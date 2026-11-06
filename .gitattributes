@@ -1,0 +1,6 @@
+# Expected outputs are compared byte for byte, so a checkout must never convert line endings.
+* text=auto eol=lf
+
+# GitHub has no Enrang grammar yet. TypeScript highlights it well enough, and these
+# files stay out of the language statistics.
+*.en linguist-language=TypeScript linguist-detectable=false
