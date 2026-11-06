@@ -1,0 +1,37 @@
+error[EN0205]: `any` does not exist in Enrang
+ --> typescript-habits.en:1:18
+  |
+1 | function show(x: any): void {
+  |                  ^^^ every value has one known type
+  |
+help: accept every type with a generic
+  |
+1 | function show<T extends Display>(x: &T): void {
+  |              +++++++++++++++++++    ~~
+  = explain: run `enrang explain EN0205`
+
+error[EN0202]: `var` does not exist in Enrang
+ --> typescript-habits.en:2:3
+  |
+2 |   var y = undefined;
+  |   ^^^ use `let` for a binding that changes, `const` otherwise
+  |
+help: replace `var` with `let`
+  |
+2 |   let y = undefined;
+  |   ~~~
+  = explain: run `enrang explain EN0202`
+
+error[EN0206]: `undefined` does not exist in Enrang
+ --> typescript-habits.en:2:11
+  |
+2 |   var y = undefined;
+  |           ^^^^^^^^^ absence has one spelling
+  |
+help: replace `undefined` with `null`, which needs a nullable type
+  |
+2 |   var y: i64 | null = null;
+  |        ++++++++++++   ~~~~
+  = explain: run `enrang explain EN0206`
+
+error: aborting due to 3 previous errors

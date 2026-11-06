@@ -1,0 +1,40 @@
+// inventory.en: the code under test. Its tests are in inventory.test.en.
+
+export class Item {
+  name: string;
+  count: i64;
+}
+
+export class Inventory {
+  private items: Item[] = [];
+
+  get size(): isize { return this.items.length; }
+
+  countOf(name: &string): i64 {
+    const found = this.items.find(item => item.name == name);
+    if (found == null) { return 0; }
+    return found.count;
+  }
+
+  mut add(name: &string, count: i64): void {
+    assert(count > 0, "count must be positive");
+    for (const item of &mut this.items) {
+      if (item.name == name) {
+        item.count += count;
+        return;
+      }
+    }
+    this.items.push(Item { name: name.clone(), count });
+  }
+
+  mut remove(name: &string, count: i64): Result<void, string> {
+    for (const item of &mut this.items) {
+      if (item.name == name) {
+        if (item.count < count) { return Err(`only ${item.count} ${name} left`); }
+        item.count -= count;
+        return Ok();
+      }
+    }
+    return Err(`no ${name} here`);
+  }
+}

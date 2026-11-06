@@ -1,0 +1,52 @@
+// rpn.en: a reverse Polish calculator, using enums, `match`, `Result` and `?`.
+// Errors are ordinary values. `?` hands one to the caller, and drops still run on the way out.
+// Run it with `enrang run rpn.en`.
+
+enum Op { Push(i64), Add, Sub, Mul, Div }
+
+function parse(word: &string): Result<Op, string> {
+  if (word == "+") { return Ok(Op.Add); }
+  if (word == "-") { return Ok(Op.Sub); }
+  if (word == "*") { return Ok(Op.Mul); }
+  if (word == "/") { return Ok(Op.Div); }
+  const n = word.parseInt();
+  if (n == null) { return Err(`unknown word: ${word}`); }
+  return Ok(Op.Push(n));                      // past the check, `n` is narrowed to i64
+}
+
+function pop(stack: &mut i64[]): Result<i64, string> {
+  const top = stack.pop();
+  if (top == null) { return Err("stack underflow"); }
+  return Ok(top);
+}
+
+function calc(line: &string): Result<i64, string> {
+  let stack: i64[] = [];
+  for (const word of line.split(" ")) {       // `split` returns owned strings, and the loop takes them
+    match (parse(word)?) {
+      Op.Push(n) => stack.push(n),
+      Op.Add => { const b = pop(&mut stack)?; const a = pop(&mut stack)?; stack.push(a + b); },
+      Op.Sub => { const b = pop(&mut stack)?; const a = pop(&mut stack)?; stack.push(a - b); },
+      Op.Mul => { const b = pop(&mut stack)?; const a = pop(&mut stack)?; stack.push(a * b); },
+      Op.Div => {
+        const b = pop(&mut stack)?;
+        const a = pop(&mut stack)?;
+        if (b == 0) { return Err("division by zero"); }
+        stack.push(a / b);
+      },
+    }
+  }
+  const result = pop(&mut stack)?;
+  if (stack.length != 0) { return Err("too many values"); }
+  return Ok(result);
+}
+
+function main(): void {
+  const lines = ["2 40 +", "3 4 * 2 -", "1 0 /", "1 +", "2 x *", "1 2"];
+  for (const line of lines) {
+    match (calc(line)) {
+      Ok(v) => console.log(`${line} = ${v}`),
+      Err(e) => console.log(`${line}: ${e}`),
+    }
+  }
+}

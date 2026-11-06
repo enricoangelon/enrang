@@ -1,0 +1,6 @@
+2 40 + = 42
+3 4 * 2 - = 10
+1 0 /: division by zero
+1 +: stack underflow
+2 x *: unknown word: x
+1 2: too many values

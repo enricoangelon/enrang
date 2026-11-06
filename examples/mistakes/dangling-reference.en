@@ -1,0 +1,4 @@
+function longest(): &string {
+  const s = "owned" + "!";
+  return &s;
+}

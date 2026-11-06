@@ -1,0 +1,9 @@
+function main(): void {
+  let queue = ["a", "b"];
+  for (const job of queue) {
+    if (job == "a") {
+      queue.push("retry");
+    }
+    console.log(job);
+  }
+}

@@ -1,0 +1,15 @@
+error[EN0501]: this `match` does not handle every `Shape`
+  --> missing-case.en:8:17
+   |
+ 4 |   Empty,
+   |   ----- `Shape.Empty` is declared here
+...
+ 8 |   return match (s) {
+   |                 ^ missing `Shape.Empty`
+   |
+help: add the missing arm
+   |
+11 +     Shape.Empty => panic("unhandled"),
+   = explain: run `enrang explain EN0501`
+
+error: aborting due to 1 previous error

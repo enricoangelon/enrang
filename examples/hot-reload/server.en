@@ -1,0 +1,27 @@
+import { os } from "os";
+
+class Player {
+  name: string;
+  score: i64;
+}
+
+class Game {
+  players: Player[];
+  tick: isize;
+}
+
+function step(g: &mut Game): void {
+  g.tick += 1;
+  const who = g.tick % g.players.length;
+  g.players[who].score += 10;
+  console.log(`tick ${g.tick}: ${g.players[who].name} = ${g.players[who].score}`);
+}
+
+function main(): void {
+  let game = Game { players: [Player { name: "Ada", score: 0 },
+                              Player { name: "Grace", score: 0 }], tick: 0 };
+  while (true) {
+    step(&mut game);
+    os.sleep(1000);
+  }
+}

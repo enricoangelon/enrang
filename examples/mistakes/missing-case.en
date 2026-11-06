@@ -1,0 +1,12 @@
+enum Shape {
+  Circle(f64),
+  Square(f64),
+  Empty,
+}
+
+function area(s: &Shape): f64 {
+  return match (s) {
+    Shape.Circle(r) => 3.14 * r * r,
+    Shape.Square(a) => a * a,
+  };
+}
