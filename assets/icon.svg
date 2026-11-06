@@ -1,4 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#e11d48"/>
-  <text x="32" y="32" dy="0.35em" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="32" font-weight="600" fill="#ffffff">E</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Enrang">
+  <title>Enrang</title>
+  <rect x="3" y="3" width="506" height="506" rx="110" fill="#16120C" stroke="#2B2214" stroke-width="6"/>
+  <g fill="none" stroke="#FFB000" stroke-width="46" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M251.2 109.5 C192.7 97.1 139.6 125.5 139.6 176.8 C139.6 215.7 169.7 242.3 210.4 242.3 H408.7"/>
+    <path d="M210.4 242.3 C152 242.3 111.3 277.7 111.3 327.2 C111.3 378.6 153.8 410.4 208.7 410.4 C290.1 410.4 346.7 373.3 346.7 302.5 V148.5"/>
+  </g>
 </svg>

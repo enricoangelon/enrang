@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1287 264" role="img" aria-label="Enrang">
+  <title>Enrang</title>
+  <svg width="200" height="200" viewBox="0 0 512 512">
+    <rect x="3" y="3" width="506" height="506" rx="110" fill="#16120C" stroke="#2B2214" stroke-width="6"/>
+    <g fill="none" stroke="#FFB000" stroke-width="46" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M251.2 109.5 C192.7 97.1 139.6 125.5 139.6 176.8 C139.6 215.7 169.7 242.3 210.4 242.3 H408.7"/>
+      <path d="M210.4 242.3 C152 242.3 111.3 277.7 111.3 327.2 C111.3 378.6 153.8 410.4 208.7 410.4 C290.1 410.4 346.7 373.3 346.7 302.5 V148.5"/>
+    </g>
+  </svg>
+  <g transform="translate(250 16) scale(0.86)" fill="none" stroke="#F6EFE0" stroke-width="37" stroke-linecap="round" stroke-linejoin="round">
+    <path transform="translate(0)" d="M0 100 H156 A78 78 0 1 0 137.8 150.1"/>
+    <path transform="translate(236)" d="M0 22 V178 M0 88 A66 66 0 0 1 132 88 V178"/>
+    <path transform="translate(444)" d="M0 22 V178 M0 88 A66 66 0 0 1 66 22 H78"/>
+    <path transform="translate(580)" d="M156 100 A78 78 0 1 1 156 99.9 M156 22 V178"/>
+    <path transform="translate(816)" d="M0 22 V178 M0 88 A66 66 0 0 1 132 88 V178"/>
+    <path transform="translate(1024)" d="M156 100 A78 78 0 1 1 156 99.9 M156 22 V196 A70 70 0 0 1 86 266 C62 266 40 258 24 244"/>
+  </g>
+</svg>
