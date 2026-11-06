@@ -68,10 +68,10 @@ Enrang is licensed under either of the [MIT licence](LICENSE-MIT) or the [Apache
 
 ## Star history
 
-<a href="https://www.star-history.com/?repos=enricoangelon%2Fenlang&type=date&legend=top-left">
+<a href="https://www.star-history.com/?repos=enricoangelon%2Fenrang&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=enricoangelon/enlang&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=enricoangelon/enlang&type=date&legend=top-left" />
-   <img alt="Star history of enricoangelon/enlang" src="https://api.star-history.com/chart?repos=enricoangelon/enlang&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=enricoangelon/enrang&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=enricoangelon/enrang&type=date&legend=top-left" />
+   <img alt="Star history of enricoangelon/enrang" src="https://api.star-history.com/chart?repos=enricoangelon/enrang&type=date&legend=top-left" />
  </picture>
 </a>
