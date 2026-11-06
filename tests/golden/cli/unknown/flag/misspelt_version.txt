@@ -1,0 +1,7 @@
+$ enrang --verison
+[exit 2]
+[stdout]
+[stderr]
+error: `--verison` is not a flag of `enrang`
+help: did you mean `--version`?
+usage: enrang <command> [arguments]

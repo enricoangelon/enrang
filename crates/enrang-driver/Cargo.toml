@@ -1,0 +1,16 @@
+[package]
+name = "enrang-driver"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+test = false
+
+[dependencies]
+enrang-base = { path = "../enrang-base" }
+enrang-diag = { path = "../enrang-diag" }
+
+[[test]]
+name = "session"
+path = "tests/session.rs"

@@ -1,0 +1,7 @@
+$ enrang targets -h
+[exit 0]
+[stdout]
+List targets, CPU levels and aliases; --evidence prints the support table.
+
+Usage: enrang targets [--evidence]
+[stderr]

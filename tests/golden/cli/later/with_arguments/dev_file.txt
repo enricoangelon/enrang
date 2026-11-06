@@ -1,0 +1,7 @@
+$ enrang dev main.en
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang dev` arrives with milestone M6
+note: M6 delivers the dev session with hot reload
+note: this is milestone M0, which has no compiler, so nothing was done

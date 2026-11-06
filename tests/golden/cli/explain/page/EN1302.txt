@@ -1,0 +1,24 @@
+$ enrang explain EN1302
+[exit 0]
+[stdout]
+EN1302: unknown command
+
+`enrang` has no command by this name. `enrang --help` lists the commands and the milestone each one arrives with. A name close to one of them gets a did-you-mean, and four names from other toolchains are pointed at their counterpart: `tsc` and `lint` at `check`, `compile` at `build`, `start` at `run`. The command stops with exit status 2.
+
+Failing:
+
+    $ enrang targest
+    error[EN1302]: `targest` is not an `enrang` command
+    help: did you mean `enrang targets`?
+      = explain: run `enrang explain EN1302`
+
+    error: aborting due to 1 previous error
+
+Fixed:
+
+    $ enrang targets
+
+From TypeScript:
+
+`tsc` and a linter are one command here, `enrang check`, from milestone M1, and there is no separate emit step to switch off. `npm start` becomes `enrang run`, from milestone M4.
+[stderr]

@@ -1,0 +1,7 @@
+$ enrang explain --hepl
+[exit 2]
+[stdout]
+[stderr]
+error: `--hepl` is not a flag of `enrang explain`
+help: did you mean `--help`?
+usage: enrang explain <code>

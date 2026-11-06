@@ -1,0 +1,6 @@
+$ enrang --version x
+[exit 2]
+[stdout]
+[stderr]
+error: `--version` takes no arguments
+usage: enrang <command> [arguments]

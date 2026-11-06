@@ -1,0 +1,27 @@
+=== EN1301
+--- rule
+These commands are outside the prototype: `install`, `add`, `publish`, `doc`, `lsp`, `repl`, `bench`, `debug`, `upgrade` and `fmt`. Each is reserved, so it stops with this code and exit status 2 and does nothing to the project. A name that is no command at all gets EN1302 instead.
+--- failing
+$ enrang fmt
+error[EN1301]: `enrang fmt` is not part of the prototype
+  = explain: run `enrang explain EN1301`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang --help
+--- typescript
+A TypeScript project reaches for npm and a formatter from the same terminal. Enrang has no package manager and no formatter yet: by design, dependencies are source files you import by path, and `enrang check`, from milestone M1, is the command that looks at your code.
+=== EN1302
+--- rule
+`enrang` has no command by this name. `enrang --help` lists the commands and the milestone each one arrives with. A name close to one of them gets a did-you-mean, and four names from other toolchains are pointed at their counterpart: `tsc` and `lint` at `check`, `compile` at `build`, `start` at `run`. The command stops with exit status 2.
+--- failing
+$ enrang targest
+error[EN1302]: `targest` is not an `enrang` command
+help: did you mean `enrang targets`?
+  = explain: run `enrang explain EN1302`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang targets
+--- typescript
+`tsc` and a linter are one command here, `enrang check`, from milestone M1, and there is no separate emit step to switch off. `npm start` becomes `enrang run`, from milestone M4.

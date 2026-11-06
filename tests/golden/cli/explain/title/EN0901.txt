@@ -1,0 +1,7 @@
+$ enrang explain EN0901
+[exit 0]
+[stdout]
+EN0901: instruction above the target CPU level
+
+No explain page yet: it arrives with milestone M5, and this is milestone M0.
+[stderr]

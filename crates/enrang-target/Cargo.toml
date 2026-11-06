@@ -1,0 +1,17 @@
+[package]
+name = "enrang-target"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+enrang-base = { path = "../enrang-base" }
+enrang-diag = { path = "../enrang-diag" }
+
+[dev-dependencies]
+enrang-testkit = { path = "../enrang-testkit" }
+
+[[test]]
+name = "target"
+path = "tests/target/main.rs"
+harness = false

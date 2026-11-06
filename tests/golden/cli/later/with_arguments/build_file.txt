@@ -1,0 +1,7 @@
+$ enrang build main.en
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang build` arrives with milestone M5
+note: M5 builds native output
+note: this is milestone M0, which has no compiler, so nothing was done

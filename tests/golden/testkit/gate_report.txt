@@ -1,0 +1,6 @@
+gap: EN0601 has no fixture (since M3, current M3)
+gap: T0001 has a failing fixture (since M3, current M3)
+gap: EN0601 has no fixture (since M3, current M3)
+stale: EN1215 claims a passing fixture before its milestone (since M6, current M3)
+duplicate: EN0601 is used by more than one row
+orphan: `covers: MIG-99` names no row

@@ -1,0 +1,28 @@
+$ enrang targets --evidence
+[exit 0]
+[stdout]
+Support evidence per CPU family. A class is printed only once it is reached.
+
+family                                  rung                          C1       C2       C3       C4
+i386, Am386                             i386                          planned  planned  planned  no hardware
+i486, Am486, Am5x86                     i486                          planned  planned  planned  no hardware
+Pentium, Pentium MMX                    i586                          planned  planned  planned  no hardware
+K5                                      i586                          planned  planned  planned  no hardware
+K6, K6-2, K6-III                        i586                          planned  planned  planned  no hardware
+Pentium Pro, II, III                    i686                          planned  planned  planned  no hardware
+K7                                      i686                          planned  planned  planned  no hardware
+NetBurst                                sse2                          planned  planned  planned  no hardware
+Intel mobile: Pentium M, Core Solo/Duo  sse2                          planned  planned  planned  no hardware
+Atom                                    sse2; x86-64 on 64-bit parts  planned  planned  planned  no hardware
+Core 2 Duo, Core 2 Quad, Q8400          sse2, x86-64                  planned  planned  planned  planned
+Newer                                   sse2, x86-64                  planned  planned  planned  planned
+
+Nothing has been achieved: this is milestone M0, which has no compiler, and no
+chip has run any Enrang output. `no hardware` means no such chip is available to test on.
+
+C1  level-proven: encoder tags, assembler oracle, disassembly audit, single-step
+    classification
+C2  run at that level on the development host, which proves the code, not the chip
+C3  emulated, naming the model
+C4  real hardware, only from the owner's report
+[stderr]

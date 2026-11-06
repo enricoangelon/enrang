@@ -1,0 +1,6 @@
+$ enrang explain $'a\x1b[31mb'
+[exit 2]
+[stdout]
+[stderr]
+error: `a\u{1b}[31mb` is not a diagnostic code
+help: codes look like `EN0601` and `T0001`

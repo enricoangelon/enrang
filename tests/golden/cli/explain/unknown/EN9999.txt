@@ -1,0 +1,6 @@
+$ enrang explain EN9999
+[exit 2]
+[stdout]
+[stderr]
+error: `EN9999` is not a diagnostic code
+help: did you mean `EN0909`?

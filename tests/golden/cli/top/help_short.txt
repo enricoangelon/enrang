@@ -1,0 +1,32 @@
+$ enrang -h
+[exit 0]
+[stdout]
+The Enrang command line, milestone M0.
+
+Enrang is designed but not built: this milestone has no compiler, so it cannot
+compile, check or run a program.
+
+Usage: enrang <command> [arguments]
+
+Commands that work today:
+  explain <code>        Print the page of a diagnostic code, or its title until the page arrives
+  targets [--evidence]  List targets, CPU levels and aliases; --evidence prints the support table
+
+Commands that later milestones deliver, each saying which one today:
+  build [file]            M5 builds native output
+  run [file] [-- args]    M4 runs programs in the VM with `--vm`, and M5 runs them natively
+  dev <file>              M6 delivers the dev session with hot reload
+  test [paths]            M4 runs tests in the VM, and M5 runs them natively
+  check [file]            M1 checks syntax, M2 adds types and M3 adds borrows
+  init [name] [--kernel]  M1 creates a project, and M9 adds `--kernel`
+
+Outside the prototype, each reported as EN1301:
+  install add publish doc lsp repl bench debug upgrade fmt
+
+Flags:
+  -h, --help     Print this help
+  -V, --version  Print the version
+
+Exit status: 0 success, 1 compile errors, failed tests or lost output, 2 usage,
+3 internal compiler error.
+[stderr]

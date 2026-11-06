@@ -1,0 +1,5 @@
+<ESC>[1;31merror[EN1302]<ESC>[0m: <ESC>[1m`buidl` is not an `enrang` command<ESC>[0m
+<ESC>[1;36mhelp<ESC>[0m: did you mean `enrang build`?
+  <ESC>[1m= explain:<ESC>[0m run `enrang explain EN1302`
+
+<ESC>[1;31merror<ESC>[0m: aborting due to 1 previous error

@@ -1,0 +1,17 @@
+running 3 cases of suite demo (4 total, 1 filtered out); seed 7, scale 1
+test first ... ok
+test second ... FAILED
+test third ... ok
+
+failures:
+
+---- second ----
+it broke
+
+failed cases:
+    second
+
+reproduce with ENRANG_SEED=7 ENRANG_SCALE=1 and the case name as a filter
+
+SKIP as not found: 2 oracle tests not run
+test result: FAILED. 2 passed; 1 failed; 1 filtered out; 4 total; 2 tests skipped

@@ -1,0 +1,7 @@
+$ enrang explain EN0201
+[exit 0]
+[stdout]
+EN0201: `===` or `!==`: use `==` and `!=`
+
+No explain page yet: it arrives with milestone M1, and this is milestone M0.
+[stderr]

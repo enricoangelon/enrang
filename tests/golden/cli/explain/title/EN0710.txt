@@ -1,0 +1,7 @@
+$ enrang explain EN0710
+[exit 0]
+[stdout]
+EN0710: returning a reference to local data
+
+No explain page yet: it arrives with milestone M3, and this is milestone M0.
+[stderr]

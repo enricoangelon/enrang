@@ -1,0 +1,31 @@
+[package]
+name = "enrang-suite"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+# The meta-tests must run the command line as a process. Cargo only builds a binary
+# for the integration tests of its own package, so these two stand in for `enrang`
+# here, and a meta-test keeps the first one identical to the real `main`.
+[[bin]]
+name = "enrang-suite-cli"
+path = "src/bin/enrang-suite-cli.rs"
+test = false
+
+[[bin]]
+name = "enrang-suite-ice"
+path = "src/bin/enrang-suite-ice.rs"
+test = false
+
+[dependencies]
+enrang-cli = { path = "../enrang-cli" }
+
+[dev-dependencies]
+enrang-diag = { path = "../enrang-diag" }
+enrang-target = { path = "../enrang-target" }
+enrang-testkit = { path = "../enrang-testkit" }
+
+[[test]]
+name = "meta"
+path = "tests/meta/main.rs"
+harness = false

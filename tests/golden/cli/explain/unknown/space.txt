@@ -1,0 +1,6 @@
+$ enrang explain 'EN 1301'
+[exit 2]
+[stdout]
+[stderr]
+error: `EN 1301` is not a diagnostic code
+help: did you mean `EN1301`?

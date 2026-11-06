@@ -1,0 +1,7 @@
+$ enrang check main.en
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang check` arrives with milestone M1
+note: M1 checks syntax, M2 adds types and M3 adds borrows
+note: this is milestone M0, which has no compiler, so nothing was done

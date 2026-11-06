@@ -1,0 +1,6 @@
+$ enrang --color=always
+[exit 2]
+[stdout]
+[stderr]
+error: `--color=always` is not a flag of `enrang`
+usage: enrang <command> [arguments]

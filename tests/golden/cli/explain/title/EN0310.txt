@@ -1,0 +1,7 @@
+$ enrang explain EN0310
+[exit 0]
+[stdout]
+EN0310: no `main` on a hosted target
+
+No explain page yet: it arrives with milestone M4, and this is milestone M0.
+[stderr]

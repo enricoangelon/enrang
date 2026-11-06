@@ -1,0 +1,9 @@
+$ enrang explain -h
+[exit 0]
+[stdout]
+Print the page of a diagnostic code, or its title until the page arrives.
+
+Usage: enrang explain <code>
+
+Codes look like `EN0601` and `T0001`.
+[stderr]

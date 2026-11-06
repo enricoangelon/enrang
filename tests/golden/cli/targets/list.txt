@@ -1,0 +1,52 @@
+$ enrang targets
+[exit 0]
+[stdout]
+Targets:
+
+target          code    pointer  default --cpu  float  output  os
+x86_64-linux    x86-64  8 bytes  x86-64         sse2   elf64   linux
+x86_64-windows  x86-64  8 bytes  x86-64         sse2   pe32+   windows
+i386-linux      i386    4 bytes  i386           soft   elf32   linux, int 0x80
+i386-none       i386    4 bytes  i386           soft   flat    none
+x86_64-none     x86-64  8 bytes  x86-64         sse2   flat    none
+vm64            vm      8 bytes  none           host   none    vm
+vm32            vm      4 bytes  none           host   none    vm
+
+CPU levels, the values --cpu will take:
+
+level   targets   code may assume
+i386    i386-*    80386 integer only
+i486    i386-*    + bswap cmpxchg xadd invlpg
+i586    i386-*    + cpuid cmpxchg8b rdtsc msr cr4
+i686    i386-*    + cmov fcomi
+sse2    i386-*    + sse sse2 fxsave
+x86-64  x86_64-*  fpu cpuid bswap cmpxchg xadd cmpxchg8b rdtsc msr cr4 cmov fcomi sse sse2 fxsave nopl pae lm invlpg
+
+CPU aliases, which --cpu will accept in place of a level:
+
+alias       on i386-*  on x86_64-*
+386         i386       EN0912, no long mode
+am386       i386       EN0912, no long mode
+486         i486       EN0912, no long mode
+am486       i486       EN0912, no long mode
+am5x86      i486       EN0912, no long mode
+pentium     i586       EN0912, no long mode
+k5          i586       EN0912, no long mode
+k6          i586       EN0912, no long mode
+k6-2        i586       EN0912, no long mode
+k6-3        i586       EN0912, no long mode
+pentiumpro  i686       EN0912, no long mode
+p2          i686       EN0912, no long mode
+p3          i686       EN0912, no long mode
+k7          i686       EN0912, no long mode
+athlon-xp   i686       EN0912, no long mode
+p4          sse2       x86-64, 64-bit models only
+pentium-m   sse2       EN0912, no long mode
+core-duo    sse2       EN0912, no long mode
+atom        sse2       x86-64, 64-bit models only
+core2       sse2       x86-64
+q8400       sse2       x86-64
+
+These are design tables. This is milestone M0, which has no compiler, so nothing
+can be built for any target yet.
+[stderr]

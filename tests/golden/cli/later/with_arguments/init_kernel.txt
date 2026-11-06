@@ -1,0 +1,7 @@
+$ enrang init --kernel
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang init` arrives with milestone M1
+note: M1 creates a project, and M9 adds `--kernel`
+note: this is milestone M0, which has no compiler, so nothing was done

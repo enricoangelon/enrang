@@ -1,0 +1,7 @@
+$ enrang explain EN0601
+[exit 0]
+[stdout]
+EN0601: use after move
+
+No explain page yet: it arrives with milestone M3, and this is milestone M0.
+[stderr]

@@ -1,0 +1,25 @@
+@@ expected line 1, actual line 1 @@
+  1
+  2
+  3
+- 4
++ four
+  5
+  6
+  7
+@@ expected line 12, actual line 12 @@
+  12
+  13
+  14
+- 15
+  16
+  17
+  18
+@@ expected line 22, actual line 21 @@
+  22
+  23
+  24
++ 24.5
+  25
+  26
+  27

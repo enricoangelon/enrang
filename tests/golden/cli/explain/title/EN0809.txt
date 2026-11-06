@@ -1,0 +1,7 @@
+$ enrang explain EN0809
+[exit 0]
+[stdout]
+EN0809: missing or invalid `@entry`
+
+No explain page yet: it arrives with milestone M9, and this is milestone M0.
+[stderr]

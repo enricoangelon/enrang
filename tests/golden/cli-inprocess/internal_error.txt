@@ -1,0 +1,2 @@
+error: internal compiler error: a deliberate panic
+note: this is a bug in enrang, not in your command

@@ -1,0 +1,7 @@
+$ enrang
+[exit 2]
+[stdout]
+[stderr]
+error: no command given
+help: run `enrang --help` to see the commands
+usage: enrang <command> [arguments]

@@ -1,0 +1,5 @@
+$ enrang --version
+[exit 0]
+[stdout]
+enrang 0.1.0 (milestone M0, no compiler yet)
+[stderr]

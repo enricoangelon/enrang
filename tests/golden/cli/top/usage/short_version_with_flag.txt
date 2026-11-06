@@ -1,0 +1,6 @@
+$ enrang -V --help
+[exit 2]
+[stdout]
+[stderr]
+error: `-V` takes no arguments
+usage: enrang <command> [arguments]

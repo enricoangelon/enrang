@@ -1,0 +1,6 @@
+$ enrang --help explain
+[exit 2]
+[stdout]
+[stderr]
+error: `--help` takes no arguments
+usage: enrang <command> [arguments]
