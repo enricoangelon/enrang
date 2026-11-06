@@ -1,0 +1,35 @@
+// ownership.en: the three ways to pass a value, and when a value ends.
+//
+//   T       hands the value over
+//   &T      lends it for reading
+//   &mut T  lends it exclusively, and the call has to say so
+//
+// Run it with `enrang run ownership.en`.
+
+class Item implements Drop {
+  constructor(public name: string) {}
+  mut drop(): void { console.log(`${this.name} is gone`); }
+}
+
+function inspect(item: &Item): void {
+  console.log(`looking at ${item.name}`);
+}
+
+function enchant(item: &mut Item): void {
+  item.name += " +1";
+}
+
+function destroy(item: Item): void {
+  console.log(`destroying ${item.name}`);
+}                                 // `item` belongs to this call, so it is dropped here
+
+function main(): void {
+  let sword = new Item("sword");
+  const shield = new Item("shield");
+
+  inspect(sword);                 // lent, so `sword` is still ours
+  enchant(&mut sword);            // lent exclusively, and visible at the call
+  destroy(sword);                 // handed over: using `sword` after this is EN0601
+
+  console.log("end of main");
+}                                 // `shield` is dropped here; `sword` already went

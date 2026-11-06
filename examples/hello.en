@@ -1,0 +1,7 @@
+// hello.en: the smallest program worth running.
+// Run it with `enrang run hello.en`.
+
+function main(): void {
+  const name = "Enrang";
+  console.log(`Hello from ${name}`);
+}

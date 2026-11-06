@@ -1,0 +1,8 @@
+PASS inventory.test.en
+  Inventory > adding stacks with what is there
+  Inventory > removing takes from the stack
+  Inventory > it will not give what it does not have
+  Inventory > a count must be positive
+  Inventory > an item has one owner
+
+Tests  5 passed, 5 total

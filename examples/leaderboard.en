@@ -1,0 +1,44 @@
+// leaderboard.en: classes, interfaces, generics and closures.
+// Run it with `enrang run leaderboard.en`.
+
+interface Ranked {
+  get points(): i64;
+}
+
+class Player implements Ranked {
+  constructor(public name: string, public wins: i64, public kills: i64) {}
+  get points(): i64 { return this.wins * 100 + this.kills; }
+}
+
+// Works for any `T` with a `points`, chosen at compile time: there is no dynamic dispatch.
+// The returned reference borrows from `all`, and no lifetime syntax is needed to say so.
+function best<T extends Ranked>(all: &T[]): &T | null {
+  let top = all.first();
+  for (const entry of all) {
+    if (top != null && entry.points > top.points) { top = entry; }
+  }
+  return top;
+}
+
+function main(): void {
+  let players = [
+    new Player("Ada", 3, 12),
+    new Player("Grace", 5, 7),
+    new Player("Alan", 2, 40),
+  ];
+
+  players.sortBy((a, b) => b.points.compare(a.points));   // highest first
+
+  for (let i = 0; i < players.length; i++) {              // `i` is inferred as isize from `.length`
+    console.log(`${i + 1}. ${players[i].name}: ${players[i].points}`);
+  }
+
+  const total = players.reduce(0, (sum, p) => sum + p.points);
+  console.log(`total points: ${total}`);
+
+  const snipers = players.filter(p => p.kills > 10).map(p => p.name.clone());
+  console.log(`snipers: ${snipers.join(", ")}`);
+
+  const champion = best(players);                         // `players` is lent, so no `&` is needed
+  if (champion != null) { console.log(`champion: ${champion.name}`); }
+}

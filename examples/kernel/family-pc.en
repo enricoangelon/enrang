@@ -1,0 +1,64 @@
+// family-pc.en: a kernel that boots, says what machine it found, and stops.
+//
+//   enrang build --target=i386-none --image=hdd family-pc.en
+//
+// This is floor output: 80386 integer instructions, no FPU and no allocator, so the same
+// image is meant to boot any listed CPU with a legacy BIOS, up to the Core 2 Quad it is named for.
+
+import { vga, serial } from "os";
+import { cpu } from "core";
+
+// Text goes to the screen and to COM1. `boot` is passed each time, because a
+// reference can live in a parameter or a local, but never in a field.
+function say(boot: &BootInfo, screen: &mut vga.Screen, text: &string): void {
+  screen.write(text);
+  serial.write(boot, text);
+}
+
+function sayNumber(boot: &BootInfo, screen: &mut vga.Screen, value: u64): void {
+  let digits: u8[20] = [0; 20];
+  let n: isize = 0;
+  let v = value;
+  do {
+    digits[n] = 48 + (v % 10).wrap<u8>();
+    v /= 10;
+    n += 1;
+  } while (v != 0);
+  while (n > 0) {
+    n -= 1;
+    screen.writeByte(digits[n]);
+    serial.writeByte(boot, digits[n]);
+  }
+}
+
+function usableKilobytes(boot: &BootInfo): u64 {
+  let bytes: u64 = 0;
+  for (let i: usize = 0; i < boot.regionCount(); i++) {
+    const region = boot.region(i);
+    if (region.usable) { bytes += region.bytes; }
+  }
+  return bytes / 1024;
+}
+
+@entry function kmain(boot: &BootInfo): never {
+  serial.init(boot);
+  let screen = vga.Screen.fromBoot(boot);
+  screen.clear();
+
+  say(boot, &mut screen, "Hello from Enrang\n");
+  say(boot, &mut screen, "cpu vendor: ");
+  say(boot, &mut screen, cpu.vendor());
+  say(boot, &mut screen, "\ncpu level:  ");
+  say(boot, &mut screen, cpu.levelOf());
+  say(boot, &mut screen, "\nmemory:     ");
+  sayNumber(boot, &mut screen, usableKilobytes(boot));
+  say(boot, &mut screen, " KB\n");
+
+  halt();
+}
+
+@panicHandler function onPanic(info: &PanicInfo): never {
+  vga.emergency("panic: ");
+  vga.emergency(info.message);
+  halt();
+}
