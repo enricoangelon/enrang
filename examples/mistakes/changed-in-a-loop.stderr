@@ -1,0 +1,26 @@
+error[EN0706]: `queue` cannot change while `job` still points into it
+ --> changed-in-a-loop.en:5:7
+  |
+3 |   for (const job of queue) {
+  |              --- `job` points into `queue` for this turn
+4 |     if (job == "a") {
+5 |       queue.push("retry");
+  |       ^^^^^^^^^^^^^^^^^^^ `push` is a `mut` method, so it needs exclusive access to `queue`
+6 |     }
+7 |     console.log(job);
+  |                 --- `job` is used again here
+  |
+  = why: `push` may move the array to a bigger block of memory, leaving `job` pointing at freed memory.
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: to loop over the items as they are now, iterate over a copy
+  |
+3 |   for (const job of [...queue]) {
+  |                     ++++     +
+help: or keep a clone of `job` from before the change
+  |
+4 +     const saved = job.clone();
+7 |     console.log(saved);
+  |                 ~~~~~
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

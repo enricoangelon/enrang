@@ -1,0 +1,45 @@
+// inventory.test.en: an extra part of module inventory.en, so it can see private members.
+// Run it with `enrang test --ci inventory.test.en`. Without `--ci` the report also has timings.
+
+function stocked(): Inventory {               // a fixture is a plain function
+  let inv = new Inventory();
+  inv.add("torch", 4);
+  inv.add("stone", 64);
+  return inv;
+}
+
+describe("Inventory", () => {
+  test("adding stacks with what is there", () => {
+    let inv = stocked();
+    inv.add("torch", 2);
+    expect(inv.countOf("torch")).toBe(6);
+    expect(inv.size).toBe(2);
+  });
+
+  test("removing takes from the stack", () => {
+    let inv = stocked();
+    expect(inv.remove("stone", 60)).toBeOk();
+    expect(inv.countOf("stone")).toBe(4);
+  });
+
+  test("it will not give what it does not have", () => {
+    let inv = stocked();
+    expect(inv.remove("torch", 5)).toBeErr("only 4 torch left");
+    expect(inv.remove("gold", 1)).toBeErr("no gold here");
+  });
+
+  test.panics("a count must be positive", "count must be positive", () => {
+    let inv = new Inventory();
+    inv.add("torch", 0);
+  });
+
+  compileFails("an item has one owner", raw`
+    class Item { name: string; }
+    function take(i: Item): void {}
+    function main(): void {
+      const i = Item { name: "torch" };
+      take(i);
+      console.log(i.name); //~ EN0601
+    }
+  `);
+});

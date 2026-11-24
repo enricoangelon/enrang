@@ -1,54 +1,102 @@
-<img src="assets/icon.svg" width="64" height="64" alt="">
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="assets/logo.svg">
+    <img alt="Enrang" src="assets/logo.svg" width="50%">
+  </picture>
 
-# Enrang
+**TypeScript's feel. Rust's power. Native code, from the 80386 to today.**
 
-Enrang is a new programming language being built: TypeScript-like syntax, native machine code with no libc and no external tools, Rust-style ownership, and diagnostics treated as a first-class feature.
+[Language reference](docs/SPEC.md) | [Examples](examples) | [Roadmap](docs/ARCHITECTURE.md#12-milestones) | [Contributing](CONTRIBUTING.md)
+</div>
 
-## Status
+Enrang is a programming language being built from scratch, for applications and for operating systems.
 
-The design is complete. Milestone M3 is built. Enrang can read a program and report its syntax, type and borrow errors, format it and start a project, but nothing is turned into machine code yet.
+> [!IMPORTANT]
+> **Enrang can't build or run a program yet.** The language is designed, and the compiler checks programs for syntax, type and borrow errors, but it doesn't generate machine code yet. The Enrang code on this page is specified behaviour, not something you can run today.
 
-M0 is the foundation: the diagnostic code registry and renderer, the tables of targets and CPU levels, a test kit, and a command line that reports honestly what it can and cannot do. M1 adds the front end's first phase: the lexer, the parser with error recovery and hints for TypeScript habits, and the formatter. M2 adds the second: modules and name resolution, type inference and checking, null narrowing, exhaustiveness, constant evaluation, data layout, and the signatures of the `core` library. M3 adds the third: the mid-level IR and its verifier, and the borrow checker with permissions inferred from function bodies (moves, read-only marks, loans, the `for...of` hold, returned references, closures and local functions), contract inference, drop elaboration and module interface files. Every other feature named in the documents below is a design, not code. No CPU family has any support evidence yet, and `enrang targets --evidence` says so.
+## Hello, world
 
-The workspace is Rust with the standard library only, and it has no external dependency.
+```ts
+console.log(greeting("world"));
 
-## Commands that work today
-
-```sh
-cargo build --workspace
-
-./target/debug/enrang --help
-./target/debug/enrang --version
-./target/debug/enrang init hello
-./target/debug/enrang check hello/src/main.en
-./target/debug/enrang check --emit=summary hello/src/main.en
-./target/debug/enrang fmt --check hello
-./target/debug/enrang explain EN0101
-./target/debug/enrang explain EN0601
-./target/debug/enrang targets
-./target/debug/enrang targets --evidence
+private function greeting(name: &string): string {
+  return `Hello, ${name}!`;
+}
 ```
 
-- `init hello` makes a project in `hello/`: `enrang.json`, `src/main.en`, `src/main.test.en` with one passing test, and a `.gitignore`. It never overwrites a file.
-- `check` reads a file and its `.test.en` part and prints each syntax, type and borrow error, with a fix where one is known. With `--emit=mir` or `--emit=summary` it also prints the checked IR or the inferred contracts.
-- `fmt` rewrites files in the canonical style. With `--check` it changes nothing and lists the files it would change.
-- `explain` prints a code's page when it has one. Every code due by M3 has one. For any other code it prints the title and the milestone its page arrives in.
-- `targets` lists the targets, CPU levels and aliases from the design tables. Nothing can be built for them yet.
-- `targets --evidence` prints the per-family support table. C1 to C3 read `planned`, and C4 reads `no hardware` except on the Q8400 and `Newer` rows.
+Tests sit next to the code, in `main.test.en`:
 
-`build`, `run`, `dev` and `test` report which later milestone delivers them. Commands outside the prototype report `EN1301`, and an unknown command reports `EN1302`. All of these stop with exit status 2, and none of them touches your files.
-
-## Tests
-
-```sh
-cargo test --workspace --locked
+```ts
+test("greets by name", () => {
+  expect(greeting("Ada")).toBe("Hello, Ada!");
+});
 ```
 
-`--locked` makes a tampered `Cargo.lock` an error, where plain `cargo test` would quietly rewrite it. Golden output lives in `tests/golden/`. To accept a changed output and see its diff, run `ENRANG_BLESS=1 cargo test --workspace`, which is refused under `CI=1`.
+`enrang init hello` starts a project with this program and its test, and `enrang check` accepts both today. Running the program, which prints `Hello, world!`, arrives with the VM in the [next milestone](docs/ARCHITECTURE.md#12-milestones).
 
-## Documents
+## The story
 
-- [SPEC.md](docs/SPEC.md): the language, normative
-- [ARCHITECTURE.md](docs/ARCHITECTURE.md): the implementation blueprint and its milestones
-- [DEV_RUNTIME.md](docs/DEV_RUNTIME.md): the planned VM, sandbox and hot reload
-- [TESTING.md](docs/TESTING.md): the planned `enrang test`, and the compiler's own tests
+I think in TypeScript. In 2019 I started my own Minecraft Bedrock server, [jukebox](https://github.com/enricoangelon/jukebox), and since 2020 I've worked on [JSPrismarine](https://github.com/JSPrismarine/JSPrismarine), a much bigger one that I still contribute to. When I wanted more speed, I wrote Rust for Node ([bytebuf](https://github.com/enricoangelon/bytebuf)), and I kept wishing for one language with Rust's power and TypeScript's feel.
+
+There's also a machine behind this: my family's old Acer, with a Core 2 Quad Q8400. I love that era of PCs, and I don't think working machines should stop getting new software because toolchains moved on. I want to write my own operating system for it, in a language I enjoy, with a dev loop where saving a file doesn't kill the running program.
+
+In 2024 I tried. [enan](https://github.com/enricoangelon/enan) stopped at a README and a licence, because a compiler felt too big for one person. AI agents changed that: I design and decide, agents help write and attack the code, and independent tests check it.
+
+The name is mine too: **Enr**ico **Ang**elon. Enrang can't compile a program yet. One day it will boot that Acer.
+
+## Why Enrang?
+
+- **Familiar:** It reads like TypeScript, and when a TypeScript habit doesn't apply, the compiler says what to write instead.
+- **Safe:** Ownership works like Rust's, with no garbage collector and no lifetime syntax.
+- **Close to the machine:** It compiles to machine code by itself, with no LLVM and no libc, for programs and operating systems on x86 CPUs from the 80386 to today.
+- **Alive while you work:** In development, saving a file updates the running program and keeps its state. Production binaries contain none of that.
+
+## Ownership
+
+A value has one owner. `&` lends it, and passing it without `&` hands it over:
+
+```ts
+const ada = new User("Ada");
+greet(&ada);   // lent: still ours
+archive(ada);  // moved
+greet(&ada);   // error[EN0601]: `ada` was moved into `archive`
+
+private class User {
+  public constructor(public name: string) {}
+}
+
+private function greet(u: &User): void {
+  console.log(`Hello, ${u.name}`);
+}
+
+private function archive(u: User): void {}
+```
+
+The compiler explains the move and suggests two fixes: change the parameter to `u: &User` if `archive` only needs to look at it, or pass a copy with `archive(ada.clone())`.
+
+## Documentation
+
+- [Language reference](docs/SPEC.md): the language, normative
+- [Architecture](docs/ARCHITECTURE.md): how the compiler will be built, and its milestones
+- [Dev runtime](docs/DEV_RUNTIME.md): the planned VM, sandbox and hot reload
+- [Testing](docs/TESTING.md): the planned `enrang test`, and the compiler's own tests
+- [Examples](examples): small programs, including some that must not compile
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). Enrang is at an early stage, so the most useful thing right now is a close read of the design.
+
+## Licence
+
+Enrang is licensed under either of the [MIT licence](LICENSE-MIT) or the [Apache License 2.0](LICENSE-APACHE), at your option.
+
+## Star history
+
+<a href="https://www.star-history.com/?repos=enricoangelon%2Fenrang&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=enricoangelon/enrang&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=enricoangelon/enrang&type=date&legend=top-left" />
+   <img alt="Star history of enricoangelon/enrang" src="https://api.star-history.com/chart?repos=enricoangelon/enrang&type=date&legend=top-left" />
+ </picture>
+</a>

@@ -1,0 +1,13 @@
+class User {
+  constructor(public name: string) {}
+}
+
+function archive(u: User): void {
+  console.log(u.name);
+}
+
+function main(): void {
+  const u = new User("Ada");
+  archive(u);
+  console.log(u.name);
+}
