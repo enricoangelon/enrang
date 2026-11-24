@@ -1,0 +1,28 @@
+//! covers: H38
+Base.demo();
+
+public class Base {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+  public static demo(): void {
+    let buf: u8[] = [1];
+    const tbl: u8[] = [0];
+    let w = new Sub(&tbl, &buf);
+    const r = &w;
+    const p = r.dst;
+    r.src = p; //~ EN0616 "`src` is declared `readonly &`, so it can't hold a reference from `dst`"
+  }
+}
+
+public final class Sub extends Base {
+  public constructor(s: &u8[], d: &u8[]) {
+    super(s, d);
+  }
+}

@@ -1,0 +1,4 @@
+//! target: i386-linux
+let b: i32[] = [];
+b.reserve(0x40000000);
+b.reserve(0x80000000); //~ EN0411 "`0x80000000` doesn't fit `isize`"

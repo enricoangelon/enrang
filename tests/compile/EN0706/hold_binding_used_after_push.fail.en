@@ -1,0 +1,7 @@
+//! covers: H20
+let q: i64[] = [1, 2];
+for (const x of &q) {
+  q.push(1); //~ EN0706 "`q` cannot change while `x` still points into it"
+  console.log(x);
+  break;
+}

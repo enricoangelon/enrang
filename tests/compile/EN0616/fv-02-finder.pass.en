@@ -1,0 +1,16 @@
+//! covers: H28
+let table: i64[][] = [[1, 2, 3], [4, 5]];
+const hit = find(&table, 1);
+if (hit != null) {
+  *hit = [9];
+}
+console.log(table);
+
+public function find(rows: &Slice<i64[]>, first: i64): &i64[] | null {
+  for (const r of rows) {
+    if (r[0] == first) {
+      return r;
+    }
+  }
+  return null;
+}

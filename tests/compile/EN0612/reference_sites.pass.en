@@ -1,0 +1,38 @@
+report(&new Circle(2.0));
+const n: i64 = 5;
+const r: &i64 = &n;
+console.log(f(r, 1));
+console.log(apply(x => x + 1, 5));
+let a = 5;
+const b = a.checkedAdd(1);
+console.log(b);
+let xs: i64[] = [1, 2];
+console.log(total(&xs));
+
+public class Circle {
+  private name: string = "circle";
+  public constructor(public radius: f64) {}
+  public label(): &string {
+    return &this.name;
+  }
+}
+
+public function report(c: &Circle): void {
+  console.log(c.radius, c.label());
+}
+
+public function f(x: &i64, y: i64): i64 {
+  return *x + y;
+}
+
+public function apply(g: (x: i64) => i64, v: i64): i64 {
+  return g(v);
+}
+
+public function total(xs: &Slice<i64>): i64 {
+  let sum: i64 = 0;
+  for (const x of xs) {
+    sum += *x;
+  }
+  return sum;
+}

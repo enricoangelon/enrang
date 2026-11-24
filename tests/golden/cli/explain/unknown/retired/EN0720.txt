@@ -1,0 +1,5 @@
+$ enrang explain EN0720
+[exit 2]
+[stdout]
+[stderr]
+error: `EN0720` is retired: a part of an array is a `&Slice<T>`, and one passed where a growable `&T[]` is expected is EN0401

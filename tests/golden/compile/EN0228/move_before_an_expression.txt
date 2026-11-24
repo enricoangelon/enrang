@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0228/move_before_an_expression.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0228]: `move` is not needed here
+ --> tests/compile/EN0228/move_before_an_expression.fail.en:3:12
+  |
+3 | queue.push(move task); //~ EN0228
+  |            ^^^^ a value moves wherever there is no `&`
+  |
+help: remove `move`
+  |
+3 | queue.push(task); //~ EN0228
+  |            ~
+  = explain: run `enrang explain EN0228`
+
+error[EN0228]: `move` is not needed here
+ --> tests/compile/EN0228/move_before_an_expression.fail.en:4:14
+  |
+4 | const copy = move queue; //~ EN0228
+  |              ^^^^ a value moves wherever there is no `&`
+  |
+help: remove `move`
+  |
+4 | const copy = queue; //~ EN0228
+  |              ~
+  = explain: run `enrang explain EN0228`
+
+error: aborting due to 2 previous errors

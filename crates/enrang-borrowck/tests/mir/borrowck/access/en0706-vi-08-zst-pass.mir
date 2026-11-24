@@ -1,0 +1,86 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/vi-08-zst.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/vi-08-zst.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@final class Silent { }
+interface Speaker { }
+fn Speaker::speak(_1: &Self) -> string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Silent[]; // units
+  let _3: void temp;
+  let _4: Silent temp;
+  let _5: *Silent temp;
+  let _6: void temp;
+  let _7: &Silent[] temp;
+  let _8: &Speaker | null; // r
+  let _9: isize temp;
+  let _10: isize temp;
+  let _11: &Silent temp;
+  let _12: &Speaker temp;
+  let _13: void temp;
+  let _14: u32 temp;
+  let _15: bool temp;
+  let _16: &bool temp;
+  let _17: void temp;
+  let _18: string temp;
+  let _19: &Speaker temp;
+  let _20: &string temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<Silent>();
+    _5 = addr_of _4;
+    _6 = named_fill Silent leaving()(move _5) -> bb1;
+  }
+  bb1: {
+    _7 = &_2 [auto-borrow];
+    _3 = "alloc/array"::Array<Silent>::push(move _7, move _4) -> bb2;
+  }
+  bb2: {
+    storage_live(_8);
+    _9 = const 0: isize;
+    _10 = len(_2);
+    check_bounds(copy _9, copy _10);
+    _11 = &_2[_9] [explicit];
+    _12 = convert(ref_to_interface, move _11);
+    _8 = present(move _12);
+    _14 = discriminant(_8);
+    _15 = eq(move _14, const 0: u32);
+    _16 = &_15 [temp-arg];
+    _13 = form log(move _16) -> bb3;
+  }
+  bb3: {
+    storage_dead(_15);
+    check_tag(_8, Present);
+    _19 = &*(_8 as Present).0 [reborrow];
+    _18 = virtual Speaker::speak [copy _19](move _19) -> bb4;
+  }
+  bb4: {
+    _20 = &_18 [temp-arg];
+    _17 = form log(move _20) -> bb5;
+  }
+  bb5: {
+    drop(_18);
+    storage_dead(_18);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Silent::speak(_1: &Silent) -> string {
+  let _1: &Silent; // this
+  bb0: {
+    _0 = const "...": string;
+    return;
+  }
+}

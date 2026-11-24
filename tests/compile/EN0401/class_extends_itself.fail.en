@@ -1,0 +1,1 @@
+public class Loop extends Loop {} //~ EN0401 "`Loop` can't extend itself"

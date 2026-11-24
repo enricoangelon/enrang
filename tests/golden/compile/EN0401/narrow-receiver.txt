@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0401/narrow-receiver.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `h.item` may be `null` here
+ --> tests/compile/EN0401/narrow-receiver.fail.en:5:15
+  |
+4 |   h.drop();
+  |   - this may write through it
+5 |   console.log(h.item.n); //~ EN0401
+  |               ^^^^^^^^ the test before this may no longer hold
+  |
+  = note: a writing reference may have changed `h.item`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

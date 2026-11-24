@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0434/a_field_the_class_lacks.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0434]: `User` has no field `nickname`
+ --> tests/compile/EN0434/a_field_the_class_lacks.fail.en:1:37
+  |
+1 | const ada = new User { name: "Ada", nickname: "A" }; //~ EN0434 "`User` has no field `nickname`"
+  |                                     ^^^^^^^^ not a field of `User`
+  |
+  = explain: run `enrang explain EN0434`
+
+error[EN0434]: `Shape.Square` has no field `corner`
+ --> tests/compile/EN0434/a_field_the_class_lacks.fail.en:2:37
+  |
+2 | const s = Shape.Square { side: 1.0, corner: 2 }; //~ EN0434 "`Shape.Square` has no field `corner`"
+  |                                     ^^^^^^ not a field of `Shape.Square`
+  |
+  = explain: run `enrang explain EN0434`
+
+error: aborting due to 2 previous errors

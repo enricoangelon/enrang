@@ -1,0 +1,64 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/readset_store_from_field.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/readset_store_from_field.fail";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+@final class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+}
+
+fn Copier::#ctor(_1: &Copier, _2: &Slice<u8>, _3: &Slice<u8>) -> void {
+  let _1: &Copier; // this
+  let _2: &Slice<u8>; // s
+  let _3: &Slice<u8>; // d
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+fn Copier::fuse(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: &Slice<u8> temp;
+  let _3: isize | null temp;
+  let _4: &Slice<u8> temp;
+  bb0: {
+    _3 = present(const 1: isize);
+    _4 = copy (*_1).dst;
+    _2 = "core/slice"::Slice<u8>::slice(move _4, const 0: isize, move _3, const 2: isize) -> bb1;
+  }
+  bb1: {
+    (*_1).src = move _2; //~ EN0616 "`src` is declared `readonly &`, so it can't hold a reference from `dst`"
+    return;
+  }
+}
+
+fn Copier::step(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  let _4: u8 temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = const 0: isize;
+    _5 = len(*(*_1).src);
+    check_bounds(copy _3, copy _5);
+    _4 = copy (*(*_1).src)[_3];
+    _6 = len(*(*_1).dst);
+    check_bounds(copy _2, copy _6);
+    (*(*_1).dst)[_2] = move _4;
+    return;
+  }
+}

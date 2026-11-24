@@ -1,0 +1,7 @@
+const s = new Shape(); //~ EN0445 "`Shape` is abstract, so it can't be created"
+const t = new Shape {}; //~ EN0445
+console.log(s.area(), t.area());
+
+public abstract class Shape {
+  public abstract area(): f64;
+}

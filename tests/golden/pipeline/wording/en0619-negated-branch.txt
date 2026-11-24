@@ -1,0 +1,10 @@
+error[EN0619]: `super(name)` isn't called on every path before the constructor returns
+ --> main.en:5:3
+  |
+5 |   }
+  |   ^ the constructor may return here without `super(name)`
+  |
+  = note: when `quiet` is true
+  = explain: run `enrang explain EN0619`
+
+error: aborting due to 1 previous error

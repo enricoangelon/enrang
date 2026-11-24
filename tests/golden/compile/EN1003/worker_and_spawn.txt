@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN1003/worker_and_spawn.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1003]: threads are not supported yet
+ --> tests/compile/EN1003/worker_and_spawn.fail.en:1:15
+  |
+1 | const w = new Worker("job.en"); //~ EN1003 "threads are not supported yet"
+  |               ^^^^^^ not supported yet
+  |
+  = note: a program runs on one thread; there is no thread or worker to start yet.
+help: `Atomic` exists only for interrupt sharing
+  = explain: run `enrang explain EN1003`
+
+error[EN1003]: threads are not supported yet
+ --> tests/compile/EN1003/worker_and_spawn.fail.en:2:1
+  |
+2 | spawn(() => console.log("hi")); //~ EN1003 "threads are not supported yet"
+  | ^^^^^ not supported yet
+  |
+  = note: a program runs on one thread; there is no thread or worker to start yet.
+help: `Atomic` exists only for interrupt sharing
+  = explain: run `enrang explain EN1003`
+
+error[EN1003]: threads are not supported yet
+ --> tests/compile/EN1003/worker_and_spawn.fail.en:3:14
+  |
+3 | let pending: Worker | null = null; //~ EN1003 "threads are not supported yet"
+  |              ^^^^^^ not supported yet
+  |
+  = note: a program runs on one thread; there is no thread or worker to start yet.
+help: `Atomic` exists only for interrupt sharing
+  = explain: run `enrang explain EN1003`
+
+error: aborting due to 3 previous errors

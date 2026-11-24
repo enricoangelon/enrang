@@ -1,0 +1,6 @@
+let p = new Point();
+p.x = 1;
+
+public class Point {
+  public x: i64 = 0;
+}

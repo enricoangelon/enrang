@@ -1,0 +1,7 @@
+public function wrap<T>(x: T<i64>): void {} //~ EN1014 "this generic feature is not supported yet"
+
+public function item<T>(x: T.Item): void {} //~ EN1014 "this generic feature is not supported yet"
+
+public class Holder<T> {
+  public v: T<string> | null = null; //~ EN1014 "this generic feature is not supported yet"
+}

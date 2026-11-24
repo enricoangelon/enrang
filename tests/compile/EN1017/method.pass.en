@@ -1,0 +1,7 @@
+public class Box2 {
+  private w: i64 = 0;
+
+  public setWidth(v: i64): void {
+    this.w = v;
+  }
+}

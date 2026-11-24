@@ -1,0 +1,11 @@
+//! row: `h1`-`h8`, hold slots: loans on the sour
+public class Tally {
+  public items: i64[] = [1, 2];
+  public total: i64 = 0;
+  public add(x: &i64): void { this.total += *x; }
+  public sum(): void {
+    for (const x of &this.items) {
+      this.add(x); //~ EN0706
+    }
+  }
+}

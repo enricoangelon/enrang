@@ -1,0 +1,7 @@
+//! covers: H22
+let q: string[] = ["a", "b"];
+for (const x of &q) {
+  const m = q;
+  console.log(m);
+  return;
+}

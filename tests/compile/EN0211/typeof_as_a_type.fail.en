@@ -1,0 +1,3 @@
+const x = 1;
+let y: typeof x = x; //~ EN0211
+console.log(y);

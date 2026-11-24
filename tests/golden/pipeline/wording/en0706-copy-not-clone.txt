@@ -1,0 +1,14 @@
+error[EN0706]: `xs` cannot change while `first` still points into it
+ --> main.en:3:1
+  |
+2 | const first = &xs[0];
+  |               ------ shared borrow of `xs` starts here, held by `first`
+3 | xs.push(new Item(2));
+  | ^^^^^^^^^^^^^^^^^^^^ `push` changes `xs`, so it needs exclusive access to it
+4 | console.log(first);
+  |             ----- `first` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,5 @@
+let v: i64[] = [1, 2, 3, 4];
+const a = v.slice(0, 2);
+const b = v.slice(2, 4); //~ EN0707 "cannot borrow `v` as exclusive twice at the same time"
+a[0] = b[0];
+b[1] = 9;

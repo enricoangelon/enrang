@@ -1,0 +1,13 @@
+const ada = new User { name: "Ada" };
+const team = new Team { size: 3 }; //~ EN0433 "missing field `owner`"
+const empty = new Team(); //~ EN0433 "`new Team()` leaves `owner` unset"
+console.log(ada.name, team.size, empty.size);
+
+public class User {
+  public name: string;
+}
+
+public class Team {
+  public owner: User;
+  public size: i64;
+}

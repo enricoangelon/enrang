@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0425/question_mark_with_another_error.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0425]: `?` returns `DiskError`, but the function returns `AgeError`
+ --> tests/compile/EN0425/question_mark_with_another_error.fail.en:4:20
+  |
+4 |   const n = read(s)?; //~ EN0425 "`?` returns `DiskError`, but the function returns `AgeError`"
+  |                    ^ this returns a `DiskError` error early
+  |
+help: return `Result<i64>`, which takes any error as its text
+  = explain: run `enrang explain EN0425`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,12 @@
+//! row: `match (move r)`, `for (const x of move r)`,
+public function f(r: &User): void {
+  const k = match (r) {
+    default => 1,
+  };
+  const b = r;
+  console.log(k, b);
+}
+
+public class User {
+  public name: string = "Ada";
+}

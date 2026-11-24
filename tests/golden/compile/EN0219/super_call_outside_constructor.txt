@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0219/super_call_outside_constructor.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0219]: `super(...)` outside a constructor
+  --> tests/compile/EN0219/super_call_outside_constructor.fail.en:11:5
+   |
+11 |     super(1); //~ EN0219 "`super(...)` outside a constructor"
+   |     ^^^^^ only a constructor calls its base's
+   |
+   = explain: run `enrang explain EN0219`
+
+error: aborting due to 1 previous error

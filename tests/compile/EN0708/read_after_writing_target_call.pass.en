@@ -1,0 +1,7 @@
+let xs: i64[] = [1, 2];
+const v = val(&xs);
+*slot(&xs) = v;
+console.log(xs);
+
+private function slot(v: &i64[]): &i64 { return &v[0]; }
+private function val(v: &i64[]): i64 { return v[1]; }

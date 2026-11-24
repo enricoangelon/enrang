@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/tk-01-lasttwice.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `lastTwice`
+ --> tests/compile/EN0616/tk-01-lasttwice.fail.en:4:12
+  |
+4 |   clash(x, y); //~ EN0616
+  |            ^ `clash` writes through it
+  |
+  = note: `lastTwice` returns two references that may point at the same data
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

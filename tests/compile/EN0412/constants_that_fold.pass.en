@@ -1,0 +1,8 @@
+const xs: i64[3] = [1, 2, 3];
+const ys = [...xs];
+console.log(SIZE, RATE, NAME, PRIMES[0], ys);
+
+private const SIZE: u8 = 200 + 55;
+private const RATE: i32 = 10 * 3;
+private const NAME: &string = "Ada";
+private const PRIMES: &Slice<i64> = &[2, 3, 5, 7];

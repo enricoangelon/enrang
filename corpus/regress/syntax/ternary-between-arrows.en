@@ -1,0 +1,1 @@
+public const a = a(node ? (b, i) => node : a => a);

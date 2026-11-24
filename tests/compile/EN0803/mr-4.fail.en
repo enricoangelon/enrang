@@ -1,0 +1,18 @@
+let q: i64[] = [];
+const f: fn() => void = relay; //~ EN0803 "`relay` uses top-level variables, so it can't become an `fn`"
+
+function relay(): void {
+  grow();
+}
+
+function grow(): void {
+  for (let i = 0; i < 100; i++) {
+    q.push(i);
+  }
+}
+
+public class Pump {
+  public run(): void {
+    grow(); //~ EN0313
+  }
+}

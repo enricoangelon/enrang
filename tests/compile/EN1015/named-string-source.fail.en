@@ -1,0 +1,4 @@
+//! row: `for (const c of "abc")`
+for (const c of "abc") { //~ EN1015 "this `for...of` source is not supported yet"
+  console.log(c);
+}

@@ -1,0 +1,5 @@
+import { Lexer } from "./lexer.pass";
+
+let s = "ab";
+let lx = new Lexer(&s);
+*lx.src += "c"; //~ EN0308 "`src` is private to `Lexer`"

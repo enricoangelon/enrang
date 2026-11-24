@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0709/move_while_borrowing_value_lives.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0709]: cannot move `src` while it is borrowed
+ --> tests/compile/EN0709/move_while_borrowing_value_lives.fail.en:3:15
+  |
+2 | let lx = new Lexer(&src);
+  |                    ---- shared borrow of `src` starts here, held by `lx`
+3 | const moved = src; //~ EN0709 "cannot move `src` while it is borrowed"
+  |               ^^^ `src` moves here
+4 | console.log(lx.peek(), moved);
+  |             -- the borrow is still in use here
+  |
+help: move `src` after its last borrow, or move a copy: `src.clone()`
+  = explain: run `enrang explain EN0709`
+
+error: aborting due to 1 previous error

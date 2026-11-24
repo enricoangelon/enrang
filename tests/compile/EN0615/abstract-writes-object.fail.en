@@ -1,0 +1,12 @@
+public abstract class Shape {
+  public abstract area(): i64;
+}
+
+public class Square extends Shape {
+  private calls: i64 = 0;
+
+  public override area(): i64 {
+    this.calls += 1; //~ EN0615 "`area` changes the object, but `Shape` declares that it doesn't"
+    return 4;
+  }
+}

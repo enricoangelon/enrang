@@ -1,0 +1,29 @@
+$ enrang check --target=i386-linux tests/compile/EN0435/a_static_too_large_for_i386.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0435]: `u8[3000000000]` is too large for `i386-linux`
+ --> tests/compile/EN0435/a_static_too_large_for_i386.fail.en:2:20
+  |
+2 | private unsafe let big: u8[3000000000]; //~ EN0435 "`u8[3000000000]` is too large for `i386-linux`"
+  |                    ^^^ it has 3000000000 elements, more than `isize.MAX` (2147483647)
+  |
+  = explain: run `enrang explain EN0435`
+
+error[EN0435]: `u64[536870912]` is too large for `i386-linux`
+ --> tests/compile/EN0435/a_static_too_large_for_i386.fail.en:3:20
+  |
+3 | private unsafe let wraps: u64[536870912]; //~ EN0435 "`u64[536870912]` is too large for `i386-linux`"
+  |                    ^^^^^ it takes more than `isize.MAX` bytes (2147483647)
+  |
+  = explain: run `enrang explain EN0435`
+
+error[EN0435]: `Huge` is too large for `i386-linux`
+ --> tests/compile/EN0435/a_static_too_large_for_i386.fail.en:5:14
+  |
+5 | public class Huge { //~ EN0435 "`Huge` is too large for `i386-linux`"
+  |              ^^^^ it takes more than `isize.MAX` bytes (2147483647)
+  |
+  = explain: run `enrang explain EN0435`
+
+error: aborting due to 3 previous errors

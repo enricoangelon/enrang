@@ -1,0 +1,11 @@
+public abstract class Slot {
+  public abstract pick(a: &i64): &i64;
+}
+
+public class Cell extends Slot {
+  private n: i64 = 0;
+
+  public override pick(a: &i64): &i64 {
+    return &this.n;
+  }
+}

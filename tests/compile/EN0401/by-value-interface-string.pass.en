@@ -1,0 +1,15 @@
+const n = new Count(5);
+console.log(keep(new Count(3)));
+console.log(keepRef(&n));
+
+private function keep(m: Measured): isize { const r: &Measured = &m; return r.length(); }
+private function keepRef(m: &Measured): isize { return m.length(); }
+
+public interface Measured {
+  length(): isize;
+}
+
+private class Count implements Measured {
+  public constructor(public n: isize) {}
+  public length(): isize { return this.n; }
+}

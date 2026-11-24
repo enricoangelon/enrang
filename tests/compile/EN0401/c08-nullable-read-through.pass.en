@@ -1,0 +1,8 @@
+//! covers: C08
+const p: Point | null = new Point { x: 1 };
+const v: i64 | null = p?.x;
+console.log(v);
+
+public class Point {
+  public x: i64;
+}

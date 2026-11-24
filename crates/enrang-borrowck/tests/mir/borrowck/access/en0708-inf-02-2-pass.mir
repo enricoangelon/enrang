@@ -1,0 +1,45 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0708/inf-02-2.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0708/inf-02-2.pass";
+class Bag {
+  items: i64[] = default;
+}
+class Holder {
+  private r: &Bag;
+}
+
+fn Holder::#ctor(_1: &Holder, _2: &Bag) -> void {
+  let _1: &Holder; // this
+  let _2: &Bag; // r
+  let _3: &Bag temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    return;
+  }
+}
+
+fn Holder::first(_1: &Holder) -> &i64 {
+  let _1: &Holder; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len((*(*_1).r).items);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).r).items[_2] [explicit];
+    return;
+  }
+}
+
+fn Holder::keep(_1: &Holder, _2: &Bag) -> void {
+  let _1: &Holder; // this
+  let _2: &Bag; // x
+  let _3: &Bag temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    return;
+  }
+}

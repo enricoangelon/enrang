@@ -1,0 +1,6 @@
+const xs = [1, 2, 3];
+const last = 0;
+for (const x of &xs) {
+  last = *x; //~ EN0613 "cannot assign to `last`, because it is `const`"
+}
+console.log(last);

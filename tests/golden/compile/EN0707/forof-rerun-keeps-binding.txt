@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0707/forof-rerun-keeps-binding.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: cannot borrow `q` as exclusive twice at the same time
+  --> tests/compile/EN0707/forof-rerun-keeps-binding.fail.en:6:19
+   |
+ 6 |   for (const x of &q) { //~ EN0707
+   |                   ^^ second exclusive borrow
+   |                    - first exclusive borrow, held by `keep`
+...
+11 | use(keep);
+   |     ---- `keep` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error: aborting due to 1 previous error

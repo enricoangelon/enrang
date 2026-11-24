@@ -1,0 +1,29 @@
+const user = new User { name: "Ada" };
+greet(&user);
+const a = new Dog {};
+const b = new Dog {};
+console.log(same(&a, &b));
+
+private function greet(x: &{ name: string }): void {
+  console.log(`hi ${x.name}`);
+}
+
+private function same<T extends Eq>(a: &T, b: &T): bool {
+  return a.equals(b);
+}
+
+private function swapIn<T extends Speaker>(let s: T, o: T): void {
+  s = o;
+  console.log(s.speak());
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class User {
+  public name: string;
+  private secret: int = 0;
+}
+
+public class Dog implements Eq {}

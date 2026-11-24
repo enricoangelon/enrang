@@ -1,0 +1,11 @@
+//! covers: H40
+let root = new Node(); let kid = new Node(); kid.val.push(1); root.kids.push(kid);
+const [k, w] = snapDown(&root); const f = &w[0];
+k.val = []; //~ EN0616
+console.log(*f);
+
+public class Node { public val: i64[] = []; public kids: Node[] = []; }
+
+public function pick(t: [&Node, i32], u: [&i64[], i32]): [&Node, &i64[]] { return [t[0], u[0]]; }
+
+public function snapDown(let node: &Node): [&Node, &i64[]] { const t: [&Node, i32] = [&node.kids[0], 0]; node = &node.kids[0]; const u: [&i64[], i32] = [&node.val, 0]; return pick(t, u); }

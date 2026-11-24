@@ -1,0 +1,129 @@
+// Moves across a deref or an index (plan d.2: EN0603, EN0604, EN0605, EN0607; doc gap
+// X13). Shapes: c.4 (plan lines 914-916) a reference or `Box` deref is a `Deref`, a raw
+// one goes through a copy of the pointer, an index is `len`, `check_bounds`, then the
+// projection; c.7 (line 1012) a `move` method's receiver; c.13 (line 1147) an owned
+// `T[]` loop source moves its elements out of the `#iter` local.
+// Heads (plan e): cannot move `x.f` out of a reference; cannot move `this.name` out of
+// `this`; cannot move out of `xs[i]`; cannot move out of `*b`; cannot move `f.name` out
+// of `f`, because `File` has a destructor.
+@final class User {
+  name: string;
+}
+@final class File {
+  name: string;
+}
+fn File::#dtor(_1: &File) -> void;
+fn archive(_1: User) -> void;
+fn keep(_1: string) -> void;
+
+fn through(_1: &User) -> void {
+  let _2: void temp;
+  bb0: {
+    _2 = archive(move *_1) -> bb1; //~ EN0603
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn User::take(_1: &User) -> string {
+  bb0: {
+    _0 = move (*_1).name; //~ EN0603
+    return;
+  }
+}
+
+// A `move` method owns its object: no error.
+move fn User::consume(_1: &User) -> string {
+  bb0: {
+    _0 = move (*_1).name;
+    return;
+  }
+}
+
+fn raw(_1: *User) -> string {
+  let _2: *User temp;
+  bb0: {
+    _2 = copy _1;
+    _0 = move (*_2).name; //~ EN0603
+    return;
+  }
+}
+
+fn boxed(_1: Box<User>) -> void {
+  let _2: void temp;
+  bb0: {
+    _2 = archive(move *_1) -> bb1; //~ EN0605
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}
+
+fn index(_1: User[], _2: isize) -> void {
+  let _3: isize temp;
+  let _4: User temp;
+  let _5: void temp;
+  bb0: {
+    _3 = len(_1);
+    check_bounds(copy _2, copy _3);
+    _4 = move _1[_2]; //~ EN0604
+    _5 = archive(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}
+
+fn split(_1: File) -> void {
+  let _2: void temp;
+  bb0: {
+    _2 = keep(move _1.name) -> bb1; //~ EN0607
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}
+
+// `for (const x of owned)` over a `T[]` rvalue: the elements move out of `#iter`.
+fn drain(_1: User[]) -> void {
+  let _2: User[] #iter;
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: User; // x
+  let _7: void temp;
+  bb0: {
+    _2 = move _1;
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb1: {
+    _4 = len(_2);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb5, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = move _2[_3];
+    _3 = add(copy _3, const 1: isize);
+    goto bb3;
+  }
+  bb3: {
+    _7 = archive(move _6) -> bb4;
+  }
+  bb4: {
+    drop(_6);
+    storage_dead(_6);
+    goto bb1;
+  }
+  bb5: {
+    drop(_2);
+    return;
+  }
+}

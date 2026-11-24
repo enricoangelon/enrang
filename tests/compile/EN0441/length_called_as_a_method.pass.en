@@ -1,0 +1,6 @@
+const name = "Ada";
+const xs: i64[] = [1, 2, 3];
+const maybe: string | null = null;
+console.log(name.length(), xs.length(), name.charCount());
+console.log("città".length(), "città".charCount());
+console.log(maybe?.length());

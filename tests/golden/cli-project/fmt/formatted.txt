@@ -1,0 +1,10 @@
+$ enrang fmt src
+[exit 0]
+[stdout]
+[stderr]
+[file src/a.en]
+const x = 1;
+[file src/b.en]
+console.log(1);
+[file src/sub/c.test.en]
+test("one", () => { expect(1).toBe(1); });

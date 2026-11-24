@@ -1,0 +1,21 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/const_root_write_through_reference.fail.en. Its row's codes: EN0608.
+module "tests/compile/EN0608/const_root_write_through_reference.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: int; // k
+  let mut _3: &int; // w
+  bb0: {
+    storage_live(_2);
+    _2 = const 12: int;
+    storage_live(_3);
+    _3 = &_2 [explicit];
+    *_3 = const 13: int; //~ EN0608 "cannot mutate immutable data"
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

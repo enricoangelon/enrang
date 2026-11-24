@@ -1,0 +1,13 @@
+const k = [1];
+let p = new Pad(&k);
+p.bad();
+console.log(k);
+
+private class Pad {
+  private t: [readonly &i64[], i32];
+  public constructor(k: &i64[]) { this.t = [k, 0]; }
+  public bad(): void {
+    const u = this.t;
+    u[0].push(1); //~ EN0614 "`u[0]` is read-only here, so"
+  }
+}

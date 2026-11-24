@@ -1,0 +1,11 @@
+$ enrang fmt --check
+[stdin]
+const   x=1;
+if (x == 1) {
+      console.log(x);
+}
+[exit 1]
+[stdout]
+<stdin> would be reformatted
+1 of 1 file would change
+[stderr]

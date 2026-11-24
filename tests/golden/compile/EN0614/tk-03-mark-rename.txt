@@ -1,0 +1,69 @@
+$ enrang check tests/compile/EN0614/tk-03-mark-rename.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `deepR` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-03-mark-rename.fail.en:5:3
+  |
+5 |   p1.push(9); p1.push(9); p1.push(9); p1.push(9); //~ EN0614
+  |   ^^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0614]: `deepR` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-03-mark-rename.fail.en:5:15
+  |
+5 |   p1.push(9); p1.push(9); p1.push(9); p1.push(9); //~ EN0614
+  |               ^^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0614]: `deepR` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-03-mark-rename.fail.en:5:27
+  |
+5 |   p1.push(9); p1.push(9); p1.push(9); p1.push(9); //~ EN0614
+  |                           ^^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0614]: `deepR` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-03-mark-rename.fail.en:5:39
+  |
+5 |   p1.push(9); p1.push(9); p1.push(9); p1.push(9); //~ EN0614
+  |                                       ^^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0614]: `deepE` returns two references that may point at the same data, so `push` cannot change it
+  --> tests/compile/EN0614/tk-03-mark-rename.fail.en:13:3
+   |
+13 |   q1.push(9); q1.push(9); q1.push(9); q1.push(9); //~ EN0614
+   |   ^^^^^^^^^^ `push` changes it
+   |
+   = explain: run `enrang explain EN0614`
+
+error[EN0614]: `deepE` returns two references that may point at the same data, so `push` cannot change it
+  --> tests/compile/EN0614/tk-03-mark-rename.fail.en:13:15
+   |
+13 |   q1.push(9); q1.push(9); q1.push(9); q1.push(9); //~ EN0614
+   |               ^^^^^^^^^^ `push` changes it
+   |
+   = explain: run `enrang explain EN0614`
+
+error[EN0614]: `deepE` returns two references that may point at the same data, so `push` cannot change it
+  --> tests/compile/EN0614/tk-03-mark-rename.fail.en:13:27
+   |
+13 |   q1.push(9); q1.push(9); q1.push(9); q1.push(9); //~ EN0614
+   |                           ^^^^^^^^^^ `push` changes it
+   |
+   = explain: run `enrang explain EN0614`
+
+error[EN0614]: `deepE` returns two references that may point at the same data, so `push` cannot change it
+  --> tests/compile/EN0614/tk-03-mark-rename.fail.en:13:39
+   |
+13 |   q1.push(9); q1.push(9); q1.push(9); q1.push(9); //~ EN0614
+   |                                       ^^^^^^^^^^ `push` changes it
+   |
+   = explain: run `enrang explain EN0614`
+
+error: aborting due to 8 previous errors

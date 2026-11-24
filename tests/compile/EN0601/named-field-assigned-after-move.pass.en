@@ -1,0 +1,25 @@
+//! row: `take(p); p.first = c;` for a plain class
+public function plain(c: string): void {
+  let p = new Node { first: "a" };
+  p.first = c;
+  take(p);
+}
+
+public function owning(c: string): void {
+  let p = new Res { first: "a" };
+  p.first = c;
+  drop(p);
+}
+
+private function take(p: Node): void {}
+
+private function drop(p: Res): void {}
+
+public class Node {
+  public first: string;
+}
+
+public class Res {
+  public first: string;
+  public destructor() {}
+}

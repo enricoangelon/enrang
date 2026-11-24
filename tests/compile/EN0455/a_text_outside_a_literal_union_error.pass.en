@@ -1,0 +1,7 @@
+console.log(turn(), steer());
+
+public function turn(): Result<string, Direction> { return "up"; }
+
+public function steer(): Result<string, Direction> { return Err("left"); }
+
+private type Direction = "left" | "right";

@@ -1,0 +1,7 @@
+//! covers: C11
+const f: fn(x: i64) => i64 = (x: i64) => x;
+const g: fn(x: i64) => i64 = double;
+const h: fn(x: i64) => i64 = x => x + 1;
+console.log(f(1), g(2), h(3));
+
+private function double(x: i64): i64 { return x * 2; }

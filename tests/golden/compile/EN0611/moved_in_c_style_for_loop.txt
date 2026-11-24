@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0611/moved_in_c_style_for_loop.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0611]: `q` was moved in an earlier turn
+ --> tests/compile/EN0611/moved_in_c_style_for_loop.fail.en:3:8
+  |
+3 |   take(q); //~ EN0611 "`q` was moved in an earlier turn"
+  |        ^ moved here, in an earlier turn
+  |
+help: borrow it instead (`&q`), or move a copy each turn: `q.clone()`
+  = explain: run `enrang explain EN0611`
+
+error: aborting due to 1 previous error

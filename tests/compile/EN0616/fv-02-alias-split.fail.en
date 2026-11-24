@@ -1,0 +1,26 @@
+let words: string[] = ["a".toString(), "b".toString()];
+let s = Splitter.fused(&words);
+const p = s.peek();
+s.step();
+console.log(*p);
+
+public final class Splitter {
+  private src: readonly &Slice<string>;
+  private dst: &Slice<string>;
+  public constructor(x: &Slice<string>) {
+    const [a, b] = x.splitAt(1);
+    this.src = a;
+    this.dst = b;
+  }
+  public peek(): readonly &string {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst[0] = "zz".toString();
+  }
+  public static fused(x: &Slice<string>): Splitter {
+    let w = new Splitter(x);
+    w.src = w.dst; //~ EN0616
+    return w; //~ EN0709
+  }
+}

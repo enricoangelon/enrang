@@ -1,0 +1,6 @@
+public class User {
+  public constructor(public name: string) {}
+  public move getName(): string {
+    return this.name;
+  }
+}

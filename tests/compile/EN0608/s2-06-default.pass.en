@@ -1,0 +1,8 @@
+const v: i64[] = [1, 2, 3, 4];
+visit(&v);
+
+private function visit(xs: &i64[], step: () => void = () => { console.log(0); }): void {
+  const head = xs.first();
+  step();
+  console.log(head);
+}

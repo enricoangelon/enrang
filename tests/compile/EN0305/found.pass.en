@@ -1,0 +1,6 @@
+import { Part, describe } from "./parts.pass";
+import { fs } from "os";
+import * as parts from "./parts.pass";
+
+const p = new Part { id: 1 };
+console.log(describe(&p), parts.describe(&p));

@@ -1,0 +1,32 @@
+public class Animal {
+  public name: string;
+  public sound: string = "...";
+
+  public constructor(name: string) {
+    this.name = name;
+  }
+}
+
+public class Dog extends Animal {
+  public tricks: string[] = [];
+
+  public constructor(name: string, quiet: bool) {
+    this.tricks = ["sit"];
+    if (quiet) {
+      super("anon");
+    } else {
+      super(name);
+    }
+  }
+}
+
+public class Pup extends Animal {
+  public tricks: string[] = [];
+
+  public constructor(name: string, bad: bool) {
+    if (bad) {
+      panic("no");
+    }
+    super(name);
+  }
+}

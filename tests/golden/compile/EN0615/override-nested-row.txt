@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0615/override-nested-row.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Sub.apply` takes `f` as a `fn(&i64[]) => void`, but `Base.apply` declares a `fn(let &i64[]) => void`
+ --> tests/compile/EN0615/override-nested-row.fail.en:9:19
+  |
+2 |   public apply(f: fn(let x: &i64[]) => void): void {
+  |          ----- the declaration it stands for
+...
+9 |   public override apply(f: fn(x: &i64[]) => void): void { //~ EN0615
+  |                   ^^^^^ declared here
+  |
+  = note: a function type's row nested inside a signature must be equal to the one it stands for, since callers through either may pass or return any function the row allows
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

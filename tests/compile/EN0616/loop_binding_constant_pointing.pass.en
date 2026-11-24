@@ -1,0 +1,10 @@
+//! covers: H28
+let v: i64[] = [0, 0];
+*firstOf(&v) = 1;
+
+public function firstOf(xs: &Slice<i64>): &i64 {
+  for (const x of xs) {
+    return x;
+  }
+  panic("none");
+}

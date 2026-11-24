@@ -1,0 +1,4 @@
+const r = first(&"a".toString()); //~ EN0712 "the temporary is dropped while `r` still borrows it"
+console.log(r);
+
+public function first(s: &string): &string { return s; }

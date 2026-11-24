@@ -1,0 +1,96 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0619/c4-super-paths-6.fail.en. Its row's codes: EN0619.
+module "tests/compile/EN0619/c4-super-paths-6.fail";
+class Animal {
+  tricks: string[];
+  name: string;
+}
+class Dog extends Animal { }
+
+fn Animal::#ctor(_1: &Animal, _2: string) -> void {
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: string[] temp;
+  let _4: string temp;
+  bb0: {
+    switch const overridden(tricks): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    switch const overridden(name): bool [0: bb4, otherwise: bb3];
+  }
+  bb2: {
+    _3 = intrinsic AllocArray<string>();
+    field_init((*_1).tricks, move _3);
+    drop(_3);
+    storage_dead(_3);
+    goto bb1;
+  }
+  bb3: {
+    _4 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _4;
+    drop(_4);
+    storage_dead(_4);
+    drop(_2);
+    return;
+  }
+  bb4: {
+    field_init((*_1).name, const "": string);
+    goto bb3;
+  }
+}
+
+fn Animal::#dtor(_1: &Animal) -> void {
+  let _1: &Animal; // this
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &(*_1).name [auto-borrow];
+    _2 = form log(const "bye, ": &string, move _3, const "": &string) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: string) -> void {
+  let _1: &Dog; // this
+  let _2: string; // name
+  let _3: () => void; // f
+  let _4: &string temp;
+  let _5: [&string] temp;
+  let _6: void temp;
+  let _7: &Dog temp;
+  let _8: &Animal temp;
+  bb0: {
+    storage_live(_3);
+    _4 = &_2 [closure-capture];
+    _5 = env(move _4);
+    _3 = closure(arrow#0, _5);
+    _7 = &*_1 [reborrow];
+    _8 = convert(upcast, move _7);
+    _6 = Animal::#ctor(move _8, move _2) -> bb1;
+  }
+  bb1: {
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+}
+
+arrow#0 of fn Dog::#ctor (_1: &[&string]) -> void {
+  let _1: &[&string] env;
+  let _2: &Dog temp;
+  let _3: &Dog temp;
+  let _4: &Animal temp;
+  capture name: &string path;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    _4 = convert(upcast, move _3);
+    _0 = Animal::#ctor(move _4) -> bb1; //~ EN0619 "`super(...)` must be a statement of the constructor's own body"
+  }
+  bb1: {
+    return;
+  }
+}

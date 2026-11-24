@@ -1,0 +1,15 @@
+public class Animal {
+  public constructor(public name: string) {}
+  public describe(): string {
+    return this.name.clone();
+  }
+}
+
+public class Dog extends Animal {
+  public label: string;
+
+  public constructor(name: string) {
+    this.label = name.clone();
+    super(name);
+  }
+}

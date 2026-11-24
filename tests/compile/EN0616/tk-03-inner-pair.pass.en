@@ -1,0 +1,4 @@
+//! covers: H27
+let grid: i64[][] = [[1, 2, 3], [4]]; const p = innerPair(&grid); if (p != null) { *p[0] = 0; *p[1] = 0; } console.log(grid);
+
+public function innerPair(rows: &Slice<i64[]>): [&i64, &i64] | null { for (const x of rows) { let a: &i64 | null = null; for (const y of x) { if (a != null) { return [a, y]; } a = y; } } return null; }

@@ -1,0 +1,16 @@
+public class Animal {
+  public tricks: string[];
+
+  public constructor(public name: string) {}
+
+  public destructor() {
+    console.log(`bye, ${this.name}`);
+  }
+}
+
+public class Dog extends Animal {
+  public constructor(name: string) {
+    const f = () => super(name); //~ EN0619 "`super(...)` must be a statement of the constructor's own body"
+    super(name);
+  }
+}

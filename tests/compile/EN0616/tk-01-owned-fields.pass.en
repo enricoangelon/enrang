@@ -1,0 +1,3 @@
+const s = "s".toString(); let t = new Two(&s); const [x, y] = t.both(); x.push(3); y.push(4); console.log(*x, *y, s);
+
+public class Two { private src: &string; private a: i64[] = [1]; private b: i64[] = [2]; public constructor(src: &string) { this.src = src; } public both(): [&i64[], &i64[]] { return [&this.a, &this.b]; } }

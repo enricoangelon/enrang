@@ -1,0 +1,10 @@
+error[EN0418]: `Cursor` writes through its reference fields, so copying it would make two writers
+ --> main.en:6:15
+  |
+6 | private class Cursor implements Copy {
+  |               ^^^^^^ declared `implements Copy` here
+  |
+help: if `Cursor` only reads through them, write `readonly` before their types or before the return types that hand them out, or remove `implements Copy`
+  = explain: run `enrang explain EN0418`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,172 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/marked-argument-and-another-conflict.fail.en. Its row's codes: EN0608, EN0608, EN0614, EN0706, EN0706, EN0709.
+module "tests/compile/EN0608/marked-argument-and-another-conflict.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@private class Grower {
+  private v: &i64[];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // other
+  let _3: i64[]; // data
+  let _4: &i64; // e
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: Grower; // g
+  let _8: &i64[] temp;
+  let _9: &Grower temp;
+  let _10: void temp;
+  let _11: &i64; // o
+  let _12: isize temp;
+  let _13: isize temp;
+  let _14: void temp;
+  let _15: &i64[] temp;
+  let _16: void temp;
+  let _17: &i64 temp;
+  let _18: &i64 temp;
+  let _19: i64[]; // kept
+  let _20: Grower; // h
+  let _21: &i64[] temp;
+  let _22: &Grower temp;
+  let _23: void temp;
+  let _24: void temp;
+  let _25: void temp;
+  let _26: &Grower temp;
+  let _27: i64[]; // v
+  let _28: &i64; // r
+  let _29: isize temp;
+  let _30: isize temp;
+  let _31: void temp;
+  let _32: &i64[] temp;
+  let _33: void temp;
+  let _34: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<i64>(const 1: i64);
+    storage_live(_4);
+    _5 = const 0: isize;
+    _6 = len(_3);
+    check_bounds(copy _5, copy _6);
+    _4 = &_3[_5] [explicit];
+    storage_live(_7);
+    set_table(_7, Grower);
+    _8 = &_3 [explicit]; //~ EN0608
+    _9 = &_7 [auto-borrow];
+    _10 = Grower::#ctor(move _9, move _8) -> bb1;
+  }
+  bb1: {
+    storage_live(_11);
+    _12 = const 0: isize;
+    _13 = len(_2);
+    check_bounds(copy _12, copy _13);
+    _11 = &_2[_12] [explicit];
+    _15 = &_2 [auto-borrow]; //~ EN0706 "`other` cannot change while `o` still points into it"
+    _14 = "alloc/array"::Array<i64>::push(move _15, const 2: i64) -> bb2;
+  }
+  bb2: {
+    _17 = &*_4 [auto-borrow];
+    _18 = &*_11 [auto-borrow];
+    _16 = form log(move _17, move _18) -> bb3;
+  }
+  bb3: {
+    storage_live(_19);
+    _19 = intrinsic AllocArray<i64>(const 1: i64);
+    storage_live(_20);
+    set_table(_20, Grower);
+    _21 = &_19 [explicit]; //~ EN0608
+    _22 = &_20 [auto-borrow];
+    _23 = Grower::#ctor(move _22, move _21) -> bb4;
+  }
+  bb4: {
+    _24 = take(move _19) -> bb5; //~ EN0709 "cannot move `kept` while it is borrowed"
+  }
+  bb5: {
+    _26 = &_20 [auto-borrow];
+    _25 = Grower::show(move _26) -> bb6;
+  }
+  bb6: {
+    storage_live(_27);
+    _27 = intrinsic AllocArray<i64>(const 1: i64);
+    storage_live(_28);
+    _29 = const 0: isize;
+    _30 = len(_27);
+    check_bounds(copy _29, copy _30);
+    _28 = &_27[_29] [explicit];
+    _32 = &_27 [auto-borrow]; //~ EN0706 "`v` cannot change while `r` still points into it"
+    _31 = "alloc/array"::Array<i64>::push(move _32, const 2: i64) -> bb7; //~ EN0614 "`v` is `const`, so `push` cannot change it"
+  }
+  bb7: {
+    _34 = &*_28 [auto-borrow];
+    _33 = form log(move _34) -> bb8;
+  }
+  bb8: {
+    storage_dead(_28);
+    drop(_27);
+    storage_dead(_27);
+    storage_dead(_20);
+    drop(_19);
+    storage_dead(_19);
+    storage_dead(_11);
+    storage_dead(_7);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Grower::#ctor(_1: &Grower, _2: &i64[]) -> void {
+  let _1: &Grower; // this
+  let _2: &i64[]; // v
+  let _3: &i64[] temp;
+  let _4: void temp;
+  let _5: &i64[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).v = move _3;
+    _5 = copy (*_1).v;
+    _4 = "alloc/array"::Array<i64>::push(move _5, const 0: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Grower::show(_1: &Grower) -> void {
+  let _1: &Grower; // this
+  let _2: void temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = copy (*_1).v;
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn take(_1: i64[]) -> void {
+  let _1: i64[]; // xs
+  let _2: void temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}

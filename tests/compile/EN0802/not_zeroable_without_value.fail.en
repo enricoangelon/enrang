@@ -1,0 +1,8 @@
+private unsafe let c: Color; //~ EN0802 "an `unsafe let` can't hold a `Color`"
+private unsafe let n: i64 | null; //~ EN0802 "an `unsafe let` can't hold an `i64 | null`"
+private unsafe let f: fn() => void; //~ EN0802 "an `unsafe let` can't hold a `fn() => void`"
+
+public enum Color {
+  Red,
+  Green,
+}

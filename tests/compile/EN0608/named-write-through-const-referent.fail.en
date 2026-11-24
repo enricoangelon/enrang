@@ -1,0 +1,4 @@
+//! row: `const x = 12; let y = &x; *y = 13;`; the
+const x = 12;
+let y = &x;
+*y = 13; //~ EN0608 "cannot mutate immutable data"

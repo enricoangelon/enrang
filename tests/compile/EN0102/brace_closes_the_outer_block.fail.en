@@ -1,0 +1,5 @@
+function greet(ready: bool): void {
+  if (ready) { //~ EN0102
+    console.log("hi");
+}
+greet(true);

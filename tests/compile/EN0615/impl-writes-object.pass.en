@@ -1,0 +1,8 @@
+public interface Counter {
+  let inc(): void;
+}
+
+public class Clicks implements Counter {
+  private n: i64 = 0;
+  public inc(): void { this.n += 1; }
+}

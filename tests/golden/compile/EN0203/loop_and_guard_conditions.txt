@@ -1,0 +1,50 @@
+$ enrang check tests/compile/EN0203/loop_and_guard_conditions.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0203]: a condition must be `bool`, found `i64`
+ --> tests/compile/EN0203/loop_and_guard_conditions.fail.en:5:10
+  |
+5 | } while (n); //~ EN0203 "a condition must be `bool`, found `i64`"
+  |          ^ this is `i64`
+  |
+help: compare it: `n != 0`
+  = explain: run `enrang explain EN0203`
+
+error[EN0203]: a condition must be `bool`, found `i64`
+ --> tests/compile/EN0203/loop_and_guard_conditions.fail.en:6:22
+  |
+6 | for (let i: i64 = 3; i; i--) { //~ EN0203 "a condition must be `bool`, found `i64`"
+  |                      ^ this is `i64`
+  |
+help: compare it: `i != 0`
+  = explain: run `enrang explain EN0203`
+
+error[EN0203]: a condition must be `bool`, found `i64`
+ --> tests/compile/EN0203/loop_and_guard_conditions.fail.en:9:22
+  |
+9 | const both = flag && n; //~ EN0203 "a condition must be `bool`, found `i64`"
+  |                      ^ this is `i64`
+  |
+help: compare it: `n != 0`
+  = explain: run `enrang explain EN0203`
+
+error[EN0203]: a condition must be `bool`, found `i64`
+  --> tests/compile/EN0203/loop_and_guard_conditions.fail.en:10:16
+   |
+10 | const either = n || flag; //~ EN0203 "a condition must be `bool`, found `i64`"
+   |                ^ this is `i64`
+   |
+help: compare it: `n != 0`
+   = explain: run `enrang explain EN0203`
+
+error[EN0203]: a condition must be `bool`, found `i64`
+  --> tests/compile/EN0203/loop_and_guard_conditions.fail.en:12:3
+   |
+12 |   n => "some", //~ EN0203 "a condition must be `bool`, found `i64`"
+   |   ^ this is `i64`
+   |
+help: compare it: `n != 0`
+   = explain: run `enrang explain EN0203`
+
+error: aborting due to 5 previous errors

@@ -1,0 +1,23 @@
+let data: i64[] = [1, 2, 3];
+let c = new Cursor(&data);
+const c2 = c;
+const e = c2.cur();
+console.log(c.all().length());
+console.log(*e);
+
+private class Cursor implements Copy {
+  private xs: readonly &i64[];
+  private i: isize = 0;
+
+  public constructor(xs: &i64[]) {
+    this.xs = xs;
+  }
+
+  public cur(): &i64 {
+    return &this.xs[this.i];
+  }
+
+  public all(): &i64[] {
+    return this.xs;
+  }
+}

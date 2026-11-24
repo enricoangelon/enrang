@@ -1,0 +1,7 @@
+public function first(xs: &string[]): readonly &string {
+  return &xs[0];
+}
+
+public function show(x: &i64): void {
+  console.log(x);
+}

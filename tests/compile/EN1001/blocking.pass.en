@@ -1,0 +1,10 @@
+public function load(): void {}
+
+public function fetchIt(): i64 {
+  return 1;
+}
+
+public function wait(): void {
+  const x = fetchIt();
+  let p: Box<i64> | null = null;
+}

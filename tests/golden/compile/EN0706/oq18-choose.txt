@@ -1,0 +1,33 @@
+$ enrang check tests/compile/EN0706/oq18-choose.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `p` can't change while `best` points into it
+ --> tests/compile/EN0706/oq18-choose.fail.en:3:3
+  |
+2 |   const best = p.pick(x, y);
+  |                ------------ `best` points into `p` from here
+3 |   p.reset(); //~ EN0706
+  |   ^^^^^^^^^ `p` changes here
+4 |   console.log(best);
+  |               ---- `best` is still used here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: keep a copy: const best = p.pick(x, y).toString();
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: `this` can't change while `best` points into it
+  --> tests/compile/EN0706/oq18-choose.fail.en:18:5
+   |
+17 |     const best = this.pick(x, y);
+   |                  --------------- `best` points into `this` from here
+18 |     this.reset(); //~ EN0706
+   |     ^^^^^^^^^^^^ `this` changes here
+19 |     console.log(best);
+   |                 ---- `best` is still used here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: keep a copy: const best = this.pick(x, y).toString();
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,18 @@
+error[EN0710]: cannot return a reference to local `s`
+ --> main.en:5:10
+  |
+4 |   const s = `hello, ${name}`;
+  |         - `s` is dropped when `greeting` returns
+5 |   return &s;
+  |          ^^ this reference would point at freed memory
+  |
+  = rule: a returned reference must borrow from a parameter: `name`.
+help: return the owned value instead
+  |
+3 | private function greeting(name: &string): string {
+  |                                           ~~~~~~
+5 |   return s;
+  |          ~
+  = explain: run `enrang explain EN0710`
+
+error: aborting due to 1 previous error

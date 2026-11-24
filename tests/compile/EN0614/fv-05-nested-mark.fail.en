@@ -1,0 +1,15 @@
+let a0: i64[] = [0];
+let b0: i64[] = [1];
+let p = new Pad(&a0, &b0);
+p.inner()[0].push(4); //~ EN0614
+p.inner()[1] = 5; //~ EN0616
+
+public final class Pad {
+  private t: [&i64[], [readonly &i64[], i32]];
+  public constructor(a: &i64[], b: &i64[]) {
+    this.t = [a, [b, 1]];
+  }
+  public inner(): &[&i64[], i32] {
+    return &this.t[1];
+  }
+}

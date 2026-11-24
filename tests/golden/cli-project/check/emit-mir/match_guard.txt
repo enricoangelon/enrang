@@ -1,0 +1,90 @@
+$ enrang check --emit=mir main.en
+[exit 0]
+[stdout]
+enum Shape { Circle { radius: i64 }, Empty }
+
+statements (_1: string[]) -> int {
+  phase elaborated;
+  let _1: string[]; // args
+  let _2: bool; // flag
+  let _3: void temp;
+  let _4: i64 temp;
+  let _5: Shape temp;
+  let _6: &i64 temp;
+  let _7: i64 temp;
+  let _8: Shape temp;
+  let _9: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const true: bool;
+    _5 = Shape::Circle { radius: const 2: i64 };
+    _4 = size(move _5, copy _2) -> bb1;
+  }
+  bb1: {
+    _6 = &_4 [temp-arg];
+    _8 = Shape::Empty {};
+    _7 = size(move _8, copy _2) -> bb2;
+  }
+  bb2: {
+    _9 = &_7 [temp-arg];
+    _3 = form log(move _6, move _9) -> bb3;
+  }
+  bb3: {
+    storage_dead(_7);
+    storage_dead(_4);
+    storage_dead(_2);
+    drop_glue(_1);
+    return;
+  }
+}
+
+fn size(_1: Shape, _2: bool) -> i64 perms() sources() moves(0, 0) result none {
+  phase elaborated;
+  let _1: Shape; // s
+  let _2: bool; // big
+  let _3: isize temp;
+  let _4: bool temp;
+  let _5: i64 temp;
+  let _6: isize temp;
+  fact f0: _1 case Circle;
+  fact f1: _1 case Empty;
+  use f0 at bb4[0];
+  use f0 at bb5[0];
+  test f0 at bb2;
+  test f0 at bb5;
+  test f1 at bb6;
+  bb0: {
+    _3 = discriminant(_1);
+    switch move _3 [0: bb2, otherwise: bb3];
+  }
+  bb1: {
+    return;
+  }
+  bb2: {
+    _4 = copy _2;
+    switch move _4 [0: bb3, otherwise: bb4];
+  }
+  bb3: {
+    _6 = discriminant(_1);
+    switch move _6 [0: bb5, 1: bb6, otherwise: bb7];
+  }
+  bb4: {
+    check_tag(_1, Circle);
+    _5 = copy (_1 as Circle).radius;
+    _0 = checked_mul(move _5, const 2: i64);
+    goto bb1;
+  }
+  bb5: {
+    check_tag(_1, Circle);
+    _0 = copy (_1 as Circle).radius;
+    goto bb1;
+  }
+  bb6: {
+    _0 = const 0: i64;
+    goto bb1;
+  }
+  bb7: {
+    unreachable;
+  }
+}
+[stderr]

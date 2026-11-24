@@ -1,0 +1,36 @@
+//! row: The source forms: `this.view()` with `pu
+public class V {
+  public items: i64[] = [1];
+  public view(): &i64[] { return &this.items; }
+  public show(): void {
+    for (const x of this.view()) {
+      console.log(x);
+    }
+    this.items.push(1);
+  }
+}
+
+private const TABLE: i64[3] = [1, 2, 3];
+
+public function first(q: &i64[]): &i64[] { return q; }
+
+public function make(): V { return new V(); }
+
+public function forms(c: bool, r: isize): void {
+  let q: i64[] = [1];
+  for (const x of first(&q)) { *x = 1; }
+  q.push(1);
+  let a: i64[] = [1];
+  let b: i64[] = [2];
+  for (const x of (c ? &a : &b)) { console.log(x); }
+  a.push(1);
+  const n: &i64[] | null = &q;
+  for (const x of n!) { console.log(x); }
+  q.push(2);
+  for (const x of make().items) { console.log(x); }
+  for (const x of &make().items) { console.log(x); }
+  let grid: i64[][] = [[1]];
+  for (const x of &grid[r]) { console.log(x); }
+  grid.push([]);
+  for (const t of &TABLE) { console.log(t); }
+}

@@ -1,0 +1,11 @@
+//! covers: H16
+let p = new P { a: 1, b: 2 };
+const v = p.b;
+const c = v.checkedAdd(1);
+console.log(c);
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32;
+}

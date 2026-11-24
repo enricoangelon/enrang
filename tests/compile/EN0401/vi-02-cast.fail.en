@@ -1,0 +1,7 @@
+const sector: u8[4] = [7, 7, 7, 7];
+console.log(after(sector.slice(0, 2))); //~ EN0401 "`T` can't stand for the view `Slice<u8>`"
+
+public function after<T>(x: &T): usize {
+  const p = x as *T;
+  return p.add(1) as usize - p as usize;
+}

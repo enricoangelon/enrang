@@ -1,0 +1,98 @@
+// The narrowing check (N2, A:1362; plan d.11): a reference recorded against a
+// fact that is a writer by N3 (here passed to a `let` parameter) may break the
+// fact, so the narrowed use after it is EN0401; passed to a Read parameter it
+// breaks nothing; a new test after the write makes the use good again.
+// MIR shapes: a nullable narrowed by a discriminant switch, the fact test's
+// block, a borrow passed as an argument with its record, the narrowed use's
+// `check_tag` then `(x as Present).0` (plan c.4, plan.md:913-919; c.11; c.20).
+fn reset(let _1: &(i64 | null)) -> void;
+fn peek(_1: &(i64 | null)) -> void;
+fn broken(_1: i64 | null) -> i64 {
+  let mut _2: i64 | null; // x
+  let _3: u32 temp;
+  let _4: &(i64 | null) temp;
+  let _5: void temp;
+  fact f0: _2 nonnull;
+  record f0 at bb1[0] _4 call_arg;
+  use f0 at bb2[0];
+  test f0 at bb1;
+  bb0: {
+    _2 = copy _1;
+    _3 = discriminant(_2);
+    switch move _3 [0: bb3, otherwise: bb1];
+  }
+  bb1: {
+    _4 = &_2 [explicit];
+    _5 = reset(move _4) -> bb2;
+  }
+  bb2: {
+    check_tag(_2, Present); //~ EN0401 "`x` may be `null` here"
+    _0 = copy (_2 as Present).0;
+    return;
+  }
+  bb3: {
+    _0 = const 0: i64;
+    return;
+  }
+}
+fn read(_1: i64 | null) -> i64 {
+  let mut _2: i64 | null; // x
+  let _3: u32 temp;
+  let _4: &(i64 | null) temp;
+  let _5: void temp;
+  fact f0: _2 nonnull;
+  record f0 at bb1[0] _4 call_arg;
+  use f0 at bb2[0];
+  test f0 at bb1;
+  bb0: {
+    _2 = copy _1;
+    _3 = discriminant(_2);
+    switch move _3 [0: bb3, otherwise: bb1];
+  }
+  bb1: {
+    _4 = &_2 [explicit];
+    _5 = peek(move _4) -> bb2;
+  }
+  bb2: {
+    check_tag(_2, Present);
+    _0 = copy (_2 as Present).0;
+    return;
+  }
+  bb3: {
+    _0 = const 0: i64;
+    return;
+  }
+}
+fn retested(_1: i64 | null) -> i64 {
+  let mut _2: i64 | null; // x
+  let _3: u32 temp;
+  let _4: &(i64 | null) temp;
+  let _5: void temp;
+  fact f0: _2 nonnull;
+  record f0 at bb1[0] _4 call_arg;
+  use f0 at bb3[0];
+  test f0 at bb1;
+  test f0 at bb3;
+  bb0: {
+    _2 = copy _1;
+    _3 = discriminant(_2);
+    switch move _3 [0: bb4, otherwise: bb1];
+  }
+  bb1: {
+    _4 = &_2 [explicit];
+    _5 = reset(move _4) -> bb2;
+  }
+  bb2: {
+    _3 = discriminant(_2);
+    switch move _3 [0: bb4, otherwise: bb3];
+  }
+  bb3: {
+    check_tag(_2, Present);
+    _0 = copy (_2 as Present).0;
+    return;
+  }
+  bb4: {
+    _0 = const 0: i64;
+    return;
+  }
+}

@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0715/capture_then_writing_argument.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0715]: `r` is locked while the arrow will still be used
+ --> tests/compile/EN0715/capture_then_writing_argument.fail.en:4:26
+  |
+4 | both(() => { *r += 1; }, r); //~ EN0715 "`r` is locked while"
+  |                          ^ `r` is used here
+  | --------------------------- the arrow is used again here
+  |               - the arrow captures `r` here
+  |
+help: use `r` after the last use of the arrow, or pass it to the closure as a parameter
+  = explain: run `enrang explain EN0715`
+
+error: aborting due to 1 previous error

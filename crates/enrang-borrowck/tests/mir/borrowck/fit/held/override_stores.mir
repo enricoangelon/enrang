@@ -1,0 +1,42 @@
+// An override whose inferred stores go beyond its base body's (plan d.10, A:1356,
+// `INF-04-read-bit`): `Base.retarget` stores `v` into the plain field `dst`,
+// `(1, 0)`; `Sub.retarget` stores it into its `readonly &` field `extra`,
+// `(1, 0)` with the read bit, which the base's store lacks: EN0615 at the
+// override. `Low.retarget` storing into another plain field fits.
+// MIR shapes: reborrowed parameters stored through `this` (plan c.4,
+// plan.md:913-914; c.6, plan.md:975).
+class Base {
+  dst: &i64;
+}
+fn Base::retarget(_1: &Base, _2: &i64) -> void {
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).dst = move _3;
+    return;
+  }
+}
+//= fn Base::retarget(_1: &Base, _2: &i64) -> void perms(write, read) sources() stores(1 -> 0) result none;
+class Sub extends Base {
+  extra: readonly &i64;
+}
+@override fn Sub::retarget(_1: &Sub, _2: &i64) -> void { //~ EN0615
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).extra = move _3;
+    return;
+  }
+}
+//= @override fn Sub::retarget(_1: &Sub, _2: &i64) -> void perms(write, read) sources() stores(1 -> 0 read) result none;
+class Low extends Base {
+  other: &i64;
+}
+@override fn Low::retarget(_1: &Low, _2: &i64) -> void {
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).other = move _3;
+    return;
+  }
+}

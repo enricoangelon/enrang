@@ -1,0 +1,7 @@
+let x = 1;
+let y = 2;
+let r = &x;
+const f = () => console.log(r);
+f();
+r = &y;
+console.log(r);

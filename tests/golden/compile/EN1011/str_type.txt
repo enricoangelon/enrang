@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN1011/str_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1011]: range indexing is not supported yet
+ --> tests/compile/EN1011/str_type.fail.en:1:10
+  |
+1 | const s: str = "abc"; //~ EN1011 "range indexing is not supported yet"
+  |          ^^^ not supported yet
+  |
+  = note: a part of an array or a string is taken with `slice`, not with a range.
+help: `xs.slice(a, b)` gives a `&Slice<T>`; `s.slice(a, b)` a read-only `&string` part
+  = explain: run `enrang explain EN1011`
+
+error[EN1011]: range indexing is not supported yet
+ --> tests/compile/EN1011/str_type.fail.en:3:27
+  |
+3 | public function first(x: &str): void {} //~ EN1011 "range indexing is not supported yet"
+  |                           ^^^ not supported yet
+  |
+  = note: a part of an array or a string is taken with `slice`, not with a range.
+help: `xs.slice(a, b)` gives a `&Slice<T>`; `s.slice(a, b)` a read-only `&string` part
+  = explain: run `enrang explain EN1011`
+
+error: aborting due to 2 previous errors

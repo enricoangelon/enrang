@@ -1,0 +1,14 @@
+const d = new Dir { file: new File("a.txt", 3) };
+const f = d.file;
+console.log(f.name);
+
+public class Dir {
+  public file: File;
+}
+
+public class File {
+  public constructor(public name: string, private fd: i64) {}
+  public destructor() {
+    console.log("close", this.fd);
+  }
+}

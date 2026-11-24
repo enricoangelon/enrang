@@ -1,0 +1,20 @@
+//! row: Source `&h.items`: moving `h`, a `move` 
+public class H { public items: i64[] = [1, 2]; public other: string[] = []; public move finish(): void { console.log(this.other); } }
+
+private function takeH(h: H): void { console.log(h.items); }
+
+public function movingOwner(): void {
+  let h = new H();
+  for (const x of &h.items) {
+    console.log(x);
+  }
+  takeH(h);
+}
+
+public function moveMethod(): void {
+  let h = new H();
+  for (const x of &h.items) {
+    h.finish();
+    break;
+  }
+}

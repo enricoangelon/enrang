@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0616/loop_source_readonly_reference_field.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot write through `this.src`, because it is `readonly &`
+ --> tests/compile/EN0616/loop_source_readonly_reference_field.fail.en:8:21
+  |
+3 |   private src: readonly &Slice<u8>;
+  |   --------------------------------- `src` is declared `readonly &` here
+...
+8 |     for (const b of this.src) { //~ EN0616 "cannot write through `this.src`, because it is `readonly &`"
+  |                     ^^^^^^^^ written here
+  |
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

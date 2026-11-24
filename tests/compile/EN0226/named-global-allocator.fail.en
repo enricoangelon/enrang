@@ -1,0 +1,2 @@
+//! row: `@globalAllocator private unsafe let heap:
+@globalAllocator unsafe let heap: FreeListHeap; //~ EN0226

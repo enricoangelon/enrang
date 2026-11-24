@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0424/question_mark_in_a_plain_function.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0424]: `?` needs the function to return `Result` or `T | null`
+ --> tests/compile/EN0424/question_mark_in_a_plain_function.fail.en:4:21
+  |
+3 | private function total(s: &string): i64 {
+  |                                     --- `i64` is the return type
+4 |   const n = parse(s)?; //~ EN0424 "`?` needs the function to return `Result` or `T | null`"
+  |                     ^ `total` returns `i64`
+  |
+  = explain: run `enrang explain EN0424`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,20 @@
+import { Atomic, AtomicValue } from "core/atomic";
+
+const count = new Atomic<u32>(0);
+const byte = new Atomic<u8>(0);
+console.log(count.testAndSet(1), byte.exchange(1));
+const dog = new Dog { name: "Rex" };
+console.log(oldest(&dog));
+dup(&count);
+
+private function oldest<T extends Animal>(a: &T): &string {
+  return &a.name;
+}
+
+private function dup<T extends AtomicValue>(a: &Atomic<T>): void {}
+
+public class Animal {
+  public name: string;
+}
+
+public class Dog extends Animal {}

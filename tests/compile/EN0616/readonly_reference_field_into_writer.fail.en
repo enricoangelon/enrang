@@ -1,0 +1,20 @@
+public final class ByteLexer {
+  private src: readonly &Slice<u8>;
+  private pos: isize = 0;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public cursor(): Cursor {
+    return new Cursor(this.src.slice(this.pos, this.src.length())); //~ EN0616
+  }
+}
+
+public final class Cursor {
+  private src: &Slice<u8>;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public zero(): void {
+    this.src[0] = 0;
+  }
+}

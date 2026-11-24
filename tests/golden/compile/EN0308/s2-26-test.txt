@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0308/s2-26-test.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0308]: `src` is private to `Lexer`
+ --> tests/compile/EN0308/s2-26-test.fail.en:5:5
+  |
+5 | *lx.src += "c"; //~ EN0308 "`src` is private to `Lexer`"
+  |     ^^^ only the body of `Lexer` can use it
+ --> tests/compile/EN0308/lexer.pass.en:2:3
+  |
+2 |   private src: &string;
+  |   --------------------- `src` is declared here
+  |
+  = explain: run `enrang explain EN0308`
+
+error: aborting due to 1 previous error

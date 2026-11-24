@@ -1,0 +1,6 @@
+$ enrang fmt --check --check
+[exit 2]
+[stdout]
+[stderr]
+error: `--check` is given twice
+usage: enrang fmt [paths] [--check]

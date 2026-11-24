@@ -1,0 +1,20 @@
+public function snapshot<T>(xs: &T[]): T[] {
+  return [...xs]; //~ EN0438 "`...` clones each element, and `T` has no `Clone` bound"
+}
+
+public function copyAll(rs: &Resource[], ps: &Pointer[]): void {
+  const a = [...rs]; //~ EN0438 "`...` clones each element, and `Resource` is not `Clone`"
+  const b = [...ps]; //~ EN0438 "`...` clones each element, and `Pointer` is not `Clone`"
+}
+
+public class Resource {
+  public id: i64 = 0;
+
+  public destructor() {
+    console.log("closed");
+  }
+}
+
+public class Pointer {
+  public at: *u8;
+}

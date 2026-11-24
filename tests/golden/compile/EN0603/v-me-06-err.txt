@@ -1,0 +1,39 @@
+$ enrang check tests/compile/EN0603/v-me-06-err.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0617]: cannot move `last` out of the arrow's capture
+ --> tests/compile/EN0603/v-me-06-err.fail.en:2:37
+  |
+2 | const fail = (): Result<i64> => Err(last); //~ EN0617
+  |                                     ^^^^ `last` is captured, so the arrow can't give it away
+  |
+  = note: an arrow or a local function may run more than once, so what it captures stays where it is
+help: move a copy instead: `last.clone()`
+  = explain: run `enrang explain EN0617`
+
+error[EN0603]: cannot move `this.name` out of `this`
+ --> tests/compile/EN0603/v-me-06-err.fail.en:9:43
+  |
+9 |     if (this.name.isEmpty()) { return Err(this.name); } //~ EN0603
+  |                                           ^^^^^^^^^ `string` gives the caller its own value
+  |
+help: to return a reference to the same field, write `&string`
+help: to return a copy, write `this.name.clone()`
+  |
+9 |     if (this.name.isEmpty()) { return Err(this.name.clone()); } //~ EN0603
+  |                                                    ++++++++
+help: or mark the method `move` to give up the object
+  = explain: run `enrang explain EN0603`
+
+error[EN0604]: cannot move out of `names[0]`
+  --> tests/compile/EN0603/v-me-06-err.fail.en:15:14
+   |
+15 |   return Err(names[0]); //~ EN0604
+   |              ^^^^^^^^ an element of an array can't be moved out
+   |
+help: borrow it: `&names[0]`
+help: or copy it: `names[0].clone()`
+   = explain: run `enrang explain EN0604`
+
+error: aborting due to 3 previous errors

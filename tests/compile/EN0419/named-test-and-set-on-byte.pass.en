@@ -1,0 +1,7 @@
+//! row: `Atomic64` at `i486`; `testAndSet` on `Atomic<u8>`
+import { Atomic } from "core/atomic";
+
+const byte = new Atomic<u8>(0);
+console.log(byte.exchange(1));
+const flags = new Atomic<u32>(0);
+console.log(flags.testAndSet(1));

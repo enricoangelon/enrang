@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/fv-07-const-view.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `PRIMES[0] = 1`, because `PRIMES` is a top-level `const`
+ --> tests/compile/EN0608/fv-07-const-view.fail.en:4:1
+  |
+4 | PRIMES[0] = 1; //~ EN0608
+  | ^^^^^^^^^^^^^ written here
+ --> tests/compile/EN0608/fv-07-const-view-2.pass.en:1:14
+  |
+1 | public const PRIMES: &Slice<i64> = &[2, 3, 5, 7];
+  |              ------ declared `const` here
+  |
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

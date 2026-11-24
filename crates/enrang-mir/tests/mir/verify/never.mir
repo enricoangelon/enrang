@@ -1,0 +1,17 @@
+@declare fn stop() -> never;
+
+fn tail(_1: bool, _2: i64[3]) -> i64 {
+  let _3: never temp;
+  let _4: i64 temp;
+  bb0: {
+    _4 = copy _2[2];
+    switch copy _1 [0: bb1, otherwise: bb2];
+  }
+  bb1: {
+    _3 = stop() -> !;
+  }
+  bb2: {
+    _0 = move _3;
+    return;
+  }
+}

@@ -1,0 +1,12 @@
+let q: i64[] = [1, 5, 3, 7];
+let keep: &i64 | null = null;
+let n = 0;
+while (n < 2) {
+  for (const x of &q) { keep = x; }
+  n += 1;
+}
+show(keep);
+
+private function show(k: &i64 | null): void {
+  if (k != null) { console.log(*k); }
+}

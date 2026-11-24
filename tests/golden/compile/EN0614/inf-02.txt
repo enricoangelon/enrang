@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0614/inf-02.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `keep` also keeps a reference from `x` in `this`, so `push` cannot change it
+ --> tests/compile/EN0614/inf-02.fail.en:8:3
+  |
+8 |   p.items.push(i); //~ EN0614
+  |   ^^^^^^^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

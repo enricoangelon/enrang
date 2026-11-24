@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN0802/f9.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0802]: an `unsafe let` can't hold a `Stats`
+ --> tests/compile/EN0802/f9.fail.en:1:27
+  |
+1 | private unsafe let stats: Stats; //~ EN0802 "an `unsafe let` can't hold a `Stats`"
+  |                           ^^^^^ `Stats` can be extended, so it carries a hidden pointer that zero would leave null
+  |
+help: write `public final class Stats`
+help: or give it a value: `= new Stats {}`
+  = explain: run `enrang explain EN0802`
+
+error[EN0802]: an `unsafe let` can't hold a `Stats`
+ --> tests/compile/EN0802/f9.fail.en:3:40
+  |
+3 | @at(0x1000) private unsafe let placed: Stats; //~ EN0802 "an `unsafe let` can't hold a `Stats`"
+  |                                        ^^^^^ `Stats` can be extended, so it carries a hidden pointer that zero would leave null
+  |
+help: write `public final class Stats`
+help: or give it a value: `= new Stats {}`
+  = explain: run `enrang explain EN0802`
+
+error[EN0802]: an `unsafe let` can't hold a `Stats`
+ --> tests/compile/EN0802/f9.fail.en:5:40
+  |
+5 | @at(0x2000) private unsafe let filled: Stats = new Stats {}; //~ EN0802 "an `unsafe let` can't hold a `Stats`"
+  |                                        ^^^^^ `Stats` can be extended, so it carries a hidden pointer that zero would leave null
+  |
+help: write `public final class Stats`
+help: or give it a value: `= new Stats {}`
+  = explain: run `enrang explain EN0802`
+
+error: aborting due to 3 previous errors

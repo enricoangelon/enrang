@@ -1,0 +1,113 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/q38-readonly-field-2.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/q38-readonly-field-2.fail";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::length(_1: &Slice<T>) -> isize;
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+@private class ByteLexer {
+  private src: readonly &Slice<u8>;
+  private pos: isize = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: u8[]; // buf
+  let mut _3: ByteLexer; // ly
+  let _4: &u8[] temp;
+  let _5: &Slice<u8> temp;
+  let _6: &ByteLexer temp;
+  let _7: void temp;
+  let _8: &Slice<u8> | null temp;
+  let _9: &ByteLexer temp;
+  let _10: isize temp;
+  let _11: isize temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 1: u8, const 2: u8, const 3: u8, const 4: u8);
+    storage_live(_3);
+    set_table(_3, ByteLexer);
+    _4 = &_2 [explicit];
+    _5 = convert(array_to_slice, move _4);
+    _6 = &_3 [auto-borrow];
+    _7 = ByteLexer::#ctor(move _6, move _5) -> bb1;
+  }
+  bb1: {
+    _9 = &_3 [auto-borrow];
+    _8 = ByteLexer::next(move _9) -> bb2;
+  }
+  bb2: {
+    _10 = const 0: isize;
+    check_tag(_8, Present);
+    _11 = len(*(_8 as Present).0);
+    check_tag(_8, Present);
+    check_bounds(copy _10, copy _11);
+    (*(_8 as Present).0)[_10] = const 9: u8; //~ EN0616
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn ByteLexer::#ctor(_1: &ByteLexer, _2: &Slice<u8>) -> void {
+  let _1: &ByteLexer; // this
+  let _2: &Slice<u8>; // src
+  let _3: &Slice<u8> temp;
+  bb0: {
+    switch const overridden(pos): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+  bb2: {
+    field_init((*_1).pos, const 0: isize);
+    goto bb1;
+  }
+}
+
+fn ByteLexer::next(_1: &ByteLexer) -> &Slice<u8> | null {
+  let _1: &ByteLexer; // this
+  let _2: bool temp;
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: &Slice<u8> temp;
+  let _6: isize; // start
+  let _7: isize temp;
+  let _8: &Slice<u8> temp;
+  let _9: isize | null temp;
+  let _10: &Slice<u8> temp;
+  bb0: {
+    _3 = copy (*_1).pos;
+    _5 = copy (*_1).src;
+    _4 = "core/slice"::Slice<u8>::length(move _5) -> bb3;
+  }
+  bb1: {
+    _0 = null;
+    return;
+  }
+  bb2: {
+    storage_live(_6);
+    _6 = copy (*_1).pos;
+    _7 = copy (*_1).pos;
+    (*_1).pos = checked_add(copy _7, const 2: isize);
+    _9 = present(copy (*_1).pos);
+    _10 = copy (*_1).src;
+    _8 = "core/slice"::Slice<u8>::slice(move _10, copy _6, move _9, const 2: isize) -> bb4;
+  }
+  bb3: {
+    _2 = ge(move _3, move _4);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb4: {
+    _0 = present(move _8);
+    storage_dead(_6);
+    return;
+  }
+}

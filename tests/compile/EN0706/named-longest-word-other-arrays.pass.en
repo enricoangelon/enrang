@@ -1,0 +1,17 @@
+//! row: The same loop over `["hello", "world", "programming"]`;
+const words = ["hello", "world", "programming"];
+let longest = &words[0];
+for (const w of &words) {
+  if (w.length() > longest.length()) {
+    longest = w;
+  }
+}
+console.log(longest);
+const none: string[] = [];
+let first = &none[0];
+for (const w of &none) {
+  if (w.length() > first.length()) {
+    first = w;
+  }
+}
+console.log(first);

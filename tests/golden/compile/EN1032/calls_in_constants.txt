@@ -1,0 +1,55 @@
+$ enrang check tests/compile/EN1032/calls_in_constants.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1032]: compile-time function calls are not supported yet
+ --> tests/compile/EN1032/calls_in_constants.fail.en:1:23
+  |
+1 | public const A: i64 = twice(2); //~ EN1032 "compile-time function calls are not supported yet"
+  |                       ^^^^^^^^ this calls a function
+  |
+  = note: a constant is computed while compiling, and the compiler does not run functions yet.
+help: Use a literal expression, or initialise at startup
+  = explain: run `enrang explain EN1032`
+
+error[EN1032]: compile-time function calls are not supported yet
+ --> tests/compile/EN1032/calls_in_constants.fail.en:2:23
+  |
+2 | public const B: u32 = (5).max(3); //~ EN1032 "compile-time function calls are not supported yet"
+  |                       ^^^^^^^^^^ this calls a function
+  |
+  = note: a constant is computed while compiling, and the compiler does not run functions yet.
+help: Use a literal expression, or initialise at startup
+  = explain: run `enrang explain EN1032`
+
+error[EN1032]: compile-time function calls are not supported yet
+ --> tests/compile/EN1032/calls_in_constants.fail.en:3:29
+  |
+3 | private unsafe let S: i64 = twice(3); //~ EN1032 "compile-time function calls are not supported yet"
+  |                             ^^^^^^^^ this calls a function
+  |
+  = note: a constant is computed while compiling, and the compiler does not run functions yet.
+help: Use a literal expression, or initialise at startup
+  = explain: run `enrang explain EN1032`
+
+error[EN1032]: compile-time function calls are not supported yet
+ --> tests/compile/EN1032/calls_in_constants.fail.en:4:27
+  |
+4 | public const LEN: isize = "abc".length(); //~ EN1032 "compile-time function calls are not supported yet"
+  |                           ^^^^^^^^^^^^^^ this calls a function
+  |
+  = note: a constant is computed while compiling, and the compiler does not run functions yet.
+help: Use a literal expression, or initialise at startup
+  = explain: run `enrang explain EN1032`
+
+error[EN1032]: compile-time function calls are not supported yet
+ --> tests/compile/EN1032/calls_in_constants.fail.en:5:8
+  |
+5 | assert(twice(1) == 2, "twice"); //~ EN1032 "compile-time function calls are not supported yet"
+  |        ^^^^^^^^ this calls a function
+  |
+  = note: a constant is computed while compiling, and the compiler does not run functions yet.
+help: Use a literal expression, or initialise at startup
+  = explain: run `enrang explain EN1032`
+
+error: aborting due to 5 previous errors

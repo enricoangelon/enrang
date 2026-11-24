@@ -1,0 +1,3 @@
+let xs = ["a".toString()];
+dispose(xs[0]); //~ EN0604
+console.log(xs);

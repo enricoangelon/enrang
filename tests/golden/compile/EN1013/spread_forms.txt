@@ -1,0 +1,85 @@
+$ enrang check tests/compile/EN1013/spread_forms.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+ --> tests/compile/EN1013/spread_forms.fail.en:5:3
+  |
+5 | f(...a); //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  |   ^^^ only an array literal's element may spread
+  |
+  = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+  = explain: run `enrang explain EN1013`
+
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+ --> tests/compile/EN1013/spread_forms.fail.en:6:7
+  |
+6 | new C(...a); //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  |       ^^^ only an array literal's element may spread
+  |
+  = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+  = explain: run `enrang explain EN1013`
+
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+ --> tests/compile/EN1013/spread_forms.fail.en:7:13
+  |
+7 | console.log(...a); //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  |             ^^^ only an array literal's element may spread
+  |
+  = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+  = explain: run `enrang explain EN1013`
+
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+ --> tests/compile/EN1013/spread_forms.fail.en:8:12
+  |
+8 | const g = (...rest) => 1; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  |            ^^^ only an array literal's element may spread
+  |
+  = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+  = explain: run `enrang explain EN1013`
+
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+ --> tests/compile/EN1013/spread_forms.fail.en:9:13
+  |
+9 | const o = { ...p }; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  |             ^^^ only an array literal's element may spread
+  |
+  = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+  = explain: run `enrang explain EN1013`
+
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+  --> tests/compile/EN1013/spread_forms.fail.en:10:23
+   |
+10 | const q = new Point { ...p }; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+   |                       ^^^ only an array literal's element may spread
+   |
+   = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+   = explain: run `enrang explain EN1013`
+
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+  --> tests/compile/EN1013/spread_forms.fail.en:11:14
+   |
+11 | const y = xs[...i]; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+   |              ^^^ only an array literal's element may spread
+   |
+   = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+   = explain: run `enrang explain EN1013`
+
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+  --> tests/compile/EN1013/spread_forms.fail.en:12:17
+   |
+12 | for (const x of ...a) { //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+   |                 ^^^ only an array literal's element may spread
+   |
+   = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+   = explain: run `enrang explain EN1013`
+
+error: aborting due to 8 previous errors

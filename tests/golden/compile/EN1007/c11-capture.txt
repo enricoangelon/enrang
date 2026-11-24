@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN1007/c11-capture.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1007]: a function pointer cannot capture variables
+ --> tests/compile/EN1007/c11-capture.fail.en:3:30
+  |
+3 | const f: fn(x: i64) => i64 = (x: i64) => x * k; //~ EN1007 "a function pointer cannot capture variables"
+  |                              ^^^^^^^^^^^^^^^^^ this arrow uses `k`
+  |                                              - `k` is captured here
+  |
+  = note: an `fn` value holds no variables; only a closure parameter takes an arrow that uses them
+help: Keep it in a local or pass it as a closure parameter, or pass the data explicitly
+  = explain: run `enrang explain EN1007`
+
+error: aborting due to 1 previous error

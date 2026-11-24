@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0307/two_imports.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0307]: `Part` is defined twice
+ --> tests/compile/EN0307/two_imports.fail.en:2:10
+  |
+1 | import { Part } from "./parts.pass";
+  |          ---- the first `Part` is here
+2 | import { Part } from "./parts.pass"; //~ EN0307 "`Part` is defined twice"
+  |          ^^^^ defined again here
+  |
+  = explain: run `enrang explain EN0307`
+
+error: aborting due to 1 previous error

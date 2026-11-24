@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0440/extra_fields_in_a_field_and_an_element.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0440]: `p` has a field `age` that `{ name: string }` does not have
+ --> tests/compile/EN0440/extra_fields_in_a_field_and_an_element.fail.en:2:30
+  |
+2 | const card = new Card { who: p }; //~ EN0440 "`p` has a field `age` that `{ name: string }` does not have"
+  |                              ^ this has more fields than `{ name: string }`
+  |
+help: build the smaller object: `{ name: p.name }`
+  = explain: run `enrang explain EN0440`
+
+error[EN0440]: `q` has a field `age` that `{ name: string }` does not have
+ --> tests/compile/EN0440/extra_fields_in_a_field_and_an_element.fail.en:4:35
+  |
+4 | const list: { name: string }[] = [q]; //~ EN0440 "`q` has a field `age` that `{ name: string }` does not have"
+  |                                   ^ this has more fields than `{ name: string }`
+  |
+help: build the smaller object: `{ name: q.name }`
+  = explain: run `enrang explain EN0440`
+
+error: aborting due to 2 previous errors

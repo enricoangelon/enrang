@@ -1,0 +1,7 @@
+$ enrang check --taget=i386-linux main.en
+[exit 2]
+[stdout]
+[stderr]
+error: `--taget=i386-linux` is not a flag of `enrang check`
+help: did you mean `--target=i386-linux`?
+usage: enrang check [file] [flags]

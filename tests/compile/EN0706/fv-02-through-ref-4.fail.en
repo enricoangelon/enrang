@@ -1,0 +1,29 @@
+//! covers: H37
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public static make(s: &u8[], d: &u8[]): Copier {
+    return new Copier(s, d);
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+  public static f(let o: &Copier, tbl: &u8[]): void {
+    let buf: u8[] = [1];
+    let c = new Copier(tbl, &buf);
+    o = &c;
+    const d0 = &o.dst[0];
+    c.step(); //~ EN0706
+    c.step(); //~ EN0706
+    c.step(); //~ EN0706
+    c.step(); //~ EN0706
+    console.log(*d0);
+  }
+}

@@ -1,0 +1,15 @@
+let names = [];
+names.push("Ada");
+const nothing: i64 | null = null;
+const empty: i64[] = [];
+const f: fn(n: int) => string = describe;
+let a = 5;
+console.log(names, nothing, empty, f(1), a.checkedAdd(1));
+
+private function describe(n: int): string {
+  return `number ${n}`;
+}
+
+private function describe(s: &string): string {
+  return `text ${s}`;
+}

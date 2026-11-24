@@ -1,0 +1,5 @@
+//! covers: C06
+const n: i64 | null = 5;
+const m: i64 = 7;
+const o: i64 | null = m;
+console.log(n, o);

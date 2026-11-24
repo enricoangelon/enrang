@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1013/rest_parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+ --> tests/compile/EN1013/rest_parameter.fail.en:1:21
+  |
+1 | public function sum(...xs: i64[]): i64 { //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  |                     ^^^ only an array literal's element may spread
+  |
+  = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+  = explain: run `enrang explain EN1013`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,9 @@
+public interface Speaker {
+  speak(): string;
+}
+
+public class Dog implements Speaker { //~ EN0416 "`Dog` does not satisfy `Speaker`: `speak` has another signature"
+  public speak(): i64 {
+    return 1;
+  }
+}

@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN1014/type_parameter_arguments_and_members.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1014]: this generic feature is not supported yet
+ --> tests/compile/EN1014/type_parameter_arguments_and_members.fail.en:1:28
+  |
+1 | public function wrap<T>(x: T<i64>): void {} //~ EN1014 "this generic feature is not supported yet"
+  |                            ^^^^^^ not supported yet
+  |
+  = note: a type parameter stands for one type and takes no type arguments or members of its own.
+  = explain: run `enrang explain EN1014`
+
+error[EN1014]: this generic feature is not supported yet
+ --> tests/compile/EN1014/type_parameter_arguments_and_members.fail.en:3:28
+  |
+3 | public function item<T>(x: T.Item): void {} //~ EN1014 "this generic feature is not supported yet"
+  |                            ^^^^^^ not supported yet
+  |
+  = note: a type parameter stands for one type and takes no type arguments or members of its own.
+  = explain: run `enrang explain EN1014`
+
+error[EN1014]: this generic feature is not supported yet
+ --> tests/compile/EN1014/type_parameter_arguments_and_members.fail.en:6:13
+  |
+6 |   public v: T<string> | null = null; //~ EN1014 "this generic feature is not supported yet"
+  |             ^^^^^^^^^ not supported yet
+  |
+  = note: a type parameter stands for one type and takes no type arguments or members of its own.
+  = explain: run `enrang explain EN1014`
+
+error: aborting due to 3 previous errors

@@ -1,0 +1,8 @@
+let g: i64[] = [1];
+let h: i64[] = [2];
+const p = two(&g, &h);
+*p[0] = [];
+
+public function two(a: &i64[], b: &i64[]): [&i64[], &i64[]] {
+  return [a, b];
+}

@@ -1,0 +1,5 @@
+let k = [1];
+const r = &k[0];
+g([&k, 0]); //~ EN0706 "`k` cannot change while `r`"
+console.log(*r);
+function g(t: [&i64[], i32], d?: &i64[]): void { t[0].push(1); t[0].push(2); }

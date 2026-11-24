@@ -1,0 +1,8 @@
+public class Holder {
+  public items: string[] = [];
+  public show(): void {
+    for (const x of this.items) { //~ EN0603 "cannot move `this.items` out of `this`"
+      console.log(x);
+    }
+  }
+}

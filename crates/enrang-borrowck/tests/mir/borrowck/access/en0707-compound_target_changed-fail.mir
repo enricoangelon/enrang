@@ -1,0 +1,65 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0707/compound_target_changed.fail.en. Its row's codes: EN0707.
+module "tests/compile/EN0707/compound_target_changed.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: &string temp;
+  let _6: &string temp;
+  let _7: &string temp;
+  let _8: void temp;
+  let _9: void temp;
+  let _10: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "a": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    _5 = &_2 [compound-target];
+    _7 = &_2 [explicit]; //~ EN0707 "`s` can't be borrowed for writing while the assignment to it waits"
+    _6 = reset(move _7) -> bb2;
+  }
+  bb2: {
+    _8 = form append(move _5, move _6) -> bb3;
+  }
+  bb3: {
+    _10 = &_2 [auto-borrow];
+    _9 = form log(move _10) -> bb4;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private @local fn reset(_1: &string) -> &string {
+  let _1: &string; // t
+  let _2: string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  bb0: {
+    _3 = const "b": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(*_1) [assign];
+    *_1 = move _2;
+    drop(_2);
+    storage_dead(_2);
+    drop(_3);
+    storage_dead(_3);
+    _0 = const "!": &string;
+    return;
+  }
+}

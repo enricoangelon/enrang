@@ -1,0 +1,2 @@
+let p: Box<i64>;
+console.log(*p); //~ EN0602 "`p` is used before it has a value"

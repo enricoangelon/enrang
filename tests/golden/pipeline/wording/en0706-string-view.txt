@@ -1,0 +1,15 @@
+error[EN0706]: `line` can't change while `root` points into it
+ --> main.en:3:1
+  |
+2 | const root = line.slice(5, 14);
+  |              ----------------- `root` points into `line` from here
+3 | line += "!";
+  | ^^^^^^^^^^^ `line` changes here
+4 | console.log(root);
+  |             ---- `root` is still used here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: keep a copy: const root = line.slice(5, 14).toString();
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,24 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/named-interrupt-unsafe-frame.pass.en. Its row's codes: none, since a near-miss passes `check`.
+target "i386-none";
+module "tests/compile/EN0615/named-interrupt-unsafe-frame.pass";
+@lang("interrupt_frame") @final class "os/none/prelude"::InterruptFrame {
+  eip: usize;
+  cs: usize;
+  eflags: usize;
+}
+@private static ticks: usize;
+
+@private @interrupt fn onTimer(_1: &InterruptFrame) -> void {
+  let _1: &InterruptFrame; // frame
+  let _2: *usize temp;
+  let _3: usize temp;
+  region r0: block;
+  bb0: {
+    _2 = const static_addr(ticks): *usize @ r0;
+    _3 = copy *_2 @ r0;
+    *_2 = checked_add(copy _3, copy (*_1).eip) @ r0;
+    return;
+  }
+}

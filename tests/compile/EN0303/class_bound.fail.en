@@ -1,0 +1,22 @@
+const animals = [new Animal("Rex", 3), new Animal("Fido", 7)];
+console.log(oldest(&animals).fetch()); //~ EN0303 "`Animal` has no member `fetch`"
+
+public class Animal {
+  public constructor(public name: string, public age: i64) {}
+}
+
+public class Dog extends Animal {
+  public fetch(): string {
+    return `${this.name} fetches`;
+  }
+}
+
+public function oldest(xs: &Slice<Animal>): &Animal {
+  let best: isize = 0;
+  for (let i: isize = 1; i < xs.length(); i++) {
+    if (xs[i].age > xs[best].age) {
+      best = i;
+    }
+  }
+  return &xs[best];
+}

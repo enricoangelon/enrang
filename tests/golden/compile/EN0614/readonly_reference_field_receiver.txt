@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0614/readonly_reference_field_receiver.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `this.src` is read-only here, so `push` cannot change it
+ --> tests/compile/EN0614/readonly_reference_field_receiver.fail.en:7:5
+  |
+2 |   private src: readonly &i64[];
+  |   ----------------------------- `src` is declared `readonly &` here
+...
+7 |     this.src.push(1); //~ EN0614
+  |     ^^^^^^^^^^^^^^^^ `push` changes `this.src`
+  |
+  = note: it comes from the `readonly &` field `src`
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

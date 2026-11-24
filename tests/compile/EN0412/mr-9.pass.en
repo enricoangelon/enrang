@@ -1,0 +1,17 @@
+let bytes: u8[] = [];
+let sink = new Sink(&bytes);
+console.log(sizeOf<Sink>());
+sink.write(1);
+
+public class Sink {
+  private out: &u8[];
+
+  public constructor(out: &u8[]) {
+    this.out = out;
+  }
+
+  public write(b: u8): void {
+    console.log(sizeOf<Sink>(), b);
+    this.out.push(b);
+  }
+}

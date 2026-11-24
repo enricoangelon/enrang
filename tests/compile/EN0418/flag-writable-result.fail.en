@@ -1,0 +1,11 @@
+public class Cursor implements Copy { //~ EN0418
+  private xs: &i64[];
+
+  public constructor(xs: &i64[]) {
+    this.xs = xs;
+  }
+
+  public all(): &i64[] {
+    return this.xs;
+  }
+}

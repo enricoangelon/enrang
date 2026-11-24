@@ -1,0 +1,4 @@
+let k = [1];
+f(1, &k);
+console.log(k);
+private function f(n: i64, xs: &i64[]): void { xs.push(n); }

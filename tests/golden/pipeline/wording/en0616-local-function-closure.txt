@@ -1,0 +1,11 @@
+error[EN0616]: `bind` stores a reference into captured `lx`
+ --> main.en:4:5
+  |
+4 | run(bind);
+  |     ^^^^ passed as a closure here
+  |
+  = note: as a closure a local function captures the variables it uses, which live outside it, so a reference stored there could outlive what it points at
+help: call `bind()` directly, which applies its stores as any call does
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

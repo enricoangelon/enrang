@@ -1,0 +1,8 @@
+let p = new P { inner: new Inner { a: [1], b: [2] } }; const [x, y] = pair(&p);
+x.push(3); y.push(4); //~ EN0614
+
+public class Inner { public a: i64[]; public b: i64[]; }
+
+public class P { public inner: Inner; }
+
+public function pair(p: &P): [&i64[], &i64[]] { const r = &p.inner; return [&r.a, &r.b]; }

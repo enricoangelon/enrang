@@ -1,0 +1,11 @@
+public interface Named {
+  name(): string;
+}
+
+public interface Sized {
+  size(): i64;
+}
+
+public function show<T extends Named & Sized>(item: &T): void {
+  console.log(item);
+}

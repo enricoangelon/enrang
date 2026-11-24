@@ -1,0 +1,13 @@
+let ps1 = [new Pair { a: [1], b: [2] }];
+const r = firstFields(&ps1);
+if (r != null) { console.log(*r[0], *r[1]); }
+
+let ps2: [i64[], i64[]][] = [[[1], [2]]];
+const r2 = firstDestructured(&ps2);
+if (r2 != null) { console.log(*r2[0], *r2[1]); }
+
+public class Pair { public a: i64[]; public b: i64[]; }
+
+public function firstFields(ps: &Slice<Pair>): [&i64[], &i64[]] | null { for (const p of ps) { return [&p.a, &p.b]; } return null; }
+
+public function firstDestructured(ps: &Slice<[i64[], i64[]]>): [&i64[], &i64[]] | null { for (const [k, v] of ps) { return [k, v]; } return null; }

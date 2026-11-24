@@ -1,0 +1,12 @@
+const source = "let x";
+let lx = new Lexer(&source);
+const b = lx.toString();
+console.log(b);
+
+private class Lexer {
+  private src: &string;
+  private pos: isize = 0;
+  public constructor(src: &string) {
+    this.src = src;
+  }
+}

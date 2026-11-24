@@ -1,0 +1,129 @@
+// Marks of a `const` root or a by-value parameter (plan d.3; A:1009, S 4.11): EN0608
+// and EN0614. Shapes: c.6 (plan lines 974-975) a receiver is `&place [auto-borrow]`, a
+// reference local used as a value `&*r [reborrow]`, a conversion `convert(kind, move
+// _t)` after it; c.7 (line 1010) the receiver's borrow comes last, before the call;
+// c.8 (line 1028) a field store; c.5 (line 956) an explicit `&`.
+// Heads (plan e): `fill` can change `buf`, but `data` is `const`; G16's `xs` is
+// `const`, so `push` cannot change it; cannot mutate immutable data (naming `k`);
+// cannot change `p`, because it is `const`.
+class Stack {
+  items: i64[];
+}
+fn Stack::push(let _1: &Stack, _2: i64) -> void;
+fn Stack::size(_1: &Stack) -> isize;
+@final class P {
+  x: i64;
+}
+fn fill(let _1: &Slice<u8>) -> void;
+fn make() -> Stack;
+
+fn g16(_1: Stack) -> void {
+  let _2: Stack; // xs
+  let _3: &Stack temp;
+  let _4: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = move _1;
+    _3 = &_2 [auto-borrow];
+    _4 = Stack::push(move _3, const 1: i64) -> bb1; //~ EN0614
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn args(_1: u8[]) -> void {
+  let _2: u8[]; // data
+  let _3: &u8[] temp;
+  let _4: &Slice<u8> temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = move _1;
+    _3 = &_2 [explicit];
+    _4 = convert(array_to_slice, move _3); //~ EN0608
+    _5 = fill(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+// `const k = 12; let w = &k; *w = 13;`
+fn through() -> void {
+  let _1: i64; // k
+  let mut _2: &i64; // w
+  bb0: {
+    storage_live(_1);
+    _1 = const 12: i64;
+    storage_live(_2);
+    _2 = &_1 [explicit];
+    *_2 = const 13: i64; //~ EN0608
+    return;
+  }
+}
+
+// A field of a `const` local, and of a by-value parameter.
+fn fields(_1: P) -> void {
+  let _2: P; // p
+  bb0: {
+    storage_live(_2);
+    _2 = P { x: const 1: i64 };
+    _2.x = const 2: i64; //~ EN0608
+    _1.x = const 3: i64; //~ EN0608
+    return;
+  }
+}
+
+// None of these: a `let` local, a statement temporary (`make().push(1)`), a `const`
+// reference written through (`const r = &n; *r = 13;`), a reading method on a `const`.
+fn fine() -> void {
+  let mut _1: Stack; // ys
+  let _2: &Stack temp;
+  let _3: void temp;
+  let _4: Stack temp;
+  let mut _5: i64; // n
+  let _6: &i64; // r
+  let _7: Stack; // zs
+  let _8: isize temp;
+  bb0: {
+    storage_live(_1);
+    _1 = make() -> bb1;
+  }
+  bb1: {
+    _2 = &_1 [auto-borrow];
+    _3 = Stack::push(move _2, const 1: i64) -> bb2;
+  }
+  bb2: {
+    _4 = make() -> bb3;
+  }
+  bb3: {
+    _2 = &_4 [auto-borrow];
+    _3 = Stack::push(move _2, const 1: i64) -> bb4;
+  }
+  bb4: {
+    storage_live(_5);
+    _5 = const 12: i64;
+    storage_live(_6);
+    _6 = &_5 [explicit];
+    *_6 = const 13: i64;
+    storage_live(_7);
+    _7 = make() -> bb5;
+  }
+  bb5: {
+    _2 = &_7 [auto-borrow];
+    _8 = Stack::size(move _2) -> bb6;
+  }
+  bb6: {
+    drop(_7);
+    storage_dead(_7);
+    drop(_4);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}

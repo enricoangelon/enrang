@@ -1,0 +1,10 @@
+let s: string = "abc";
+let t: string = "de";
+console.log(pick(&s, &t, true));
+console.log(pick(s.slice(0, 1), t.slice(0, 1), false));
+*pick(&s, &t, true) += "!";
+console.log(s);
+
+private function pick<T>(a: &T, b: &T, first: bool): &T {
+  return first ? a : b;
+}

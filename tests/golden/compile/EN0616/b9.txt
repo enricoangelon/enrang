@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/b9.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `peekInner`
+ --> tests/compile/EN0616/b9.fail.en:8:5
+  |
+8 |     *this.peekInner() = 299; //~ EN0616 "cannot change the object returned by `peekInner`"
+  |     ^^^^^^^^^^^^^^^^^^^^^^^ `peekInner` returns a `readonly` reference
+  |
+help: to allow this, remove `readonly` from the return type of `peekInner`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

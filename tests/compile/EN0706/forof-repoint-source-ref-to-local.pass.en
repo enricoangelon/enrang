@@ -1,0 +1,7 @@
+//! row: `let r = &a; for (const x of r) { const 
+let a: i64[] = [1];
+let r = &a;
+for (const x of r) {
+  const b = [1];
+  console.log(x, b);
+}

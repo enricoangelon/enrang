@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0707/slb-07-narrow.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: `o` can't be borrowed for writing while the assignment to it waits
+ --> tests/compile/EN0707/slb-07-narrow.fail.en:3:16
+  |
+3 |   o.s += clear(&o); //~ EN0707
+  |                ^^ exclusive borrow while the assignment waits to store
+  |   ---------------- the assignment reserves `o` here
+  |
+help: run the right side first: `const r = clear(&o); o.s += r;`
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 1 previous error

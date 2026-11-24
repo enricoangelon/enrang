@@ -1,0 +1,8 @@
+let p = new P { a: "x".toString(), b: "y".toString() };
+p.eat(p.b.clone()); //~ EN0601
+
+private class P {
+  public a: string;
+  public b: string;
+  public move eat(x: string): void { console.log(this.a, x); }
+}

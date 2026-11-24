@@ -1,0 +1,8 @@
+public function next(p: *u8, q: *u8): *u8 {
+  if (p.isNull() || p == q) { return q; }
+  const local = 0x1000 as *u8;
+  unsafe { local.write(1); }
+  return p.add(1);
+}
+
+public unsafe function w<T extends ptr.VolatileValue>(p: *T, v: T): void { p.writeVolatile(v); }

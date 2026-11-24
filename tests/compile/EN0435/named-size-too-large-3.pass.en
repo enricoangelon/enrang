@@ -1,0 +1,10 @@
+//! target: i386-linux
+//! row: `u64[536870912]` on `i386`, whose size wraps
+public function f(): void {
+  let small: A<u64>;
+}
+
+public class A<T> {
+  public a: T[65536];
+  public b: T[65536];
+}

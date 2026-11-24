@@ -1,0 +1,62 @@
+fn demo() -> i64 perms() sources() result none {
+  phase elaborated;
+  let mut _1: i64; // n
+  let _2: string[] temp;
+  let _3: &string[] temp;
+  let _4: &string[] #src;
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &string; // w
+  let _9: i64 temp;
+  let _10: i64 temp;
+  let _11: &string temp;
+  loop l0: once _4 preheader bb6 head bb1 bind bb2[2] binding _8;
+  bb0: {
+    storage_live(_1);
+    _1 = const 0: i64;
+    _2 = words(const 7: i64) -> bb5;
+  }
+  bb1: {
+    _6 = len(*_4);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_4)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb7;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop_glue(_2);
+    storage_dead(_2);
+    _0 = copy _1;
+    storage_dead(_1);
+    return;
+  }
+  bb5: {
+    _3 = &_2 [temp-arg];
+    _4 = move _3;
+    goto bb6;
+  }
+  bb6: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb7: {
+    _9 = copy _1;
+    _11 = &*_8 [reborrow];
+    _10 = len(move _11) -> bb8;
+  }
+  bb8: {
+    _1 = checked_add(copy _9, move _10);
+    storage_dead(_8);
+    goto bb3;
+  }
+}

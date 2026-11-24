@@ -1,0 +1,526 @@
+=== EN1001
+--- rule
+`async`, `await` and the type `Promise` are not supported yet. Write the function to run blocking: it returns its result when the work is done, and its caller waits. Threads and an event loop come later.
+--- failing
+public async function load(): void { console.log("loading"); }
+--- fixed
+public function load(): void { console.log("loading"); }
+--- typescript
+TypeScript code waits on promises with `await` so that the event loop can run other work in the meantime. Enrang's prototype has no event loop, and no I/O call that returns before it is done.
+=== EN1002
+--- rule
+Generators, `function*` and `yield`, are not supported yet. Return an array of the values, or keep the state in a class whose method returns the next value.
+--- failing
+public function* evens(limit: i64): void {
+  for (const i of 0..limit) {
+    if (i % 2 == 0) { yield i; }
+  }
+}
+--- fixed
+public function evens(limit: i64): i64[] {
+  let out: i64[] = [];
+  for (const i of 0..limit) {
+    if (i % 2 == 0) { out.push(i); }
+  }
+  return out;
+}
+--- typescript
+A TypeScript generator suspends in the middle of its body. Enrang functions run to their end, so the values are collected first, or produced one by one by a class.
+=== EN1003
+--- rule
+Threads are not supported yet: there is no `Worker`, no `spawn` and no other way to start a second thread, so a program runs on one. Do the work in order; a function returns when its work is done. The prototype's `Atomic` exists only to share a value with an interrupt handler.
+--- failing
+spawn(() => console.log("working"));
+console.log("done");
+--- fixed
+console.log("working");
+console.log("done");
+--- typescript
+TypeScript runs code in parallel in workers, which exchange messages with the main thread. Enrang's prototype has one thread, so the work a worker would do runs in the order the program gives.
+=== EN1004
+--- rule
+Shared ownership types, `Rc`, `Arc`, `Cell` and `RefCell`, are not supported yet. Every value has one owner: keep it in one place and pass `&T` to the code that uses it, or keep the values in an array and refer to each by its integer index.
+--- failing
+public class Settings {
+  public verbose: bool = false;
+}
+
+public function report(settings: Rc<Settings>, text: &string): void {
+  if (settings.verbose) { console.log(text); }
+}
+--- fixed
+public class Settings {
+  public verbose: bool = false;
+}
+
+public function report(settings: &Settings, text: &string): void {
+  if (settings.verbose) { console.log(text); }
+}
+--- typescript
+In TypeScript any number of variables may refer to one object, and the garbage collector frees it after the last one is gone. In Enrang its one owner frees it, and references, which the compiler checks, let other code use it meanwhile.
+=== EN1005
+--- rule
+Named lifetimes, such as `'a` in `&'a T` or `<'a>`, are not supported yet. Write no lifetime: a reference a function returns comes from the function's body, and the compiler works out which parameters it borrows from; a class may hold a `private` `&` field. Because `'` before a name lexes as a lifetime right after `&` or `<`, a string literal there is written with double quotes: `&"a b"`, not `&'a b'`.
+--- failing
+public function first<'a>(xs: &'a Slice<i64>): &'a i64 { return xs.get(0)!; }
+--- fixed
+public function first(xs: &Slice<i64>): &i64 { return xs.get(0)!; }
+--- typescript
+TypeScript has no lifetimes. They come from Rust, where they name how long a reference lives; Enrang infers that from function bodies, so programs written today keep their meaning if named lifetimes arrive.
+=== EN1006
+--- rule
+A value of an interface type has no size the compiler knows, since each class that satisfies the interface has its own, so an interface by value is supported only as a parameter, where each class passed gets its own copy of the function. Everywhere else it is not supported yet: an array element, a local, a field, a result or a type argument of an interface type; a `Box`, or a reference that carries a method table, of an interface with a member that takes or returns `Self` by value or has type parameters of its own; a function with a by-value interface parameter as an `fn` value or a closure parameter; an argument whose class depends on a branch; and `Result<T, Error>`. The note names the case. Refer to one with `&Shape` and own one with `Box<Shape>`; for errors write `Result<T>`, because `Error` is a family of types, not a type.
+--- failing
+public interface Shape {
+  area(): f64;
+}
+
+public function total(shapes: &Shape[]): f64 {
+  let sum = 0.0;
+  for (const s of shapes) { sum += s.area(); }
+  return sum;
+}
+--- fixed
+public interface Shape {
+  area(): f64;
+}
+
+public function total(shapes: &Box<Shape>[]): f64 {
+  let sum = 0.0;
+  for (const s of shapes) { sum += s.area(); }
+  return sum;
+}
+--- typescript
+In TypeScript every object is reached through a reference, so an array of an interface type holds references. An Enrang array holds its elements inline, so they must all have one size, and a `Box<Shape>` has the same size whatever class it holds.
+=== EN1007
+--- rule
+An `fn` type is a plain pointer to code, so an arrow becomes an `fn` value only when it uses no variables from around it; one that does, stored in an `fn`-typed field, local or result, is EN1007. Keep the arrow in a local with no `fn` type, where it can be called, or pass it to a closure parameter, written `(x: i64) => i64`, which may use variables; or pass the data it needs as an argument.
+--- failing
+public function scaleAll(xs: &i64[], factor: i64): void {
+  const by: fn(x: i64) => i64 = (x: i64): i64 => x * factor;
+  for (let i = 0; i < xs.length(); i++) { xs[i] = by(xs[i]); }
+}
+--- fixed
+public function scaleAll(xs: &i64[], factor: i64): void {
+  const by = (x: i64): i64 => x * factor;
+  for (let i = 0; i < xs.length(); i++) { xs[i] = by(xs[i]); }
+}
+--- typescript
+In TypeScript any function value may keep the variables it uses, and the garbage collector keeps them alive. In Enrang an arrow borrows the variables it uses, so it lives only where the compiler sees its last call: in a local, or in a closure parameter for the length of a call.
+=== EN1009
+--- rule
+These module forms are not supported yet: `export default`, a default import, `import x from "./x"`, an import for its effects alone, `import "./x"`, an export list, `export { a, b }`, and `require(...)`. Mark each declaration that other files may use `public`, and import names in braces, `import { greet } from "./greet";`, or a whole module, `import * as greet from "./greet";`.
+--- failing
+export default function greet(): void { console.log("hello"); }
+--- fixed
+public function greet(): void { console.log("hello"); }
+--- typescript
+A TypeScript module may have one default export besides its named ones. In Enrang every import names what it takes, so a name means the same thing in every file that uses it.
+=== EN1010
+--- rule
+A default in a destructuring pattern, at any depth, as in `const { width = 80 } = opts;`, is not supported yet. Destructure first, then apply the default with `??` where the value is used.
+--- failing
+const opts: { width: i64 | null } = { width: null };
+const { width = 80 } = opts;
+console.log(width);
+--- fixed
+const opts: { width: i64 | null } = { width: null };
+const { width } = opts;
+console.log(width ?? 80);
+--- typescript
+TypeScript applies a pattern's default when the value is `undefined`. Enrang has no `undefined`, and `??` says in one place what happens when the value is `null`.
+=== EN1011
+--- rule
+Range indexing, `xs[a..b]`, is not supported yet, and neither is `str`, the type Rust gives a part of a string. Take a part with `slice`, which copies nothing: `xs.slice(a, b)` gives a `&Slice<T>` of an array's elements from `a` up to `b`, and `s.slice(a, b)` gives a read-only `&string` part of a string. A part of a string has the type `&string`, as a whole string does.
+--- failing
+public function prefix(line: &str, n: isize): &str { return line.slice(0, n); }
+--- fixed
+public function prefix(line: &string, n: isize): &string { return line.slice(0, n); }
+--- typescript
+TypeScript's `slice` copies the characters into a new string. Enrang's points into the original, so taking a part costs nothing, and `.toString()` makes a copy when one is needed.
+=== EN1012
+--- rule
+`Map` and `Set` are not supported yet: the standard library has no hashed or ordered collections. Use an array, `T[]`, and look values up with `includes` or `find`, keeping it sorted when it grows large; a map is an array of pairs of a key and a value.
+--- failing
+const seen = new Set<string>();
+seen.add("ada");
+console.log(seen.has("ada"));
+--- fixed
+let seen: string[] = [];
+seen.push("ada");
+console.log(seen.includes("ada"));
+--- typescript
+TypeScript's `Map` and `Set` come with every runtime. The prototype's library has arrays only, so a set is an array of its values and a map an array of pairs.
+=== EN1013
+--- rule
+`...` is supported in one place only: as an element of an array literal, `[...a, x]`, which copies the elements of `a` into the new array. Everywhere else it is not supported yet, in a call, `f(...a)`, a rest parameter, `(...xs: i64[])`, an object literal, `{ ...o }`, or a pattern, `const [a, ...rest] = xs`. Pass an array instead; `[...a]` copies one.
+--- failing
+public function total(...xs: i64[]): i64 {
+  let t = 0;
+  for (const x of xs) { t += x; }
+  return t;
+}
+--- fixed
+public function total(xs: &Slice<i64>): i64 {
+  let t = 0;
+  for (const x of xs) { t += x; }
+  return t;
+}
+--- typescript
+TypeScript spreads arguments, objects and rest parameters. In Enrang a function's parameters are fixed, so a list of values is passed as one array, and a call such as `total(&[1, 2, 3])` builds it in place.
+=== EN1014
+--- rule
+Generic features beyond plain type parameters are not supported yet: associated types, such as `L.Item` for a type that `L` would define; type arguments on a type parameter, as in `C<i64>`; constant generic arguments; and specialisation. A type parameter stands for one whole type, so name each part you need with a type parameter of its own: a function over the elements of any array takes `&Slice<T>`, with `T` for the element type.
+--- failing
+public function firstOf<L>(list: &L): L.Item | null { return null; }
+--- fixed
+public function firstOf<T>(list: &Slice<T>): &T | null { return list.first(); }
+--- typescript
+TypeScript computes types such as `L[number]` from a type parameter. In Enrang a type parameter has no members and takes no arguments, so the element type is a parameter of its own.
+=== EN1015
+--- rule
+`for...of` goes over an array, `T[]`, a fixed array, `T[N]`, a view, `Slice<T>`, or a range such as `0..n`, after at most one `&`. Any other source is not supported yet: a `string`, a class of your own, a `Box` holding an array, which is written `&*b`, and a loop that takes the elements of a fixed array whose elements are not Copy. `for...in` is not supported either, since an Enrang object has no keys to walk. For a string, loop over its indexes and read each byte with `byteAt`; for a class, expose an array, or a `get(i)` and a `length()`; for owned elements that are not Copy, use a `T[]`.
+--- failing
+const word = "hello";
+for (const c of word) { console.log(c); }
+--- fixed
+const word = "hello";
+for (let i = 0; i < word.length(); i++) { console.log(word.byteAt(i)); }
+--- typescript
+In TypeScript `for...of` takes any iterable, and a string yields its characters. An Enrang string is UTF-8 bytes, and a loop over it has to say whether it reads bytes or code points.
+=== EN1017
+--- rule
+Setters, `set name(v)`, are not supported yet. Write a method, such as `setName(v)`, so that every call that changes the object looks like one.
+--- failing
+public class Temperature {
+  private celsius: f64 = 0.0;
+
+  public set fahrenheit(f: f64) { this.celsius = (f - 32.0) / 1.8; }
+}
+--- fixed
+public class Temperature {
+  private celsius: f64 = 0.0;
+
+  public setFahrenheit(f: f64): void { this.celsius = (f - 32.0) / 1.8; }
+}
+--- typescript
+In TypeScript `t.fahrenheit = 50` may run any code. In Enrang an assignment to a field only stores, and code that does more is a method call.
+=== EN1018
+--- rule
+Operator overloading, a method that defines what an operator such as `+` does for a class, is not supported yet. Write a named method instead: `a.plus(b)`.
+--- failing
+public class Vec2 {
+  public constructor(public x: f64, public y: f64) {}
+
+  public operator +(o: &Vec2): Vec2 { return new Vec2(this.x + o.x, this.y + o.y); }
+}
+--- fixed
+public class Vec2 {
+  public constructor(public x: f64, public y: f64) {}
+
+  public plus(o: &Vec2): Vec2 { return new Vec2(this.x + o.x, this.y + o.y); }
+}
+--- typescript
+TypeScript has no operator overloading either. In Enrang operators work on numbers, `bool` and strings, as the language defines them.
+=== EN1019
+--- rule
+A character type, `char`, is not supported yet. A string is UTF-8 bytes, read by index: `s.byteAt(i)` gives the byte at `i` as a `u8`, and `s.codePointAt(i)` gives the code point that starts there as a `u32`.
+--- failing
+public function initial(name: &string): char { return name.codePointAt(0); }
+--- fixed
+public function initial(name: &string): u32 { return name.codePointAt(0); }
+--- typescript
+TypeScript has no character type either: `s[0]` is a string of length 1. Enrang reads bytes and code points as numbers.
+=== EN1021
+--- rule
+Static fields, `static x = ...` in a class body, are not supported yet. Use a top-level `const` for a value that never changes, or an `unsafe let` for storage the whole program shares. Static methods are supported.
+--- failing
+public class Config {
+  public static maxUsers: i64 = 100;
+}
+--- fixed
+public const MAX_USERS: i64 = 100;
+--- typescript
+TypeScript's static fields are shared, changeable state. In Enrang a module-level `const` covers constants, and shared changeable storage is an `unsafe let`, which says plainly what it is.
+=== EN1022
+--- rule
+The `**` operator is not supported yet. Write `a.pow(b)`. In a type or before an operand, `**` is two `*` and not this operator: `**u8` is a pointer to a pointer, and `**pp` reads through two.
+--- failing
+const side = 3.0;
+const area = side ** 2.0;
+console.log(area);
+--- fixed
+const side = 3.0;
+const area = side.pow(2.0);
+console.log(area);
+--- typescript
+TypeScript's `**` binds tighter than `*` and is right-associative. A method call has no precedence to remember.
+=== EN1023
+--- rule
+Type-level computation is not supported yet: `keyof`, mapped types such as `{ [K in T]: V }`, and conditional types such as `T extends U ? X : Y`. Write the type out: a set of field names is a string-literal union in a `type` alias, and a computed object type is a class or an object type written field by field.
+--- failing
+public class Point {
+  public x: f64 = 0.0;
+  public y: f64 = 0.0;
+}
+
+public type Axis = keyof Point;
+--- fixed
+public class Point {
+  public x: f64 = 0.0;
+  public y: f64 = 0.0;
+}
+
+public type Axis = "x" | "y";
+--- typescript
+TypeScript computes types from types. Enrang's types are written out, so each one reads the same in a signature as in an error message.
+=== EN1024
+--- rule
+Intersection types, `A & B`, are not supported yet outside a bound. In a type parameter's bound they are: `<T extends Named & Aged>` accepts any type that satisfies both interfaces, so write the function as generic over such a `T`.
+--- failing
+public interface Named {
+  name(): string;
+}
+
+public interface Aged {
+  age(): i64;
+}
+
+public function show(p: &Named & Aged): void {
+  console.log(`${p.name()} is ${p.age()}`);
+}
+--- fixed
+public interface Named {
+  name(): string;
+}
+
+public interface Aged {
+  age(): i64;
+}
+
+public function show<T extends Named & Aged>(p: &T): void {
+  console.log(`${p.name()} is ${p.age()}`);
+}
+--- typescript
+TypeScript intersects any two types. Enrang keeps `&` for bounds, where it means that a type satisfies every interface listed.
+=== EN1025
+--- rule
+Regular expressions, `/re/` where a value starts, are not supported yet. Search and split with the string methods, `indexOf` and `split`.
+--- failing
+const line = "a,b,c";
+const parts = line.split(/,/);
+console.log(parts);
+--- fixed
+const line = "a,b,c";
+const parts = line.split(",");
+console.log(parts);
+--- typescript
+TypeScript has regular expression literals and the `RegExp` class. Enrang's prototype has neither, so text is searched with plain string methods.
+=== EN1026
+--- rule
+`Math` does not exist. The math functions are methods of the number types, as in `x.sqrt()`, `x.abs()` and `a.max(b)`, and constants such as `f64.PI` are read through the type's name.
+--- failing
+const side = 2.0;
+const diagonal = Math.sqrt(side * side * 2.0);
+console.log(diagonal);
+--- fixed
+const side = 2.0;
+const diagonal = (side * side * 2.0).sqrt();
+console.log(diagonal);
+--- typescript
+TypeScript's `Math` is an object of functions on `number`, its one number type. Enrang has many number types, and each has its own methods, so `a.max(b)` takes two values of one type.
+=== EN1027
+--- rule
+`JSON` is not supported yet: the prototype's library has no JSON parser or printer. To show a value, pass it to `console.log` or a template, which print every value the same way, and write text in JSON's format with a template.
+--- failing
+const p = { x: 1, y: 2 };
+console.log(JSON.stringify(p));
+--- fixed
+const p = { x: 1, y: 2 };
+console.log(`{"x":${p.x},"y":${p.y}}`);
+=== EN1028
+--- rule
+Network APIs, `fetch`, `WebSocket` and sockets, are not supported yet: the prototype's library has no sockets and no HTTP. A program reads and writes files with `fs`, so fetch the data with another tool first, then read the file.
+--- failing
+const page = fetch("https://example.com/");
+console.log(page);
+--- fixed
+import { fs } from "os";
+
+const page = fs.readFile("page.html");
+console.log(page);
+=== EN1029
+--- rule
+Reflection, such as `Object.keys`, `Object.entries` and `Reflect`, is not supported yet: types exist only while compiling, so a value carries no list of its fields to inspect. Name the fields you need; `console.log` prints a whole value, with its field names.
+--- failing
+const p = { x: 1, y: 2 };
+for (const key of Object.keys(p)) { console.log(key); }
+--- fixed
+const p = { x: 1, y: 2 };
+console.log(`x = ${p.x}, y = ${p.y}`);
+--- typescript
+A TypeScript object is a table of its fields when the program runs, so code can list them. An Enrang value is only its data, laid out as its type says.
+=== EN1030
+--- rule
+Two kinds of foreign call are not supported yet: the 32-bit calling conventions `@abi("cdecl")` and `@abi("stdcall")`, and a class passed by value to or from foreign code, as are an enum with fields, a `Box`, an interface value, an object type and a tuple. Foreign functions use `win64` or `sysv` and take scalars and pointers: pass a raw pointer to the class, which is what a C function that takes a structure usually expects, and give the class `@repr("C")` so that its layout stays fixed.
+--- failing
+public final class Rect {
+  public left: i32 = 0;
+  public top: i32 = 0;
+  public right: i32 = 0;
+  public bottom: i32 = 0;
+}
+
+@dll("user32.dll")
+public declare function FillRect(dc: usize, rect: Rect, brush: usize): i32;
+--- fixed
+@repr("C")
+public final class Rect {
+  public left: i32 = 0;
+  public top: i32 = 0;
+  public right: i32 = 0;
+  public bottom: i32 = 0;
+}
+
+@dll("user32.dll")
+public declare function FillRect(dc: usize, rect: *Rect, brush: usize): i32;
+=== EN1031
+--- rule
+32-bit Windows output, `--target=i386-windows`, is not supported yet. Windows output is 64-bit only, `--target=x86_64-windows`. For 32-bit output, and to test 32-bit code, build for `i386-linux`.
+--- failing
+$ enrang check --target=i386-windows
+error[EN1031]: 32-bit Windows output is not supported yet
+  = note: Windows output is 64-bit only; nothing has been built for 32-bit Windows
+help: `x86_64-windows`; `i386-linux` for 32-bit testing
+  = explain: run `enrang explain EN1031`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang check --target=x86_64-windows
+=== EN1032
+--- rule
+Compile-time function calls are not supported yet: a `const` is computed while compiling, and the compiler does not run functions, so a call in a constant's initialiser is EN1032. Write the value with literals, operators and other constants, or compute it when the program starts.
+--- failing
+public const BUFFER: i64 = kib(64);
+
+public function kib(n: i64): i64 { return n * 1024; }
+--- fixed
+public const KIB: i64 = 1024;
+public const BUFFER: i64 = 64 * KIB;
+=== EN1033
+--- rule
+Unchecked reinterpretation, `union` types and `transmute`, is not supported yet: a value's bits are read as another type only through checked conversions. `f.toBits()` gives a float's bits as an integer, `x.wrap<u8>()` keeps an integer's low bits, and a raw pointer cast to another pointer type, `p as *U`, reads memory as another type in `unsafe` code.
+--- failing
+const bits: u64 = transmute(1.5);
+console.log(bits);
+--- fixed
+const bits: u64 = 1.5.toBits();
+console.log(bits);
+=== EN1034
+--- rule
+DWARF debugging information, `--debug-info=dwarf`, is not supported yet. To find where a program failed, use the stack trace that a panic prints and the symbols that `--symbols` writes.
+--- failing
+$ enrang check --debug-info=dwarf
+error[EN1034]: DWARF output is not supported yet
+  = note: debug information in the DWARF format is outside the prototype
+help: `--symbols` plus stack traces
+  = explain: run `enrang explain EN1034`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang check
+=== EN1035
+--- rule
+A `function` declared inside a function body is not supported yet. Move it to the top level, or store an arrow in a local. Functions written among a program's top-level statements are not nested, and are fine.
+--- failing
+public function outer(): i64 {
+  function inner(x: i64): i64 { return x * 2; }
+  return inner(21);
+}
+--- fixed
+public function outer(): i64 {
+  const inner = (x: i64): i64 => x * 2;
+  return inner(21);
+}
+--- typescript
+TypeScript functions nest freely and capture what they see. In Enrang an arrow is the one function that captures, so a helper inside a function is an arrow in a local.
+=== EN1036
+--- rule
+Generic arrows, `<T>(x: T) => x`, are not supported yet. Use a generic `function`; among a program's top-level statements it may be a local function.
+--- failing
+const id = <T>(x: T): T => x;
+console.log(id(42));
+--- fixed
+function id<T>(x: T): T { return x; }
+console.log(id(42));
+--- typescript
+TypeScript arrows can take type parameters. In Enrang an arrow's types come from where it is used, and a function that works for any type is declared with `function`.
+=== EN1037
+--- rule
+Class expressions, `class { ... }` where a value is expected, as in `const C = class {}` or `new class {}()`, are not supported yet. Declare the class by name at the top level.
+--- failing
+const Point = class {
+  public x: i64 = 0;
+};
+const p = new Point {};
+console.log(p.x);
+--- fixed
+const p = new Point {};
+console.log(p.x);
+
+private class Point {
+  public x: i64 = 0;
+}
+--- typescript
+In TypeScript a class is also a value that can be created anywhere. In Enrang a class is a declaration, known to the whole module.
+=== EN1038
+--- rule
+A label on a block, `name: { ... }`, is not supported yet. Labels go on loops only; to skip the rest of a block, use an `if`, or move the block into a function and `return`.
+--- failing
+const n = 5;
+check: {
+  if (n < 0) { break check; }
+  console.log("not negative");
+}
+--- fixed
+const n = 5;
+if (n >= 0) { console.log("not negative"); }
+--- typescript
+TypeScript allows `break` out of a labelled block. Enrang keeps labels for loops, where `break` and `continue` read the same in every language you may come from.
+=== EN1039
+--- rule
+`as const` is not supported yet, and it is not needed: `const` is already deep, so nothing can change a `const` binding's value, its elements and fields included.
+--- failing
+const sizes = [8, 16, 32] as const;
+console.log(sizes);
+--- fixed
+const sizes = [8, 16, 32];
+console.log(sizes);
+--- typescript
+In TypeScript `const` fixes only the binding, so `as const` is needed to make an array or object read-only. In Enrang `const` already covers the whole value.
+=== EN1041
+--- rule
+The flags `--multiboot` and `--coverage` are not supported yet. A kernel boots from the disk image that `--image` writes, and the VM counts the blocks a program runs internally but does not report coverage yet.
+--- failing
+$ enrang check --coverage
+error[EN1041]: this flag is not supported yet
+  = note: `--coverage` is outside the prototype
+help: Boot through `--image`; the VM counts blocks internally but reports no coverage yet
+  = explain: run `enrang explain EN1041`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang check
+=== EN1042
+--- rule
+Destructuring an array, `const [a, b] = xs` or `[a, b] = xs` with `xs` a `T[]` or `T[N]`, at any depth of a pattern, is not supported yet: the pattern would need the array to have at least that many elements. Index the array, as in `xs[0]`, which is checked, or use a tuple, such as `[i64, i64]`, whose length is part of its type and which destructures.
+--- failing
+const point = [3, 4];
+const [x, y] = point;
+console.log(x + y);
+--- fixed
+const point: [i64, i64] = [3, 4];
+const [x, y] = point;
+console.log(x + y);
+--- typescript
+In TypeScript a pattern reads `undefined` for an element that is missing. Enrang has no `undefined`, so a pattern names only the parts of a tuple, whose type says how many there are.

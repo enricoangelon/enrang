@@ -1,0 +1,8 @@
+//! covers: C12
+const xs = [1, 2, 3];
+xs.forEach(x => console.log(x));
+xs.forEach(show);
+const shout = (x: &i64) => console.log(x);
+xs.forEach(shout);
+
+private function show(x: &i64): void { console.log(x); }

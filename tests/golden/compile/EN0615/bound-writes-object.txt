@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0615/bound-writes-object.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `get` changes the object, but `Counter` declares that it doesn't
+  --> tests/compile/EN0615/bound-writes-object.fail.en:12:14
+   |
+ 9 |   get(): i64;
+   |   --- declared here without `let`
+10 | }
+11 |
+12 | public class Clicks { //~ EN0615 "`get` changes the object, but `Counter` declares that it doesn't"
+   |              ^^^^^^ `get` in `Clicks` changes the object
+   |
+help: if implementations may change the object, write `let get(): i64;` in `Counter`
+   |
+ 9 |   let get(): i64;
+   |   ++++
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,5 @@
+let xs: i64[] = [1];
+const e = &xs[0];
+console.log(*e);
+const grow = () => { xs.push(2); };
+grow();

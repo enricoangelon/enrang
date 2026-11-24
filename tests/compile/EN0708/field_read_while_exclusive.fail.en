@@ -1,0 +1,9 @@
+let p = new Pt();
+const r = &p.x;
+console.log(p.x); //~ EN0708 "`p.x` can't be read while `r` may write into it"
+*r = 1;
+
+public class Pt {
+  public x: i64 = 0;
+  public y: i64 = 0;
+}

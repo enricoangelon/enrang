@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0708/read_while_writable_pair_used.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `q` can't be read while `p` may write into it
+ --> tests/compile/EN0708/read_while_writable_pair_used.fail.en:5:15
+  |
+2 | const p = pairBig(&q);
+  |                   -- borrowed for writing here, because `p` writes on line 6
+3 | if (p != null) {
+4 |   *p[0] = 0;
+5 |   console.log(q); //~ EN0708 "`q` can't be read while `p` may write into it"
+  |               ^ read here
+6 |   *p[1] = 0;
+  |    - the write
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `q` before line 2 or after line 6
+  = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,33 @@
+$ enrang check tests/compile/EN0703/reference_type_arguments.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0703]: `T` can't stand for the reference `&User`
+ --> tests/compile/EN0703/reference_type_arguments.fail.en:7:10
+  |
+7 |   return t.isNull(); //~ EN0703 "can't stand for the reference `&User`"
+  |          ^^^^^^^^^^ this makes `T` the reference `&User`
+  |
+help: compare with `null`: `t == null`
+  |
+7 |   return t == null; //~ EN0703 "can't stand for the reference `&User`"
+  |          ~~~~~~~~~
+  = explain: run `enrang explain EN0703`
+
+error[EN0703]: `U` can't stand for the reference `&User`
+  --> tests/compile/EN0703/reference_type_arguments.fail.en:11:28
+   |
+11 |   const copies = users.map(u => u); //~ EN0703 "`U` can't stand for the reference `&User`"
+   |                            ^^^^^^ this makes `U` the reference `&User`
+   |
+   = explain: run `enrang explain EN0703`
+
+error[EN0703]: `T` can't stand for the reference `&User | null`
+  --> tests/compile/EN0703/reference_type_arguments.fail.en:17:8
+   |
+17 |   keep(u); //~ EN0703 "`T` can't stand for the reference `&User | null`"
+   |        ^ this makes `T` the reference `&User | null`
+   |
+   = explain: run `enrang explain EN0703`
+
+error: aborting due to 3 previous errors

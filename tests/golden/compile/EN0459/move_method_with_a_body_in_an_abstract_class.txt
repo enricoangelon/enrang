@@ -1,0 +1,11 @@
+$ enrang check tests/compile/EN0459/move_method_with_a_body_in_an_abstract_class.fail.en
+[exit 0]
+[stdout]
+[stderr]
+warning[EN0459]: `move` method of an abstract class can never run
+ --> tests/compile/EN0459/move_method_with_a_body_in_an_abstract_class.fail.en:2:15
+  |
+2 |   public move run(): string { //~ EN0459 "`move` method of an abstract class can never run"
+  |               ^^^ no object is ever exactly a `Task`
+  |
+help: declare it `abstract`

@@ -1,0 +1,81 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/d9-store.fail.en. Its row's codes: EN0608, EN0608.
+module "tests/compile/EN0608/d9-store.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class C {
+  private a: &i64[];
+  private b: &i64[];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: i64[]; // k
+  let _3: i64[]; // j
+  let mut _4: C; // c
+  let _5: &i64[] temp;
+  let _6: &i64[] temp;
+  let _7: &C temp;
+  let _8: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<i64>(const 2: i64);
+    storage_live(_4);
+    set_table(_4, C);
+    _5 = &_2 [explicit]; //~ EN0608
+    _6 = &_3 [explicit]; //~ EN0608
+    _7 = &_4 [auto-borrow];
+    _8 = C::#ctor(move _7, move _5, move _6) -> bb1;
+  }
+  bb1: {
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn C::#ctor(_1: &C, _2: &i64[], _3: &i64[]) -> void {
+  let _1: &C; // this
+  let _2: &i64[]; // x
+  let _3: &i64[]; // y
+  let _4: void temp;
+  let _5: [&i64[], &i64[]] temp;
+  let _6: &i64[] temp;
+  let _7: &i64[] temp;
+  let _8: &i64[] temp;
+  let _9: &i64[] temp;
+  bb0: {
+    _6 = &*_2 [reborrow];
+    _7 = &*_3 [reborrow];
+    _5 = tuple(move _6, move _7);
+    _8 = copy _5.0;
+    (*_1).a = copy _8;
+    _9 = copy _5.1;
+    (*_1).b = copy _9;
+    return;
+  }
+}
+
+fn C::grow(_1: &C) -> void {
+  let _1: &C; // this
+  let _2: void temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = copy (*_1).a;
+    _2 = "alloc/array"::Array<i64>::push(move _3, const 1: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

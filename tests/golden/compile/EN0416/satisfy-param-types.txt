@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0416/satisfy-param-types.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0416]: `Bowl` does not satisfy `Feeder`: `feed` has another signature
+ --> tests/compile/EN0416/satisfy-param-types.fail.en:5:30
+  |
+5 | public class Bowl implements Feeder { //~ EN0416 "`Bowl` does not satisfy `Feeder`: `feed` has another signature"
+  |                              ^^^^^^ required by this `implements`
+6 |   public feed(grams: i32): void {}
+  |          ---- `Bowl.feed` is declared here
+  |
+  = note: `Feeder` declares `feed(grams: i64): void`
+  = explain: run `enrang explain EN0416`
+
+error: aborting due to 1 previous error

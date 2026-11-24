@@ -1,0 +1,8 @@
+public function rename(let u: User): User {
+  u = new User { name: "Bo" };
+  return u;
+}
+
+public class User {
+  public name: string;
+}

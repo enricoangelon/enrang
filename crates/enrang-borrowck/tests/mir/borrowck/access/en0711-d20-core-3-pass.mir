@@ -1,0 +1,226 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0711/d20-core-3.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0711/d20-core-3.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+@private class Lexer {
+  private src: &string;
+  private pos: isize;
+}
+class Parser {
+  private lx: Lexer;
+}
+
+fn Lexer::#ctor(_1: &Lexer, _2: &string) -> void {
+  let _1: &Lexer; // this
+  let _2: &string; // src
+  let _3: &string temp;
+  bb0: {
+    switch const overridden(pos): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+  bb2: {
+    field_init((*_1).pos, const 0: isize);
+    goto bb1;
+  }
+}
+
+fn Lexer::next(_1: &Lexer) -> &string | null {
+  let _1: &Lexer; // this
+  let _2: bool temp;
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: &string temp;
+  let _6: isize; // start
+  let _7: isize temp;
+  let _8: &string temp;
+  let _9: &string temp;
+  let _10: isize | null temp;
+  let _11: &string temp;
+  bb0: {
+    _3 = copy (*_1).pos;
+    _5 = copy (*_1).src;
+    _4 = "core/string"::string::length(move _5) -> bb3;
+  }
+  bb1: {
+    _0 = null;
+    return;
+  }
+  bb2: {
+    storage_live(_6);
+    _6 = copy (*_1).pos;
+    _8 = copy (*_1).src;
+    _7 = "core/string"::string::length(move _8) -> bb4;
+  }
+  bb3: {
+    _2 = ge(move _3, move _4);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb4: {
+    (*_1).pos = move _7;
+    _10 = present(copy (*_1).pos);
+    _11 = copy (*_1).src;
+    _9 = "core/string"::string::slice(move _11, copy _6, move _10, const 2: isize) -> bb5;
+  }
+  bb5: {
+    _0 = present(move _9);
+    storage_dead(_6);
+    return;
+  }
+}
+
+fn Parser::#ctor(_1: &Parser, _2: Lexer) -> void {
+  let _1: &Parser; // this
+  let _2: Lexer; // lx
+  bb0: {
+    (*_1).lx = move _2;
+    return;
+  }
+}
+
+move fn Parser::intoLexer(_1: &Parser) -> Lexer {
+  let _1: &Parser; // this
+  bb0: {
+    check_class(*_1, move_this(intoLexer), ref);
+    _0 = move (*_1).lx;
+    return;
+  }
+}
+
+fn copied() -> void {
+  let mut _1: [&string, int]; // keep
+  let _2: string; // tmp
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: string temp;
+  let _8: [&string, int]; // pair
+  let _9: &string temp;
+  let _10: &[&string, int]; // r
+  let _11: [&string, int] temp;
+  let _12: void temp;
+  let _13: &string temp;
+  bb0: {
+    storage_live(_1);
+    _1 = tuple(const "none": &string, const 0: int);
+    storage_live(_2);
+    _3 = const "xy": string;
+    _4 = &_3 [temp-arg];
+    _5 = const "z": string;
+    _6 = &_5 [temp-arg];
+    _7 = form concat(move _4, move _6) -> bb1;
+  }
+  bb1: {
+    _2 = move _7;
+    drop(_7);
+    storage_dead(_7);
+    drop(_5);
+    storage_dead(_5);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_8);
+    _9 = &_2 [explicit];
+    _8 = tuple(move _9, const 1: int);
+    storage_live(_10);
+    _10 = &_8 [explicit];
+    _11 = copy *_10;
+    _1 = move _11;
+    storage_dead(_10);
+    _13 = copy _1.0;
+    _12 = form log(move _13) -> bb2;
+  }
+  bb2: {
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn make(_1: &string) -> Lexer {
+  let _1: &string; // src
+  let _2: Parser; // p
+  let _3: Lexer temp;
+  let _4: &string temp;
+  let _5: &Lexer temp;
+  let _6: void temp;
+  let _7: &Parser temp;
+  let _8: void temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, Parser);
+    set_table(_3, Lexer);
+    _4 = &*_1 [reborrow];
+    _5 = &_3 [auto-borrow];
+    _6 = Lexer::#ctor(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    _7 = &_2 [auto-borrow];
+    _8 = Parser::#ctor(move _7, move _3) -> bb2;
+  }
+  bb2: {
+    _0 = Parser::intoLexer(move _2) -> bb3;
+  }
+  bb3: {
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn written() -> void {
+  let mut _1: [&string, int]; // pair
+  let _2: string; // tmp
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: string temp;
+  let _8: &[&string, int]; // t
+  let _9: &string temp;
+  let _10: void temp;
+  let _11: &string temp;
+  bb0: {
+    storage_live(_1);
+    _1 = tuple(const "none": &string, const 0: int);
+    storage_live(_2);
+    _3 = const "xy": string;
+    _4 = &_3 [temp-arg];
+    _5 = const "z": string;
+    _6 = &_5 [temp-arg];
+    _7 = form concat(move _4, move _6) -> bb1;
+  }
+  bb1: {
+    _2 = move _7;
+    drop(_7);
+    storage_dead(_7);
+    drop(_5);
+    storage_dead(_5);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_8);
+    _8 = &_1 [explicit];
+    _9 = &_2 [explicit];
+    *_8 = tuple(move _9, const 1: int);
+    storage_dead(_8);
+    _11 = copy _1.0;
+    _10 = form log(move _11) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}

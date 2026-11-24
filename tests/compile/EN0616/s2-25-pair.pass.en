@@ -1,0 +1,16 @@
+//! covers: H27
+let q: i64[] = [1, 5, 3, 7];
+const p = pairBig(&q);
+if (p != null) { *p[0] = 0; *p[1] = 0; }
+console.log(q);
+
+public function pairBig(xs: &Slice<i64>): [&i64, &i64] | null {
+  let a: &i64 | null = null;
+  for (const x of xs) {
+    if (*x > 2) {
+      if (a != null) { return [a, x]; }
+      a = x;
+    }
+  }
+  return null;
+}

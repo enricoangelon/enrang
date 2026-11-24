@@ -1,0 +1,12 @@
+public abstract class Shape {
+  public abstract let area(): i64;
+}
+
+public class Square extends Shape {
+  private calls: i64 = 0;
+
+  public override area(): i64 {
+    this.calls += 1;
+    return 4;
+  }
+}

@@ -1,0 +1,12 @@
+//! row: `let keep: &i64 \| null = null; for (cons
+let q: i64[] = [1, 5, 3, 7];
+let keep: &i64 | null = null;
+for (const x of &q) {
+  keep = x;
+}
+use(keep);
+console.log(q);
+
+private function use(r: &i64 | null): void {
+  if (r != null) { *r = 0; }
+}

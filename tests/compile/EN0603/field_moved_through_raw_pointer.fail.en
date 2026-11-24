@@ -1,0 +1,7 @@
+public unsafe function nameAt(p: *User): string {
+  return (*p).name; //~ EN0603
+}
+
+public class User {
+  public name: string;
+}

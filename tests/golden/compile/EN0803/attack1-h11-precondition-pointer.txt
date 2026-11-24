@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0803/attack1-h11-precondition-pointer.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0803]: `poke` is an `unsafe function`, so it can't become a safe `fn`
+ --> tests/compile/EN0803/attack1-h11-precondition-pointer.fail.en:9:40
+  |
+9 |   const a: fn(p: *u8, v: u8) => void = poke; //~ EN0803
+  |                                        ^^^^ its callers must uphold what it requires
+  |
+help: convert it to an `unsafe fn(...)` type, which only `unsafe` code may call
+  = explain: run `enrang explain EN0803`
+
+error[EN0803]: `pick` has `@requires`, so it can't become a safe `fn`
+  --> tests/compile/EN0803/attack1-h11-precondition-pointer.fail.en:10:40
+   |
+10 |   const b: fn(p: *u8, v: u8) => void = pick; //~ EN0803
+   |                                        ^^^^ it runs only where the CPU features it requires were checked
+   |
+help: convert it to an `unsafe fn(...)` type, which only `unsafe` code may call
+   = explain: run `enrang explain EN0803`
+
+error[EN0803]: `poke` is an `unsafe function`, so it can't become a closure
+  --> tests/compile/EN0803/attack1-h11-precondition-pointer.fail.en:11:7
+   |
+11 |   run(poke); //~ EN0803
+   |       ^^^^ its callers must uphold what it requires
+   |
+help: convert it to an `unsafe fn(...)` type, which only `unsafe` code may call
+   = explain: run `enrang explain EN0803`
+
+error: aborting due to 3 previous errors

@@ -1,0 +1,4 @@
+console.log("hi");
+function main(): void { //~ EN0314 "`main` beside top-level statements is not the entry point"
+  console.log("never");
+}

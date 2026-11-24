@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0707/m3gate-self-reference-reassign.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: cannot change `c` while it is borrowed
+ --> tests/compile/EN0707/m3gate-self-reference-reassign.fail.en:5:1
+  |
+4 | c.fix();
+  | - first exclusive borrow
+5 | c = new Outer(&k); //~ EN0707 "cannot change `c` while it"
+  | ^^^^^^^^^^^^^^^^^ `c` changes here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0701/d20-core-5.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0701]: a `Retarget` can't hold a `Lexer`, because `Lexer` holds a reference
+ --> tests/compile/EN0701/d20-core-5.fail.en:4:7
+  |
+4 | useIt(&lx, &tmp); //~ EN0701 "a `Retarget` can't hold a `Lexer`, because `Lexer` holds a reference"
+  |       ^^^ only a value type becomes an interface value
+  |
+  = explain: run `enrang explain EN0701`
+
+error: aborting due to 1 previous error

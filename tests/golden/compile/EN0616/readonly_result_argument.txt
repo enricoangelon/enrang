@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/readonly_result_argument.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `count`
+ --> tests/compile/EN0616/readonly_result_argument.fail.en:2:6
+  |
+2 | bump(c.count()); //~ EN0616 "cannot change the object returned by `count`"
+  |      ^^^^^^^^^ `bump` writes through it
+  |
+help: to allow this, remove `readonly` from the return type of `count`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

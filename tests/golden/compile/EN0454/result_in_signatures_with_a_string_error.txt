@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0454/result_in_signatures_with_a_string_error.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0454]: `string` is not an error type
+ --> tests/compile/EN0454/result_in_signatures_with_a_string_error.fail.en:1:51
+  |
+1 | public function parseAge(s: &string): Result<i64, string> { //~ EN0454 "`string` is not an error type"
+  |                                                   ^^^^^^ the error type of this `Result`
+  |
+help: return `Result<i64>` and write the text in `Err("...")`
+  = explain: run `enrang explain EN0454`
+
+error[EN0454]: `i64` is not an error type
+ --> tests/compile/EN0454/result_in_signatures_with_a_string_error.fail.en:5:37
+  |
+5 | public function keep(r: Result<i64, i64>): void { //~ EN0454 "`i64` is not an error type"
+  |                                     ^^^ the error type of this `Result`
+  |
+help: an error type is an enum, `Failure`, or a class that `implements Error`
+  = explain: run `enrang explain EN0454`
+
+error[EN0454]: `Plain` is not an error type
+  --> tests/compile/EN0454/result_in_signatures_with_a_string_error.fail.en:10:25
+   |
+10 |   public r: Result<i64, Plain>; //~ EN0454 "`Plain` is not an error type"
+   |                         ^^^^^ the error type of this `Result`
+   |
+help: an error type is an enum, `Failure`, or a class that `implements Error`
+   = explain: run `enrang explain EN0454`
+
+error: aborting due to 3 previous errors

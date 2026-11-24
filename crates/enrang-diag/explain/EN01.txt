@@ -1,0 +1,257 @@
+=== EN0100
+--- rule
+The grammar does not allow this token here, and no more specific code covers the mistake. The message says what the parser expected and what it found, and the parser skips to the end of the statement or declaration before it goes on, so one mistake gives one error. Common causes: a choice `a ? b` whose `:` never comes, two expressions side by side on one line, a `{` at the start of a statement meant as an object literal (it always starts a block there, so wrap the literal in parentheses), a getter, and a keyword used as a name.
+--- failing
+const ready = true;
+const label = ready ? "go";
+console.log(label);
+--- fixed
+const ready = true;
+const label = ready ? "go" : "wait";
+console.log(label);
+--- typescript
+Most of these are syntax errors in TypeScript too. Two are not: Enrang has no getters, so `get value()` is EN0100 and a method `value()` takes its place, and words such as `match`, `move` and `type` are keywords, so they cannot name a function or a binding.
+=== EN0101
+--- rule
+Every statement ends with `;`, and Enrang never inserts one. When a `;` is missing and the next token is on a later line, is a `}` or is the end of the file, the parser reports EN0101 and reads on as if the `;` were there; on the same line, the next token is EN0100 instead. A file gets one EN0101, at its first missing `;`: a note counts the other places, and the fix-it inserts every one of them, so a file written without semicolons is fixed in one step.
+--- failing
+const name = "Ada"
+console.log(name);
+--- fixed
+const name = "Ada";
+console.log(name);
+--- typescript
+TypeScript inserts semicolons automatically, and some styles leave them all out. Enrang has no automatic semicolon insertion, so every statement states where it ends; `enrang fmt` cannot add them, because a file that does not parse is left as it is.
+=== EN0102
+--- rule
+The file ended while a `{`, `(` or `[` was still open. To find which `{` lost its `}`, the parser compares each `}` with the indentation of the line that holds its `{`. The first `}` that does not line up is shown: it probably closes an outer block, so the error points at the `{` it was paired with, and the fix-it inserts a `}` for that block, at its indentation, before the line of the `}` shown. When every `}` lines up, the innermost open `{` is the one, and the fix-it closes it at the end of the file. The parser then reads on as if the `}` were there. An unclosed `${` in a template is EN0004.
+--- failing
+function greet(): void {
+  if (true) {
+    console.log("hi");
+}
+greet();
+--- fixed
+function greet(): void {
+  if (true) { console.log("hi"); }
+}
+greet();
+--- typescript
+TypeScript reports `'}' expected` at the end of the file. Enrang uses the indentation to point at the block that is most likely open, since that is where the `}` was forgotten.
+=== EN0103
+--- rule
+`?` and `!` mean two things each, and spacing tells them apart. The choice `a ? b : c` has a space before its `?`, and a line break counts as one. Propagation `f()?` and the null assertion `x!` take no space before them. So `a? b : c` is EN0103, with a fix-it that adds the space, and `f() ?` is EN0103, with a fix-it that removes it. Because `!=` is one token, a null assertion followed by `=` is written `x! = y`.
+--- failing
+const ready = true;
+const label = ready? "go" : "wait";
+console.log(label);
+--- fixed
+const ready = true;
+const label = ready ? "go" : "wait";
+console.log(label);
+--- typescript
+TypeScript ignores this spacing. Enrang has the postfix `?` that propagates an error, as Rust does, so the space before a choice's `?` is part of the syntax.
+=== EN0104
+--- rule
+The body of `if`, `else`, `while`, `for` and `do` is always a block in braces. `if (x) y();` is EN0104, with a fix-it that wraps the body in braces, along with the lines after it that are indented as if they were inside. A one-line guard is written `if (user == null) { return; }`, and `} else if (x) {` needs no extra braces.
+--- failing
+const n = 3;
+if (n > 2)
+  console.log("big");
+--- fixed
+const n = 3;
+if (n > 2) { console.log("big"); }
+--- typescript
+TypeScript allows a body without braces, and a second line indented under it looks as if it belongs to the `if` while it always runs. Enrang makes the braces mandatory, so the indentation can never lie.
+=== EN0105
+--- rule
+An assignment is an expression, but it may not decide anything: an assignment as the condition of `if`, `while`, `do` or `for`, as the condition of a choice `? :`, or as an operand of `&&`, `||` or `!` is EN0105. It is almost always a `==` with an `=` missing, and the fix-it makes it one. An assignment inside a comparison is fine, as in `while ((line = readLine()) != null)`, because the comparison is the condition. Parentheses around the assignment do not hide it.
+--- failing
+let count = 0;
+if (count = 1) { console.log("one"); }
+--- fixed
+let count = 0;
+if (count == 1) { console.log("one"); }
+--- typescript
+TypeScript accepts `if (count = 1)`, and linters warn about it. In Enrang it is an error, and the compiler offers the `==`.
+=== EN0106
+--- rule
+`??` cannot be mixed with `||` or `&&` without parentheses: in `a ?? b || c`, either grouping is a plausible reading. Write the parentheses that say which one you mean: `(a ?? b) || c` or `a ?? (b || c)`. `a ?? b ?? c` needs none.
+--- failing
+const saved: bool | null = null;
+const admin = false;
+const allowed = saved ?? false || admin;
+console.log(allowed);
+--- fixed
+const saved: bool | null = null;
+const admin = false;
+const allowed = (saved ?? false) || admin;
+console.log(allowed);
+--- typescript
+JavaScript has the same rule, so TypeScript rejects `a ?? b || c` too.
+=== EN0107
+--- rule
+Comparisons do not chain. `a < b < c` and `a == b != c` are EN0107, and so is `a < b > (c)`, which is not a call with type arguments because of the space before `<`. Write each comparison and join them with `&&`: `0 < x && x < 10`.
+--- failing
+const x = 5;
+const inRange = 0 < x < 10;
+console.log(inRange);
+--- fixed
+const x = 5;
+const inRange = 0 < x && x < 10;
+console.log(inRange);
+--- typescript
+TypeScript reads `0 < x < 10` as `(0 < x) < 10` and then rejects comparing a `boolean` with a number; JavaScript runs it and finds it `true` for every `x`. Enrang stops at the second comparison and says why.
+=== EN0108
+--- rule
+A decorator goes only before a declaration at the top level of a file, a member of a class or of an `extend` block, an enum case, or a function pointer type. Before anything else, a statement, an expression, a parameter, an interface member, an enum method, a test item, an `import` or an `assert`, it is EN0108, and the parser drops it. Which decorator fits which declaration is checked once names are known.
+--- failing
+public function greet(@required name: string): void { console.log(name); }
+--- fixed
+public function greet(name: string): void { console.log(name); }
+--- typescript
+TypeScript's experimental decorators may go on parameters, as Angular and NestJS use them for injection. Enrang has a fixed set of decorators, each with the declarations it applies to, and none applies to a parameter: pass what the function needs as an argument.
+=== EN0109
+--- rule
+Declarations go at the top level of a file: a class, enum, interface or type alias, an `import`, and anything marked `public` or `private`. Inside a block or a function body only statements may appear, so a declaration there is EN0109. Move it to the top level, marked `private` if only this file uses it. A `function` inside a function body is EN1035 instead.
+--- failing
+public function tally(): i64 {
+  class Counter {
+    public count: i64 = 0;
+  }
+  return 0;
+}
+--- fixed
+private class Counter {
+  public count: i64 = 0;
+}
+
+public function tally(): i64 {
+  const c = new Counter {};
+  return c.count;
+}
+--- typescript
+TypeScript allows classes, enums and type aliases inside functions. In Enrang every declaration belongs to its module, where its visibility is stated once and every other declaration can see it.
+=== EN0110
+--- rule
+A file starts with its imports. An `import` after a statement or a declaration is EN0110; move it up with the others.
+--- failing
+public function greet(): void { console.log("hello"); }
+
+import { fs } from "os";
+--- fixed
+import { fs } from "os";
+
+public function greet(): void { console.log("hello"); }
+--- typescript
+TypeScript hoists imports wherever they are written, so their place does not matter there. Enrang asks for them where they take effect, at the top.
+=== EN0111
+--- rule
+`break` and `continue` leave or restart the nearest loop around them, or the loop their label names. One with no loop around it is EN0111, and so is one inside an arrow's body whose loop is outside the arrow, because the arrow may run anywhere, long after the loop is gone. To stop early, use a `for...of` loop instead of a callback.
+--- failing
+const xs = [1, 2, 3];
+xs.forEach(x => {
+  if (x == 2) { break; }
+  console.log(x);
+});
+--- fixed
+const xs = [1, 2, 3];
+for (const x of xs) {
+  if (x == 2) { break; }
+  console.log(x);
+}
+--- typescript
+TypeScript rejects these as well: `break` cannot cross a function boundary, and `forEach` has no way to stop early.
+=== EN0112
+--- rule
+`break label` and `continue label` name a loop around them, written `label: for (...)`. A label that names no loop in scope is EN0112, and the compiler suggests the closest label in scope.
+--- failing
+outer: for (const i of 0..3) {
+  for (const j of 0..3) {
+    if (j == i) { continue otuer; }
+    console.log(j);
+  }
+}
+--- fixed
+outer: for (const i of 0..3) {
+  for (const j of 0..3) {
+    if (j == i) { continue outer; }
+    console.log(j);
+  }
+}
+--- typescript
+Labels work as in TypeScript, but only on loops: a labelled block is EN1038.
+=== EN0113
+--- rule
+A label may not reuse the name of a label that is already in scope, because `break` and `continue` could then not say which loop they mean. Give the inner loop a name of its own.
+--- failing
+rows: for (const i of 0..3) {
+  rows: for (const j of 0..3) {
+    if (j > i) { break rows; }
+    console.log(j);
+  }
+}
+--- fixed
+rows: for (const i of 0..3) {
+  cols: for (const j of 0..3) {
+    if (j > i) { break cols; }
+    console.log(j);
+  }
+}
+--- typescript
+TypeScript reports a duplicate label too.
+=== EN0114
+--- rule
+The left side of `=`, of a compound assignment such as `+=`, and the operand of `++` and `--` must be a place: a variable, a field, an element, or `*r` for a reference `r`. After `=`, a tuple or object pattern may also stand there, as in `[a, b] = [b, a];`. Anything else, such as a call's result, a literal or `this`, is EN0114.
+--- failing
+let p = new Point {};
+p.getX() = 3;
+console.log(p.x);
+
+private class Point {
+  public x: i64 = 0;
+
+  public getX(): i64 { return this.x; }
+}
+--- fixed
+let p = new Point {};
+p.x = 3;
+console.log(p.x);
+
+private class Point {
+  public x: i64 = 0;
+
+  public getX(): i64 { return this.x; }
+}
+--- typescript
+TypeScript rejects the same targets, saying the left-hand side of an assignment must be a variable or a property access.
+=== EN0115
+--- rule
+A file that has top-level statements is a program, and its parts come in order: imports, then the statements and the local functions written among them, then classes and other declarations. A statement after the first declaration is EN0115. Move the statements up, so the program reads from what it does to what it uses.
+--- failing
+private class Greeter {
+  public greet(): void { console.log("hello"); }
+}
+
+const g = new Greeter {};
+g.greet();
+--- fixed
+const g = new Greeter {};
+g.greet();
+
+private class Greeter {
+  public greet(): void { console.log("hello"); }
+}
+--- typescript
+TypeScript lets statements and declarations interleave. Enrang keeps the statements of a program together at the top, before the declarations they use, which may appear in any order.
+=== EN0116
+--- rule
+A `const` always has a value, given where it is declared. A binding whose value comes later is a `let`: `let total: i64;` starts at `0`, the default of its type, and may change.
+--- failing
+const limit: i64;
+console.log(limit);
+--- fixed
+const limit: i64 = 100;
+console.log(limit);
+--- typescript
+TypeScript requires an initialiser on `const` as well.

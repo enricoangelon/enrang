@@ -1,0 +1,7 @@
+let n = 6;
+*bump(&n) = 9; //~ EN0616 "cannot change the object returned by `bump`"
+
+function bump(x: &i64): readonly &i64 {
+  *x += 1;
+  return x;
+}

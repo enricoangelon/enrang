@@ -1,0 +1,71 @@
+// One SCC (plan d.8 graph and stage 3, A:1336, A:1340): `ping` and `pong` call
+// each other and `pong` writes, so both are Write at the fixed point; `outer`, in
+// a later SCC, reads their contract from the memo. Witnesses are the shortest
+// chains to the write (A:1364).
+// MIR shapes: reborrowed reference arguments (plan c.6, plan.md:975; c.7).
+fn ping(_1: &i64, _2: bool) -> void {
+  let _3: &i64 temp;
+  let _4: void temp;
+  bb0: {
+    switch copy _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &*_1 [reborrow];
+    _4 = pong(move _3, const false: bool) -> bb2;
+  }
+  bb2: {
+    return;
+  }
+}
+fn pong(_1: &i64, _2: bool) -> void {
+  let _3: &i64 temp;
+  let _4: void temp;
+  bb0: {
+    switch copy _2 [0: bb1, otherwise: bb2];
+  }
+  bb1: {
+    *_1 = const 1: i64;
+    return;
+  }
+  bb2: {
+    _3 = &*_1 [reborrow];
+    _4 = ping(move _3, const false: bool) -> bb3;
+  }
+  bb3: {
+    return;
+  }
+}
+fn outer(_1: &i64, _2: &i64) -> void {
+  let _3: &i64 temp;
+  let _4: void temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = ping(move _3, const true: bool) -> bb1;
+  }
+  bb1: {
+    _0 = const void: void;
+    return;
+  }
+}
+// `later` calls `pong` before it writes directly: the shortest chain, not the
+// lexically first, is its witness.
+fn later(_1: &i64) -> void {
+  let _2: &i64 temp;
+  let _3: void temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _3 = pong(move _2, const false: bool) -> bb1;
+  }
+  bb1: {
+    *_1 = const 2: i64;
+    return;
+  }
+}
+//= fn later(_1: &i64) -> void perms(write) sources() result none;
+//= //   #0: writes through it
+//= fn outer(_1: &i64, _2: &i64) -> void perms(write, read) sources() result none;
+//= //   #0: passes it to `ping`, which passes it to `pong`, which writes through it
+//= fn ping(_1: &i64, _2: bool) -> void perms(write) sources() moves(0) result none;
+//= //   #0: passes it to `pong`, which writes through it
+//= fn pong(_1: &i64, _2: bool) -> void perms(write) sources() moves(0) result none;
+//= //   #0: writes through it

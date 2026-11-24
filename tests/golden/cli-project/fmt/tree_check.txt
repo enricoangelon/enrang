@@ -1,0 +1,50 @@
+$ enrang fmt --check src
+[exit 1]
+[stdout]
+src/a.en would be reformatted
+src/sub/c.en would be reformatted
+src/sub/c.test.en would be reformatted
+3 of 5 files would change
+[stderr]
+error[EN0101]: missing `;` after this statement
+ --> src/bad.en:1:12
+  |
+1 | const x = 1
+  |            ^ expected `;` here
+  |
+  = from TypeScript: Enrang has no automatic semicolon insertion.
+help: add the semicolon
+  |
+1 | const x = 1;
+  |            +
+  = explain: run `enrang explain EN0101`
+
+error: aborting due to 1 previous error
+[file src/a.en]
+const   x=1;
+if (x == 1) {
+      console.log(x);
+}
+[file src/b.en]
+console.log(1);
+[file src/bad.en]
+const x = 1
+console.log(x);
+[file src/notes.txt]
+  not   source
+[file src/sub/c.en]
+f( 1,2 );
+[file src/sub/c.test.en]
+test("one",() => {
+  expect(1).toBe(1);
+});
+[file src/sub/snippet.fail.en]
+const   x=1;
+if (x == 1) {
+      console.log(x);
+}
+[file top.en]
+const   x=1;
+if (x == 1) {
+      console.log(x);
+}

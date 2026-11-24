@@ -1,0 +1,7 @@
+public interface Dumper {
+  dump<T>(x: &T): void;
+}
+
+public class Log implements Dumper { //~ EN0416 "`Log` does not satisfy `Dumper`: `dump` has another signature"
+  public dump(x: &i64): void {}
+}

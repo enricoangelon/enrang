@@ -1,0 +1,5 @@
+function run(f: () => void): void { f(); }
+let q: i64[] = [1];
+for (const x of &q) {
+  run(() => { q.push(1); }); //~ EN0706 "cannot mutate `q` while iterating over it"
+}

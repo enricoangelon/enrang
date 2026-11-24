@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN1033/reinterpretation.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1033]: unchecked reinterpretation is not supported yet
+ --> tests/compile/EN1033/reinterpretation.fail.en:1:11
+  |
+1 | const u = transmute(1); //~ EN1033 "unchecked reinterpretation is not supported yet"
+  |           ^^^^^^^^^ not supported yet
+  |
+  = note: a value's bits are read as another type only through the checked conversions.
+help: `toBits`, `wrap`, raw-pointer casts in `unsafe`
+  = explain: run `enrang explain EN1033`
+
+error[EN1033]: unchecked reinterpretation is not supported yet
+ --> tests/compile/EN1033/reinterpretation.fail.en:2:9
+  |
+2 | let un: union | null = null; //~ EN1033 "unchecked reinterpretation is not supported yet"
+  |         ^^^^^ not supported yet
+  |
+  = note: a value's bits are read as another type only through the checked conversions.
+help: `toBits`, `wrap`, raw-pointer casts in `unsafe`
+  = explain: run `enrang explain EN1033`
+
+error: aborting due to 2 previous errors

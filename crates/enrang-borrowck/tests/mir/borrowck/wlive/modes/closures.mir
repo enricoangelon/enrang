@@ -1,0 +1,49 @@
+// Captures (plan d.7, choice in wlive.rs): creating a closure over an arrow
+// that writes through its environment makes the environment write-live, so
+// the capture's borrow is exclusive; an arrow that only reads leaves it shared.
+// MIR shapes: `_ci = &l [closure-capture]`, `_env = env(ops)`, `c = closure(arrow#k,
+// _env)` and the arrow body's `*((*_1).i)` (plan c.16).
+fn counter() -> void {
+  let mut _1: i64; // n
+  let _2: &i64 temp;
+  let _3: [&i64] temp;
+  let _4: () => void; // inc
+  bb0: {
+    _1 = const 0: i64;
+    _2 = &_1 [closure-capture]; // exclusive
+    _3 = env(move _2);
+    _4 = closure(arrow#0, _3);
+    return;
+  }
+}
+
+arrow#0 of fn counter (_1: &[&i64]) -> void {
+  let _1: &[&i64] env;
+  capture n: &i64 path;
+  bb0: {
+    *(*_1).0 = const 1: i64;
+    return;
+  }
+}
+fn reader() -> void {
+  let _1: i64; // n
+  let _2: &i64 temp;
+  let _3: [&i64] temp;
+  let _4: () => i64; // get
+  bb0: {
+    _1 = const 0: i64;
+    _2 = &_1 [closure-capture]; // shared
+    _3 = env(move _2);
+    _4 = closure(arrow#0, _3);
+    return;
+  }
+}
+
+arrow#0 of fn reader (_1: &[&i64]) -> i64 {
+  let _1: &[&i64] env;
+  capture n: &i64 path;
+  bb0: {
+    _0 = copy *(*_1).0;
+    return;
+  }
+}

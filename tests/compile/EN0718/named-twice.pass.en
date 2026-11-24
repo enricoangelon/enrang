@@ -1,0 +1,16 @@
+//! row: `twice(f, f)`
+//! row: `visit(f, n); visit(f, m);` and `xs.forEach(f);
+let n = 0;
+const f = (x: &i64): void => { n += *x; };
+const m: i64 = 1;
+const k: i64 = 2;
+visit(f, &m);
+visit(f, &k);
+const xs: i64[] = [1, 2];
+xs.forEach(f);
+xs.forEach(f);
+console.log(n);
+
+private function visit(a: (x: &i64) => void, x: &i64): void {
+  a(x);
+}

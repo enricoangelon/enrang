@@ -1,0 +1,3 @@
+public function f(x: &&i64): void {} //~ EN0702 "a reference can't point to a reference"
+
+public function g(x: &(&i64 | null)): void {} //~ EN0702 "a reference can't point to a reference"

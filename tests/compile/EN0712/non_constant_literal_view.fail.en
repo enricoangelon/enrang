@@ -1,0 +1,4 @@
+let n: i64 = 1;
+n += 1;
+const w: &Slice<i64> = &[n, 2]; //~ EN0712 "the temporary is dropped while `w` still borrows it"
+console.log(w);

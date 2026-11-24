@@ -1,0 +1,17 @@
+private class Lexer {
+  private src: &string;
+  private pos: isize = 0;
+  public constructor(src: &string) {
+    this.src = src;
+  }
+  public reset(): void {
+    const tmp: string = "x" + "y";
+    run(() => {
+      this.pos = tmp.length();
+    });
+  }
+}
+
+private function run(f: () => void): void {
+  f();
+}

@@ -1,0 +1,6 @@
+$ enrang check --help main.en
+[exit 2]
+[stdout]
+[stderr]
+error: `--help` takes no other arguments
+usage: enrang check [file] [flags]

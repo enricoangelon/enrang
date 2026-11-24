@@ -1,0 +1,4 @@
+//! row: `<T>(xs: &T[])`, `T extends Clone`, `T e
+public function cloned<T extends Clone>(xs: &T[]): T[] { return [...xs]; }
+
+public function copied<T extends Copy>(xs: &T[]): T[] { return [...xs]; }

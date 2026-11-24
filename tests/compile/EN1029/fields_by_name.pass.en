@@ -1,0 +1,11 @@
+const p = new Point { x: 1 };
+console.log(p.x);
+const keys = Object.keys();
+
+public final class Point {
+  public x: i64;
+}
+
+public final class Object {
+  public static keys(): i64[] { return []; }
+}

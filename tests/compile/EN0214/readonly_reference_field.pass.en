@@ -1,0 +1,5 @@
+private class View {
+  private items: readonly &i64[];
+  private names: string[] = [];
+  public constructor(items: &i64[]) { this.items = items; }
+}

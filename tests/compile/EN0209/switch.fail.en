@@ -1,0 +1,5 @@
+const n = 1;
+switch (n) { //~ EN0209
+  case 1:
+    console.log("one");
+}

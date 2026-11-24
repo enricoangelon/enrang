@@ -1,0 +1,16 @@
+//! row: Under `p != null`: `for (const x of &p) { if (c) { p
+public function branch(c: bool, d: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) { if (d) { p = null; break; } }
+    console.log(p.length()); //~ EN0303
+  }
+}
+
+public function retest(c: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) { p = null; if (p == null) { break; } }
+    console.log(p.length()); //~ EN0303
+  }
+}

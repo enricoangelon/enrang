@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0621/assignment_value_kept_by_object_literal_field.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0621]: an assignment's value can't be kept
+ --> tests/compile/EN0621/assignment_value_kept_by_object_literal_field.fail.en:2:28
+  |
+2 | const u = new User { name: s = "b".toString() }; //~ EN0621 "an assignment's value can't be kept"
+  |                            ^^^^^^^^^^^^^^^^^^ `s = "b".toString()` is still owned by `s`
+  |
+help: assign first, then copy: `s = "b".toString();`, then write `s.clone()` in its place
+  = explain: run `enrang explain EN0621`
+
+error: aborting due to 1 previous error

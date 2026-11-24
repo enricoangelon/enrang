@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN0615/inf-04.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `put` stores `s` into `h`, which `fn(let h: &Holder, s: &string) => void` can't declare
+ --> tests/compile/EN0615/inf-04.fail.en:3:1
+  |
+3 | attachTemp(&h, put); //~ EN0615
+  | ^^^^^^^^^^^^^^^^^^^ converted here
+  |
+  = note: a function value may write only what its type's `let` marks allow, and store nothing
+  = explain: run `enrang explain EN0615`
+
+error[EN0615]: `Keeper.attach` stores `s` into `this`, but `Base.attach` declares no such store
+  --> tests/compile/EN0615/inf-04.fail.en:39:19
+   |
+28 |   public attach(s: &string): void { this.n = s.length(); }
+   |          ------ declared here
+...
+39 |   public override attach(s: &string): void { this.b = s; } //~ EN0615
+   |                   ^^^^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,5 @@
+//! covers: H07
+public function copyOf(r: &string): string {
+  const s = r.clone();
+  return s;
+}

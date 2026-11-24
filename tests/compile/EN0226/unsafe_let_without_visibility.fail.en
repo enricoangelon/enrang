@@ -1,0 +1,2 @@
+@globalAllocator
+unsafe let heap: FreeListHeap; //~ EN0226

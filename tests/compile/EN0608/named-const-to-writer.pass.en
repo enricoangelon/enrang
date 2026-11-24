@@ -1,0 +1,13 @@
+//! row: `const n = 1; bump(&n);` with a `bump` that
+let n = 1;
+bump(&n);
+let data: u8[] = [1, 2];
+fill(&data);
+
+function bump(x: &i64): void {
+  *x += 1;
+}
+
+function fill(let buf: &Slice<u8>): void {
+  console.log(buf.length());
+}

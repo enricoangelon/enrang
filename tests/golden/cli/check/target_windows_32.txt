@@ -1,0 +1,10 @@
+$ enrang check --target=i386-windows
+[exit 2]
+[stdout]
+[stderr]
+error[EN1031]: 32-bit Windows output is not supported yet
+  = note: Windows output is 64-bit only; nothing has been built for 32-bit Windows
+help: `x86_64-windows`; `i386-linux` for 32-bit testing
+  = explain: run `enrang explain EN1031`
+
+error: aborting due to 1 previous error

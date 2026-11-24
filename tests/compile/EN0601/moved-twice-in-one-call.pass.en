@@ -1,0 +1,35 @@
+let s = "x".toString();
+both(s.clone(), s);
+
+public function twice(h?: () => void): void {
+  run(h, null);
+}
+
+public function literal(): void {
+  const t = "y".toString();
+  const pair = [t.clone(), t];
+  console.log(pair.length());
+}
+
+public function part(): void {
+  const p = new Pair { first: "a", n: 1 };
+  takeBoth(p.n, p);
+}
+
+public class Pair {
+  public first: string;
+  public n: i64;
+}
+
+private function both(a: string, b: string): void {
+  console.log(a, b);
+}
+
+private function run(a?: () => void, b?: () => void): void {
+  if (a != null) { a(); }
+  if (b != null) { b(); }
+}
+
+private function takeBoth(n: i64, p: Pair): void {
+  console.log(p.first, n);
+}

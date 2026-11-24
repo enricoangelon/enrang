@@ -1,0 +1,5 @@
+private function outer(f: () => void): void {
+  f();
+  const g = () => { f(); };
+  g();
+}

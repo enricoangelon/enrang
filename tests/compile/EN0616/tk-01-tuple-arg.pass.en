@@ -1,0 +1,7 @@
+let g: i64[] = [1];
+let h: i64[] = [2];
+const p = id2([&g, &h]);
+p[0].push(1);
+p[1].push(2);
+
+public function id2(t: [&i64[], &i64[]]): [&i64[], &i64[]] { return t; }

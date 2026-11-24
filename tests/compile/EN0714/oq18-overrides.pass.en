@@ -1,0 +1,39 @@
+let a: i64[] = [1];
+let b: i64[] = [2];
+const r = Pair.first(&a, &b);
+b.push(1);
+console.log(r);
+
+public class Picker {
+  protected favorite: string;
+
+  public pick(a: &string, b: &string): &string { return a.length() > b.length() ? a : b; }
+
+  public reset(): void { this.favorite = ""; }
+}
+
+public class Loyal extends Picker {
+  public override pick(a: &string, b: &string): &string { return &this.favorite; }
+}
+
+public class Lazy extends Picker {
+  public override pick(a: &string, b: &string): &string { return b; }
+}
+
+public class Silent extends Picker {
+  public override pick(a: &string, b: &string): &string { return "none"; }
+}
+
+public abstract class Named {
+  public abstract label(): &string;
+}
+
+public class Person extends Named {
+  private name: string = "Ada";
+
+  public override label(): &string { return &this.name; }
+}
+
+public class Pair {
+  public static first(a: &i64[], b: &i64[]): &i64[] { return a; }
+}

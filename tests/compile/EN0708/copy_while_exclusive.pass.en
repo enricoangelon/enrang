@@ -1,0 +1,5 @@
+let n = 12;
+const r = &n;
+*r = 13;
+const m = n;
+console.log(m);

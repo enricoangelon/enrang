@@ -1,0 +1,2 @@
+const greeting = "café"; //~ EN0001 "source is not valid UTF-8"
+console.log(greeting);

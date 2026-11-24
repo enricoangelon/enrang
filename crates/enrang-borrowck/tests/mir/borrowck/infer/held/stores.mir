@@ -1,0 +1,69 @@
+// Stage 2 stores (plan d.9 "Stores", A:1281): `(j, m)` for each key of
+// parameter `j` in `held(Caller(m))` at a `Return`; `fields_only` when only
+// `j`'s fields reached it and `j`'s class is off; `read_set_only` when only its
+// `readonly &` fields did (FV-02-skip); the read bit for a store into a
+// `readonly &` field. A source also stored makes the result read-only
+// (`StoredSource`, S:939). A store through `this` writes it: `this` is Write.
+// MIR shapes: reborrowed parameters stored through `this` (plan c.4,
+// plan.md:913-914; c.6 plan.md:975), field copies through references.
+class Holder {
+  r: &i64;
+}
+//= class Holder
+fn Holder::set(_1: &Holder, _2: &i64) -> void {
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    return;
+  }
+}
+//= fn Holder::set(_1: &Holder, _2: &i64) -> void perms(write, read) sources() stores(1 -> 0) result none;
+fn Holder::copyFrom(_1: &Holder, _2: &Holder) -> void {
+  let _3: &i64 temp;
+  bb0: {
+    _3 = copy (*_2).r;
+    (*_1).r = move _3;
+    return;
+  }
+}
+//= fn Holder::copyFrom(_1: &Holder, _2: &Holder) -> void perms(write, read) sources() stores(1 -> 0 fields_only) result none;
+fn Holder::keep(_1: &Holder, _2: &i64) -> &i64 {
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    _0 = &*_2 [reborrow];
+    return;
+  }
+}
+//= fn Holder::keep(_1: &Holder, _2: &i64) -> &i64 perms(write, read) sources(1) stores(1 -> 0) result readonly(stored 1);
+class Copier {
+  src: readonly &i64;
+  dst: &i64;
+}
+fn Copier::retarget(_1: &Copier, _2: &i64) -> void {
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+//= fn Copier::retarget(_1: &Copier, _2: &i64) -> void perms(write, read) sources() stores(1 -> 0 read) result none;
+fn Copier::skip(_1: &Copier) -> void {
+  let _2: &i64 temp;
+  bb0: {
+    _2 = copy (*_1).src;
+    (*_1).src = move _2;
+    return;
+  }
+}
+//= fn Copier::skip(_1: &Copier) -> void perms(write) sources() stores(0 -> 0 read_set_only read) result none;
+fn Copier::step(_1: &Copier) -> void {
+  bb0: {
+    *(*_1).dst = const 1: i64;
+    return;
+  }
+}
+//= class Copier writes_through_fields

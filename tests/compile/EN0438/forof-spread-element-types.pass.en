@@ -1,0 +1,15 @@
+//! row: Elements: `i64`, `(*u8)[]`, a Copy class
+public class Cp implements Copy { public p: *u8 = 0 as *u8; }
+
+public class Node { public next: Box<Node> | null = null; }
+
+public function forms<T extends Clone>(a: &i64[], b: &(*u8)[], c: &Cp[], d: &Node[], e: &(T | null)[], f: &i64[2][], g: &Box<i64>[], h: &Result<i64>[]): void {
+  const a2 = [...a]; const a3 = a.clone();
+  const b2 = [...b]; const b3 = b.clone();
+  const c2 = [...c]; const c3 = c.clone();
+  const d2 = [...d]; const d3 = d.clone();
+  const e2 = [...e]; const e3 = e.clone();
+  const f2 = [...f]; const f3 = f.clone();
+  const g2 = [...g]; const g3 = g.clone();
+  const h2 = [...h]; const h3 = h.clone();
+}

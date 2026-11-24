@@ -1,0 +1,5 @@
+function reset(t: &string): &string { *t = "b".toString(); return "!"; }
+let s: string = "a".toString();
+const r = reset(&s);
+s += r;
+console.log(s);

@@ -1,0 +1,23 @@
+{
+  let d = new Dog("Rex", true);
+  d.tricks.push("sit");
+}
+
+public class Animal {
+  public tricks: string[];
+
+  public constructor(public name: string) {}
+
+  public destructor() {
+    console.log(`bye, ${this.name}`);
+  }
+}
+
+public class Dog extends Animal {
+  public constructor(name: string, quick: bool) {
+    if (quick) {
+      return; //~ EN0619 "`super(name)` isn't called on every path before the constructor returns"
+    }
+    super(name);
+  }
+}

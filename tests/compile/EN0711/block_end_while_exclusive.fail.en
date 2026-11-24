@@ -1,0 +1,7 @@
+let k = 0;
+let r: &i64 = &k;
+{
+  let n = 5;
+  r = &n;
+} //~ EN0711 "`n` is dropped while `r` still borrows it"
+*r = 6;

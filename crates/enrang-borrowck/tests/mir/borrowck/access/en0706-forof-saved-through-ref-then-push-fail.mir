@@ -1,0 +1,89 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/forof-saved-through-ref-then-push.fail.en. Its row's codes: EN0706.
+module "tests/compile/EN0706/forof-saved-through-ref-then-push.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string[]; // a
+  let mut _3: &string[]; // r
+  let mut _4: &string | null; // saved
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &string; // x
+  let _9: &string temp;
+  let _10: void temp;
+  let _11: &string[] temp;
+  let _12: void temp;
+  loop l0: path *_3 preheader bb5 head bb1 bind bb2[2] binding _8;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<string>(const "a": string, const "b": string);
+    storage_live(_3);
+    _3 = &_2 [explicit];
+    storage_live(_4);
+    _4 = null;
+    goto bb5;
+  }
+  bb1: {
+    _6 = len(*_3);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_3)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    storage_dead(_4);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _9 = &*_8 [reborrow];
+    _4 = present(move _9);
+    _11 = &_2 [auto-borrow]; //~ EN0706
+    _10 = "alloc/array"::Array<string>::push(move _11, const "s": string) -> bb7;
+  }
+  bb7: {
+    _12 = use(copy _4) -> bb8;
+  }
+  bb8: {
+    storage_dead(_8);
+    goto bb3;
+  }
+}
+
+@private fn use(_1: &string | null) -> void {
+  let _1: &string | null; // s
+  let _2: void temp;
+  let _3: &(&string | null) temp;
+  bb0: {
+    _3 = &_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

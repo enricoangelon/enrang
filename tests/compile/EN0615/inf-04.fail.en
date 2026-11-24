@@ -1,0 +1,40 @@
+let text: string = "abc";
+let h = new Holder(&text);
+attachTemp(&h, put); //~ EN0615
+
+private function attachTemp(h: &Holder, f: fn(let h: &Holder, s: &string) => void): void {
+  const tmp = "temp" + "!";
+  f(h, &tmp);
+}
+
+private function put(h: &Holder, s: &string): void {
+  h.setSrc(s);
+}
+
+public class Holder {
+  private src: &string;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public setSrc(s: &string): void { this.src = s; }
+}
+
+public class Base {
+  private r: &string;
+  private n: isize = 0;
+
+  public constructor(r: &string) { this.r = r; }
+
+  public attach(s: &string): void { this.n = s.length(); }
+}
+
+public class Keeper extends Base {
+  private b: &string;
+
+  public constructor(r: &string, b: &string) {
+    this.b = b;
+    super(r);
+  }
+
+  public override attach(s: &string): void { this.b = s; } //~ EN0615
+}

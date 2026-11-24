@@ -1,0 +1,2 @@
+const Point = class {}; //~ EN1037 "class expressions are not supported yet"
+const p = new class {}; //~ EN1037 "class expressions are not supported yet"

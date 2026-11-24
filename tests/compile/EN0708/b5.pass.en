@@ -1,0 +1,9 @@
+let players: i64[] = [1, 2];
+const n = players.length();
+setTo(players.last(), n);
+
+function setTo(x: &i64 | null, n: isize): void {
+  if (x != null) {
+    *x = n as i64;
+  }
+}

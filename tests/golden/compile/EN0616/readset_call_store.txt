@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/readset_call_store.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: a `readonly &` field can't take a reference that another field writes through
+ --> tests/compile/EN0616/readset_call_store.fail.en:6:1
+  |
+6 | Wrapper.nudge(&w); //~ EN0616
+  | ^^^^^^^^^^^^^^^^^ stored here
+  |
+help: store a reference from a parameter, or from another `readonly &` field
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

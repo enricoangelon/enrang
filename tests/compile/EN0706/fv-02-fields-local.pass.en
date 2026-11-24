@@ -1,0 +1,21 @@
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();  // a sketch: the rest of the text is one token
+    return this.src.slice(start, this.pos);
+  }
+
+  public static demo(): void {
+    let base = "abc".toString();
+    let lx = new Lexer(&base);
+    const keep = lx.src;
+    console.log(keep);
+    base = "zzz".toString();
+  }
+}

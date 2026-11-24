@@ -1,0 +1,34 @@
+public function kept(): void {
+  let s: string = "a".toString();
+  const t = (s += "?"); //~ EN0621 "an assignment's value can't be kept"
+  console.log(t);
+}
+
+public function chained(): void {
+  let a: string = "".toString();
+  let b: string = "".toString();
+  a = b = "xx".toString(); //~ EN0621
+  console.log(a, b);
+}
+
+public function borrowedTwice(): void {
+  let s = "ab".toString();
+  both(&(s += "c"), &s); //~ EN0708
+}
+
+public function keptLoan(): void {
+  let s = "ab".toString();
+  const r = head(&(s += "c"));
+  s = "z".toString(); //~ EN0706
+  console.log(r);
+}
+
+private function both(a: &string, b: &string): void {
+  const p = b.slice(0, 1);
+  *a += "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+  console.log(p);
+}
+
+private function head(x: &string): &string {
+  return x.slice(0, 1);
+}

@@ -1,0 +1,7 @@
+//! covers: C13
+// A string literal becomes a `&string` and nothing else: its bytes are no view.
+count("Ada"); //~ EN0401 "mismatched types: expected `&Slice<u8>`, found `string`"
+
+private function count(bytes: &Slice<u8>): isize {
+  return bytes.length();
+}

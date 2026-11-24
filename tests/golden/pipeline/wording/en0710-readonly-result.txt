@@ -1,0 +1,12 @@
+error[EN0710]: cannot return a reference to local `s`
+ --> main.en:3:10
+  |
+2 |   const s = "owned" + "!";
+  |         - `s` is dropped when `longest` returns
+3 |   return &s;
+  |          ^^ this reference would point at freed memory
+  |
+  = rule: a returned reference must borrow from a parameter, and `longest` has no reference parameters.
+  = explain: run `enrang explain EN0710`
+
+error: aborting due to 1 previous error

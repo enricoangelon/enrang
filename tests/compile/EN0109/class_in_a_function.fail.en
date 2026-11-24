@@ -1,0 +1,4 @@
+public function build(): i64 {
+  class Point {} //~ EN0109
+  return 1;
+}

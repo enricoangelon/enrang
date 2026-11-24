@@ -1,0 +1,5 @@
+let q = ["a", "b"];
+for (const x of q) {
+  console.log(x);
+}
+console.log(q.length()); //~ EN0601 "`q` was used up by the loop"

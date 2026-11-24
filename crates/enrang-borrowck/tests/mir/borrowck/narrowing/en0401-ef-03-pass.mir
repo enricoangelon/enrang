@@ -1,0 +1,82 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/ef-03.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/ef-03.pass";
+@lang("error") interface "core/prelude"::Error { }
+@lang("failure") @final class "core/result"::Failure {
+  private text: string;
+}
+@lang("result") enum "core/result"::Result<T, E extends Error> { Ok { value: T }, Err { error: E } }
+enum AgeError { NotANumber = "not a number", Negative = "negative age" }
+@private @str_union enum Direction { left = "left", right = "right" }
+enum Token { Word, End }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: void temp;
+  let _3: Result<i64, Direction> temp;
+  let _4: &Result<i64, Direction> temp;
+  let _5: Result<Token> temp;
+  let _6: &Result<Token> temp;
+  let _7: Result<i64> temp;
+  let _8: &Result<i64> temp;
+  bb0: {
+    _3 = turn(const 1: i64) -> bb1;
+  }
+  bb1: {
+    _4 = &_3 [temp-arg];
+    _5 = next() -> bb2;
+  }
+  bb2: {
+    _6 = &_5 [temp-arg];
+    _7 = age(const -1: i64) -> bb3;
+  }
+  bb3: {
+    _8 = &_7 [temp-arg];
+    _2 = form log(move _4, move _6, move _8) -> bb4;
+  }
+  bb4: {
+    drop(_7);
+    storage_dead(_7);
+    drop(_5);
+    storage_dead(_5);
+    storage_dead(_3);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn age(_1: i64) -> Result<i64> {
+  let _1: i64; // n
+  let _2: AgeError temp;
+  let _3: Failure temp;
+  bb0: {
+    _2 = AgeError::Negative {};
+    _3 = form into_failure(move _2) -> bb1;
+  }
+  bb1: {
+    _0 = Result<i64>::Err { error: move _3 };
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}
+
+@private fn next() -> Result<Token> {
+  let _1: Token temp;
+  bb0: {
+    _1 = Token::End {};
+    _0 = Result<Token>::Ok { value: move _1 };
+    return;
+  }
+}
+
+@private fn turn(_1: i64) -> Result<i64, Direction> {
+  let _1: i64; // n
+  let _2: Direction temp;
+  bb0: {
+    _2 = Direction::left {};
+    _0 = Result<i64, Direction>::Err { error: move _2 };
+    return;
+  }
+}

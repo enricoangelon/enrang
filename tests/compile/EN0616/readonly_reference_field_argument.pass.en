@@ -1,0 +1,15 @@
+public final class ByteLexer {
+  private src: &Slice<u8>;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public wipe(): void {
+    fill(this.src, 0);
+  }
+}
+
+public function fill(xs: &Slice<u8>, v: u8): void {
+  for (const x of xs) {
+    *x = v;
+  }
+}

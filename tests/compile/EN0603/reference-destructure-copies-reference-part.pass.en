@@ -1,0 +1,5 @@
+let a: i64 = 1;
+let b: i64 = 2;
+const pair: [&i64, &i64] = [&a, &b];
+const [x, y] = &pair;
+console.log(*x + *y);

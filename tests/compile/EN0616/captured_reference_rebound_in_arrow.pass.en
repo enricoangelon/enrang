@@ -1,0 +1,7 @@
+let a: i64 = 1;
+let b: i64 = 2;
+let r: &i64 = &a;
+const f = (): void => { console.log(*r); };
+f();
+r = &b;
+console.log(*r);

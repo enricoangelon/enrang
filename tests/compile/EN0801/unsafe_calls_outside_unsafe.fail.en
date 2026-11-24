@@ -1,0 +1,13 @@
+//! target: x86_64-windows
+@dll("kernel32.dll") private declare function Beep(f: u32, d: u32): bool;
+
+private unsafe function noop(): void {}
+
+public function clear(p: *u8, f: unsafe fn() => void, cb: @abi("sysv") fn(n: i32) => void): void {
+  mem.set(p, 0, 4); //~ EN0801 "calling `set` needs `unsafe`"
+  f(); //~ EN0801 "calling `f` needs `unsafe`"
+  const g: unsafe fn() => void = noop;
+  g(); //~ EN0801 "calling `g` needs `unsafe`"
+  cb(1); //~ EN0801 "calling `cb` needs `unsafe`"
+  Beep(440, 100); //~ EN0801 "calling `Beep` needs `unsafe`"
+}

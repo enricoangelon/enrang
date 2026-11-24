@@ -1,0 +1,39 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0804/element_borrow.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0804/element_borrow.pass";
+@final class P {
+  a: u8;
+  b: u8[4];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: P; // p
+  let _3: u8[4] temp;
+  let _4: *P temp;
+  let _5: void temp;
+  let _6: &u8; // e
+  let _7: void temp;
+  let _8: &u8 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = fixed<u8>[const 1: u8, const 2: u8, const 3: u8, const 4: u8];
+    _4 = addr_of _2;
+    _5 = named_fill P leaving()(move _4) -> bb1;
+  }
+  bb1: {
+    _2.a = const 1: u8;
+    _2.b = move _3;
+    storage_live(_6);
+    _6 = &_2.b[1] [explicit];
+    _8 = &*_6 [auto-borrow];
+    _7 = form log(move _8) -> bb2;
+  }
+  bb2: {
+    storage_dead(_6);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

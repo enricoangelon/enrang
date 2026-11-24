@@ -1,0 +1,18 @@
+console.log(age("x"));
+
+private function age(s: &string): Result<i64, AgeError> {
+  const n = read(s)?; //~ EN0425 "`?` returns `DiskError`, but the function returns `AgeError`"
+  return n;
+}
+
+private function read(s: &string): Result<i64, DiskError> {
+  return Err(DiskError.Timeout);
+}
+
+public enum AgeError {
+  NotANumber,
+}
+
+public enum DiskError {
+  Timeout,
+}

@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0303/class_bound.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0303]: `Animal` has no member `fetch`
+ --> tests/compile/EN0303/class_bound.fail.en:2:30
+  |
+2 | console.log(oldest(&animals).fetch()); //~ EN0303 "`Animal` has no member `fetch`"
+  |                              ^^^^^ no such member
+  |
+  = explain: run `enrang explain EN0303`
+
+error: aborting due to 1 previous error

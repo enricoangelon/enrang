@@ -1,0 +1,6 @@
+const xs = [1, 2, 3];
+let last = 0;
+for (const x of &xs) {
+  last = *x;
+}
+console.log(last);

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0433/a_variable_lacking_an_optional_field.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0433]: missing `subtitle`
+ --> tests/compile/EN0433/a_variable_lacking_an_optional_field.fail.en:5:22
+  |
+5 |   const book: Book = draft; //~ EN0433 "missing `subtitle`"
+  |                      ^^^^^ `{ subtitle?: string | null, title: string }` needs every field it names, optional ones included
+  |
+help: add `subtitle: null`
+  = explain: run `enrang explain EN0433`
+
+error: aborting due to 1 previous error

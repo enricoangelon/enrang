@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0402/compound_operand_widened.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0402]: cannot divide `i64` by `isize`
+ --> tests/compile/EN0402/compound_operand_widened.fail.en:3:10
+  |
+3 |   return total / (xs.length() - 1); //~ EN0402 "cannot divide `i64` by `isize`"
+  |          ^^^^^^^^^^^^^^^^^^^^^^^^^ `i64` and `isize` are different types
+  |
+help: convert it, which never fails: `((xs.length() - 1) as i64)`
+  |
+3 |   return total / ((xs.length() - 1) as i64); //~ EN0402 "cannot divide `i64` by `isize`"
+  |                  +                 ++++++++
+  = explain: run `enrang explain EN0402`
+
+error[EN0402]: cannot add `isize` to `i64`
+ --> tests/compile/EN0402/compound_operand_widened.fail.en:7:10
+  |
+7 |   return total + n * 2; //~ EN0402 "cannot add `isize` to `i64`"
+  |          ^^^^^^^^^^^^^ `i64` and `isize` are different types
+  |
+help: convert it, which never fails: `((n * 2) as i64)`
+  |
+7 |   return total + ((n * 2) as i64); //~ EN0402 "cannot add `isize` to `i64`"
+  |                  ++     +++++++++
+  = explain: run `enrang explain EN0402`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,11 @@
+$ enrang check tests/compile/EN0453/unused_result_of_a_must_use_function.fail.en
+[exit 0]
+[stdout]
+[stderr]
+warning[EN0453]: the result of `checksum` is not used
+ --> tests/compile/EN0453/unused_result_of_a_must_use_function.fail.en:2:1
+  |
+2 | checksum(&data); //~ EN0453 "the result of `checksum` is not used"
+  | ^^^^^^^^^^^^^^^ `checksum` is marked `@mustUse`
+  |
+help: keep the result, or discard it deliberately with `void`

@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0401/m3gate-super-call-narrowed-null.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `this.s` may be `null` here
+  --> tests/compile/EN0401/m3gate-super-call-narrowed-null.fail.en:11:19
+   |
+10 |       super.clr();
+   |       ----- this may write through it
+11 |       console.log(this.s.length()); //~ EN0401 "`this.s` may be `null` here"
+   |                   ^^^^^^ the test before this may no longer hold
+   |
+   = note: a writing reference may have changed `this.s`
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

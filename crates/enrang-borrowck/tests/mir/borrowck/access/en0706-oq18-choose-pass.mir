@@ -1,0 +1,224 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/oq18-choose.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/oq18-choose.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+@final class FinalPicker {
+  protected favorite: string;
+}
+class Picker {
+  protected favorite: string;
+}
+
+fn FinalPicker::#ctor(_1: &FinalPicker, _2: string) -> void {
+  let _1: &FinalPicker; // this
+  let _2: string; // favorite
+  let _3: string temp;
+  bb0: {
+    (*_1).favorite = const "": string;
+    _3 = move _2;
+    drop((*_1).favorite) [assign];
+    (*_1).favorite = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+}
+
+fn FinalPicker::pick(_1: &FinalPicker, _2: &string, _3: &string) -> &string {
+  let _1: &FinalPicker; // this
+  let _2: &string; // a
+  let _3: &string; // b
+  let _4: bool temp;
+  let _5: isize temp;
+  let _6: &string temp;
+  let _7: isize temp;
+  let _8: &string temp;
+  let _9: &string temp;
+  let _10: &string temp;
+  bb0: {
+    _6 = &*_2 [reborrow];
+    _5 = "core/string"::string::length(move _6) -> bb3;
+  }
+  bb1: {
+    _9 = &*_2 [reborrow];
+    _0 = move _9;
+    goto bb5;
+  }
+  bb2: {
+    _10 = &*_3 [reborrow];
+    _0 = move _10;
+    goto bb5;
+  }
+  bb3: {
+    _8 = &*_3 [reborrow];
+    _7 = "core/string"::string::length(move _8) -> bb4;
+  }
+  bb4: {
+    _4 = gt(move _5, move _7);
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb5: {
+    return;
+  }
+}
+
+fn FinalPicker::reset(_1: &FinalPicker) -> void {
+  let _1: &FinalPicker; // this
+  bb0: {
+    drop((*_1).favorite) [assign];
+    (*_1).favorite = const "": string;
+    return;
+  }
+}
+
+fn Picker::#ctor(_1: &Picker, _2: string) -> void {
+  let _1: &Picker; // this
+  let _2: string; // favorite
+  let _3: string temp;
+  bb0: {
+    switch const overridden(favorite): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).favorite) [assign];
+    (*_1).favorite = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).favorite, const "": string);
+    goto bb1;
+  }
+}
+
+fn Picker::pick(_1: &Picker, _2: &string, _3: &string) -> &string {
+  let _1: &Picker; // this
+  let _2: &string; // a
+  let _3: &string; // b
+  let _4: bool temp;
+  let _5: isize temp;
+  let _6: &string temp;
+  let _7: isize temp;
+  let _8: &string temp;
+  let _9: &string temp;
+  let _10: &string temp;
+  bb0: {
+    _6 = &*_2 [reborrow];
+    _5 = "core/string"::string::length(move _6) -> bb3;
+  }
+  bb1: {
+    _9 = &*_2 [reborrow];
+    _0 = move _9;
+    goto bb5;
+  }
+  bb2: {
+    _10 = &*_3 [reborrow];
+    _0 = move _10;
+    goto bb5;
+  }
+  bb3: {
+    _8 = &*_3 [reborrow];
+    _7 = "core/string"::string::length(move _8) -> bb4;
+  }
+  bb4: {
+    _4 = gt(move _5, move _7);
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb5: {
+    return;
+  }
+}
+
+fn Picker::reset(_1: &Picker) -> void {
+  let _1: &Picker; // this
+  bb0: {
+    drop((*_1).favorite) [assign];
+    (*_1).favorite = const "": string;
+    return;
+  }
+}
+
+@private fn chooseFinal(_1: &FinalPicker, _2: &string, _3: &string) -> void {
+  let _1: &FinalPicker; // p
+  let _2: &string; // x
+  let _3: &string; // y
+  let _4: &string; // best
+  let _5: &string temp;
+  let _6: &string temp;
+  let _7: &FinalPicker temp;
+  let _8: void temp;
+  let _9: &FinalPicker temp;
+  let _10: void temp;
+  let _11: &string temp;
+  bb0: {
+    storage_live(_4);
+    _5 = &*_2 [reborrow];
+    _6 = &*_3 [reborrow];
+    _7 = &*_1 [reborrow];
+    _4 = FinalPicker::pick(move _7, move _5, move _6) -> bb1;
+  }
+  bb1: {
+    _9 = &*_1 [reborrow];
+    _8 = FinalPicker::reset(move _9) -> bb2;
+  }
+  bb2: {
+    _11 = &*_4 [reborrow];
+    _10 = form log(move _11) -> bb3;
+  }
+  bb3: {
+    storage_dead(_4);
+    return;
+  }
+}
+
+@private fn chooseLocal(_1: &string, _2: &string) -> void {
+  let _1: &string; // x
+  let _2: &string; // y
+  let mut _3: Picker; // p
+  let _4: &Picker temp;
+  let _5: void temp;
+  let _6: &string; // best
+  let _7: &string temp;
+  let _8: &string temp;
+  let _9: &Picker temp;
+  let _10: void temp;
+  let _11: &Picker temp;
+  let _12: void temp;
+  let _13: &string temp;
+  bb0: {
+    storage_live(_3);
+    set_table(_3, Picker);
+    _4 = &_3 [auto-borrow];
+    _5 = Picker::#ctor(move _4, const "fav": string) -> bb1;
+  }
+  bb1: {
+    storage_live(_6);
+    _7 = &*_1 [reborrow];
+    _8 = &*_2 [reborrow];
+    _9 = &_3 [auto-borrow];
+    _6 = Picker::pick(move _9, move _7, move _8) -> bb2;
+  }
+  bb2: {
+    _11 = &_3 [auto-borrow];
+    _10 = Picker::reset(move _11) -> bb3;
+  }
+  bb3: {
+    _13 = &*_6 [reborrow];
+    _12 = form log(move _13) -> bb4;
+  }
+  bb4: {
+    storage_dead(_6);
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}

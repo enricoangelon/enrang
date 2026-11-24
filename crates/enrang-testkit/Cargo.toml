@@ -1,0 +1,16 @@
+[package]
+name = "enrang-testkit"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+test = false
+
+[[test]]
+name = "selftest"
+path = "tests/selftest/main.rs"
+harness = false
+
+[dependencies]
+enrang-base = { path = "../enrang-base" }

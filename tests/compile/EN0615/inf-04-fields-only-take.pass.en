@@ -1,0 +1,39 @@
+let t: string = "text";
+let first = new Lexer(&t);
+let s = new Sub(&t, &first);
+attach(&s, &t);
+s.show();
+
+private function attach(r: &Keeper, text: &string): void {
+  const tmp = new Lexer(text);
+  r.take(&tmp);
+}
+
+public final class Lexer {
+  private src: &string;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public peek(): &string { return this.src.slice(0, 1); }
+}
+
+public class Keeper {
+  private s: &string;
+
+  public constructor(s: &string) { this.s = s; }
+
+  public take(o: &Lexer): void { this.s = o.peek(); }
+}
+
+public class Sub extends Keeper {
+  private lx: &Lexer;
+
+  public constructor(s: &string, lx: &Lexer) {
+    this.lx = lx;
+    super(s);
+  }
+
+  public override take(o: &Lexer): void { console.log(o.peek()); }
+
+  public show(): void { console.log(this.lx.peek()); }
+}

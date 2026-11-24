@@ -1,0 +1,11 @@
+const p: Pointt = new Point { x: 1, y: 2 }; //~ EN0302 "cannot find type `Pointt` in this scope"
+console.log(p);
+
+public class Point {
+  public x: i64;
+  public y: i64;
+}
+
+public function area(s: Shape): f64 { //~ EN0302 "cannot find type `Shape` in this scope"
+  return 0.0;
+}

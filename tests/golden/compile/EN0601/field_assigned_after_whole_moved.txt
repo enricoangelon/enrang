@@ -1,0 +1,47 @@
+$ enrang check tests/compile/EN0601/field_assigned_after_whole_moved.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `p` was moved into `take`
+  --> tests/compile/EN0601/field_assigned_after_whole_moved.fail.en:3:1
+   |
+ 1 | let p = new Pair { first: "a", second: "b" };
+   |     - `p` owns this `Pair`, which is not Copy because it has a `string` field
+ 2 | take(p);
+   |      - `p` moves here, because `take` takes `Pair`, not `&Pair`
+ 3 | p.first = "c"; //~ EN0601 "`p` was moved into `take`"
+   | ^ used here, after the move
+   |
+   = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `p` hands it over.
+help: if `take` only needs to look at it, change the parameter to `p: &Pair`
+   |
+ 2 | take(&p);
+   |      +
+21 | public function take(p: &Pair): void {
+   |                         +
+help: to keep your own, pass a copy: `take(p.clone())`
+   |
+ 2 | take(p.clone());
+   |       ++++++++
+   = explain: run `enrang explain EN0601`
+
+error[EN0601]: `f` was moved into `close`
+  --> tests/compile/EN0601/field_assigned_after_whole_moved.fail.en:6:1
+   |
+ 4 | let f = new File { first: "a", fd: 3 };
+   |     - `f` owns this `File`, which is not Copy because it has a `string` field
+ 5 | close(f);
+   |       - `f` moves here, because `close` takes `File`, not `&File`
+ 6 | f.first = "c"; //~ EN0601 "`f` was moved into `close`"
+   | ^ used here, after the move
+   |
+   = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `f` hands it over.
+help: if `close` only needs to look at it, change the parameter to `f: &File`
+   |
+ 5 | close(&f);
+   |       +
+25 | public function close(f: &File): void {
+   |                          +
+   = explain: run `enrang explain EN0601`
+
+error: aborting due to 2 previous errors

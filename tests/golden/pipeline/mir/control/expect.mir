@@ -1,0 +1,12 @@
+test #test0 () -> void {
+  let _1: i64; // n
+  let _2: &i64 temp;
+  let _3: void temp;
+  bb0: {
+    _2 = &_1 [auto-borrow];
+    _3 = form expect not toBe(move _2, const 2: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

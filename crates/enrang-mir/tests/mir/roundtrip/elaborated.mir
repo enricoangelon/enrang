@@ -1,0 +1,24 @@
+class Pair {
+  a: i64;
+  b: Box<i64>;
+}
+
+fn elab(_1: Pair) -> void {
+  phase elaborated;
+  let _2: bool flag;
+  let _3: &Slice<i64> temp;
+  drop_flag _2: _1.b;
+  literal#0: i64[2] = [1, 2];
+  literal#1: [i64, bool] = tuple(-1, false);
+  bb0: {
+    _3 = const static_addr(literal#0): &Slice<i64>;
+    switch copy _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    drop_glue(_1.b);
+    goto bb2;
+  }
+  bb2: {
+    return;
+  }
+}

@@ -1,0 +1,37 @@
+//! row: `public interface Shelf { book(id: i64):
+const fixed = new Library();
+show(&fixed);
+rename(&fixed); //~ EN0608 "`rename` can change `s`, but `fixed` is `const`"
+
+private function show(s: &Shelf): void {
+  console.log(s.book(1).title);
+}
+
+private function rename(s: &Shelf): void {
+  s.book(1).title = "Dune";
+}
+
+private function renameCatalog(s: &Catalog): void {
+  s.book(1).title = "Dune"; //~ EN0616 "cannot change the object returned by `book`"
+}
+
+public class Book {
+  public id: i64 = 0;
+  public title: string = "";
+}
+
+public interface Shelf {
+  book(id: i64): &Book;
+}
+
+public interface Catalog {
+  book(id: i64): readonly &Book;
+}
+
+public class Library implements Shelf, Catalog {
+  private books: Book[] = [new Book { id: 1, title: "Emma" }];
+
+  public book(id: i64): &Book {
+    return &this.books[id - 1];
+  }
+}

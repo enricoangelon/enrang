@@ -1,0 +1,10 @@
+$ enrang check --target=i386-linx main.en
+[exit 2]
+[stdout]
+[stderr]
+error[EN1303]: unknown target `i386-linx`
+  = note: targets are `x86_64-linux`, `x86_64-windows`, `i386-linux`, `i386-none` and `x86_64-none`
+help: did you mean `i386-linux`?
+  = explain: run `enrang explain EN1303`
+
+error: aborting due to 1 previous error

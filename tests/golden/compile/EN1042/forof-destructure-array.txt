@@ -1,0 +1,45 @@
+$ enrang check tests/compile/EN1042/forof-destructure-array.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1042]: array destructuring is not supported yet
+ --> tests/compile/EN1042/forof-destructure-array.fail.en:5:3
+  |
+5 |   [a, r] = xs; //~ EN1042
+  |   ^^^^^^ the value is `i64[]`, an array
+  |
+  = note: an array's length is known only when the program runs, so a pattern can't name its elements
+help: Index the array, or return a tuple
+  = explain: run `enrang explain EN1042`
+
+error[EN1042]: array destructuring is not supported yet
+ --> tests/compile/EN1042/forof-destructure-array.fail.en:6:9
+  |
+6 |   const [b, s] = xs; //~ EN1042
+  |         ^^^^^^ the value is `i64[]`, an array
+  |
+  = note: an array's length is known only when the program runs, so a pattern can't name its elements
+help: Index the array, or return a tuple
+  = explain: run `enrang explain EN1042`
+
+error[EN1042]: array destructuring is not supported yet
+ --> tests/compile/EN1042/forof-destructure-array.fail.en:7:3
+  |
+7 |   [a, r] = ys; //~ EN1042
+  |   ^^^^^^ the value is `i64[3]`, an array
+  |
+  = note: only a tuple is destructured by position; a fixed array's elements are read by index
+help: Index the array, or return a tuple
+  = explain: run `enrang explain EN1042`
+
+error[EN1042]: array destructuring is not supported yet
+ --> tests/compile/EN1042/forof-destructure-array.fail.en:8:9
+  |
+8 |   const [c, t] = ys; //~ EN1042
+  |         ^^^^^^ the value is `i64[3]`, an array
+  |
+  = note: only a tuple is destructured by position; a fixed array's elements are read by index
+help: Index the array, or return a tuple
+  = explain: run `enrang explain EN1042`
+
+error: aborting due to 4 previous errors

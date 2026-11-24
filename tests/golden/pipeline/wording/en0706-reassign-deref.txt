@@ -1,0 +1,14 @@
+error[EN0706]: cannot reassign `b` during iteration
+ --> main.en:2:24
+  |
+2 | for (const x of &*b) { b = new Box([3]); }
+  |                        ^^^^^^^^^^^^^^^^ cannot reassign while borrowed
+  |                 --- `b` is borrowed here
+  |
+help: iterate over `(*b).clone()` if reassignment is intentional
+  |
+2 | for (const x of (*b).clone()) { b = new Box([3]); }
+  |                 ~~~~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

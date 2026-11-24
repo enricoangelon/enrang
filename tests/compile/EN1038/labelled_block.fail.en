@@ -1,0 +1,3 @@
+setup: { //~ EN1038 "labelled blocks are not supported yet"
+  console.log(1);
+}

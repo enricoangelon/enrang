@@ -1,0 +1,6 @@
+//! covers: H20
+let queue = ["a", "b"];
+for (const job of &queue) {
+  if (job == "a") { queue.push("retry"); } //~ EN0706 "cannot mutate `queue` while iterating over it"
+  console.log(job);
+}

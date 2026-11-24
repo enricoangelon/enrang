@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN0419/atomic_of_a_string.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `string` does not satisfy `AtomicValue`
+ --> tests/compile/EN0419/atomic_of_a_string.fail.en:4:14
+  |
+4 | const name = new Atomic<string>("x"); //~ EN0419 "`string` does not satisfy `AtomicValue`"
+  |              ^^^^^^^^^^^^^^^^^^^^^^^ `T` must satisfy `AtomicValue`
+ --> lib/core/atomic.en:8:27
+  |
+8 | public final class Atomic<T extends AtomicValue> {
+  |                           - the bound on `T`
+  |
+  = explain: run `enrang explain EN0419`
+
+error[EN0419]: `T` does not satisfy `AtomicValue`
+ --> tests/compile/EN0419/atomic_of_a_string.fail.en:7:25
+  |
+7 | private function dup<T>(a: &Atomic<T>): void {} //~ EN0419 "`T` does not satisfy `AtomicValue`"
+  |                         ^^^^^^^^^^^^^ `Atomic` requires `T extends AtomicValue`
+  |
+  = explain: run `enrang explain EN0419`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,18 @@
+// SPEC 8.2, `mem`: `core/mem`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `mem.forget(x)` is a compiler form (SPEC 6).
+@intrinsic("MemCopy") public declare function copy<T>(d: *T, s: *T, n: usize): void;
+
+@intrinsic("MemCopyOverlap") public declare function copyOverlapping<T>(
+  d: *T,
+  s: *T,
+  n: usize,
+): void;
+
+@intrinsic("MemSet") public declare function set(d: *u8, v: u8, n: usize): void;
+
+@lang("mem_swap") public function swap<T>(let a: &T, let b: &T): void { unreachable(); }
+
+@lang("mem_replace") public function replace<T>(let x: &T, v: T): T { unreachable(); }
+
+// Where a program starts, before its entry runs (ARCHITECTURE 10).
+@lang("start") public function __rt_start(): never { unreachable(); }

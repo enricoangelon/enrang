@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0706/forof-source-forms-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `q[0]` while iterating over it
+ --> tests/compile/EN0706/forof-source-forms-2.fail.en:3:24
+  |
+3 |   for (const x of q) { q[0] = 1; } //~ EN0706 "cannot mutate `q[0]` while iterating over it"
+  |                        ^^^^^^^^ conflicting mutable access
+  |                   - immutable borrow begins here
+  |
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

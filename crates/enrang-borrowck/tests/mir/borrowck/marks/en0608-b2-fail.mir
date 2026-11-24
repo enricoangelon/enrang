@@ -1,0 +1,27 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/b2.fail.en. Its row's codes: EN0608.
+module "tests/compile/EN0608/b2.fail";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Box<int>; // b
+  let _3: &Box<int> temp;
+  let _4: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &_2 [auto-borrow];
+    _4 = "alloc/box"::Box<int>::#ctor(move _3, const 1: int) -> bb1;
+  }
+  bb1: {
+    *_2 = const 2: int; //~ EN0608 "cannot change `*b`, because `b` is `const`"
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

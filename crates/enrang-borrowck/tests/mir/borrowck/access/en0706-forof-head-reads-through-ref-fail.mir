@@ -1,0 +1,65 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/forof-head-reads-through-ref.fail.en. Its row's codes: EN0706.
+module "tests/compile/EN0706/forof-head-reads-through-ref.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string[]; // queue
+  let _3: &string[]; // r
+  let _4: isize #i;
+  let _5: isize #n;
+  let _6: bool temp;
+  let _7: &string; // job
+  let _8: void temp;
+  let _9: &string[] temp;
+  loop l0: path *_3 preheader bb5 head bb1 bind bb2[2] binding _7;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<string>(const "a": string, const "b": string);
+    storage_live(_3);
+    _3 = &_2 [explicit];
+    goto bb5;
+  }
+  bb1: {
+    _5 = len(*_3);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &(*_3)[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_4);
+    _4 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _9 = &_2 [auto-borrow]; //~ EN0706
+    _8 = "alloc/array"::Array<string>::push(move _9, const "x": string) -> bb7;
+  }
+  bb7: {
+    storage_dead(_7);
+    goto bb3;
+  }
+}

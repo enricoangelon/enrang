@@ -1,0 +1,62 @@
+fn demo() -> void perms() sources() result none {
+  phase elaborated;
+  let _1: void temp;
+  let _2: View temp;
+  let _3: Tracer temp;
+  let _4: &Tracer temp;
+  let _5: void temp;
+  let _6: &Tracer temp;
+  let _7: &View temp;
+  let _8: void temp;
+  let _9: &View temp;
+  let _10: void temp;
+  let _11: Holder temp;
+  let _12: isize temp;
+  let _13: Tracer temp;
+  let _14: &Tracer temp;
+  let _15: void temp;
+  let _16: &Tracer temp;
+  let _17: &Holder temp;
+  let _18: void temp;
+  let _19: &Holder temp;
+  bb0: {
+    _4 = &_3 [auto-borrow];
+    _5 = Tracer::#ctor(move _4, const "t": string) -> bb1;
+  }
+  bb1: {
+    _6 = &_3 [temp-arg];
+    _7 = &_2 [auto-borrow];
+    _8 = View::#ctor(move _7, move _6) -> bb2;
+  }
+  bb2: {
+    _9 = &_2 [temp-arg];
+    _1 = show(move _9) -> bb3;
+  }
+  bb3: {
+    drop_glue(_2);
+    storage_dead(_2);
+    drop_glue(_3);
+    storage_dead(_3);
+    _14 = &_13 [auto-borrow];
+    _15 = Tracer::#ctor(move _14, const "u": string) -> bb4;
+  }
+  bb4: {
+    _16 = &_13 [temp-arg];
+    _12 = size(move _16) -> bb5;
+  }
+  bb5: {
+    _17 = &_11 [auto-borrow];
+    _18 = Holder::#ctor(move _17, move _12) -> bb6;
+  }
+  bb6: {
+    _19 = &_11 [temp-arg];
+    _10 = keep(move _19) -> bb7;
+  }
+  bb7: {
+    drop_glue(_11);
+    storage_dead(_11);
+    drop_glue(_13);
+    storage_dead(_13);
+    return;
+  }
+}

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0209/case_in_a_match.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0209]: `case` does not exist in Enrang
+ --> tests/compile/EN0209/case_in_a_match.fail.en:3:3
+  |
+3 |   case 1: "one", //~ EN0209
+  |   ^^^^ a `match` arm is written `value => ...`
+  |
+help: write `match (value) { 1 => ..., default => ... }`
+  = explain: run `enrang explain EN0209`
+
+error: aborting due to 1 previous error

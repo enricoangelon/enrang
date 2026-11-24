@@ -1,0 +1,5 @@
+let grid: i64[][] = [[1], [2, 3]];
+const v: &Slice<i64[]> = &grid;
+const e = &grid[1][0]; //~ EN0708
+v[1] = [];
+console.log(*e);

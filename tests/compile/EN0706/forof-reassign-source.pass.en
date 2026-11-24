@@ -1,0 +1,7 @@
+//! row: `xs = []` in the body of a loop over `&x
+let xs: i64[] = [1, 2];
+for (const x of &xs) {
+  xs = [];
+  break;
+}
+console.log(xs);

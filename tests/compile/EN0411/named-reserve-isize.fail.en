@@ -1,0 +1,4 @@
+//! target: i386-linux
+//! row: `b.reserve(0x40000000)` with `b: i32[]` on
+let b: i32[] = [];
+b.reserve(0x80000000); //~ EN0411

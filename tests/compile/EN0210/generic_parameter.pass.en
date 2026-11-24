@@ -1,0 +1,3 @@
+public function show<T>(value: &T): void {
+  console.log(value);
+}

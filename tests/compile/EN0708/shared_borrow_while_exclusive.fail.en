@@ -1,0 +1,8 @@
+let xs: i64[] = [1];
+const w = &xs;
+show(&xs); //~ EN0708 "`xs` can't be read while `w` may write into it"
+w.push(2);
+
+private function show(v: &i64[]): void {
+  console.log(v);
+}

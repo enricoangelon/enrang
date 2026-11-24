@@ -1,0 +1,6 @@
+onKey(65);
+onKey(66, k => console.log(k));
+
+private function onKey(key: u8, handler?: (k: u8) => void): void {
+  handler(key); //~ EN0428 "`handler` may be `null`, so it can't be called"
+}

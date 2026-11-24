@@ -1,0 +1,67 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/fv-01-ctor-3.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/fv-01-ctor-3.fail";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+@private class Lexer {
+  private src: &string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // text
+  let _3: Lexer; // lx
+  let _4: &string temp;
+  let _5: isize | null temp;
+  let _6: &string temp;
+  let _7: &Lexer temp;
+  let _8: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "ab": string;
+    storage_live(_3);
+    set_table(_3, Lexer);
+    _5 = present(const 1: isize);
+    _6 = &_2 [auto-borrow];
+    _4 = "core/string"::string::slice(move _6, const 0: isize, move _5, const 2: isize) -> bb1;
+  }
+  bb1: {
+    _7 = &_3 [auto-borrow];
+    _8 = Lexer::#ctor(move _7, move _4) -> bb2; //~ EN0616
+  }
+  bb2: {
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Lexer::#ctor(_1: &Lexer, _2: &string) -> void {
+  let _1: &Lexer; // this
+  let _2: &string; // src
+  let _3: &string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: void temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    _4 = &*(*_1).src [compound-target];
+    _5 = const " ": string;
+    _6 = &_5 [temp-arg];
+    _7 = form append(move _4, move _6) -> bb1;
+  }
+  bb1: {
+    drop(_5);
+    storage_dead(_5);
+    return;
+  }
+}

@@ -1,0 +1,30 @@
+$ enrang check tests/compile/EN0453/unused_results_of_library_methods.fail.en
+[exit 0]
+[stdout]
+[stderr]
+warning[EN0453]: the result of `toUpperCase` is not used
+ --> tests/compile/EN0453/unused_results_of_library_methods.fail.en:2:1
+  |
+2 | name.toUpperCase(); //~ EN0453 "the result of `toUpperCase` is not used"
+  | ^^^^^^^^^^^^^^^^^^ `toUpperCase` returns a new string and leaves `name` as it was
+  |
+help: keep it
+  |
+2 | name = name.toUpperCase(); //~ EN0453 "the result of `toUpperCase` is not used"
+  | +++++++
+
+warning[EN0453]: the result of `slice` is not used
+ --> tests/compile/EN0453/unused_results_of_library_methods.fail.en:3:1
+  |
+3 | name.slice(1); //~ EN0453 "the result of `slice` is not used"
+  | ^^^^^^^^^^^^^ `slice` returns a new value and leaves `name` as it was
+  |
+help: keep the result, or discard it deliberately with `void`
+
+warning[EN0453]: the result of `checkedAdd` is not used
+ --> tests/compile/EN0453/unused_results_of_library_methods.fail.en:5:1
+  |
+5 | n.checkedAdd(1); //~ EN0453 "the result of `checkedAdd` is not used"
+  | ^^^^^^^^^^^^^^^ `checkedAdd` returns a new value and leaves `n` as it was
+  |
+help: keep the result, or discard it deliberately with `void`

@@ -1,0 +1,28 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0710/return_view_of_local.fail.en. Its row's codes: EN0710.
+module "tests/compile/EN0710/return_view_of_local.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "alloc/array"::Array<T>::slice(const _1: &Array<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+
+fn head() -> &Slice<i64> {
+  let _1: i64[]; // xs
+  let _2: isize | null temp;
+  let _3: &i64[] temp;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    _2 = present(const 2: isize);
+    _3 = &_1 [auto-borrow];
+    _0 = "alloc/array"::Array<i64>::slice(move _3, const 0: isize, move _2, const 2: isize) -> bb1; //~ EN0710 "cannot return a reference to local `xs`"
+  }
+  bb1: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}

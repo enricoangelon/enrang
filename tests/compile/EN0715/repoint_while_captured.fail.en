@@ -1,0 +1,6 @@
+let x = 1;
+let y = 2;
+let r = &x;
+const f = () => console.log(r);
+r = &y; //~ EN0715 "`r` is locked while `f` will still be used"
+f();

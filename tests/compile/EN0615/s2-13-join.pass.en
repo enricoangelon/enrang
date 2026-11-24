@@ -1,0 +1,14 @@
+let msg: string = "hi";
+const loud = false;
+function run(f: fn(let s: &string) => void, s: &string): void {
+  f(s);
+}
+run(loud ? quote : show, &msg);
+
+private function show(s: &string): void {
+  console.log(s.length());
+}
+
+private function quote(s: &string): void {
+  console.log(`"${s}"`);
+}

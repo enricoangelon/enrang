@@ -1,0 +1,6 @@
+//! covers: H21
+let q = [1, 2, 3];
+for (const x of &q) {
+  console.log(x);
+  q = []; //~ EN0706 "cannot reassign `q` during iteration"
+}

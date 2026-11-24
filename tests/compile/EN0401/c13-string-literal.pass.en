@@ -1,0 +1,8 @@
+//! covers: C13
+greet("Ada");
+const s: &string = "Grace";
+greet(s);
+
+private function greet(name: &string): void {
+  console.log(`hello ${name}`);
+}

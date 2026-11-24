@@ -1,0 +1,28 @@
+$ enrang check tests/compile/EN0423/wrong_argument_count.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0423]: `add` takes 2 arguments, but 3 were given
+ --> tests/compile/EN0423/wrong_argument_count.fail.en:1:13
+  |
+1 | console.log(add(1, 2, 3)); //~ EN0423 "`add` takes 2 arguments, but 3 were given"
+  |             ^^^^^^^^^^^^ too many arguments
+2 | console.log(add(1)); //~ EN0423
+3 |
+4 | private function add(a: i64, b: i64): i64 {
+  |                  --- `add` is declared here
+  |
+  = explain: run `enrang explain EN0423`
+
+error[EN0423]: `add` takes 2 arguments, but 1 was given
+ --> tests/compile/EN0423/wrong_argument_count.fail.en:2:13
+  |
+2 | console.log(add(1)); //~ EN0423
+  |             ^^^^^^ too few arguments
+3 |
+4 | private function add(a: i64, b: i64): i64 {
+  |                  --- `add` is declared here
+  |
+  = explain: run `enrang explain EN0423`
+
+error: aborting due to 2 previous errors

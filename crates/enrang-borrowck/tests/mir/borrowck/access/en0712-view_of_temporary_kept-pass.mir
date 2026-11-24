@@ -1,0 +1,57 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0712/view_of_temporary_kept.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0712/view_of_temporary_kept.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: string; // ab
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: string temp;
+  let _8: &string; // v
+  let _9: isize | null temp;
+  let _10: &string temp;
+  let _11: void temp;
+  let _12: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "a": string;
+    _4 = &_3 [temp-arg];
+    _5 = const "b": string;
+    _6 = &_5 [temp-arg];
+    _7 = form concat(move _4, move _6) -> bb1;
+  }
+  bb1: {
+    _2 = move _7;
+    drop(_7);
+    storage_dead(_7);
+    drop(_5);
+    storage_dead(_5);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_8);
+    _9 = present(const 1: isize);
+    _10 = &_2 [auto-borrow];
+    _8 = "core/string"::string::slice(move _10, const 0: isize, move _9, const 2: isize) -> bb2;
+  }
+  bb2: {
+    _12 = &*_8 [reborrow];
+    _11 = form log(move _12) -> bb3;
+  }
+  bb3: {
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

@@ -1,0 +1,15 @@
+error[EN0706]: `list` can't change while `v` points into it
+ --> main.en:3:1
+  |
+2 | const v = list.slice(0, 1);
+  |           ---------------- `v` points into `list` from here
+3 | list.push(3);
+  | ^^^^^^^^^^^^ `list` grows here
+4 | console.log(v);
+  |             - `v` is still used here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: keep a copy: const v = [...list.slice(0, 1)];
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

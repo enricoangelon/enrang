@@ -1,0 +1,28 @@
+private unsafe function bufSink(ctx: *u8, bytes: *u8, n: usize): void {
+  const b = *bytes;
+  ctx.write(b);
+}
+
+public interface Reader {
+  readAt(p: *u8): u8;
+}
+
+public final class Mem implements Reader {
+  public const readAt(p: *u8): u8 {
+    unsafe { return *p; }
+  }
+}
+
+public class Base {
+  public peek(p: *u8): u8 { return 0; }
+}
+
+public final class Derived extends Base {
+  public override const peek(p: *u8): u8 {
+    unsafe { return p.read(); }
+  }
+}
+
+public function make(ctx: *u8): void {
+  unsafe { const f = Formatter.fromFn(bufSink, ctx); }
+}

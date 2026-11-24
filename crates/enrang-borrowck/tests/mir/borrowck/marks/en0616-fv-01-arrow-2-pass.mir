@@ -1,0 +1,56 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/fv-01-arrow-2.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/fv-01-arrow-2.pass";
+@private class ByteLexer {
+  private src: readonly &Slice<u8>;
+}
+
+fn ByteLexer::#ctor(_1: &ByteLexer, _2: &Slice<u8>) -> void {
+  let _1: &ByteLexer; // this
+  let _2: &Slice<u8>; // src
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn ByteLexer::poke(_1: &ByteLexer) -> void {
+  let _1: &ByteLexer; // this
+  let _2: () => void; // f
+  let _3: &ByteLexer temp;
+  let _4: [&ByteLexer] temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [closure-capture];
+    _4 = env(move _3);
+    _2 = closure(arrow#0, _4);
+    _5 = closure _2() -> bb1;
+  }
+  bb1: {
+    storage_dead(_2);
+    return;
+  }
+}
+
+arrow#0 of fn ByteLexer::poke (_1: &[&ByteLexer]) -> void {
+  let _1: &[&ByteLexer] env;
+  let _2: void temp;
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: &u8 temp;
+  capture this: &ByteLexer through_ref;
+  bb0: {
+    _3 = const 0: isize;
+    _4 = len(*(*(*_1).0).src);
+    check_bounds(copy _3, copy _4);
+    _5 = &(*(*(*_1).0).src)[_3] [auto-borrow];
+    _2 = form log(move _5) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

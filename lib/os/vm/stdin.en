@@ -1,0 +1,2 @@
+// SPEC 8.4, `stdin`: `os/vm/stdin`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+public function readLine(): string | null { unreachable(); }

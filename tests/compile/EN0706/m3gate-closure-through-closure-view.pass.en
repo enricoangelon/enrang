@@ -1,0 +1,6 @@
+let s = "abcdefghijkl".toString();
+const v = s.slice(1);
+const f = (): void => { console.log(v); };
+const g = (): void => { f(); };
+g();
+s = "q".toString();

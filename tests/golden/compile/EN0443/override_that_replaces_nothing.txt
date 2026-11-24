@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0443/override_that_replaces_nothing.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0443]: `bark` overrides nothing in `Animal`
+ --> tests/compile/EN0443/override_that_replaces_nothing.fail.en:8:19
+  |
+8 |   public override bark(): string { //~ EN0443 "`bark` overrides nothing in `Animal`"
+  |                   ^^^^ no class above `Dog` has a method `bark`
+  |
+  = explain: run `enrang explain EN0443`
+
+error[EN0443]: `speak` overrides nothing in `Animal`
+  --> tests/compile/EN0443/override_that_replaces_nothing.fail.en:12:19
+   |
+ 2 |   public speak(): string {
+   |          ----- `Animal.speak` is declared here
+...
+12 |   public override speak(loud: bool): string { //~ EN0443 "`speak` overrides nothing in `Animal`"
+   |                   ^^^^^ no `speak` above `Dog` takes these parameters
+   |
+   = explain: run `enrang explain EN0443`
+
+error[EN0443]: `speak` overrides nothing
+  --> tests/compile/EN0443/override_that_replaces_nothing.fail.en:18:19
+   |
+18 |   public override speak(): string { //~ EN0443 "`speak` overrides nothing"
+   |                   ^^^^^ `Cat` extends no class
+   |
+   = explain: run `enrang explain EN0443`
+
+error: aborting due to 3 previous errors

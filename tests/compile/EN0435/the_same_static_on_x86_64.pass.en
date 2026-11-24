@@ -1,0 +1,8 @@
+//! target: x86_64-linux
+private unsafe let big: u8[3000000000];
+private unsafe let wraps: u64[536870912];
+
+public class Huge {
+  public a: u8[2000000000];
+  public b: u8[2000000000];
+}

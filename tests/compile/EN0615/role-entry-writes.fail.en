@@ -1,0 +1,7 @@
+//! target: i386-none
+@entry private function kmain(boot: &BootInfo): never {
+  touch(boot); //~ EN0615
+  halt();
+}
+
+private function touch(let b: &BootInfo): void {}

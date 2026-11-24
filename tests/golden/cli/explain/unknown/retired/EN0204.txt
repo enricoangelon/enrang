@@ -1,0 +1,5 @@
+$ enrang explain EN0204
+[exit 2]
+[stdout]
+[stderr]
+error: `EN0204` is retired: classes may extend a class now; see EN0442

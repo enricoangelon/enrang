@@ -1,0 +1,8 @@
+public class Holder {
+  public items: string[] = [];
+  public show(): void {
+    for (const x of &this.items) {
+      console.log(x);
+    }
+  }
+}

@@ -1,0 +1,132 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/override-store-read-set-only.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/override-store-read-set-only.pass";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::length(_1: &Slice<T>) -> isize;
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize = default;
+}
+class Rewinder extends Copier {
+  private back: readonly &Slice<u8>;
+}
+
+fn Copier::#ctor(_1: &Copier, _2: &Slice<u8>, _3: &Slice<u8>) -> void {
+  let _1: &Copier; // this
+  let _2: &Slice<u8>; // s
+  let _3: &Slice<u8>; // d
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  bb0: {
+    switch const overridden(pos): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+  bb2: {
+    field_init((*_1).pos, const 0: isize);
+    goto bb1;
+  }
+}
+
+fn Copier::skip(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: &Slice<u8> temp;
+  let _3: isize temp;
+  let _4: &Slice<u8> temp;
+  let _5: isize | null temp;
+  let _6: &Slice<u8> temp;
+  bb0: {
+    _4 = copy (*_1).src;
+    _3 = "core/slice"::Slice<u8>::length(move _4) -> bb1;
+  }
+  bb1: {
+    _5 = present(move _3);
+    _6 = copy (*_1).src;
+    _2 = "core/slice"::Slice<u8>::slice(move _6, const 1: isize, move _5, const 2: isize) -> bb2;
+  }
+  bb2: {
+    (*_1).src = move _2;
+    return;
+  }
+}
+
+fn Copier::step(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  let _4: u8 temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  bb0: {
+    _2 = copy (*_1).pos;
+    _3 = const 0: isize;
+    _5 = len(*(*_1).src);
+    check_bounds(copy _3, copy _5);
+    _4 = copy (*(*_1).src)[_3];
+    _6 = len(*(*_1).dst);
+    check_bounds(copy _2, copy _6);
+    (*(*_1).dst)[_2] = move _4;
+    _7 = copy (*_1).pos;
+    (*_1).pos = checked_add(copy _7, const 1: isize);
+    return;
+  }
+}
+
+fn Rewinder::#ctor(_1: &Rewinder, _2: &Slice<u8>, _3: &Slice<u8>, _4: &Slice<u8>) -> void {
+  let _1: &Rewinder; // this
+  let _2: &Slice<u8>; // s
+  let _3: &Slice<u8>; // d
+  let _4: &Slice<u8>; // b
+  let _5: &Slice<u8> temp;
+  let _6: void temp;
+  let _7: &Slice<u8> temp;
+  let _8: &Slice<u8> temp;
+  let _9: &Rewinder temp;
+  let _10: &Copier temp;
+  bb0: {
+    _5 = &*_4 [reborrow];
+    (*_1).back = move _5;
+    _7 = &*_2 [reborrow];
+    _8 = &*_3 [reborrow];
+    _9 = &*_1 [reborrow];
+    _10 = convert(upcast, move _9);
+    _6 = Copier::#ctor(move _10, move _7, move _8) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@override fn Rewinder::skip(_1: &Rewinder) -> void {
+  let _1: &Rewinder; // this
+  let _2: &Slice<u8> temp;
+  let _3: isize temp;
+  let _4: &Slice<u8> temp;
+  let _5: isize | null temp;
+  let _6: &Slice<u8> temp;
+  bb0: {
+    _4 = copy (*_1).back;
+    _3 = "core/slice"::Slice<u8>::length(move _4) -> bb1;
+  }
+  bb1: {
+    _5 = present(move _3);
+    _6 = copy (*_1).back;
+    _2 = "core/slice"::Slice<u8>::slice(move _6, const 1: isize, move _5, const 2: isize) -> bb2;
+  }
+  bb2: {
+    (*_1).back = move _2;
+    return;
+  }
+}

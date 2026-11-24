@@ -1,0 +1,26 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0621/assignment_value_kept_by_return.fail.en. Its row's codes: EN0621.
+module "tests/compile/EN0621/assignment_value_kept_by_return.fail";
+
+fn grow(let _1: string) -> string {
+  let _1: string; // s
+  let _2: &string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  assign_value bb1[0];
+  bb0: {
+    _2 = &_1 [compound-target];
+    _3 = const "!": string;
+    _4 = &_3 [temp-arg];
+    _5 = form append(move _2, move _4) -> bb1;
+  }
+  bb1: {
+    _0 = move _1; //~ EN0621 "an assignment's value can't be kept"
+    drop(_3);
+    storage_dead(_3);
+    drop(_1);
+    return;
+  }
+}

@@ -1,0 +1,16 @@
+const n = 1;
+const color = n as Color; //~ EN0404 "`int` can't be converted to `Color` with `as`"
+const flag = n as bool; //~ EN0404 "`int` can't be converted to `bool` with `as`"
+const code = Dir.Up as i32; //~ EN0404 "`Dir` can't be converted to `int` with `as`"
+const text = "7" as i32; //~ EN0404 "`string` can't be converted to `int` with `as`"
+console.log(color, flag, code, text);
+
+private enum Color {
+  Red,
+  Green,
+}
+
+private enum Dir {
+  Up = "up",
+  Down = "down",
+}

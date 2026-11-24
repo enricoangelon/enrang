@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0408/class_holding_itself.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0408]: recursive type `Node` needs `Box`
+ --> tests/compile/EN0408/class_holding_itself.fail.en:3:16
+  |
+3 |   public next: Node | null = null; //~ EN0408 "recursive type `Node` needs `Box`"
+  |                ^^^^^^^^^^^ this holds a `Node` inline
+  |
+help: write `Box<Node> | null`
+  |
+3 |   public next: Box<Node> | null = null; //~ EN0408 "recursive type `Node` needs `Box`"
+  |                ~~~~~~~~~~~~~~~~
+  = explain: run `enrang explain EN0408`
+
+error: aborting due to 1 previous error

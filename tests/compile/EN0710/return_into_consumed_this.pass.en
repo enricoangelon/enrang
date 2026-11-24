@@ -1,0 +1,4 @@
+public class Lexer {
+  public pos: isize = 0;
+  public posRef(): &isize { return &this.pos; }
+}

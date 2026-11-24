@@ -1,0 +1,28 @@
+$ enrang check tests/compile/EN1015/box_and_user_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1015]: this `for...of` source is not supported yet
+ --> tests/compile/EN1015/box_and_user_type.fail.en:2:17
+  |
+2 | for (const x of b) { //~ EN1015 "this `for...of` source is not supported yet"
+  |                 ^ this is `Box<i64[]>`
+  |
+  = note: a loop goes over an array, a fixed array, a view or a range, through at most one `&`, and a `Box` is none of them
+help: loop over the array in the box: `&*b`
+  |
+2 | for (const x of &*b) { //~ EN1015 "this `for...of` source is not supported yet"
+  |                 ~~~
+  = explain: run `enrang explain EN1015`
+
+error[EN1015]: this `for...of` source is not supported yet
+ --> tests/compile/EN1015/box_and_user_type.fail.en:6:17
+  |
+6 | for (const x of bag) { //~ EN1015 "this `for...of` source is not supported yet"
+  |                 ^^^ this is `Bag`
+  |
+  = note: a loop goes over an array, a fixed array, a view or a range; iterators of other types come later
+help: Expose an array, or a `get(i)` and `length()`
+  = explain: run `enrang explain EN1015`
+
+error: aborting due to 2 previous errors

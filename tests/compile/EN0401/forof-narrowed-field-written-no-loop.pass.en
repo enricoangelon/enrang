@@ -1,0 +1,10 @@
+//! row: With `h: &H`: `const g = h; g.items = nu
+public class H { public items: string[] | null = null; }
+
+public function viaCopy(h: &H): void {
+  if (h.items != null) {
+    console.log(h.items.length());
+    const g = h;
+    g.items = null;
+  }
+}

@@ -1,0 +1,9 @@
+const h = new Holder { pair: [1, 2], list: [3, 4] };
+const { pair: [a, b] } = h;
+const { list: [c, d] } = h; //~ EN1042 "array destructuring is not supported yet"
+const bad: string = 5; //~ EN0401 "mismatched types: expected `string`, found `int`"
+
+public final class Holder {
+  public pair: [i64, i64];
+  public list: i64[];
+}

@@ -1,0 +1,237 @@
+class Animal {
+  name: string;
+  sound: string = default;
+  legs: i64 = default;
+  loud: bool = default;
+}
+class Circle extends Shape {
+  r: i64;
+}
+class Counter {
+  count: i64 = default;
+}
+class Dog extends Animal {
+  sound: string = default override;
+  age: i64;
+}
+@final class Leaf {
+  v: i64;
+  w: i64 = default;
+}
+class Point {
+  x: i64;
+  y: i64 = default;
+}
+class Shape {
+  tag: string = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Animal; // a
+  let _3: &Animal temp;
+  let _4: void temp;
+  let _5: Dog; // d
+  let _6: &Dog temp;
+  let _7: void temp;
+  let _8: Point; // p
+  let _9: *Point temp;
+  let _10: void temp;
+  let _11: Counter; // c
+  let _12: *Counter temp;
+  let _13: void temp;
+  let _14: Leaf; // l
+  let _15: &Leaf temp;
+  let _16: void temp;
+  let _17: void temp;
+  let _18: Animal temp;
+  let _19: &string temp;
+  let _20: &Dog temp;
+  let _21: &Point temp;
+  let _22: &Counter temp;
+  let _23: &Leaf temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, Animal);
+    _3 = &_2 [auto-borrow];
+    _4 = Animal::#ctor(move _3, const "Rex": string, const 1: isize) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    set_table(_5, Dog);
+    _6 = &_5 [auto-borrow];
+    _7 = Dog::#ctor(move _6, const "Fido": string, const 3: i64) -> bb2;
+  }
+  bb2: {
+    storage_live(_8);
+    _9 = addr_of _8;
+    _10 = named_fill Point leaving(y)(move _9) -> bb3;
+  }
+  bb3: {
+    _8.x = const 1: i64;
+    storage_live(_11);
+    _12 = addr_of _11;
+    _13 = named_fill Counter leaving(count)(move _12) -> bb4;
+  }
+  bb4: {
+    storage_live(_14);
+    _15 = &_14 [auto-borrow];
+    _16 = Leaf::#ctor(move _15, const 2: i64) -> bb5;
+  }
+  bb5: {
+    _18 = Animal::into(move _2) -> bb6;
+  }
+  bb6: {
+    _19 = &_18.name [auto-borrow];
+    _20 = &_5 [auto-borrow];
+    _21 = &_8 [auto-borrow];
+    _22 = &_11 [auto-borrow];
+    _23 = &_14 [auto-borrow];
+    _17 = form log(move _19, move _20, move _21, move _22, move _23) -> bb7;
+  }
+  bb7: {
+    drop(_18);
+    storage_dead(_18);
+    storage_dead(_14);
+    storage_dead(_11);
+    storage_dead(_8);
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Animal::#ctor(_1: &Animal, _2: string, _3: bool = default) -> void {
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: bool; // loud
+  let _4: isize arg; // #supplied
+  let _5: bool temp;
+  let _6: string temp;
+  defaults _4;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    switch const overridden(sound): bool [0: bb4, otherwise: bb3];
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+  bb3: {
+    switch const overridden(legs): bool [0: bb6, otherwise: bb5];
+  }
+  bb4: {
+    field_init((*_1).sound, const "...": string);
+    goto bb3;
+  }
+  bb5: {
+    switch const overridden(loud): bool [0: bb8, otherwise: bb7];
+  }
+  bb6: {
+    field_init((*_1).legs, const 4: i64);
+    goto bb5;
+  }
+  bb7: {
+    _5 = lt(copy _4, const 2: isize);
+    switch move _5 [0: bb10, otherwise: bb9];
+  }
+  bb8: {
+    field_init((*_1).loud, const false: bool);
+    goto bb7;
+  }
+  bb9: {
+    _3 = const false: bool;
+    goto bb10;
+  }
+  bb10: {
+    (*_1).loud = copy _3;
+    _6 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _6;
+    drop(_6);
+    storage_dead(_6);
+    drop(_2);
+    return;
+  }
+}
+
+move fn Animal::into(_1: &Animal) -> Animal {
+  let _1: &Animal; // this
+  bb0: {
+    check_class(*_1, move_this(into), ref);
+    _0 = move *_1;
+    drop(*_1);
+    return;
+  }
+}
+
+fn Circle::#ctor(_1: &Circle, _2: i64) -> void {
+  let _1: &Circle; // this
+  let _2: i64; // r
+  let _3: void temp;
+  let _4: *Circle temp;
+  bb0: {
+    switch const overridden(r): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _4 = addr_of *_1;
+    _3 = implicit_ctor Shape(move _4) -> bb3;
+  }
+  bb2: {
+    field_init((*_1).r, const 0: i64);
+    goto bb1;
+  }
+  bb3: {
+    (*_1).r = copy _2;
+    return;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: string, _3: i64) -> void {
+  let _1: &Dog; // this
+  let _2: string; // name
+  let _3: i64; // age
+  let _4: void temp;
+  let _5: &Dog temp;
+  let _6: &Animal temp;
+  bb0: {
+    switch const overridden(sound): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    switch const overridden(age): bool [0: bb4, otherwise: bb3];
+  }
+  bb2: {
+    field_init((*_1).sound, const "woof": string);
+    goto bb1;
+  }
+  bb3: {
+    (*_1).age = copy _3;
+    _5 = &*_1 [reborrow];
+    _6 = convert(upcast, move _5);
+    _4 = Animal::#ctor(move _6, move _2, const 1: isize) -> bb5;
+  }
+  bb4: {
+    field_init((*_1).age, const 0: i64);
+    goto bb3;
+  }
+  bb5: {
+    drop(_2);
+    return;
+  }
+}
+
+fn Leaf::#ctor(_1: &Leaf, _2: i64) -> void {
+  let _1: &Leaf; // this
+  let _2: i64; // v
+  bb0: {
+    (*_1).v = const 0: i64;
+    (*_1).w = const 1: i64;
+    (*_1).v = copy _2;
+    return;
+  }
+}

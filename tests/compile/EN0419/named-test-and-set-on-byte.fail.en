@@ -1,0 +1,5 @@
+//! row: `Atomic64` at `i486`; `testAndSet` on `Atomic<u8>`
+import { Atomic } from "core/atomic";
+
+const byte = new Atomic<u8>(0);
+console.log(byte.testAndSet(1)); //~ EN0419 "`u8` does not satisfy `AtomicBits`"

@@ -1,0 +1,3 @@
+public declare function write(fd: i32, p: *u8, n: usize): isize; //~ EN0815 "`declare function` without `@dll`"
+
+private declare function exit(code: i32): never; //~ EN0815 "`declare function` without `@dll`"

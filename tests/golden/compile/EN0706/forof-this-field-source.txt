@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN0706/forof-this-field-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `this.items` while iterating over it
+ --> tests/compile/EN0706/forof-this-field-source.fail.en:6:7
+  |
+5 |     for (const x of &this.items) {
+  |                     ----------- immutable borrow begins here
+6 |       this.items.push(1); //~ EN0706
+  |       ^^^^^^^^^^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+help: collect new jobs separately, or loop over a copy
+  |
+5 |     for (const x of [...this.items]) {
+  |                     ~~~~          +
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `this` while iterating over it
+  --> tests/compile/EN0706/forof-this-field-source.fail.en:11:7
+   |
+10 |     for (const x of &this.items) {
+   |                     ----------- immutable borrow begins here
+11 |       this.reset(); //~ EN0706
+   |       ^^^^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+help: loop over a copy
+   |
+10 |     for (const x of [...this.items]) {
+   |                     ~~~~          +
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

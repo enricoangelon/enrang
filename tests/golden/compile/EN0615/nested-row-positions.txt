@@ -1,0 +1,68 @@
+$ enrang check tests/compile/EN0615/nested-row-positions.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `readers` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+ --> tests/compile/EN0615/nested-row-positions.fail.en:3:46
+  |
+3 | const writers: (fn(let x: &i64) => void)[] = readers; //~ EN0615
+  |                                              ^^^^^^^ converted here
+  |
+  = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+  = explain: run `enrang explain EN0615`
+
+error[EN0615]: `&one` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+ --> tests/compile/EN0615/nested-row-positions.fail.en:4:39
+  |
+4 | const r: &(fn(let x: &i64) => void) = &one; //~ EN0615
+  |                                       ^^^^ converted here
+  |
+  = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+  = explain: run `enrang explain EN0615`
+
+error[EN0615]: `maybe` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+ --> tests/compile/EN0615/nested-row-positions.fail.en:6:46
+  |
+6 | const m2: (fn(let x: &i64) => void) | null = maybe; //~ EN0615
+  |                                              ^^^^^ converted here
+  |
+  = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+  = explain: run `enrang explain EN0615`
+
+error[EN0615]: `o1` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+ --> tests/compile/EN0615/nested-row-positions.fail.en:8:45
+  |
+8 | const o2: { cb: fn(let x: &i64) => void } = o1; //~ EN0615
+  |                                             ^^ converted here
+  |
+  = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+  = explain: run `enrang explain EN0615`
+
+error[EN0615]: `b1` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+  --> tests/compile/EN0615/nested-row-positions.fail.en:10:42
+   |
+10 | const b2: Box<fn(let x: &i64) => void> = b1; //~ EN0615
+   |                                          ^^ converted here
+   |
+   = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `take` takes `f` as a `fn(let &i64) => void`, but its function type declares a `fn(&i64) => void`
+  --> tests/compile/EN0615/nested-row-positions.fail.en:11:47
+   |
+11 | const g: fn(f: fn(x: &i64) => void) => void = take; //~ EN0615
+   |                                               ^^^^ converted here
+   |
+   = note: a function type's row nested inside a signature must be equal to the function's own
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `give` returns a `fn(&i64) => void`, but its function type declares a `fn(let &i64) => void`
+  --> tests/compile/EN0615/nested-row-positions.fail.en:12:44
+   |
+12 | const k: fn() => fn(let x: &i64) => void = give; //~ EN0615
+   |                                            ^^^^ converted here
+   |
+   = note: a function type's row nested inside a signature must be equal to the function's own
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 7 previous errors

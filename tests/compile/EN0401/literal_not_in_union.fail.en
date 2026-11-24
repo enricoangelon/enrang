@@ -1,0 +1,8 @@
+turn("left");
+turn("lft"); //~ EN0401 "is not a `Direction`"
+
+private function turn(d: Direction): void {
+  console.log(d);
+}
+
+private type Direction = "left" | "right";

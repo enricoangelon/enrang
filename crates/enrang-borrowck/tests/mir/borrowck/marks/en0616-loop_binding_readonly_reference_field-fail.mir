@@ -1,0 +1,142 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/loop_binding_readonly_reference_field.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/loop_binding_readonly_reference_field.fail";
+@final class Finder {
+  private rows: readonly &Slice<i64[]>;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[][]; // table
+  let _3: i64[] temp;
+  let _4: i64[] temp;
+  let _5: Finder; // f
+  let _6: &i64[][] temp;
+  let _7: &Slice<i64[]> temp;
+  let _8: &Finder temp;
+  let _9: void temp;
+  let _10: &i64[] | null; // hit
+  let _11: &Finder temp;
+  let _12: bool temp;
+  let _13: u32 temp;
+  let _14: i64[] temp;
+  fact f0: _10 nonnull;
+  use f0 at bb3[1];
+  use f0 at bb3[3];
+  test f0 at bb3;
+  bb0: {
+    storage_live(_2);
+    _3 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    _4 = intrinsic AllocArray<i64>(const 4: i64, const 5: i64);
+    _2 = intrinsic AllocArray<i64[]>(move _3, move _4);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = &_2 [explicit];
+    _7 = convert(array_to_slice, move _6);
+    _8 = &_5 [auto-borrow];
+    _9 = Finder::#ctor(move _8, move _7) -> bb1;
+  }
+  bb1: {
+    storage_live(_10);
+    _11 = &_5 [auto-borrow];
+    _10 = Finder::find(move _11, const 1: i64) -> bb2;
+  }
+  bb2: {
+    _13 = discriminant(_10);
+    _12 = ne(move _13, const 0: u32);
+    switch move _12 [0: bb4, otherwise: bb3];
+  }
+  bb3: {
+    _14 = intrinsic AllocArray<i64>(const 9: i64);
+    check_tag(_10, Present);
+    drop(*(_10 as Present).0) [assign];
+    check_tag(_10, Present);
+    *(_10 as Present).0 = move _14; //~ EN0616 "cannot change the object returned by `find`"
+    drop(_14);
+    storage_dead(_14);
+    goto bb4;
+  }
+  bb4: {
+    storage_dead(_10);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Finder::#ctor(_1: &Finder, _2: &Slice<i64[]>) -> void {
+  let _1: &Finder; // this
+  let _2: &Slice<i64[]>; // rows
+  let _3: &Slice<i64[]> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).rows = move _3;
+    return;
+  }
+}
+
+fn Finder::find(_1: &Finder, _2: i64) -> &i64[] | null {
+  let _1: &Finder; // this
+  let _2: i64; // first
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &i64[]; // r
+  let _7: bool temp;
+  let _8: isize temp;
+  let _9: i64 temp;
+  let _10: isize temp;
+  let _11: &i64[] temp;
+  loop l0: path *(*_1).rows preheader bb5 head bb1 bind bb2[2] binding _6;
+  bb0: {
+    goto bb5;
+  }
+  bb1: {
+    _4 = len(*(*_1).rows);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &(*(*_1).rows)[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _0 = null;
+    return;
+  }
+  bb5: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _8 = const 0: isize;
+    _10 = len(*_6);
+    check_bounds(copy _8, copy _10);
+    _9 = copy (*_6)[_8];
+    _7 = eq(move _9, copy _2);
+    switch move _7 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    _11 = &*_6 [reborrow];
+    _0 = present(move _11);
+    storage_dead(_6);
+    return;
+  }
+  bb8: {
+    storage_dead(_6);
+    goto bb3;
+  }
+}

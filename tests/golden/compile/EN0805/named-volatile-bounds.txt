@@ -1,0 +1,14 @@
+$ enrang check --target=x86_64-linux tests/compile/EN0805/named-volatile-bounds.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0805]: `T` can't be accessed volatile on `x86_64-linux`
+ --> tests/compile/EN0805/named-volatile-bounds.fail.en:4:3
+  |
+4 |   p.writeVolatile(v); //~ EN0805 "`T` can't be accessed volatile on `x86_64-linux`"
+  |   ^^^^^^^^^^^^^^^^^^ `T` is not a `VolatileValue`
+  |
+  = note: volatile access takes `u8 u16 u32 i8 i16 i32 usize isize bool` and raw pointers, and `u64 i64` on `x86_64-*`
+  = explain: run `enrang explain EN0805`
+
+error: aborting due to 1 previous error

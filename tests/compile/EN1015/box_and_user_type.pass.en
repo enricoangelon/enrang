@@ -1,0 +1,10 @@
+const b: Box<i64[]> = new Box([1, 2]);
+for (const x of &*b) { console.log(x); }
+const bag = new Bag {};
+for (const x of &bag.items) { console.log(x); }
+for (const x of bag.view()) { console.log(x); }
+
+public final class Bag {
+  public items: i64[] = [];
+  public view(): &Slice<i64> { return &this.items; }
+}

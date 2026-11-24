@@ -1,0 +1,35 @@
+let s = "x".toString();
+both(s, s); //~ EN0601 "`s` was moved into `both`"
+
+public function twice(h?: () => void): void {
+  run(h, h); //~ EN0601 "`h` was moved into `run`"
+}
+
+public function literal(): void {
+  const t = "y".toString();
+  const pair = [t, t]; //~ EN0601 "`t` was moved"
+  console.log(pair.length());
+}
+
+public function part(): void {
+  const p = new Pair { first: "a", n: 1 };
+  takeBoth(p, p.n); //~ EN0601 "`p` was moved into `takeBoth`"
+}
+
+public class Pair {
+  public first: string;
+  public n: i64;
+}
+
+private function both(a: string, b: string): void {
+  console.log(a, b);
+}
+
+private function run(a?: () => void, b?: () => void): void {
+  if (a != null) { a(); }
+  if (b != null) { b(); }
+}
+
+private function takeBoth(p: Pair, n: i64): void {
+  console.log(p.first, n);
+}

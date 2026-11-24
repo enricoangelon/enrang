@@ -1,0 +1,7 @@
+public final class Animal {
+  public name: string;
+}
+
+public class Dog extends Animal { //~ EN0442 "`Animal` is `final`, so no class can extend it"
+  public tricks: i64;
+}

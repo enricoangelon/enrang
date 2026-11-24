@@ -1,0 +1,149 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/fv-02-skip-5.fail.en. Its row's codes: EN0706.
+module "tests/compile/EN0706/fv-02-skip-5.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@final class Feeder {
+  private src: readonly &u8[];
+  private sink: &View;
+}
+@final class View {
+  private x: readonly &u8[];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: u8[]; // table
+  let _3: u8[]; // other
+  let mut _4: View; // v
+  let _5: &u8[] temp;
+  let _6: &View temp;
+  let _7: void temp;
+  let mut _8: Feeder; // f
+  let _9: &u8[] temp;
+  let _10: &View temp;
+  let _11: &Feeder temp;
+  let _12: void temp;
+  let _13: void temp;
+  let _14: &Feeder temp;
+  let _15: void temp;
+  let _16: &u8[] temp;
+  let _17: void temp;
+  let _18: u8 temp;
+  let _19: &View temp;
+  let _20: &u8 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 7: u8, const 8: u8, const 9: u8);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<u8>(const 1: u8);
+    storage_live(_4);
+    _5 = &_3 [explicit];
+    _6 = &_4 [auto-borrow];
+    _7 = View::#ctor(move _6, move _5) -> bb1;
+  }
+  bb1: {
+    storage_live(_8);
+    _9 = &_2 [explicit];
+    _10 = &_4 [explicit];
+    _11 = &_8 [auto-borrow];
+    _12 = Feeder::#ctor(move _11, move _9, move _10) -> bb2;
+  }
+  bb2: {
+    _14 = &_8 [auto-borrow];
+    _13 = Feeder::share(move _14) -> bb3;
+  }
+  bb3: {
+    _16 = &_2 [auto-borrow]; //~ EN0706
+    _15 = "alloc/array"::Array<u8>::push(move _16, const 4: u8) -> bb4;
+  }
+  bb4: {
+    _19 = &_4 [auto-borrow];
+    _18 = View::first(move _19) -> bb5;
+  }
+  bb5: {
+    _20 = &_18 [temp-arg];
+    _17 = form log(move _20) -> bb6;
+  }
+  bb6: {
+    storage_dead(_18);
+    storage_dead(_8);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Feeder::#ctor(_1: &Feeder, _2: &u8[], _3: &View) -> void {
+  let _1: &Feeder; // this
+  let _2: &u8[]; // s
+  let _3: &View; // v
+  let _4: &u8[] temp;
+  let _5: &View temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).sink = move _5;
+    return;
+  }
+}
+
+fn Feeder::share(_1: &Feeder) -> void {
+  let _1: &Feeder; // this
+  let _2: void temp;
+  let _3: &u8[] temp;
+  let _4: &View temp;
+  bb0: {
+    _3 = copy (*_1).src;
+    _4 = copy (*_1).sink;
+    _2 = View::setX(move _4, move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn View::#ctor(_1: &View, _2: &u8[]) -> void {
+  let _1: &View; // this
+  let _2: &u8[]; // x
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).x = move _3;
+    return;
+  }
+}
+
+fn View::first(_1: &View) -> u8 {
+  let _1: &View; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).x);
+    check_bounds(copy _2, copy _3);
+    _0 = copy (*(*_1).x)[_2];
+    return;
+  }
+}
+
+fn View::setX(_1: &View, _2: &u8[]) -> void {
+  let _1: &View; // this
+  let _2: &u8[]; // s
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).x = move _3;
+    return;
+  }
+}

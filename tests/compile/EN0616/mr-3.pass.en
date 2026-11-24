@@ -1,0 +1,17 @@
+let s: string = "abc";
+let t: string = "de";
+s += "!";
+console.log(longest(&s, &t));
+
+let x: i64[] = [1, 2];
+let y: i64[] = [3];
+longer(&x, &y).push(9);
+console.log(x);
+
+public function longest(a: &string, b: &string): &string {
+  return a.length() >= b.length() ? a : b;
+}
+
+public function longer(a: &i64[], b: &i64[]): &i64[] {
+  return a.length() >= b.length() ? a : b;
+}

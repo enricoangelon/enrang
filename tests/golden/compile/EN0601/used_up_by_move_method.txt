@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0601/used_up_by_move_method.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `e` was used up by `open`
+ --> tests/compile/EN0601/used_up_by_move_method.fail.en:4:13
+  |
+2 | const l = e.open();
+  |           - `e` moves here
+3 | console.log(l.text);
+4 | console.log(e.inside.text); //~ EN0601 "`e` was used up by `open`"
+  |             ^^^^^^^^ used here, after the move
+  |
+  = explain: run `enrang explain EN0601`
+
+error: aborting due to 1 previous error

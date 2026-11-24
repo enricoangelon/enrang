@@ -1,0 +1,37 @@
+<ESC>[1;31merror[EN0205]<ESC>[0m: <ESC>[1m`any` does not exist in Enrang<ESC>[0m
+ <ESC>[1;34m--><ESC>[0m g04.en:1:25
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;34m1 <ESC>[0m<ESC>[1;34m|<ESC>[0m public function show(x: any): void {
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m                         <ESC>[1;31m^^^<ESC>[0m <ESC>[1;31mevery value has one known type<ESC>[0m
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;36mhelp<ESC>[0m: accept every value type with a generic
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;34m1 <ESC>[0m<ESC>[1;34m|<ESC>[0m public function show<T>(x: &T): void {
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m                     <ESC>[32m+++<ESC>[0m    <ESC>[33m~~<ESC>[0m
+  <ESC>[1m= explain:<ESC>[0m run `enrang explain EN0205`
+
+<ESC>[1;31merror[EN0202]<ESC>[0m: <ESC>[1m`var` does not exist in Enrang<ESC>[0m
+ <ESC>[1;34m--><ESC>[0m g04.en:2:3
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;34m2 <ESC>[0m<ESC>[1;34m|<ESC>[0m   var y = undefined;
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m   <ESC>[1;31m^^^<ESC>[0m <ESC>[1;31muse `let` for a binding that changes, `const` otherwise<ESC>[0m
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;36mhelp<ESC>[0m: replace `var` with `let`
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;34m2 <ESC>[0m<ESC>[1;34m|<ESC>[0m   let y = undefined;
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m   <ESC>[33m~~~<ESC>[0m
+  <ESC>[1m= explain:<ESC>[0m run `enrang explain EN0202`
+
+<ESC>[1;31merror[EN0206]<ESC>[0m: <ESC>[1m`undefined` does not exist in Enrang<ESC>[0m
+ <ESC>[1;34m--><ESC>[0m g04.en:2:11
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;34m2 <ESC>[0m<ESC>[1;34m|<ESC>[0m   var y = undefined;
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m           <ESC>[1;31m^^^^^^^^^<ESC>[0m <ESC>[1;31mabsence has one spelling<ESC>[0m
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;36mhelp<ESC>[0m: replace `undefined` with `null`, which needs a nullable type
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;34m2 <ESC>[0m<ESC>[1;34m|<ESC>[0m   var y: i64 | null = null;
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m        <ESC>[32m++++++++++++<ESC>[0m   <ESC>[33m~~~~<ESC>[0m
+  <ESC>[1m= explain:<ESC>[0m run `enrang explain EN0206`
+
+<ESC>[1;31merror<ESC>[0m: aborting due to 3 previous errors

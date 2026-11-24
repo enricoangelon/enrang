@@ -1,0 +1,9 @@
+const q = { x: 1.0, y: 2.0 };
+show(&q); //~ EN0401 "`Point` now has a method, so it is an interface, not an object type"
+
+private function show(p: &Point): void {}
+
+public interface Point {
+  x(): &f64;
+  y(): &f64;
+}

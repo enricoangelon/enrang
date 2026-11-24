@@ -1,0 +1,3 @@
+let count = 0;
+function add(x: &i64): void { *x += 1; count += 1; }
+add(&count); //~ EN0707 "cannot borrow `count` as exclusive twice at the same time"

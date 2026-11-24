@@ -1,0 +1,22 @@
+//! row: A function that writes its parameter, as
+//! row: A reading function where `(let x: &i64) =>
+let n: i64 = 1;
+apply(bump);
+const f: fn(let x: &i64) => void = bump;
+f(&n);
+apply(show);
+const g: fn(let x: &i64) => void = show;
+g(&n);
+
+private function bump(x: &i64): void {
+  *x += 1;
+}
+
+private function show(x: &i64): void {
+  console.log(x);
+}
+
+private function apply(g: (let x: &i64) => void): void {
+  let k: i64 = 0;
+  g(&k);
+}

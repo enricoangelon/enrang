@@ -1,0 +1,89 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0709/move_while_borrowing_value_lives.fail.en. Its row's codes: EN0709.
+module "tests/compile/EN0709/move_while_borrowing_value_lives.fail";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+class Lexer {
+  private src: &string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // src
+  let _3: string temp;
+  let _4: &string temp;
+  let mut _5: Lexer; // lx
+  let _6: &string temp;
+  let _7: &Lexer temp;
+  let _8: void temp;
+  let _9: string; // moved
+  let _10: void temp;
+  let _11: isize temp;
+  let _12: &Lexer temp;
+  let _13: &isize temp;
+  let _14: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "abc": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    set_table(_5, Lexer);
+    _6 = &_2 [explicit];
+    _7 = &_5 [auto-borrow];
+    _8 = Lexer::#ctor(move _7, move _6) -> bb2;
+  }
+  bb2: {
+    storage_live(_9);
+    _9 = move _2; //~ EN0709 "cannot move `src` while it is borrowed"
+    _12 = &_5 [auto-borrow];
+    _11 = Lexer::peek(move _12) -> bb3;
+  }
+  bb3: {
+    _13 = &_11 [temp-arg];
+    _14 = &_9 [auto-borrow];
+    _10 = form log(move _13, move _14) -> bb4;
+  }
+  bb4: {
+    storage_dead(_11);
+    drop(_9);
+    storage_dead(_9);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Lexer::#ctor(_1: &Lexer, _2: &string) -> void {
+  let _1: &Lexer; // this
+  let _2: &string; // src
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn Lexer::peek(_1: &Lexer) -> isize {
+  let _1: &Lexer; // this
+  let _2: &string temp;
+  bb0: {
+    _2 = copy (*_1).src;
+    _0 = "core/string"::string::length(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

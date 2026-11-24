@@ -1,0 +1,19 @@
+//! row: With `h: &H`: `const g = h; g.items = nu
+public class H { public items: string[] | null = null; public other: string[] | null = null; }
+
+public function viaDestructure(h: &H): void {
+  if (h.items != null) {
+    const { items } = h;
+    *items = null;
+    console.log(h.items.length()); //~ EN0401 "`h.items` may be `null` here"
+  }
+}
+
+public function viaBoth(h: &H): void {
+  if (h.items != null) {
+    const { other, items } = h;
+    console.log(other);
+    *items = null;
+    console.log(h.items.length()); //~ EN0401 "`h.items` may be `null` here"
+  }
+}

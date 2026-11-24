@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/f4.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `items`, because `items` is `const`
+ --> tests/compile/EN0608/f4.fail.en:3:21
+  |
+3 | for (const item of &items) { //~ EN0608
+  |                     ^^^^^ written here
+  |
+help: declare it `let items`
+  |
+2 | let items = [new Item(), new Item()];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

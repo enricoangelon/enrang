@@ -1,0 +1,4 @@
+import { greet } from "./script.pass"; //~ EN0312 "`script.pass.en` has top-level statements, so it can't be imported"
+import { zero } from "./counter.pass"; //~ EN0312 "`counter.pass.en` has top-level statements, so it can't be imported"
+
+console.log(greet("Ada"), zero());

@@ -1,0 +1,276 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0708/s2-24-narrowed.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0708/s2-24-narrowed.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "alloc/array"::Array<T>::slice(const _1: &Array<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+class Bag {
+  items: i64[] | null = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Bag; // b
+  let _3: *Bag temp;
+  let _4: void temp;
+  let _5: i64[] temp;
+  let _6: i64[] | null temp;
+  let mut _7: &i64 | null; // keep
+  let _8: bool temp;
+  let _9: u32 temp;
+  let _10: isize #i;
+  let _11: isize #n;
+  let _12: bool temp;
+  let _13: &i64; // x
+  let _14: bool temp;
+  let _15: &i64 temp;
+  let _16: bool temp;
+  let _17: u32 temp;
+  let _18: void temp;
+  let _19: &(i64[] | null) temp;
+  let mut _20: i64[] | null; // p
+  let _21: i64[] temp;
+  let _22: bool temp;
+  let _23: u32 temp;
+  let _24: isize #i;
+  let _25: isize #n;
+  let _26: bool temp;
+  let _27: &i64; // x
+  let _28: i64 temp;
+  let _29: void temp;
+  let _30: &(i64[] | null) temp;
+  let mut _31: i64[]; // v
+  let _32: void temp;
+  let _33: &Slice<i64> temp;
+  let _34: isize | null temp;
+  let _35: &i64[] temp;
+  let _36: &Slice<i64> | null temp;
+  let _37: void temp;
+  let _38: &i64[] temp;
+  loop l0: path (_2.items as Present).0 preheader bb8 head bb4 bind bb5[3] binding _13;
+  loop l1: path (_20 as Present).0 preheader bb21 head bb17 bind bb18[3] binding _27;
+  fact f0: _2.items nonnull;
+  fact f1: _7 nonnull;
+  fact f2: _20 nonnull;
+  use f0 at bb4[0];
+  use f0 at bb5[2];
+  use f1 at bb12[0];
+  use f2 at bb17[0];
+  use f2 at bb18[2];
+  test f0 at bb2;
+  test f1 at bb12;
+  test f2 at bb15;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Bag leaving(items)(move _3) -> bb1;
+  }
+  bb1: {
+    _5 = intrinsic AllocArray<i64>(const 1: i64, const 5: i64, const 3: i64, const 7: i64);
+    _6 = present(move _5);
+    drop(_2.items) [assign];
+    _2.items = move _6;
+    drop(_6);
+    storage_dead(_6);
+    drop(_5);
+    storage_dead(_5);
+    storage_live(_7);
+    _7 = null;
+    _9 = discriminant(_2.items);
+    _8 = ne(move _9, const 0: u32);
+    switch move _8 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    goto bb8;
+  }
+  bb3: {
+    _17 = discriminant(_7);
+    _16 = ne(move _17, const 0: u32);
+    switch move _16 [0: bb13, otherwise: bb12];
+  }
+  bb4: {
+    check_tag(_2.items, Present);
+    _11 = len((_2.items as Present).0);
+    _12 = lt(copy _10, copy _11);
+    switch move _12 [0: bb7, otherwise: bb5];
+  }
+  bb5: {
+    storage_live(_13);
+    check_bounds(copy _10, copy _11);
+    check_tag(_2.items, Present);
+    _13 = &(_2.items as Present).0[_10] [for-of-element];
+    _10 = add(copy _10, const 1: isize);
+    goto bb9;
+  }
+  bb6: {
+    goto bb4;
+  }
+  bb7: {
+    goto bb3;
+  }
+  bb8: {
+    storage_live(_10);
+    _10 = const 0: isize;
+    goto bb4;
+  }
+  bb9: {
+    _14 = gt(copy *_13, const 2: i64);
+    switch move _14 [0: bb11, otherwise: bb10];
+  }
+  bb10: {
+    _15 = &*_13 [reborrow];
+    _7 = present(move _15);
+    goto bb11;
+  }
+  bb11: {
+    storage_dead(_13);
+    goto bb6;
+  }
+  bb12: {
+    check_tag(_7, Present);
+    *(_7 as Present).0 = const 0: i64;
+    goto bb13;
+  }
+  bb13: {
+    _19 = &_2.items [auto-borrow];
+    _18 = form log(move _19) -> bb14;
+  }
+  bb14: {
+    storage_live(_20);
+    _21 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    _20 = present(move _21);
+    drop(_21);
+    storage_dead(_21);
+    _23 = discriminant(_20);
+    _22 = ne(move _23, const 0: u32);
+    switch move _22 [0: bb16, otherwise: bb15];
+  }
+  bb15: {
+    goto bb21;
+  }
+  bb16: {
+    _30 = &_20 [auto-borrow];
+    _29 = form log(move _30) -> bb23;
+  }
+  bb17: {
+    check_tag(_20, Present);
+    _25 = len((_20 as Present).0);
+    _26 = lt(copy _24, copy _25);
+    switch move _26 [0: bb20, otherwise: bb18];
+  }
+  bb18: {
+    storage_live(_27);
+    check_bounds(copy _24, copy _25);
+    check_tag(_20, Present);
+    _27 = &(_20 as Present).0[_24] [for-of-element];
+    _24 = add(copy _24, const 1: isize);
+    goto bb22;
+  }
+  bb19: {
+    goto bb17;
+  }
+  bb20: {
+    goto bb16;
+  }
+  bb21: {
+    storage_live(_24);
+    _24 = const 0: isize;
+    goto bb17;
+  }
+  bb22: {
+    _28 = copy *_27;
+    *_27 = checked_add(copy _28, const 1: i64);
+    storage_dead(_27);
+    goto bb19;
+  }
+  bb23: {
+    storage_live(_31);
+    _31 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    _34 = present(const 3: isize);
+    _35 = &_31 [auto-borrow];
+    _33 = "alloc/array"::Array<i64>::slice(move _35, const 0: isize, move _34, const 2: isize) -> bb24;
+  }
+  bb24: {
+    _36 = present(move _33);
+    _32 = bump(move _36, const 1: isize) -> bb25;
+  }
+  bb25: {
+    _38 = &_31 [auto-borrow];
+    _37 = form log(move _38) -> bb26;
+  }
+  bb26: {
+    drop(_31);
+    storage_dead(_31);
+    drop(_20);
+    storage_dead(_20);
+    storage_dead(_7);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn bump(_1: &Slice<i64> | null = default) -> void {
+  let _1: &Slice<i64> | null; // xs
+  let _2: isize arg; // #supplied
+  let _3: bool temp;
+  let _4: u32 temp;
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64; // x
+  let _9: i64 temp;
+  loop l0: path *(_1 as Present).0 preheader bb7 head bb3 bind bb4[3] binding _8;
+  fact f0: _1 nonnull;
+  use f0 at bb3[0];
+  use f0 at bb4[2];
+  test f0 at bb1;
+  defaults _2;
+  bb0: {
+    _4 = discriminant(_1);
+    _3 = ne(move _4, const 0: u32);
+    switch move _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    goto bb7;
+  }
+  bb2: {
+    return;
+  }
+  bb3: {
+    check_tag(_1, Present);
+    _6 = len(*(_1 as Present).0);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb6, otherwise: bb4];
+  }
+  bb4: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    check_tag(_1, Present);
+    _8 = &(*(_1 as Present).0)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb8;
+  }
+  bb5: {
+    goto bb3;
+  }
+  bb6: {
+    goto bb2;
+  }
+  bb7: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb3;
+  }
+  bb8: {
+    _9 = copy *_8;
+    *_8 = checked_add(copy _9, const 1: i64);
+    storage_dead(_8);
+    goto bb5;
+  }
+}

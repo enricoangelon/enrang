@@ -1,0 +1,20 @@
+$ enrang check tests/compile/EN0706/fv-02-make.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `t2` cannot change while `tok` still points into it
+  --> tests/compile/EN0706/fv-02-make.fail.en:11:1
+   |
+ 8 | let c = make(&t1, &t2);
+   |                   --- shared borrow of `t2` starts here, held by `tok`
+ 9 | c.setA(&o);
+10 | const tok = c.peekB();
+11 | t2.push(9); //~ EN0706
+   | ^^^^^^^^^^ `push` changes `t2`, so it needs exclusive access to it
+12 | console.log(tok);
+   |             --- `tok` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

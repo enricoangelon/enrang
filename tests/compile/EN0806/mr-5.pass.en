@@ -1,0 +1,17 @@
+let log: string[] = [];
+log.push("start");
+console.log(count());
+
+@mustUse function count(): isize {
+  log.push("counted");
+  return log.length();
+}
+
+@devMigrate function migrateQuiet(old: { name: string, hp: i32 }): Player {
+  return new Player { name: old.name.clone(), hp: old.hp };
+}
+
+public final class Player {
+  public name: string;
+  public hp: i32;
+}

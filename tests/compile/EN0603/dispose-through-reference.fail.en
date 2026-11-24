@@ -1,0 +1,5 @@
+let s = "a".toString();
+kill(&s);
+console.log(s);
+
+private function kill(r: &string): void { dispose(*r); } //~ EN0603 "cannot move `*r` out of a reference"

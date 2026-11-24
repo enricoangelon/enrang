@@ -1,0 +1,8 @@
+//! row: Inner source is the outer element: `for 
+let grid: i64[][] = [[1], [2]];
+outer: for (const row of &grid) {
+  for (const c of row) {
+    grid.push([]);
+    break outer;
+  }
+}

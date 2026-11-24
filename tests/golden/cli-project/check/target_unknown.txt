@@ -1,0 +1,9 @@
+$ enrang check --target=bogus main.en
+[exit 2]
+[stdout]
+[stderr]
+error[EN1303]: unknown target `bogus`
+  = note: targets are `x86_64-linux`, `x86_64-windows`, `i386-linux`, `i386-none` and `x86_64-none`
+  = explain: run `enrang explain EN1303`
+
+error: aborting due to 1 previous error

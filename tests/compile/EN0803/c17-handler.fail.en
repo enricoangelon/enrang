@@ -1,0 +1,15 @@
+//! target: i386-none
+//! covers: C17
+@interrupt private function onTimer(frame: &InterruptFrame): void {}
+
+private function run(f: (frame: &InterruptFrame) => void): void {}
+
+@entry private function kmain(boot: &BootInfo): never {
+  const f: fn(frame: &InterruptFrame) => void = onTimer; //~ EN0803 "`onTimer` is an `@interrupt` function, so it can only become an `InterruptHandler`"
+  run(onTimer); //~ EN0803 "`onTimer` is an `@interrupt` function, so it can only become an `InterruptHandler`"
+  halt();
+}
+
+@panicHandler private function onPanic(info: &PanicInfo): never {
+  halt();
+}

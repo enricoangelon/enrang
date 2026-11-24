@@ -1,0 +1,6 @@
+const a = -1 as u32; //~ EN0411 "`-1` doesn't fit `u32`"
+const b = -5 as u8; //~ EN0411 "`-5` doesn't fit `u8`"
+const c = (300) as u8; //~ EN0411 "`300` doesn't fit `u8`"
+const d = -128 as i8;
+const e = (0xFFFFFFFFFFFFFFFF) as u64;
+console.log(a, b, c, d, e);

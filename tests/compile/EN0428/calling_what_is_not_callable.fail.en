@@ -1,0 +1,7 @@
+onKey(65, null);
+const count = 3;
+count(); //~ EN0428 "`count` is not callable"
+
+private function onKey(key: u8, handler?: (k: u8) => void): void {
+  handler(key); //~ EN0428 "`handler` may be `null`, so it can't be called"
+}

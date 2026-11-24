@@ -1,0 +1,7 @@
+const data: u8[] = [1, 2, 3];
+const pos: int = 1;
+const left = data.length() - pos; //~ EN0402 "cannot subtract `int` from `isize`"
+const small: i32 = 2;
+const wide: i64 = 3;
+const sum = small + wide; //~ EN0402 "cannot add `i64` to `int`"
+console.log(left, sum);

@@ -1,0 +1,18 @@
+const k: i64[] = [1, 2];
+let p = new Pad(&k);
+const e = p.first();
+const f = p.first();
+console.log(*e, *f);
+
+private class Pad {
+  private t: [readonly &i64[], i32];
+  public constructor(v: &i64[]) {
+    this.t = [v, 0];
+  }
+  public first(): readonly &i64 {
+    return &this.t[0][0];
+  }
+  public tup(): &[&i64[], i32] {
+    return &this.t;
+  }
+}

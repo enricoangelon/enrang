@@ -1,0 +1,22 @@
+$ enrang check tests/compile/EN0614/fv-05-nested-mark.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `inner` returns a reference reached from a `readonly &` part of the field `t`, so `push` cannot change it
+ --> tests/compile/EN0614/fv-05-nested-mark.fail.en:4:1
+  |
+4 | p.inner()[0].push(4); //~ EN0614
+  | ^^^^^^^^^^^^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0616]: cannot change the object returned by `inner`
+ --> tests/compile/EN0614/fv-05-nested-mark.fail.en:5:1
+  |
+5 | p.inner()[1] = 5; //~ EN0616
+  | ^^^^^^^^^^^^^^^^ written here
+  |
+  = note: `inner` returns a reference reached from a `readonly &` part of the field `t`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 2 previous errors

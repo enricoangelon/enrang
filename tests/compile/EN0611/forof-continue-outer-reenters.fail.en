@@ -1,0 +1,11 @@
+//! row: `continue outer` that re-enters an inner
+let rows: i64[] = [1, 2];
+let q: string[] = ["a"];
+outer: for (const r of &rows) {
+  for (const x of &q) {
+    take(q); //~ EN0611
+    continue outer;
+  }
+}
+
+private function take(v: string[]): void { console.log(v); }

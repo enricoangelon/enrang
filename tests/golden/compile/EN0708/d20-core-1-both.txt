@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0708/d20-core-1-both.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `a` can't be read while a borrow of it may write into it
+ --> tests/compile/EN0708/d20-core-1-both.fail.en:3:10
+  |
+2 |   k.set(a);
+  |         - borrowed for writing here, because it writes on line 2
+3 |   return a; //~ EN0708
+  |          ^ read here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

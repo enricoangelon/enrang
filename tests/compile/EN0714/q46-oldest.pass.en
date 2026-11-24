@@ -1,0 +1,22 @@
+const dogs: Dog[] = [new Dog("Rex", 3), new Dog("Fido", 7)];
+console.log(oldest(&dogs).fetch());
+
+public class Animal {
+  public constructor(public name: string, public age: i64) {}
+}
+
+public class Dog extends Animal {
+  public fetch(): string {
+    return `${this.name} fetches`;
+  }
+}
+
+private function oldest<T extends Animal>(xs: &Slice<T>): &T {
+  let best = &xs[0];
+  for (const x of xs) {
+    if (x.age > best.age) {
+      best = x;
+    }
+  }
+  return best;
+}

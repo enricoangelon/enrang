@@ -1,0 +1,38 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/c09-never.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/c09-never.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: bool; // ready
+  let _3: i64; // x
+  let _4: bool temp;
+  let _5: never temp;
+  let _6: void temp;
+  let _7: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const false: bool;
+    storage_live(_3);
+    _4 = copy _2;
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = const 1: i64;
+    goto bb3;
+  }
+  bb2: {
+    _5 = form panic(const "no": &string) -> !;
+  }
+  bb3: {
+    _7 = &_3 [auto-borrow];
+    _6 = form log(move _7) -> bb4;
+  }
+  bb4: {
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

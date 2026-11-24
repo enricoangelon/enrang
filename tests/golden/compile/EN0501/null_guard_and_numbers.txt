@@ -1,0 +1,40 @@
+$ enrang check tests/compile/EN0501/null_guard_and_numbers.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0501]: `match` doesn't handle `null`
+  --> tests/compile/EN0501/null_guard_and_numbers.fail.en:7:17
+   |
+ 7 |   return match (s) { //~ EN0501 "`match` doesn't handle `null`"
+   |                 ^ missing `null`
+   |
+help: add `null => ...,`
+   |
+10 +     null => panic("unhandled"),
+   = explain: run `enrang explain EN0501`
+
+error[EN0501]: `match` doesn't handle every `Shape.Circle`
+  --> tests/compile/EN0501/null_guard_and_numbers.fail.en:14:17
+   |
+14 |   return match (s) { //~ EN0501 "`match` doesn't handle every `Shape.Circle`"
+   |                 ^ missing other `Shape.Circle` values
+15 |     Shape.Circle if s.radius > 10.0 => "big circle",
+   |                     --------------- only when this is true
+   |
+help: add an arm for the other circles: `Shape.Circle => ...,`
+   |
+17 +     Shape.Circle => panic("unhandled"),
+   = explain: run `enrang explain EN0501`
+
+error[EN0501]: `match` doesn't handle every `i64`
+  --> tests/compile/EN0501/null_guard_and_numbers.fail.en:21:17
+   |
+21 |   return match (n) { //~ EN0501 "`match` doesn't handle every `i64`"
+   |                 ^ only a `default` arm handles every `i64`
+   |
+help: add `default => ...,`
+   |
+24 +     default => panic("unhandled"),
+   = explain: run `enrang explain EN0501`
+
+error: aborting due to 3 previous errors

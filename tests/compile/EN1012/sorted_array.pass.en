@@ -1,0 +1,7 @@
+let sorted: i64[] = [1, 3, 5];
+sorted.push(7);
+const m = new Map { size: 0 };
+
+public final class Map {
+  public size: i64;
+}

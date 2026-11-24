@@ -1,0 +1,10 @@
+//! target: x86_64-windows
+@dll("kernel32.dll") public declare function ExitProcess(code: u32): never;
+
+@dll("kernel32.dll") private declare function WriteFile(
+  h: *u8,
+  p: *u8,
+  n: u32,
+  w: *u32,
+  o: *u8,
+): bool;

@@ -1,0 +1,5 @@
+$ enrang check
+[exit 0]
+[stdout]
+[stderr]
+note: `k6` resolves to level `i586`

@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN1015/string_source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1015]: this `for...of` source is not supported yet
+ --> tests/compile/EN1015/string_source.fail.en:1:17
+  |
+1 | for (const c of "abc") { //~ EN1015 "this `for...of` source is not supported yet"
+  |                 ^^^^^ this is `string`
+  |
+  = note: a string is UTF-8 bytes, and a loop over it would have to choose bytes or code points
+help: loop over its indexes and read each byte with `"abc".byteAt(i)`
+  = explain: run `enrang explain EN1015`
+
+error[EN1015]: this `for...of` source is not supported yet
+ --> tests/compile/EN1015/string_source.fail.en:5:17
+  |
+5 | for (const c of &s) { //~ EN1015 "this `for...of` source is not supported yet"
+  |                 ^^ this is `&string`
+  |
+  = note: a string is UTF-8 bytes, and a loop over it would have to choose bytes or code points
+help: loop over its indexes and read each byte with `s.byteAt(i)`
+  = explain: run `enrang explain EN1015`
+
+error: aborting due to 2 previous errors

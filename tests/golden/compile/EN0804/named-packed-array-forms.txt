@@ -1,0 +1,41 @@
+$ enrang check tests/compile/EN0804/named-packed-array-forms.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0804]: reference to the packed field `p.b`, which may be misaligned
+ --> tests/compile/EN0804/named-packed-array-forms.fail.en:3:17
+  |
+3 | for (const x of &p.b) { //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+  |                 ^^^^ a `@packed` class aligns its fields to 1 byte
+  |
+help: copy the field into a local first: `const v = p.b;`
+  = explain: run `enrang explain EN0804`
+
+error[EN0804]: reference to the packed field `p.g[r]`, which may be misaligned
+ --> tests/compile/EN0804/named-packed-array-forms.fail.en:7:17
+  |
+7 | for (const x of &p.g[r]) { //~ EN0804 "reference to the packed field `p.g[r]`, which may be misaligned"
+  |                 ^^^^^^^ a `@packed` class aligns its fields to 1 byte
+  |
+help: copy the field into a local first: `const v = p.g[r];`
+  = explain: run `enrang explain EN0804`
+
+error[EN0804]: reference to the packed field `p.b[1]`, which may be misaligned
+  --> tests/compile/EN0804/named-packed-array-forms.fail.en:10:11
+   |
+10 | const e = &p.b[1]; //~ EN0804 "reference to the packed field `p.b[1]`, which may be misaligned"
+   |           ^^^^^^^ a `@packed` class aligns its fields to 1 byte
+   |
+help: copy the field into a local first: `const v = p.b[1];`
+   = explain: run `enrang explain EN0804`
+
+error[EN0804]: reference to the packed field `p.b`, which may be misaligned
+  --> tests/compile/EN0804/named-packed-array-forms.fail.en:12:15
+   |
+12 | const c = [...p.b]; //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+   |               ^^^ a `@packed` class aligns its fields to 1 byte
+   |
+help: copy the field into a local first: `const v = p.b;`
+   = explain: run `enrang explain EN0804`
+
+error: aborting due to 4 previous errors

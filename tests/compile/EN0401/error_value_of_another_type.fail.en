@@ -1,0 +1,13 @@
+console.log(parse("x"));
+
+private function parse(s: &string): Result<i64, AgeError> {
+  if (s.isEmpty()) {
+    return Err(AgeError.Negative);
+  }
+  return Err("not a number"); //~ EN0401 "mismatched types: expected `AgeError`, found `string`"
+}
+
+public enum AgeError {
+  NotANumber,
+  Negative,
+}

@@ -1,0 +1,2 @@
+const sizes = [1, 2, 3] as const; //~ EN1039 "`as const` is not supported yet"
+console.log(sizes);

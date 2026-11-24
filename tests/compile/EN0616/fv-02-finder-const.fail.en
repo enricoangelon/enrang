@@ -1,0 +1,21 @@
+//! covers: H28
+const f = new Finder2(&[2, 3, 5, 7]);
+const h = f.find(5);
+if (h != null) {
+  *h = 0; //~ EN0616
+}
+
+public final class Finder2 {
+  private src: readonly &Slice<i64>;
+  public constructor(src: &Slice<i64>) {
+    this.src = src;
+  }
+  public find(v: i64): &i64 | null {
+    for (const x of this.src) {
+      if (*x == v) {
+        return x;
+      }
+    }
+    return null;
+  }
+}

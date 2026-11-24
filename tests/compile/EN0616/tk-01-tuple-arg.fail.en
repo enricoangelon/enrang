@@ -1,0 +1,11 @@
+let g: i64[] = [1];
+const m = mk(&g);
+*m[0] = [2]; //~ EN0616
+
+let g2: i64[] = [1];
+const p = id2([&g2, &g2]); //~ EN0707
+p[0].push(1);
+
+public function id2(t: [&i64[], &i64[]]): [&i64[], &i64[]] { return t; }
+
+public function mk(x: &i64[]): [&i64[], &i64[]] { return id2([x, x]); }

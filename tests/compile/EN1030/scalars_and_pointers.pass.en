@@ -1,0 +1,17 @@
+//! target: x86_64-windows
+@dll("kernel32.dll") public declare function ByPointer(p: *Point): *Point;
+
+@dll("kernel32.dll") public declare function Choose(k: Kind): void;
+
+public type Cb = @abi("win64") unsafe fn(p: *Point) => *Point;
+
+public type SysCb = @abi("sysv") fn(n: i32) => void;
+
+public final class Point {
+  public x: i32 = 0;
+}
+
+public enum Kind {
+  A,
+  B,
+}

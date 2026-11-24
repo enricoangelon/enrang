@@ -1,0 +1,17 @@
+public interface TokenReader {
+  let next(): &string | null;
+}
+
+public class Words implements TokenReader { //~ EN0615 "`Words.next` returns a read-only reference, but `TokenReader` declares a writable one"
+  private text: string = "let x = 42";
+  private pos: isize = 0;
+
+  public next(): &string | null {
+    if (this.pos >= this.text.length()) {
+      return null;
+    }
+    const start = this.pos;
+    this.pos = this.text.length();
+    return this.text.slice(start, this.pos);
+  }
+}

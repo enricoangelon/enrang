@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN0706/forof-repoint-cursor.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot reassign `r` during iteration
+ --> tests/compile/EN0706/forof-repoint-cursor.fail.en:9:5
+  |
+8 |   for (const x of r) {
+  |                   - `r` is borrowed here
+9 |     r = &*b; //~ EN0706
+  |     ^^^^^^^ cannot reassign while borrowed
+  |
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot reassign `r` during iteration
+  --> tests/compile/EN0706/forof-repoint-cursor.fail.en:16:5
+   |
+15 |   for (const x of r) {
+   |                   - `r` is borrowed here
+16 |     r = &x.children; //~ EN0706
+   |     ^^^^^^^^^^^^^^^ cannot reassign while borrowed
+   |
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

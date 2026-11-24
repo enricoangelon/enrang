@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0616/s2-25-pair.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `twice`
+ --> tests/compile/EN0616/s2-25-pair.fail.en:4:11
+  |
+4 | clash(p0, p1); //~ EN0616
+  |           ^^ `clash` writes through it
+  |
+  = note: `twice` returns two references that may point at the same data
+  = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot change the object returned by `same`
+ --> tests/compile/EN0616/s2-25-pair.fail.en:9:3
+  |
+9 |   *s[1] = [9]; //~ EN0616
+  |   ^^^^^^^^^^^ written here
+  |
+  = note: `same` returns two references that may point at the same data
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 2 previous errors

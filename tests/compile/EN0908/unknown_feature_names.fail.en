@@ -1,0 +1,8 @@
+import { cpu } from "core";
+
+public function probe(name: &string): bool {
+  const bad = cpu.has("avx"); //~ EN0908 "unknown feature name `avx`"
+  const typo = cpu.has("sse4_1"); //~ EN0908 "unknown feature name `sse4_1`"
+  const upper = cpu.has("SSE2"); //~ EN0908 "unknown feature name `SSE2`"
+  return cpu.has(name); //~ EN0908 "a feature name must be a string literal"
+}

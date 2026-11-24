@@ -1,0 +1,9 @@
+private unsafe let count: i64 = 0;
+
+public function peek(p: *i64): i64 {
+  const r = &*p; //~ EN0801 "borrowing through a raw pointer needs `unsafe`"
+  const c = &count; //~ EN0801 "using `count`, an `unsafe let`, needs `unsafe`"
+  const xs = [1, 2];
+  xs.forEach(x => console.log(count)); //~ EN0801 "using `count`, an `unsafe let`, needs `unsafe`"
+  return *r;
+}

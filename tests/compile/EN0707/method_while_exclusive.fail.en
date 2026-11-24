@@ -1,0 +1,4 @@
+let xs: i64[] = [1, 2];
+const r = &xs;
+xs.push(9); //~ EN0707 "cannot borrow `xs` as exclusive twice at the same time"
+r.push(1);

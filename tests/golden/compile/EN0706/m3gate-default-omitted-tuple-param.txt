@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/m3gate-default-omitted-tuple-param.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `k` cannot change while `r` still points into it
+ --> tests/compile/EN0706/m3gate-default-omitted-tuple-param.fail.en:3:4
+  |
+2 | const r = &k[0];
+  |           ----- shared borrow of `k` starts here, held by `r`
+3 | g([&k, 0]); //~ EN0706 "`k` cannot change while `r`"
+  |    ^^ `k` changes here
+4 | console.log(*r);
+  |              - `r` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

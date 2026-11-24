@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0714/local-function-returns-captured.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0714]: `peek` returns a reference its signature does not allow
+ --> tests/compile/EN0714/local-function-returns-captured.fail.en:6:3
+  |
+6 |   return &count; //~ EN0714
+  |   ^^^^^^^^^^^^^^ returned here
+  |
+  = note: a returned reference may borrow only from the parameters its signature names as sources
+  = explain: run `enrang explain EN0714`
+
+error: aborting due to 1 previous error

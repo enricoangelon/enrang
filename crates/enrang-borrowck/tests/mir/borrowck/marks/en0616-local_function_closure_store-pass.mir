@@ -1,0 +1,94 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/local_function_closure_store.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/local_function_closure_store.pass";
+@private class Lexer {
+  private src: &string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s0
+  let mut _3: string; // t
+  let mut _4: Lexer; // lx
+  let _5: &string temp;
+  let _6: &Lexer temp;
+  let _7: void temp;
+  let _8: void temp;
+  let _9: &string temp;
+  let _10: &Lexer temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "q": string;
+    storage_live(_3);
+    _3 = const "ab": string;
+    storage_live(_4);
+    set_table(_4, Lexer);
+    _5 = &_2 [explicit];
+    _6 = &_4 [auto-borrow];
+    _7 = Lexer::#ctor(move _6, move _5) -> bb1;
+  }
+  bb1: {
+    _9 = &_3 [hidden-arg];
+    _10 = &_4 [hidden-arg];
+    _8 = bind(move _9, move _10) -> bb2;
+  }
+  bb2: {
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Lexer::#ctor(_1: &Lexer, _2: &string) -> void {
+  let _1: &Lexer; // this
+  let _2: &string; // src
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn Lexer::setSrc(_1: &Lexer, _2: &string) -> void {
+  let _1: &Lexer; // this
+  let _2: &string; // s
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+@private @local fn bind() -> void {
+  let _1: &string arg; // t
+  let _2: &Lexer arg; // lx
+  let _3: void temp;
+  let _4: &string temp;
+  let _5: &Lexer temp;
+  bb0: {
+    _4 = &*_1 [explicit];
+    _5 = &*_2 [auto-borrow];
+    _3 = Lexer::setSrc(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private @local fn run(_1: () => void) -> void {
+  let _1: () => void; // f
+  let _2: void temp;
+  bb0: {
+    _2 = closure _1() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

@@ -1,0 +1,22 @@
+$ enrang check tests/compile/EN0433/fields_without_a_default.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0433]: missing field `owner`
+ --> tests/compile/EN0433/fields_without_a_default.fail.en:2:14
+  |
+2 | const team = new Team { size: 3 }; //~ EN0433 "missing field `owner`"
+  |              ^^^^^^^^^^^^^^^^^^^^ every field without a default must be set
+  |
+  = explain: run `enrang explain EN0433`
+
+error[EN0433]: `new Team()` leaves `owner` unset
+ --> tests/compile/EN0433/fields_without_a_default.fail.en:3:15
+  |
+3 | const empty = new Team(); //~ EN0433 "`new Team()` leaves `owner` unset"
+  |               ^^^^^^^^^^ this field has no default
+  |
+help: use `new Team { owner: ... }`
+  = explain: run `enrang explain EN0433`
+
+error: aborting due to 2 previous errors

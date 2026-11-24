@@ -1,0 +1,17 @@
+const ticks = new Ticks {};
+console.log(total(&ticks)); //~ EN0419 "`Ticks` does not satisfy `Counter`"
+
+private function total<T extends Counter>(c: &T): i64 {
+  return c.count();
+}
+
+public interface Counter {
+  count(): i64;
+}
+
+public class Ticks {
+  @requires("cmov")
+  public count(): i64 {
+    return 1;
+  }
+}

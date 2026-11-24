@@ -1,0 +1,82 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0610/q31-before-super-2.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0610/q31-before-super-2.pass";
+class Animal {
+  name: string;
+}
+class Dog extends Animal {
+  owner: Person;
+}
+class Person {
+  name: string;
+}
+
+fn Animal::#ctor(_1: &Animal, _2: string) -> void {
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: string, _3: Person) -> void {
+  let _1: &Dog; // this
+  let _2: string; // name
+  let _3: Person; // owner
+  let _4: Person temp;
+  let _5: void temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  bb0: {
+    _4 = move _3;
+    drop((*_1).owner) [assign];
+    (*_1).owner = move _4;
+    drop(_4);
+    storage_dead(_4);
+    _6 = &*_1 [reborrow];
+    _7 = convert(upcast, move _6);
+    _5 = Animal::#ctor(move _7, move _2) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    drop(_2);
+    return;
+  }
+}
+
+fn Person::#ctor(_1: &Person, _2: string) -> void {
+  let _1: &Person; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}

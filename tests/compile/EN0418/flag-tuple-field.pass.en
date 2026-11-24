@@ -1,0 +1,7 @@
+public class Pair implements Copy {
+  private both: [readonly &i64, i64];
+
+  public constructor(x: &i64, n: i64) {
+    this.both = [x, n];
+  }
+}

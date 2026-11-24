@@ -1,0 +1,22 @@
+$ enrang check tests/compile/EN0706/local_function_while_shared.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `count` cannot change while `r` still points into it
+ --> tests/compile/EN0706/local_function_while_shared.fail.en:4:1
+  |
+3 | const r = &count;
+  |           ------ shared borrow of `count` starts here, held by `r`
+4 | inc(); //~ EN0706 "`count` cannot change while `r` still points into it"
+  | ^^^^^ `count` changes here
+5 | console.log(r);
+  |             - `r` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: keep a copy instead of a reference
+  |
+3 | const r = count.clone();
+  |           ~~~~~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

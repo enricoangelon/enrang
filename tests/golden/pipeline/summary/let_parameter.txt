@@ -1,0 +1,5 @@
+module "main"
+fn grow(_1: &i64[]) -> void perms(write) sources() result none;
+//   #0: passes it to `Array.push` from `alloc/array`, which changes it
+fn peek(let _1: &i64[]) -> void perms(write) sources() result none;
+//   #0: is declared writable

@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0429/question_mark_on_a_plain_value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0429]: `?` needs a `Result` or `T | null`, found `i64`
+ --> tests/compile/EN0429/question_mark_on_a_plain_value.fail.en:4:14
+  |
+4 |   const m = n?; //~ EN0429 "`?` needs a `Result` or `T | null`, found `i64`"
+  |              ^ `n` is `i64`
+  |
+  = explain: run `enrang explain EN0429`
+
+error: aborting due to 1 previous error

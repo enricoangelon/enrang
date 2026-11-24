@@ -1,0 +1,10 @@
+error[EN0708]: `s` can't be read here while the assignment appends to it
+ --> main.en:2:6
+  |
+2 | s += s.slice(0, 1);
+  |      ^^^^^^^^^^^^^ read here, and still used when the assignment stores
+  |
+help: append a copy: `s += s.slice(0, 1).toString();`
+  = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

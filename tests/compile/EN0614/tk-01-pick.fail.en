@@ -1,0 +1,5 @@
+let data: i64[] = [1, 2]; let h = new Holder(&data); const [arr, e] = h.pick(false);
+arr.push(3); arr.push(4); arr.push(5); arr.push(6); //~ EN0614
+console.log(*e);
+
+public class Holder { private view: &i64[]; private own: i64[] = []; public constructor(v: &i64[]) { this.view = v; } public pick(c: bool): [&i64[], &i64] { const p = c ? &this.own : this.view; return [p, &this.view[0]]; } }

@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0311/private_item.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0311]: `Helper` is private to `user.pass.en`
+ --> tests/compile/EN0311/private_item.fail.en:1:10
+  |
+1 | import { Helper } from "./user.pass"; //~ EN0311 "`Helper` is private to `user.pass.en`"
+  |          ^^^^^^ a private item
+  |
+  = explain: run `enrang explain EN0311`
+
+error[EN0311]: `Helper` is private to `user.pass.en`
+ --> tests/compile/EN0311/private_item.fail.en:4:12
+  |
+4 | const h: u.Helper | null = null; //~ EN0311 "`Helper` is private to `user.pass.en`"
+  |            ^^^^^^ a private item
+  |
+  = explain: run `enrang explain EN0311`
+
+error: aborting due to 2 previous errors

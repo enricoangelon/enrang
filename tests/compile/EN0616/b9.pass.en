@@ -1,0 +1,19 @@
+let t = new Thermo();
+t.cool();
+t.show();
+
+public class Thermo {
+  private kelvin: i64 = 300;
+
+  public cool(): void {
+    *this.peekInner() = 299;
+  }
+
+  public show(): void {
+    console.log(this.kelvin);
+  }
+
+  private peekInner(): &i64 {
+    return &this.kelvin;
+  }
+}

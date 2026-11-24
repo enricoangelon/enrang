@@ -1,0 +1,30 @@
+const s0: string = "ab";
+let t: string = "xy";
+let lx = new Lexer(&s0);
+function bind(): void {
+  console.log(lx.next());
+}
+function run(f: () => void): void {
+  f();
+}
+run(bind);
+t = "zzzzzzzzzzzzzzzz";
+console.log(lx.next());
+
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();  // a sketch: the rest of the text is one token
+    return this.src.slice(start, this.pos);
+  }
+
+  public setSrc(s: &string): void {
+    this.src = s;
+  }
+}

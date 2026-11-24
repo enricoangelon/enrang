@@ -1,0 +1,18 @@
+const c = new Circle(2, new Person("Ada"));
+console.log(`${c.color} shape of ${c.owner.name}`);
+
+public class Person {
+  public constructor(public name: string) {}
+}
+
+public class Shape {
+  public color: string = "red";
+  public owner: Person;
+}
+
+public class Circle extends Shape {
+  public constructor(public r: i64, o: Person) {
+    super();
+    this.owner = o;
+  }
+}

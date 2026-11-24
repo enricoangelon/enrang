@@ -1,0 +1,10 @@
+$ enrang check --target=i386-linux --cpu=k6 missing.en
+[exit 2]
+[stdout]
+[stderr]
+note: `k6` resolves to level `i586`
+
+error[EN1305]: file not found: `missing.en`
+  = explain: run `enrang explain EN1305`
+
+error: aborting due to 1 previous error

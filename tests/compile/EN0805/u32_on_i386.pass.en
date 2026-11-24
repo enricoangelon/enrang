@@ -1,0 +1,10 @@
+//! target: i386-linux
+public unsafe function word(p: *u32): u32 {
+  p.writeVolatile(1);
+  return p.readVolatile();
+}
+
+public unsafe function size(p: *usize, q: *isize): void {
+  p.writeVolatile(1);
+  q.writeVolatile(-1);
+}

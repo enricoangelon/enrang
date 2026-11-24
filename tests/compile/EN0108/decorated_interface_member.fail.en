@@ -1,0 +1,3 @@
+public interface Shape {
+  @cached area(): f64; //~ EN0108
+}

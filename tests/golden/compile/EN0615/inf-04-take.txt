@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0615/inf-04-take.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Sub2.take` keeps `o` itself, but `Base.take` keeps only what `o`'s fields hold
+  --> tests/compile/EN0615/inf-04-take.fail.en:38:19
+   |
+27 |   public take(o: &Lexer): void { this.w = o.text(); }
+   |          ---- declared here
+...
+38 |   public override take(o: &Lexer): void { this.lx = o; } //~ EN0615
+   |                   ^^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

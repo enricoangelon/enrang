@@ -1,0 +1,13 @@
+//! covers: H28
+console.log(*firstOf());
+
+public function zeros(): &Slice<i64> {
+  return &[0, 0];
+}
+
+public function firstOf(): &i64 {
+  for (const x of zeros()) {
+    return x;
+  }
+  panic("none");
+}

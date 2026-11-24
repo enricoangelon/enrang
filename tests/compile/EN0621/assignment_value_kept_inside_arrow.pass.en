@@ -1,0 +1,5 @@
+let s: string = "a".toString();
+const f = () => {
+  console.log(s += "?");
+};
+f();

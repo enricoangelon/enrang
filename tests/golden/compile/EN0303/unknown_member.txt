@@ -1,0 +1,37 @@
+$ enrang check tests/compile/EN0303/unknown_member.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0303]: `Point` has no member `z`
+ --> tests/compile/EN0303/unknown_member.fail.en:2:15
+  |
+2 | console.log(p.z); //~ EN0303 "`Point` has no member `z`"
+  |               ^ no such member
+  |
+help: did you mean `x`?
+  |
+2 | console.log(p.x); //~ EN0303 "`Point` has no member `z`"
+  |               ~
+  = explain: run `enrang explain EN0303`
+
+error[EN0303]: `Point` has no member `lenght`
+ --> tests/compile/EN0303/unknown_member.fail.en:3:15
+  |
+3 | console.log(p.lenght()); //~ EN0303 "`Point` has no member `lenght`"
+  |               ^^^^^^ no such member
+  |
+help: did you mean `length`?
+  |
+3 | console.log(p.length()); //~ EN0303 "`Point` has no member `lenght`"
+  |               ~~~~~~
+  = explain: run `enrang explain EN0303`
+
+error[EN0303]: `Point` has no member `size`
+ --> tests/compile/EN0303/unknown_member.fail.en:4:12
+  |
+4 | const { x, size } = &p; //~ EN0303 "`Point` has no member `size`"
+  |            ^^^^ no such member
+  |
+  = explain: run `enrang explain EN0303`
+
+error: aborting due to 3 previous errors

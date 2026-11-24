@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0401/view_for_type_parameter_without_body.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `T` can't stand for the view `Slice<u8>`
+ --> tests/compile/EN0401/view_for_type_parameter_without_body.fail.en:2:3
+  |
+2 |   d.dump(v); //~ EN0401 "`T` can't stand for the view `Slice<u8>`"
+  |   ^^^^^^^^^ this binds `T` to `Slice<u8>`
+  |
+  = note: `Dumper.dump` has no body, so its `T` may be used by value
+help: add `dump<T>(x: &Slice<T>)`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

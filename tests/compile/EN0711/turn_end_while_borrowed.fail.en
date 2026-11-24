@@ -1,0 +1,8 @@
+const fallback = "none";
+let r: &string = &fallback;
+const xs = ["a", "b"];
+for (const x of &xs) {
+  const s = x + "!";
+  r = &s;
+} //~ EN0711 "`s` is dropped while `r` still borrows it"
+console.log(r);

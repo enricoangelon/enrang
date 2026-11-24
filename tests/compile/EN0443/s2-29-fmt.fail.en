@@ -1,0 +1,14 @@
+const rex = new Dog("Rex");
+console.log(rex);
+
+public class Animal {
+  public constructor(public name: string) {}
+}
+
+public class Dog extends Animal {
+  public tricks: i64 = 3;
+
+  public override fmt(let f: &Formatter): void { //~ EN0443 "`fmt` overrides nothing in `Animal`"
+    writeTo(f, `dog ${this.name}`);
+  }
+}

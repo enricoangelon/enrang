@@ -1,0 +1,6 @@
+let a: i64[] = [1];
+let b: i64[] = [1];
+const f = a.first();
+const same = f == other(&b, &a);
+console.log(same);
+function other(x: &i64[], y: &i64[]): &i64 | null { x.push(1); return y.first(); }

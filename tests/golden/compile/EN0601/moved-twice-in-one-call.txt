@@ -1,0 +1,56 @@
+$ enrang check tests/compile/EN0601/moved-twice-in-one-call.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `s` was moved into `both`
+ --> tests/compile/EN0601/moved-twice-in-one-call.fail.en:2:9
+  |
+1 | let s = "x".toString();
+  |     - `s` owns this `string`, which is not Copy
+2 | both(s, s); //~ EN0601 "`s` was moved into `both`"
+  |         ^ used here, after the move
+  |      - `s` moves here, because `both` takes `string`, not `&string`
+  |
+  = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `s` hands it over.
+help: to keep your own, pass a copy: `both(s.clone(), s)`
+  |
+2 | both(s.clone(), s); //~ EN0601 "`s` was moved into `both`"
+  |       ++++++++
+  = explain: run `enrang explain EN0601`
+
+error[EN0601]: `h` was moved into `run`
+ --> tests/compile/EN0601/moved-twice-in-one-call.fail.en:5:10
+  |
+5 |   run(h, h); //~ EN0601 "`h` was moved into `run`"
+  |          ^ used here, after the move
+  |       - `h` moves here, because `run` takes `(() => void) | null`, not `&(() => void) | null`
+  |
+  = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `h` hands it over.
+  = explain: run `enrang explain EN0601`
+
+error[EN0601]: `t` was moved
+  --> tests/compile/EN0601/moved-twice-in-one-call.fail.en:10:20
+   |
+ 9 |   const t = "y".toString();
+   |         - `t` owns this `string`, which is not Copy
+10 |   const pair = [t, t]; //~ EN0601 "`t` was moved"
+   |                    ^ used here, after the move
+   |                 - `t` moves here
+   |
+   = explain: run `enrang explain EN0601`
+
+error[EN0601]: `p` was moved into `takeBoth`
+  --> tests/compile/EN0601/moved-twice-in-one-call.fail.en:16:15
+   |
+16 |   takeBoth(p, p.n); //~ EN0601 "`p` was moved into `takeBoth`"
+   |               ^^^ used here, after the move
+   |            - `p` moves here, because `takeBoth` takes `Pair`, not `&Pair`
+   |
+   = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `p` hands it over.
+help: to keep your own, pass a copy: `takeBoth(p.clone(), p.n)`
+   |
+16 |   takeBoth(p.clone(), p.n); //~ EN0601 "`p` was moved into `takeBoth`"
+   |             ++++++++
+   = explain: run `enrang explain EN0601`
+
+error: aborting due to 4 previous errors

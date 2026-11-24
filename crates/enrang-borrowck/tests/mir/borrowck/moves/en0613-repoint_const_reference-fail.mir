@@ -1,0 +1,31 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0613/repoint_const_reference.fail.en. Its row's codes: EN0613.
+module "tests/compile/EN0613/repoint_const_reference.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int; // x
+  let mut _3: int; // z
+  let _4: &int; // y
+  let _5: void temp;
+  let _6: &int temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 12: int;
+    storage_live(_3);
+    _3 = const 14: int;
+    storage_live(_4);
+    _4 = &_2 [explicit];
+    _4 = &_3 [explicit]; //~ EN0613 "cannot assign to `y`, because it is `const`"
+    _6 = &*_4 [auto-borrow];
+    _5 = form log(move _6) -> bb1;
+  }
+  bb1: {
+    storage_dead(_4);
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

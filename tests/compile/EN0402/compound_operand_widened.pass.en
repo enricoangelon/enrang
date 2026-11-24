@@ -1,0 +1,4 @@
+// The fix-its of `compound_operand_widened.fail.en`, applied.
+public function avg(total: i64, xs: &i64[]): i64 { return total / ((xs.length() - 1) as i64); }
+
+public function twice(total: i64, n: isize): i64 { return total + ((n * 2) as i64); }

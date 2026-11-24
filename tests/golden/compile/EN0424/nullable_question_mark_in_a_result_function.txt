@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0424/nullable_question_mark_in_a_result_function.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0424]: `?` needs the function to return `Result` or `T | null`
+ --> tests/compile/EN0424/nullable_question_mark_in_a_result_function.fail.en:4:17
+  |
+3 | private function first(xs: i64[] | null): Result<i64 | null> {
+  |                                           ------------------ `Result<i64 | null>` is the return type
+4 |   const all = xs?; //~ EN0424
+  |                 ^ `first` returns `Result<i64 | null>`
+  |
+  = note: the early return of `?` is never wrapped as a success, so it can't return `null` here
+  = explain: run `enrang explain EN0424`
+
+error: aborting due to 1 previous error

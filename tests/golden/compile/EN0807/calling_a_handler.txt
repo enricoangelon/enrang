@@ -1,0 +1,21 @@
+$ enrang check --target=i386-none tests/compile/EN0807/calling_a_handler.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0807]: an interrupt handler can't be called
+ --> tests/compile/EN0807/calling_a_handler.fail.en:5:3
+  |
+5 |   onTimer(frame); //~ EN0807 "an interrupt handler can't be called"
+  |   ^^^^^^^^^^^^^^ `onTimer` is an `@interrupt` function, which only the CPU calls
+  |
+  = explain: run `enrang explain EN0807`
+
+error[EN0807]: an interrupt handler can't be called
+  --> tests/compile/EN0807/calling_a_handler.fail.en:11:5
+   |
+11 |     onTimer(&*f); //~ EN0807 "an interrupt handler can't be called"
+   |     ^^^^^^^^^^^^ `onTimer` is an `@interrupt` function, which only the CPU calls
+   |
+   = explain: run `enrang explain EN0807`
+
+error: aborting due to 2 previous errors

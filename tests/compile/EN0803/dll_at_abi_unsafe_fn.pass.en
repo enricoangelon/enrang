@@ -1,0 +1,9 @@
+//! target: x86_64-windows
+@dll("kernel32") private declare function Beep(p: *u8, v: u8): void;
+
+private function runForeign(f: @abi("win64") unsafe fn(p: *u8, v: u8) => void): void {}
+
+public function wire(): void {
+  const c: @abi("win64") unsafe fn(p: *u8, v: u8) => void = Beep;
+  runForeign(Beep);
+}

@@ -1,0 +1,2 @@
+// SPEC 8.4, `pit`: `os/uefi/pit`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+public function setHz(hz: u32): void { unreachable(); }

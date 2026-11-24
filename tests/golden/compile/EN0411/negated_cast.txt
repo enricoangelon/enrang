@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0411/negated_cast.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0411]: `-1` doesn't fit `u32`
+ --> tests/compile/EN0411/negated_cast.fail.en:1:11
+  |
+1 | const a = -1 as u32; //~ EN0411 "`-1` doesn't fit `u32`"
+  |           ^^ `u32` holds 0 to 4294967295
+  |
+  = explain: run `enrang explain EN0411`
+
+error[EN0411]: `-5` doesn't fit `u8`
+ --> tests/compile/EN0411/negated_cast.fail.en:2:11
+  |
+2 | const b = -5 as u8; //~ EN0411 "`-5` doesn't fit `u8`"
+  |           ^^ `u8` holds 0 to 255
+  |
+  = explain: run `enrang explain EN0411`
+
+error[EN0411]: `300` doesn't fit `u8`
+ --> tests/compile/EN0411/negated_cast.fail.en:3:12
+  |
+3 | const c = (300) as u8; //~ EN0411 "`300` doesn't fit `u8`"
+  |            ^^^ `u8` holds 0 to 255
+  |
+  = explain: run `enrang explain EN0411`
+
+error: aborting due to 3 previous errors

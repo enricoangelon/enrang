@@ -1,0 +1,92 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/named-rows-below-the-top.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/named-rows-below-the-top.pass";
+class Holder<T> {
+  v: T;
+}
+
+fn underArray(_1: (fn(let &i64) => void)[]) -> void {
+  let _1: (fn(let &i64) => void)[]; // readers
+  let _2: (fn(let &i64) => void)[]; // writers
+  bb0: {
+    storage_live(_2);
+    _2 = move _1;
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn underField(_1: fn(&i64) => void) -> void {
+  let _1: fn(&i64) => void; // r
+  let _2: { f: fn(let &i64) => void }; // o
+  let _3: { f: fn(let &i64) => void }; // w
+  bb0: {
+    storage_live(_2);
+    _2 = object { f: fn(let &i64) => void } { f: copy _1 };
+    storage_live(_3);
+    _3 = copy _2;
+    storage_dead(_3);
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn underGeneric(_1: Holder<fn(let &i64) => void>) -> void {
+  let _1: Holder<fn(let &i64) => void>; // b
+  let _2: Holder<fn(let &i64) => void>; // w
+  bb0: {
+    storage_live(_2);
+    _2 = move _1;
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn underNull(_1: (fn(let &i64) => void) | null) -> void {
+  let _1: (fn(let &i64) => void) | null; // o
+  let _2: (fn(let &i64) => void) | null; // w
+  bb0: {
+    storage_live(_2);
+    _2 = copy _1;
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn underParameter(_1: fn(fn(let &i64) => void) => void) -> void {
+  let _1: fn(fn(let &i64) => void) => void; // h
+  let _2: fn(fn(let &i64) => void) => void; // w
+  bb0: {
+    storage_live(_2);
+    _2 = copy _1;
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn underRef(_1: &(fn(let &i64) => void)) -> void {
+  let _1: &(fn(let &i64) => void); // r
+  let _2: &(fn(let &i64) => void); // w
+  let _3: &(fn(let &i64) => void) temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = move _3;
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn underResult(_1: fn() => fn(let &i64) => void) -> void {
+  let _1: fn() => fn(let &i64) => void; // h
+  let _2: fn() => fn(let &i64) => void; // w
+  bb0: {
+    storage_live(_2);
+    _2 = copy _1;
+    storage_dead(_2);
+    return;
+  }
+}

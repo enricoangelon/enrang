@@ -1,0 +1,16 @@
+let q: i64[] = [1, 2];
+for (const x of &q) {
+  console.log(x);
+}
+const f = () => { q.push(9); };
+f();
+
+let q2: i64[] = [1, 2];
+for (const x of &q2) {
+  console.log(x);
+}
+run(() => { q2.push(1); });
+
+private function run(f: () => void): void {
+  f();
+}

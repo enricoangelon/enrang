@@ -1,0 +1,5 @@
+//! covers: H12
+import { Atomic } from "core/atomic";
+
+const count = new Atomic<u32>(0);
+console.log(count.load());

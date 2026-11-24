@@ -1,0 +1,24 @@
+let sector: u8[8] = [0; 8];
+let list: u8[] = [1, 2, 3];
+fill(sector.slice(4, 8), 7);
+fill(&list, 5);
+addOne(&list);
+console.log(sector, list, checksum(&sector));
+
+private function fill(xs: &Slice<u8>, v: u8): void {
+  for (let i: isize = 0; i < xs.length(); i++) {
+    xs[i] = v;
+  }
+}
+
+private function addOne(xs: &u8[]): void {
+  xs.push(1);
+}
+
+private function checksum(data: &Slice<u8>): u32 {
+  let sum: u32 = 0;
+  for (const x of data) {
+    sum += *x as u32;
+  }
+  return sum;
+}

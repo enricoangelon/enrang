@@ -1,0 +1,70 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/named-const-to-writer.fail.en. Its row's codes: EN0608, EN0608.
+module "tests/compile/EN0608/named-const-to-writer.fail";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::length(_1: &Slice<T>) -> isize;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: i64; // n
+  let _3: void temp;
+  let _4: &i64 temp;
+  let _5: u8[]; // data
+  let _6: void temp;
+  let _7: &u8[] temp;
+  let _8: &Slice<u8> temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 1: i64;
+    _4 = &_2 [explicit]; //~ EN0608
+    _3 = bump(move _4) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _5 = intrinsic AllocArray<u8>(const 1: u8, const 2: u8);
+    _7 = &_5 [explicit];
+    _8 = convert(array_to_slice, move _7); //~ EN0608
+    _6 = fill(move _8) -> bb2;
+  }
+  bb2: {
+    drop(_5);
+    storage_dead(_5);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private @local fn bump(_1: &i64) -> void {
+  let _1: &i64; // x
+  let _2: i64 temp;
+  bb0: {
+    _2 = copy *_1;
+    *_1 = checked_add(copy _2, const 1: i64);
+    return;
+  }
+}
+
+@private @local fn fill(let _1: &Slice<u8>) -> void {
+  let _1: &Slice<u8>; // buf
+  let _2: void temp;
+  let _3: isize temp;
+  let _4: &Slice<u8> temp;
+  let _5: &isize temp;
+  bb0: {
+    _4 = &*_1 [reborrow];
+    _3 = "core/slice"::Slice<u8>::length(move _4) -> bb1;
+  }
+  bb1: {
+    _5 = &_3 [temp-arg];
+    _2 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    storage_dead(_3);
+    return;
+  }
+}

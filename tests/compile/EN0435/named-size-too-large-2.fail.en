@@ -1,0 +1,15 @@
+//! target: x86_64-linux
+//! row: `u64[536870912]` on `i386`, whose size wraps
+public function f(): void {
+  let big: A<A<u64>>; //~ EN0435 "the stack frame of `f` is too large for `x86_64-linux`"
+}
+
+public function g(): void {
+  const huge: u8[3000000000] = [0; 3000000000]; //~ EN0435 "the stack frame of `g` is too large for `x86_64-linux`"
+  console.log(huge[0]);
+}
+
+public class A<T> {
+  public a: T[65536];
+  public b: T[65536];
+}

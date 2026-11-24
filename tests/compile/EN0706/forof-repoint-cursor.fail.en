@@ -1,0 +1,18 @@
+//! row: `r = &*b` as the body of a loop over `r`
+public class Node { public children: Node[] = []; }
+
+public function boxed(): void {
+  let b: Box<i64[]> = new Box([1]);
+  let a: i64[] = [0];
+  let r = &a;
+  for (const x of r) {
+    r = &*b; //~ EN0706
+  }
+}
+
+public function descend(root: &Node): void {
+  let r = &root.children;
+  for (const x of r) {
+    r = &x.children; //~ EN0706
+  }
+}

@@ -1,0 +1,20 @@
+$ enrang check tests/compile/EN0613/named-const-reference-repointed.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0613]: cannot assign to `y`, because it is `const`
+ --> tests/compile/EN0613/named-const-reference-repointed.fail.en:6:1
+  |
+4 | const y = &x;
+  |       - `y` is declared `const` here
+5 | *y = 13;
+6 | y = &z; //~ EN0613 "cannot assign to `y`, because it is `const`"
+  | ^^^^^^ assigned here
+  |
+help: make the binding mutable
+  |
+4 | let y = &x;
+  | ~~~
+  = explain: run `enrang explain EN0613`
+
+error: aborting due to 1 previous error

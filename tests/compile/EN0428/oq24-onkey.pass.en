@@ -1,0 +1,15 @@
+onKey(65);
+onKey(66, k => console.log(k));
+pad();
+pad(3);
+
+private function onKey(key: u8, handler?: (k: u8) => void): void {
+  if (handler != null) {
+    handler(key);
+  }
+}
+
+private function pad(width?: i64 | null): void {
+  const w: i64 = width ?? 8;
+  console.log(w);
+}

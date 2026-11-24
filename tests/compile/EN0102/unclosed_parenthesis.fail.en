@@ -1,0 +1,2 @@
+console.log(1, 2 //~ EN0102
+console.log(3);

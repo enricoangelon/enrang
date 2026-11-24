@@ -1,0 +1,50 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/const_root_let_reference_parameter.fail.en. Its row's codes: EN0608.
+module "tests/compile/EN0608/const_root_let_reference_parameter.fail";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::length(_1: &Slice<T>) -> isize;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: u8[]; // data
+  let _3: void temp;
+  let _4: &u8[] temp;
+  let _5: &Slice<u8> temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 1: u8, const 2: u8);
+    _4 = &_2 [explicit];
+    _5 = convert(array_to_slice, move _4); //~ EN0608
+    _3 = fill(move _5) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private @local fn fill(let _1: &Slice<u8>) -> void {
+  let _1: &Slice<u8>; // buf
+  let _2: void temp;
+  let _3: isize temp;
+  let _4: &Slice<u8> temp;
+  let _5: &isize temp;
+  bb0: {
+    _4 = &*_1 [reborrow];
+    _3 = "core/slice"::Slice<u8>::length(move _4) -> bb1;
+  }
+  bb1: {
+    _5 = &_3 [temp-arg];
+    _2 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    storage_dead(_3);
+    return;
+  }
+}

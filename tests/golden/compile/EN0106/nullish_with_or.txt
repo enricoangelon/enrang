@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0106/nullish_with_or.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0106]: `??` and `||` cannot mix without parentheses
+ --> tests/compile/EN0106/nullish_with_or.fail.en:4:18
+  |
+4 | const on = given ?? a || b; //~ EN0106
+  |                  ^^ this `??` mixes with `||`
+  |
+help: parenthesise the `||`
+  |
+4 | const on = given ?? (a || b); //~ EN0106
+  |                     +      +
+  = explain: run `enrang explain EN0106`
+
+error: aborting due to 1 previous error

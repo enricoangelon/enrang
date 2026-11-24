@@ -1,0 +1,7 @@
+$ enrang run --vm main.en
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang run` arrives with milestone M4
+note: M4 runs programs in the VM with `--vm`, and M5 runs them natively
+note: this is milestone M3, so nothing was done

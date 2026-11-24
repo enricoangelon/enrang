@@ -1,0 +1,27 @@
+//! row: `o.add(clear(&o));` and `o.n = clear(&o);`
+//! row: `if (n != null) { n.x = 1; n.x = 2; }`, `if
+let o: Counter | null = new Counter();
+if (o != null) {
+  o.add(peek(&o));
+}
+let n: Counter | null = new Counter();
+if (n != null) {
+  n.n = 1;
+  n.n = 2;
+}
+if (n != null) {
+  n.add(1);
+  n.add(1);
+}
+
+private function peek(x: &(Counter | null)): i64 {
+  return 1;
+}
+
+public class Counter {
+  public n: i64 = 0;
+
+  public add(k: i64): void {
+    this.n += k;
+  }
+}

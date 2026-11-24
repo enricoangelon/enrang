@@ -1,0 +1,39 @@
+// Recorded satisfactions (plan d.10, A:1356, `FIT-structural`): a class whose
+// `size` writes `this` where `Sizer.size` has no `let` is EN0615 at that write in
+// the body (G18, plan e); one that only reads fits. A role's parameters are
+// declared Read (N11), so an `@entry` body writing one is EN0615 at the write.
+// MIR shapes: field reads and writes through `this` (plan c.4, plan.md:913).
+interface Sizer { }
+fn Sizer::size(_1: &Self) -> i64;
+class Grower {
+  n: i64;
+}
+fn Grower::size(_1: &Grower) -> i64 {
+  bb0: {
+    (*_1).n = const 1: i64; //~ EN0615
+    _0 = copy (*_1).n;
+    return;
+  }
+}
+class Plain {
+  n: i64;
+}
+fn Plain::size(_1: &Plain) -> i64 {
+  bb0: {
+    _0 = copy (*_1).n;
+    return;
+  }
+}
+@entry fn start(_1: &i64) -> void {
+  bb0: {
+    *_1 = const 1: i64; //~ EN0615
+    return;
+  }
+}
+//! satisfies main::Grower::size main::Sizer::size
+//! satisfies main::Plain::size main::Sizer::size
+//= fn Grower::size(_1: &Grower) -> i64 perms(write) sources() result none;
+//= //   #0: writes through it
+//= fn Plain::size(_1: &Plain) -> i64 perms(read) sources() result none;
+//= @entry fn start(_1: &i64) -> void perms(write) sources() result none;
+//= //   #0: writes through it

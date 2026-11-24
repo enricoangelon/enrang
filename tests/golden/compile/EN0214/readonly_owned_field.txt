@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0214/readonly_owned_field.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0214]: `readonly` before a field type that is not a reference
+ --> tests/compile/EN0214/readonly_owned_field.fail.en:2:18
+  |
+2 |   private books: readonly string[]; //~ EN0214
+  |                  ^^^^^^^^ expected `&` after `readonly`
+  |
+help: use `readonly &T` for a read-only reference, or write `readonly` before the field's name
+  = explain: run `enrang explain EN0214`
+
+error: aborting due to 1 previous error

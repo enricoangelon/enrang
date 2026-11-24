@@ -1,0 +1,10 @@
+error[EN0615]: `readers` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+ --> main.en:2:46
+  |
+2 | const writers: (fn(let x: &i64) => void)[] = readers;
+  |                                              ^^^^^^^ converted here
+  |
+  = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

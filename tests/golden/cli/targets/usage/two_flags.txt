@@ -1,0 +1,6 @@
+$ enrang targets --evidence --evidence
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang targets` takes one flag at most
+usage: enrang targets [--evidence]

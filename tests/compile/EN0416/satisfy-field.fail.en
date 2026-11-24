@@ -1,0 +1,7 @@
+public interface Named {
+  name(): &string;
+}
+
+public class User implements Named { //~ EN0416 "`User` does not satisfy `Named`: `name` is a field"
+  public name: string = "Ada";
+}

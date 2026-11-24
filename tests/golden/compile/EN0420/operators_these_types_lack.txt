@@ -1,0 +1,38 @@
+$ enrang check tests/compile/EN0420/operators_these_types_lack.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0420]: `<` can't compare `string`s
+ --> tests/compile/EN0420/operators_these_types_lack.fail.en:3:13
+  |
+3 | console.log(a < b); //~ EN0420 "`<` can't compare `string`s"
+  |             ^^^^^ strings have no operator order
+  |
+help: compare them with `.compare`: `a.compare(&b) < 0`
+  |
+3 | console.log(a.compare(&b) < 0); //~ EN0420 "`<` can't compare `string`s"
+  |             ~~~~~~~~~~~~~~~~~
+  = explain: run `enrang explain EN0420`
+
+error[EN0420]: `&` binds looser than `==`
+ --> tests/compile/EN0420/operators_these_types_lack.fail.en:5:13
+  |
+5 | console.log(flags & 2 == 2); //~ EN0420
+  |             ^^^^^^^^^^^^^^ this reads as `&` of a `bool`
+  |                     ------ `==` is applied first
+  |
+help: parenthesise the `&`
+  |
+5 | console.log((flags & 2) == 2); //~ EN0420
+  |             +         +
+  = explain: run `enrang explain EN0420`
+
+error[EN0420]: `+` needs numbers, found `bool`
+ --> tests/compile/EN0420/operators_these_types_lack.fail.en:7:13
+  |
+7 | console.log(yes + 1); //~ EN0420
+  |             ^^^ this is `bool`
+  |
+  = explain: run `enrang explain EN0420`
+
+error: aborting due to 3 previous errors

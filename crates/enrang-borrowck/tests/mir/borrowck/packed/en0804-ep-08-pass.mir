@@ -1,0 +1,76 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0804/ep-08.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0804/ep-08.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+@final class GdtPointer {
+  limit: u16;
+  base: u32;
+}
+@final class Robot {
+  id: i64;
+}
+interface Speaker { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Box<Speaker>[]; // all
+  let _3: Box<Speaker> temp;
+  let _4: Robot temp;
+  let _5: *Robot temp;
+  let _6: void temp;
+  let _7: &Box<Speaker> temp;
+  let _8: void temp;
+  let _9: void temp;
+  let _10: &Box<Speaker>[] temp;
+  let _11: void temp;
+  let _12: GdtPointer temp;
+  let _13: *GdtPointer temp;
+  let _14: void temp;
+  let _15: &GdtPointer temp;
+  bb0: {
+    storage_live(_2);
+    _5 = addr_of _4;
+    _6 = named_fill Robot leaving()(move _5) -> bb1;
+  }
+  bb1: {
+    _4.id = const 7: i64;
+    _7 = &_3 [auto-borrow];
+    _8 = "alloc/box"::Box<Speaker>::#ctor(move _7, move _4) -> bb2;
+  }
+  bb2: {
+    _2 = intrinsic AllocArray<Box<Speaker>>(move _3);
+    drop(_3);
+    storage_dead(_3);
+    _10 = &_2 [auto-borrow];
+    _9 = form log(move _10) -> bb3;
+  }
+  bb3: {
+    _13 = addr_of _12;
+    _14 = named_fill GdtPointer leaving()(move _13) -> bb4;
+  }
+  bb4: {
+    _12.limit = const 23: u16;
+    _12.base = const 4096: u32;
+    _15 = &_12 [temp-arg];
+    _11 = form log(move _15) -> bb5;
+  }
+  bb5: {
+    storage_dead(_12);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Robot::speak(_1: &Robot) -> string {
+  let _1: &Robot; // this
+  bb0: {
+    _0 = const "beep": string;
+    return;
+  }
+}

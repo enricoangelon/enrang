@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0609/method_write.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0609]: cannot write `this.id`, because it is `readonly`
+  --> tests/compile/EN0609/method_write.fail.en:10:5
+   |
+ 5 |   public readonly id: i64;
+   |   ------------------------ `id` is declared `readonly` here
+...
+10 |     this.id = 2; //~ EN0609 "cannot write `this.id`, because it is `readonly`"
+   |     ^^^^^^^^^^^ written here
+   |
+   = note: a `readonly` field is set only by its class's constructor
+   = explain: run `enrang explain EN0609`
+
+error: aborting due to 1 previous error

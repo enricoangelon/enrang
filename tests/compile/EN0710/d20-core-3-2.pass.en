@@ -1,0 +1,26 @@
+public function make(src: &string): Lexer {
+  const p = new Parser(new Lexer(src));
+  return p.intoLexer();
+}
+
+public class Parser {
+  private lx: Lexer;
+
+  public constructor(lx: Lexer) { this.lx = lx; }
+
+  public move intoLexer(): Lexer { return this.lx; }
+}
+
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();
+    return this.src.slice(start, this.pos);
+  }
+}

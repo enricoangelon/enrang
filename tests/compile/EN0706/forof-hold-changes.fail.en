@@ -1,0 +1,78 @@
+//! row: In a loop over `&q`: `q.push(1)`, `const
+public class O {
+  public items: i64[] = [1];
+  public clear(): void { this.items = []; }
+}
+
+private function make(): O { return new O(); }
+private function reset(o: &O): void { o.items = []; }
+private function g(v: &i64[]): void { v.push(1); }
+
+private function push(): void {
+  let q: i64[] = [1, 2];
+  for (const x of &q) {
+    q.push(1); //~ EN0706
+  }
+}
+
+private function pushThroughLocal(): void {
+  let q: i64[] = [1, 2];
+  for (const x of &q) {
+    const r = &q; r.push(1); //~ EN0706
+  }
+}
+
+private function pushOnOneBranch(c: bool): void {
+  let q: i64[] = [1, 2];
+  for (const x of &q) {
+    if (c) { q.push(1); } //~ EN0706
+  }
+}
+
+private function elementWrite(): void {
+  let q: i64[] = [1, 2];
+  for (const x of &q) {
+    q[0] = 9; //~ EN0706
+  }
+}
+
+private function reassignContinue(): void {
+  let q: i64[] = [1, 2];
+  for (const x of &q) {
+    q = []; continue; //~ EN0706
+  }
+}
+
+private function clearField(): void {
+  let o = new O();
+  for (const x of &o.items) {
+    o.clear(); //~ EN0706
+  }
+}
+
+private function resetField(): void {
+  let o = new O();
+  for (const x of &o.items) {
+    reset(&o); //~ EN0706
+  }
+}
+
+private function replaceOwner(): void {
+  let o = new O();
+  for (const x of &o.items) {
+    o = make(); //~ EN0706
+  }
+}
+
+private function growParam(q: &i64[]): void {
+  for (const x of q) {
+    g(q); //~ EN0706
+  }
+}
+
+private function refill(): void {
+  let a: i64[3] = [1, 2, 3];
+  for (const x of &a) {
+    a = [0; 3]; //~ EN0706
+  }
+}

@@ -1,0 +1,5 @@
+$ enrang explain EN0505
+[exit 2]
+[stdout]
+[stderr]
+error: `EN0505` is retired: `match` arms bind no variables now

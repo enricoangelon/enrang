@@ -1,0 +1,4 @@
+const maybe: i64 | null = 5;
+const other: i64 | null = null;
+console.log(maybe != null && maybe == 5);
+console.log(maybe == null, maybe == other);

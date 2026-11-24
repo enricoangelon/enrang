@@ -1,0 +1,208 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/inf-08.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/inf-08.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+interface TokenReader { }
+fn TokenReader::next(let _1: &Self) -> readonly &string | null;
+class Tokens {
+  private text: &string;
+  private pos: isize = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: string; // source
+  let mut _3: Tokens; // t
+  let _4: &string temp;
+  let _5: &Tokens temp;
+  let _6: void temp;
+  let mut _7: &string | null; // tok
+  let _8: &Tokens temp;
+  let _9: bool temp;
+  let _10: u32 temp;
+  let _11: void temp;
+  let _12: &string temp;
+  let _13: &string | null temp;
+  let _14: &Tokens temp;
+  fact f0: _7 nonnull;
+  use f0 at bb4[0];
+  test f0 at bb4;
+  bb0: {
+    storage_live(_2);
+    _2 = const "let x = 42": string;
+    storage_live(_3);
+    set_table(_3, Tokens);
+    _4 = &_2 [explicit];
+    _5 = &_3 [auto-borrow];
+    _6 = Tokens::#ctor(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    storage_live(_7);
+    _8 = &_3 [auto-borrow];
+    _7 = Tokens::next(move _8) -> bb2;
+  }
+  bb2: {
+    goto bb3;
+  }
+  bb3: {
+    _10 = discriminant(_7);
+    _9 = ne(move _10, const 0: u32);
+    switch move _9 [0: bb5, otherwise: bb4];
+  }
+  bb4: {
+    check_tag(_7, Present);
+    _12 = &*(_7 as Present).0 [reborrow];
+    _11 = form log(move _12) -> bb6;
+  }
+  bb5: {
+    storage_dead(_7);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb6: {
+    _14 = &_3 [auto-borrow];
+    _13 = Tokens::next(move _14) -> bb7;
+  }
+  bb7: {
+    _7 = move _13;
+    goto bb3;
+  }
+}
+
+fn Tokens::#ctor(_1: &Tokens, _2: &string) -> void {
+  let _1: &Tokens; // this
+  let _2: &string; // text
+  let _3: &string temp;
+  bb0: {
+    switch const overridden(pos): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &*_2 [reborrow];
+    (*_1).text = move _3;
+    return;
+  }
+  bb2: {
+    field_init((*_1).pos, const 0: isize);
+    goto bb1;
+  }
+}
+
+fn Tokens::next(_1: &Tokens) -> &string | null {
+  let _1: &Tokens; // this
+  let _2: bool temp;
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: &string temp;
+  let _6: isize; // start
+  let _7: isize temp;
+  let _8: &string temp;
+  let _9: isize | null temp;
+  let _10: &string temp;
+  bb0: {
+    _3 = copy (*_1).pos;
+    _5 = copy (*_1).text;
+    _4 = "core/string"::string::length(move _5) -> bb3;
+  }
+  bb1: {
+    _0 = null;
+    return;
+  }
+  bb2: {
+    storage_live(_6);
+    _6 = copy (*_1).pos;
+    _7 = copy (*_1).pos;
+    (*_1).pos = checked_add(copy _7, const 1: isize);
+    _9 = present(copy (*_1).pos);
+    _10 = copy (*_1).text;
+    _8 = "core/string"::string::slice(move _10, copy _6, move _9, const 2: isize) -> bb4;
+  }
+  bb3: {
+    _2 = ge(move _3, move _4);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb4: {
+    _0 = present(move _8);
+    storage_dead(_6);
+    return;
+  }
+}
+
+@private fn firstTwo<T extends TokenReader>(_1: &T) -> void {
+  let _1: &T; // t
+  let _2: &string | null; // a
+  let _3: &T temp;
+  let _4: void temp;
+  let _5: &(&string | null) temp;
+  let _6: &string | null; // b
+  let _7: &T temp;
+  let _8: void temp;
+  let _9: &(&string | null) temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = TokenReader::next(move _3) -> bb1;
+  }
+  bb1: {
+    _5 = &_2 [auto-borrow];
+    _4 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    storage_live(_6);
+    _7 = &*_1 [reborrow];
+    _6 = TokenReader::next(move _7) -> bb3;
+  }
+  bb3: {
+    _9 = &_6 [auto-borrow];
+    _8 = form log(move _9) -> bb4;
+  }
+  bb4: {
+    storage_dead(_6);
+    storage_dead(_2);
+    return;
+  }
+}
+
+@private fn viaInterface<implicit TokenReader>(_1: &TokenReader) -> void {
+  let _1: &TokenReader; // t
+  let _2: &string | null; // a
+  let _3: &TokenReader temp;
+  let _4: void temp;
+  let _5: &(&string | null) temp;
+  let _6: &string | null; // b
+  let _7: &TokenReader temp;
+  let _8: void temp;
+  let _9: &(&string | null) temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = TokenReader::next(move _3) -> bb1;
+  }
+  bb1: {
+    _5 = &_2 [auto-borrow];
+    _4 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    storage_live(_6);
+    _7 = &*_1 [reborrow];
+    _6 = TokenReader::next(move _7) -> bb3;
+  }
+  bb3: {
+    _9 = &_6 [auto-borrow];
+    _8 = form log(move _9) -> bb4;
+  }
+  bb4: {
+    storage_dead(_6);
+    storage_dead(_2);
+    return;
+  }
+}

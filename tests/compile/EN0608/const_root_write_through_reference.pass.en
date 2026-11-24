@@ -1,0 +1,6 @@
+const k = 12;
+let z = 5;
+let w = &k;
+w = &z;
+*w = 13;
+console.log(z);

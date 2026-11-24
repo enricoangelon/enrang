@@ -1,0 +1,7 @@
+const x = make<i64>();
+const y: string[] = make();
+console.log(x, y);
+
+private function make<T>(): T[] {
+  return [];
+}

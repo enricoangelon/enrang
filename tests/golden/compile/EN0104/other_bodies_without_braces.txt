@@ -1,0 +1,53 @@
+$ enrang check tests/compile/EN0104/other_bodies_without_braces.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0104]: `else` needs braces around its body
+ --> tests/compile/EN0104/other_bodies_without_braces.fail.en:5:8
+  |
+5 | } else console.log("idle"); //~ EN0104
+  |        ^^^^^^^^^^^^^^^^^^^^ this statement is not in braces
+  |
+help: add braces around the body
+  |
+5 | } else { console.log("idle"); } //~ EN0104
+  |        ++                    ++
+  = explain: run `enrang explain EN0104`
+
+error[EN0104]: `while` needs braces around its body
+ --> tests/compile/EN0104/other_bodies_without_braces.fail.en:6:14
+  |
+6 | while (busy) busy = false; //~ EN0104
+  |              ^^^^^^^^^^^^^ this statement is not in braces
+  |
+help: add braces around the body
+  |
+6 | while (busy) { busy = false; } //~ EN0104
+  |              ++             ++
+  = explain: run `enrang explain EN0104`
+
+error[EN0104]: `for` needs braces around its body
+ --> tests/compile/EN0104/other_bodies_without_braces.fail.en:7:21
+  |
+7 | for (const x of xs) console.log(x); //~ EN0104
+  |                     ^^^^^^^^^^^^^^^ this statement is not in braces
+  |
+help: add braces around the body
+  |
+7 | for (const x of xs) { console.log(x); } //~ EN0104
+  |                     ++               ++
+  = explain: run `enrang explain EN0104`
+
+error[EN0104]: `do` needs braces around its body
+ --> tests/compile/EN0104/other_bodies_without_braces.fail.en:8:4
+  |
+8 | do busy = false; while (busy); //~ EN0104
+  |    ^^^^^^^^^^^^^ this statement is not in braces
+  |
+help: add braces around the body
+  |
+8 | do { busy = false; } while (busy); //~ EN0104
+  |    ++             ++
+  = explain: run `enrang explain EN0104`
+
+error: aborting due to 4 previous errors

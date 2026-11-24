@@ -1,0 +1,17 @@
+@packed public final class A {
+  public a: u8;
+  public b: u32;
+}
+
+@repr("C") @align(8) public final class F {
+  public a: u8;
+}
+
+@align(4096) public final class Page {
+  public bytes: u8[4096];
+}
+
+@repr("u16") public enum K {
+  A,
+  B,
+}

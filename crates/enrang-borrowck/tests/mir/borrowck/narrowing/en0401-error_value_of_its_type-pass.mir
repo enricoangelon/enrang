@@ -1,0 +1,57 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/error_value_of_its_type.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/error_value_of_its_type.pass";
+@lang("error") interface "core/prelude"::Error { }
+@lang("result") enum "core/result"::Result<T, E extends Error> { Ok { value: T }, Err { error: E } }
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::isEmpty(_1: &string) -> bool;
+enum AgeError { NotANumber, Negative }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: void temp;
+  let _3: Result<i64, AgeError> temp;
+  let _4: &Result<i64, AgeError> temp;
+  bb0: {
+    _3 = parse(const "x": &string) -> bb1;
+  }
+  bb1: {
+    _4 = &_3 [temp-arg];
+    _2 = form log(move _4) -> bb2;
+  }
+  bb2: {
+    storage_dead(_3);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn parse(_1: &string) -> Result<i64, AgeError> {
+  let _1: &string; // s
+  let _2: bool temp;
+  let _3: &string temp;
+  let _4: AgeError temp;
+  let _5: AgeError temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = "core/string"::string::isEmpty(move _3) -> bb3;
+  }
+  bb1: {
+    _4 = AgeError::Negative {};
+    _0 = Result<i64, AgeError>::Err { error: move _4 };
+    return;
+  }
+  bb2: {
+    _5 = AgeError::NotANumber {};
+    _0 = Result<i64, AgeError>::Err { error: move _5 };
+    return;
+  }
+  bb3: {
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+}

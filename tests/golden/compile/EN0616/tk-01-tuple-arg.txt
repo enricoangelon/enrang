@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN0616/tk-01-tuple-arg.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `mk`
+ --> tests/compile/EN0616/tk-01-tuple-arg.fail.en:3:1
+  |
+3 | *m[0] = [2]; //~ EN0616
+  | ^^^^^^^^^^^ written here
+  |
+  = note: `mk` returns two references that may point at the same data
+  = explain: run `enrang explain EN0616`
+
+error[EN0707]: cannot borrow `g2` as exclusive twice at the same time
+ --> tests/compile/EN0616/tk-01-tuple-arg.fail.en:6:21
+  |
+6 | const p = id2([&g2, &g2]); //~ EN0707
+  |                     ^^^ second exclusive borrow
+  |               ---------- `the borrow` is used again here
+  |                --- first exclusive borrow
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 2 previous errors

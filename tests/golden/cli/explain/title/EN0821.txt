@@ -1,0 +1,7 @@
+$ enrang explain EN0821
+[exit 0]
+[stdout]
+EN0821: second `@globalAllocator`
+
+No explain page yet: it arrives with milestone M4, and this is milestone M3.
+[stderr]

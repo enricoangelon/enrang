@@ -1,0 +1,5 @@
+let q: i64[] = [1, 2];
+for (const x of &q) {
+  *x = 5;
+  q.push(1); //~ EN0706 "cannot mutate `q` while iterating over it"
+}

@@ -1,0 +1,10 @@
+const name = "Ada".toString();
+const xs = [1, 2, 3];
+for (const x of &xs) {
+  greet(name); //~ EN0611 "`name` was moved in an earlier turn"
+  console.log(x);
+}
+
+public function greet(n: string): void {
+  console.log(n);
+}

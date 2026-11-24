@@ -1,0 +1,8 @@
+fetch(2);
+const ws = new WebSocket { url: "ws://example.com" };
+
+private function fetch(n: i64): void {}
+
+public final class WebSocket {
+  public url: string;
+}

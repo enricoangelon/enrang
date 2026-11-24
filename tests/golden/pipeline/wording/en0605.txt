@@ -1,0 +1,10 @@
+error[EN0605]: cannot move out of `*b`
+ --> main.en:2:11
+  |
+2 | const s = *b;
+  |           ^^ the contents of a `Box` can't be moved out
+  |
+help: take the value with `b.unbox()`
+  = explain: run `enrang explain EN0605`
+
+error: aborting due to 1 previous error

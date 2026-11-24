@@ -1,0 +1,27 @@
+$ enrang check tests/compile/EN0709/forof-field-source-moves.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0709]: cannot move `h` while iterating over it
+  --> tests/compile/EN0709/forof-field-source-moves.fail.en:10:5
+   |
+ 9 |   for (const x of &h.items) {
+   |                   -------- `h` is borrowed here
+10 |     takeH(h); //~ EN0709
+   |     ^^^^^^^^ `h` moves here
+   |
+help: move `h` after the loop, or move a copy: `h.clone()`
+   = explain: run `enrang explain EN0709`
+
+error[EN0709]: cannot move `h` while iterating over it
+  --> tests/compile/EN0709/forof-field-source-moves.fail.en:17:5
+   |
+16 |   for (const x of &h.items) {
+   |                   -------- `h` is borrowed here
+17 |     h.finish(); //~ EN0709
+   |     ^^^^^^^^^^ `h` moves here
+   |
+help: move `h` after the loop, or move a copy: `h.clone()`
+   = explain: run `enrang explain EN0709`
+
+error: aborting due to 2 previous errors

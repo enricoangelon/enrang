@@ -1,0 +1,8 @@
+//! row: `const xs = []; xs.push(1);`; `for (cons
+const xs = [];
+xs.push(1); //~ EN0614
+
+const ys: i64[] = [1, 2];
+for (const y of &ys) { //~ EN0608
+  *y = 1;
+}

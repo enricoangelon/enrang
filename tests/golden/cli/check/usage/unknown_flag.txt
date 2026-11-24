@@ -1,0 +1,6 @@
+$ enrang check --bogus
+[exit 2]
+[stdout]
+[stderr]
+error: `--bogus` is not a flag of `enrang check`
+usage: enrang check [file] [flags]

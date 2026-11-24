@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0707/two_writable_views.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: cannot borrow `v` as exclusive twice at the same time
+ --> tests/compile/EN0707/two_writable_views.fail.en:3:11
+  |
+2 | const a = v.slice(0, 2);
+  |           - first exclusive borrow, held by `a`
+3 | const b = v.slice(2, 4); //~ EN0707 "cannot borrow `v` as exclusive twice at the same time"
+  |           ^^^^^^^^^^^^^ second exclusive borrow
+4 | a[0] = b[0];
+  | - `a` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 1 previous error

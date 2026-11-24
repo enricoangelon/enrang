@@ -1,0 +1,20 @@
+$ enrang check tests/compile/EN0706/m3gate-closure-through-closure.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `a` cannot change while `g` still points into it
+ --> tests/compile/EN0706/m3gate-closure-through-closure.fail.en:5:1
+  |
+2 | const e = &a[0];
+  |           ----- shared borrow of `a` starts here, held by `g`
+3 | const f = (): void => { console.log(*e); };
+4 | const g = (): void => { f(); };
+5 | a.push(2); //~ EN0706 "`a` cannot change while `g`"
+  | ^^^^^^^^^ `push` changes `a`, so it needs exclusive access to it
+6 | g();
+  | - `g` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

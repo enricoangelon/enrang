@@ -1,0 +1,39 @@
+const source: string = "let x = 42";
+let t = new Tokens(&source);
+let tok = t.next();
+while (tok != null) {
+  console.log(tok);
+  tok = t.next();
+}
+
+private function firstTwo<T extends TokenReader>(t: &T): void {
+  const a = t.next();
+  console.log(a);
+  const b = t.next();
+  console.log(b);
+}
+
+private function viaInterface(t: &TokenReader): void {
+  const a = t.next();
+  console.log(a);
+  const b = t.next();
+  console.log(b);
+}
+
+public interface TokenReader {
+  let next(): readonly &string | null;
+}
+
+public class Tokens implements TokenReader {
+  private text: &string;
+  private pos: isize = 0;
+
+  public constructor(text: &string) { this.text = text; }
+
+  public next(): &string | null {
+    if (this.pos >= this.text.length()) { return null; }
+    const start = this.pos;
+    this.pos += 1;
+    return this.text.slice(start, this.pos);
+  }
+}

@@ -1,0 +1,28 @@
+const text = "let x = 42";
+let v = new View(text.clone());
+firstTwo(&v);
+firstTwoOf(&v);
+
+public interface TokenReader {
+  let next(): isize;
+}
+
+private class View implements TokenReader {
+  private text: string;
+  private pos: isize = 0;
+  public constructor(text: string) {
+    this.text = text;
+  }
+  public next(): isize {
+    this.pos += 1;
+    return this.pos;
+  }
+}
+
+private function firstTwo(t: &TokenReader): void {
+  console.log(t.next(), t.next());
+}
+
+private function firstTwoOf<T extends TokenReader>(t: &T): void {
+  console.log(t.next(), t.next());
+}

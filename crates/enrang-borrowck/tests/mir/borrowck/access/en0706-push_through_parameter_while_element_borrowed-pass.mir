@@ -1,0 +1,38 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/push_through_parameter_while_element_borrowed.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/push_through_parameter_while_element_borrowed.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+fn f(_1: &i64[]) -> void {
+  let _1: &i64[]; // a
+  let _2: &i64; // e
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: void temp;
+  let _6: &i64 temp;
+  let _7: void temp;
+  let _8: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const 0: isize;
+    _4 = len(*_1);
+    check_bounds(copy _3, copy _4);
+    _2 = &(*_1)[_3] [explicit];
+    _6 = &*_2 [auto-borrow];
+    _5 = form log(move _6) -> bb1;
+  }
+  bb1: {
+    _8 = &*_1 [reborrow];
+    _7 = "alloc/array"::Array<i64>::push(move _8, const 1: i64) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    return;
+  }
+}

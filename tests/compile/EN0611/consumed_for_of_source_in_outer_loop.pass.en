@@ -1,0 +1,10 @@
+//! covers: H22
+let q = ["a", "b"];
+let n = 0;
+outer: while (n < 2) {
+  n++;
+  for (const x of &q) {
+    console.log(x);
+    continue outer;
+  }
+}

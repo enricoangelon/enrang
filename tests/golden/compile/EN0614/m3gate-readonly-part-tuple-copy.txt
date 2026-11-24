@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0614/m3gate-readonly-part-tuple-copy.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `u[0]` is read-only here, so `push` cannot change it
+  --> tests/compile/EN0614/m3gate-readonly-part-tuple-copy.fail.en:11:5
+   |
+ 7 |   private t: [readonly &i64[], i32];
+   |   ---------------------------------- `t` is declared with a `readonly &` part here
+...
+11 |     u[0].push(1); //~ EN0614 "`u[0]` is read-only here, so"
+   |     ^^^^^^^^^^^^ `push` changes `u[0]`
+   |
+   = note: it comes from a `readonly &` part of the field `t`
+   = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

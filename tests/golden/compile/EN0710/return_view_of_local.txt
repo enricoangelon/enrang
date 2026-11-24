@@ -1,0 +1,22 @@
+$ enrang check tests/compile/EN0710/return_view_of_local.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0710]: cannot return a reference to local `xs`
+ --> tests/compile/EN0710/return_view_of_local.fail.en:3:10
+  |
+2 |   const xs: i64[] = [1, 2, 3];
+  |         -- `xs` is dropped when `head` returns
+3 |   return xs.slice(0, 2); //~ EN0710 "cannot return a reference to local `xs`"
+  |          ^^ this reference would point at freed memory
+  |
+  = rule: a returned reference must borrow from a parameter, and `head` has no reference parameters.
+help: keep a copy: return [...xs.slice(0, 2)];
+  |
+1 | public function head(): i64[] {
+  |                         ~~~~~
+3 |   return [...xs.slice(0, 2)]; //~ EN0710 "cannot return a reference to local `xs`"
+  |          ~~~~~~~~~~~~~~~~~~~
+  = explain: run `enrang explain EN0710`
+
+error: aborting due to 1 previous error

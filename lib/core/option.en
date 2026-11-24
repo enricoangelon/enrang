@@ -1,0 +1,8 @@
+// SPEC 8.2, `T | null`: `core/option`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `T` ranges over value types, so on a nullable reference these are EN0703.
+extend<T> T | null {
+  public let take(): T | null;
+  public isNull(): bool;
+  public move orElse(d: () => T): T;
+  public clone(): T | null where T extends Clone;
+}

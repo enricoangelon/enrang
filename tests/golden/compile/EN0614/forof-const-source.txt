@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0614/forof-const-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `xs` is `const`, so `push` cannot change it
+ --> tests/compile/EN0614/forof-const-source.fail.en:3:1
+  |
+2 | const xs = [];
+  |       -- declared `const` here: immutable all the way down
+3 | xs.push(1); //~ EN0614
+  | ^^^^^^^^^^ `push` changes `xs`
+  |
+  = from TypeScript: a TS `const` only freezes the binding. In Enrang values have no shared identity, so `const` freezes the value.
+help: make the binding mutable
+  |
+2 | let xs = [];
+  | ~~~
+  = explain: run `enrang explain EN0614`
+
+error[EN0608]: cannot change `ys`, because `ys` is `const`
+ --> tests/compile/EN0614/forof-const-source.fail.en:6:18
+  |
+6 | for (const y of &ys) { //~ EN0608
+  |                  ^^ written here
+  |
+help: declare it `let ys`
+  |
+5 | let ys: i64[] = [1, 2];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 2 previous errors

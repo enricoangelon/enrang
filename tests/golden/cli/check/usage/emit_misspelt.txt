@@ -1,0 +1,8 @@
+$ enrang check --emit=sumary main.en
+[exit 2]
+[stdout]
+[stderr]
+error: `--emit=sumary` is not a value `enrang check` takes
+help: did you mean `--emit=summary`?
+note: `enrang check` emits `mir` or `summary`
+usage: enrang check [file] [flags]

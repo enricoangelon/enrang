@@ -1,0 +1,5 @@
+let q: i64[] = [1, 2];
+function show(): void { console.log(q.length()); }
+for (const x of &q) {
+  show();
+}

@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0614/readonly_tuple_part_receiver.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `this.t[0]` is read-only here, so `push` cannot change it
+ --> tests/compile/EN0614/readonly_tuple_part_receiver.fail.en:7:5
+  |
+2 |   private t: [readonly &i64[], i32];
+  |   ---------------------------------- `t` is declared with a `readonly &` part here
+...
+7 |     this.t[0].push(4); //~ EN0614
+  |     ^^^^^^^^^^^^^^^^^ `push` changes `this.t[0]`
+  |
+  = note: it comes from a `readonly &` part of the field `t`
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

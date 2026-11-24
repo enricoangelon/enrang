@@ -1,0 +1,5 @@
+let q;
+const c = [...q]; //~ EN0410
+q = [1];
+const d = [...[]]; //~ EN0410
+console.log(c, d);

@@ -1,0 +1,18 @@
+//! covers: C20
+const p = { name: "Ada", age: 36 };
+const u = new User { name: "Ada", age: 36 };
+greet(&p);
+greet(&u);
+const q: &{ name: string } = &p;
+const r: &{ name: string } = &u;
+console.log(q.name, r.name);
+console.log(nameOf(u));
+
+public function greet(x: &{ name: string }): void { console.log(`hi ${x.name}`); }
+
+public function nameOf(x: { name: string }): string { return x.name.clone(); }
+
+public class User {
+  public name: string;
+  public age: i64;
+}

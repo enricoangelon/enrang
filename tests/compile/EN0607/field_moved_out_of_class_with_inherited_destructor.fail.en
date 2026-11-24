@@ -1,0 +1,15 @@
+const f = new LogFile("a.txt");
+const n = f.name; //~ EN0607
+console.log(n);
+
+public class Handle {
+  public destructor() {
+    console.log("close");
+  }
+}
+
+public class LogFile extends Handle {
+  public constructor(public name: string) {
+    super();
+  }
+}

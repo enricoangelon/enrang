@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0703/named-is-null-on-reference.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0703]: `T` can't stand for the reference `&User`
+ --> tests/compile/EN0703/named-is-null-on-reference.fail.en:3:10
+  |
+3 |   return t.isNull(); //~ EN0703
+  |          ^^^^^^^^^^ this makes `T` the reference `&User`
+  |
+help: compare with `null`: `t == null`
+  |
+3 |   return t == null; //~ EN0703
+  |          ~~~~~~~~~
+  = explain: run `enrang explain EN0703`
+
+error: aborting due to 1 previous error

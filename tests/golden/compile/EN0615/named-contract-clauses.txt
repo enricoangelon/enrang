@@ -1,0 +1,53 @@
+$ enrang check tests/compile/EN0615/named-contract-clauses.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `File.close` and `Closer.close` must both be `move` or both not
+  --> tests/compile/EN0615/named-contract-clauses.fail.en:18:30
+   |
+ 3 |   close(): void;
+   |   ----- declared here
+...
+18 | public class File implements Closer { //~ EN0615 "`File.close` and `Closer.close` must both be `move` or both not"
+   |                              ^^^^^^ here
+   |
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `Door.open` and `Opener.open` must both be `move` or both not
+  --> tests/compile/EN0615/named-contract-clauses.fail.en:23:30
+   |
+ 7 |   move open(): void;
+   |        ---- declared here
+...
+23 | public class Door implements Opener { //~ EN0615 "`Door.open` and `Opener.open` must both be `move` or both not"
+   |                              ^^^^^^ here
+   |
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `Words.next` returns a read-only reference, but `TokenReader` declares a writable one
+  --> tests/compile/EN0615/named-contract-clauses.fail.en:28:31
+   |
+11 |   let next(): &string | null;
+   |       ---- declared here
+...
+28 | public class Words implements TokenReader { //~ EN0615 "`Words.next` returns a read-only reference, but `TokenReader` declares a writable one"
+   |                               ^^^^^^^^^^^ returns a read-only reference
+   |
+help: if callers only read it, write `let next(): readonly &string | null;` in `TokenReader`
+   |
+11 |   let next(): readonly &string | null;
+   |               +++++++++
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `Keeper.put` stores `s` into `this`, but `Sink.put` declares no such store
+  --> tests/compile/EN0615/named-contract-clauses.fail.en:42:32
+   |
+15 |   let put(s: &string): void;
+   |       --- declared here
+...
+42 | public class Keeper implements Sink { //~ EN0615 "`Keeper.put` stores `s` into `this`, but `Sink.put` declares no such store"
+   |                                ^^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 4 previous errors

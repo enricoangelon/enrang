@@ -1,0 +1,9 @@
+error[EN0614]: `lanes` returns two references that may point at the same data, so `push` cannot change it
+ --> main.en:3:1
+  |
+3 | v.push(3); console.log(*e);
+  | ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

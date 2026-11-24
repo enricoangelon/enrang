@@ -1,0 +1,32 @@
+let fan = new Loyal("Ada");
+cheer(&fan);
+
+public class Picker {
+  protected favorite: string;
+
+  public pick(a: &string, b: &string): &string {
+    return a.length() > b.length() ? a : b;
+  }
+
+  public reset(): void {
+    this.favorite = "";
+  }
+}
+
+public class Loyal extends Picker {
+  public constructor(favorite: string) {
+    super();
+    this.favorite = favorite;
+  }
+
+  public override pick(a: &string, b: &string): &string {
+    return &this.favorite;
+  }
+}
+
+private function cheer(l: &Loyal): void {
+  let x: string = "Bo";
+  let y: string = "Grace";
+  *l.pick(&x, &y) += "!";
+  console.log(l.pick(&x, &y));
+}

@@ -1,0 +1,13 @@
+public class Animal {
+  public constructor(public age: i64) {}
+}
+
+public class Dog extends Animal {
+  public constructor(age: i64, n: i64) {
+    let i = 0;
+    super(age);
+    while (i < n) {
+      i++;
+    }
+  }
+}

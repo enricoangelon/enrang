@@ -1,0 +1,16 @@
+public class Bag {
+  public items: i64[] = [];
+}
+
+public class Holder {
+  private r: &Bag;
+
+  public constructor(r: &Bag) { this.r = r; }
+
+  public keep(x: &Bag): &Bag {
+    this.r = x;
+    return x; //~ EN0708
+  }
+
+  public first(): &i64 { return &this.r.items[0]; }
+}

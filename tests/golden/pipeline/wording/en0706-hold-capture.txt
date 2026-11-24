@@ -1,0 +1,14 @@
+error[EN0706]: cannot mutate `q` while iterating over it
+ --> main.en:2:55
+  |
+2 | let q: i64[] = [1]; for (const x of &q) { run(() => { q.push(1); }); }
+  |                                                       ^ conflicting mutable access
+  |                                     -- immutable borrow begins here
+  |
+help: loop over a copy
+  |
+2 | let q: i64[] = [1]; for (const x of [...q]) { run(() => { q.push(1); }); }
+  |                                     ~~~~ +
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

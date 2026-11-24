@@ -1,0 +1,6 @@
+const big: i64 = 3_000_000_000;
+const byte: u8 = 255;
+const least: i64 = -9223372036854775808;
+const all = 0xFFFFFFFFFFFFFFFF as u64;
+const vga = 0xB8000 as *u16;
+console.log(big, byte, least, all, vga as usize);

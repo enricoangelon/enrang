@@ -1,0 +1,37 @@
+$ enrang check --target=x86_64-linux tests/compile/EN0814/hosted_section_names.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0814]: section `.boot` is not allowed on `x86_64-linux`
+ --> tests/compile/EN0814/hosted_section_names.fail.en:2:10
+  |
+2 | @section(".boot") public function early(): void {} //~ EN0814 "section `.boot` is not allowed on `x86_64-linux`"
+  |          ^^^^^^^ a hosted target takes names starting with `.text.`, `.data.`, `.rodata.` or `.bss.`
+  |
+  = explain: run `enrang explain EN0814`
+
+error[EN0814]: section `.text` is not allowed on `x86_64-linux`
+ --> tests/compile/EN0814/hosted_section_names.fail.en:4:10
+  |
+4 | @section(".text") public function plain(): void {} //~ EN0814 "section `.text` is not allowed on `x86_64-linux`"
+  |          ^^^^^^^ a hosted target takes names starting with `.text.`, `.data.`, `.rodata.` or `.bss.`
+  |
+  = explain: run `enrang explain EN0814`
+
+error[EN0814]: section `.bss.stack` is reserved
+ --> tests/compile/EN0814/hosted_section_names.fail.en:6:10
+  |
+6 | @section(".bss.stack") private unsafe let stack: u8[4096]; //~ EN0814 "section `.bss.stack` is reserved"
+  |          ^^^^^^^^^^^^ the compiler's stack lives there
+  |
+  = explain: run `enrang explain EN0814`
+
+error[EN0814]: section `custom` is not allowed on `x86_64-linux`
+ --> tests/compile/EN0814/hosted_section_names.fail.en:8:10
+  |
+8 | @section("custom") public const C: i64 = 1; //~ EN0814 "section `custom` is not allowed on `x86_64-linux`"
+  |          ^^^^^^^^ a hosted target takes names starting with `.text.`, `.data.`, `.rodata.` or `.bss.`
+  |
+  = explain: run `enrang explain EN0814`
+
+error: aborting due to 4 previous errors

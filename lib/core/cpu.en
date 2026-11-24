@@ -1,0 +1,5 @@
+// SPEC 10.3, `cpu`: `core/cpu`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `cpu.has("f")` is a compiler form (SPEC 6).
+public function vendor(): &string { unreachable(); }
+
+public function levelOf(): &string { unreachable(); }

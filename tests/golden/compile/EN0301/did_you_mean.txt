@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0301/did_you_mean.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0301]: cannot find `totl` in this scope
+ --> tests/compile/EN0301/did_you_mean.fail.en:2:13
+  |
+1 | const total = 10;
+  |       ----- a local with a similar name is declared here
+2 | console.log(totl); //~ EN0301 "cannot find `totl` in this scope"
+  |             ^^^^ not found
+  |
+help: did you mean `total`?
+  |
+2 | console.log(total); //~ EN0301 "cannot find `totl` in this scope"
+  |             ~~~~~
+  = explain: run `enrang explain EN0301`
+
+error: aborting due to 1 previous error

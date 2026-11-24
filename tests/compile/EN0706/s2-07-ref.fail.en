@@ -1,0 +1,6 @@
+let data: i64[] = [1, 2, 3];
+const e = &data[0];
+let pair: [&i64[], i32] = [&data, 1]; //~ EN0706
+const t = &pair;
+t[0].push(4);
+console.log(*e);

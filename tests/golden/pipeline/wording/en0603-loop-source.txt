@@ -1,0 +1,13 @@
+error[EN0603]: cannot move `this.items` out of `this`
+ --> main.en:3:40
+  |
+3 |   public all(): void { for (const x of this.items) { console.log(x); } }
+  |                                        ^^^^^^^^^^ `this.items` moves here
+  |
+help: to loop over the elements in place, write `&this.items`
+  |
+3 |   public all(): void { for (const x of &this.items) { console.log(x); } }
+  |                                        +
+  = explain: run `enrang explain EN0603`
+
+error: aborting due to 1 previous error

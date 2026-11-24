@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0709/fv-02-move-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0709]: cannot move `this` while it is borrowed
+  --> tests/compile/EN0709/fv-02-move-2.fail.en:24:12
+   |
+23 |     this.src = this.src.slice(1, this.src.length());
+   |                -------- shared borrow of `this` starts here
+24 |     return this; //~ EN0709
+   |            ^^^^ `this` moves here
+   |
+help: move `this` after its last borrow
+   = explain: run `enrang explain EN0709`
+
+error: aborting due to 1 previous error

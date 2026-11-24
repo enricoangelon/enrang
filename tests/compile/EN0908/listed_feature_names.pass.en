@@ -1,0 +1,12 @@
+import { cpu } from "core";
+
+public function probe(): bool {
+  const a = cpu.has("fpu") && cpu.has("cpuid") && cpu.has("bswap") && cpu.has("cmpxchg");
+  const b = cpu.has("xadd") && cpu.has("cmpxchg8b") && cpu.has("rdtsc") && cpu.has("msr");
+  const c = cpu.has("cr4") && cpu.has("cmov") && cpu.has("fcomi") && cpu.has("mmx");
+  const d = cpu.has("3dnow") && cpu.has("sse") && cpu.has("sse2") && cpu.has("sse3");
+  const e = cpu.has("ssse3") && cpu.has("sse4.1") && cpu.has("sse4.2") && cpu.has("popcnt");
+  const f = cpu.has("fxsave") && cpu.has("nopl") && cpu.has("pae") && cpu.has("nx");
+  const g = cpu.has("lm") && cpu.has("invlpg");
+  return a && b && c && d && e && f && g;
+}

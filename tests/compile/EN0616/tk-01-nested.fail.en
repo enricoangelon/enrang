@@ -1,0 +1,16 @@
+let grid: i64[][] = [[1], [2]];
+const n = nest(&grid);
+if (n != null) {
+  *n[0][0] = [9]; //~ EN0616
+}
+
+let grid2: i64[][] = [[1], [2]];
+const m = nest(&grid2);
+if (m != null) {
+  m[0][1].push(1); //~ EN0614
+}
+
+public function nest(rows: &Slice<i64[]>): [[&i64[], &i64[]], i32] | null {
+  for (const r of rows) { return [[r, r], 0]; }
+  return null;
+}

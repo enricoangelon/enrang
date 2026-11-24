@@ -1,0 +1,7 @@
+const r = save("a.txt");
+console.log(r);
+void save("b.txt");
+
+private function save(path: &string): Result<void> {
+  return Ok();
+}

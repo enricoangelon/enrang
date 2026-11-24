@@ -1,0 +1,17 @@
+const show = () => this; //~ EN0219 "`this` outside a method"
+console.log(this); //~ EN0219 "`this` outside a method"
+
+private function name(): string {
+  return this.name; //~ EN0219 "`this` outside a method"
+}
+
+private function base(): void {
+  super.m(); //~ EN0219 "`super` outside a method"
+}
+
+public class Counter {
+  public n: i64 = 0;
+  public static make(): i64 {
+    return this.n; //~ EN0219 "`this` outside a method"
+  }
+}

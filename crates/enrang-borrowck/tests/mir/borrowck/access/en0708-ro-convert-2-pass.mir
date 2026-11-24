@@ -1,0 +1,65 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0708/ro-convert-2.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0708/ro-convert-2.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[][]; // grid
+  let _3: i64[] temp;
+  let _4: i64[] temp;
+  let _5: &Slice<i64[]>; // v
+  let _6: &i64[][] temp;
+  let _7: &i64; // e
+  let _8: isize temp;
+  let _9: isize temp;
+  let _10: isize temp;
+  let _11: isize temp;
+  let _12: isize temp;
+  let _13: void temp;
+  let _14: isize temp;
+  let _15: isize temp;
+  let _16: &i64[] temp;
+  let _17: void temp;
+  let _18: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = intrinsic AllocArray<i64>(const 1: i64);
+    _4 = intrinsic AllocArray<i64>(const 2: i64, const 3: i64);
+    _2 = intrinsic AllocArray<i64[]>(move _3, move _4);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = &_2 [explicit];
+    _5 = convert(array_to_slice, move _6);
+    storage_live(_7);
+    _8 = const 1: isize;
+    _9 = const 0: isize;
+    _10 = len(_2);
+    _11 = len(_2);
+    check_bounds(copy _8, copy _11);
+    _12 = len(_2[_8]);
+    check_bounds(copy _8, copy _10);
+    check_bounds(copy _9, copy _12);
+    _7 = &_2[_8][_9] [explicit];
+    _14 = const 1: isize;
+    _15 = len(*_5);
+    check_bounds(copy _14, copy _15);
+    _16 = &(*_5)[_14] [auto-borrow];
+    _13 = form log(move _16) -> bb1;
+  }
+  bb1: {
+    _18 = &*_7 [auto-borrow];
+    _17 = form log(move _18) -> bb2;
+  }
+  bb2: {
+    storage_dead(_7);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

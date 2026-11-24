@@ -1,0 +1,25 @@
+const boxed = new Box(new Dog {});
+console.log(greet(&*boxed));
+console.log(boxed.speak());
+
+private function greet<T extends Speaker>(x: &T): string {
+  return x.speak();
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class Dog implements Speaker {
+  public speak(): string {
+    return "woof";
+  }
+}
+
+public class Kennel implements Speaker {
+  public dog: Box<Dog> = new Box(new Dog {});
+
+  public speak(): string {
+    return this.dog.speak();
+  }
+}

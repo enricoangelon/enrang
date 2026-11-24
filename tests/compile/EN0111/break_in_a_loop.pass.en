@@ -1,0 +1,9 @@
+const xs = [1, 2, 3];
+for (const x of &xs) {
+  if (x == 2) {
+    break;
+  }
+  xs.forEach((y) => {
+    console.log(y);
+  });
+}

@@ -1,0 +1,20 @@
+//! row: `@packed public final class P { public a:
+let p = new P { a: 1, b: [1, 2, 3, 4], g: [[1, 2], [3, 4]] };
+for (const x of &p.b) { //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+  console.log(x);
+}
+const r: isize = 1;
+for (const x of &p.g[r]) { //~ EN0804 "reference to the packed field `p.g[r]`, which may be misaligned"
+  console.log(x);
+}
+const e = &p.b[1]; //~ EN0804 "reference to the packed field `p.b[1]`, which may be misaligned"
+console.log(*e);
+const c = [...p.b]; //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+console.log(c);
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32[4];
+  public g: u32[2][2];
+}

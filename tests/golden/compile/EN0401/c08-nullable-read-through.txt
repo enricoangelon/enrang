@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/c08-nullable-read-through.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `string | null`, found `&string | null`
+ --> tests/compile/EN0401/c08-nullable-read-through.fail.en:3:26
+  |
+3 | const v: string | null = p?.name; //~ EN0401 "mismatched types: expected `string | null`, found `&string | null`"
+  |                          ^^^^^^^ this is `&string | null`
+  |          ------------- `string | null` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

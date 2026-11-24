@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1035/nested_function.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1035]: nested functions are not supported yet
+ --> tests/compile/EN1035/nested_function.fail.en:2:3
+  |
+2 |   function inner(): i64 { //~ EN1035 "nested functions are not supported yet"
+  |   ^^^^^^^^ a function inside a body
+  |
+  = note: functions are declared at the top level; an arrow is the function value a body can hold.
+help: Move it to the top level, or store an arrow in a local
+  = explain: run `enrang explain EN1035`
+
+error: aborting due to 1 previous error

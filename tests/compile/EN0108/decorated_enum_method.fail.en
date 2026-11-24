@@ -1,0 +1,8 @@
+public enum Color {
+  Red,
+  Green;
+
+  @inline public name(): string { //~ EN0108
+    return "a color";
+  }
+}

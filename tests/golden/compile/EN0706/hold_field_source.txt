@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0706/hold_field_source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `h.items` while iterating over it
+ --> tests/compile/EN0706/hold_field_source.fail.en:4:3
+  |
+2 | for (const x of &h.items) {
+  |                 -------- immutable borrow begins here
+3 |   h.count += 1;
+4 |   h.items.push(1); //~ EN0706 "cannot mutate `h.items` while iterating over it"
+  |   ^^^^^^^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+help: collect new jobs separately, or loop over a copy
+  |
+2 | for (const x of [...h.items]) {
+  |                 ~~~~       +
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

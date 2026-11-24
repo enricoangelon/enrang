@@ -1,0 +1,4 @@
+//! row: `[...move a]`; `a.extendCloned(&a)`
+let a: i64[] = [1, 2];
+const copy = [...a];
+a.extendCloned(&copy);

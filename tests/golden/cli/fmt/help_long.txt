@@ -1,0 +1,16 @@
+$ enrang fmt --help
+[exit 0]
+[stdout]
+Format files in the canonical style, or report those that would change.
+
+Usage: enrang fmt [paths] [--check]
+
+Each path is a file, or a directory whose `.en` files are formatted at any depth;
+`*.fail.en` files are skipped. With no path, or `-`, standard input is formatted
+to standard output. A file that does not parse is left untouched, and its errors
+are printed. Nothing changes the layout: there are no options.
+
+Flags:
+  --check     Change nothing; list the files that would change, and exit 1 if any would
+  -h, --help  Print this help
+[stderr]

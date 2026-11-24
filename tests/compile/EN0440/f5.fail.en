@@ -1,0 +1,3 @@
+public function keepName(x: { name: string }): { name: string } {
+  return x; //~ EN0440 "`x` may have more fields than `{ name: string }`"
+}

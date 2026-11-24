@@ -1,0 +1,18 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/top_level_const_write.fail.en. Its row's codes: EN0608.
+module "tests/compile/EN0608/top_level_const_write.fail";
+@private const TABLE: i64[3] = [1, 2, 3];
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: &i64[3]; // r
+  bb0: {
+    storage_live(_2);
+    _2 = const static_addr(TABLE): &i64[3];
+    (*_2)[0] = const 5: i64; //~ EN0608
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

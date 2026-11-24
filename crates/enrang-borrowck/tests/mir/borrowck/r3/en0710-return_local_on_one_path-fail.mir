@@ -1,0 +1,50 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0710/return_local_on_one_path.fail.en. Its row's codes: EN0710.
+module "tests/compile/EN0710/return_local_on_one_path.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+
+fn pick(_1: &i64[]) -> &i64 {
+  let _1: &i64[]; // xs
+  let _2: i64[]; // fallback
+  let _3: bool temp;
+  let _4: isize temp;
+  let _5: &i64[] temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  let _8: isize temp;
+  let _9: isize temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 0: i64);
+    _5 = &*_1 [reborrow];
+    _4 = "alloc/array"::Array<i64>::length(move _5) -> bb3;
+  }
+  bb1: {
+    _6 = const 0: isize;
+    _7 = len(*_1);
+    check_bounds(copy _6, copy _7);
+    _0 = &(*_1)[_6] [explicit];
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+  bb2: {
+    _8 = const 0: isize;
+    _9 = len(_2);
+    check_bounds(copy _8, copy _9);
+    _0 = &_2[_8] [explicit]; //~ EN0710 "cannot return a reference to local `fallback`"
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+  bb3: {
+    _3 = gt(move _4, const 0: isize);
+    switch move _3 [0: bb2, otherwise: bb1];
+  }
+}

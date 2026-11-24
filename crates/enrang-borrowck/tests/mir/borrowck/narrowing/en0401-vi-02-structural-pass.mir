@@ -1,0 +1,90 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/vi-02-structural.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/vi-02-structural.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+class Keeper { }
+interface Measured { }
+interface Sizer { }
+fn Sizer::size<T extends Measured>(_1: &Self, _2: &T) -> isize;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: Keeper; // k
+  let _6: *Keeper temp;
+  let _7: void temp;
+  let _8: void temp;
+  let _9: &Keeper temp;
+  let _10: &string temp;
+  let _11: isize | null temp;
+  let _12: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "hello": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = addr_of _5;
+    _7 = named_fill Keeper leaving()(move _6) -> bb2;
+  }
+  bb2: {
+    _9 = &_5 [explicit];
+    _11 = present(const 3: isize);
+    _12 = &_2 [auto-borrow];
+    _10 = "core/string"::string::slice(move _12, const 1: isize, move _11, const 2: isize) -> bb3;
+  }
+  bb3: {
+    _8 = f<Keeper>(move _9, move _10) -> bb4;
+  }
+  bb4: {
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Keeper::size<T extends Measured>(_1: &Keeper, _2: &T) -> isize {
+  let _1: &Keeper; // this
+  let _2: &T; // x
+  bb0: {
+    _0 = const 0: isize;
+    return;
+  }
+}
+
+@private fn f<implicit Sizer>(_1: &Sizer, _2: &string) -> void {
+  let _1: &Sizer; // z
+  let _2: &string; // v
+  let _3: void temp;
+  let _4: isize temp;
+  let _5: &string temp;
+  let _6: &Sizer temp;
+  let _7: &isize temp;
+  bb0: {
+    _5 = &*_2 [reborrow];
+    _6 = &*_1 [reborrow];
+    _4 = Sizer::size(move _6, move _5) -> bb1;
+  }
+  bb1: {
+    _7 = &_4 [temp-arg];
+    _3 = form log(move _7) -> bb2;
+  }
+  bb2: {
+    storage_dead(_4);
+    return;
+  }
+}

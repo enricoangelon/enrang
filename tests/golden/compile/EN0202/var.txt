@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0202/var.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0202]: `var` does not exist in Enrang
+ --> tests/compile/EN0202/var.fail.en:1:1
+  |
+1 | var count = 0; //~ EN0202 "`var` does not exist in Enrang"
+  | ^^^ use `let` for a binding that changes, `const` otherwise
+  |
+help: replace `var` with `let`
+  |
+1 | let count = 0; //~ EN0202 "`var` does not exist in Enrang"
+  | ~~~
+  = explain: run `enrang explain EN0202`
+
+error[EN0202]: `var` does not exist in Enrang
+ --> tests/compile/EN0202/var.fail.en:2:6
+  |
+2 | for (var i = 0; i < 3; i++) { //~ EN0202
+  |      ^^^ use `let` for a binding that changes, `const` otherwise
+  |
+help: replace `var` with `let`
+  |
+2 | for (let i = 0; i < 3; i++) { //~ EN0202
+  |      ~~~
+  = explain: run `enrang explain EN0202`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0416/satisfy-type-params.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0416]: `Log` does not satisfy `Dumper`: `dump` has another signature
+ --> tests/compile/EN0416/satisfy-type-params.fail.en:5:29
+  |
+5 | public class Log implements Dumper { //~ EN0416 "`Log` does not satisfy `Dumper`: `dump` has another signature"
+  |                             ^^^^^^ required by this `implements`
+6 |   public dump(x: &i64): void {}
+  |          ---- `Log.dump` is declared here
+  |
+  = note: `Dumper` declares `dump<T>(x: &T): void`
+  = explain: run `enrang explain EN0416`
+
+error: aborting due to 1 previous error

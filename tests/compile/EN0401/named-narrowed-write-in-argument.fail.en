@@ -1,0 +1,22 @@
+//! row: `o.add(clear(&o));` and `o.n = clear(&o);`
+let o: Counter | null = new Counter();
+if (o != null) {
+  o.add(clear(&o)); //~ EN0401 "`o` may be `null` here"
+}
+let p: Counter | null = new Counter();
+if (p != null) {
+  p.n = clear(&p); //~ EN0401 "`p` may be `null` here"
+}
+
+private function clear(x: &(Counter | null)): i64 {
+  *x = null;
+  return 1;
+}
+
+public class Counter {
+  public n: i64 = 0;
+
+  public add(k: i64): void {
+    this.n += k;
+  }
+}

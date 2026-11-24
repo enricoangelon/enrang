@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0615/inf-04-read-bit-put.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Sub.put` keeps `x` in the `readonly &` field `seen`, but `Base.put` keeps it in another field
+  --> tests/compile/EN0615/inf-04-read-bit-put.fail.en:24:19
+   |
+16 |   public put(x: &i64[]): void { this.keep = x; }
+   |          --- declared here
+...
+24 |   public override put(x: &i64[]): void { this.seen = x; } //~ EN0615
+   |                   ^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

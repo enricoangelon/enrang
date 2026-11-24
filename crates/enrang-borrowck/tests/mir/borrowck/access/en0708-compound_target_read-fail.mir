@@ -1,0 +1,51 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0708/compound_target_read.fail.en. Its row's codes: EN0708.
+module "tests/compile/EN0708/compound_target_read.fail";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: &string temp;
+  let _6: &string temp;
+  let _7: isize | null temp;
+  let _8: &string temp;
+  let _9: void temp;
+  let _10: void temp;
+  let _11: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "ab": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    _5 = &_2 [compound-target];
+    _7 = present(const 1: isize);
+    _8 = &_2 [auto-borrow]; //~ EN0708 "`s` can't be read here while the assignment appends to it"
+    _6 = "core/string"::string::slice(move _8, const 0: isize, move _7, const 2: isize) -> bb2;
+  }
+  bb2: {
+    _9 = form append(move _5, move _6) -> bb3;
+  }
+  bb3: {
+    _11 = &_2 [auto-borrow];
+    _10 = form log(move _11) -> bb4;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

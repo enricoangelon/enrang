@@ -1,0 +1,4 @@
+let limit: i64;
+const other: i64 = 3;
+limit = other;
+console.log(limit);

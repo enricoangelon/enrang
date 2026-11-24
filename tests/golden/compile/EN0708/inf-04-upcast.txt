@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0708/inf-04-upcast.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `this.dst` can't be read while `b` may write into it
+  --> tests/compile/EN0708/inf-04-upcast.fail.en:26:16
+   |
+25 |     const b: &Base = this;
+   |                      ---- borrowed for writing here, because `b` writes on line 26
+26 |     b.retarget(this.dst.slice(0, 1)); //~ EN0708
+   |                ^^^^^^^^ read here
+   |     - the write
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `this.dst` before line 25 or after line 26
+   = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

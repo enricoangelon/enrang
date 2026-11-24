@@ -1,0 +1,441 @@
+=== EN0601
+--- rule
+A value whose type is not Copy has one owner. Assigning it to another name, passing it to a parameter that takes it by value, returning it or putting it in a literal moves it, and the name it left holds no value after that: using that name, or any part of it, is EN0601. The message says where the value went, and the helps offer the two ways out: give the function a `&User` parameter and pass `&u` when it only needs to look at the value or change it, or pass a copy, `u.clone()`, to keep your own. Assigning a new value to a `let` gives it a value again. Numbers, `bool`, references and classes that declare `implements Copy` are copied, never moved.
+--- failing
+const u = new User("Ada");
+archive(u);
+console.log(u.name);
+
+private function archive(u: User): void { console.log(u.name); }
+
+private class User {
+  public constructor(public name: string) {}
+}
+--- fixed
+const u = new User("Ada");
+archive(&u);
+console.log(u.name);
+
+private function archive(u: &User): void { console.log(u.name); }
+
+private class User {
+  public constructor(public name: string) {}
+}
+--- typescript
+In TypeScript `archive(u)` passes a reference to the same object, and both names go on seeing it. In Enrang a value has one owner, so passing `u` hands it over, and the name that gave it away cannot be used again until it gets a new value.
+=== EN0602
+--- rule
+A `let` declared without a value starts at its type's default when the type has one: `0` for a number, `false`, `""` for a `string`, `[]` for an array and `null` for a nullable type. A class, an enum, a `Box`, a `Result` or a reference has no default, so a local of such a type needs a value on every path before it is used, and a use that some path reaches with none is EN0602. Give the local a value where it is declared, or on every path, as the `else` does in the fixed example. A value decided by branches can also be a `const` set from a ternary or a `match`.
+--- failing
+const score: i64 = 75;
+let grade: Grade;
+if (score >= 60) { grade = new Grade("pass"); }
+console.log(grade.label);
+
+private class Grade {
+  public constructor(public label: string) {}
+}
+--- fixed
+const score: i64 = 75;
+let grade: Grade;
+if (score >= 60) {
+  grade = new Grade("pass");
+} else {
+  grade = new Grade("fail");
+}
+console.log(grade.label);
+
+private class Grade {
+  public constructor(public label: string) {}
+}
+--- typescript
+TypeScript reports a variable used before it is assigned only with `strictNullChecks`, and otherwise reads `undefined`. Enrang has no `undefined`, so a local always holds a value of its type: its default, or one assigned on every path.
+=== EN0603
+--- rule
+A reference lends a value without handing it over. Reading a field that is not Copy through a reference where a value moves, in a `return`, an initialiser or a by-value argument, would take the field away from its owner, so it is EN0603; so is moving out of `this` in a method that is not marked `move`, or out of a raw pointer. Take a copy with `.clone()`, as the help offers, or take the parameter by value when the function should own what it was given.
+--- failing
+const ada = new User("Ada");
+console.log(nameOf(&ada));
+
+private function nameOf(u: &User): string { return u.name; }
+
+private class User {
+  public constructor(public name: string) {}
+}
+--- fixed
+const ada = new User("Ada");
+console.log(nameOf(&ada));
+
+private function nameOf(u: &User): string { return u.name.clone(); }
+
+private class User {
+  public constructor(public name: string) {}
+}
+--- typescript
+In TypeScript `return u.name` hands back the same string that the object keeps. In Enrang the `User` owns its `name`, and a function that only borrowed the user can read the name or copy it, but cannot take it away.
+=== EN0604
+--- rule
+An array owns its elements, and moving one out would leave a hole that the array still counts. So `xs[i]` of a type that is not Copy, used where a value moves, is EN0604. The helps list the three ways out: borrow the element with `&xs[i]`, copy it with `xs[i].clone()`, or take it out of the array with `xs.remove(i)`, which shortens it. Elements of a Copy type, such as numbers, are copied, never moved.
+--- failing
+const names: string[] = ["Ada", "Grace"];
+const first = names[0];
+console.log(first, names.length());
+--- fixed
+const names: string[] = ["Ada", "Grace"];
+const first = &names[0];
+console.log(first, names.length());
+--- typescript
+In TypeScript `const first = names[0]` shares the element with the array. In Enrang a name holds its own value, so it either borrows the element, copies it, or removes it from the array.
+=== EN0605
+--- rule
+A `Box<T>` owns one value on the heap, and `*b` names that value where it is. Moving it out with `*b` would leave the box owning nothing, so a move out of `*b` is EN0605. Call `b.unbox()`, as the help says: it consumes the box and gives back its value. Reading through the box needs no move: `b.name` reads a field, and `*b` of a Copy type is a copy.
+--- failing
+const boxed = new Box(new User("Ada"));
+const u = *boxed;
+console.log(u.name);
+
+private class User {
+  public constructor(public name: string) {}
+}
+--- fixed
+const boxed = new Box(new User("Ada"));
+const u = boxed.unbox();
+console.log(u.name);
+
+private class User {
+  public constructor(public name: string) {}
+}
+--- typescript
+TypeScript has no boxes, since every object already lives on the heap behind a reference. An Enrang `Box<T>` owns its value, and `unbox()` ends the box and hands the value over.
+=== EN0606
+--- rule
+A destructor runs by itself, exactly once, at the end of its object's life, and it is never a member. Calling it by name, as `x.destructor()`, is EN0606, on a type parameter too, since the object would then be destroyed twice. To end an object's life early, write `dispose(x)`: its destructor runs then, and `x` is gone. A `destructor` declared in an interface is EN0606 as well, because cleanup is no part of what an interface asks for.
+--- failing
+const timer = new Timer("load");
+timer.destructor();
+
+private class Timer {
+  public constructor(public name: string) {}
+
+  public destructor() { console.log(`${this.name} done`); }
+}
+--- fixed
+const timer = new Timer("load");
+dispose(timer);
+
+private class Timer {
+  public constructor(public name: string) {}
+
+  public destructor() { console.log(`${this.name} done`); }
+}
+--- typescript
+TypeScript cleanup is a method that code calls, such as `close()` or `[Symbol.dispose]()`, and nothing stops a second call or a use after it. An Enrang destructor runs once, and `dispose(x)` only moves that moment earlier.
+=== EN0607
+--- rule
+A field may be moved out of a value that is owned, and the other fields are then dropped one by one, unless the value's class, or that of any path the field is reached through, has a destructor: the destructor runs at the end of the object's life and needs every field, so moving one out is EN0607. Copy the field with `.clone()`, as the help says, or move the whole object.
+--- failing
+const log = new File("log.txt");
+const name = log.name;
+console.log(name);
+
+private class File {
+  public constructor(public name: string) {}
+
+  public destructor() { console.log(`${this.name} closed`); }
+}
+--- fixed
+const log = new File("log.txt");
+const name = log.name.clone();
+console.log(name);
+
+private class File {
+  public constructor(public name: string) {}
+
+  public destructor() { console.log(`${this.name} closed`); }
+}
+--- typescript
+TypeScript has no destructors and no moves, so reading a field never changes the object. In Enrang an object with a destructor is moved or dropped whole, so its cleanup always finds every field in place.
+=== EN0608
+--- rule
+`const` freezes a value all the way down, not only its name: nothing may change it, directly or through a reference made from it. Passing it where a function writes through its parameter, or writing through a reference that came from it, is EN0608, and so is changing a top-level `const`. The message names the function and the parameter that write. Declare the value `let`, as the help offers, or call a function that only reads its parameter. Calling a method that changes the value is EN0614, and assigning to the `const` itself is EN0613.
+--- failing
+const data: i64[] = [];
+fill(&data);
+console.log(data);
+
+private function fill(buf: &i64[]): void { buf.push(1); }
+--- fixed
+let data: i64[] = [];
+fill(&data);
+console.log(data);
+
+private function fill(buf: &i64[]): void { buf.push(1); }
+--- typescript
+A TypeScript `const` freezes only the binding, so a function can still push to the array it names. An Enrang `const` freezes the value, and the compiler knows which functions change what they are given.
+=== EN0609
+--- rule
+A `readonly` field is set by its class's constructor and never again: writing it anywhere else is EN0609, on a `let` object and through a writable reference alike. The secondary label points at the declaration. To change such a field, make a new object, as the fixed example does, or remove `readonly` if the field is meant to change.
+--- failing
+let ada = new User(1, "Ada");
+ada.id = 2;
+console.log(ada.id);
+
+private class User {
+  public constructor(public readonly id: i64, public name: string) {}
+}
+--- fixed
+let ada = new User(1, "Ada");
+ada = new User(2, "Ada");
+console.log(ada.id);
+
+private class User {
+  public constructor(public readonly id: i64, public name: string) {}
+}
+--- typescript
+TypeScript's `readonly` is the same rule, though an alias whose type leaves out `readonly` can still write the field. In Enrang no reference can write it outside the constructor.
+=== EN0610
+--- rule
+A constructor gives every field without a default a value before the object is used as a whole: reading `this`, calling a method, passing `this` or returning before then is EN0610, and so is using `this` in a field initialiser. In a class with a base, the constructor sets its own fields first and then calls `super(...)`, which may run only once every own field without a default is assigned, because the base constructor may call methods that the subclass overrides; a base field left unset is assigned after `super(...)`. Set the field first, as the help's fix-it does.
+--- failing
+public class Person {
+  public constructor(public name: string) {}
+}
+
+public class Animal {
+  public constructor(public name: string) {}
+}
+
+public class Dog extends Animal {
+  public owner: Person;
+
+  public constructor(name: string, owner: Person) {
+    super(name);
+    this.owner = owner;
+  }
+}
+--- fixed
+public class Person {
+  public constructor(public name: string) {}
+}
+
+public class Animal {
+  public constructor(public name: string) {}
+}
+
+public class Dog extends Animal {
+  public owner: Person;
+
+  public constructor(name: string, owner: Person) {
+    this.owner = owner;
+    super(name);
+  }
+}
+--- typescript
+TypeScript requires `super(...)` before any use of `this`, field assignments included (TS17009). Enrang sets a subclass's own fields first, so a base constructor that calls an override finds them set.
+=== EN0611
+--- rule
+A move inside a loop that a later turn reaches again would move a value that is already gone, so it is EN0611, even though the first turn alone is fine. A move in a `for...of` body that reaches the loop's source or a later turn's binding is EN0611 too. Move a copy each turn with `u.clone()`, as the help offers, borrow the value where the callee takes a reference, or give the variable a new value before the next turn reaches the move.
+--- failing
+const u = new User("Ada");
+let i = 0;
+while (i < 3) {
+  archive(u);
+  i += 1;
+}
+
+private function archive(u: User): void { console.log(u.name); }
+
+private class User {
+  public constructor(public name: string) {}
+}
+--- fixed
+const u = new User("Ada");
+let i = 0;
+while (i < 3) {
+  archive(u.clone());
+  i += 1;
+}
+
+private function archive(u: User): void { console.log(u.name); }
+
+private class User {
+  public constructor(public name: string) {}
+}
+--- typescript
+In TypeScript each turn passes a reference to the same object. In Enrang the first turn hands the value over, so the second would have nothing to pass.
+=== EN0612
+--- rule
+There is no implicit `&`: a reference is made only by writing it. A value that is not a reference, where a reference is expected, is EN0612: an argument to a `&` parameter, a `return` from a function that returns `&T`, or the initialiser of a local annotated `&T`. The fix-it inserts the `&`, which is needed whether the callee reads the value or changes it. A variable that already holds a reference is passed as it is, and method receivers, operators, `console.log` and template holes take their reference by themselves.
+--- failing
+let scores: i64[] = [3, 5, 8];
+bump(scores);
+console.log(scores);
+
+private function bump(xs: &i64[]): void { xs.push(1); }
+--- fixed
+let scores: i64[] = [3, 5, 8];
+bump(&scores);
+console.log(scores);
+
+private function bump(xs: &i64[]): void { xs.push(1); }
+--- typescript
+In TypeScript an array or an object is always passed by reference and a number by value, and the call does not show which. In Enrang the `&` at the call shows that `bump` borrows `scores` and may change it; without it the array would move into the function.
+=== EN0613
+--- rule
+A `const` gets its value once, and a parameter taken by value is like a `const` unless it is declared `let`: assigning to either is EN0613. Mark the parameter `let`, as in `function clamp(let x: i64)`, to change the function's own copy; the caller's value and the function's type stay the same, so a caller may still pass a `const`. To change the caller's variable instead, take `x: &i64` and write `*x`, as the second help says. A local that must change is declared `let`.
+--- failing
+console.log(clamp(12));
+
+private function clamp(x: i64): i64 {
+  if (x > 10) { x = 10; }
+  return x;
+}
+--- fixed
+console.log(clamp(12));
+
+private function clamp(let x: i64): i64 {
+  if (x > 10) { x = 10; }
+  return x;
+}
+--- typescript
+A TypeScript parameter can always be reassigned. In Enrang a by-value parameter is as fixed as a `const` unless it says `let`, so a function that changes its own copy says so where the parameter is declared.
+=== EN0614
+--- rule
+A method that changes its object, such as `push`, needs a receiver it can change. Calling one on a `const`, on a parameter taken by value without `let`, or through a read-only reference, such as the result of a method whose return type says `readonly`, is EN0614; the message names the method and why its receiver cannot change. Declare the value `let`, as the help offers, or remove `readonly` from the return type the reference came from. Whether a method changes its object is inferred from its body.
+--- failing
+const xs: i64[] = [];
+xs.push(1);
+console.log(xs.length());
+--- fixed
+let xs: i64[] = [];
+xs.push(1);
+console.log(xs.length());
+--- typescript
+A TypeScript `const` only freezes the binding, so `xs.push(1)` is allowed on a `const xs`. In Enrang values have no shared identity, so `const` freezes the value, and only a `let` array grows.
+=== EN0615
+--- rule
+Where there is no body to infer from, as for an interface method, the declaration states what code may do with its references, and each body that stands in for it must do no more. An interface method declared without `let` promises not to change the object, so an implementation that changes it is EN0615, at the write; so is a body that writes through a parameter, or stores a reference, that the declaration does not allow, and a function that writes passed where a closure parameter's type declares one that only reads, as `f: (x: &i64) => void` does. Declare the position `let` when implementations may change it, as the help offers, or keep the body within the declaration.
+--- failing
+public interface Counter {
+  inc(): void;
+}
+
+public class Clicks implements Counter {
+  private n: i64 = 0;
+  public inc(): void { this.n += 1; }
+}
+--- fixed
+public interface Counter {
+  let inc(): void;
+}
+
+public class Clicks implements Counter {
+  private n: i64 = 0;
+  public inc(): void { this.n += 1; }
+}
+--- typescript
+A TypeScript interface describes only the shape of its methods, so any implementation may change its object. An Enrang interface also says whether a method may change the object, since code that holds only the interface relies on it.
+=== EN0616
+--- rule
+Some references are read-only whatever their type says: the result of a function whose return type says `readonly`, a part of a string, a string literal, a reference field declared `readonly &` and a tuple part declared `readonly`. Writing through one, or passing one where a function writes, is EN0616. An arrow or a local function also cannot repoint a reference it captures, or store a reference into a value it captures, and a `readonly &` field cannot take a reference that another field of its class writes through: each of these is EN0616 too. Remove `readonly` from the declaration the reference came from, as the help offers, or write through a reference to data the code owns.
+--- failing
+let c = new Counter();
+*c.count() = 5;
+console.log(c.n);
+
+private class Counter {
+  public n: isize = 0;
+  public count(): readonly &isize { return &this.n; }
+}
+--- fixed
+let c = new Counter();
+*c.count() = 5;
+console.log(c.n);
+
+private class Counter {
+  public n: isize = 0;
+  public count(): &isize { return &this.n; }
+}
+--- typescript
+TypeScript checks `readonly` on a property or an array type at that type alone. In Enrang read-only travels with the reference, so whatever it is passed to, writing through it is still an error.
+=== EN0617
+--- rule
+An arrow or a local function may run more than once, so what it captures stays where it is: moving a captured value out of the body, by passing it to a parameter that takes it by value, returning it or assigning it to another name, is EN0617. Move a copy each time with `name.clone()`, as the help offers, or pass a reference where the callee can take one.
+--- failing
+const name = "Ada".toString();
+run(() => { archive(name); });
+
+private function run(f: () => void): void { f(); }
+
+private function archive(s: string): void { console.log(s); }
+--- fixed
+const name = "Ada".toString();
+run(() => { archive(name.clone()); });
+
+private function run(f: () => void): void { f(); }
+
+private function archive(s: string): void { console.log(s); }
+--- typescript
+A TypeScript closure keeps the variables it uses alive and shares them with the code around it. An Enrang arrow borrows what it captures, so it may read or change it, but giving it away would leave the outer variable with no value.
+=== EN0618
+--- rule
+A local function may read only the top-level variables declared above it, and it reads them when it is called. A call placed above the declaration of a variable that the function reads, directly or through other local functions it calls, would read that variable before it has a value, so it is EN0618. The label names the line of the declaration. Move the call below it, as the help says.
+--- failing
+report();
+let count = 0;
+function report(): void { console.log(`count = ${count}`); }
+--- fixed
+let count = 0;
+report();
+function report(): void { console.log(`count = ${count}`); }
+--- typescript
+JavaScript hoists a function declaration, and a call that reads a `let` before its declaration throws a `ReferenceError` when it runs, in the temporal dead zone. Enrang finds the same mistake when it compiles.
+=== EN0619
+--- rule
+In a class with a base, every constructor runs `super(...)` exactly once on every path that returns. A `return` or the closing brace reached on a path without it, as after the `if` with no `else` here, is EN0619, and so is a `super(...)` that may already have run, as one in a loop. `super(...)` is a statement of the constructor's own body: inside an arrow or a local function of the constructor it is EN0619 too; in a class with no base it is EN0219. A path that ends in `panic(...)` needs none. Call `super(...)` on each path, as the fixed example does in both branches.
+--- failing
+const rex = new Dog("Rex", false);
+console.log(rex.name);
+
+public class Animal {
+  public constructor(public name: string) {}
+}
+
+public class Dog extends Animal {
+  public constructor(name: string, quiet: bool) {
+    if (!quiet) { super(name); }
+  }
+}
+--- fixed
+const rex = new Dog("Rex", false);
+console.log(rex.name);
+
+public class Animal {
+  public constructor(public name: string) {}
+}
+
+public class Dog extends Animal {
+  public constructor(name: string, quiet: bool) {
+    if (quiet) {
+      super("anon");
+    } else {
+      super(name);
+    }
+  }
+}
+--- typescript
+In JavaScript a derived constructor that returns without calling `super(...)`, or calls it twice, throws a `ReferenceError` when it runs. Enrang checks every path when it compiles, as Swift checks `super.init`.
+=== EN0621
+--- rule
+An assignment is an expression whose value is its target, read after the store. For a Copy place that value is a copy, so `a = b = 0;` sets both. For any other place the target stays the only owner, so a use that would keep the value is EN0621: a binding's initialiser, the right side of another assignment, a by-value argument, a `return`, an element or field of a literal, or a capture by value. A use that keeps nothing, such as `console.log(s += "!")` or a comparison, borrows the place and compiles. Assign first, then copy the place with `.clone()`, as the help says.
+--- failing
+let s = "a".toString();
+const t = (s += "?");
+console.log(t);
+--- fixed
+let s = "a".toString();
+s += "?";
+const t = s.clone();
+console.log(t);
+--- typescript
+In JavaScript the value of an assignment is the value stored, which for an object both names then share. In Enrang the target owns the value, so keeping it would make a second owner.

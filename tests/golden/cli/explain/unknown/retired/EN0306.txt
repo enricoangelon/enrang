@@ -1,0 +1,5 @@
+$ enrang explain EN0306
+[exit 2]
+[stdout]
+[stderr]
+error: `EN0306` is retired: user folders have namespaces now; a private item is EN0311

@@ -1,0 +1,4 @@
+//! row: `for (const c of "abc")`
+for (const c of "abc".split("")) {
+  console.log(c);
+}

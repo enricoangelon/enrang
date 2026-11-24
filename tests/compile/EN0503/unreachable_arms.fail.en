@@ -1,0 +1,13 @@
+const n: i64 = 5;
+const s = match (n) {
+  1 => "one",
+  1 => "uno", //~ EN0503 "this arm is never reached"
+  0..10 => "small",
+  2..5 => "inner", //~ EN0503 "this arm is never reached"
+  default => "big",
+};
+const k = match (n) {
+  default => "any",
+  7 => "seven", //~ EN0503 "this arm is never reached"
+};
+console.log(s, k);

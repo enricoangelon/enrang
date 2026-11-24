@@ -1,0 +1,91 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0601/named-field-assigned-after-move.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0601/named-field-assigned-after-move.pass";
+class Node {
+  first: string;
+}
+class Res {
+  first: string;
+}
+
+fn Res::#dtor(_1: &Res) -> void {
+  let _1: &Res; // this
+  bb0: {
+    return;
+  }
+}
+
+@private fn drop(_1: Res) -> void {
+  let _1: Res; // p
+  bb0: {
+    drop(_1);
+    return;
+  }
+}
+
+fn owning(_1: string) -> void {
+  let _1: string; // c
+  let mut _2: Res; // p
+  let _3: *Res temp;
+  let _4: void temp;
+  let _5: string temp;
+  let _6: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Res leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _2.first = const "a": string;
+    _5 = move _1;
+    drop(_2.first) [assign];
+    _2.first = move _5;
+    drop(_5);
+    storage_dead(_5);
+    _6 = drop(move _2) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn plain(_1: string) -> void {
+  let _1: string; // c
+  let mut _2: Node; // p
+  let _3: *Node temp;
+  let _4: void temp;
+  let _5: string temp;
+  let _6: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Node leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _2.first = const "a": string;
+    _5 = move _1;
+    drop(_2.first) [assign];
+    _2.first = move _5;
+    drop(_5);
+    storage_dead(_5);
+    _6 = take(move _2) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn take(_1: Node) -> void {
+  let _1: Node; // p
+  bb0: {
+    drop(_1);
+    return;
+  }
+}

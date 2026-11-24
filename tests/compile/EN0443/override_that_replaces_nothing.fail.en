@@ -1,0 +1,21 @@
+public class Animal {
+  public speak(): string {
+    return "...";
+  }
+}
+
+public class Dog extends Animal {
+  public override bark(): string { //~ EN0443 "`bark` overrides nothing in `Animal`"
+    return "woof";
+  }
+
+  public override speak(loud: bool): string { //~ EN0443 "`speak` overrides nothing in `Animal`"
+    return "WOOF";
+  }
+}
+
+public class Cat {
+  public override speak(): string { //~ EN0443 "`speak` overrides nothing"
+    return "meow";
+  }
+}

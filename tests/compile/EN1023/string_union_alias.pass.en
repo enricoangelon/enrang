@@ -1,0 +1,5 @@
+let k: PointKey = "x";
+let m: { x: i64, y: i64 } = { x: 1, y: 2 };
+console.log(k, m);
+
+private type PointKey = "x" | "y";

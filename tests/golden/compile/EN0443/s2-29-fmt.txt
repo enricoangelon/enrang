@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0443/s2-29-fmt.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0443]: `fmt` overrides nothing in `Animal`
+  --> tests/compile/EN0443/s2-29-fmt.fail.en:11:19
+   |
+11 |   public override fmt(let f: &Formatter): void { //~ EN0443 "`fmt` overrides nothing in `Animal`"
+   |                   ^^^ no class above `Dog` writes `fmt`: the printer is synthesised, not a member
+   |
+   = explain: run `enrang explain EN0443`
+
+error: aborting due to 1 previous error

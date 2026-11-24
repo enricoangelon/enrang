@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0302/unknown_types.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0302]: cannot find type `Pointt` in this scope
+ --> tests/compile/EN0302/unknown_types.fail.en:1:10
+  |
+1 | const p: Pointt = new Point { x: 1, y: 2 }; //~ EN0302 "cannot find type `Pointt` in this scope"
+  |          ^^^^^^ not found
+2 | console.log(p);
+3 |
+4 | public class Point {
+  |              ----- a class with a similar name is declared here
+  |
+help: did you mean `Point`?
+  |
+1 | const p: Point = new Point { x: 1, y: 2 }; //~ EN0302 "cannot find type `Pointt` in this scope"
+  |          ~~~~~
+  = explain: run `enrang explain EN0302`
+
+error[EN0302]: cannot find type `Shape` in this scope
+ --> tests/compile/EN0302/unknown_types.fail.en:9:25
+  |
+9 | public function area(s: Shape): f64 { //~ EN0302 "cannot find type `Shape` in this scope"
+  |                         ^^^^^ not found
+  |
+  = explain: run `enrang explain EN0302`
+
+error: aborting due to 2 previous errors

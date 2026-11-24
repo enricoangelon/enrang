@@ -1,0 +1,35 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/string_literal_argument.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/string_literal_argument.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: void temp;
+  bb0: {
+    _2 = grow(const "a": &string) -> bb1; //~ EN0616 "cannot change a string literal"
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}
+
+fn grow(_1: &string) -> void {
+  let _1: &string; // s
+  let _2: &string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  bb0: {
+    _2 = &*_1 [compound-target];
+    _3 = const "!": string;
+    _4 = &_3 [temp-arg];
+    _5 = form append(move _2, move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}

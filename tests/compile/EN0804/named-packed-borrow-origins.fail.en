@@ -1,0 +1,30 @@
+//! row: Packed field, one per `BorrowOrigin` except
+let p = new P { a: 1, b: 2, g: [[1, 2], [3, 4]] };
+const e = &p.b; //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+console.log(*e);
+const c = p.b.checkedAdd(1); //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+console.log(c);
+const rp = &p;
+const q = &rp.b; //~ EN0804 "reference to the packed field `rp.b`, which may be misaligned"
+console.log(*q);
+const { a, b } = &p; //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+console.log(a, b);
+for (const x of &p.g) { //~ EN0804 "reference to the packed field `p.g`, which may be misaligned"
+  console.log(x);
+}
+const r: isize = 1;
+for (const y of &p.g[r]) { //~ EN0804 "reference to the packed field `p.g[r]`, which may be misaligned"
+  console.log(y);
+}
+show(&p.b); //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+
+private function show(x: &u32): void {
+  console.log(*x);
+}
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32;
+  public g: u32[2][2];
+}

@@ -1,0 +1,21 @@
+@private fn f(_1: i64 | null) -> i64 {
+  let _1: i64 | null; // x
+  let _2: i64 temp;
+  let _3: isize temp;
+  bb0: {
+    _3 = discriminant(_1);
+    switch move _3 [0: bb1, otherwise: bb3];
+  }
+  bb1: {
+    _0 = const 5: i64;
+    goto bb2;
+  }
+  bb2: {
+    return;
+  }
+  bb3: {
+    check_tag(_1, Present);
+    _0 = copy (_1 as Present).0;
+    goto bb2;
+  }
+}

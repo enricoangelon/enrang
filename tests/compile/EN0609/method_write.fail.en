@@ -1,0 +1,12 @@
+let u = new User(1);
+u.rename();
+
+public class User {
+  public readonly id: i64;
+  public constructor(id: i64) {
+    this.id = id;
+  }
+  public rename(): void {
+    this.id = 2; //~ EN0609 "cannot write `this.id`, because it is `readonly`"
+  }
+}

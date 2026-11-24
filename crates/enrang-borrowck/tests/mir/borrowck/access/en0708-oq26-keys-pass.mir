@@ -1,0 +1,294 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0708/oq26-keys.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0708/oq26-keys.pass";
+
+fn readFirst() -> void {
+  let mut _1: i64[]; // q
+  let mut _2: &i64 | null; // keep
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &i64; // x
+  let _7: bool temp;
+  let _8: &i64 temp;
+  let _9: bool temp;
+  let _10: u32 temp;
+  let _11: void temp;
+  let _12: isize temp;
+  let _13: isize temp;
+  let _14: &i64 temp;
+  loop l0: path _1 preheader bb5 head bb1 bind bb2[2] binding _6;
+  fact f0: _2 nonnull;
+  use f0 at bb9[0];
+  test f0 at bb9;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<i64>(const 1: i64, const 5: i64, const 3: i64, const 7: i64);
+    storage_live(_2);
+    _2 = null;
+    goto bb5;
+  }
+  bb1: {
+    _4 = len(_1);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &_1[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _10 = discriminant(_2);
+    _9 = ne(move _10, const 0: u32);
+    switch move _9 [0: bb10, otherwise: bb9];
+  }
+  bb5: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _7 = gt(copy *_6, const 2: i64);
+    switch move _7 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    _8 = &*_6 [reborrow];
+    _2 = present(move _8);
+    goto bb8;
+  }
+  bb8: {
+    storage_dead(_6);
+    goto bb3;
+  }
+  bb9: {
+    check_tag(_2, Present);
+    *(_2 as Present).0 = const 0: i64;
+    goto bb10;
+  }
+  bb10: {
+    _12 = const 0: isize;
+    _13 = len(_1);
+    check_bounds(copy _12, copy _13);
+    _14 = &_1[_12] [auto-borrow];
+    _11 = form log(move _14) -> bb11;
+  }
+  bb11: {
+    storage_dead(_2);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn secondLoop() -> void {
+  let mut _1: i64[]; // q
+  let mut _2: &i64 | null; // keep
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &i64; // x
+  let _7: bool temp;
+  let _8: &i64 temp;
+  let _9: bool temp;
+  let _10: u32 temp;
+  let _11: isize #i;
+  let _12: isize #n;
+  let _13: bool temp;
+  let _14: &i64; // y
+  let _15: void temp;
+  let _16: &i64 temp;
+  let _17: void temp;
+  let _18: &i64[] temp;
+  loop l0: path _1 preheader bb5 head bb1 bind bb2[2] binding _6;
+  loop l1: path _1 preheader bb15 head bb11 bind bb12[2] binding _14;
+  fact f0: _2 nonnull;
+  use f0 at bb9[0];
+  test f0 at bb9;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<i64>(const 1: i64, const 5: i64, const 3: i64, const 7: i64);
+    storage_live(_2);
+    _2 = null;
+    goto bb5;
+  }
+  bb1: {
+    _4 = len(_1);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &_1[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _10 = discriminant(_2);
+    _9 = ne(move _10, const 0: u32);
+    switch move _9 [0: bb10, otherwise: bb9];
+  }
+  bb5: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _7 = gt(copy *_6, const 2: i64);
+    switch move _7 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    _8 = &*_6 [reborrow];
+    _2 = present(move _8);
+    goto bb8;
+  }
+  bb8: {
+    storage_dead(_6);
+    goto bb3;
+  }
+  bb9: {
+    check_tag(_2, Present);
+    *(_2 as Present).0 = const 0: i64;
+    goto bb10;
+  }
+  bb10: {
+    goto bb15;
+  }
+  bb11: {
+    _12 = len(_1);
+    _13 = lt(copy _11, copy _12);
+    switch move _13 [0: bb14, otherwise: bb12];
+  }
+  bb12: {
+    storage_live(_14);
+    check_bounds(copy _11, copy _12);
+    _14 = &_1[_11] [for-of-element];
+    _11 = add(copy _11, const 1: isize);
+    goto bb16;
+  }
+  bb13: {
+    goto bb11;
+  }
+  bb14: {
+    _18 = &_1 [auto-borrow];
+    _17 = form log(move _18) -> bb18;
+  }
+  bb15: {
+    storage_live(_11);
+    _11 = const 0: isize;
+    goto bb11;
+  }
+  bb16: {
+    _16 = &*_14 [reborrow];
+    _15 = form log(move _16) -> bb17;
+  }
+  bb17: {
+    storage_dead(_14);
+    goto bb13;
+  }
+  bb18: {
+    storage_dead(_2);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn twoRuns() -> void {
+  let mut _1: i64[]; // q
+  let mut _2: int; // n
+  let _3: bool temp;
+  let mut _4: &i64 | null; // keep
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64; // x
+  let _9: &i64 temp;
+  let _10: bool temp;
+  let _11: u32 temp;
+  let _12: int temp;
+  let _13: void temp;
+  let _14: &i64[] temp;
+  loop l1: path _1 preheader bb8 head bb4 bind bb5[2] binding _8;
+  fact f0: _4 nonnull;
+  use f0 at bb10[0];
+  test f0 at bb10;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<i64>(const 1: i64, const 5: i64, const 3: i64, const 7: i64);
+    storage_live(_2);
+    _2 = const 0: int;
+    goto bb1;
+  }
+  bb1: {
+    _3 = lt(copy _2, const 2: int);
+    switch move _3 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_4);
+    _4 = null;
+    goto bb8;
+  }
+  bb3: {
+    _14 = &_1 [auto-borrow];
+    _13 = form log(move _14) -> bb12;
+  }
+  bb4: {
+    _6 = len(_1);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb7, otherwise: bb5];
+  }
+  bb5: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &_1[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb9;
+  }
+  bb6: {
+    goto bb4;
+  }
+  bb7: {
+    _11 = discriminant(_4);
+    _10 = ne(move _11, const 0: u32);
+    switch move _10 [0: bb11, otherwise: bb10];
+  }
+  bb8: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb4;
+  }
+  bb9: {
+    _9 = &*_8 [reborrow];
+    _4 = present(move _9);
+    storage_dead(_8);
+    goto bb6;
+  }
+  bb10: {
+    check_tag(_4, Present);
+    *(_4 as Present).0 = const 0: i64;
+    goto bb11;
+  }
+  bb11: {
+    _12 = copy _2;
+    _2 = checked_add(copy _12, const 1: int);
+    storage_dead(_4);
+    goto bb1;
+  }
+  bb12: {
+    storage_dead(_2);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}

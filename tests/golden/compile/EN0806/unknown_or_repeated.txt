@@ -1,0 +1,50 @@
+$ enrang check tests/compile/EN0806/unknown_or_repeated.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0806]: unknown decorator `@inline`
+ --> tests/compile/EN0806/unknown_or_repeated.fail.en:1:1
+  |
+1 | @inline public function a(): void {} //~ EN0806 "unknown decorator `@inline`"
+  | ^^^^^^^ not a decorator
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: unknown decorator `@mustuse`
+ --> tests/compile/EN0806/unknown_or_repeated.fail.en:3:1
+  |
+3 | @mustuse public function b(): i64 { //~ EN0806 "unknown decorator `@mustuse`"
+  | ^^^^^^^^ not a decorator
+  |
+help: did you mean `@mustUse`?
+  |
+3 | @mustUse public function b(): i64 { //~ EN0806 "unknown decorator `@mustuse`"
+  |  ~~~~~~~
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: `@mustUse` is written twice
+ --> tests/compile/EN0806/unknown_or_repeated.fail.en:7:10
+  |
+7 | @mustUse @mustUse public function c(): i64 { //~ EN0806 "`@mustUse` is written twice"
+  |          ^^^^^^^^ written again here
+  | -------- the first is here
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: unknown CPU feature `sse9`
+  --> tests/compile/EN0806/unknown_or_repeated.fail.en:11:11
+   |
+11 | @requires("sse9") public function g(): void {} //~ EN0806 "unknown CPU feature `sse9`"
+   |           ^^^^^^ not a feature name
+   |
+   = explain: run `enrang explain EN0806`
+
+error[EN0806]: `@section` takes a section name
+  --> tests/compile/EN0806/unknown_or_repeated.fail.en:13:1
+   |
+13 | @section(1) public function h(): void {} //~ EN0806 "`@section` takes a section name"
+   | ^^^^^^^^^^^ no name
+   |
+   = explain: run `enrang explain EN0806`
+
+error: aborting due to 5 previous errors

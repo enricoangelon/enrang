@@ -1,0 +1,15 @@
+$ enrang check --emit=summary main.en
+[exit 0]
+[stdout]
+module "main"
+[stderr]
+warning[EN0453]: the result of `trim` is not used
+ --> main.en:2:1
+  |
+2 | name.trim();
+  | ^^^^^^^^^^^ `trim` returns a new string and leaves `name` as it was
+  |
+help: keep it
+  |
+2 | name = name.trim();
+  | +++++++

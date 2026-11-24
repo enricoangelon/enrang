@@ -1,0 +1,5 @@
+//! target: x86_64-linux
+public function f(): void {
+  const big: u8[2147483646] = [0; 2147483646];
+  console.log(big[0]);
+}

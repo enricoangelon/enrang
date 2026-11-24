@@ -1,0 +1,22 @@
+//! covers: H18
+let o: Acc | null = new Acc();
+if (o != null) {
+  o.add(clear(&o)); //~ EN0401
+}
+let p: Acc | null = new Acc();
+if (p != null) {
+  p.n = clear(&p); //~ EN0401
+}
+
+private class Acc {
+  public n: i64 = 0;
+
+  public add(k: i64): void {
+    this.n += k;
+  }
+}
+
+private function clear(a: &(Acc | null)): i64 {
+  *a = null;
+  return 1;
+}

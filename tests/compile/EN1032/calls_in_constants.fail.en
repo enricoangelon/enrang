@@ -1,0 +1,9 @@
+public const A: i64 = twice(2); //~ EN1032 "compile-time function calls are not supported yet"
+public const B: u32 = (5).max(3); //~ EN1032 "compile-time function calls are not supported yet"
+private unsafe let S: i64 = twice(3); //~ EN1032 "compile-time function calls are not supported yet"
+public const LEN: isize = "abc".length(); //~ EN1032 "compile-time function calls are not supported yet"
+assert(twice(1) == 2, "twice"); //~ EN1032 "compile-time function calls are not supported yet"
+
+public function twice(n: i64): i64 {
+  return n * 2;
+}

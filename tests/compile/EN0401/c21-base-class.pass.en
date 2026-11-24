@@ -1,0 +1,15 @@
+//! covers: C21
+const rex = new Dog { name: "Rex" };
+introduce(&rex);
+const pet: Box<Animal> = new Box(new Dog { name: "Fido" });
+introduce(&*pet);
+
+private function introduce(a: &Animal): void {
+  console.log(a.name);
+}
+
+public class Animal {
+  public name: string;
+}
+
+public class Dog extends Animal {}

@@ -1,0 +1,14 @@
+//! target: x86_64-linux
+public unsafe function w<T extends ptr.VolatileValue>(p: *T, v: T): void { p.writeVolatile(v); }
+
+public unsafe function big(p: *u64): u64 {
+  p.writeVolatile(1);
+  return p.readVolatile();
+}
+
+public unsafe function narrow(p: *u16, q: *bool, r: **u8): void {
+  p.writeVolatile(0x0741);
+  q.writeVolatile(true);
+  r.writeVolatile(0x1000 as *u8);
+  w(p, 7);
+}

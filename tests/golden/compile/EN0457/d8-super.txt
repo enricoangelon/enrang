@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0457/d8-super.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0457]: `Shape.area` is abstract, so it has no body to call
+ --> tests/compile/EN0457/d8-super.fail.en:9:12
+  |
+9 |     return super.area() + this.side; //~ EN0457 "`Shape.area` is abstract, so it has no body to call"
+  |            ^^^^^^^^^^^^ the nearest `area` above `Sq` is abstract
+  |
+  = explain: run `enrang explain EN0457`
+
+error: aborting due to 1 previous error

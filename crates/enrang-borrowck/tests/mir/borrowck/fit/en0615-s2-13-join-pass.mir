@@ -1,0 +1,94 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/s2-13-join.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/s2-13-join.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // msg
+  let _3: bool; // loud
+  let _4: void temp;
+  let _5: fn(let &string) => void temp;
+  let _6: bool temp;
+  let _7: &string temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "hi": string;
+    storage_live(_3);
+    _3 = const false: bool;
+    _6 = copy _3;
+    switch move _6 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _5 = const fn quote: fn(let &string) => void;
+    goto bb3;
+  }
+  bb2: {
+    _5 = const fn show: fn(let &string) => void;
+    goto bb3;
+  }
+  bb3: {
+    _7 = &_2 [explicit];
+    _4 = run(move _5, move _7) -> bb4;
+  }
+  bb4: {
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn quote(_1: &string) -> void {
+  let _1: &string; // s
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = form log(const "\"": &string, move _3, const "\"": &string) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private @local fn run(_1: fn(let &string) => void, _2: &string) -> void {
+  let _1: fn(let &string) => void; // f
+  let _2: &string; // s
+  let _3: void temp;
+  let _4: &string temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = fnptr(copy _1)(move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn show(_1: &string) -> void {
+  let _1: &string; // s
+  let _2: void temp;
+  let _3: isize temp;
+  let _4: &string temp;
+  let _5: &isize temp;
+  bb0: {
+    _4 = &*_1 [reborrow];
+    _3 = "core/string"::string::length(move _4) -> bb1;
+  }
+  bb1: {
+    _5 = &_3 [temp-arg];
+    _2 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    storage_dead(_3);
+    return;
+  }
+}

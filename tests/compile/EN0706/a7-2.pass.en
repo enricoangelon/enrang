@@ -1,0 +1,6 @@
+import { Atomic } from "core/atomic";
+
+let q: Atomic<u32>[] = [new Atomic<u32>(1)];
+for (const x of &q) {
+  console.log(q[0].load());
+}

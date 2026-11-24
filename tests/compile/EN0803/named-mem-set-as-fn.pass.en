@@ -1,0 +1,2 @@
+//! row: `const f: fn(d: *u8, v: u8, n: usize) =>
+const f: unsafe fn(d: *u8, v: u8, n: usize) => void = mem.set;

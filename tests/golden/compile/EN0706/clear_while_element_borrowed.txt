@@ -1,0 +1,22 @@
+$ enrang check tests/compile/EN0706/clear_while_element_borrowed.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `queue` cannot change while `first` still points into it
+ --> tests/compile/EN0706/clear_while_element_borrowed.fail.en:3:1
+  |
+2 | const first = &queue[0];
+  |               --------- shared borrow of `queue` starts here, held by `first`
+3 | queue.clear(); //~ EN0706 "`queue` cannot change while `first` still points into it"
+  | ^^^^^^^^^^^^^ `clear` changes `queue`, so it needs exclusive access to it
+4 | console.log(first);
+  |             ----- `first` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: keep a copy instead of a reference
+  |
+2 | const first = queue[0].clone();
+  |               ~~~~~~~~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

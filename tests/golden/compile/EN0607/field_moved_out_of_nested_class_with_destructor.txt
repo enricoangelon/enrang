@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0607/field_moved_out_of_nested_class_with_destructor.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0607]: cannot move `d.file.name` out of `d.file`, because `File` has a destructor
+ --> tests/compile/EN0607/field_moved_out_of_nested_class_with_destructor.fail.en:2:11
+  |
+2 | const n = d.file.name; //~ EN0607 "cannot move `d.file.name` out of `d.file`, because `File` has a destructor"
+  |           ^^^^^^^^^^^ `File`'s destructor needs every field when it runs
+  |
+help: copy it: `d.file.name.clone()`
+  = explain: run `enrang explain EN0607`
+
+error: aborting due to 1 previous error

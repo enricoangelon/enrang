@@ -1,0 +1,3 @@
+const xs = [1, 2, 3];
+for (const k of &xs) { console.log(k); }
+for (const k of xs) { console.log(k); }

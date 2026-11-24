@@ -1,0 +1,189 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/fv-02-upcast-local-2.fail.en. Its row's codes: EN0706, EN0706, EN0706, EN0706, EN0706.
+module "tests/compile/EN0706/fv-02-upcast-local-2.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+class Base {
+  private src: readonly &Slice<u8>;
+}
+@final class Sub extends Base {
+  private dst: &u8[];
+}
+
+fn Base::#ctor(_1: &Base, _2: &Slice<u8>) -> void {
+  let _1: &Base; // this
+  let _2: &Slice<u8>; // s
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn Base::peek(_1: &Base) -> readonly &Slice<u8> {
+  let _1: &Base; // this
+  let _2: isize | null temp;
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _2 = present(const 1: isize);
+    _3 = copy (*_1).src;
+    _0 = "core/slice"::Slice<u8>::slice(move _3, const 0: isize, move _2, const 2: isize) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Base::retarget(_1: &Base, _2: &Slice<u8>) -> void {
+  let _1: &Base; // this
+  let _2: &Slice<u8>; // v
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn Sub::#ctor(_1: &Sub, _2: &Slice<u8>, _3: &u8[]) -> void {
+  let _1: &Sub; // this
+  let _2: &Slice<u8>; // s
+  let _3: &u8[]; // d
+  let _4: &u8[] temp;
+  let _5: void temp;
+  let _6: &Slice<u8> temp;
+  let _7: &Sub temp;
+  let _8: &Base temp;
+  bb0: {
+    _4 = &*_3 [reborrow];
+    (*_1).dst = move _4;
+    _6 = &*_2 [reborrow];
+    _7 = &*_1 [reborrow];
+    _8 = convert(upcast, move _7);
+    _5 = Base::#ctor(move _8, move _6) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+static fn Sub::demo(_1: &Slice<u8>, _2: &u8[]) -> void {
+  let _1: &Slice<u8>; // s
+  let _2: &u8[]; // d
+  let mut _3: Sub; // w
+  let _4: &Slice<u8> temp;
+  let _5: &u8[] temp;
+  let _6: &Sub temp;
+  let _7: void temp;
+  let _8: &u8[]; // p
+  let _9: void temp;
+  let _10: &u8[] temp;
+  let _11: &Slice<u8> temp;
+  let _12: &Sub temp;
+  let _13: &Base temp;
+  let _14: &Slice<u8>; // a
+  let _15: &Sub temp;
+  let _16: &Base temp;
+  let _17: void temp;
+  let _18: &Sub temp;
+  let _19: void temp;
+  let _20: &Sub temp;
+  let _21: void temp;
+  let _22: &Sub temp;
+  let _23: void temp;
+  let _24: &Sub temp;
+  let _25: void temp;
+  let _26: &Slice<u8> temp;
+  bb0: {
+    storage_live(_3);
+    set_table(_3, Sub);
+    _4 = &*_1 [reborrow];
+    _5 = &*_2 [reborrow];
+    _6 = &_3 [auto-borrow];
+    _7 = Sub::#ctor(move _6, move _4, move _5) -> bb1;
+  }
+  bb1: {
+    storage_live(_8);
+    _8 = copy _3.dst;
+    _10 = &*_8 [reborrow];
+    _11 = convert(array_to_slice, move _10);
+    _12 = &_3 [auto-borrow]; //~ EN0706
+    _13 = convert(upcast, move _12);
+    _9 = Base::retarget(move _13, move _11) -> bb2;
+  }
+  bb2: {
+    storage_live(_14);
+    _15 = &_3 [auto-borrow];
+    _16 = convert(upcast, move _15);
+    _14 = Base::peek(move _16) -> bb3;
+  }
+  bb3: {
+    _18 = &_3 [auto-borrow]; //~ EN0706
+    _17 = Sub::step(move _18) -> bb4;
+  }
+  bb4: {
+    _20 = &_3 [auto-borrow]; //~ EN0706
+    _19 = Sub::step(move _20) -> bb5;
+  }
+  bb5: {
+    _22 = &_3 [auto-borrow]; //~ EN0706
+    _21 = Sub::step(move _22) -> bb6;
+  }
+  bb6: {
+    _24 = &_3 [auto-borrow]; //~ EN0706
+    _23 = Sub::step(move _24) -> bb7;
+  }
+  bb7: {
+    _26 = &*_14 [reborrow];
+    _25 = form log(move _26) -> bb8;
+  }
+  bb8: {
+    storage_dead(_14);
+    storage_dead(_8);
+    storage_dead(_3);
+    return;
+  }
+}
+
+static fn Sub::make(_1: &Slice<u8>, _2: &u8[]) -> Sub {
+  let _1: &Slice<u8>; // s
+  let _2: &u8[]; // d
+  let _3: &Slice<u8> temp;
+  let _4: &u8[] temp;
+  let _5: &Sub temp;
+  let _6: void temp;
+  bb0: {
+    set_table(_0, Sub);
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _5 = &_0 [auto-borrow];
+    _6 = Sub::#ctor(move _5, move _3, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Sub::step(_1: &Sub) -> void {
+  let _1: &Sub; // this
+  let _2: void temp;
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_1).dst;
+    _2 = "alloc/array"::Array<u8>::push(move _3, const 1: u8) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

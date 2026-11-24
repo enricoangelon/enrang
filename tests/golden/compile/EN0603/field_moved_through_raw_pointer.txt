@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0603/field_moved_through_raw_pointer.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0603]: cannot move `(*p).name` out of a raw pointer
+ --> tests/compile/EN0603/field_moved_through_raw_pointer.fail.en:2:10
+  |
+2 |   return (*p).name; //~ EN0603
+  |          ^^^^^^^^^ `(*p).name` is behind a raw pointer
+  |
+help: to take a copy, write `(*p).name.clone()`
+  |
+2 |   return (*p).name.clone(); //~ EN0603
+  |                   ++++++++
+  = explain: run `enrang explain EN0603`
+
+error: aborting due to 1 previous error

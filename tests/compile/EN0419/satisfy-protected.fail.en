@@ -1,0 +1,16 @@
+const dog = new Dog {};
+console.log(greet(&dog)); //~ EN0419 "`Dog` does not satisfy `Speaker`"
+
+private function greet<T extends Speaker>(x: &T): string {
+  return x.speak();
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class Dog {
+  protected speak(): string {
+    return "woof";
+  }
+}

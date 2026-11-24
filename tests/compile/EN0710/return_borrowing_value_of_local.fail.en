@@ -1,0 +1,9 @@
+public function make(): Lexer {
+  const s = "abc".toString();
+  return new Lexer(&s); //~ EN0710 "cannot return a reference to local `s`"
+}
+
+public class Lexer {
+  private src: &string;
+  public constructor(src: &string) { this.src = src; }
+}

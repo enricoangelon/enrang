@@ -1,0 +1,6 @@
+$ enrang targets x86_64-linux
+[exit 2]
+[stdout]
+[stderr]
+error: `x86_64-linux` is not a flag of `enrang targets`
+usage: enrang targets [--evidence]

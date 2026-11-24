@@ -1,0 +1,22 @@
+const pup = new Puppy {};
+console.log(greet(&pup));
+
+private function greet<T extends Speaker>(x: &T): string {
+  return x.speak();
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class Dog {
+  protected sound(): string {
+    return "woof";
+  }
+}
+
+public class Puppy extends Dog implements Speaker {
+  public speak(): string {
+    return this.sound();
+  }
+}

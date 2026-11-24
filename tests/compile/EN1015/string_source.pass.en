@@ -1,0 +1,3 @@
+const s = "xyz";
+for (let i = 0; i < s.length(); i++) { console.log(s.byteAt(i)); }
+for (const i of 0..3) { console.log("abc".byteAt(i)); }

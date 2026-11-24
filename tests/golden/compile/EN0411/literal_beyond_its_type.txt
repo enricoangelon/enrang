@@ -1,0 +1,33 @@
+$ enrang check tests/compile/EN0411/literal_beyond_its_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0411]: `3_000_000_000` doesn't fit `int`
+ --> tests/compile/EN0411/literal_beyond_its_type.fail.en:1:13
+  |
+1 | const big = 3_000_000_000; //~ EN0411 "`3_000_000_000` doesn't fit `int`"
+  |             ^^^^^^^^^^^^^ `int` holds -2147483648 to 2147483647
+  |
+help: give it a wider type: `: i64`
+  |
+1 | const big: i64 = 3_000_000_000; //~ EN0411 "`3_000_000_000` doesn't fit `int`"
+  |          +++++
+  = explain: run `enrang explain EN0411`
+
+error[EN0411]: `256` doesn't fit `u8`
+ --> tests/compile/EN0411/literal_beyond_its_type.fail.en:2:18
+  |
+2 | const byte: u8 = 256; //~ EN0411 "`256` doesn't fit `u8`"
+  |                  ^^^ `u8` holds 0 to 255
+  |
+  = explain: run `enrang explain EN0411`
+
+error[EN0411]: `300` doesn't fit `u8`
+ --> tests/compile/EN0411/literal_beyond_its_type.fail.en:3:15
+  |
+3 | const small = 300 as u8; //~ EN0411 "`300` doesn't fit `u8`"
+  |               ^^^ `u8` holds 0 to 255
+  |
+  = explain: run `enrang explain EN0411`
+
+error: aborting due to 3 previous errors

@@ -1,0 +1,13 @@
+error[EN0614]: `xs` is a parameter not marked `let`, so `push` cannot change it
+ --> main.en:1:38
+  |
+1 | public function f(xs: i64[]): void { xs.push(1); }
+  |                                      ^^^^^^^^^^ `push` changes `xs`
+  |
+help: mark it `let xs`
+  |
+1 | public function f(let xs: i64[]): void { xs.push(1); }
+  |                   ++++
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,32 @@
+// A kept assignment value (plan d.2, EN0621; A:942). Shapes: c.8 (plan lines 1034-1044)
+// a compound assignment to a non-Copy place is `_p = &place [compound-target]` and the
+// `append` form, and a use that keeps its value is `move x` recorded in
+// `meta.assign_values`.
+// EN0621 head (plan e): an assignment's value can't be kept, label `s += "?"` is still
+// owned by `s`.
+fn kept() -> void {
+  let mut _1: string; // s
+  let _2: string; // t
+  let _3: &string temp;
+  let _4: void temp;
+  assign_value bb1[1];
+  bb0: {
+    storage_live(_1);
+    _1 = const "a": string;
+    _3 = &_1 [compound-target];
+    _4 = form append(move _3, const "?": &string) -> bb1;
+  }
+  bb1: {
+    storage_live(_2);
+    _2 = move _1; //~ EN0621
+    _3 = &_1 [auto-borrow];
+    _4 = form log(move _3) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}

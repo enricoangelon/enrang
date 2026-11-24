@@ -1,0 +1,13 @@
+const a = cells4();
+const b = cells4();
+a[0] = 7; //~ EN0616
+b[0] = 8; //~ EN0616
+console.log(a[0]);
+
+private unsafe let cells: u16[4];
+
+public function cells4(): &Slice<u16> {
+  unsafe {
+    return Slice<u16>.fromRaw(&cells[0] as *u16, 4);
+  }
+}

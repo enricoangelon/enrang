@@ -1,0 +1,127 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/c04-box-deref.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/c04-box-deref.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::length(_1: &Slice<T>) -> isize;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Box<u8[]>; // bytes
+  let _3: u8[] temp;
+  let _4: u8 temp;
+  let _5: &Box<u8[]> temp;
+  let _6: void temp;
+  let _7: void temp;
+  let _8: &Box<u8[]> temp;
+  let _9: &u8[] temp;
+  let _10: &Slice<u8> temp;
+  let _11: Box<i64>; // n
+  let _12: i64 temp;
+  let _13: &Box<i64> temp;
+  let _14: void temp;
+  let _15: void temp;
+  let _16: &Box<i64> temp;
+  let _17: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _4 = cast(int_to_int, const 1: u8, u8);
+    _3 = intrinsic AllocArray<u8>(move _4, const 2: u8, const 3: u8);
+    _5 = &_2 [auto-borrow];
+    _6 = "alloc/box"::Box<u8[]>::#ctor(move _5, move _3) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    _8 = &_2 [explicit];
+    _9 = &**_8 [reborrow];
+    _10 = convert(array_to_slice, move _9);
+    _7 = fill(move _10, const 7: u8) -> bb2;
+  }
+  bb2: {
+    storage_dead(_8);
+    storage_live(_11);
+    _12 = cast(int_to_int, const 5: i64, i64);
+    _13 = &_11 [auto-borrow];
+    _14 = "alloc/box"::Box<i64>::#ctor(move _13, move _12) -> bb3;
+  }
+  bb3: {
+    _16 = &_11 [explicit];
+    _17 = &**_16 [reborrow];
+    _15 = show(move _17) -> bb4;
+  }
+  bb4: {
+    storage_dead(_16);
+    drop(_11);
+    storage_dead(_11);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn fill(_1: &Slice<u8>, _2: u8) -> void {
+  let _1: &Slice<u8>; // part
+  let _2: u8; // v
+  let mut _3: isize; // i
+  let _4: bool temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: &Slice<u8> temp;
+  let _8: isize temp;
+  let _9: u8 temp;
+  let _10: isize temp;
+  let _11: isize temp;
+  bb0: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb1: {
+    _5 = copy _3;
+    _7 = &*_1 [reborrow];
+    _6 = "core/slice"::Slice<u8>::length(move _7) -> bb5;
+  }
+  bb2: {
+    _8 = copy _3;
+    _9 = copy _2;
+    _10 = len(*_1);
+    check_bounds(copy _8, copy _10);
+    (*_1)[_8] = move _9;
+    goto bb3;
+  }
+  bb3: {
+    _11 = copy _3;
+    _3 = checked_add(copy _11, const 1: isize);
+    goto bb1;
+  }
+  bb4: {
+    storage_dead(_3);
+    return;
+  }
+  bb5: {
+    _4 = lt(move _5, move _6);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+}
+
+@private fn show(_1: &i64) -> void {
+  let _1: &i64; // x
+  let _2: void temp;
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

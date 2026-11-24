@@ -1,0 +1,107 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/sl-08-cmp.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/sl-08-cmp.pass";
+@lang("ord") interface "core/prelude"::Ord { }
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::sort(let _1: &Slice<T>) -> void where T extends Ord;
+fn "core/slice"::Slice<T>::sortBy(let _1: &Slice<T>, _2: (&T, &T) => int) -> void;
+@final class P {
+  n: i64;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // v
+  let _3: void temp;
+  let _4: (&i64, &i64) => int temp;
+  let _5: [] temp;
+  let _6: &i64[] temp;
+  let _7: &Slice<i64> temp;
+  let _8: void temp;
+  let _9: &i64[] temp;
+  let mut _10: P[]; // ps
+  let _11: P temp;
+  let _12: *P temp;
+  let _13: void temp;
+  let _14: P temp;
+  let _15: *P temp;
+  let _16: void temp;
+  let _17: P temp;
+  let _18: *P temp;
+  let _19: void temp;
+  let _20: void temp;
+  let _21: &P[] temp;
+  let _22: &Slice<P> temp;
+  let _23: void temp;
+  let _24: &P[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 5: i64, const 3: i64, const 9: i64, const 1: i64);
+    _5 = env();
+    _4 = closure(arrow#0, _5);
+    _6 = &_2 [auto-borrow];
+    _7 = convert(array_to_slice, move _6);
+    _3 = "core/slice"::Slice<i64>::sortBy(move _7, move _4) -> bb1;
+  }
+  bb1: {
+    _9 = &_2 [auto-borrow];
+    _8 = form log(move _9) -> bb2;
+  }
+  bb2: {
+    storage_live(_10);
+    _12 = addr_of _11;
+    _13 = named_fill P leaving()(move _12) -> bb3;
+  }
+  bb3: {
+    _11.n = const 2: i64;
+    _15 = addr_of _14;
+    _16 = named_fill P leaving()(move _15) -> bb4;
+  }
+  bb4: {
+    _14.n = const 1: i64;
+    _18 = addr_of _17;
+    _19 = named_fill P leaving()(move _18) -> bb5;
+  }
+  bb5: {
+    _17.n = const 3: i64;
+    _10 = intrinsic AllocArray<P>(move _11, move _14, move _17);
+    _21 = &_10 [auto-borrow];
+    _22 = convert(array_to_slice, move _21);
+    _20 = "core/slice"::Slice<P>::sort(move _22) -> bb6;
+  }
+  bb6: {
+    _24 = &_10 [auto-borrow];
+    _23 = form log(move _24) -> bb7;
+  }
+  bb7: {
+    drop(_10);
+    storage_dead(_10);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+arrow#0 of statements (_1: &[], _2: &i64, _3: &i64) -> int {
+  let _1: &[] env;
+  let _2: &i64; // a
+  let _3: &i64; // b
+  bb0: {
+    _0 = const 1: int;
+    return;
+  }
+}
+
+fn P::compare(_1: &P, _2: &P) -> int {
+  let _1: &P; // this
+  let _2: &P; // other
+  bb0: {
+    _0 = const -1: int;
+    return;
+  }
+}

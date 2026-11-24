@@ -1,0 +1,6 @@
+$ enrang explain --bogus
+[exit 2]
+[stdout]
+[stderr]
+error: `--bogus` is not a flag of `enrang explain`
+usage: enrang explain <code>

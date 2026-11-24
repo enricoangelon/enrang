@@ -1,0 +1,7 @@
+const a = "apple";
+const b = "banana";
+console.log(a.compare(&b) < 0, a == b);
+const flags: u8 = 6;
+console.log((flags & 2) == 2);
+const yes = true;
+console.log((yes as i32) + 1);

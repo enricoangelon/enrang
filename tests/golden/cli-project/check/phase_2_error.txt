@@ -1,0 +1,32 @@
+$ enrang check main.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `i64`, found `string`
+ --> main.en:1:16
+  |
+1 | const n: i64 = "five";
+  |                ^^^^^^ this is `string`
+  |          --- `i64` is required by this annotation
+  |
+  = note: Enrang never converts between numbers and strings implicitly.
+  = explain: run `enrang explain EN0401`
+
+error[EN0301]: cannot find `totl` in this scope
+ --> main.en:2:13
+  |
+2 | console.log(totl);
+  |             ^^^^ not found
+  |
+  = explain: run `enrang explain EN0301`
+
+error[EN0401]: mismatched types: expected `bool`, found `int`
+ --> main.test.en:2:19
+  |
+2 |   const b: bool = 1;
+  |                   ^ this is `int`
+  |            ---- `bool` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 3 previous errors

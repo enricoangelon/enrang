@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0428/oq24-onkey.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0428]: `handler` may be `null`, so it can't be called
+ --> tests/compile/EN0428/oq24-onkey.fail.en:5:3
+  |
+5 |   handler(key); //~ EN0428 "`handler` may be `null`, so it can't be called"
+  |   ^^^^^^^ this may be `null`
+  |
+help: check it first: `if (handler != null) { handler(...); }`
+  = explain: run `enrang explain EN0428`
+
+error: aborting due to 1 previous error

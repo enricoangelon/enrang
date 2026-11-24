@@ -1,0 +1,13 @@
+const a = new Point { x: 1, y: 2 };
+const b = new Point { x: 1, y: 2 };
+console.log(a == b, Color.Red == Color.Green);
+
+public class Point implements Eq {
+  public x: i64;
+  public y: i64;
+}
+
+public enum Color {
+  Red,
+  Green,
+}

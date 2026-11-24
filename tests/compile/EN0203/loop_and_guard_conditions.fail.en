@@ -1,0 +1,15 @@
+let n: i64 = 3;
+const flag = n > 1;
+do {
+  n -= 1;
+} while (n); //~ EN0203 "a condition must be `bool`, found `i64`"
+for (let i: i64 = 3; i; i--) { //~ EN0203 "a condition must be `bool`, found `i64`"
+  console.log(i);
+}
+const both = flag && n; //~ EN0203 "a condition must be `bool`, found `i64`"
+const either = n || flag; //~ EN0203 "a condition must be `bool`, found `i64`"
+const word = match (true) {
+  n => "some", //~ EN0203 "a condition must be `bool`, found `i64`"
+  default => "none",
+};
+console.log(both, either, word);

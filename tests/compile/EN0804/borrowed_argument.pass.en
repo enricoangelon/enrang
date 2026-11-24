@@ -1,0 +1,14 @@
+//! covers: H16
+let p = new P { a: 1, b: 2 };
+const v = p.b;
+show(&v);
+
+private function show(x: &u32): void {
+  console.log(*x);
+}
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32;
+}

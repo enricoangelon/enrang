@@ -1,0 +1,2 @@
+//! row: `<T>(xs: &T[])`, `T extends Clone`, `T e
+public function plain<T>(xs: &T[]): T[] { return [...xs]; } //~ EN0438

@@ -1,0 +1,8 @@
+//! row: `0xFFFFFFFFFFFFFFFF as u64`, `0xB8000 as
+//! row: `300 as u8`
+const x = 0xFFFFFFFFFFFFFFFF as u64;
+const p = 0xB8000 as *u16;
+const m: i64 = -9223372036854775808;
+console.log(x, m);
+const y = 255 as u8;
+console.log(y);

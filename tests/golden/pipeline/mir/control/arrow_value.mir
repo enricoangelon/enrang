@@ -1,0 +1,18 @@
+@private fn f(_1: i64, _2: &i64, _3: () => void) -> void {
+  let _1: i64; // n
+  let _2: &i64; // r
+  let _3: () => void; // g
+  let _4: () => void temp;
+  let _5: &(() => void) temp;
+  let _6: &i64 temp;
+  let _7: &i64 temp;
+  let _8: [&(() => void), &i64, &i64] temp;
+  bb0: {
+    _5 = &_3 [closure-capture];
+    _6 = &_1 [closure-capture];
+    _7 = &*_2 [closure-capture];
+    _8 = env(move _5, move _6, move _7);
+    _4 = closure(arrow#0, _8);
+    return;
+  }
+}

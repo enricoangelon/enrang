@@ -1,0 +1,3 @@
+public function main(): i64 { //~ EN0436 "`main` must return `void`, `i32` or `Result<void, E>`"
+  return 0;
+}

@@ -1,0 +1,113 @@
+$ enrang check --emit=mir main.en
+[exit 0]
+[stdout]
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_extend_cloned") fn "alloc/array"::Array<T>::extendCloned(let _1: &Array<T>, _2: &Slice<T>) -> void where T extends Clone;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("clone") interface "core/prelude"::Clone { }
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::equals(_1: &string, _2: &string) -> bool;
+
+statements (_1: string[]) -> int {
+  phase elaborated;
+  let _1: string[]; // args
+  let mut _2: string[]; // queue
+  let _3: string[] #iter;
+  let _4: string[] temp;
+  let _5: &string[] temp;
+  let _6: &Slice<string> temp;
+  let _7: &string[] temp;
+  let _8: void temp;
+  let _9: isize #i;
+  let _10: isize #n;
+  let _11: bool temp;
+  let _12: string; // job
+  let _13: bool temp;
+  let _14: &string temp;
+  let _15: string temp;
+  let _16: &string temp;
+  let _17: bool temp;
+  let _18: void temp;
+  let _19: &string[] temp;
+  let _20: void temp;
+  let _21: &string temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<string>(const "a": string, const "b": string);
+    _4 = intrinsic AllocArray<string>();
+    _5 = &_2 [auto-borrow];
+    _6 = convert(array_to_slice, move _5);
+    _7 = &_4 [auto-borrow];
+    _8 = "alloc/array"::Array<string>::extendCloned(move _7, move _6) -> bb5;
+  }
+  bb1: {
+    _10 = len(_3);
+    _11 = lt(copy _9, copy _10);
+    switch move _11 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_12);
+    check_bounds(copy _9, copy _10);
+    _12 = move _3[_9];
+    _9 = add(copy _9, const 1: isize);
+    goto bb7;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    storage_dead(_4);
+    drop_glue(_3);
+    storage_dead(_3);
+    drop_glue(_2);
+    storage_dead(_2);
+    drop_glue(_1);
+    return;
+  }
+  bb5: {
+    _3 = move _4;
+    goto bb6;
+  }
+  bb6: {
+    storage_live(_9);
+    _9 = const 0: isize;
+    goto bb1;
+  }
+  bb7: {
+    _14 = &_12 [auto-borrow];
+    _15 = const "a": string;
+    _16 = &_15 [temp-arg];
+    _17 = "core/string"::string::equals(move _14, move _16) -> bb10;
+  }
+  bb8: {
+    _19 = &_2 [auto-borrow];
+    _18 = "alloc/array"::Array<string>::push(move _19, const "retry": string) -> bb11;
+  }
+  bb9: {
+    _21 = &_12 [auto-borrow];
+    _20 = form log(move _21) -> bb12;
+  }
+  bb10: {
+    _13 = move _17;
+    drop_glue(_15);
+    storage_dead(_15);
+    switch move _13 [0: bb9, otherwise: bb8];
+  }
+  bb11: {
+    goto bb9;
+  }
+  bb12: {
+    drop_glue(_12);
+    storage_dead(_12);
+    goto bb3;
+  }
+}
+[stderr]

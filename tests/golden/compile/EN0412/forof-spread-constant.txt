@@ -1,0 +1,50 @@
+$ enrang check tests/compile/EN0412/forof-spread-constant.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/forof-spread-constant.fail.en:3:20
+  |
+3 | private const Y = [...X]; //~ EN0412
+  |                    ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/forof-spread-constant.fail.en:4:33
+  |
+4 | private unsafe let s: i64[2] = [...X]; //~ EN0412
+  |                                 ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/forof-spread-constant.fail.en:5:32
+  |
+5 | private const Z: i64[2] = [0; [...X].length()]; //~ EN0412
+  |                                ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/forof-spread-constant.fail.en:6:23
+  |
+6 | private const W: i64[[...X].length()] = [1, 2]; //~ EN0412
+  |                       ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/forof-spread-constant.fail.en:7:9
+  |
+7 | assert([...X].length() == 2); //~ EN0412
+  |         ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error: aborting due to 5 previous errors

@@ -1,0 +1,12 @@
+let a: i64 = 1;
+let w: W | null = new W(&a);
+{
+  let b: i64 = 2;
+  setw(&w, &b);
+} //~ EN0711 "`b` is dropped while `w`"
+if (w != null) {
+  console.log(w.get());
+}
+
+public function setw(let p: &(W | null), x: &i64): void { *p = new W(x); }
+public class W { private r: &i64; public constructor(r: &i64) { this.r = r; } public get(): i64 { return *this.r; } }

@@ -1,0 +1,9 @@
+let op = Op.Name { s: "abc".toString() };
+match (op) {
+  Op.Name => {
+    console.log(op.s);
+    const o = mem.replace(&op, Op.Add);
+  },
+  default => {},
+}
+private enum Op { Push { value: i64 }, Name { s: string }, Add }

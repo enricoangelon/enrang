@@ -1,0 +1,36 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/field_write_while_shared.fail.en. Its row's codes: EN0706.
+module "tests/compile/EN0706/field_write_while_shared.fail";
+class Pt {
+  x: i64 = default;
+  y: i64 = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Pt; // p
+  let _3: *Pt temp;
+  let _4: void temp;
+  let _5: &i64; // r
+  let _6: void temp;
+  let _7: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Pt leaving(x, y)(move _3) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _5 = &_2.x [explicit];
+    _2.x = const 5: i64; //~ EN0706 "`p.x` cannot change while `r` still points into it"
+    _7 = &*_5 [auto-borrow];
+    _6 = form log(move _7) -> bb2;
+  }
+  bb2: {
+    storage_dead(_5);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

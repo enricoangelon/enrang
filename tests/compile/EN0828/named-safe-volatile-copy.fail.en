@@ -1,0 +1,6 @@
+//! row: `public unsafe function w<T extends Copy>(p:
+public function w<T extends ptr.VolatileValue>(p: *T, v: T): void {
+  unsafe {
+    p.writeVolatile(v); //~ EN0828 "`w` writes through the raw pointer `p`"
+  }
+}

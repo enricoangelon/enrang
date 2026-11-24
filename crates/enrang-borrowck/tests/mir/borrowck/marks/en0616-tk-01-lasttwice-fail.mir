@@ -1,0 +1,185 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/tk-01-lasttwice.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/tk-01-lasttwice.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[][]; // grid
+  let _3: i64[] temp;
+  let _4: i64[] temp;
+  let _5: [&i64[] | null, &i64[] | null] temp;
+  let _6: &i64[][] temp;
+  let _7: &Slice<i64[]> temp;
+  let _8: &i64[] | null; // x
+  let _9: &i64[] | null; // y
+  let _10: bool temp;
+  let _11: bool temp;
+  let _12: u32 temp;
+  let _13: u32 temp;
+  let _14: void temp;
+  let _15: &i64[] temp;
+  let _16: &i64[] temp;
+  fact f0: _8 nonnull;
+  fact f1: _9 nonnull;
+  use f0 at bb2[0];
+  use f1 at bb2[2];
+  test f0 at bb4;
+  test f0 at bb2;
+  test f1 at bb2;
+  bb0: {
+    storage_live(_2);
+    _3 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    _4 = intrinsic AllocArray<i64>(const 3: i64);
+    _2 = intrinsic AllocArray<i64[]>(move _3, move _4);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    _6 = &_2 [explicit];
+    _7 = convert(array_to_slice, move _6);
+    _5 = lastTwice(move _7) -> bb1;
+  }
+  bb1: {
+    storage_live(_8);
+    _8 = copy _5.0;
+    storage_live(_9);
+    _9 = copy _5.1;
+    _12 = discriminant(_8);
+    _11 = ne(move _12, const 0: u32);
+    switch copy _11 [0: bb5, otherwise: bb4];
+  }
+  bb2: {
+    check_tag(_8, Present);
+    _15 = &*(_8 as Present).0 [reborrow];
+    check_tag(_9, Present);
+    _16 = &*(_9 as Present).0 [reborrow]; //~ EN0616
+    _14 = clash(move _15, move _16) -> bb7;
+  }
+  bb3: {
+    storage_dead(_9);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb4: {
+    _13 = discriminant(_9);
+    _10 = ne(move _13, const 0: u32);
+    goto bb6;
+  }
+  bb5: {
+    _10 = copy _11;
+    goto bb6;
+  }
+  bb6: {
+    switch move _10 [0: bb3, otherwise: bb2];
+  }
+  bb7: {
+    goto bb3;
+  }
+}
+
+fn clash(_1: &i64[], _2: &i64[]) -> void {
+  let _1: &i64[]; // x
+  let _2: &i64[]; // y
+  let _3: &i64; // first
+  let _4: isize temp;
+  let _5: isize temp;
+  let _6: i64[] temp;
+  let _7: void temp;
+  let _8: &i64 temp;
+  bb0: {
+    storage_live(_3);
+    _4 = const 0: isize;
+    _5 = len(*_1);
+    check_bounds(copy _4, copy _5);
+    _3 = &(*_1)[_4] [explicit];
+    _6 = intrinsic AllocArray<i64>(const 9: i64);
+    drop(*_2) [assign];
+    *_2 = move _6;
+    drop(_6);
+    storage_dead(_6);
+    _8 = &*_3 [auto-borrow];
+    _7 = form log(move _8) -> bb1;
+  }
+  bb1: {
+    storage_dead(_3);
+    return;
+  }
+}
+
+fn lastTwice(_1: &Slice<i64[]>) -> [&i64[] | null, &i64[] | null] {
+  let _1: &Slice<i64[]>; // rows
+  let mut _2: [&i64[] | null, &i64[] | null]; // t
+  let _3: &i64[] | null temp;
+  let _4: &i64[] | null temp;
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64[]; // r
+  let _9: bool temp;
+  let _10: isize temp;
+  let _11: &i64[] temp;
+  let _12: &i64[] temp;
+  let _13: &i64[] temp;
+  loop l0: path *_1 preheader bb5 head bb1 bind bb2[2] binding _8;
+  bb0: {
+    storage_live(_2);
+    _3 = null;
+    _4 = null;
+    _2 = tuple(move _3, move _4);
+    goto bb5;
+  }
+  bb1: {
+    _6 = len(*_1);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_1)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _0 = copy _2;
+    storage_dead(_2);
+    return;
+  }
+  bb5: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _11 = &*_8 [reborrow];
+    _10 = "alloc/array"::Array<i64>::length(move _11) -> bb9;
+  }
+  bb7: {
+    _12 = &*_8 [reborrow];
+    _2.0 = present(move _12);
+    goto bb8;
+  }
+  bb8: {
+    _13 = &*_8 [reborrow];
+    _2.1 = present(move _13);
+    storage_dead(_8);
+    goto bb3;
+  }
+  bb9: {
+    _9 = gt(move _10, const 1: isize);
+    switch move _9 [0: bb8, otherwise: bb7];
+  }
+}

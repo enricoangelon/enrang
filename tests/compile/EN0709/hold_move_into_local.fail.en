@@ -1,0 +1,6 @@
+//! covers: H22
+let q: string[] = ["a", "b"];
+for (const x of &q) {
+  const m = q; //~ EN0709 "cannot move `q` while iterating over it"
+  console.log(m);
+}

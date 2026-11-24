@@ -1,0 +1,50 @@
+$ enrang check tests/compile/EN0412/spread_in_every_constant_context.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/spread_in_every_constant_context.fail.en:1:9
+  |
+1 | assert([...X].length() == 3, "three"); //~ EN0412 "constant evaluation failed: `...` is not constant"
+  |         ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/spread_in_every_constant_context.fail.en:4:28
+  |
+4 | private const Y: i64[3] = [...X]; //~ EN0412 "constant evaluation failed: `...` is not constant"
+  |                            ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/spread_in_every_constant_context.fail.en:5:38
+  |
+5 | private unsafe let counts: i64[3] = [...X]; //~ EN0412 "constant evaluation failed: `...` is not constant"
+  |                                      ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/spread_in_every_constant_context.fail.en:6:22
+  |
+6 | private const Z: u8[[...X].length()] = [0; 3]; //~ EN0412 "constant evaluation failed: `...` is not constant"
+  |                      ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/spread_in_every_constant_context.fail.en:7:31
+  |
+7 | private const W: u8[3] = [0; [...X].length()]; //~ EN0412 "constant evaluation failed: `...` is not constant"
+  |                               ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error: aborting due to 5 previous errors

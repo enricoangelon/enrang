@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0108/decorated_enum_method.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0108]: a decorator cannot go before an enum method
+ --> tests/compile/EN0108/decorated_enum_method.fail.en:5:3
+  |
+5 |   @inline public name(): string { //~ EN0108
+  |   ^^^^^^^ a decorator marks a declaration
+  |
+  = explain: run `enrang explain EN0108`
+
+error: aborting due to 1 previous error

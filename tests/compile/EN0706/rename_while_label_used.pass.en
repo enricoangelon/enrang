@@ -1,0 +1,16 @@
+public function show(a: &Animal): void {
+  const tag = a.label().toString();
+  a.rename("Max");
+  console.log(tag);
+}
+
+public class Animal {
+  public constructor(public name: string) {}
+  public label(): &string { return "animal"; }
+  public rename(n: string): void { this.name = n; }
+}
+
+public class Dog extends Animal {
+  public constructor(name: string) { super(name); }
+  public override label(): &string { return &this.name; }
+}

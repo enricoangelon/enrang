@@ -1,0 +1,4 @@
+let xs = [1, 2];
+const r = &xs;
+r.push(1);
+xs = [3];

@@ -1,0 +1,6 @@
+let q: i64[] = [1];
+const f = () => { q.push(9); };
+for (const x of &q) { //~ EN0715 "`q` is locked while `f` will still be used"
+  f();
+  console.log(x);
+}

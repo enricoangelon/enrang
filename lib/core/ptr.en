@@ -1,0 +1,17 @@
+// SPEC 8.2, raw pointers (7.1, 7.2): `core/ptr`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// A sealed interface (SPEC 4.4): its implementers are the compiler's table.
+@lang("volatile_value") public interface VolatileValue {}
+
+public function null<T>(): *T { unreachable(); }
+
+extend<T> *T {
+  public isNull(): bool;
+  public add(n: isize): *T;
+  public sub(n: isize): *T;
+  public unsafe read(): T;
+  public unsafe write(v: T): void;
+  @intrinsic("ReadUnaligned") public unsafe readUnaligned(): T;
+  @intrinsic("WriteUnaligned") public unsafe writeUnaligned(v: T): void;
+  @intrinsic("VolatileRead") public unsafe readVolatile(): T where T extends VolatileValue;
+  @intrinsic("VolatileWrite") public unsafe writeVolatile(v: T): void where T extends VolatileValue;
+}

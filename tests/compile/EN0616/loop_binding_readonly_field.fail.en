@@ -1,0 +1,19 @@
+//! covers: H28
+let b = new Board();
+const c = b.firstCell();
+if (c != null) {
+  *c = 9; //~ EN0616 "cannot change the object returned by `firstCell`"
+}
+
+public class Board {
+  private readonly cells: i64[];
+  public constructor() {
+    this.cells = [1, 2, 3];
+  }
+  public firstCell(): &i64 | null {
+    for (const c of &this.cells) {
+      return c;
+    }
+    return null;
+  }
+}

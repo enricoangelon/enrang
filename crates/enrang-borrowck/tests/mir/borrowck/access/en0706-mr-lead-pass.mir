@@ -1,0 +1,92 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/mr-lead.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/mr-lead.pass";
+class Sink {
+  private out: &string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // msg
+  let mut _3: Sink; // sink
+  let _4: &string temp;
+  let _5: &Sink temp;
+  let _6: void temp;
+  let _7: void temp;
+  let _8: &Sink temp;
+  let _9: &string; // r
+  let _10: void temp;
+  let _11: &string temp;
+  let mut _12: string; // lit
+  let _13: Sink; // k
+  let _14: &string temp;
+  let _15: &Sink temp;
+  let _16: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "a": string;
+    storage_live(_3);
+    set_table(_3, Sink);
+    _4 = &_2 [explicit];
+    _5 = &_3 [auto-borrow];
+    _6 = Sink::#ctor(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    _8 = &_3 [auto-borrow];
+    _7 = Sink::add(move _8, const "b": &string) -> bb2;
+  }
+  bb2: {
+    storage_live(_9);
+    _9 = &_2 [explicit];
+    _11 = &*_9 [reborrow];
+    _10 = form log(move _11) -> bb3;
+  }
+  bb3: {
+    storage_live(_12);
+    _12 = const "literal": string;
+    storage_live(_13);
+    set_table(_13, Sink);
+    _14 = &_12 [explicit];
+    _15 = &_13 [auto-borrow];
+    _16 = Sink::#ctor(move _15, move _14) -> bb4;
+  }
+  bb4: {
+    storage_dead(_13);
+    drop(_12);
+    storage_dead(_12);
+    storage_dead(_9);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Sink::#ctor(_1: &Sink, _2: &string) -> void {
+  let _1: &Sink; // this
+  let _2: &string; // out
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).out = move _3;
+    return;
+  }
+}
+
+fn Sink::add(_1: &Sink, _2: &string) -> void {
+  let _1: &Sink; // this
+  let _2: &string; // s
+  let _3: &string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  bb0: {
+    _3 = &*(*_1).out [compound-target];
+    _4 = &*_2 [reborrow];
+    _5 = form append(move _3, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

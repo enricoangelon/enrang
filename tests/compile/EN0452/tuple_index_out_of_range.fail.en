@@ -1,0 +1,7 @@
+public function second(t: [int, int]): int {
+  return t[2]; //~ EN0452 "`[int, int]` has no element 2"
+}
+
+public function pick(t: [int, int], i: isize): int {
+  return t[i]; //~ EN0452 "a tuple index must be a constant"
+}

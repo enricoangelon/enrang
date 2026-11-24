@@ -1,0 +1,5 @@
+zeros()[0] = 1; //~ EN0616 "`zeros` returns a reference that may point at a constant"
+
+public function zeros(): &Slice<i64> {
+  return &[0, 0];
+}

@@ -1,0 +1,22 @@
+[package]
+name = "enrang-hir"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+test = false
+
+[dependencies]
+enrang-base = { path = "../enrang-base" }
+enrang-diag = { path = "../enrang-diag" }
+enrang-target = { path = "../enrang-target" }
+enrang-syntax = { path = "../enrang-syntax" }
+
+[dev-dependencies]
+enrang-testkit = { path = "../enrang-testkit" }
+
+[[test]]
+name = "hir"
+path = "tests/hir/main.rs"
+harness = false

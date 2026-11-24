@@ -1,0 +1,73 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0621/assignment_value_kept_by_argument.fail.en. Its row's codes: EN0621.
+module "tests/compile/EN0621/assignment_value_kept_by_argument.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  let _6: &string temp;
+  let _7: string temp;
+  let _8: &string temp;
+  let _9: void temp;
+  let _10: string temp;
+  assign_value bb2[0];
+  bb0: {
+    storage_live(_2);
+    _3 = const "a": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    _6 = &_2 [compound-target];
+    _7 = const "?": string;
+    _8 = &_7 [temp-arg];
+    _9 = form append(move _6, move _8) -> bb2;
+  }
+  bb2: {
+    _10 = move _2; //~ EN0621 "an assignment's value can't be kept"
+    _5 = keep(move _10) -> bb3;
+  }
+  bb3: {
+    drop(_10);
+    storage_dead(_10);
+    drop(_7);
+    storage_dead(_7);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn keep(_1: string) -> void {
+  let _1: string; // t
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}
+
+fn look(_1: &string) -> void {
+  let _1: &string; // t
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

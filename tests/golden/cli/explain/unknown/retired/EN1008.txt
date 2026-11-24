@@ -1,0 +1,5 @@
+$ enrang explain EN1008
+[exit 2]
+[stdout]
+[stderr]
+error: `EN1008` is retired: `match` guards and ranges are supported now

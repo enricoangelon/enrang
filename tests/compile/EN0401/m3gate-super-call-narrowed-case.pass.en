@@ -1,0 +1,18 @@
+let d = new D();
+d.go();
+public class B {
+  public op: Op = Op.Name { s: "a".toString() };
+  public reset(): void { this.op = Op.Add; }
+}
+public class D extends B {
+  public go(): void {
+    match (this.op) {
+      Op.Name => {
+        console.log(this.op.s);
+        super.reset();
+      },
+      default => {},
+    }
+  }
+}
+private enum Op { Name { s: string }, Add }

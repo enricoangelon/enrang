@@ -1,0 +1,110 @@
+// `super(...)` exactly once on every path (plan d.2, EN0619; A:999, A:1003). Shapes: c.7
+// (plan line 1001) `super(...)` is the base constructor with `this` upcast first; c.3
+// (lines 902-906) each exit drops the parameters; a `never` call has no `next`.
+// EN0619 heads (plan e): `super(name)` isn't called on every path before the
+// constructor returns; `super(age)` may already have run here; `super(...)` must be a
+// statement of the constructor's own body.
+class Animal {
+  age: i64;
+}
+fn Animal::#ctor(_1: &Animal, _2: i64) -> void;
+@final class Quick extends Animal { }
+@final class Twice extends Animal { }
+@final class Quiet extends Animal { }
+@final class Brave extends Animal { }
+
+// `if (quick) { return; } super(age);`: EN0619 at the `return`.
+fn Quick::#ctor(_1: &Quick, _2: i64, _3: bool) -> void {
+  let _4: void temp;
+  let _5: &Animal temp;
+  let _6: &Quick temp;
+  bb0: {
+    switch copy _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    return; //~ EN0619
+  }
+  bb2: {
+    _6 = &*_1 [reborrow];
+    _5 = convert(upcast, move _6);
+    _4 = Animal::#ctor(move _5, copy _2) -> bb3;
+  }
+  bb3: {
+    return;
+  }
+}
+
+// `super(age); super(age);`: EN0619 at the second.
+fn Twice::#ctor(_1: &Twice, _2: i64) -> void {
+  let _3: void temp;
+  let _4: &Animal temp;
+  let _5: &Twice temp;
+  bb0: {
+    _5 = &*_1 [reborrow];
+    _4 = convert(upcast, move _5);
+    _3 = Animal::#ctor(move _4, copy _2) -> bb1;
+  }
+  bb1: {
+    _5 = &*_1 [reborrow];
+    _4 = convert(upcast, move _5);
+    _3 = Animal::#ctor(move _4, copy _2) -> bb2; //~ EN0619
+  }
+  bb2: {
+    return;
+  }
+}
+
+// `if (!quiet) { super(age); }`: EN0619 at the closing brace's `return`.
+fn Quiet::#ctor(_1: &Quiet, _2: i64, _3: bool) -> void {
+  let _4: void temp;
+  let _5: &Animal temp;
+  let _6: &Quiet temp;
+  bb0: {
+    switch copy _3 [0: bb1, otherwise: bb2];
+  }
+  bb1: {
+    _6 = &*_1 [reborrow];
+    _5 = convert(upcast, move _6);
+    _4 = Animal::#ctor(move _5, copy _2) -> bb2;
+  }
+  bb2: {
+    return; //~ EN0619
+  }
+}
+
+// `if (bad) { panic("no"); } super(age);`: a `never` call reaches no exit.
+fn Brave::#ctor(_1: &Brave, _2: i64, _3: bool) -> void {
+  let _4: void temp;
+  let _5: &Animal temp;
+  let _6: &Brave temp;
+  let _7: never temp;
+  bb0: {
+    switch copy _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _7 = form panic(const "no": &string) -> !;
+  }
+  bb2: {
+    _6 = &*_1 [reborrow];
+    _5 = convert(upcast, move _6);
+    _4 = Animal::#ctor(move _5, copy _2) -> bb3;
+  }
+  bb3: {
+    return;
+  }
+}
+
+// A base constructor run on `this` outside a constructor.
+fn Brave::again(_1: &Brave) -> void {
+  let _2: void temp;
+  let _3: &Animal temp;
+  let _4: &Brave temp;
+  bb0: {
+    _4 = &*_1 [reborrow];
+    _3 = convert(upcast, move _4);
+    _2 = Animal::#ctor(move _3, const 1: i64) -> bb1; //~ EN0619
+  }
+  bb1: {
+    return;
+  }
+}

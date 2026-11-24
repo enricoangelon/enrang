@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0718/forward_twice.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0718]: `f` is used twice at once
+ --> tests/compile/EN0718/forward_twice.fail.en:3:10
+  |
+3 | twice(f, f); //~ EN0718 "`f` is used twice at once"
+  |          ^ second use
+  | ----------- the first use ends here
+  |       - first use, still live here
+  |
+  = note: a closure value is used exclusively, so it can't be called, forwarded or captured again while another use of it is live
+  = explain: run `enrang explain EN0718`
+
+error: aborting due to 1 previous error

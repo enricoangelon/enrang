@@ -1,0 +1,42 @@
+// EN0804, phase 4 (A:653, S:1300, H16, H23): `packed.rs` runs `check_packed` on this
+// fixture with `Pk` marked `@packed` (the text form has no `@packed`), expecting
+// EN0804 on each line marked `//= EN0804`; the fixture runner sees no code.
+// Source:
+//   @packed class Pk { a: u8; b: i64; c: u8[2]; s: Inner; p: Box<Inner>; f: Flags; }
+//   refs(k: &Pk) { const b = &k.b; const a = &k.a; const c = &k.c; const v = &k.s.v; const w = &k.p.v; const f = &k.f; }
+// Shapes: field borrows through `*_1` (c.4); a `Box` deref (c.4).
+class Inner {
+  v: i64;
+}
+class Flags {
+  x: u8;
+  y: bool;
+}
+class Pk {
+  a: u8;
+  b: i64;
+  c: u8[2];
+  s: Inner;
+  p: Box<Inner>;
+  f: Flags;
+}
+
+fn refs(_1: &Pk) -> void {
+  let _2: &i64 temp;
+  let _3: &u8 temp;
+  let _4: &u8[2] temp;
+  let _5: &i64 temp;
+  let _6: &i64 temp;
+  let _7: &Flags temp;
+  let _8: &Inner temp;
+  bb0: {
+    _2 = &(*_1).b [explicit]; //= EN0804
+    _3 = &(*_1).a [explicit];
+    _4 = &(*_1).c [explicit];
+    _5 = &(*_1).s.v [explicit]; //= EN0804
+    _6 = &(*(*_1).p).v [explicit];
+    _7 = &(*_1).f [explicit];
+    _8 = &(*_1).s [explicit]; //= EN0804
+    return;
+  }
+}

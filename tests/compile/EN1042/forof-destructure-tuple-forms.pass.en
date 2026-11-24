@@ -1,0 +1,21 @@
+//! row: `const [lo, hi] = minMax(&xs);`, `[a, b]
+const xs: i64[] = [3, 1, 2];
+const [lo, hi] = minMax(&xs);
+let a = "x" + "";
+let b = "y" + "";
+[a, b] = [b, a];
+const ada = new User { name: "Ada", age: 36 };
+const { name: who, age } = &ada;
+console.log(lo, hi, a, b, who, age);
+
+public class User { public name: string; public age: i64; }
+
+public function minMax(xs: &i64[]): [i64, i64] {
+  let lo = xs[0];
+  let hi = xs[0];
+  for (const x of xs) {
+    if (*x < lo) { lo = *x; }
+    if (*x > hi) { hi = *x; }
+  }
+  return [lo, hi];
+}

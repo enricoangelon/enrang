@@ -1,0 +1,8 @@
+public class Animal {
+  protected sound: string = "...";
+  public constructor(public name: string) {}
+}
+
+public class Dog extends Animal {
+  protected override sound: string = "woof";
+}

@@ -1,0 +1,10 @@
+//! row: `for (const x of &*b)` with `b: Box<T[]>
+public function assign(): void {
+  let b: Box<i64[]> = new Box([1, 2]);
+  for (const x of &*b) {
+    console.log(x);
+  }
+  b = new Box([3]);
+  const v = b.unbox();
+  console.log(v);
+}

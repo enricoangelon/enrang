@@ -1,0 +1,75 @@
+$ enrang check --target=x86_64-windows tests/compile/EN1030/aggregates_by_value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1030]: this foreign ABI is not supported yet
+ --> tests/compile/EN1030/aggregates_by_value.fail.en:2:57
+  |
+2 | @dll("kernel32.dll") public declare function ByValue(p: Point): void; //~ EN1030 "this foreign ABI is not supported yet"
+  |                                                         ^^^^^ a class passed by value
+  |
+  = note: foreign code is called with `win64` or `sysv`, passing scalars and pointers.
+help: Use scalars and pointers
+  = explain: run `enrang explain EN1030`
+
+error[EN1030]: this foreign ABI is not supported yet
+ --> tests/compile/EN1030/aggregates_by_value.fail.en:4:55
+  |
+4 | @dll("kernel32.dll") public declare function Boxed(b: Box<i32>): void; //~ EN1030 "this foreign ABI is not supported yet"
+  |                                                       ^^^^^^^^ a class passed by value
+  |
+  = note: foreign code is called with `win64` or `sysv`, passing scalars and pointers.
+help: Use scalars and pointers
+  = explain: run `enrang explain EN1030`
+
+error[EN1030]: this foreign ABI is not supported yet
+ --> tests/compile/EN1030/aggregates_by_value.fail.en:6:53
+  |
+6 | @dll("kernel32.dll") public declare function Tup(t: [i32, i32]): void; //~ EN1030 "this foreign ABI is not supported yet"
+  |                                                     ^^^^^^^^^^ a struct passed by value
+  |
+  = note: foreign code is called with `win64` or `sysv`, passing scalars and pointers.
+help: Use scalars and pointers
+  = explain: run `enrang explain EN1030`
+
+error[EN1030]: this foreign ABI is not supported yet
+ --> tests/compile/EN1030/aggregates_by_value.fail.en:8:53
+  |
+8 | @dll("kernel32.dll") public declare function Obj(o: { x: i32 }): void; //~ EN1030 "this foreign ABI is not supported yet"
+  |                                                     ^^^^^^^^^^ a struct passed by value
+  |
+  = note: foreign code is called with `win64` or `sysv`, passing scalars and pointers.
+help: Use scalars and pointers
+  = explain: run `enrang explain EN1030`
+
+error[EN1030]: this foreign ABI is not supported yet
+  --> tests/compile/EN1030/aggregates_by_value.fail.en:10:57
+   |
+10 | @dll("kernel32.dll") public declare function Payload(c: Shape): void; //~ EN1030 "this foreign ABI is not supported yet"
+   |                                                         ^^^^^ an enum with fields passed by value
+   |
+   = note: foreign code is called with `win64` or `sysv`, passing scalars and pointers.
+help: Use scalars and pointers
+   = explain: run `enrang explain EN1030`
+
+error[EN1030]: this foreign ABI is not supported yet
+  --> tests/compile/EN1030/aggregates_by_value.fail.en:12:55
+   |
+12 | @dll("kernel32.dll") public declare function Iface(c: Eq): void; //~ EN1030 "this foreign ABI is not supported yet"
+   |                                                       ^^ an interface passed by value
+   |
+   = note: foreign code is called with `win64` or `sysv`, passing scalars and pointers.
+help: Use scalars and pointers
+   = explain: run `enrang explain EN1030`
+
+error[EN1030]: this foreign ABI is not supported yet
+  --> tests/compile/EN1030/aggregates_by_value.fail.en:14:47
+   |
+14 | public type Cb = @abi("win64") unsafe fn() => Point; //~ EN1030 "this foreign ABI is not supported yet"
+   |                                               ^^^^^ a class passed by value
+   |
+   = note: foreign code is called with `win64` or `sysv`, passing scalars and pointers.
+help: Use scalars and pointers
+   = explain: run `enrang explain EN1030`
+
+error: aborting due to 7 previous errors

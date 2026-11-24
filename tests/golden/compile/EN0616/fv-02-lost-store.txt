@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN0616/fv-02-lost-store.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot store a reference into a value reached through consumed `this`
+  --> tests/compile/EN0616/fv-02-lost-store.fail.en:39:5
+   |
+39 |     this.cp.retarget(s); //~ EN0616 "cannot store a reference into a value reached through consumed `this`"
+   |     ^^^^^^^^^^^^^^^^^^^ stored here
+   |
+   = note: a consumed value is disposed of when the function ends, so nothing stored in it reaches the caller
+help: write the field directly, or take the value by reference
+   = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot store a reference into a value reached through by-value `w`
+  --> tests/compile/EN0616/fv-02-lost-store.fail.en:42:5
+   |
+42 |     w.cp.retarget(s); //~ EN0616 "cannot store a reference into a value reached through by-value `w`"
+   |     ^^^^^^^^^^^^^^^^ stored here
+   |
+   = note: a consumed value is disposed of when the function ends, so nothing stored in it reaches the caller
+help: write the field directly, or take the value by reference
+   = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot store a reference into a value reached through by-value `t`
+  --> tests/compile/EN0616/fv-02-lost-store.fail.en:47:3
+   |
+47 |   t[0].retarget(s); //~ EN0616
+   |   ^^^^^^^^^^^^^^^^ stored here
+   |
+   = note: a consumed value is disposed of when the function ends, so nothing stored in it reaches the caller
+help: write the field directly, or take the value by reference
+   = explain: run `enrang explain EN0616`
+
+error: aborting due to 3 previous errors

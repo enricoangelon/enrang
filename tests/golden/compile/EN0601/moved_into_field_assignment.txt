@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0601/moved_into_field_assignment.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `name` was moved into `u.name`
+ --> tests/compile/EN0601/moved_into_field_assignment.fail.en:4:13
+  |
+2 | const name = "Ada".toString();
+  |       ---- `name` owns this `string`, which is not Copy
+3 | u.name = name;
+  |          ---- `name` moves here
+4 | console.log(name); //~ EN0601
+  |             ^^^^ used here, after the move
+  |
+  = explain: run `enrang explain EN0601`
+
+error: aborting due to 1 previous error

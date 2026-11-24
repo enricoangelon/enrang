@@ -1,0 +1,20 @@
+$ enrang check tests/compile/EN0706/s2-07-ref.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `data` cannot change while `e` still points into it
+ --> tests/compile/EN0706/s2-07-ref.fail.en:3:28
+  |
+2 | const e = &data[0];
+  |           -------- shared borrow of `data` starts here, held by `e`
+3 | let pair: [&i64[], i32] = [&data, 1]; //~ EN0706
+  |                            ^^^^^ `data` changes here
+4 | const t = &pair;
+5 | t[0].push(4);
+6 | console.log(*e);
+  |              - `e` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

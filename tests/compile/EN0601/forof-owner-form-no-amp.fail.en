@@ -1,0 +1,5 @@
+//! row: The same over `queue` with no `&`
+let queue = ["a", "b"];
+for (const job of queue) {
+  queue.push("retry"); //~ EN0601
+}

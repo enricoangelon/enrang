@@ -1,0 +1,9 @@
+$ enrang inti
+[exit 2]
+[stdout]
+[stderr]
+error[EN1302]: `inti` is not an `enrang` command
+help: did you mean `enrang init`?
+  = explain: run `enrang explain EN1302`
+
+error: aborting due to 1 previous error

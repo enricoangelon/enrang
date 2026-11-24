@@ -1,0 +1,9 @@
+function archive(u: &User): void { console.log(u.name); }
+
+const u = new User("Ada");
+archive(&u);
+console.log(u.name);
+
+private class User {
+  public constructor(public name: string) {}
+}

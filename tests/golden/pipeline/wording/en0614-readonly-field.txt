@@ -1,0 +1,9 @@
+error[EN0614]: `find` returns a reference reached from the `readonly &` field `rows`, so `push` cannot change it
+ --> main.en:4:18
+  |
+4 | if (r != null) { r.push(5); }
+  |                  ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

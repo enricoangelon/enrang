@@ -1,0 +1,13 @@
+//! covers: H19
+let n: i64 = 1;
+const r = &n;
+run2(r);
+run(() => { *r += 1; });
+
+private function run(f: () => void): void {
+  f();
+}
+
+private function run2(x: &i64): void {
+  *x += 1;
+}

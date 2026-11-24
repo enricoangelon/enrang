@@ -1,0 +1,20 @@
+$ enrang check tests/compile/EN0706/inf-05.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `y.items` cannot change while `r` still points into it
+  --> tests/compile/EN0706/inf-05.fail.en:8:3
+   |
+ 6 | const r = pk.pick(&x, &y, 1);
+   |                       -- shared borrow of `y` starts here, held by `r`
+ 7 | for (let i = 0; i < 3; i++) {
+ 8 |   y.items.push(i); //~ EN0706
+   |   ^^^^^^^^^^^^^^^ `push` changes `y.items`, so it needs exclusive access to it
+ 9 | }
+10 | console.log(r);
+   |             - `r` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

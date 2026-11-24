@@ -1,0 +1,4 @@
+//! row: `[...b]` with `b: Box<T[]>`, `[...5]`, `
+const b: Box<i64[]> = new Box([1, 2]);
+const c1 = [...*b];
+console.log(c1);

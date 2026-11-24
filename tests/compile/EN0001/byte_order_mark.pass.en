@@ -1,0 +1,2 @@
+﻿const greeting = "café";
+console.log(greeting);

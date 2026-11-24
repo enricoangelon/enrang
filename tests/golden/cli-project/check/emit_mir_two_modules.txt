@@ -1,0 +1,36 @@
+$ enrang check --emit=mir main.en
+[exit 0]
+[stdout]
+module "lib";
+
+fn one() -> i64 perms() sources() result none {
+  phase elaborated;
+  bb0: {
+    _0 = const 1: i64;
+    return;
+  }
+}
+
+fn "lib"::one() -> i64 perms() sources() result none;
+
+statements (_1: string[]) -> int {
+  phase elaborated;
+  let _1: string[]; // args
+  let _2: i64; // n
+  let _3: void temp;
+  let _4: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = "lib"::one() -> bb1;
+  }
+  bb1: {
+    _4 = &_2 [auto-borrow];
+    _3 = form log(move _4) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    drop_glue(_1);
+    return;
+  }
+}
+[stderr]

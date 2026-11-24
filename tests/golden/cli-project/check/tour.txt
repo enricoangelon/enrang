@@ -1,0 +1,4 @@
+$ enrang check tour.en
+[exit 0]
+[stdout]
+[stderr]

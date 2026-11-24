@@ -1,0 +1,6 @@
+const b = new Box("a".toString());
+take(b.unbox());
+
+public function take(s: string): void {
+  console.log(s);
+}

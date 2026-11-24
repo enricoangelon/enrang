@@ -1,0 +1,22 @@
+let c = new Counter();
+console.log(c.count); //~ EN0308 "`count` is private to `Counter`"
+c.reset(); //~ EN0308 "`reset` is private to `Counter`"
+console.log(c.step); //~ EN0308 "`step` is protected in `Counter`"
+const d = new Counter { count: 5 }; //~ EN0308 "`count` is private to `Counter`"
+
+public class Counter {
+  private count: i64 = 0;
+  protected step: i64 = 1;
+  private reset(): void {
+    this.count = 0;
+  }
+  public total(): i64 {
+    return this.count;
+  }
+}
+
+private class Probe extends Counter {
+  public peek(): i64 {
+    return this.count; //~ EN0308 "`count` is private to `Counter`"
+  }
+}

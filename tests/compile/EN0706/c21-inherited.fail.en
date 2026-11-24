@@ -1,0 +1,18 @@
+let rex = new Dog("Rex".toString());
+const tag = rex.label();
+rex.rename("Max"); //~ EN0706
+console.log(tag);
+
+public class Animal {
+  public constructor(public name: string) {}
+
+  public label(): &string {
+    return &this.name;
+  }
+
+  public rename(n: &string): void {
+    this.name = n.toString();
+  }
+}
+
+public class Dog extends Animal {}

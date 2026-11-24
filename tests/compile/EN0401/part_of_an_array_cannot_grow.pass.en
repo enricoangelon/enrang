@@ -1,0 +1,12 @@
+let list: i64[] = [1, 2, 3];
+addOne(&list);
+setFirst(list.slice(0, 2));
+console.log(list);
+
+private function addOne(xs: &i64[]): void {
+  xs.push(1);
+}
+
+private function setFirst(part: &Slice<i64>): void {
+  part[0] = 9;
+}

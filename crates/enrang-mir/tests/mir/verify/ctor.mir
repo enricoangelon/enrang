@@ -1,0 +1,30 @@
+class Base {
+  a: i64 = default;
+}
+fn Base::#ctor(_1: &Base) -> void;
+class Mid extends Base {
+  a: i64 = default override;
+  b: i64;
+}
+
+fn Mid::#ctor(_1: &Mid, _2: i64) -> void {
+  let _3: void temp;
+  let _4: &Base temp;
+  let _5: &Mid temp;
+  bb0: {
+    switch const overridden(a): bool [0: bb1, otherwise: bb2];
+  }
+  bb1: {
+    field_init((*_1).a, const 5: i64);
+    goto bb2;
+  }
+  bb2: {
+    _5 = &*_1 [reborrow];
+    _4 = convert(upcast, move _5);
+    _3 = Base::#ctor(move _4) -> bb3;
+  }
+  bb3: {
+    (*_1).b = copy _2;
+    return;
+  }
+}

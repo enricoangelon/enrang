@@ -1,0 +1,157 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0708/f3.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0708/f3.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+class Holder {
+  private slot: &Box<i64>;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Box<i64>; // one
+  let _3: &Box<i64> temp;
+  let _4: void temp;
+  let mut _5: Holder; // h
+  let _6: &Box<i64> temp;
+  let _7: &Holder temp;
+  let _8: void temp;
+  let _9: &Box<i64>; // w1
+  let _10: &Holder temp;
+  let _11: Box<i64> temp;
+  let _12: &Box<i64> temp;
+  let _13: void temp;
+  let _14: &Box<i64>; // w2
+  let _15: &Holder temp;
+  let _16: &i64; // inner
+  let _17: void temp;
+  let _18: &i64 temp;
+  let mut _19: Box<i64>; // two
+  let _20: &Box<i64> temp;
+  let _21: void temp;
+  let mut _22: Holder; // k
+  let _23: &Box<i64> temp;
+  let _24: &Holder temp;
+  let _25: void temp;
+  let _26: &Box<i64>; // v1
+  let _27: &Holder temp;
+  let _28: Box<i64> temp;
+  let _29: &Box<i64> temp;
+  let _30: void temp;
+  let _31: &Box<i64>; // v2
+  let _32: &Holder temp;
+  let _33: Box<i64> temp;
+  let _34: &Box<i64> temp;
+  let _35: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &_2 [auto-borrow];
+    _4 = "alloc/box"::Box<i64>::#ctor(move _3, const 1: i64) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    set_table(_5, Holder);
+    _6 = &_2 [explicit];
+    _7 = &_5 [auto-borrow];
+    _8 = Holder::#ctor(move _7, move _6) -> bb2;
+  }
+  bb2: {
+    storage_live(_9);
+    _10 = &_5 [auto-borrow];
+    _9 = Holder::take(move _10) -> bb3;
+  }
+  bb3: {
+    _12 = &_11 [auto-borrow];
+    _13 = "alloc/box"::Box<i64>::#ctor(move _12, const 7: i64) -> bb4;
+  }
+  bb4: {
+    drop(*_9) [assign];
+    *_9 = move _11;
+    drop(_11);
+    storage_dead(_11);
+    storage_live(_14);
+    _15 = &_5 [auto-borrow];
+    _14 = Holder::take(move _15) -> bb5;
+  }
+  bb5: {
+    storage_live(_16);
+    _16 = &**_14 [reborrow];
+    _18 = &*_16 [auto-borrow];
+    _17 = form log(move _18) -> bb6;
+  }
+  bb6: {
+    storage_live(_19);
+    _20 = &_19 [auto-borrow];
+    _21 = "alloc/box"::Box<i64>::#ctor(move _20, const 2: i64) -> bb7;
+  }
+  bb7: {
+    storage_live(_22);
+    set_table(_22, Holder);
+    _23 = &_19 [explicit];
+    _24 = &_22 [auto-borrow];
+    _25 = Holder::#ctor(move _24, move _23) -> bb8;
+  }
+  bb8: {
+    storage_live(_26);
+    _27 = &_22 [auto-borrow];
+    _26 = Holder::take(move _27) -> bb9;
+  }
+  bb9: {
+    _29 = &_28 [auto-borrow];
+    _30 = "alloc/box"::Box<i64>::#ctor(move _29, const 7: i64) -> bb10;
+  }
+  bb10: {
+    drop(*_26) [assign];
+    *_26 = move _28;
+    drop(_28);
+    storage_dead(_28);
+    storage_live(_31);
+    _32 = &_22 [auto-borrow];
+    _31 = Holder::take(move _32) -> bb11;
+  }
+  bb11: {
+    _34 = &_33 [auto-borrow];
+    _35 = "alloc/box"::Box<i64>::#ctor(move _34, const 8: i64) -> bb12;
+  }
+  bb12: {
+    drop(*_31) [assign];
+    *_31 = move _33;
+    drop(_33);
+    storage_dead(_33);
+    storage_dead(_31);
+    storage_dead(_26);
+    storage_dead(_22);
+    drop(_19);
+    storage_dead(_19);
+    storage_dead(_16);
+    storage_dead(_14);
+    storage_dead(_9);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Holder::#ctor(_1: &Holder, _2: &Box<i64>) -> void {
+  let _1: &Holder; // this
+  let _2: &Box<i64>; // slot
+  let _3: &Box<i64> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).slot = move _3;
+    return;
+  }
+}
+
+fn Holder::take(_1: &Holder) -> &Box<i64> {
+  let _1: &Holder; // this
+  bb0: {
+    _0 = copy (*_1).slot;
+    return;
+  }
+}

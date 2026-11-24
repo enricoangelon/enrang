@@ -1,0 +1,5 @@
+$ enrang explain EN0217
+[exit 2]
+[stdout]
+[stderr]
+error: `EN0217` is retired: an object literal without a class is an anonymous object now

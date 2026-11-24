@@ -1,0 +1,14 @@
+let q = ["a", "b"];
+let n = 0;
+while (n < 2) {
+  for (const x of &q) {
+    console.log(x);
+  }
+  take(q);
+  q = ["c"];
+  n++;
+}
+
+public function take(xs: string[]): void {
+  console.log(xs);
+}

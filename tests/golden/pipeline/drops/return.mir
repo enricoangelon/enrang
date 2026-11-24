@@ -1,0 +1,29 @@
+fn demo() -> i64 perms() sources() result none {
+  phase elaborated;
+  let _1: string temp;
+  let _2: &string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  bb0: {
+    _1 = const "a": string;
+    _2 = &_1 [temp-arg];
+    _3 = const "b": string;
+    _4 = &_3 [temp-arg];
+    _5 = form concat(move _2, move _4) -> bb1;
+  }
+  bb1: {
+    _6 = &_5 [temp-arg];
+    _0 = len(move _6) -> bb2;
+  }
+  bb2: {
+    drop_glue(_5);
+    storage_dead(_5);
+    drop_glue(_3);
+    storage_dead(_3);
+    drop_glue(_1);
+    storage_dead(_1);
+    return;
+  }
+}

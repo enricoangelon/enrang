@@ -1,0 +1,14 @@
+console.log(run(true));
+const later = (): Result<void> => {
+  const dryRun = true;
+  if (dryRun) { return; }
+  console.log("ran");
+  return;
+};
+console.log(later());
+
+private function run(dryRun: bool): Result<void> {
+  if (dryRun) { return; }
+  console.log("ran");
+  return;
+}

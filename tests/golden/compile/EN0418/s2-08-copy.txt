@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0418/s2-08-copy.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0418]: `Cursor` writes through its reference fields, so copying it would make two writers
+ --> tests/compile/EN0418/s2-08-copy.fail.en:9:15
+  |
+9 | private class Cursor implements Copy { //~ EN0418 "`Cursor` writes through its reference fields, so copying it would make two writers"
+  |               ^^^^^^ declared `implements Copy` here
+  |
+help: if `Cursor` only reads through them, write `readonly` before their types or before the return types that hand them out, or remove `implements Copy`
+  = explain: run `enrang explain EN0418`
+
+error[EN0418]: `Sub` writes through its reference fields, so copying it would make two writers
+  --> tests/compile/EN0418/s2-08-copy.fail.en:52:20
+   |
+52 | public final class Sub extends Base implements Copy { //~ EN0418 "`Sub` writes through its reference fields, so copying it would make two writers"
+   |                    ^^^ declared `implements Copy` here
+   |
+help: if `Sub` only reads through them, write `readonly` before their types or before the return types that hand them out, or remove `implements Copy`
+   = explain: run `enrang explain EN0418`
+
+error: aborting due to 2 previous errors

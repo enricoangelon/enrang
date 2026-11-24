@@ -1,0 +1,8 @@
+//! row: An unrelated EN0706 and warning EN0453 f
+let queue = ["a", "b"];
+for (const job of &queue) {
+  console.log(job);
+}
+queue.push("retry");
+const name = " Ada ";
+console.log(name.trim());

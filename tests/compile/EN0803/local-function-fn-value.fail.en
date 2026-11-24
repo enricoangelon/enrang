@@ -1,0 +1,6 @@
+let v: i64[] = [1];
+function grow(): void { v.push(2); }
+const f = grow; //~ EN0803 "`grow` uses top-level variables, so it can't become an `fn`"
+const e = &v[0];
+f();
+console.log(*e);

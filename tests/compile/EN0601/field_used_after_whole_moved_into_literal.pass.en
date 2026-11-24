@@ -1,0 +1,11 @@
+const u = new User { name: "Bo" };
+const t = new Team { owner: u };
+console.log(t.owner.name);
+
+public class User {
+  public name: string;
+}
+
+public class Team {
+  public owner: User;
+}

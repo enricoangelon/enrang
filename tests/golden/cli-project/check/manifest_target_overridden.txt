@@ -1,0 +1,4 @@
+$ enrang check --target=x86_64-linux --cpu=x86-64
+[exit 0]
+[stdout]
+[stderr]

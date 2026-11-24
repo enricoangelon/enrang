@@ -1,0 +1,6 @@
+console.log(twice(4));
+
+private function twice(n: i64 | null): i64 | null {
+  const m = n?;
+  return m * 2;
+}

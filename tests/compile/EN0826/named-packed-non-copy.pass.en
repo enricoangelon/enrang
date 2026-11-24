@@ -1,0 +1,8 @@
+//! row: `@packed public final class P { public s:
+@packed public final class P {
+  public s: u8[8];
+}
+
+public final class G<T> {
+  public v: T;
+}

@@ -1,0 +1,8 @@
+let v: i64[] = [1, 2];
+const r = &v;
+const a = r;
+a.push(3);
+a.push(4);
+const b = r;
+const e = &b[0];
+console.log(*e);

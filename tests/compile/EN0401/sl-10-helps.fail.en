@@ -1,0 +1,10 @@
+let sector: u8[8] = [0; 8];
+addOne(&sector); //~ EN0401 "a fixed array can't grow"
+
+private function addOne(xs: &u8[]): void {
+  xs.push(1);
+}
+
+private function g(part: &Slice<u8>): void {
+  addOne(part); //~ EN0401 "a part of an array can't grow"
+}

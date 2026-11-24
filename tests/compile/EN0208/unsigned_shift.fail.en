@@ -1,0 +1,3 @@
+const x: u32 = 64;
+const y = x >>> 2; //~ EN0208
+console.log(y);

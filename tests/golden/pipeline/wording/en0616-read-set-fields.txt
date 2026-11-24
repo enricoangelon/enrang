@@ -1,0 +1,20 @@
+error[EN0616]: `src` is declared `readonly &`, so it can't hold a reference from `dst`
+ --> main.en:6:97
+  |
+6 |   public static alias(s: &u8[], d: &u8[]): Copier { let w = Copier.make(s, d); const p = w.dst; w.src = p; return w; } }
+  |                                                                                                 ^^^^^^^^^ stored here
+  |
+help: store a reference from a parameter, or from another `readonly &` field
+  = explain: run `enrang explain EN0616`
+
+error[EN0709]: cannot move `w` while it is borrowed
+ --> main.en:6:115
+  |
+6 |   public static alias(s: &u8[], d: &u8[]): Copier { let w = Copier.make(s, d); const p = w.dst; w.src = p; return w; } }
+  |                                                                                                                   ^ `w` moves here
+  |                                                                                          ----- shared borrow of `w` starts here
+  |
+help: move `w` after its last borrow
+  = explain: run `enrang explain EN0709`
+
+error: aborting due to 2 previous errors

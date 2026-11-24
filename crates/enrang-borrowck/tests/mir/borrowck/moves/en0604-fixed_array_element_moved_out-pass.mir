@@ -1,0 +1,51 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0604/fixed_array_element_moved_out.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0604/fixed_array_element_moved_out.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: string[2]; // a
+  let _3: string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: string temp;
+  let _7: string temp;
+  let _8: &string temp;
+  let _9: &string; // s
+  let _10: void temp;
+  let _11: &string temp;
+  bb0: {
+    storage_live(_2);
+    _4 = const "a": string;
+    _5 = &_4 [temp-arg];
+    _3 = form to_string(move _5) -> bb1;
+  }
+  bb1: {
+    _7 = const "b": string;
+    _8 = &_7 [temp-arg];
+    _6 = form to_string(move _8) -> bb2;
+  }
+  bb2: {
+    _2 = fixed<string>[move _3, move _6];
+    drop(_6);
+    storage_dead(_6);
+    drop(_7);
+    storage_dead(_7);
+    drop(_3);
+    storage_dead(_3);
+    drop(_4);
+    storage_dead(_4);
+    storage_live(_9);
+    _9 = &_2[0] [explicit];
+    _11 = &*_9 [reborrow];
+    _10 = form log(move _11) -> bb3;
+  }
+  bb3: {
+    storage_dead(_9);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

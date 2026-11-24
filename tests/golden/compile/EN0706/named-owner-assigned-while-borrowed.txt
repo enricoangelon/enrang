@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/named-owner-assigned-while-borrowed.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `x` cannot change while `y` still points into it
+ --> tests/compile/EN0706/named-owner-assigned-while-borrowed.fail.en:4:1
+  |
+3 | const y = &x;
+  |           -- shared borrow of `x` starts here, held by `y`
+4 | x = 13; //~ EN0706 "`x` cannot change while `y` still points into it"
+  | ^^^^^^ `x` changes here
+5 | console.log(*y);
+  |              - `y` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0615/s2-13-value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `choose(false)` may hold a function that takes `s` as a part, so it can't become a `fn(let s: &string) => void`
+ --> tests/compile/EN0615/s2-13-value.fail.en:5:5
+  |
+5 | run(choose(false), &msg); //~ EN0615 "`choose(false)` may hold a function that takes `s` as a part, so it can't become a `fn(let s: &string) => void`"
+  |     ^^^^^^^^^^^^^ converted here
+  |
+help: declare the wider row where the value comes from: `fn(let s: &string) => void`
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

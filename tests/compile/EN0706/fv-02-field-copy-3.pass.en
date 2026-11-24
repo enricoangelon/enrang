@@ -1,0 +1,13 @@
+//! covers: H33
+public final class Holder {
+  private v: &u8[];
+  public constructor(v: &u8[]) {
+    this.v = v;
+  }
+  public dup(): void {
+    const a = &this.v[0];
+    const b = this.v;
+    console.log(b.length());
+    console.log(*a);
+  }
+}

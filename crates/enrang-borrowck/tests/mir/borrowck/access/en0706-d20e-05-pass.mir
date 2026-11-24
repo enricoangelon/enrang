@@ -1,0 +1,232 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/d20e-05.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/d20e-05.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Adder {
+  private xs: &i64[];
+}
+class Bumper {
+  private r: &i64;
+}
+class Pusher {
+  private xs: &i64[];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // xs
+  let _3: &i64; // first
+  let _4: isize temp;
+  let _5: isize temp;
+  let _6: void temp;
+  let _7: &i64 temp;
+  let _8: Pusher; // p
+  let _9: &i64[] temp;
+  let _10: &Pusher temp;
+  let _11: void temp;
+  let _12: void temp;
+  let _13: isize temp;
+  let _14: &Pusher temp;
+  let _15: &isize temp;
+  let mut _16: i64[]; // ys
+  let _17: &i64; // head
+  let _18: isize temp;
+  let _19: isize temp;
+  let _20: void temp;
+  let _21: &i64 temp;
+  let mut _22: Adder; // p
+  let _23: &i64[] temp;
+  let _24: &Adder temp;
+  let _25: void temp;
+  let _26: void temp;
+  let _27: &Adder temp;
+  let mut _28: i64; // n
+  let _29: Bumper; // b
+  let _30: &i64 temp;
+  let _31: &Bumper temp;
+  let _32: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    storage_live(_3);
+    _4 = const 0: isize;
+    _5 = len(_2);
+    check_bounds(copy _4, copy _5);
+    _3 = &_2[_4] [explicit];
+    _7 = &*_3 [auto-borrow];
+    _6 = form log(move _7) -> bb1;
+  }
+  bb1: {
+    storage_live(_8);
+    set_table(_8, Pusher);
+    _9 = &_2 [explicit];
+    _10 = &_8 [auto-borrow];
+    _11 = Pusher::#ctor(move _10, move _9) -> bb2;
+  }
+  bb2: {
+    _14 = &_8 [auto-borrow];
+    _13 = Pusher::size(move _14) -> bb3;
+  }
+  bb3: {
+    _15 = &_13 [temp-arg];
+    _12 = form log(move _15) -> bb4;
+  }
+  bb4: {
+    storage_dead(_13);
+    drop(_8);
+    storage_dead(_8);
+    storage_live(_16);
+    _16 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    storage_live(_17);
+    _18 = const 0: isize;
+    _19 = len(_16);
+    check_bounds(copy _18, copy _19);
+    _17 = &_16[_18] [explicit];
+    _21 = &*_17 [auto-borrow];
+    _20 = form log(move _21) -> bb5;
+  }
+  bb5: {
+    storage_live(_22);
+    set_table(_22, Adder);
+    _23 = &_16 [explicit];
+    _24 = &_22 [auto-borrow];
+    _25 = Adder::#ctor(move _24, move _23) -> bb6;
+  }
+  bb6: {
+    _27 = &_22 [auto-borrow];
+    _26 = Adder::add(move _27, const 2: i64) -> bb7;
+  }
+  bb7: {
+    storage_dead(_22);
+    storage_live(_28);
+    _28 = const 5: i64;
+    storage_live(_29);
+    set_table(_29, Bumper);
+    _30 = &_28 [explicit];
+    _31 = &_29 [auto-borrow];
+    _32 = Bumper::#ctor(move _31, move _30) -> bb8;
+  }
+  bb8: {
+    drop(_29);
+    storage_dead(_29);
+    storage_dead(_28);
+    storage_dead(_17);
+    drop(_16);
+    storage_dead(_16);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Adder::#ctor(_1: &Adder, _2: &i64[]) -> void {
+  let _1: &Adder; // this
+  let _2: &i64[]; // xs
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).xs = move _3;
+    return;
+  }
+}
+
+fn Adder::add(_1: &Adder, _2: i64) -> void {
+  let _1: &Adder; // this
+  let _2: i64; // v
+  let _3: void temp;
+  let _4: &i64[] temp;
+  bb0: {
+    _4 = copy (*_1).xs;
+    _3 = "alloc/array"::Array<i64>::push(move _4, copy _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Bumper::#ctor(_1: &Bumper, _2: &i64) -> void {
+  let _1: &Bumper; // this
+  let _2: &i64; // r
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    return;
+  }
+}
+
+fn Bumper::#dtor(_1: &Bumper) -> void {
+  let _1: &Bumper; // this
+  let _2: i64 temp;
+  bb0: {
+    _2 = copy *(*_1).r;
+    *(*_1).r = checked_add(copy _2, const 1: i64);
+    return;
+  }
+}
+
+fn Pusher::#ctor(_1: &Pusher, _2: &i64[]) -> void {
+  let _1: &Pusher; // this
+  let _2: &i64[]; // xs
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).xs = move _3;
+    return;
+  }
+}
+
+fn Pusher::#dtor(_1: &Pusher) -> void {
+  let _1: &Pusher; // this
+  let mut _2: i64; // i
+  let _3: bool temp;
+  let _4: void temp;
+  let _5: &i64[] temp;
+  let _6: i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 0: i64;
+    goto bb1;
+  }
+  bb1: {
+    _3 = lt(copy _2, const 8: i64);
+    switch move _3 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    _5 = copy (*_1).xs;
+    _4 = "alloc/array"::Array<i64>::push(move _5, copy _2) -> bb5;
+  }
+  bb3: {
+    _6 = copy _2;
+    _2 = checked_add(copy _6, const 1: i64);
+    goto bb1;
+  }
+  bb4: {
+    storage_dead(_2);
+    return;
+  }
+  bb5: {
+    goto bb3;
+  }
+}
+
+fn Pusher::size(_1: &Pusher) -> isize {
+  let _1: &Pusher; // this
+  let _2: &i64[] temp;
+  bb0: {
+    _2 = copy (*_1).xs;
+    _0 = "alloc/array"::Array<i64>::length(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

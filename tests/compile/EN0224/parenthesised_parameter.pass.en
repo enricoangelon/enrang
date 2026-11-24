@@ -1,0 +1,4 @@
+const double = (x: i64): i64 => x * 2;
+const triple = (x: i64) => x * 3;
+const quad: fn(x: i64) => i64 = x => x * 4;
+console.log(double(2), triple(2), quad(2));

@@ -1,0 +1,31 @@
+//! row: Packed field, one per `BorrowOrigin` except
+let p = new P { a: 1, b: 2, g: [[1, 2], [3, 4]] };
+const e = p.b;
+console.log(e);
+const c = (p.b + 0).checkedAdd(1);
+console.log(c);
+const rp = &p;
+const q = rp.b;
+console.log(q);
+const { a, b } = p;
+console.log(a, b);
+for (const x of p.g) {
+  console.log(x);
+}
+const r: isize = 1;
+for (const y of p.g[r]) {
+  console.log(y);
+}
+const t = p.b;
+show(&t);
+
+private function show(x: &u32): void {
+  console.log(*x);
+}
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32;
+  public g: u32[2][2];
+}

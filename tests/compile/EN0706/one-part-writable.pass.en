@@ -1,0 +1,15 @@
+let xs: i64[] = [1, 2];
+*pick(&xs) = 5;
+console.log(xs);
+
+// A writable result with one reference part, from a parameter the body does not
+// also store, formed while a second reference to the same parameter is live:
+// such a result needs no exclusive-access proof in the callee (SPEC 5.4), so
+// Enrang accepts it, and rustc rejects its `get_mut` twin (TESTING 13; corpus row
+// ONE-PART-WRITABLE, twin corpus/twins/ONE-PART-WRITABLE.rs).
+public function pick(xs: &i64[]): &i64 {
+  const second = &xs[1];
+  const first = &xs[0];
+  console.log(*second);
+  return first;
+}

@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/l4.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `*count`, because `count` is `const`
+ --> tests/compile/EN0608/l4.fail.en:4:3
+  |
+4 |   count += 1; //~ EN0608 "because `count` is `const`"
+  |   ^^^^^^^^^^ written here
+  |
+help: declare it `let count`
+  |
+2 | let count = 0;
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

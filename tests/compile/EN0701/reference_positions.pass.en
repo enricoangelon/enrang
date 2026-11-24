@@ -1,0 +1,20 @@
+const n: i64 = 1;
+const xs: i64[] = [n];
+const b: Box<i64> = new Box(n);
+const h = new Holder(&n);
+const t: [&i64, i32] = [&n, 0];
+console.log(xs, b, h.get(), t[1]);
+
+public class Holder {
+  private r: &i64;
+  public constructor(r: &i64) {
+    this.r = r;
+  }
+  public get(): i64 {
+    return *this.r;
+  }
+}
+
+public class Callback {
+  public cb: fn(s: &string) => void;
+}

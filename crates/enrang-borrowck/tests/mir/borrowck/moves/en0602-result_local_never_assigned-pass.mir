@@ -1,0 +1,36 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0602/result_local_never_assigned.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0602/result_local_never_assigned.pass";
+@lang("error") interface "core/prelude"::Error { }
+@lang("failure") @final class "core/result"::Failure {
+  private text: string;
+}
+@lang("ok") fn "core/result"::Ok<T, E extends Error>@["T"](_1: T) -> Result<T, E>;
+@lang("result") enum "core/result"::Result<T, E extends Error> { Ok { value: T }, Err { error: E } }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Result<i64>; // r
+  let _3: Result<i64> temp;
+  let _4: void temp;
+  let _5: &Result<i64> temp;
+  bb0: {
+    storage_live(_2);
+    _3 = "core/result"::Ok<i64, Failure>@["T"](const 1: i64) -> bb1;
+  }
+  bb1: {
+    drop(_2) [assign];
+    _2 = move _3;
+    drop(_3);
+    storage_dead(_3);
+    _5 = &_2 [auto-borrow];
+    _4 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

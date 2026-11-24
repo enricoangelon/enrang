@@ -1,0 +1,13 @@
+console.log(new Header { len: 3, tag: "x, flags: 0" });
+console.log(PacketError.Short { got: ["a, b", "c"] });
+console.log({ name: "Ada", age: 36 });
+
+public final class Header {
+  public len: i64;
+  public tag: string;
+}
+
+public enum PacketError {
+  Bad { msg: string },
+  Short { got: string[] },
+}

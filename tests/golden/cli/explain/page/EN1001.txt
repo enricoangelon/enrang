@@ -1,0 +1,19 @@
+$ enrang explain EN1001
+[exit 0]
+[stdout]
+EN1001: async functions
+
+`async`, `await` and the type `Promise` are not supported yet. Write the function to run blocking: it returns its result when the work is done, and its caller waits. Threads and an event loop come later.
+
+Failing:
+
+    public async function load(): void { console.log("loading"); }
+
+Fixed:
+
+    public function load(): void { console.log("loading"); }
+
+From TypeScript:
+
+TypeScript code waits on promises with `await` so that the event loop can run other work in the meantime. Enrang's prototype has no event loop, and no I/O call that returns before it is done.
+[stderr]

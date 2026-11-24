@@ -1,0 +1,30 @@
+$ enrang fmt top.en
+[exit 0]
+[stdout]
+[stderr]
+[file src/a.en]
+const   x=1;
+if (x == 1) {
+      console.log(x);
+}
+[file src/b.en]
+console.log(1);
+[file src/bad.en]
+const x = 1
+console.log(x);
+[file src/notes.txt]
+  not   source
+[file src/sub/c.en]
+f( 1,2 );
+[file src/sub/c.test.en]
+test("one",() => {
+  expect(1).toBe(1);
+});
+[file src/sub/snippet.fail.en]
+const   x=1;
+if (x == 1) {
+      console.log(x);
+}
+[file top.en]
+const x = 1;
+if (x == 1) { console.log(x); }

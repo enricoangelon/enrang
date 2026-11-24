@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0207/throw.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0207]: `throw` does not exist in Enrang
+ --> tests/compile/EN0207/throw.fail.en:3:5
+  |
+3 |     throw new Error("negative"); //~ EN0207 "`throw` does not exist in Enrang"
+  |     ^^^^^ errors are values in Enrang
+  |
+  = from TypeScript: Enrang has no exceptions: a function that can fail returns `Result<T, E>`, `?` passes its error to the caller, and `panic` stops the program on a bug.
+help: return `Err(...)` from a function that returns `Result`, or call `panic(...)` for a bug
+  = explain: run `enrang explain EN0207`
+
+error: aborting due to 1 previous error

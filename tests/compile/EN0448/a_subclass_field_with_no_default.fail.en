@@ -1,0 +1,11 @@
+public class Person {
+  public name: string;
+}
+
+public class Shape {
+  public color: string = "red";
+}
+
+public class Circle extends Shape { //~ EN0448 "`Circle` needs a constructor: `owner` has no default"
+  public owner: Person;
+}

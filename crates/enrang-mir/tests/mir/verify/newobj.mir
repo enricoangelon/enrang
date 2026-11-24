@@ -1,0 +1,109 @@
+class Animal {
+  name: i64;
+}
+fn Animal::#ctor(_1: &Animal) -> void;
+fn take(_1: Animal) -> void;
+
+fn build(_1: bool) -> void {
+  let _2: Animal; // a
+  let _3: &Animal temp;
+  let _4: void temp;
+  bb0: {
+    goto bb1;
+  }
+  bb1: {
+    storage_live(_2);
+    set_table(_2, Animal);
+    _3 = &_2 [auto-borrow];
+    _4 = Animal::#ctor(move _3) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    switch copy _1 [0: bb3, otherwise: bb1];
+  }
+  bb3: {
+    return;
+  }
+}
+fn make() -> Animal {
+  let _1: &Animal temp;
+  let _2: void temp;
+  bb0: {
+    set_table(_0, Animal);
+    _1 = &_0 [auto-borrow];
+    _2 = Animal::#ctor(move _1) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+fn moved(_1: bool) -> void {
+  let _2: Animal temp;
+  let _3: &Animal temp;
+  let _4: void temp;
+  bb0: {
+    goto bb1;
+  }
+  bb1: {
+    set_table(_2, Animal);
+    _3 = &_2 [auto-borrow];
+    _4 = Animal::#ctor(move _3) -> bb2;
+  }
+  bb2: {
+    _4 = take(move _2) -> bb3;
+  }
+  bb3: {
+    switch copy _1 [0: bb4, otherwise: bb1];
+  }
+  bb4: {
+    return;
+  }
+}
+fn borrowed(_1: bool) -> void {
+  let _2: void temp;
+  let _3: Animal temp;
+  let _4: &Animal temp;
+  bb0: {
+    goto bb1;
+  }
+  bb1: {
+    set_table(_3, Animal);
+    _4 = &_3 [auto-borrow];
+    _2 = Animal::#ctor(move _4) -> bb2;
+  }
+  bb2: {
+    storage_dead(_3);
+    switch copy _1 [0: bb3, otherwise: bb1];
+  }
+  bb3: {
+    return;
+  }
+}
+fn kept(_1: bool) -> void {
+  let _2: Animal temp;
+  let _3: &Animal temp;
+  let _4: void temp;
+  let _5: Animal; // a
+  let _6: [Animal, i64] temp;
+  bb0: {
+    goto bb1;
+  }
+  bb1: {
+    set_table(_2, Animal);
+    _3 = &_2 [auto-borrow];
+    _4 = Animal::#ctor(move _3) -> bb2;
+  }
+  bb2: {
+    _5 = move _2;
+    set_table(_2, Animal);
+    _3 = &_2 [auto-borrow];
+    _4 = Animal::#ctor(move _3) -> bb3;
+  }
+  bb3: {
+    _6 = tuple(move _2, const 1: i64);
+    switch copy _1 [0: bb4, otherwise: bb1];
+  }
+  bb4: {
+    return;
+  }
+}

@@ -1,0 +1,7 @@
+public function first(xs: &i64[]): &i64 {
+  return &xs[0];
+}
+
+public function pick<T>(xs: &T[]): &T {
+  return &xs[0];
+}

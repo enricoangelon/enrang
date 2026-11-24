@@ -1,0 +1,15 @@
+public class Bag {
+  public items: i64[] = [];
+}
+
+public class Holder {
+  private r: &Bag;
+
+  public constructor(r: &Bag) { this.r = r; }
+
+  public keep(x: &Bag): void {
+    this.r = x;
+  }
+
+  public first(): &i64 { return &this.r.items[0]; }
+}

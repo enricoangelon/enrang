@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN1026/math.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1026]: `Math` does not exist
+ --> tests/compile/EN1026/math.fail.en:1:14
+  |
+1 | const root = Math.sqrt(2.0); //~ EN1026 "`Math` does not exist"
+  |              ^^^^ no such namespace
+  |
+  = note: the math functions are methods of the number types, and constants such as `PI` are read through the type's name.
+help: `x.sqrt()`, `f64.PI`, `a.max(b)`
+  = explain: run `enrang explain EN1026`
+
+error[EN1026]: `Math` does not exist
+ --> tests/compile/EN1026/math.fail.en:2:13
+  |
+2 | const big = Math.max(3, 4); //~ EN1026 "`Math` does not exist"
+  |             ^^^^ no such namespace
+  |
+  = note: the math functions are methods of the number types, and constants such as `PI` are read through the type's name.
+help: `x.sqrt()`, `f64.PI`, `a.max(b)`
+  = explain: run `enrang explain EN1026`
+
+error[EN1026]: `Math` does not exist
+ --> tests/compile/EN1026/math.fail.en:3:12
+  |
+3 | const pi = Math.PI; //~ EN1026 "`Math` does not exist"
+  |            ^^^^ no such namespace
+  |
+  = note: the math functions are methods of the number types, and constants such as `PI` are read through the type's name.
+help: `x.sqrt()`, `f64.PI`, `a.max(b)`
+  = explain: run `enrang explain EN1026`
+
+error: aborting due to 3 previous errors

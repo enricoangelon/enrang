@@ -1,0 +1,5 @@
+import * as me from "./imports_itself.fail"; //~ EN0304 "import cycle: `imports_itself.fail.en` imports itself"
+
+public function helper(): i64 {
+  return 1;
+}

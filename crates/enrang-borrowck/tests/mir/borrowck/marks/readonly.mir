@@ -1,0 +1,103 @@
+// Marks of `readonly` fields, `readonly &` fields and parts, read-only results, string
+// literals and parts, top-level constants and raw derefs (plan d.3; A:1009): EN0609,
+// EN0616, EN0608. Shapes: c.4 (plan line 915) a raw deref goes through a copy of the
+// pointer; c.6 (line 978) a string literal at `&string` is `const "text": &string`;
+// c.18 (line 1202) a `&string` constant is `const static_addr(def): &T`; c.8 (line
+// 1028) stores.
+// Heads (plan e): cannot write `this.id`, because it is `readonly`; cannot change the
+// object returned by `count`; `longest` returns a string that may be a part, so it
+// can't grow; `firstOf` returns a reference that may point at a constant.
+@final class Rec {
+  readonly id: i64;
+}
+@final class Holder {
+  r: readonly &i64;
+}
+@final class Tup {
+  t: [&i64[], i32] readonly_at([0]);
+}
+fn set(let _1: &i64) -> void;
+fn count(_1: &Rec) -> readonly &i64;
+fn longest(_1: &string, _2: &string) -> &string sources(0, 1) result readonly(string_part);
+const LIMIT: i64 = 3;
+const NAME: &string = "ada";
+fn firstOf() -> &i64 sources() result readonly(constant LIMIT);
+
+fn Rec::#ctor(_1: &Rec) -> void {
+  let _2: &i64 temp;
+  let _3: void temp;
+  bb0: {
+    (*_1).id = const 1: i64;
+    _2 = &(*_1).id [explicit]; //~ EN0609
+    _3 = set(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Rec::bump(_1: &Rec) -> void {
+  bb0: {
+    (*_1).id = const 2: i64; //~ EN0609
+    return;
+  }
+}
+
+fn results(_1: &Rec, _2: &string) -> void {
+  let _3: &Rec temp;
+  let _4: &i64 temp;
+  let _5: &string temp;
+  let _6: &string temp;
+  let _7: &i64 temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = count(move _3) -> bb1;
+  }
+  bb1: {
+    *_4 = const 1: i64; //~ EN0616
+    _5 = &*_2 [reborrow];
+    _6 = longest(move _5, const "x": &string) -> bb2;
+  }
+  bb2: {
+    drop(*_6) [assign];
+    *_6 = const "y": string; //~ EN0616
+    _7 = firstOf() -> bb3;
+  }
+  bb3: {
+    *_7 = const 1: i64; //~ EN0616
+    return;
+  }
+}
+
+fn refs(_1: &Holder, _2: &Tup) -> void {
+  let _3: &i64 temp;
+  let _4: &[&i64[], i32] temp;
+  bb0: {
+    *(*_1).r = const 1: i64; //~ EN0616
+    _3 = copy (*_1).r;
+    *_3 = const 2: i64; //~ EN0616
+    _4 = &(*_2).t [explicit];
+    (*_4).1 = const 5: i32; //~ EN0616
+    return;
+  }
+}
+
+fn statics(_1: *i64) -> void {
+  let _2: &string; // s
+  let _3: &string; // n
+  let _4: &i64; // r
+  bb0: {
+    storage_live(_2);
+    _2 = const "lit": &string;
+    drop(*_2) [assign];
+    *_2 = const "b": string; //~ EN0616
+    storage_live(_3);
+    _3 = const static_addr(NAME): &string;
+    drop(*_3) [assign];
+    *_3 = const "c": string; //~ EN0608
+    storage_live(_4);
+    _4 = &*_1 [explicit];
+    *_4 = const 1: i64; //~ EN0616
+    return;
+  }
+}

@@ -1,0 +1,45 @@
+//! row: Satisfaction, one per clause: `unsafe` method,
+public interface Port {
+  poke(): void;
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public interface Counter {
+  count(): i64;
+}
+
+public class Device implements Port { //~ EN0416 "`Device` does not satisfy `Port`: `poke` is `unsafe`"
+  public unsafe poke(): void {}
+}
+
+public class Dog implements Speaker { //~ EN0416 "`Dog` does not satisfy `Speaker`: `speak` is private"
+  private speak(): string {
+    return "woof";
+  }
+}
+
+public class Cat implements Speaker { //~ EN0416 "`Cat` does not satisfy `Speaker`: `speak` is protected"
+  protected speak(): string {
+    return "meow";
+  }
+}
+
+public class Ticks implements Counter { //~ EN0416 "`Ticks` does not satisfy `Counter`: `count` has `@requires`"
+  @requires("cmov")
+  public count(): i64 {
+    return 1;
+  }
+}
+
+public class Parrot {
+  public speak(): string {
+    return "hello";
+  }
+}
+
+public class Cage implements Speaker { //~ EN0416 "`Cage` does not satisfy `Speaker`: `speak` is missing"
+  public bird: Box<Parrot> = new Box(new Parrot {});
+}

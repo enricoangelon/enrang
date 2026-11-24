@@ -1,0 +1,15 @@
+@repr("C") public final class Regs {
+  public inner: Animal; //~ EN0827 "class can't hold `Animal` inline"
+}
+
+@repr("C") public final class Outer {
+  public mid: Mid; //~ EN0827 "can't hold `Animal` inline"
+}
+
+public final class Mid {
+  public a: Animal;
+}
+
+public class Animal implements Copy {
+  public legs: u8 = 4;
+}

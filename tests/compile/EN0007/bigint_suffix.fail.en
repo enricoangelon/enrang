@@ -1,0 +1,2 @@
+const big = 10n; //~ EN0007
+console.log(big);

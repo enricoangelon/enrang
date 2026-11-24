@@ -1,0 +1,7 @@
+assert(sizeOf<Header>() == 8, "a header is eight bytes"); //~ EN0415 "compile-time assert failed: a header is eight bytes"
+
+public final class Header {
+  public kind: u32 = 0;
+  public length: u32 = 0;
+  public extra: u8 = 0;
+}

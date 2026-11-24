@@ -1,0 +1,8 @@
+//! library
+public type Point = { x: f64, y: f64 };
+extend Point { //~ EN0439 "an anonymous object type or a tuple can't have methods"
+  public length(): f64;
+}
+extend [i64, i64] { //~ EN0439
+  public sum(): i64;
+}

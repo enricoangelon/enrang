@@ -1,0 +1,21 @@
+let s0: string = "q";
+let t: string = "ab";
+let lx = new Lexer(&s0);
+function bind(): void {
+  lx.setSrc(&t);
+}
+run(bind); //~ EN0616 "`bind` stores a reference into captured `lx`"
+
+function run(f: () => void): void {
+  f();
+}
+
+private class Lexer {
+  private src: &string;
+  public constructor(src: &string) {
+    this.src = src;
+  }
+  public setSrc(s: &string): void {
+    this.src = s;
+  }
+}

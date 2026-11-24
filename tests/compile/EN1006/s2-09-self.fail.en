@@ -1,0 +1,41 @@
+const d = new Dog { name: "Rex" };
+const r = new Robot { a: 1, b: 2, c: 3 };
+console.log(same(&d, &r));
+let kept: Box<Clone> | null = null; //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+look(&d);
+
+private function same(a: &Eq, b: &Eq): bool {
+  return a.equals(b); //~ EN0401 "`b` may hold another class than `a`"
+}
+
+private function first(a: &Clone, b: &Clone): &Clone { //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  return a;
+}
+
+private function look(x: &Clone): void {}
+
+public final class Holder {
+  private c: &Clone; //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  public constructor(c: &Clone) {
+    this.c = c;
+  }
+}
+
+public final class Dog implements Eq, Clone {
+  public name: string;
+  public equals(other: &Dog): bool {
+    return this.name == other.name;
+  }
+  public clone(): Dog {
+    return new Dog { name: this.name.clone() };
+  }
+}
+
+public final class Robot implements Eq {
+  public a: i64;
+  public b: i64;
+  public c: i64;
+  public equals(other: &Robot): bool {
+    return this.a == other.a;
+  }
+}

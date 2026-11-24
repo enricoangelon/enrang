@@ -1,0 +1,68 @@
+$ enrang check tests/compile/EN0615/named-rows-below-the-top.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `r` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+ --> tests/compile/EN0615/named-rows-below-the-top.fail.en:7:39
+  |
+7 |   const w: &fn(let x: &i64) => void = r; //~ EN0615 "`r` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected"
+  |                                       ^ converted here
+  |
+  = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+  = explain: run `enrang explain EN0615`
+
+error[EN0615]: `readers` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+  --> tests/compile/EN0615/named-rows-below-the-top.fail.en:11:48
+   |
+11 |   const writers: (fn(let x: &i64) => void)[] = readers; //~ EN0615 "`readers` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected"
+   |                                                ^^^^^^^ converted here
+   |
+   = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `o` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+  --> tests/compile/EN0615/named-rows-below-the-top.fail.en:15:47
+   |
+15 |   const w: (fn(let x: &i64) => void) | null = o; //~ EN0615 "`o` holds a `fn(&i64) => void`"
+   |                                               ^ converted here
+   |
+   = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `o` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+  --> tests/compile/EN0615/named-rows-below-the-top.fail.en:20:45
+   |
+20 |   const w: { f: fn(let x: &i64) => void } = o; //~ EN0615 "`o` holds a `fn(&i64) => void`"
+   |                                             ^ converted here
+   |
+   = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `b` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+  --> tests/compile/EN0615/named-rows-below-the-top.fail.en:24:46
+   |
+24 |   const w: Holder<fn(let x: &i64) => void> = b; //~ EN0615 "`b` holds a `fn(&i64) => void`"
+   |                                              ^ converted here
+   |
+   = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `h` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+  --> tests/compile/EN0615/named-rows-below-the-top.fail.en:28:53
+   |
+28 |   const w: fn(g: fn(let x: &i64) => void) => void = h; //~ EN0615 "`h` holds a `fn(&i64) => void`"
+   |                                                     ^ converted here
+   |
+   = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `h` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected
+  --> tests/compile/EN0615/named-rows-below-the-top.fail.en:32:46
+   |
+32 |   const w: fn() => fn(let x: &i64) => void = h; //~ EN0615 "`h` holds a `fn(&i64) => void`"
+   |                                              ^ converted here
+   |
+   = note: type checking ignores `let` marks, but below the top of a type a function type's row must be equal, since code holding the outer value may store into it or call through it with either row
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 7 previous errors

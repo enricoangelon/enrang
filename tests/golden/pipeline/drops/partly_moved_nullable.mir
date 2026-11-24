@@ -1,0 +1,62 @@
+fn f(_1: string | null, _2: bool) -> void perms() sources() moves(1, 0) result none {
+  phase elaborated;
+  let _1: string | null; // o
+  let _2: bool; // c
+  let _3: bool temp;
+  let _4: bool temp;
+  let _5: u32 temp;
+  let _6: void temp;
+  let _7: string temp;
+  let _8: bool flag;
+  let _9: u32 temp;
+  drop_flag _8: (_1 as Present).0;
+  fact f0: _1 nonnull;
+  use f0 at bb1[0];
+  test f0 at bb3;
+  test f0 at bb1;
+  bb0: {
+    _8 = const true: bool;
+    _5 = discriminant(_1);
+    _4 = ne(move _5, const 0: u32);
+    switch copy _4 [0: bb4, otherwise: bb3];
+  }
+  bb1: {
+    check_tag(_1, Present);
+    _7 = move (_1 as Present).0;
+    _8 = const false: bool;
+    _6 = take(move _7) -> bb6;
+  }
+  bb2: {
+    _9 = discriminant(_1);
+    switch move _9 [1: bb8, otherwise: bb7];
+  }
+  bb3: {
+    _3 = copy _2;
+    goto bb5;
+  }
+  bb4: {
+    _3 = copy _4;
+    goto bb5;
+  }
+  bb5: {
+    switch move _3 [0: bb2, otherwise: bb1];
+  }
+  bb6: {
+    storage_dead(_7);
+    goto bb2;
+  }
+  bb7: {
+    _8 = const false: bool;
+    return;
+  }
+  bb8: {
+    switch copy _8 [0: bb10, otherwise: bb9];
+  }
+  bb9: {
+    drop_glue((_1 as Present).0);
+    goto bb10;
+  }
+  bb10: {
+    goto bb7;
+  }
+}

@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0707/nested_writing_loops.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: cannot mutate `xs` while iterating over it
+ --> tests/compile/EN0707/nested_writing_loops.fail.en:3:21
+  |
+2 |   for (const a of xs) {
+  |                   -- mutable borrow begins here
+3 |     for (const b of xs) { //~ EN0707
+  |                     ^^ conflicting mutable access
+  |
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 1 previous error

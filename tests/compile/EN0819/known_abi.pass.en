@@ -1,0 +1,7 @@
+@abi("win64") public function exported(n: i32): i32 { return n; }
+
+@abi("sysv") public function exported2(p: *u8): void {}
+
+public type EfiPrint = @abi("win64") unsafe fn(self: *u8, s: *u16) => usize;
+
+public type SysCb = @abi("sysv") fn(n: i32) => void;

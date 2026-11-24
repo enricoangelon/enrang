@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0401/error_value_of_another_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `AgeError`, found `string`
+ --> tests/compile/EN0401/error_value_of_another_type.fail.en:7:14
+  |
+7 |   return Err("not a number"); //~ EN0401 "mismatched types: expected `AgeError`, found `string`"
+  |              ^^^^^^^^^^^^^^ this is `string`
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

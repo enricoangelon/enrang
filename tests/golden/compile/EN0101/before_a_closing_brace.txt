@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0101/before_a_closing_brace.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0101]: missing `;` after this statement
+ --> tests/compile/EN0101/before_a_closing_brace.fail.en:2:17
+  |
+2 |   console.log(n) //~ EN0101
+  |                 ^ expected `;` here
+  |
+  = from TypeScript: Enrang has no automatic semicolon insertion.
+help: add the semicolon
+  |
+2 |   console.log(n); //~ EN0101
+  |                 +
+  = explain: run `enrang explain EN0101`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0450/overloads_differing_only_in_return_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0450]: a call can't tell these overloads of `parse` apart
+ --> tests/compile/EN0450/overloads_differing_only_in_return_type.fail.en:5:17
+  |
+1 | public function parse(s: &string): i64 {
+  |                 ----- and this one
+...
+5 | public function parse(s: &string): f64 { //~ EN0450 "a call can't tell these overloads of `parse` apart"
+  |                 ^^^^^ this overload
+  |
+  = note: they differ only in their return type
+  = explain: run `enrang explain EN0450`
+
+error[EN0450]: a call can't tell these overloads of `pad` apart
+  --> tests/compile/EN0450/overloads_differing_only_in_return_type.fail.en:13:17
+   |
+ 9 | public function pad(s: &string): string {
+   |                 --- and this one
+...
+13 | public function pad(s: &string, width: i64 = 8): string { //~ EN0450 "a call can't tell these overloads of `pad` apart"
+   |                 ^^^ this overload
+   |
+   = note: a call with 1 argument matches both, through a default parameter
+   = explain: run `enrang explain EN0450`
+
+error: aborting due to 2 previous errors

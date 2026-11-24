@@ -1,0 +1,8 @@
+const total = 10;
+console.log(total);
+const sum = add(1, 2);
+console.log(sum);
+
+private function add(a: i64, b: i64): i64 {
+  return a + b;
+}

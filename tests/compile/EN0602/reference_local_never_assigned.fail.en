@@ -1,0 +1,3 @@
+const n = 5;
+let r: &i64;
+console.log(*r); //~ EN0602 "`r` is used before it has a value"

@@ -1,0 +1,38 @@
+$ enrang check tests/compile/EN0313/top_level_variables.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0313]: `count` is a top-level variable, which `report` can't see
+ --> tests/compile/EN0313/top_level_variables.fail.en:2:26
+  |
+2 |   console.log(`count = ${count}`); //~ EN0313 "`count` is a top-level variable, which `report` can't see"
+  |                          ^^^^^ `count` is declared below `report`
+3 | }
+4 | let count = 0;
+  |     ----- `count` is declared here
+  |
+  = explain: run `enrang explain EN0313`
+
+error[EN0313]: `count` is a top-level variable, which `Tally` can't see
+ --> tests/compile/EN0313/top_level_variables.fail.en:9:17
+  |
+4 | let count = 0;
+  |     ----- `count` is declared here
+...
+9 |     console.log(count); //~ EN0313 "`count` is a top-level variable, which `Tally` can't see"
+  |                 ^^^^^ only the top-level statements and the local functions below it see it
+  |
+  = explain: run `enrang explain EN0313`
+
+error[EN0313]: `count` is a top-level variable, which `peek` can't see
+  --> tests/compile/EN0313/top_level_variables.fail.en:14:10
+   |
+ 4 | let count = 0;
+   |     ----- `count` is declared here
+...
+14 |   return count; //~ EN0313 "`count` is a top-level variable, which `peek` can't see"
+   |          ^^^^^ only the top-level statements and the local functions below it see it
+   |
+   = explain: run `enrang explain EN0313`
+
+error: aborting due to 3 previous errors

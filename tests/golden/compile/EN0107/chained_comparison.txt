@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0107/chained_comparison.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0107]: comparisons cannot be chained
+ --> tests/compile/EN0107/chained_comparison.fail.en:2:23
+  |
+2 | const inRange = 0 < x < 10; //~ EN0107 "comparisons cannot be chained"
+  |                       ^ this compares the result of the comparison before it
+  |
+  = note: `0 < x` is a `bool`, which is not compared with `<`
+help: compare each pair, joined by `&&`
+  |
+2 | const inRange = 0 < x && x < 10; //~ EN0107 "comparisons cannot be chained"
+  |                      +++++
+  = explain: run `enrang explain EN0107`
+
+error: aborting due to 1 previous error

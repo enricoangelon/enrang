@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/c09-never.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `i64`, found `string`
+ --> tests/compile/EN0401/c09-never.fail.en:3:33
+  |
+3 | const x: i64 = c ? panic("a") : "s"; //~ EN0401 "mismatched types: expected `i64`"
+  |                                 ^^^ this is `string`
+  |
+  = note: Enrang never converts between numbers and strings implicitly.
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

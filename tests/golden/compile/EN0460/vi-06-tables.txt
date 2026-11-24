@@ -1,0 +1,48 @@
+$ enrang check tests/compile/EN0460/vi-06-tables.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0460]: `show` has its own type parameters, so it can't be overridden
+ --> tests/compile/EN0460/vi-06-tables.fail.en:8:19
+  |
+2 |   public show<T>(x: &T): void {
+  |          ---- `Animal.show` is declared here
+...
+8 |   public override show<T>(x: &T): void { //~ EN0460 "`show` has its own type parameters, so it can't be overridden"
+  |                   ^^^^ `Animal.show` is compiled once per type, so it has no method-table slot
+  |
+help: give Dog's method another name
+  = explain: run `enrang explain EN0460`
+
+error[EN0460]: `show` has its own type parameters, so it can't be overridden
+  --> tests/compile/EN0460/vi-06-tables.fail.en:14:10
+   |
+ 2 |   public show<T>(x: &T): void {
+   |          ---- `Animal.show` is declared here
+...
+14 |   public show<T>(x: &T): void { //~ EN0460 "`show` has its own type parameters, so it can't be overridden"
+   |          ^^^^ `Animal.show` is compiled once per type, so it has no method-table slot
+   |
+help: give Puppy's method another name
+   = explain: run `enrang explain EN0460`
+
+error[EN0460]: `show` has its own type parameters, so it can't be overridden
+  --> tests/compile/EN0460/vi-06-tables.fail.en:20:19
+   |
+20 |   public abstract show<T>(x: &T): void; //~ EN0460 "`show` has its own type parameters, so it can't be overridden"
+   |                   ^^^^ no subclass could implement it
+   |
+help: give `show` a body
+   = explain: run `enrang explain EN0460`
+
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+  --> tests/compile/EN0460/vi-06-tables.fail.en:27:25
+   |
+27 | public function keep(d: Box<Dumper>): void { //~ EN1006
+   |                         ^^^^^^^^^^^ this `Box<Dumper>` needs its class's table
+   |
+   = note: `Dumper.dump` is compiled once per type, so no table can hold it where the class is unknown
+help: use a type parameter `T extends Dumper`
+   = explain: run `enrang explain EN1006`
+
+error: aborting due to 4 previous errors

@@ -1,0 +1,10 @@
+const f = new File("a.txt", 3);
+const n = f.name.clone();
+console.log(n);
+
+public class File {
+  public constructor(public name: string, private fd: i64) {}
+  public destructor() {
+    console.log("close", this.fd);
+  }
+}

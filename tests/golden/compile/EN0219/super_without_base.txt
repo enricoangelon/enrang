@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0219/super_without_base.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0219]: `super` in `Animal`, which extends no class
+ --> tests/compile/EN0219/super_without_base.fail.en:3:5
+  |
+3 |     super(); //~ EN0219 "`super` in `Animal`, which extends no class"
+  |     ^^^^^ there is no base class here
+  |
+  = explain: run `enrang explain EN0219`
+
+error: aborting due to 1 previous error

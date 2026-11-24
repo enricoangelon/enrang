@@ -1,0 +1,14 @@
+//! row: `function steal<T extends Base>(x: T): string { return x.name; }`
+//! covers: H41
+const s = steal(new Base("x".toString()));
+console.log(s, keepName(new Base("y".toString())));
+
+private class Base {
+  public constructor(public name: string) {}
+  public destructor() { console.log(`drop ${this.name}`); }
+}
+
+private function steal<T extends Base>(x: T): string { return x.name; } //~ EN0607 "because `T` may have a destructor"
+private function keepName(x: { name: string }): string { return x.name; } //~ EN0607 "because `{ name: string }` may have a destructor"
+
+@devMigrate private function migrateBase(old: { name: string }): Base { return new Base(old.name); } //~ EN0607

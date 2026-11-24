@@ -1,0 +1,4 @@
+let xs: i64[] = [1, 2, 3, 4];
+console.log(xs.slice(3, 1), xs.slice(-2, 4));
+const s = "abcd";
+console.log(s.slice(3, 1), s.slice(-2, 4));

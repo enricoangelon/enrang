@@ -1,0 +1,13 @@
+error[EN0601]: `a` was moved into `b`
+ --> main.en:3:13
+  |
+1 | let a = "x".toString();
+  |     - `a` owns this `string`, which is not Copy
+2 | const b = a;
+  |           - `a` moves here
+3 | console.log(a, b);
+  |             ^ used here, after the move
+  |
+  = explain: run `enrang explain EN0601`
+
+error: aborting due to 1 previous error

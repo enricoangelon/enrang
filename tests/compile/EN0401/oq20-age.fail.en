@@ -1,0 +1,26 @@
+console.log(next(), load(), wait());
+
+private function next(): Result<Token, Token> {
+  return Token.End; //~ EN0455
+}
+
+private function load(): Result<string> {
+  return "file missing"; //~ EN0455
+}
+
+private function wait(): Result<i64, AgeError> {
+  return Err(DiskError.Timeout); //~ EN0401
+}
+
+public enum Token {
+  Word,
+  End,
+}
+
+public enum AgeError {
+  NotANumber = "not a number",
+}
+
+public enum DiskError {
+  Timeout,
+}

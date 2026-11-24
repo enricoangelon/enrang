@@ -1,0 +1,5 @@
+import { Helper } from "./user.pass"; //~ EN0311 "`Helper` is private to `user.pass.en`"
+import * as u from "./user.pass";
+
+const h: u.Helper | null = null; //~ EN0311 "`Helper` is private to `user.pass.en`"
+console.log(h);

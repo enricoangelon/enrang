@@ -1,0 +1,63 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/push_while_view_used.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/push_while_view_used.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_extend_cloned") fn "alloc/array"::Array<T>::extendCloned(let _1: &Array<T>, _2: &Slice<T>) -> void where T extends Clone;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@mustUse fn "alloc/array"::Array<T>::slice(const _1: &Array<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+@lang("clone") interface "core/prelude"::Clone { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int[]; // list
+  let _3: int[]; // head
+  let _4: int[] temp;
+  let _5: &Slice<int> temp;
+  let _6: isize | null temp;
+  let _7: &int[] temp;
+  let _8: &Slice<int> temp;
+  let _9: &int[] temp;
+  let _10: void temp;
+  let _11: void temp;
+  let _12: &int[] temp;
+  let _13: void temp;
+  let _14: &int[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<int>(const 1: int, const 2: int);
+    storage_live(_3);
+    _4 = intrinsic AllocArray<int>();
+    _6 = present(const 1: isize);
+    _7 = &_2 [auto-borrow];
+    _5 = "alloc/array"::Array<int>::slice(move _7, const 0: isize, move _6, const 2: isize) -> bb1;
+  }
+  bb1: {
+    _8 = &*_5 [reborrow];
+    _9 = &_4 [auto-borrow];
+    _10 = "alloc/array"::Array<int>::extendCloned(move _9, move _8) -> bb2;
+  }
+  bb2: {
+    _3 = move _4;
+    drop(_4);
+    storage_dead(_4);
+    _12 = &_2 [auto-borrow];
+    _11 = "alloc/array"::Array<int>::push(move _12, const 3: int) -> bb3;
+  }
+  bb3: {
+    _14 = &_3 [auto-borrow];
+    _13 = form log(move _14) -> bb4;
+  }
+  bb4: {
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

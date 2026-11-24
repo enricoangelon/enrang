@@ -1,0 +1,8 @@
+public interface Counter {
+  inc(): void;
+}
+
+public class Clicks implements Counter { //~ EN0615 "`inc` changes the object, but `Counter` declares that it doesn't"
+  private n: i64 = 0;
+  public let inc(): void {}
+}

@@ -1,0 +1,64 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/hold_element_write.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/hold_element_write.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // q
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &i64; // x
+  let _7: void temp;
+  let _8: &i64 temp;
+  let _9: isize temp;
+  let _10: isize temp;
+  loop l0: path _2 preheader bb5 head bb1 bind bb2[2] binding _6;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    goto bb5;
+  }
+  bb1: {
+    _4 = len(_2);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &_2[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _8 = &*_6 [reborrow];
+    _7 = form log(move _8) -> bb7;
+  }
+  bb7: {
+    _9 = const 0: isize;
+    _10 = len(_2);
+    check_bounds(copy _9, copy _10);
+    _2[_9] = const 9: i64;
+    storage_dead(_6);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

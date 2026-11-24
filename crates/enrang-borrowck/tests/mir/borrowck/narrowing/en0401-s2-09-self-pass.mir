@@ -1,0 +1,40 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/s2-09-self.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/s2-09-self.pass";
+@lang("clone") interface "core/prelude"::Clone { }
+@final class Dog {
+  name: string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Dog; // d
+  let _3: *Dog temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &Dog temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Dog leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _2.name = const "Rex": string;
+    _6 = &_2 [explicit];
+    _5 = look<Dog>(move _6) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn look<implicit Clone>(_1: &Clone) -> void {
+  let _1: &Clone; // x
+  bb0: {
+    return;
+  }
+}

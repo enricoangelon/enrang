@@ -1,0 +1,14 @@
+//! covers: H18
+let q: Acc | null = new Acc();
+if (q != null) {
+  clear(&q);
+  console.log(q.n); //~ EN0401
+}
+
+private class Acc {
+  public n: i64 = 0;
+}
+
+private function clear(a: &(Acc | null)): void {
+  *a = null;
+}

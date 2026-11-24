@@ -1,0 +1,12 @@
+console.log(age(3));
+
+public enum AgeError {
+  Negative,
+}
+
+public function age(n: i64): Result<i64, AgeError> {
+  if (n < 0) {
+    return Err(AgeError.Negative);
+  }
+  return n;
+}

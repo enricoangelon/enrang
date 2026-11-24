@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0303/named-optional-chain-broken.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0303]: `&(Inner | null) | null` has no member `c`
+ --> tests/compile/EN0303/named-optional-chain-broken.fail.en:3:18
+  |
+3 | console.log(o?.b.c); //~ EN0303
+  |                  ^ no such member
+  |
+  = explain: run `enrang explain EN0303`
+
+error: aborting due to 1 previous error

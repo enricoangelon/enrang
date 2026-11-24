@@ -1,0 +1,15 @@
+//! row: `for (const x of &this.items)` in a meth
+public class Bag {
+  public items: i64[] = [1];
+  public fill(): void {
+    for (const x of &this.items) {
+      this.items.push(1); //~ EN0706
+    }
+  }
+  public refill(): void {
+    for (const x of &this.items) {
+      this.reset(); //~ EN0706
+    }
+  }
+  public reset(): void { this.items = []; }
+}

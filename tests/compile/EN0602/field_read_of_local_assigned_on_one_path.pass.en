@@ -1,0 +1,13 @@
+public function pick(c: bool): string {
+  let g: User;
+  if (c) {
+    g = new User { name: "Ada" };
+  } else {
+    g = new User { name: "Bo" };
+  }
+  return g.name;
+}
+
+public class User {
+  public name: string;
+}

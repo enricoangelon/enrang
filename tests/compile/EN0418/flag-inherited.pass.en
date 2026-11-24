@@ -1,0 +1,18 @@
+//! covers: H38
+public class Base {
+  private dst: &u8[];
+
+  public constructor(d: &u8[]) {
+    this.dst = d;
+  }
+
+  public step(): isize {
+    return this.dst.length();
+  }
+}
+
+public final class Sub extends Base implements Copy {
+  public constructor(d: &u8[]) {
+    super(d);
+  }
+}

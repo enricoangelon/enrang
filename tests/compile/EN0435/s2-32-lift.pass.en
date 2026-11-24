@@ -1,0 +1,30 @@
+//! target: i386-none
+@entry private function kmain(info: &BootInfo): never {
+  const r = boot();
+  halt();
+}
+
+@panicHandler private function onPanic(info: &PanicInfo): never { halt(); }
+
+private function boot(): Result<u8> {
+  const a = lift(probe())?;
+  const b = lift(ready())?;
+  return a + b;
+}
+
+private function lift<T, E>(r: Result<T, E>): Result<T> {
+  return r?;
+}
+
+private function probe(): Result<u8, BusError> {
+  return Err(BusError.Busy);
+}
+
+private function ready(): Result<u8> {
+  return Err("not ready");
+}
+
+public enum BusError {
+  Busy,
+  Gone,
+}

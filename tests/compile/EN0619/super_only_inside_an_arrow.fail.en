@@ -1,0 +1,12 @@
+public class Animal {
+  public constructor(public age: i64) {}
+}
+
+public class Dog extends Animal {
+  public constructor(age: i64) {
+    const f = () => {
+      super(age); //~ EN0619 "`super(...)` must be a statement of the constructor's own body"
+    };
+    f();
+  } //~ EN0619 "isn't called on every path before the constructor returns"
+}

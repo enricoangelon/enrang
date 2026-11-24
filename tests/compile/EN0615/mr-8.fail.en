@@ -1,0 +1,11 @@
+public class Entity {
+  public x: i64 = 0;
+
+  public update(): void {}
+}
+
+public class Player extends Entity {
+  public override update(): void {
+    this.x += 1; //~ EN0615 "`update` changes the object, but `Entity` declares that it doesn't"
+  }
+}

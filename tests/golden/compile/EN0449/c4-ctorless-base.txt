@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0449/c4-ctorless-base.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0449]: `Shape` has no constructor, so it takes no arguments
+  --> tests/compile/EN0449/c4-ctorless-base.fail.en:18:11
+   |
+18 |     super(1); //~ EN0449 "`Shape` has no constructor, so it takes no arguments"
+   |           ^ no constructor takes these
+   |
+   = explain: run `enrang explain EN0449`
+
+error: aborting due to 1 previous error

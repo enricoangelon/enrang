@@ -1,0 +1,64 @@
+//! row: Satisfaction, one per clause: `unsafe` method,
+const device = new Device {};
+touch(&device); //~ EN0419 "`Device` does not satisfy `Port`"
+const dog = new Dog {};
+console.log(greet(&dog)); //~ EN0419 "`Dog` does not satisfy `Speaker`"
+const cat = new Cat {};
+console.log(greet(&cat)); //~ EN0419 "`Cat` does not satisfy `Speaker`"
+const ticks = new Ticks {};
+console.log(total(&ticks)); //~ EN0419 "`Ticks` does not satisfy `Counter`"
+const boxed = new Box(new Parrot {});
+console.log(greet(&boxed)); //~ EN0419 "`Box<Parrot>` does not satisfy `Speaker`"
+
+private function touch<T extends Port>(p: &T): void {
+  p.poke();
+}
+
+private function greet<T extends Speaker>(x: &T): string {
+  return x.speak();
+}
+
+private function total<T extends Counter>(c: &T): i64 {
+  return c.count();
+}
+
+public interface Port {
+  poke(): void;
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public interface Counter {
+  count(): i64;
+}
+
+public class Device {
+  public unsafe poke(): void {}
+}
+
+public class Dog {
+  private speak(): string {
+    return "woof";
+  }
+}
+
+public class Cat {
+  protected speak(): string {
+    return "meow";
+  }
+}
+
+public class Ticks {
+  @requires("cmov")
+  public count(): i64 {
+    return 1;
+  }
+}
+
+public class Parrot implements Speaker {
+  public speak(): string {
+    return "hello";
+  }
+}

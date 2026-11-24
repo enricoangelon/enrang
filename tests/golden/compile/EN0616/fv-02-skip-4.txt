@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0616/fv-02-skip-4.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: a `readonly &` field can't take a reference that another field writes through
+ --> tests/compile/EN0616/fv-02-skip-4.fail.en:6:1
+  |
+6 | Wrapper.nudge(&w); //~ EN0616
+  | ^^^^^^^^^^^^^^^^^ stored here
+  |
+help: store a reference from a parameter, or from another `readonly &` field
+  = explain: run `enrang explain EN0616`
+
+error[EN0707]: cannot borrow `c` as exclusive twice at the same time
+ --> tests/compile/EN0616/fv-02-skip-4.fail.en:7:1
+  |
+5 | let w = new Wrapper(&c);
+  |                     -- first exclusive borrow
+6 | Wrapper.nudge(&w); //~ EN0616
+7 | c.step(); //~ EN0707
+  | ^^^^^^^^ second exclusive borrow
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 2 previous errors

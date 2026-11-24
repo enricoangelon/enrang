@@ -1,0 +1,17 @@
+//! covers: H06
+let s: string = "abc";
+const lx = new Lexer(&s);
+const b = new Box(s.clone());
+console.log(wrap(s.clone()), b, lx.size());
+
+private function wrap<T>(x: T): T[] {
+  return [x];
+}
+
+private class Lexer {
+  private src: &string;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public size(): isize { return this.src.length(); }
+}

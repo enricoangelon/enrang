@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0815/declare_without_dll.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0815]: `declare function` without `@dll`
+ --> tests/compile/EN0815/declare_without_dll.fail.en:1:8
+  |
+1 | public declare function write(fd: i32, p: *u8, n: usize): isize; //~ EN0815 "`declare function` without `@dll`"
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a foreign function needs the DLL that exports it
+  |
+  = note: only a Windows DLL import is declared without a body; on Linux and freestanding targets there is no dynamic linker or libc, so reach the system with inline assembly (`asm`) in an `unsafe function`
+  = explain: run `enrang explain EN0815`
+
+error[EN0815]: `declare function` without `@dll`
+ --> tests/compile/EN0815/declare_without_dll.fail.en:3:9
+  |
+3 | private declare function exit(code: i32): never; //~ EN0815 "`declare function` without `@dll`"
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ a foreign function needs the DLL that exports it
+  |
+  = note: only a Windows DLL import is declared without a body; on Linux and freestanding targets there is no dynamic linker or libc, so reach the system with inline assembly (`asm`) in an `unsafe function`
+  = explain: run `enrang explain EN0815`
+
+error: aborting due to 2 previous errors

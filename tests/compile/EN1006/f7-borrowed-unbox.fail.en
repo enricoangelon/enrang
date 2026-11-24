@@ -1,0 +1,16 @@
+const b: Box<Speaker> = new Box(new Dog {});
+introduce(&b.unbox()); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+
+private function introduce(s: &Speaker): void {
+  console.log(s.speak());
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Dog implements Speaker {
+  public speak(): string {
+    return "woof";
+  }
+}

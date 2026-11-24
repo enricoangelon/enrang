@@ -1,0 +1,5 @@
+let a = "x" + "";
+let b = "y" + "";
+[a, b] = [b, a];
+const [p, q] = [1, 2];
+console.log(a, b, p, q);

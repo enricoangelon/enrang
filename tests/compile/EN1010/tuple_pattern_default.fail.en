@@ -1,0 +1,3 @@
+const t: [i64, i64] = [1, 2];
+const [a = 1, b] = t; //~ EN1010 "defaults in patterns are not supported yet"
+console.log(a, b);

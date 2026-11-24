@@ -1,0 +1,86 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0611/moved_in_for_of_body.fail.en. Its row's codes: EN0611.
+module "tests/compile/EN0611/moved_in_for_of_body.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: string; // name
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: int[]; // xs
+  let _6: isize #i;
+  let _7: isize #n;
+  let _8: bool temp;
+  let _9: &int; // x
+  let _10: void temp;
+  let _11: void temp;
+  let _12: &int temp;
+  loop l0: path _5 preheader bb6 head bb2 bind bb3[2] binding _9;
+  bb0: {
+    storage_live(_2);
+    _3 = const "Ada": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _5 = intrinsic AllocArray<int>(const 1: int, const 2: int, const 3: int);
+    goto bb6;
+  }
+  bb2: {
+    _7 = len(_5);
+    _8 = lt(copy _6, copy _7);
+    switch move _8 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_9);
+    check_bounds(copy _6, copy _7);
+    _9 = &_5[_6] [for-of-element];
+    _6 = add(copy _6, const 1: isize);
+    goto bb7;
+  }
+  bb4: {
+    goto bb2;
+  }
+  bb5: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb6: {
+    storage_live(_6);
+    _6 = const 0: isize;
+    goto bb2;
+  }
+  bb7: {
+    _10 = greet(move _2) -> bb8; //~ EN0611 "`name` was moved in an earlier turn"
+  }
+  bb8: {
+    _12 = &*_9 [reborrow];
+    _11 = form log(move _12) -> bb9;
+  }
+  bb9: {
+    storage_dead(_9);
+    goto bb4;
+  }
+}
+
+fn greet(_1: string) -> void {
+  let _1: string; // n
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}

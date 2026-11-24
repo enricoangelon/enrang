@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0451/vi-07-overloads.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0451]: more than one overload of `f` matches
+ --> tests/compile/EN0451/vi-07-overloads.fail.en:3:1
+  |
+3 | f(&a3, &b3); //~ EN0451 "more than one overload of `f` matches"
+  | ^^^^^^^^^^^ these arguments match more than one overload equally
+  |
+  = note: candidate: `f<T>(a: &T, b: &Slice<i64>): void`
+  = note: candidate: `f<T>(a: &Slice<i64>, b: &T): void`
+  = explain: run `enrang explain EN0451`
+
+error: aborting due to 1 previous error

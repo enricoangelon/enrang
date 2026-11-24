@@ -1,0 +1,7 @@
+private function dumpWith(d: &Dumper, v: &Slice<u8>): void {
+  d.dump(v); //~ EN0401 "`T` can't stand for the view `Slice<u8>`"
+}
+
+public interface Dumper {
+  dump<T>(x: &T): void;
+}

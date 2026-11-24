@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0401/c14-closure-parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `(&string) => void`, found `(i64) => void`
+ --> tests/compile/EN0401/c14-closure-parameter.fail.en:9:11
+  |
+4 | private function runText(f: (s: &string) => void): void {
+  |                          ----------------------- `(&string) => void` is required by this parameter
+...
+9 |   runText(g); //~ EN0401 "mismatched types"
+  |           ^ this is `(i64) => void`
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

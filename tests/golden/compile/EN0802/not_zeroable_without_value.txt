@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0802/not_zeroable_without_value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0802]: an `unsafe let` can't hold a `Color`
+ --> tests/compile/EN0802/not_zeroable_without_value.fail.en:1:23
+  |
+1 | private unsafe let c: Color; //~ EN0802 "an `unsafe let` can't hold a `Color`"
+  |                       ^^^^^ `Color` has no all-zero value
+  |
+help: give it a value
+  = explain: run `enrang explain EN0802`
+
+error[EN0802]: an `unsafe let` can't hold an `i64 | null`
+ --> tests/compile/EN0802/not_zeroable_without_value.fail.en:2:23
+  |
+2 | private unsafe let n: i64 | null; //~ EN0802 "an `unsafe let` can't hold an `i64 | null`"
+  |                       ^^^^^^^^^^ `i64 | null` has no all-zero value
+  |
+help: give it a value
+  = explain: run `enrang explain EN0802`
+
+error[EN0802]: an `unsafe let` can't hold a `fn() => void`
+ --> tests/compile/EN0802/not_zeroable_without_value.fail.en:3:23
+  |
+3 | private unsafe let f: fn() => void; //~ EN0802 "an `unsafe let` can't hold a `fn() => void`"
+  |                       ^^^^^^^^^^^^ `fn() => void` has no all-zero value
+  |
+help: give it a value
+  = explain: run `enrang explain EN0802`
+
+error: aborting due to 3 previous errors

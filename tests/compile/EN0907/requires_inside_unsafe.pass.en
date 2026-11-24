@@ -1,0 +1,30 @@
+import { cpu } from "core";
+
+@requires("cmov")
+public unsafe function fastMax(a: i32, b: i32): i32 {
+  let r: i32 = a;
+  asm(
+    `cmp eax, ebx
+     cmovl eax, ebx`,
+    { in: { eax: a, ebx: b }, out: { eax: r } },
+  );
+  return r;
+}
+
+@requires("popcnt") private function count(n: u32): u32 { return n; }
+
+public function max(a: i32, b: i32): i32 {
+  if (cpu.has("cmov")) {
+    unsafe { return fastMax(a, b); }
+  }
+  return a > b ? a : b;
+}
+
+@requires("popcnt") private function twice(n: u32): u32 { return n + n; }
+
+public function bits(n: u32): u32 {
+  if (cpu.has("popcnt")) {
+    unsafe { return count(n) + twice(n); }
+  }
+  return 0;
+}

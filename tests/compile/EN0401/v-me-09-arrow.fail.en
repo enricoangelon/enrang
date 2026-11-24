@@ -1,0 +1,13 @@
+const check = (s: &string) => {
+  if (s.isEmpty()) {
+    return Err("empty");
+  }
+  return s.length(); //~ EN0401
+};
+const check2 = (s: &string) => {
+  if (!s.isEmpty()) {
+    return s.trim().toString();
+  }
+  return Err("empty"); //~ EN0401
+};
+console.log(check("a"), check2("b"));

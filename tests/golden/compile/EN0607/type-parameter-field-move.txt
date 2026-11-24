@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0607/type-parameter-field-move.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0607]: cannot move `x.name` out of `x`, because `T` may have a destructor
+  --> tests/compile/EN0607/type-parameter-field-move.fail.en:11:63
+   |
+11 | private function steal<T extends Base>(x: T): string { return x.name; } //~ EN0607 "because `T` may have a destructor"
+   |                                                               ^^^^^^ a `T` may be a class whose destructor needs every field, or one with fields `T` does not list
+   |
+help: copy it: `x.name.clone()`
+   = explain: run `enrang explain EN0607`
+
+error[EN0607]: cannot move `x.name` out of `x`, because `{ name: string }` may have a destructor
+  --> tests/compile/EN0607/type-parameter-field-move.fail.en:12:65
+   |
+12 | private function keepName(x: { name: string }): string { return x.name; } //~ EN0607 "because `{ name: string }` may have a destructor"
+   |                                                                 ^^^^^^ a `{ name: string }` may be a class whose destructor needs every field, or one with fields `{ name: string }` does not list
+   |
+help: copy it: `x.name.clone()`
+   = explain: run `enrang explain EN0607`
+
+error[EN0607]: cannot move `old.name` out of `old`, because `{ name: string }` may have a destructor
+  --> tests/compile/EN0607/type-parameter-field-move.fail.en:14:89
+   |
+14 | @devMigrate private function migrateBase(old: { name: string }): Base { return new Base(old.name); } //~ EN0607
+   |                                                                                         ^^^^^^^^ a `{ name: string }` may be a class whose destructor needs every field, or one with fields `{ name: string }` does not list
+   |
+help: copy it: `old.name.clone()`
+   = explain: run `enrang explain EN0607`
+
+error: aborting due to 3 previous errors

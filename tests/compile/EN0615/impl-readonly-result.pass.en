@@ -1,0 +1,17 @@
+public interface TokenReader {
+  let next(): readonly &string | null;
+}
+
+public class Words implements TokenReader {
+  private text: string = "let x = 42";
+  private pos: isize = 0;
+
+  public next(): &string | null {
+    if (this.pos >= this.text.length()) {
+      return null;
+    }
+    const start = this.pos;
+    this.pos = this.text.length();
+    return this.text.slice(start, this.pos);
+  }
+}

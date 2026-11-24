@@ -1,0 +1,31 @@
+const t: u8[] = [1];
+let o: u8[] = [2];
+const p = &t;
+const v = new View(p);
+const rv = &v;
+let c = new Copier(p, &o);
+c.step();
+o.push(3);
+console.log(rv.first(), o);
+
+public final class View {
+  private x: readonly &u8[];
+  public constructor(x: &u8[]) {
+    this.x = x;
+  }
+  public first(): u8 {
+    return this.x[0];
+  }
+}
+
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public step(): void {
+    this.dst.push(this.src[0]);
+  }
+}

@@ -1,0 +1,74 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/part_of_an_array_cannot_grow.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/part_of_an_array_cannot_grow.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@mustUse fn "alloc/array"::Array<T>::slice(const _1: &Array<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // list
+  let _3: void temp;
+  let _4: &i64[] temp;
+  let _5: void temp;
+  let _6: &Slice<i64> temp;
+  let _7: isize | null temp;
+  let _8: &i64[] temp;
+  let _9: void temp;
+  let _10: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    _4 = &_2 [explicit];
+    _3 = addOne(move _4) -> bb1;
+  }
+  bb1: {
+    _7 = present(const 2: isize);
+    _8 = &_2 [auto-borrow];
+    _6 = "alloc/array"::Array<i64>::slice(move _8, const 0: isize, move _7, const 2: isize) -> bb2;
+  }
+  bb2: {
+    _5 = setFirst(move _6) -> bb3;
+  }
+  bb3: {
+    _10 = &_2 [auto-borrow];
+    _9 = form log(move _10) -> bb4;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn addOne(_1: &i64[]) -> void {
+  let _1: &i64[]; // xs
+  let _2: void temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = "alloc/array"::Array<i64>::push(move _3, const 1: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn setFirst(_1: &Slice<i64>) -> void {
+  let _1: &Slice<i64>; // part
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*_1);
+    check_bounds(copy _2, copy _3);
+    (*_1)[_2] = const 9: i64;
+    return;
+  }
+}

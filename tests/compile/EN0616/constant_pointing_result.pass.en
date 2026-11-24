@@ -1,0 +1,5 @@
+console.log(zeros()[0]);
+
+public function zeros(): &Slice<i64> {
+  return &[0, 0];
+}

@@ -1,0 +1,179 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/fv-02-base-flag.fail.en. Its row's codes: EN0706, EN0706, EN0706, EN0706.
+module "tests/compile/EN0706/fv-02-base-flag.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Base {
+  private src: readonly &u8[];
+  private dst: &u8[];
+}
+@final class Sub extends Base { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: u8[]; // buf
+  let _3: u8[]; // tbl
+  let mut _4: Sub; // s
+  let _5: &u8[] temp;
+  let _6: &u8[] temp;
+  let _7: &Sub temp;
+  let _8: void temp;
+  let _9: &u8; // t
+  let _10: &Sub temp;
+  let _11: void temp;
+  let _12: &Sub temp;
+  let _13: &Base temp;
+  let _14: void temp;
+  let _15: &Sub temp;
+  let _16: &Base temp;
+  let _17: void temp;
+  let _18: &Sub temp;
+  let _19: &Base temp;
+  let _20: void temp;
+  let _21: &Sub temp;
+  let _22: &Base temp;
+  let _23: void temp;
+  let _24: &u8 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 1: u8);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<u8>(const 0: u8);
+    storage_live(_4);
+    set_table(_4, Sub);
+    _5 = &_3 [explicit];
+    _6 = &_2 [explicit];
+    _7 = &_4 [auto-borrow];
+    _8 = Sub::#ctor(move _7, move _5, move _6) -> bb1;
+  }
+  bb1: {
+    storage_live(_9);
+    _10 = &_4 [explicit];
+    _9 = Base::firstOf(move _10) -> bb2;
+  }
+  bb2: {
+    _12 = &_4 [auto-borrow]; //~ EN0706
+    _13 = convert(upcast, move _12);
+    _11 = Base::step(move _13) -> bb3;
+  }
+  bb3: {
+    _15 = &_4 [auto-borrow]; //~ EN0706
+    _16 = convert(upcast, move _15);
+    _14 = Base::step(move _16) -> bb4;
+  }
+  bb4: {
+    _18 = &_4 [auto-borrow]; //~ EN0706
+    _19 = convert(upcast, move _18);
+    _17 = Base::step(move _19) -> bb5;
+  }
+  bb5: {
+    _21 = &_4 [auto-borrow]; //~ EN0706
+    _22 = convert(upcast, move _21);
+    _20 = Base::step(move _22) -> bb6;
+  }
+  bb6: {
+    _24 = &*_9 [auto-borrow];
+    _23 = form log(move _24) -> bb7;
+  }
+  bb7: {
+    storage_dead(_9);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Base::#ctor(_1: &Base, _2: &u8[], _3: &u8[]) -> void {
+  let _1: &Base; // this
+  let _2: &u8[]; // s
+  let _3: &u8[]; // d
+  let _4: &u8[] temp;
+  let _5: &u8[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+fn Base::adopt(_1: &Base, _2: &Sub) -> void {
+  let _1: &Base; // this
+  let _2: &Sub; // o
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_2).dst;
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+static fn Base::firstOf(_1: &Sub) -> readonly &u8 {
+  let _1: &Sub; // o
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).dst);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).dst)[_2] [explicit];
+    return;
+  }
+}
+
+fn Base::peek(_1: &Base) -> readonly &u8 {
+  let _1: &Base; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).src);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).src)[_2] [explicit];
+    return;
+  }
+}
+
+fn Base::step(_1: &Base) -> void {
+  let _1: &Base; // this
+  let _2: void temp;
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_1).dst;
+    _2 = "alloc/array"::Array<u8>::push(move _3, const 1: u8) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Sub::#ctor(_1: &Sub, _2: &u8[], _3: &u8[]) -> void {
+  let _1: &Sub; // this
+  let _2: &u8[]; // s
+  let _3: &u8[]; // d
+  let _4: void temp;
+  let _5: &u8[] temp;
+  let _6: &u8[] temp;
+  let _7: &Sub temp;
+  let _8: &Base temp;
+  bb0: {
+    _5 = &*_2 [reborrow];
+    _6 = &*_3 [reborrow];
+    _7 = &*_1 [reborrow];
+    _8 = convert(upcast, move _7);
+    _4 = Base::#ctor(move _8, move _5, move _6) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

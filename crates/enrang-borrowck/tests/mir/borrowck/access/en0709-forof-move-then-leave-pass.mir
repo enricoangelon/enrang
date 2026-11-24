@@ -1,0 +1,116 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0709/forof-move-then-leave.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0709/forof-move-then-leave.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string[]; // q
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &string; // x
+  let _7: void temp;
+  loop l0: path _2 preheader bb5 head bb1 bind bb2[2] binding _6;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<string>(const "a": string, const "b": string);
+    goto bb5;
+  }
+  bb1: {
+    _4 = len(_2);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &_2[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _7 = take(move _2) -> bb7;
+  }
+  bb7: {
+    storage_dead(_6);
+    goto bb4;
+  }
+}
+
+@private fn leave() -> void {
+  let mut _1: string[]; // q
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &string; // x
+  let _6: void temp;
+  loop l0: path _1 preheader bb5 head bb1 bind bb2[2] binding _5;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<string>(const "a": string, const "b": string);
+    goto bb5;
+  }
+  bb1: {
+    _3 = len(_1);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &_1[_2] [for-of-element];
+    _2 = add(copy _2, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _6 = take(move _1) -> bb7;
+  }
+  bb7: {
+    storage_dead(_5);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+@private fn take(_1: string[]) -> void {
+  let _1: string[]; // v
+  let _2: void temp;
+  let _3: &string[] temp;
+  bb0: {
+    _3 = &_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}

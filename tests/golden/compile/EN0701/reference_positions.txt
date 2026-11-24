@@ -1,0 +1,51 @@
+$ enrang check tests/compile/EN0701/reference_positions.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0701]: an array can't hold a `&i64`, because `&i64` is a reference
+ --> tests/compile/EN0701/reference_positions.fail.en:2:11
+  |
+2 | const xs: (&i64)[] = [&n]; //~ EN0701 "an array can't hold a `&i64`, because `&i64` is a reference"
+  |           ^^^^^^^^ a reference
+  |
+  = rule: a reference lives only in locals, parameters, return values, tuple parts and `private` fields of a class that holds references.
+  = explain: run `enrang explain EN0701`
+
+error[EN0701]: a `Box` can't hold a `&i64`, because `&i64` is a reference
+ --> tests/compile/EN0701/reference_positions.fail.en:3:10
+  |
+3 | const b: Box<&i64> | null = null; //~ EN0701 "a `Box` can't hold a `&i64`"
+  |          ^^^^^^^^^ a reference
+  |
+  = rule: a reference lives only in locals, parameters, return values, tuple parts and `private` fields of a class that holds references.
+  = explain: run `enrang explain EN0701`
+
+error[EN0701]: an enum case can't hold a `&i64`, because `&i64` is a reference
+ --> tests/compile/EN0701/reference_positions.fail.en:7:13
+  |
+7 |   Full { r: &i64 }, //~ EN0701 "an enum case can't hold a `&i64`"
+  |             ^^^^ a reference
+  |
+  = rule: a reference lives only in locals, parameters, return values, tuple parts and `private` fields of a class that holds references.
+  = explain: run `enrang explain EN0701`
+
+error[EN0701]: `r` holds a reference, so it must be `private`
+  --> tests/compile/EN0701/reference_positions.fail.en:12:13
+   |
+12 |   public r: &i64; //~ EN0701 "`r` holds a reference, so it must be `private`"
+   |             ^^^^ a reference in a `public` field
+   |
+   = rule: a reference field is seen only inside its class, so the class can keep track of what it borrows.
+help: make it `private`: `private r: &i64;`
+   = explain: run `enrang explain EN0701`
+
+error[EN0701]: an object type can't hold a `&i64`, because `&i64` is a reference
+  --> tests/compile/EN0701/reference_positions.fail.en:18:26
+   |
+18 | public function show(p: &{ r: &i64 }): void {} //~ EN0701 "an object type can't hold a `&i64`"
+   |                          ^^^^^^^^^^^ a reference
+   |
+   = rule: a reference lives only in locals, parameters, return values, tuple parts and `private` fields of a class that holds references.
+   = explain: run `enrang explain EN0701`
+
+error: aborting due to 5 previous errors

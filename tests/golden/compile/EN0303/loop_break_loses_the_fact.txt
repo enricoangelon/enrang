@@ -1,0 +1,44 @@
+$ enrang check tests/compile/EN0303/loop_break_loses_the_fact.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0303]: `string[] | null` has no member `length`
+ --> tests/compile/EN0303/loop_break_loses_the_fact.fail.en:8:17
+  |
+8 |   console.log(p.length()); //~ EN0303 "has no member `length`"
+  |                 ^^^^^^ this value may be `null`
+  |
+help: use `?.length`, which reads it only when the value is not `null`
+  |
+8 |   console.log(p?.length()); //~ EN0303 "has no member `length`"
+  |                +
+help: or narrow it first: `if (p != null) { ... }`
+  = explain: run `enrang explain EN0303`
+
+error[EN0303]: `string[] | null` has no member `length`
+  --> tests/compile/EN0303/loop_break_loses_the_fact.fail.en:17:17
+   |
+17 |   console.log(p.length()); //~ EN0303 "has no member `length`"
+   |                 ^^^^^^ this value may be `null`
+   |
+help: use `?.length`, which reads it only when the value is not `null`
+   |
+17 |   console.log(p?.length()); //~ EN0303 "has no member `length`"
+   |                +
+help: or narrow it first: `if (p != null) { ... }`
+   = explain: run `enrang explain EN0303`
+
+error[EN0303]: `string[] | null` has no member `length`
+  --> tests/compile/EN0303/loop_break_loses_the_fact.fail.en:26:17
+   |
+26 |   console.log(p.length()); //~ EN0303 "has no member `length`"
+   |                 ^^^^^^ this value may be `null`
+   |
+help: use `?.length`, which reads it only when the value is not `null`
+   |
+26 |   console.log(p?.length()); //~ EN0303 "has no member `length`"
+   |                +
+help: or narrow it first: `if (p != null) { ... }`
+   = explain: run `enrang explain EN0303`
+
+error: aborting due to 3 previous errors

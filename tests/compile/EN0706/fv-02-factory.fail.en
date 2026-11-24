@@ -1,0 +1,19 @@
+//! covers: H30
+let buf: u8[] = [7, 8, 9];
+const v = View.over(&buf);
+const a = v.peek();
+buf = [1]; //~ EN0706
+console.log(*a);
+
+public final class View {
+  private src: readonly &Slice<u8>;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public static over(s: &Slice<u8>): View {
+    return new View(s);
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+}

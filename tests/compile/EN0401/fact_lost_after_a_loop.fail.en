@@ -1,0 +1,20 @@
+let p: string[] | null = ["a"];
+if (p != null) {
+  for (const x of &p) {
+    p = null;
+    break;
+  }
+  const r: &string[] = &p; //~ EN0401
+  console.log(r);
+}
+let q: string[] | null = ["b"];
+if (q != null) {
+  outer: for (const a of &q) {
+    for (const x of &q) {
+      q = null;
+      break outer;
+    }
+  }
+  const s: &string[] = &q; //~ EN0401
+  console.log(s);
+}

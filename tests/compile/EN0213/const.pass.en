@@ -1,0 +1,7 @@
+const file = open("log.txt");
+console.log(file);
+
+function open(path: &string): i64 {
+  console.log(path);
+  return 3;
+}

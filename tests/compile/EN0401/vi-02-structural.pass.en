@@ -1,0 +1,21 @@
+let s = "hello".toString();
+const k = new Keeper();
+f(&k, s.slice(1, 3));
+
+private function f(z: &Sizer, v: &string): void {
+  console.log(z.size(v));
+}
+
+public interface Measured {
+  length(): isize;
+}
+
+public interface Sizer {
+  size<T extends Measured>(x: &T): isize;
+}
+
+public class Keeper {
+  public size<T extends Measured>(x: &T): isize {
+    return 0;
+  }
+}

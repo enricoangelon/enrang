@@ -1,0 +1,6 @@
+public function head(): &string {
+  const s = "ab".toString();
+  return first(&s); //~ EN0710 "cannot return a reference to local `s`"
+}
+
+private function first(t: &string): &string { return t; }

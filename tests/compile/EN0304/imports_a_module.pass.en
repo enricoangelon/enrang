@@ -1,0 +1,5 @@
+import { Square, area } from "./shapes.pass";
+import * as shapes from "./shapes.pass";
+
+const s = new Square { side: 2.0 };
+console.log(area(&s), shapes.area(&s));

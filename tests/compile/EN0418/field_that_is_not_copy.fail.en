@@ -1,0 +1,4 @@
+public class Tag implements Copy { //~ EN0418 "`Tag` can't be Copy: `name` is a `string`"
+  public id: i64 = 0;
+  public name: string = "";
+}

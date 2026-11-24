@@ -1,0 +1,211 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/fv-02-lost-store.fail.en. Its row's codes: EN0616, EN0616, EN0616.
+module "tests/compile/EN0616/fv-02-lost-store.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+}
+@final class Wrapper {
+  private cp: &Copier;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: u8[]; // tbl
+  let mut _3: u8[]; // buf
+  let mut _4: Copier; // c
+  let _5: &u8[] temp;
+  let _6: &u8[] temp;
+  let _7: &Copier temp;
+  let _8: void temp;
+  let mut _9: u8[]; // y
+  let _10: void temp;
+  let _11: Wrapper temp;
+  let _12: &Copier temp;
+  let _13: &Wrapper temp;
+  let _14: void temp;
+  let _15: &u8[] temp;
+  let _16: &u8; // b
+  let _17: &Copier temp;
+  let _18: void temp;
+  let _19: &u8 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 0: u8);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<u8>(const 1: u8);
+    storage_live(_4);
+    _5 = &_2 [explicit];
+    _6 = &_3 [explicit];
+    _7 = &_4 [auto-borrow];
+    _8 = Copier::#ctor(move _7, move _5, move _6) -> bb1;
+  }
+  bb1: {
+    storage_live(_9);
+    _9 = intrinsic AllocArray<u8>(const 8: u8, const 9: u8);
+    _12 = &_4 [explicit];
+    _13 = &_11 [auto-borrow];
+    _14 = Wrapper::#ctor(move _13, move _12) -> bb2;
+  }
+  bb2: {
+    _15 = &_9 [explicit];
+    _10 = Wrapper::relink(move _11, move _15) -> bb3;
+  }
+  bb3: {
+    drop(_9);
+    storage_dead(_9);
+    storage_live(_16);
+    _17 = &_4 [auto-borrow];
+    _16 = Copier::peek(move _17) -> bb4;
+  }
+  bb4: {
+    _19 = &*_16 [auto-borrow];
+    _18 = form log(move _19) -> bb5;
+  }
+  bb5: {
+    storage_dead(_16);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Copier::#ctor(_1: &Copier, _2: &u8[], _3: &u8[]) -> void {
+  let _1: &Copier; // this
+  let _2: &u8[]; // s
+  let _3: &u8[]; // d
+  let _4: &u8[] temp;
+  let _5: &u8[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+static fn Copier::make(_1: &u8[], _2: &u8[]) -> Copier {
+  let _1: &u8[]; // s
+  let _2: &u8[]; // d
+  let _3: &u8[] temp;
+  let _4: &u8[] temp;
+  let _5: &Copier temp;
+  let _6: void temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _5 = &_0 [auto-borrow];
+    _6 = Copier::#ctor(move _5, move _3, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Copier::peek(_1: &Copier) -> readonly &u8 {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).src);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).src)[_2] [explicit];
+    return;
+  }
+}
+
+fn Copier::retarget(_1: &Copier, _2: &u8[]) -> void {
+  let _1: &Copier; // this
+  let _2: &u8[]; // v
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn Copier::step(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: void temp;
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_1).dst;
+    _2 = "alloc/array"::Array<u8>::push(move _3, const 1: u8) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Wrapper::#ctor(_1: &Wrapper, _2: &Copier) -> void {
+  let _1: &Wrapper; // this
+  let _2: &Copier; // cp
+  let _3: &Copier temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).cp = move _3;
+    return;
+  }
+}
+
+move fn Wrapper::relink(_1: &Wrapper, _2: &u8[]) -> void {
+  let _1: &Wrapper; // this
+  let _2: &u8[]; // s
+  let _3: void temp;
+  let _4: &u8[] temp;
+  let _5: &Copier temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _5 = copy (*_1).cp;
+    _3 = Copier::retarget(move _5, move _4) -> bb1; //~ EN0616 "cannot store a reference into a value reached through consumed `this`"
+  }
+  bb1: {
+    return;
+  }
+}
+
+static fn Wrapper::relinkBy(_1: Wrapper, _2: &u8[]) -> void {
+  let _1: Wrapper; // w
+  let _2: &u8[]; // s
+  let _3: void temp;
+  let _4: &u8[] temp;
+  let _5: &Copier temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _5 = copy _1.cp;
+    _3 = Copier::retarget(move _5, move _4) -> bb1; //~ EN0616
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn relinkPart(_1: [&Copier, int], _2: &u8[]) -> void {
+  let _1: [&Copier, int]; // t
+  let _2: &u8[]; // s
+  let _3: void temp;
+  let _4: &u8[] temp;
+  let _5: &Copier temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _5 = copy _1.0;
+    _3 = Copier::retarget(move _5, move _4) -> bb1; //~ EN0616
+  }
+  bb1: {
+    return;
+  }
+}

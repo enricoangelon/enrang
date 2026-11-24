@@ -1,0 +1,9 @@
+const name = "Ada".toString();
+const f = () => {
+  keep(name); //~ EN0617 "cannot move `name` out of the arrow's capture"
+};
+f();
+
+public function keep(n: string): void {
+  console.log(n);
+}

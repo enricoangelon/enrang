@@ -1,0 +1,7 @@
+const name = "Ada";
+const xs: i64[] = [1, 2, 3];
+const maybe: string | null = null;
+console.log(name.length); //~ EN0441 "`length` is a method on `string`"
+console.log(xs.length); //~ EN0441 "`length` is a method on `i64[]`"
+console.log("città".length); //~ EN0441 "`length` is a method on `string`"
+console.log(maybe?.length); //~ EN0441 "`length` is a method on `string`"

@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN1022/power_operator.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1022]: the `**` operator is not supported yet
+ --> tests/compile/EN1022/power_operator.fail.en:2:19
+  |
+2 | const area = side ** 2; //~ EN1022 "the `**` operator is not supported yet"
+  |                   ^^ a power
+  |
+  = note: a power is the `pow` method of the number types.
+help: `a.pow(b)`
+  |
+2 | const area = side.pow(2); //~ EN1022 "the `**` operator is not supported yet"
+  |              ~~~~~~~~~~~
+  = explain: run `enrang explain EN1022`
+
+error: aborting due to 1 previous error

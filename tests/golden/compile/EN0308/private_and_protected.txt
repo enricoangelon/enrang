@@ -1,0 +1,61 @@
+$ enrang check tests/compile/EN0308/private_and_protected.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0308]: `count` is private to `Counter`
+ --> tests/compile/EN0308/private_and_protected.fail.en:2:15
+  |
+2 | console.log(c.count); //~ EN0308 "`count` is private to `Counter`"
+  |               ^^^^^ only the body of `Counter` can use it
+...
+8 |   private count: i64 = 0;
+  |   ----------------------- `count` is declared here
+  |
+  = explain: run `enrang explain EN0308`
+
+error[EN0308]: `reset` is private to `Counter`
+  --> tests/compile/EN0308/private_and_protected.fail.en:3:3
+   |
+ 3 | c.reset(); //~ EN0308 "`reset` is private to `Counter`"
+   |   ^^^^^ only the body of `Counter` can use it
+...
+10 |   private reset(): void {
+   |           ----- `reset` is declared here
+   |
+   = explain: run `enrang explain EN0308`
+
+error[EN0308]: `step` is protected in `Counter`
+ --> tests/compile/EN0308/private_and_protected.fail.en:4:15
+  |
+4 | console.log(c.step); //~ EN0308 "`step` is protected in `Counter`"
+  |               ^^^^ only `Counter` and its subclasses can use it
+...
+9 |   protected step: i64 = 1;
+  |   ------------------------ `step` is declared here
+  |
+  = explain: run `enrang explain EN0308`
+
+error[EN0308]: `count` is private to `Counter`
+ --> tests/compile/EN0308/private_and_protected.fail.en:5:25
+  |
+5 | const d = new Counter { count: 5 }; //~ EN0308 "`count` is private to `Counter`"
+  |                         ^^^^^ only the body of `Counter` can use it
+6 |
+7 | public class Counter {
+8 |   private count: i64 = 0;
+  |   ----------------------- `count` is declared here
+  |
+  = explain: run `enrang explain EN0308`
+
+error[EN0308]: `count` is private to `Counter`
+  --> tests/compile/EN0308/private_and_protected.fail.en:20:17
+   |
+ 8 |   private count: i64 = 0;
+   |   ----------------------- `count` is declared here
+...
+20 |     return this.count; //~ EN0308 "`count` is private to `Counter`"
+   |                 ^^^^^ only the body of `Counter` can use it
+   |
+   = explain: run `enrang explain EN0308`
+
+error: aborting due to 5 previous errors

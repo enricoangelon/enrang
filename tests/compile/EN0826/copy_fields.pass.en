@@ -1,0 +1,24 @@
+@packed public final class GdtPointer {
+  public limit: u16;
+  public base: u32;
+}
+
+@packed public final class Mixed {
+  public tag: u8;
+  public words: u32[4];
+  public grid: u32[2][2];
+  public p: *u8;
+  public kind: Kind;
+  public at: Point;
+  public flag: bool;
+}
+
+public final class Point implements Copy {
+  public x: i32 = 0;
+  public y: i32 = 0;
+}
+
+public enum Kind {
+  A,
+  B,
+}

@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0714/override-through-fields.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0714]: `Loud.label` returns a reference that `Namer.label` does not allow
+  --> tests/compile/EN0714/override-through-fields.fail.en:22:5
+   |
+15 |   public label(o: &Item): readonly &string {
+   |          ----- declared here
+...
+22 |     return &o.name; //~ EN0714
+   |     ^^^^^^^^^^^^^^^ returned here
+   |
+help: through a `&Namer`, callers only expect `o` or the object
+   = explain: run `enrang explain EN0714`
+
+error: aborting due to 1 previous error

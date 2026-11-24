@@ -1,0 +1,38 @@
+const a = new Snapshot(64);
+const b = a;
+console.log(b.bytes());
+const o = new Owner { n: 1, label: "x" };
+keep(o); //~ EN0419 "`Owner` does not satisfy `Copy`"
+
+private function keep<T extends Copy>(x: T): void {
+  const y = x;
+  console.log(y);
+}
+
+public class Region {
+  protected base: *u8;
+  protected size: usize;
+
+  public constructor(size: usize) {
+    this.size = size;
+    this.base = 0 as *u8;
+  }
+
+  public bytes(): usize {
+    return this.size;
+  }
+
+  public destructor() {
+    console.log("freed");
+  }
+}
+
+public class Snapshot extends Region implements Copy {} //~ EN0418 "`Region`'s destructor runs for every `Snapshot`, so copying one would run it twice"
+
+public class Cell implements Copy {
+  public n: i64;
+}
+
+public class Owner extends Cell {
+  public label: string;
+}

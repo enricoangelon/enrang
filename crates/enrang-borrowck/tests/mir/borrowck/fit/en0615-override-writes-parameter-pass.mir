@@ -1,0 +1,70 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/override-writes-parameter.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/override-writes-parameter.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Filler extends Source { }
+class Source { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // v
+  let _3: Filler; // f
+  let _4: *Filler temp;
+  let _5: void temp;
+  let _6: void temp;
+  let _7: &i64[] temp;
+  let _8: &Filler temp;
+  let _9: void temp;
+  let _10: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>();
+    storage_live(_3);
+    _4 = addr_of _3;
+    _5 = named_fill Filler leaving()(move _4) -> bb1;
+  }
+  bb1: {
+    _7 = &_2 [explicit];
+    _8 = &_3 [auto-borrow];
+    _6 = Filler::fill(move _8, move _7) -> bb2;
+  }
+  bb2: {
+    _10 = &_2 [auto-borrow];
+    _9 = form log(move _10) -> bb3;
+  }
+  bb3: {
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@override fn Filler::fill(_1: &Filler, _2: &i64[]) -> void {
+  let _1: &Filler; // this
+  let _2: &i64[]; // xs
+  let _3: void temp;
+  let _4: &i64[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = "alloc/array"::Array<i64>::push(move _4, const 7: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Source::fill(_1: &Source, let _2: &i64[]) -> void {
+  let _1: &Source; // this
+  let _2: &i64[]; // xs
+  bb0: {
+    return;
+  }
+}

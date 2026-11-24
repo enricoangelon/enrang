@@ -1,0 +1,9 @@
+const ada = new Person { name: "Ada", age: 36 };
+const { name, age } = ada;
+console.log(name, age);
+console.log(ada.name); //~ EN0601 "`ada.name` was moved into `name`"
+
+public class Person {
+  public name: string;
+  public age: i64;
+}

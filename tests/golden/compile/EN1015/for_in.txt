@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN1015/for_in.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1015]: this `for...of` source is not supported yet
+ --> tests/compile/EN1015/for_in.fail.en:2:14
+  |
+2 | for (const k in xs) { //~ EN1015 "this `for...of` source is not supported yet"
+  |              ^^ `for...in` walks an object's keys
+  |
+  = note: an Enrang object has no keys to walk; `for...of` goes over the elements of an array
+help: to loop over an array's elements, write `of`
+  |
+2 | for (const k of xs) { //~ EN1015 "this `for...of` source is not supported yet"
+  |              ~~
+  = explain: run `enrang explain EN1015`
+
+error: aborting due to 1 previous error

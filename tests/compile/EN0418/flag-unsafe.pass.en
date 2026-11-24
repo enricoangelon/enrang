@@ -1,0 +1,15 @@
+private unsafe let seen: isize = 0;
+
+public class Cursor implements Copy {
+  private xs: &i64[];
+
+  public constructor(xs: &i64[]) {
+    this.xs = xs;
+  }
+
+  public const size(): isize {
+    const n = this.xs.length();
+    unsafe { seen += n; }
+    return n;
+  }
+}

@@ -1,0 +1,24 @@
+let a = new Bag();
+a.items.push(1);
+let v = new View(&a);
+for (let i = 0; i < 3; i++) {
+  v.cur().items.push(i);
+}
+const q = &a.items[0];
+console.log(q);
+
+public class Bag {
+  public items: i64[] = [];
+}
+
+public class View {
+  private r: &Bag;
+
+  public constructor(r: &Bag) {
+    this.r = r;
+  }
+
+  public cur(): &Bag {
+    return this.r;
+  }
+}

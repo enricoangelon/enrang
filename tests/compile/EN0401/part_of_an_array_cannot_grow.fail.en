@@ -1,0 +1,6 @@
+let list: i64[] = [1, 2, 3];
+addOne(list.slice(0, 2)); //~ EN0401 "a part of an array can't grow"
+
+private function addOne(xs: &i64[]): void {
+  xs.push(1);
+}

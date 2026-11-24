@@ -1,0 +1,63 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0617/arrow_moves_captured_variable.fail.en. Its row's codes: EN0617.
+module "tests/compile/EN0617/arrow_moves_captured_variable.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: string; // name
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: () => void; // f
+  let _6: &string temp;
+  let _7: [&string] temp;
+  let _8: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "Ada": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = &_2 [closure-capture];
+    _7 = env(move _6);
+    _5 = closure(arrow#0, _7);
+    _8 = closure _5() -> bb2;
+  }
+  bb2: {
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+arrow#0 of statements (_1: &[&string]) -> void {
+  let _1: &[&string] env;
+  let _2: void temp;
+  capture name: &string path;
+  bb0: {
+    _2 = keep(move *(*_1).0) -> bb1; //~ EN0617 "cannot move `name` out of the arrow's capture"
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn keep(_1: string) -> void {
+  let _1: string; // n
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}

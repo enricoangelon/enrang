@@ -1,0 +1,10 @@
+const z: fn(xs: &Slice<i64>) => &i64 = firstOrZero; //~ EN0615
+
+private const ZERO: i64 = 0;
+
+private function firstOrZero(xs: &Slice<i64>): &i64 {
+  if (xs.isEmpty()) {
+    return &ZERO;
+  }
+  return &xs[0];
+}

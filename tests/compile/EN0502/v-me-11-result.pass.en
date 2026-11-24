@@ -1,0 +1,7 @@
+const a: Result<i64> = Ok(5);
+console.log(a);
+const r: Result<string> = Err("boom");
+console.log(r);
+const v: Result<void> = Ok();
+console.log(v);
+console.log([Ok("x")]);

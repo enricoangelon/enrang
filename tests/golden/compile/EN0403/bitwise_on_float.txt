@@ -1,0 +1,37 @@
+$ enrang check tests/compile/EN0403/bitwise_on_float.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0403]: `&` needs integers, found `f64`
+ --> tests/compile/EN0403/bitwise_on_float.fail.en:2:14
+  |
+2 | const mask = ratio & 2; //~ EN0403 "`&` needs integers, found `f64`"
+  |              ^^^^^ this is `f64`
+  |
+  = explain: run `enrang explain EN0403`
+
+error[EN0403]: `<<` needs integers, found `f64`
+ --> tests/compile/EN0403/bitwise_on_float.fail.en:3:17
+  |
+3 | const shifted = ratio << 1; //~ EN0403
+  |                 ^^^^^ this is `f64`
+  |
+  = explain: run `enrang explain EN0403`
+
+error[EN0403]: `<<` needs integers, found `f64`
+ --> tests/compile/EN0403/bitwise_on_float.fail.en:5:29
+  |
+5 | const byFraction = count << 1.5; //~ EN0403 "`<<` needs integers, found `f64`"
+  |                             ^^^ this is `f64`
+  |
+  = explain: run `enrang explain EN0403`
+
+error[EN0403]: `>>` needs integers, found `f64`
+ --> tests/compile/EN0403/bitwise_on_float.fail.en:6:26
+  |
+6 | const byFloat = count >> ratio; //~ EN0403 "`>>` needs integers, found `f64`"
+  |                          ^^^^^ this is `f64`
+  |
+  = explain: run `enrang explain EN0403`
+
+error: aborting due to 4 previous errors

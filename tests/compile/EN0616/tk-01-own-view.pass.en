@@ -1,0 +1,11 @@
+let data: i64[] = [1, 2]; let h = new Holder(&data); const [o, e] = h.both(); o.push(3); *e = 9; console.log(*o, *e); console.log(data);
+let data2: i64[] = [1, 2]; let h2 = new Holder(&data2); const [o2, v2] = h2.pair(); o2.push(3); v2.push(4); console.log(*o2, *v2);
+
+public class Holder {
+  private view: &i64[];
+  private own: i64[] = [];
+  public constructor(v: &i64[]) { this.view = v; }
+  public pick(c: bool): [&i64[], &i64] { const p = c ? &this.own : this.view; return [p, &this.view[0]]; }
+  public both(): [&i64[], &i64] { return [&this.own, &this.view[0]]; }
+  public pair(): [&i64[], &i64[]] { return [&this.own, this.view]; }
+}

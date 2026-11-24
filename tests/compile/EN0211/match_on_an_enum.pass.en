@@ -1,0 +1,11 @@
+public enum Shape {
+  Circle,
+  Square,
+}
+
+public function kind(value: Shape): string {
+  return match (value) {
+    Shape.Circle => "circle",
+    default => "other",
+  };
+}

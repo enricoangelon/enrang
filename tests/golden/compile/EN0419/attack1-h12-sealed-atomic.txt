@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0419/attack1-h12-sealed-atomic.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `string` does not satisfy `AtomicValue`
+ --> tests/compile/EN0419/attack1-h12-sealed-atomic.fail.en:4:14
+  |
+4 | const name = new Atomic<string>("x"); //~ EN0419
+  |              ^^^^^^^^^^^^^^^^^^^^^^^ `T` must satisfy `AtomicValue`
+ --> lib/core/atomic.en:8:27
+  |
+8 | public final class Atomic<T extends AtomicValue> {
+  |                           - the bound on `T`
+  |
+  = explain: run `enrang explain EN0419`
+
+error[EN0419]: `AtomicValue` is sealed, so `Owner` can't implement it
+ --> tests/compile/EN0419/attack1-h12-sealed-atomic.fail.en:6:31
+  |
+6 | public class Owner implements AtomicValue {} //~ EN0419
+  |                               ^^^^^^^^^^^ a sealed interface
+  |
+  = note: only the compiler's own list of types implements a sealed interface
+  = explain: run `enrang explain EN0419`
+
+error: aborting due to 2 previous errors

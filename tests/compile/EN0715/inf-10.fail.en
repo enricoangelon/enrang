@@ -1,0 +1,16 @@
+let q: i64[] = [1, 2];
+const f = () => { q.push(9); };
+for (const x of &q) { //~ EN0715 "`q` is locked while `f` will still be used"
+  f();
+  console.log(x);
+}
+
+let q2: i64[] = [1, 2];
+for (const x of &q2) {
+  run(() => { q2.push(1); }); //~ EN0706
+  console.log(x);
+}
+
+private function run(f: () => void): void {
+  f();
+}

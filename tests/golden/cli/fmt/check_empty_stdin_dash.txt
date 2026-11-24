@@ -1,0 +1,4 @@
+$ enrang fmt - --check
+[exit 0]
+[stdout]
+[stderr]

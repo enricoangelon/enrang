@@ -1,0 +1,10 @@
+//! covers: H37
+let buf: u8[] = [1];
+let t: [&u8[], i32] = [&buf, 1];
+const r = &t;
+const t2 = *r;
+t[0].push(9); //~ EN0706
+t[0].push(9); //~ EN0706
+t[0].push(9); //~ EN0706
+t[0].push(9); //~ EN0706
+console.log(t2[0][0]);

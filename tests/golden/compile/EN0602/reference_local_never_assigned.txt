@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0602/reference_local_never_assigned.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0602]: `r` is used before it has a value
+ --> tests/compile/EN0602/reference_local_never_assigned.fail.en:3:14
+  |
+2 | let r: &i64;
+  |     - `r` is declared here with no value
+3 | console.log(*r); //~ EN0602 "`r` is used before it has a value"
+  |              ^ a `&i64` has no default value
+  |
+help: give `r` a value where it is declared, or on every path before this use
+  = explain: run `enrang explain EN0602`
+
+error: aborting due to 1 previous error

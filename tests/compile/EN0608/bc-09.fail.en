@@ -1,0 +1,23 @@
+const c: u8[4] = [0; 4];
+const w0 = new Writer(&c); //~ EN0608
+let d: u8[4] = [0; 4];
+let w = new Writer(&d);
+const p = w.peek();
+w.put(1); //~ EN0706
+console.log(*p);
+
+public final class Writer {
+  private buf: &Slice<u8>;
+  public constructor(buf: &Slice<u8>) {
+    this.buf = buf;
+  }
+  public put(b: u8): void {
+    unsafe {
+      const p = &this.buf[0] as *u8;
+      *p = b;
+    }
+  }
+  public peek(): readonly &u8 {
+    return &this.buf[0];
+  }
+}

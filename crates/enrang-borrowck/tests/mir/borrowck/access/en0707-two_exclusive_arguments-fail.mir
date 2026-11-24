@@ -1,0 +1,67 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0707/two_exclusive_arguments.fail.en. Its row's codes: EN0707.
+module "tests/compile/EN0707/two_exclusive_arguments.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // xs
+  let _3: void temp;
+  let _4: &i64[] temp;
+  let _5: &Slice<i64> temp;
+  let _6: &i64[] temp;
+  let _7: &Slice<i64> temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    _4 = &_2 [explicit];
+    _5 = convert(array_to_slice, move _4);
+    _6 = &_2 [explicit]; //~ EN0707 "cannot borrow `xs` as exclusive twice at the same time"
+    _7 = convert(array_to_slice, move _6);
+    _3 = swapFirst(move _5, move _7) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private @local fn swapFirst(_1: &Slice<i64>, _2: &Slice<i64>) -> void {
+  let _1: &Slice<i64>; // a
+  let _2: &Slice<i64>; // b
+  let _3: i64; // t
+  let _4: isize temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  let _8: i64 temp;
+  let _9: isize temp;
+  let _10: isize temp;
+  let _11: isize temp;
+  let _12: i64 temp;
+  let _13: isize temp;
+  bb0: {
+    storage_live(_3);
+    _4 = const 0: isize;
+    _5 = len(*_1);
+    check_bounds(copy _4, copy _5);
+    _3 = copy (*_1)[_4];
+    _6 = const 0: isize;
+    _7 = const 0: isize;
+    _9 = len(*_2);
+    check_bounds(copy _7, copy _9);
+    _8 = copy (*_2)[_7];
+    _10 = len(*_1);
+    check_bounds(copy _6, copy _10);
+    (*_1)[_6] = move _8;
+    _11 = const 0: isize;
+    _12 = copy _3;
+    _13 = len(*_2);
+    check_bounds(copy _11, copy _13);
+    (*_2)[_11] = move _12;
+    storage_dead(_3);
+    return;
+  }
+}

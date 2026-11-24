@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0222/namespace.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0222]: `namespace` does not exist in Enrang
+ --> tests/compile/EN0222/namespace.fail.en:1:1
+  |
+1 | namespace Geometry { //~ EN0222
+  | ^^^^^^^^^ a file is a module
+  |
+help: move its contents to a file of their own, and `import` them
+  = explain: run `enrang explain EN0222`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,180 @@
+// Moves around a back edge (plan d.2, EN0611; A:1007). Shapes: c.9 (plan line 1047ff.)
+// a `while` is a head block with a `switch` and a back edge; c.13 (lines 1128-1155) the
+// `for...of` pre-header, head, bind and body; c.7 (line 1004) a form's argument is a
+// shared borrow.
+// EN0611 head (plan e): `q` was moved in an earlier turn; primary label `moved here, in
+// an earlier turn` at the move, secondary the first read.
+@final class User {
+  name: string;
+}
+fn make() -> User;
+fn archive(_1: User) -> void;
+
+fn spin(_1: bool) -> void {
+  let _2: User; // q
+  let _3: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = make() -> bb1;
+  }
+  bb1: {
+    switch copy _1 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _3 = archive(move _2) -> bb1; //~ EN0611
+  }
+  bb3: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+// `for (const x of &xs) { console.log(q); take(q); }`: both reads of the next turn are
+// reached by the one move, so one EN0611, at the move. The `const` binding `x` is set
+// again each turn after its `storage_dead`: no EN0613.
+fn each(_1: &i64[]) -> void {
+  let _2: User; // q
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &i64; // x
+  let _7: &User temp;
+  let _8: void temp;
+  loop l0: path *_1 preheader bb1 head bb2 bind bb3[2] binding _6;
+  bb0: {
+    storage_live(_2);
+    _2 = make() -> bb1;
+  }
+  bb1: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb2;
+  }
+  bb2: {
+    _4 = len(*_1);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb7, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &(*_1)[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb4;
+  }
+  bb4: {
+    _7 = &_2 [auto-borrow];
+    _8 = form log(move _7) -> bb5;
+  }
+  bb5: {
+    _8 = archive(move _2) -> bb6; //~ EN0611
+  }
+  bb6: {
+    storage_dead(_6);
+    goto bb2;
+  }
+  bb7: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+// `while (c) { take(q); break; }`: no error.
+fn broke(_1: bool) -> void {
+  let _2: User; // q
+  let _3: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = make() -> bb1;
+  }
+  bb1: {
+    switch copy _1 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _3 = archive(move _2) -> bb3;
+  }
+  bb3: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+// `while (c) { take(q); q = make(); }`: no error.
+fn reset(_1: bool) -> void {
+  let mut _2: User; // q
+  let _3: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = make() -> bb1;
+  }
+  bb1: {
+    switch copy _1 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    _3 = archive(move _2) -> bb3;
+  }
+  bb3: {
+    _2 = make() -> bb1;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+// `take(q); while (c) { console.log(q); }`: the move reaches the read on the first
+// turn too, so EN0601 at the read.
+fn before(_1: bool) -> void {
+  let _2: User; // q
+  let _3: void temp;
+  let _4: &User temp;
+  bb0: {
+    storage_live(_2);
+    _2 = make() -> bb1;
+  }
+  bb1: {
+    _3 = archive(move _2) -> bb2;
+  }
+  bb2: {
+    switch copy _1 [0: bb4, otherwise: bb3];
+  }
+  bb3: {
+    _4 = &_2 [auto-borrow]; //~ EN0601
+    _3 = form log(move _4) -> bb2;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+// `while (c) { take(q); } console.log(q);`: one EN0611, at the move.
+fn after(_1: bool) -> void {
+  let _2: User; // q
+  let _3: void temp;
+  let _4: &User temp;
+  bb0: {
+    storage_live(_2);
+    _2 = make() -> bb1;
+  }
+  bb1: {
+    switch copy _1 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _3 = archive(move _2) -> bb1; //~ EN0611
+  }
+  bb3: {
+    _4 = &_2 [auto-borrow];
+    _3 = form log(move _4) -> bb4;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}

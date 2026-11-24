@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0401/arrow-narrowed-capture-name.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `p` may be `null` here
+ --> tests/compile/EN0401/arrow-narrowed-capture-name.fail.en:6:17
+  |
+5 |     clr();
+  |     ----- this may write through it
+6 |     console.log(p.length()); //~ EN0401 "`p` may be `null` here"
+  |                 ^ the test before this may no longer hold
+  |
+  = note: a writing reference may have changed `p`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

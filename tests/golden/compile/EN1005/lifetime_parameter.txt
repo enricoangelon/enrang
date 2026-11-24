@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1005/lifetime_parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1005]: named lifetimes are not supported yet
+ --> tests/compile/EN1005/lifetime_parameter.fail.en:1:23
+  |
+1 | public function first<'a>(xs: &i64[]): &i64 { //~ EN1005 "named lifetimes are not supported yet"
+  |                       ^^ a named lifetime
+  |
+  = note: every reference's lifetime comes from the function body (5.4), so none is written.
+help: Write no lifetime: a class may hold a `private` `&` field, and a returned reference's sources come from the function body
+  = explain: run `enrang explain EN1005`
+
+error: aborting due to 1 previous error

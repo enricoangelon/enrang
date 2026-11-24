@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0706/m3gate-log-nullable-ref-tuple-part.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `a` cannot change while a borrow of it is still used
+ --> tests/compile/EN0706/m3gate-log-nullable-ref-tuple-part.fail.en:3:24
+  |
+2 | const t: [&i64 | null, i32] = [a.first(), 0];
+  |                                - shared borrow of `a` starts here
+3 | console.log(t[0], grow(&a)); //~ EN0706 "`a` cannot change while a"
+  |                        ^^ `a` changes here
+  | --------------------------- the borrow is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

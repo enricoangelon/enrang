@@ -1,0 +1,36 @@
+//! covers: H29
+public final class Lexer {
+  private src: &string;
+
+  public constructor(src: &string) {
+    this.src = src;
+  }
+
+  public text(): readonly &string {
+    return this.src;
+  }
+}
+
+public class Keeper {
+  private w: &string | null = null;
+  private lx: &Lexer | null = null;
+
+  public constructor() {}
+
+  public take(o: &Lexer): void {
+    this.w = o.text();
+  }
+}
+
+public class Sub extends Keeper {
+  private w2: &string | null = null;
+  private lx2: &Lexer | null = null;
+
+  public constructor() {
+    super();
+  }
+
+  public override take(o: &Lexer): void { //~ EN0615
+    this.lx2 = o;
+  }
+}

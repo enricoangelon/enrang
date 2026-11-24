@@ -1,0 +1,9 @@
+//! row: `const c = 'a';`, `f(x, 'a b')`
+const c = 'a';
+const x = 1;
+f(x, 'a b');
+console.log(c);
+
+private function f(x: i64, y: &string): void {
+  console.log(x, y);
+}

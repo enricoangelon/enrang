@@ -1,0 +1,3 @@
+//! row: `for (const job of [...queue]) { queue.p
+let queue = ["a", "b"];
+for (const job of [...queue]) { queue.push("retry"); }

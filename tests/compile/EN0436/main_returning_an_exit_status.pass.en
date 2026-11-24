@@ -1,0 +1,4 @@
+public function main(): i32 {
+  console.log("hello");
+  return 0;
+}

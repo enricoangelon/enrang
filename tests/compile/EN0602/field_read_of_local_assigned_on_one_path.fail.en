@@ -1,0 +1,11 @@
+public function pick(c: bool): string {
+  let g: User;
+  if (c) {
+    g = new User { name: "Ada" };
+  }
+  return g.name; //~ EN0602
+}
+
+public class User {
+  public name: string;
+}

@@ -1,0 +1,5 @@
+const given: bool | null = null;
+const a = true;
+const b = false;
+const on = given ?? a || b; //~ EN0106
+console.log(on);

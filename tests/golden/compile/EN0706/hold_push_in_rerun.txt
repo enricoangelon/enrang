@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0706/hold_push_in_rerun.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `q` while iterating over it
+ --> tests/compile/EN0706/hold_push_in_rerun.fail.en:7:5
+  |
+5 |   for (const x of &q) {
+  |                   -- mutable borrow begins here
+6 |     *x += 1;
+7 |     q.push(n); //~ EN0706 "cannot mutate `q` while iterating over it"
+  |     ^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

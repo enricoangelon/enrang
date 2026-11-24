@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0432/ternary_branches_of_two_types.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0432]: the branches have different types: `int` and `string`
+ --> tests/compile/EN0432/ternary_branches_of_two_types.fail.en:2:27
+  |
+2 | const label = ready ? 1 : "no"; //~ EN0432 "the branches have different types: `int` and `string`"
+  |                           ^^^^ this is `string`
+  |
+help: annotate the expected type, or make every branch give one type
+  = explain: run `enrang explain EN0432`
+
+error: aborting due to 1 previous error

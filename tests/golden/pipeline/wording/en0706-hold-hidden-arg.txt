@@ -1,0 +1,14 @@
+error[EN0706]: cannot mutate `q` while iterating over it
+ --> main.en:3:23
+  |
+3 | for (const x of &q) { grow(); }
+  |                       ^^^^^^ conflicting mutable access
+  |                 -- immutable borrow begins here
+  |
+help: loop over a copy
+  |
+3 | for (const x of [...q]) { grow(); }
+  |                 ~~~~ +
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

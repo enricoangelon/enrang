@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0104/if_without_braces.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0104]: `if` needs braces around its body
+ --> tests/compile/EN0104/if_without_braces.fail.en:2:12
+  |
+2 | if (ready) console.log("go"); //~ EN0104
+  |            ^^^^^^^^^^^^^^^^^^ this statement is not in braces
+  |
+help: add braces around the body
+  |
+2 | if (ready) { console.log("go"); } //~ EN0104
+  |            ++                  ++
+  = explain: run `enrang explain EN0104`
+
+error: aborting due to 1 previous error

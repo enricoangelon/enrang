@@ -1,0 +1,201 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0601/s2-16-upcast.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0601/s2-16-upcast.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+class Animal {
+  name: string;
+}
+class Dog extends Animal {
+  private tricks: string[] = default;
+}
+@final class Robot { }
+interface Speaker { }
+fn Speaker::speak(_1: &Self) -> string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Box<Animal>; // pet
+  let _3: Box<Dog> temp;
+  let _4: Dog temp;
+  let _5: string[] temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  let _8: void temp;
+  let _9: &Box<Dog> temp;
+  let _10: void temp;
+  let _11: Box<Speaker>; // s
+  let _12: Box<Speaker>[]; // all
+  let _13: Box<Speaker> temp;
+  let _14: Box<Speaker> temp;
+  let _15: Robot temp;
+  let _16: *Robot temp;
+  let _17: void temp;
+  let _18: &Box<Speaker> temp;
+  let _19: void temp;
+  let _20: isize #i;
+  let _21: isize #n;
+  let _22: bool temp;
+  let _23: &Box<Speaker>; // x
+  let _24: void temp;
+  let _25: string temp;
+  let _26: &Speaker temp;
+  let _27: &string temp;
+  loop l0: path _12 preheader bb9 head bb5 bind bb6[2] binding _23;
+  bb0: {
+    storage_live(_2);
+    set_table(_4, Dog);
+    _5 = intrinsic AllocArray<string>();
+    _4.tricks = move _5;
+    drop(_5);
+    storage_dead(_5);
+    _6 = &_4 [auto-borrow];
+    _7 = convert(upcast, move _6);
+    _8 = Animal::#ctor(move _7, const "Rex": string) -> bb1;
+  }
+  bb1: {
+    _9 = &_3 [auto-borrow];
+    _10 = "alloc/box"::Box<Dog>::#ctor(move _9, move _4) -> bb2;
+  }
+  bb2: {
+    _2 = convert(upcast, move _3);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_11);
+    _11 = convert(box_to_interface, move _2);
+    storage_live(_12);
+    _13 = move _11;
+    _16 = addr_of _15;
+    _17 = named_fill Robot leaving()(move _16) -> bb3;
+  }
+  bb3: {
+    _18 = &_14 [auto-borrow];
+    _19 = "alloc/box"::Box<Speaker>::#ctor(move _18, move _15) -> bb4;
+  }
+  bb4: {
+    _12 = intrinsic AllocArray<Box<Speaker>>(move _13, move _14);
+    drop(_14);
+    storage_dead(_14);
+    drop(_13);
+    storage_dead(_13);
+    goto bb9;
+  }
+  bb5: {
+    _21 = len(_12);
+    _22 = lt(copy _20, copy _21);
+    switch move _22 [0: bb8, otherwise: bb6];
+  }
+  bb6: {
+    storage_live(_23);
+    check_bounds(copy _20, copy _21);
+    _23 = &_12[_20] [for-of-element];
+    _20 = add(copy _20, const 1: isize);
+    goto bb10;
+  }
+  bb7: {
+    goto bb5;
+  }
+  bb8: {
+    drop(_12);
+    storage_dead(_12);
+    drop(_11);
+    storage_dead(_11);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb9: {
+    storage_live(_20);
+    _20 = const 0: isize;
+    goto bb5;
+  }
+  bb10: {
+    _26 = &**_23 [auto-borrow];
+    _25 = virtual Speaker::speak [copy _26](move _26) -> bb11;
+  }
+  bb11: {
+    _27 = &_25 [temp-arg];
+    _24 = form log(move _27) -> bb12;
+  }
+  bb12: {
+    drop(_25);
+    storage_dead(_25);
+    storage_dead(_23);
+    goto bb7;
+  }
+}
+
+fn Animal::#ctor(_1: &Animal, _2: string) -> void {
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn Animal::speak(_1: &Animal) -> string {
+  let _1: &Animal; // this
+  let _2: &string temp;
+  bb0: {
+    _2 = &(*_1).name [auto-borrow];
+    _0 = form template(const "": &string, move _2, const " makes a sound": &string) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@override fn Dog::speak(_1: &Dog) -> string {
+  let _1: &Dog; // this
+  let _2: &string temp;
+  let _3: isize temp;
+  let _4: &string[] temp;
+  let _5: &isize temp;
+  bb0: {
+    _2 = &(*_1).name [auto-borrow];
+    _4 = &(*_1).tricks [auto-borrow];
+    _3 = "alloc/array"::Array<string>::length(move _4) -> bb1;
+  }
+  bb1: {
+    _5 = &_3 [temp-arg];
+    _0 = form template(const "": &string, move _2, const " barks, ": &string, move _5, const " tricks": &string) -> bb2;
+  }
+  bb2: {
+    storage_dead(_3);
+    return;
+  }
+}
+
+fn Robot::speak(_1: &Robot) -> string {
+  let _1: &Robot; // this
+  bb0: {
+    _0 = const "beep": string;
+    return;
+  }
+}

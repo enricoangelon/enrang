@@ -1,0 +1,6 @@
+let xs = ["a".toString(), "b".toString()];
+take(xs.remove(1));
+
+public function take(s: string): void {
+  console.log(s);
+}

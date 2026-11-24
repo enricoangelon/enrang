@@ -1,0 +1,18 @@
+public class User {
+  public name: string = "";
+  public age: i64 = 0;
+}
+
+public function check(t: &User | null): bool {
+  return t.isNull(); //~ EN0703 "can't stand for the reference `&User`"
+}
+
+public function same(users: &User[]): void {
+  const copies = users.map(u => u); //~ EN0703 "`U` can't stand for the reference `&User`"
+}
+
+public function keep<T>(x: T): void {}
+
+public function hold(u: &User | null): void {
+  keep(u); //~ EN0703 "`T` can't stand for the reference `&User | null`"
+}

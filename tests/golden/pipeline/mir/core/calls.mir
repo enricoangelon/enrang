@@ -1,0 +1,203 @@
+class Base { }
+class Kid extends Base { }
+@final class Solo {
+  v: i64 = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Kid; // k
+  let _3: *Kid temp;
+  let _4: void temp;
+  let _5: i64 temp;
+  let _6: &Kid temp;
+  let _7: &Base temp;
+  let _8: Kid temp;
+  let _9: *Kid temp;
+  let _10: void temp;
+  let mut _11: string; // s
+  let _12: void temp;
+  let _13: string temp;
+  let mut _14: string; // t
+  let _15: void temp;
+  let _16: string temp;
+  let _17: usize; // size
+  let _18: void temp;
+  let _19: string temp;
+  let _20: &string temp;
+  let _21: &usize temp;
+  let _22: void temp;
+  let _23: bool temp;
+  let _24: &bool temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Kid leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [explicit];
+    _7 = convert(upcast, move _6);
+    _9 = addr_of _8;
+    _10 = named_fill Kid leaving()(move _9) -> bb2;
+  }
+  bb2: {
+    _5 = call(move _7, move _8, const fn twice: fn(i64) => i64) -> bb3;
+  }
+  bb3: {
+    storage_live(_11);
+    _11 = const "bye": string;
+    _13 = move _11;
+    drop(_13);
+    storage_dead(_13);
+    storage_live(_14);
+    _14 = const "gone": string;
+    _16 = move _14;
+    storage_dead(_16);
+    storage_live(_17);
+    _17 = intrinsic SizeOf<i64>();
+    _19 = const "size": string;
+    _20 = &_19 [temp-arg];
+    _21 = &_17 [auto-borrow];
+    _18 = form error(move _20, move _21) -> bb4;
+  }
+  bb4: {
+    drop(_19);
+    storage_dead(_19);
+    _23 = gt(copy _17, const 0: usize);
+    _24 = &_23 [temp-arg];
+    _22 = form assert(move _24) -> bb5;
+  }
+  bb5: {
+    storage_dead(_23);
+    storage_dead(_17);
+    drop(_14);
+    storage_dead(_14);
+    drop(_11);
+    storage_dead(_11);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Base::greet(_1: &Base) -> string {
+  let _1: &Base; // this
+  bb0: {
+    _0 = const "b": string;
+    return;
+  }
+}
+
+@override fn Kid::greet(_1: &Kid) -> string {
+  let _1: &Kid; // this
+  let _2: string temp;
+  let _3: &Kid temp;
+  let _4: &Base temp;
+  let _5: &string temp;
+  let _6: string temp;
+  let _7: &string temp;
+  let _8: string temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = convert(upcast, move _3);
+    _2 = Base::greet(move _4) -> bb1;
+  }
+  bb1: {
+    _5 = &_2 [temp-arg];
+    _6 = const "k": string;
+    _7 = &_6 [temp-arg];
+    _8 = form concat(move _5, move _7) -> bb2;
+  }
+  bb2: {
+    _0 = move _8;
+    drop(_8);
+    storage_dead(_8);
+    drop(_6);
+    storage_dead(_6);
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn Solo::get(_1: &Solo) -> i64 {
+  let _1: &Solo; // this
+  bb0: {
+    _0 = copy (*_1).v;
+    return;
+  }
+}
+
+fn call(_1: &Base, _2: Kid, _3: fn(i64) => i64) -> i64 {
+  let _1: &Base; // b
+  let _2: Kid; // k
+  let _3: fn(i64) => i64; // f
+  let _4: void temp;
+  let _5: string temp;
+  let _6: &Base temp;
+  let _7: &string temp;
+  let _8: string temp;
+  let _9: &Kid temp;
+  let _10: &string temp;
+  let _11: Solo; // s
+  let _12: *Solo temp;
+  let _13: void temp;
+  let _14: i64; // n
+  let _15: i64 temp;
+  let _16: &Solo temp;
+  let _17: i64 temp;
+  let _18: bool temp;
+  let _19: never temp;
+  bb0: {
+    _6 = &*_1 [reborrow];
+    _5 = virtual Base::greet [copy _6](move _6) -> bb1;
+  }
+  bb1: {
+    _7 = &_5 [temp-arg];
+    _9 = &_2 [auto-borrow];
+    _8 = Kid::greet(move _9) -> bb2;
+  }
+  bb2: {
+    _10 = &_8 [temp-arg];
+    _4 = form log(move _7, move _10) -> bb3;
+  }
+  bb3: {
+    drop(_8);
+    storage_dead(_8);
+    drop(_5);
+    storage_dead(_5);
+    storage_live(_11);
+    _12 = addr_of _11;
+    _13 = named_fill Solo leaving(v)(move _12) -> bb4;
+  }
+  bb4: {
+    storage_live(_14);
+    _16 = &_11 [auto-borrow];
+    _15 = Solo::get(move _16) -> bb5;
+  }
+  bb5: {
+    _17 = fnptr(copy _3)(const 2: i64) -> bb6;
+  }
+  bb6: {
+    _14 = checked_add(move _15, move _17);
+    _18 = gt(copy _14, const 10: i64);
+    switch move _18 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    _19 = form panic(const "big": &string) -> !;
+  }
+  bb8: {
+    _0 = copy _14;
+    storage_dead(_14);
+    storage_dead(_11);
+    return;
+  }
+}
+
+fn twice(_1: i64) -> i64 {
+  let _1: i64; // x
+  bb0: {
+    _0 = checked_mul(copy _1, const 2: i64);
+    return;
+  }
+}

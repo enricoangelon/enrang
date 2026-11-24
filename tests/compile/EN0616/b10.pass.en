@@ -1,0 +1,11 @@
+let s = new Stack();
+*s.top() = 9;
+console.log(*s.top());
+
+public class Stack {
+  private items: i64[] = [1, 2];
+
+  public top(): &i64 {
+    return &this.items[1];
+  }
+}

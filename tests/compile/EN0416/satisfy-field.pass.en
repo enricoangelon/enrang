@@ -1,0 +1,18 @@
+const user = new User {};
+console.log(label(&user));
+
+private function label<T extends Named>(x: &T): string {
+  return x.name().toString();
+}
+
+public interface Named {
+  name(): &string;
+}
+
+public class User implements Named {
+  private given: string = "Ada";
+
+  public name(): &string {
+    return &this.given;
+  }
+}

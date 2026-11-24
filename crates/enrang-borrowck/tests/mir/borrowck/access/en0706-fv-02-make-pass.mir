@@ -1,0 +1,145 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/fv-02-make.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/fv-02-make.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+class Two {
+  private a: readonly &Slice<u8>;
+  private b: readonly &Slice<u8>;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: u8[]; // t1
+  let mut _3: u8[]; // t2
+  let _4: u8[]; // o
+  let mut _5: Two; // c
+  let _6: &u8[] temp;
+  let _7: &Slice<u8> temp;
+  let _8: &u8[] temp;
+  let _9: &Slice<u8> temp;
+  let _10: void temp;
+  let _11: &u8[] temp;
+  let _12: &Slice<u8> temp;
+  let _13: &Two temp;
+  let _14: &Slice<u8>; // tok
+  let _15: &Two temp;
+  let _16: void temp;
+  let _17: &Slice<u8> temp;
+  let _18: void temp;
+  let _19: &u8[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 1: u8);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<u8>(const 2: u8, const 2: u8, const 2: u8);
+    storage_live(_4);
+    _4 = intrinsic AllocArray<u8>(const 3: u8);
+    storage_live(_5);
+    _6 = &_2 [explicit];
+    _7 = convert(array_to_slice, move _6);
+    _8 = &_3 [explicit];
+    _9 = convert(array_to_slice, move _8);
+    _5 = make(move _7, move _9) -> bb1;
+  }
+  bb1: {
+    _11 = &_4 [explicit];
+    _12 = convert(array_to_slice, move _11);
+    _13 = &_5 [auto-borrow];
+    _10 = Two::setA(move _13, move _12) -> bb2;
+  }
+  bb2: {
+    storage_live(_14);
+    _15 = &_5 [auto-borrow];
+    _14 = Two::peekB(move _15) -> bb3;
+  }
+  bb3: {
+    _17 = &*_14 [reborrow];
+    _16 = form log(move _17) -> bb4;
+  }
+  bb4: {
+    _19 = &_3 [auto-borrow];
+    _18 = "alloc/array"::Array<u8>::push(move _19, const 9: u8) -> bb5;
+  }
+  bb5: {
+    storage_dead(_14);
+    storage_dead(_5);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Two::#ctor(_1: &Two, _2: &Slice<u8>, _3: &Slice<u8>) -> void {
+  let _1: &Two; // this
+  let _2: &Slice<u8>; // a
+  let _3: &Slice<u8>; // b
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).a = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).b = move _5;
+    return;
+  }
+}
+
+fn Two::peekB(_1: &Two) -> readonly &Slice<u8> {
+  let _1: &Two; // this
+  let _2: isize | null temp;
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _2 = present(const 1: isize);
+    _3 = copy (*_1).b;
+    _0 = "core/slice"::Slice<u8>::slice(move _3, const 0: isize, move _2, const 2: isize) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Two::setA(_1: &Two, _2: &Slice<u8>) -> void {
+  let _1: &Two; // this
+  let _2: &Slice<u8>; // a
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).a = move _3;
+    return;
+  }
+}
+
+@private @local fn make(_1: &Slice<u8>, _2: &Slice<u8>) -> Two {
+  let _1: &Slice<u8>; // a
+  let _2: &Slice<u8>; // b
+  let _3: &Slice<u8> temp;
+  let _4: &Slice<u8> temp;
+  let _5: &Two temp;
+  let _6: void temp;
+  bb0: {
+    set_table(_0, Two);
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _5 = &_0 [auto-borrow];
+    _6 = Two::#ctor(move _5, move _3, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

@@ -1,0 +1,4 @@
+let q: i64[] = [1];
+const show = () => { console.log(q); };
+show();
+q.push(2);

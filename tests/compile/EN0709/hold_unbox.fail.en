@@ -1,0 +1,5 @@
+let b: Box<i64[]> = new Box([1, 2]);
+for (const x of &*b) {
+  const v = b.unbox(); //~ EN0709 "cannot move `b` while iterating over it"
+  console.log(v);
+}

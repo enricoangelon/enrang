@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0401/ef-03.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `"up"` is not a `Direction`
+ --> tests/compile/EN0401/ef-03.fail.en:7:14
+  |
+7 |   return Err("up"); //~ EN0401
+  |              ^^^^ not one of `Direction`'s values
+  |
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: mismatched types: expected `AgeError`, found `string`
+  --> tests/compile/EN0401/ef-03.fail.en:11:14
+   |
+11 |   return Err("no"); //~ EN0401
+   |              ^^^^ this is `string`
+   |
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

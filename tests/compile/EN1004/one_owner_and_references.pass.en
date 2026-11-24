@@ -1,0 +1,10 @@
+let owner: Box<i64> = new Box(5);
+console.log(peek(&owner));
+let counter = new Cell { value: 0 };
+counter.value = 1;
+
+private function peek(b: &Box<i64>): i64 { return **b; }
+
+public final class Cell {
+  public value: i64;
+}

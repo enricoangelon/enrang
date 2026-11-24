@@ -1,0 +1,21 @@
+growable();
+fixed();
+let w: i64[] = [1, 2, 3, 4];
+console.log(w.splitAt(-1));
+console.log(w.splitAt(9));
+
+private function growable(): void {
+  let v: i64[] = [1, 2, 3, 4];
+  const [lo, hi] = v.splitAt(2);
+  lo[0] = hi[0];
+  hi[1] = 9;
+  console.log(v);
+}
+
+private function fixed(): void {
+  let v: i64[4] = [1, 2, 3, 4];
+  const [lo, hi] = v.splitAt(2);
+  lo[0] = hi[0];
+  hi[1] = 9;
+  console.log(v);
+}

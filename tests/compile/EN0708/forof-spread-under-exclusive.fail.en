@@ -1,0 +1,5 @@
+//! row: `const r = &f; const c = [...f]; r[0] = 
+let f: i64[] = [1, 2];
+const r = &f;
+const c = [...f]; //~ EN0708
+r[0] = 1;

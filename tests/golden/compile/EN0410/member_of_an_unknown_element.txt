@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0410/member_of_an_unknown_element.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0410]: cannot infer the type of `xs[0]`
+ --> tests/compile/EN0410/member_of_an_unknown_element.fail.en:3:13
+  |
+3 | console.log(xs[0].name); //~ EN0410
+  |             ^^^^^ nothing here decides its type
+  |
+help: add a type annotation
+  = explain: run `enrang explain EN0410`
+
+error: aborting due to 1 previous error

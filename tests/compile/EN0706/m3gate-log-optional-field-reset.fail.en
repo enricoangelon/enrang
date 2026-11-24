@@ -1,0 +1,4 @@
+let o: O | null = new O();
+console.log(o?.name, reset(&o)); //~ EN0706 "`o` cannot change while a"
+function reset(x: &(O | null)): i64 { *x = null; return 0; }
+public class O { public name: string = "abc".toString(); }

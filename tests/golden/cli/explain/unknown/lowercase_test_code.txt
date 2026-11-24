@@ -1,0 +1,6 @@
+$ enrang explain t0001
+[exit 2]
+[stdout]
+[stderr]
+error: `t0001` is not a diagnostic code
+help: did you mean `T0001`?

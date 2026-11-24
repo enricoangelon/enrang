@@ -1,0 +1,22 @@
+private function f(src: &string): &string {
+  const lx = new Lexer(src);
+  return lx.srcRef();
+}
+
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();
+    return this.src.slice(start, this.pos);
+  }
+
+  public setSrc(s: &string): void { this.src = s; }
+
+  public move srcRef(): &string { return this.src; }
+}

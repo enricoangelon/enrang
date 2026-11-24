@@ -1,0 +1,25 @@
+console.log(turn(1), next(), age(-1));
+
+private function turn(n: i64): Result<i64, Direction> {
+  return Err("left");
+}
+
+private function next(): Result<Token> {
+  return Token.End;
+}
+
+private function age(n: i64): Result<i64> {
+  return Err(AgeError.Negative);
+}
+
+private type Direction = "left" | "right";
+
+public enum Token {
+  Word,
+  End,
+}
+
+public enum AgeError {
+  NotANumber = "not a number",
+  Negative = "negative age",
+}

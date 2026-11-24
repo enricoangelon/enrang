@@ -1,0 +1,7 @@
+console.log(Opcode.Halt as i32);
+
+@repr("u8")
+public enum Opcode {
+  Nop = 0,
+  Halt = 255,
+}

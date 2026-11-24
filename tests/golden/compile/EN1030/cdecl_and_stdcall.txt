@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN1030/cdecl_and_stdcall.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1030]: this foreign ABI is not supported yet
+ --> tests/compile/EN1030/cdecl_and_stdcall.fail.en:1:23
+  |
+1 | public type Cd = @abi("cdecl") unsafe fn(n: i32) => void; //~ EN1030 "this foreign ABI is not supported yet"
+  |                       ^^^^^^^ a 32-bit Windows calling convention
+  |
+  = note: foreign code is called with `win64` or `sysv`, passing scalars and pointers.
+help: Use scalars and pointers
+  = explain: run `enrang explain EN1030`
+
+error[EN1030]: this foreign ABI is not supported yet
+ --> tests/compile/EN1030/cdecl_and_stdcall.fail.en:3:6
+  |
+3 | @abi("stdcall") public function sc(n: i32): i32 { //~ EN1030 "this foreign ABI is not supported yet"
+  |      ^^^^^^^^^ a 32-bit Windows calling convention
+  |
+  = note: foreign code is called with `win64` or `sysv`, passing scalars and pointers.
+help: Use scalars and pointers
+  = explain: run `enrang explain EN1030`
+
+error: aborting due to 2 previous errors

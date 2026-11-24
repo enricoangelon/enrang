@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0619/super_in_a_loop.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0619]: `super(age)` may already have run here
+ --> tests/compile/EN0619/super_in_a_loop.fail.en:9:7
+  |
+9 |       super(age); //~ EN0619 "`super(age)` may already have run here"
+  |       ^^^^^^^^^^ a second `super(...)` on this path
+  |
+  = note: every constructor of a class with a base runs `super(...)` exactly once on every path
+  = explain: run `enrang explain EN0619`
+
+error[EN0619]: `super(age)` isn't called on every path before the constructor returns
+  --> tests/compile/EN0619/super_in_a_loop.fail.en:12:3
+   |
+12 |   } //~ EN0619 "`super(age)` isn't called on every path before the constructor returns"
+   |   ^ the constructor may return here without `super(age)`
+   |
+   = note: when `i < n` is false
+   = explain: run `enrang explain EN0619`
+
+error: aborting due to 2 previous errors

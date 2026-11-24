@@ -1,0 +1,15 @@
+//! covers: H02
+let s: Shape = Shape.Circle { radius: 1 };
+match (s) {
+  Shape.Circle => {
+    const r = &s.radius;
+    s = Shape.Empty; //~ EN0706 "`s` cannot change while `r` still points into it"
+    console.log(*r);
+  },
+  default => {},
+}
+
+public enum Shape {
+  Circle { radius: i64 },
+  Empty,
+}

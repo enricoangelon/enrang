@@ -1,0 +1,26 @@
+//! target: i386-none
+import { idt } from "os";
+
+@interrupt private function onTimer(frame: &InterruptFrame): void {}
+
+@interrupt private function onDouble(frame: &InterruptFrame): never { halt(); }
+
+@interrupt({ errorCode: true }) private function onFault(
+  frame: &InterruptFrame,
+  code: usize,
+): never {
+  halt();
+}
+
+@interrupt({ errorCode: true }) private function onGeneral(
+  frame: &InterruptFrame,
+  code: usize,
+): void {}
+
+@entry private function kmain(boot: &BootInfo): never {
+  idt.set(32, onTimer);
+  idt.set(8, onDouble);
+  idt.set(14, onFault);
+  idt.set(13, onGeneral);
+  halt();
+}

@@ -1,0 +1,37 @@
+{
+  const rex = new Dog("Rex", new Box(new Person("Ada")));
+}
+
+public class Person {
+  public constructor(public name: string) {}
+}
+
+public class Animal {
+  public name: string;
+
+  public constructor(name: string) {
+    this.name = name;
+    console.log(`hello, ${this.describe()}`);
+  }
+
+  public describe(): string {
+    return `${this.name} makes a sound`;
+  }
+
+  public destructor() {
+    console.log(`bye, ${this.describe()}`);
+  }
+}
+
+public class Dog extends Animal {
+  private owner: Box<Person>;
+
+  public constructor(name: string, owner: Box<Person>) {
+    super(name); //~ EN0610 "`this.owner` is not set when `super(name)` runs"
+    this.owner = owner;
+  }
+
+  public override describe(): string {
+    return `${this.name} of ${this.owner.name}`;
+  }
+}

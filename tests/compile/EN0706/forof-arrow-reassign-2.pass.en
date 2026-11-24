@@ -1,0 +1,20 @@
+//! row: `run(() => { xs = []; })` in a loop over
+public function dead(): void {
+  let xs: i64[] = [1, 2];
+  for (const x of &xs) {
+    run(() => { console.log(x); });
+    break;
+  }
+  run(() => { xs = []; });
+}
+
+public function live(): void {
+  let xs: i64[] = [1, 2];
+  for (const x of &xs) {
+    console.log(x);
+    run(() => { xs = []; });
+    break;
+  }
+}
+
+private function run(f: () => void): void { f(); }

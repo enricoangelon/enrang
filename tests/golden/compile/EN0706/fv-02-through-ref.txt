@@ -1,0 +1,66 @@
+$ enrang check tests/compile/EN0706/fv-02-through-ref.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `t` cannot change while `e` still points into it
+  --> tests/compile/EN0706/fv-02-through-ref.fail.en:6:1
+   |
+ 4 | const r = &t;
+   |           -- shared borrow of `t` starts here, held by `e`
+ 5 | const e = &r[0][0];
+ 6 | t[0].push(9); //~ EN0706
+   | ^^^^ `t` changes here
+...
+10 | console.log(*e);
+   |              - `e` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `t` cannot change while `e` still points into it
+  --> tests/compile/EN0706/fv-02-through-ref.fail.en:7:1
+   |
+ 4 | const r = &t;
+   |           -- shared borrow of `t` starts here, held by `e`
+ 5 | const e = &r[0][0];
+ 6 | t[0].push(9); //~ EN0706
+ 7 | t[0].push(9); //~ EN0706
+   | ^^^^ `t` changes here
+ 8 | t[0].push(9); //~ EN0706
+ 9 | t[0].push(9); //~ EN0706
+10 | console.log(*e);
+   |              - `e` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `t` cannot change while `e` still points into it
+  --> tests/compile/EN0706/fv-02-through-ref.fail.en:8:1
+   |
+ 4 | const r = &t;
+   |           -- shared borrow of `t` starts here, held by `e`
+...
+ 8 | t[0].push(9); //~ EN0706
+   | ^^^^ `t` changes here
+ 9 | t[0].push(9); //~ EN0706
+10 | console.log(*e);
+   |              - `e` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `t` cannot change while `e` still points into it
+  --> tests/compile/EN0706/fv-02-through-ref.fail.en:9:1
+   |
+ 4 | const r = &t;
+   |           -- shared borrow of `t` starts here, held by `e`
+...
+ 9 | t[0].push(9); //~ EN0706
+   | ^^^^ `t` changes here
+10 | console.log(*e);
+   |              - `e` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 4 previous errors

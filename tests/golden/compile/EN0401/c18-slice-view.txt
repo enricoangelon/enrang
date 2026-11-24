@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/c18-slice-view.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: a fixed array can't grow
+ --> tests/compile/EN0401/c18-slice-view.fail.en:3:22
+  |
+3 | console.log(checksum(&sector)); //~ EN0401 "a fixed array can't grow"
+  |                      ^^^^^^^ expected `&u8[]`, found `&u8[8]`
+  |
+help: if `checksum` only reads or sets elements, take `data: &Slice<u8>`; to let it grow, make `sector` a `u8[]`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

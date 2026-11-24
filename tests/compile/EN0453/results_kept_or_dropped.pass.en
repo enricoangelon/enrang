@@ -1,0 +1,14 @@
+let name = "  Ada  ".toString();
+name = name.trim();
+const data: u8[] = [1, 2, 3];
+const sum = checksum(&data);
+let queue: i64[] = [1, 2];
+queue.pop();
+console.log(name, sum, queue);
+
+@mustUse
+public function checksum(data: &Slice<u8>): u32 {
+  let sum: u32 = 0;
+  for (const b of data) { sum = sum + (b as u32); }
+  return sum;
+}

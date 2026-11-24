@@ -1,0 +1,7 @@
+public function viaFn(a: &i64, b: &i64): &i64 {
+  return b;
+}
+
+public function wire(): void {
+  const f: fn(a: &i64, b: &i64) => &i64 = viaFn;
+}

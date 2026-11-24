@@ -1,0 +1,8 @@
+//! covers: H21
+let a: i64[] = [1];
+let b: i64[] = [2];
+let r = &a;
+for (const x of r) {
+  r = &b;
+  break;
+}

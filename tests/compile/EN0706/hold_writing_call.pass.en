@@ -1,0 +1,8 @@
+let q: i64[] = [1, 2];
+for (const x of &q) {
+  console.log(total(&q));
+}
+
+private function total(v: &i64[]): isize {
+  return v.length();
+}

@@ -1,0 +1,10 @@
+//! covers: H16
+let p = new P { a: 1, b: [1, 2, 3, 4] };
+const e = &p.b[1];
+console.log(*e);
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u8[4];
+}

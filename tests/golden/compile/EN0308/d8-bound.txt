@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0308/d8-bound.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0308]: `secret` is protected in `Labeler`
+  --> tests/compile/EN0308/d8-bound.fail.en:13:17
+   |
+ 6 |   protected secret: i64 = 0;
+   |   -------------------------- `secret` is declared here
+...
+13 |   console.log(x.secret); //~ EN0308 "`secret` is protected in `Labeler`"
+   |                 ^^^^^^ only `Labeler` and its subclasses can use it
+   |
+   = explain: run `enrang explain EN0308`
+
+error[EN0701]: `T` can't stand for a `Lexer`, because `Lexer` holds a reference
+  --> tests/compile/EN0308/d8-bound.fail.en:24:33
+   |
+24 | private function scan<T extends Lexer>(x: &T): void {} //~ EN0701 "`T` can't stand for a `Lexer`, because `Lexer` holds a reference"
+   |                                 ^^^^^ `Lexer` borrows through its field `src`
+   |
+   = rule: a class that holds a reference lives only where a reference can: in locals, parameters, return values and fields of another such class.
+help: own the data: `private src: string;`
+   = explain: run `enrang explain EN0701`
+
+error: aborting due to 2 previous errors

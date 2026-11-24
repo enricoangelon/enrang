@@ -1,0 +1,21 @@
+private function choose(p: &Picker, x: &string, y: &string): void {
+  const best = p.pick(x, y);
+  p.reset(); //~ EN0706
+  console.log(best);
+}
+
+public class Picker {
+  protected favorite: string;
+
+  public constructor(favorite: string) { this.favorite = favorite; }
+
+  public pick(a: &string, b: &string): &string { return a.length() > b.length() ? a : b; }
+
+  public reset(): void { this.favorite = ""; }
+
+  public choose(x: &string, y: &string): void {
+    const best = this.pick(x, y);
+    this.reset(); //~ EN0706
+    console.log(best);
+  }
+}

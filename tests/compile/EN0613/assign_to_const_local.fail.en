@@ -1,0 +1,3 @@
+const x = 1;
+x = 2; //~ EN0613 "cannot assign to `x`, because it is `const`"
+console.log(x);

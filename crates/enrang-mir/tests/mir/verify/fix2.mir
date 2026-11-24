@@ -1,0 +1,114 @@
+@lang("mem_swap") fn "core/mem"::swap<T>(let _1: &T, let _2: &T) -> void;
+@lang("error") interface "core/prelude"::Error { }
+@lang("failure") @final class "core/result"::Failure {
+  private text: string;
+}
+@lang("result") enum "core/result"::Result<T, E extends Error> { Ok { value: T }, Err { error: E } }
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::isEmpty(_1: &string) -> bool;
+class Animal {
+  n: i64 = default;
+}
+
+fn Animal::label(_1: &Animal) -> i64 {
+  let _1: &Animal; // this
+  bb0: {
+    _0 = copy (*_1).n;
+    return;
+  }
+}
+
+fn apply(_1: (i64) => i64, _2: i64) -> i64 {
+  let _1: (i64) => i64; // f
+  let _2: i64; // v
+  bb0: {
+    _0 = closure _1(copy _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn parse(_1: &string) -> Result<i64> {
+  let _1: &string; // s
+  let _2: bool temp;
+  let _3: &string temp;
+  let _4: Failure temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = "core/string"::string::isEmpty(move _3) -> bb3;
+  }
+  bb1: {
+    _4 = form failure_text(const "e": &string) -> bb4;
+  }
+  bb2: {
+    _0 = Result<i64>::Ok { value: const 1: i64 };
+    return;
+  }
+  bb3: {
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb4: {
+    _0 = Result<i64>::Err { error: move _4 };
+    drop(_4);
+    storage_dead(_4);
+    return;
+  }
+}
+
+fn sh(_1: u32, _2: u8) -> u32 {
+  let _1: u32; // x
+  let _2: u8; // r
+  bb0: {
+    _0 = checked_shl(copy _1, copy _2);
+    return;
+  }
+}
+
+fn sw(_1: &Animal, _2: &Animal) -> void {
+  let _1: &Animal; // a
+  let _2: &Animal; // b
+  let _3: void temp;
+  let _4: &Animal temp;
+  let _5: &Animal temp;
+  bb0: {
+    check_class(*_1, swap, ref);
+    _4 = &*_1 [reborrow];
+    check_class(*_2, swap, ref);
+    _5 = &*_2 [reborrow];
+    _3 = "core/mem"::swap<Animal>(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn value(_1: fn(i64) => i64) -> i64 {
+  let _1: fn(i64) => i64; // g
+  let _2: [fn(i64) => i64] temp;
+  let _3: (i64) => i64 temp;
+  bb0: {
+    _2 = env(copy _1);
+    _3 = closure(fn_value, _2);
+    _0 = apply(move _3, const 4: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn viaBound<T extends Animal>(_1: &T) -> i64 {
+  let _1: &T; // a
+  let _2: &T temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = virtual Animal::label [copy _2](move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

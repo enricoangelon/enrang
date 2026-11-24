@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0421/equality_without_eq.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0421]: `==` needs `Point` to implement `Eq`
+ --> tests/compile/EN0421/equality_without_eq.fail.en:3:13
+  |
+3 | console.log(a == b); //~ EN0421 "`==` needs `Point` to implement `Eq`"
+  |             ^^^^^^ `Point` has no `equals`
+  |
+help: declare `implements Eq` on `Point`, or compare its fields
+  = explain: run `enrang explain EN0421`
+
+error: aborting due to 1 previous error

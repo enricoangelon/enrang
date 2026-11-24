@@ -1,0 +1,8 @@
+public function both(xs: &Slice<i64>): void {
+  for (const a of xs) {
+    for (const b of xs) { //~ EN0707
+      *b = 1;
+    }
+    *a = 2;
+  }
+}

@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0115/statement_after_a_class.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0115]: top-level statement after a declaration
+ --> tests/compile/EN0115/statement_after_a_class.fail.en:4:1
+  |
+1 | public class Point {
+  | -------------------- the first declaration is here
+2 |   public x: i64 = 0;
+3 | }
+4 | console.log(1); //~ EN0115
+  | ^^^^^^^^^^^^^^^ this statement comes after a declaration
+  |
+  = note: a file lists its imports, then its statements and local functions, then its classes and other declarations
+help: move the statement before the first declaration
+  = explain: run `enrang explain EN0115`
+
+error: aborting due to 1 previous error

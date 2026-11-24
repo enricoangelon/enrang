@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0714/override-two-returns.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0714]: `Strict.label` returns a reference into `fallback`, but `Labeler.label` returns only into `name` or `this`
+  --> tests/compile/EN0714/override-two-returns.fail.en:10:7
+   |
+ 2 |   public label(name: &string, fallback: &string, quiet: bool): &string {
+   |          ----- declared here
+...
+10 |       return fallback; //~ EN0714
+   |       ^^^^^^^^^^^^^^^^ returned here
+   |
+help: through a `&Labeler`, callers only expect `name` or the object
+   = explain: run `enrang explain EN0714`
+
+error: aborting due to 1 previous error

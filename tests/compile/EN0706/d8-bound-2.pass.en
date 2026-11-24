@@ -1,0 +1,23 @@
+const title = "Dune";
+let echo = new Echo { title: "Echo" };
+const t = tag(&echo, &title).toString();
+echo.title = "x";
+console.log(t);
+
+public class Labeler {
+  public label(name: &string, fallback: &string): &string {
+    return name;
+  }
+}
+
+public class Echo extends Labeler {
+  public title: string;
+
+  public override label(name: &string, fallback: &string): &string {
+    return &this.title;
+  }
+}
+
+public function tag<T extends Labeler>(x: &T, n: &string): &string {
+  return x.label(n, "none");
+}

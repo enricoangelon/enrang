@@ -1,0 +1,17 @@
+const bytes: u8[] = [1, 2, 3];
+console.log(first(&bytes).length());
+dumpWith(new Log {}, &bytes);
+
+private function first(xs: &Slice<u8>): &Slice<u8> {
+  return xs.slice(0, 1);
+}
+
+private function dumpWith(d: Log, v: &Slice<u8>): void {
+  d.dump(v);
+}
+
+public class Log {
+  public dump<T>(x: &T): void {
+    console.log(x);
+  }
+}

@@ -1,0 +1,4 @@
+//! row: A closure-typed parameter of a closure type,
+run((g) => g(1));
+
+public function run(f: (g: fn(k: u8) => void) => void): void {}

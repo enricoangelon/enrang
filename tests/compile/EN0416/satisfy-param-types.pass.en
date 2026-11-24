@@ -1,0 +1,14 @@
+const bowl = new Bowl {};
+fill(&bowl);
+
+private function fill<T extends Feeder>(f: &T): void {
+  f.feed(100);
+}
+
+public interface Feeder {
+  feed(grams: i64): void;
+}
+
+public class Bowl implements Feeder {
+  public feed(grams: i64): void {}
+}

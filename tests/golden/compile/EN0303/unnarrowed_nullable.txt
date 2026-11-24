@@ -1,0 +1,30 @@
+$ enrang check tests/compile/EN0303/unnarrowed_nullable.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0303]: `string | null` has no member `length`
+ --> tests/compile/EN0303/unnarrowed_nullable.fail.en:2:18
+  |
+2 | console.log(name.length()); //~ EN0303 "has no member `length`"
+  |                  ^^^^^^ this value may be `null`
+  |
+help: use `?.length`, which reads it only when the value is not `null`
+  |
+2 | console.log(name?.length()); //~ EN0303 "has no member `length`"
+  |                 +
+help: or narrow it first: `if (name != null) { ... }`
+  = explain: run `enrang explain EN0303`
+
+error[EN0303]: `&Inner | null` has no member `c`
+ --> tests/compile/EN0303/unnarrowed_nullable.fail.en:4:18
+  |
+4 | console.log(a?.b.c); //~ EN0303 "has no member `c`"
+  |                  ^ this value may be `null`
+  |
+help: use `?.c`, which reads it only when the value is not `null`
+  |
+4 | console.log(a?.b?.c); //~ EN0303 "has no member `c`"
+  |                 +
+  = explain: run `enrang explain EN0303`
+
+error: aborting due to 2 previous errors

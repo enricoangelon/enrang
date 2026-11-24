@@ -1,0 +1,13 @@
+public class Base {
+  public apply(f: fn(let x: &i64[]) => void): void {
+    let v: i64[] = [1];
+    f(&v);
+  }
+}
+
+public class Sub extends Base {
+  public override apply(f: fn(let x: &i64[]) => void): void {
+    let v: i64[] = [1, 2, 3];
+    f(&v);
+  }
+}

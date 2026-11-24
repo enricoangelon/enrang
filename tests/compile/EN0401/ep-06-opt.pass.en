@@ -1,0 +1,10 @@
+const five: i64 | null = 5;
+let a: Opt<i64 | null> = { v: five };
+put<i64 | null>(&a, null);
+console.log(a.v);
+
+private function put<T>(o: &Opt<T>, x: T): void {
+  o.v = x;
+}
+
+public type Opt<T> = { v?: T };

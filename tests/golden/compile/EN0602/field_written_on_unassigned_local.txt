@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0602/field_written_on_unassigned_local.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0602]: `g` is used before it has a value
+ --> tests/compile/EN0602/field_written_on_unassigned_local.fail.en:2:1
+  |
+1 | let g: User;
+  |     - `g` is declared here with no value
+2 | g.name = "Ada"; //~ EN0602 "`g` is used before it has a value"
+  | ^ a `User` has no default value
+  |
+help: give `g` a value where it is declared, or on every path before this use
+  = explain: run `enrang explain EN0602`
+
+error: aborting due to 1 previous error

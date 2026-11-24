@@ -1,0 +1,271 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0707/s2-22-string.fail.en. Its row's codes: EN0707, EN0707, EN0708, EN0709.
+module "tests/compile/EN0707/s2-22-string.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::clear(let _1: &Array<T>) -> void;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+
+fn appendMoved() -> void {
+  let mut _1: string; // s
+  let _2: string temp;
+  let _3: &string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: void temp;
+  bb0: {
+    storage_live(_1);
+    _2 = const "a": string;
+    _3 = &_2 [temp-arg];
+    _1 = form to_string(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    _4 = &_1 [compound-target];
+    _5 = eat(move _1) -> bb2; //~ EN0709
+  }
+  bb2: {
+    _6 = &_5 [temp-arg];
+    _7 = form append(move _4, move _6) -> bb3;
+  }
+  bb3: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn appendPart() -> void {
+  let mut _1: string; // s
+  let _2: string temp;
+  let _3: &string temp;
+  let _4: &string temp;
+  let _5: &string temp;
+  let _6: isize | null temp;
+  let _7: &string temp;
+  let _8: void temp;
+  let _9: void temp;
+  let _10: &string temp;
+  bb0: {
+    storage_live(_1);
+    _2 = const "ab": string;
+    _3 = &_2 [temp-arg];
+    _1 = form to_string(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    _4 = &_1 [compound-target];
+    _6 = present(const 1: isize);
+    _7 = &_1 [auto-borrow]; //~ EN0708
+    _5 = "core/string"::string::slice(move _7, const 0: isize, move _6, const 2: isize) -> bb2;
+  }
+  bb2: {
+    _8 = form append(move _4, move _5) -> bb3;
+  }
+  bb3: {
+    _10 = &_1 [auto-borrow];
+    _9 = form log(move _10) -> bb4;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn appendReset() -> void {
+  let mut _1: string; // s
+  let _2: string temp;
+  let _3: &string temp;
+  let _4: &string temp;
+  let _5: &string temp;
+  let _6: &string temp;
+  let _7: void temp;
+  let _8: void temp;
+  let _9: &string temp;
+  bb0: {
+    storage_live(_1);
+    _2 = const "a": string;
+    _3 = &_2 [temp-arg];
+    _1 = form to_string(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    _4 = &_1 [compound-target];
+    _6 = &_1 [explicit]; //~ EN0707
+    _5 = reset(move _6) -> bb2;
+  }
+  bb2: {
+    _7 = form append(move _4, move _5) -> bb3;
+  }
+  bb3: {
+    _9 = &_1 [auto-borrow];
+    _8 = form log(move _9) -> bb4;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn appendTake() -> void {
+  let mut _1: string[]; // names
+  let _2: string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: &string temp;
+  let _8: &string temp;
+  let _9: &string[] temp;
+  let _10: void temp;
+  let _11: void temp;
+  let _12: &string[] temp;
+  bb0: {
+    storage_live(_1);
+    _3 = const "ab": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    _1 = intrinsic AllocArray<string>(move _2);
+    drop(_2);
+    storage_dead(_2);
+    drop(_3);
+    storage_dead(_3);
+    _5 = const 0: isize;
+    _6 = len(_1);
+    check_bounds(copy _5, copy _6);
+    _7 = &_1[_5] [compound-target];
+    _9 = &_1 [explicit]; //~ EN0707
+    _8 = take(move _9) -> bb2;
+  }
+  bb2: {
+    _10 = form append(move _7, move _8) -> bb3;
+  }
+  bb3: {
+    _12 = &_1 [auto-borrow];
+    _11 = form log(move _12) -> bb4;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+@private fn eat(_1: string) -> string {
+  let _1: string; // t
+  let _2: &string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  bb0: {
+    _2 = &_1 [auto-borrow];
+    _3 = const "!": string;
+    _4 = &_3 [temp-arg];
+    _5 = form concat(move _2, move _4) -> bb1;
+  }
+  bb1: {
+    _0 = move _5;
+    drop(_5);
+    storage_dead(_5);
+    drop(_3);
+    storage_dead(_3);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn grown(_1: &string) -> &string {
+  let _1: &string; // s
+  let _2: &string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  let _6: &string temp;
+  bb0: {
+    _2 = &*_1 [compound-target];
+    _3 = const "?": string;
+    _4 = &_3 [temp-arg];
+    _5 = form append(move _2, move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    _6 = &*_1 [reborrow];
+    _0 = move _6;
+    return;
+  }
+}
+
+@private fn reset(_1: &string) -> &string {
+  let _1: &string; // t
+  let _2: string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  bb0: {
+    _3 = const "b": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(*_1) [assign];
+    *_1 = move _2;
+    drop(_2);
+    storage_dead(_2);
+    drop(_3);
+    storage_dead(_3);
+    _0 = const "!": &string;
+    return;
+  }
+}
+
+@private fn take(_1: &string[]) -> &string {
+  let _1: &string[]; // xs
+  let _2: void temp;
+  let _3: &string[] temp;
+  let _4: void temp;
+  let _5: string temp;
+  let _6: string temp;
+  let _7: &string temp;
+  let _8: &string[] temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = "alloc/array"::Array<string>::clear(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = const "cd": string;
+    _7 = &_6 [temp-arg];
+    _5 = form to_string(move _7) -> bb2;
+  }
+  bb2: {
+    _8 = &*_1 [reborrow];
+    _4 = "alloc/array"::Array<string>::push(move _8, move _5) -> bb3;
+  }
+  bb3: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_6);
+    storage_dead(_6);
+    _0 = const "!": &string;
+    return;
+  }
+}

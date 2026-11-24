@@ -1,0 +1,74 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/f4.fail.en. Its row's codes: EN0706.
+module "tests/compile/EN0706/f4.fail";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: &string; // view
+  let _6: isize | null temp;
+  let _7: &string temp;
+  let _8: void temp;
+  let _9: &string temp;
+  let _10: [&string, int] temp;
+  let _11: void temp;
+  let _12: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "abc": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = present(const 2: isize);
+    _7 = &_2 [auto-borrow];
+    _5 = "core/string"::string::slice(move _7, const 0: isize, move _6, const 2: isize) -> bb2;
+  }
+  bb2: {
+    _9 = &_2 [explicit]; //~ EN0706
+    _10 = tuple(move _9, const 1: int);
+    _8 = grow(move _10) -> bb3;
+  }
+  bb3: {
+    _12 = &*_5 [reborrow];
+    _11 = form log(move _12) -> bb4;
+  }
+  bb4: {
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn grow(let _1: [&string, int]) -> void {
+  let _1: [&string, int]; // t
+  let _2: &string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  bb0: {
+    _2 = &*_1.0 [compound-target];
+    _3 = const "!!!!!!!!": string;
+    _4 = &_3 [temp-arg];
+    _5 = form append(move _2, move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}

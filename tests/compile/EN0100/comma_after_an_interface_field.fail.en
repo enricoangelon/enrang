@@ -1,0 +1,4 @@
+public interface Point {
+  x: i64, //~ EN0100
+  y: i64;
+}

@@ -1,0 +1,6 @@
+let sector: u8[4] = [7; 4];
+pair(sector.slice(0, 2)); //~ EN0401 "`T` can't stand for the view `Slice<u8>`"
+
+private function pair<T>(x: &T): void {
+  console.log(sizeOf<T>(), x);
+}

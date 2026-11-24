@@ -1,0 +1,8 @@
+//! covers: C08
+const p: User | null = new User { name: "Ada" };
+const v: string | null = p?.name; //~ EN0401 "mismatched types: expected `string | null`, found `&string | null`"
+console.log(v);
+
+public class User {
+  public name: string;
+}

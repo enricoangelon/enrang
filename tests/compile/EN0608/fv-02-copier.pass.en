@@ -1,0 +1,17 @@
+const data: u8[] = [1, 2, 3];
+let buf: u8[] = [];
+let c = new Copier(&data, &buf);
+c.copyOne();
+console.log(data, buf);
+
+public final class Copier {
+  private src: readonly &Slice<u8>;
+  private out: &u8[];
+  public constructor(src: &Slice<u8>, out: &u8[]) {
+    this.src = src;
+    this.out = out;
+  }
+  public copyOne(): void {
+    this.out.push(this.src[0]);
+  }
+}

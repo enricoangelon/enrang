@@ -1,0 +1,18 @@
+const l = new Logger();
+l.log("a");
+
+private unsafe let count: i64 = 0;
+
+private function bump(const g: &Logger): void {
+  unsafe { count += 1; }
+}
+
+public class Logger {
+  public constructor() {}
+
+  public const log(const m: &string): void {
+    unsafe { count += 1; }
+    bump(this);
+    console.log(m);
+  }
+}

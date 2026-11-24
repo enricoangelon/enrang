@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0616/bc-10.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `bind` stores a reference into captured `lx`
+  --> tests/compile/EN0616/bc-10.fail.en:10:5
+   |
+10 | run(bind); //~ EN0616
+   |     ^^^^ passed as a closure here
+   |
+   = note: as a closure a local function captures the variables it uses, which live outside it, so a reference stored there could outlive what it points at
+help: call `bind()` directly, which applies its stores as any call does
+   = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

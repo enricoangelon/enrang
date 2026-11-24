@@ -1,0 +1,7 @@
+$ enrang test --watch
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang test` arrives with milestone M4
+note: M4 runs tests in the VM, and M5 runs them natively
+note: this is milestone M3, so nothing was done

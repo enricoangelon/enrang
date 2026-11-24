@@ -1,0 +1,4 @@
+<ESC>[1;31merror[EN1301]<ESC>[0m: <ESC>[1m`enrang lsp` is not part of the prototype<ESC>[0m
+  <ESC>[1m= explain:<ESC>[0m run `enrang explain EN1301`
+
+<ESC>[1;31merror<ESC>[0m: aborting due to 1 previous error

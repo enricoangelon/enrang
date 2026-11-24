@@ -1,0 +1,6 @@
+//! row: `new Atomic<string>(...)`, generic `dup<T>(a:
+import { Atomic } from "core/atomic";
+
+const name = new Atomic<string>("x"); //~ EN0419 "`string` does not satisfy `AtomicValue`"
+
+private function dup<T>(a: &Atomic<T>): void {} //~ EN0419 "`T` does not satisfy `AtomicValue`"

@@ -1,0 +1,64 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0621/assignment_value_kept_by_object_literal_field.fail.en. Its row's codes: EN0621.
+module "tests/compile/EN0621/assignment_value_kept_by_object_literal_field.fail";
+class User {
+  name: string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: User; // u
+  let _6: string temp;
+  let _7: string temp;
+  let _8: &string temp;
+  let _9: string temp;
+  let _10: *User temp;
+  let _11: void temp;
+  let _12: void temp;
+  let _13: &string temp;
+  assign_value bb2[2];
+  bb0: {
+    storage_live(_2);
+    _3 = const "a": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _7 = const "b": string;
+    _8 = &_7 [temp-arg];
+    _6 = form to_string(move _8) -> bb2;
+  }
+  bb2: {
+    drop(_2) [assign];
+    _2 = move _6;
+    _9 = move _2; //~ EN0621 "an assignment's value can't be kept"
+    _10 = addr_of _5;
+    _11 = named_fill User leaving()(move _10) -> bb3;
+  }
+  bb3: {
+    _5.name = move _9;
+    drop(_9);
+    storage_dead(_9);
+    drop(_6);
+    storage_dead(_6);
+    drop(_7);
+    storage_dead(_7);
+    _13 = &_5.name [auto-borrow];
+    _12 = form log(move _13) -> bb4;
+  }
+  bb4: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

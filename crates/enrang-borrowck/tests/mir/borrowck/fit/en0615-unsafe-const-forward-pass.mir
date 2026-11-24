@@ -1,0 +1,76 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/unsafe-const-forward.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/unsafe-const-forward.pass";
+class Logger { }
+@private static count: i64;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Logger; // l
+  let _3: &Logger temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &Logger temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, Logger);
+    _3 = &_2 [auto-borrow];
+    _4 = Logger::#ctor(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [auto-borrow];
+    _5 = Logger::log(move _6, const "a": &string) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Logger::#ctor(_1: &Logger) -> void {
+  let _1: &Logger; // this
+  bb0: {
+    return;
+  }
+}
+
+fn Logger::log(const _1: &Logger, const _2: &string) -> void {
+  let _1: &Logger; // this
+  let _2: &string; // m
+  let _3: *i64 temp;
+  let _4: i64 temp;
+  let _5: void temp;
+  let _6: &Logger temp;
+  let _7: void temp;
+  let _8: &string temp;
+  region r0: block;
+  bb0: {
+    _3 = const static_addr(count): *i64 @ r0;
+    _4 = copy *_3 @ r0;
+    *_3 = checked_add(copy _4, const 1: i64) @ r0;
+    _6 = &*_1 [reborrow];
+    _5 = bump(move _6) -> bb1;
+  }
+  bb1: {
+    _8 = &*_2 [reborrow];
+    _7 = form log(move _8) -> bb2;
+  }
+  bb2: {
+    return;
+  }
+}
+
+@private fn bump(const _1: &Logger) -> void {
+  let _1: &Logger; // g
+  let _2: *i64 temp;
+  let _3: i64 temp;
+  region r0: block;
+  bb0: {
+    _2 = const static_addr(count): *i64 @ r0;
+    _3 = copy *_2 @ r0;
+    *_2 = checked_add(copy _3, const 1: i64) @ r0;
+    return;
+  }
+}

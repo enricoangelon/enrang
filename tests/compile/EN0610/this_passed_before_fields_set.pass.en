@@ -1,0 +1,16 @@
+public class Person {
+  public constructor(public name: string) {}
+}
+
+public class Pet {
+  public owner: Person;
+
+  public constructor(owner: Person) {
+    this.owner = owner;
+    show(this);
+  }
+}
+
+public function show(p: &Pet): void {
+  console.log(p.owner.name);
+}

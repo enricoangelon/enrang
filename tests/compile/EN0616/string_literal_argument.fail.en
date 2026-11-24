@@ -1,0 +1,5 @@
+grow("a"); //~ EN0616 "cannot change a string literal"
+
+public function grow(s: &string): void {
+  *s += "!";
+}

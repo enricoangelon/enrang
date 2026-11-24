@@ -1,0 +1,5 @@
+report(); //~ EN0618 "`report()` reads `count` before it is declared"
+let count = 0;
+function report(): void {
+  console.log(count);
+}

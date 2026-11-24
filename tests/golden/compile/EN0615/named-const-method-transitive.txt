@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0615/named-const-method-transitive.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `log` is marked `const`, but it changes the object
+  --> tests/compile/EN0615/named-const-method-transitive.fail.en:18:5
+   |
+18 |     bump(this); //~ EN0615
+   |     ^^^^^^^^^^ this needs exclusive access to `this`
+   |
+   = note: in a body containing `unsafe`, the safe code treats a `const` reference as shared: it may not write it, or pass it to a function that does
+help: remove `const` before `log` if the body changes it
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

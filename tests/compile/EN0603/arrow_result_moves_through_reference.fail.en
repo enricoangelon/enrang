@@ -1,0 +1,8 @@
+//! covers: H07
+const users = [new User { name: "Ada" }];
+const names = users.map(u => u.name); //~ EN0603 "cannot move `u.name` out of a reference"
+console.log(names);
+
+public class User {
+  public name: string;
+}

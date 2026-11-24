@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/part_of_an_array_cannot_grow.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: a part of an array can't grow
+ --> tests/compile/EN0401/part_of_an_array_cannot_grow.fail.en:2:8
+  |
+2 | addOne(list.slice(0, 2)); //~ EN0401 "a part of an array can't grow"
+  |        ^^^^^^^^^^^^^^^^ `addOne` takes `xs: &i64[]`, a whole array it may grow
+  |
+help: pass the whole array: addOne(&list)
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

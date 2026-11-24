@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0615/fit-structural.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `size` changes the object, but `Sizer` declares that it doesn't
+  --> tests/compile/EN0615/fit-structural.fail.en:17:14
+   |
+14 |   size<T extends Measured>(x: &T): isize;
+   |   ---- declared here without `let`
+15 | }
+16 |
+17 | public class Tally { //~ EN0615 "`size` changes the object, but `Sizer` declares that it doesn't"
+   |              ^^^^^ `size` in `Tally` changes the object
+   |
+help: if implementations may change the object, write `let size<T extends Measured>(x: &T): isize;` in `Sizer`
+   |
+14 |   let size<T extends Measured>(x: &T): isize;
+   |   ++++
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

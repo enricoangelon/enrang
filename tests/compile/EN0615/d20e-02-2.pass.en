@@ -1,0 +1,17 @@
+public abstract class Attachable {
+  public abstract attach(s: &string): void;
+}
+
+private class Tag extends Attachable {
+  private label: &string;
+
+  public constructor(label: &string) {
+    this.label = label;
+    super();
+  }
+
+  public override attach(s: &string): void {
+    console.log(this.label, s);
+  }
+}
+

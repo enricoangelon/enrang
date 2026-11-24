@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0701/attack1-h06-reference-in-container.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0701]: `T` can't stand for a `Lexer`, because `Lexer` holds a reference
+ --> tests/compile/EN0701/attack1-h06-reference-in-container.fail.en:4:13
+  |
+4 | console.log(new Box(lx)); //~ EN0701
+  |             ^^^^^^^^^^^ no generic argument can hold a reference
+  |
+  = explain: run `enrang explain EN0701`
+
+error[EN0703]: `T` can't stand for the reference `&string`
+ --> tests/compile/EN0701/attack1-h06-reference-in-container.fail.en:5:6
+  |
+5 | wrap(&s); //~ EN0703
+  |      ^^ this makes `T` the reference `&string`
+  |
+  = explain: run `enrang explain EN0703`
+
+error: aborting due to 2 previous errors

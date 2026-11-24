@@ -1,0 +1,3 @@
+const p: &Slice<i64> = &[2, 3, 5, 7]; //~ EN0712 "the temporary is dropped while `p` still borrows it"
+p[0] = 1;
+console.log(p);

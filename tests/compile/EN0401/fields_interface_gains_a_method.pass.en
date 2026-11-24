@@ -1,0 +1,9 @@
+const q = { x: 1.0, y: 2.0 };
+show(&q);
+
+private function show(p: &Point): void {}
+
+public interface Point {
+  x: f64;
+  y: f64;
+}

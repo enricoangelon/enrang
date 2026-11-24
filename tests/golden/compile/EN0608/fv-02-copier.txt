@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/fv-02-copier.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `new Copier` can change `src`, but `data` is `const`
+ --> tests/compile/EN0608/fv-02-copier.fail.en:3:20
+  |
+3 | let c = new Copier(&data, &buf); //~ EN0608
+  |                    ^^^^^ `new Copier` writes through it
+  |
+help: declare it `let data`
+  |
+1 | let data: u8[] = [1, 2, 3];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

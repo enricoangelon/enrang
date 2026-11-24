@@ -1,0 +1,33 @@
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+
+  public first(): readonly &u8 {
+    return &this.src[0];
+  }
+
+  public last(): readonly &u8 {
+    return &this.dst[0];
+  }
+
+  public step(): void {
+    this.dst.push(1);
+  }
+}
+
+public class Peeker {
+  public peek(o: &Copier): readonly &u8 {
+    return o.first();
+  }
+}
+
+public class Greedy extends Peeker {
+  public override peek(o: &Copier): readonly &u8 {
+    return o.first();
+  }
+}

@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0707/fv-02-skip-3.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: cannot borrow `c` as exclusive twice at the same time
+  --> tests/compile/EN0707/fv-02-skip-3.fail.en:14:1
+   |
+12 | const r = id(&c);
+   |              -- first exclusive borrow
+13 | r.skip();
+14 | c.step(); //~ EN0707
+   | ^^^^^^^^ second exclusive borrow
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error: aborting due to 1 previous error

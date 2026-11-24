@@ -1,0 +1,11 @@
+let q = ["a", "b"];
+let i = 0;
+while (i < 2) {
+  take(q);
+  q = ["c"];
+  i++;
+}
+
+public function take(xs: string[]): void {
+  console.log(xs);
+}

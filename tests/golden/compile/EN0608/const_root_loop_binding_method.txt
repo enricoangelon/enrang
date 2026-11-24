@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/const_root_loop_binding_method.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `rows`, because `rows` is `const`
+ --> tests/compile/EN0608/const_root_loop_binding_method.fail.en:3:18
+  |
+3 | for (const r of &rows) { //~ EN0608
+  |                  ^^^^ written here
+  |
+help: declare it `let rows`
+  |
+2 | let rows: i64[][] = [[1], [2]];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

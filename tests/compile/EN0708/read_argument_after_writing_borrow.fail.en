@@ -1,0 +1,6 @@
+let a: i64[] = [1, 2];
+fill(&a, a.length()); //~ EN0708 "`a` can't be read while a borrow of it may write into it"
+
+private function fill(xs: &i64[], n: isize): void {
+  xs.push(n as i64);
+}

@@ -1,0 +1,16 @@
+const cat = new Cat { name: "Tom" };
+console.log(oldest(&cat)); //~ EN0419 "`Cat` does not satisfy `Animal`"
+
+private function oldest<T extends Animal>(a: &T): &string {
+  return &a.name;
+}
+
+public class Animal {
+  public name: string;
+}
+
+public class Dog extends Animal {}
+
+public class Cat {
+  public name: string;
+}

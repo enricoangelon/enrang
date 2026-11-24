@@ -1,0 +1,7 @@
+//! row: `queue.push(job.clone());` in the body
+let queue = ["a", "b"];
+let more: string[] = [];
+for (const job of &queue) {
+  more.push(job.clone());
+}
+console.log(more);

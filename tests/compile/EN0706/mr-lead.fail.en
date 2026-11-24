@@ -1,0 +1,18 @@
+let msg: string = "a";
+const r = &msg;
+let sink = new Sink(&msg); //~ EN0706
+sink.add("b");
+console.log(r);
+const k = new Sink("literal"); //~ EN0616
+
+public class Sink {
+  private out: &string;
+
+  public constructor(out: &string) {
+    this.out = out;
+  }
+
+  public add(s: &string): void {
+    *this.out += s;
+  }
+}

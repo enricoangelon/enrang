@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0616/d20e-03.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot store a reference into captured `lx`
+ --> tests/compile/EN0616/d20e-03.fail.en:4:33
+  |
+4 | words.forEach((w: &string) => { lx.setSrc(w); }); //~ EN0616
+  |                                 ^^^^^^^^^^^^ stored here
+  |
+  = note: what an arrow captures lives outside it, so a reference stored there could outlive what it points at
+  = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot store a reference into captured `lx2`
+  --> tests/compile/EN0616/d20e-03.fail.en:11:21
+   |
+11 |   const g = () => { lx2.setSrc(&tmp); }; //~ EN0616
+   |                     ^^^^^^^^^^^^^^^^ stored here
+   |
+   = note: what an arrow captures lives outside it, so a reference stored there could outlive what it points at
+   = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot store a reference into captured `this`
+  --> tests/compile/EN0616/d20e-03.fail.en:36:17
+   |
+36 |     run(() => { this.src = &tmp; }); //~ EN0616
+   |                 ^^^^^^^^^^^^^^^ stored here
+   |
+   = note: what an arrow captures lives outside it, so a reference stored there could outlive what it points at
+   = explain: run `enrang explain EN0616`
+
+error: aborting due to 3 previous errors

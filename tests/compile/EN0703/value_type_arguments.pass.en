@@ -1,0 +1,20 @@
+public class User {
+  public name: string = "";
+  public age: i64 = 0;
+}
+
+public function check(t: &User | null): bool {
+  return t == null;
+}
+
+public function ages(users: &User[]): i64[] {
+  return users.map(u => u.age);
+}
+
+public function keep<T>(x: T): void {}
+
+public function hold(u: &User | null): void {
+  keep(5);
+  const n: i64 | null = null;
+  console.log(n.isNull());
+}

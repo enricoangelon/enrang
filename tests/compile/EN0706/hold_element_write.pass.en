@@ -1,0 +1,6 @@
+let q: i64[] = [1, 2, 3];
+for (const x of &q) {
+  console.log(x);
+  q[0] = 9;
+  return;
+}

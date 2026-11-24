@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0412/overflow_and_division_by_zero.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0412]: constant evaluation failed: `200 + 100` overflows `u8`
+ --> tests/compile/EN0412/overflow_and_division_by_zero.fail.en:1:26
+  |
+1 | private const SIZE: u8 = 200 + 100; //~ EN0412 "constant evaluation failed: `200 + 100` overflows `u8`"
+  |                          ^^^^^^^^^ integer overflow: 200 + 100
+  |
+  = explain: run `enrang explain EN0412`
+
+error[EN0412]: constant evaluation failed: `10 / 0` divides by zero
+ --> tests/compile/EN0412/overflow_and_division_by_zero.fail.en:2:27
+  |
+2 | private const RATE: i32 = 10 / 0; //~ EN0412 "constant evaluation failed: `10 / 0` divides by zero"
+  |                           ^^^^^^ division by zero
+  |
+  = explain: run `enrang explain EN0412`
+
+error: aborting due to 2 previous errors

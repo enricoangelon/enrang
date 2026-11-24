@@ -1,0 +1,33 @@
+//! covers: H36
+public class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize = 0;
+
+  public constructor(s: &Slice<u8>, d: &Slice<u8>) {
+    this.src = s;
+    this.dst = d;
+  }
+
+  public step(): void {
+    this.dst[this.pos] = this.src[0];
+    this.pos += 1;
+  }
+
+  public skip(): void {
+    this.src = this.src.slice(1, this.src.length());
+  }
+}
+
+public class Rewinder extends Copier {
+  private back: readonly &Slice<u8>;
+
+  public constructor(s: &Slice<u8>, d: &Slice<u8>, b: &Slice<u8>) {
+    this.back = b;
+    super(s, d);
+  }
+
+  public override skip(): void {
+    this.back = this.back.slice(1, this.back.length());
+  }
+}

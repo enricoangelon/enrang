@@ -1,0 +1,39 @@
+const rex = new Dog("Rex");
+const a: Animal = rex.into(); //~ EN0458 "`move` method not declared in the receiver's class"
+introduce(&a);
+const boxed = new Box(a);
+const max = new LoudDog("Max");
+const n = max.takeName(); //~ EN0458 "`move` method not declared in the receiver's class"
+console.log(n);
+
+public function introduce(a: &Animal): void {
+  console.log(a.speak());
+}
+
+public class Animal {
+  public constructor(public name: string) {}
+
+  public speak(): string {
+    return `${this.name} makes a sound`;
+  }
+
+  public move into(): Animal {
+    return this;
+  }
+
+  public move takeName(): string {
+    return this.name;
+  }
+}
+
+public class Dog extends Animal {
+  private tricks: string[] = [];
+}
+
+public class LoudDog extends Animal {
+  private tricks: string[] = [];
+
+  public destructor() {
+    console.log("bye");
+  }
+}

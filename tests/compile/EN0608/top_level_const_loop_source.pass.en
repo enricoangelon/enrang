@@ -1,0 +1,7 @@
+//! covers: H28
+let table = TABLE;
+for (const t of &table) {
+  *t = 0;
+}
+
+private const TABLE: i64[3] = [1, 2, 3];

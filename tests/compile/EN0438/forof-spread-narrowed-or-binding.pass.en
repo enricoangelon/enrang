@@ -1,0 +1,12 @@
+//! row: `[...p]` under `p != null`, `[...x]` wit
+public function narrowed(p: i64[] | null): i64[] {
+  if (p != null) { return [...p]; }
+  return [];
+}
+
+public function bindings(rows: &i64[][]): void {
+  for (const x of rows) {
+    const copy = [...x];
+    console.log(copy);
+  }
+}

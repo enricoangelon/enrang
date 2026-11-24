@@ -1,0 +1,48 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0601/moved_into_binding.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0601/moved_into_binding.pass";
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: string; // a
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string; // b
+  let _6: &string temp;
+  let _7: void temp;
+  let _8: &string temp;
+  let _9: void temp;
+  let _10: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "x": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = &_2 [auto-borrow];
+    _5 = "alloc/string"::#extend0::clone(move _6) -> bb2;
+  }
+  bb2: {
+    _8 = &_5 [auto-borrow];
+    _7 = form log(move _8) -> bb3;
+  }
+  bb3: {
+    _10 = &_2 [auto-borrow];
+    _9 = form log(move _10) -> bb4;
+  }
+  bb4: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

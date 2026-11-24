@@ -1,0 +1,5 @@
+const j = JSON.parse("1");
+
+public final class JSON {
+  public static parse(s: &string): i64 { return 0; }
+}

@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0615/override-store-new.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Keeper.attach` stores `s` into `this`, but `Base.attach` declares no such store
+  --> tests/compile/EN0615/override-store-new.fail.en:22:19
+   |
+ 9 |   public attach(s: &string): void {
+   |          ------ declared here
+...
+22 |   public override attach(s: &string): void { //~ EN0615
+   |                   ^^^^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

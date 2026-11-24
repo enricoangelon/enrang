@@ -1,0 +1,40 @@
+class P {
+  x: i64;
+  y: bool;
+}
+
+fn f(_1: &P, _2: i64, _3: bool, _4: *P) -> P {
+  let _5: i64 temp;
+  let _6: void temp;
+  bb0: {
+    _5 = copy (*_1).x;
+    _0 = P { x: copy _2, y: copy _3 };
+    _6 = named_fill P leaving(y)(copy _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+// --- new
+class P {
+  y: bool;
+  x: i64;
+}
+// --- expected
+class P {
+  y: bool;
+  x: i64;
+}
+
+fn f(_1: &P, _2: i64, _3: bool, _4: *P) -> P {
+  let _5: i64 temp;
+  let _6: void temp;
+  bb0: {
+    _5 = copy (*_1).x;
+    _0 = P { y: copy _3, x: copy _2 };
+    _6 = named_fill P leaving(y)(copy _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

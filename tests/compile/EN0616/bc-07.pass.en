@@ -1,0 +1,25 @@
+const a = "ab";
+const b = "xy";
+let lx = new Lexer(&a);
+let lx2 = lx.withSrc(&b);
+console.log(lx2.next());
+
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();  // a sketch: the rest of the text is one token
+    return this.src.slice(start, this.pos);
+  }
+
+  public move withSrc(s: &string): Lexer {
+    this.src = s;
+    this.pos = 0;
+    return this;
+  }
+}

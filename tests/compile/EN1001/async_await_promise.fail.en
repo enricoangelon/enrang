@@ -1,0 +1,6 @@
+public async function load(): void {} //~ EN1001 "async functions are not supported yet"
+
+public function wait(): void {
+  const x = await fetchIt(); //~ EN1001 "async functions are not supported yet"
+  let p: Promise<i64> | null = null; //~ EN1001 "async functions are not supported yet"
+}

@@ -1,0 +1,9 @@
+private const START: i64 = 0;
+
+public class Counter {
+  public count: i64 = START;
+
+  public static make(): Counter {
+    return new Counter {};
+  }
+}

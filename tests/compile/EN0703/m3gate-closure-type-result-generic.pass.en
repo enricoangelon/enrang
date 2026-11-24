@@ -1,0 +1,6 @@
+let n: i64 = 1;
+growVia((a: &i64): &i64 => { return a; }, &n, 6);
+
+private function growVia<T>(f: fn(a: &T) => &T, x: &T, v: T): void {
+  *f(x) = v;
+}

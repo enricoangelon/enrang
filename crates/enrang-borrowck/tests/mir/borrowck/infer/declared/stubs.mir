@@ -1,0 +1,40 @@
+// Declared contracts (plan d.8 "Declared contracts", A:1354, S:923-929): Read
+// for every parameter and `this` but `let` (Write) and `move` (Own); SPEC 5.4's
+// default sources (rule 1 `this` for a method, rule 2 every reference parameter,
+// rule 3 none); a writable result unless `readonly`, or a `&string` result whose
+// default sources hold a `&string` not marked `let` (StringPart). A constructor's
+// `this` is Write (plan i.28); a role's parameters are Read (N11).
+class Lexer {
+  src: &string;
+  pos: i64;
+}
+fn Lexer::#ctor(_1: &Lexer, _2: &string) -> void;
+fn Lexer::next(_1: &Lexer) -> &string | null;
+fn Lexer::peek(const _1: &Lexer) -> readonly &string;
+fn Lexer::reset(let _1: &Lexer, _2: &string) -> void;
+move fn Lexer::rest(_1: &Lexer) -> Lexer;
+static fn Lexer::make(_1: &string) -> Lexer;
+fn pick(_1: &string, let _2: &string, _3: i64) -> &string;
+fn first(_1: &i64[], _2: &i64[]) -> &i64;
+fn grow(let _1: &string) -> &string;
+fn wrap(_1: &string) -> [&string, i64];
+fn maybe(_1: &string | null) -> &string | null;
+fn fresh() -> &i64;
+fn count(_1: i64) -> i64;
+fn tup(_1: [&i64, i64], let _2: &i64) -> void;
+@entry fn start(let _1: &i64) -> void;
+//? main::Lexer::#ctor => perms(write, read) sources() result none
+//? main::Lexer::next => perms(read) sources(0) result writable
+//? main::Lexer::peek => perms(read) sources(0) result readonly(Declared)
+//? main::Lexer::reset => perms(write, read) sources() result none
+//? main::Lexer::rest => perms(own) sources(0) result writable
+//? main::Lexer::make => perms(read) sources(0) result writable
+//? main::pick => perms(read, write) sources(0, 1) result readonly(StringPart)
+//? main::first => perms(read, read) sources(0, 1) result writable
+//? main::grow => perms(write) sources(0) result writable
+//? main::wrap => perms(read) sources(0) result readonly(StringPart)
+//? main::maybe => perms(read) sources(0) result readonly(StringPart)
+//? main::fresh => perms() sources() result writable
+//? main::count => perms() sources() result none
+//? main::tup => perms(write, read) sources() result none
+//? main::start => perms(read) sources() result none

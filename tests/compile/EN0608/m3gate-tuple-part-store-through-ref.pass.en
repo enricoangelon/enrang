@@ -1,0 +1,7 @@
+let k = [1];
+let o = [0];
+let t: [&i64[], i32] = [&o, 0];
+const p = &t;
+p[0] = &k;
+t[0].push(1);
+console.log(k);

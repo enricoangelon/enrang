@@ -1,0 +1,31 @@
+//! target: i386-none
+private function timeout(): Result<u8> {
+  return Err(DiskError.Timeout);
+}
+
+private function probe(): Result<u8, BusError> {
+  return Err(BusError.NoDevice);
+}
+
+private function viaQuestion(): Result<u8> {
+  const v = probe()?;
+  return v;
+}
+
+private function readSector(lba: u64): Result<u8, DiskError> {
+  return Err(DiskError.BadSector { lba });
+}
+
+private function load(lba: u64): Result<u8, DiskError> {
+  return readSector(lba)?;
+}
+
+public enum DiskError {
+  BadSector { lba: u64 },
+  Timeout,
+}
+
+public enum BusError {
+  NoDevice,
+  Busy,
+}

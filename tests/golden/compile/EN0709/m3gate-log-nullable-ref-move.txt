@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0709/m3gate-log-nullable-ref-move.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0709]: cannot move `a` while it is borrowed
+ --> tests/compile/EN0709/m3gate-log-nullable-ref-move.fail.en:2:24
+  |
+2 | console.log(a.first(), eat(a)); //~ EN0709 "cannot move `a` while it"
+  |                        ^^^^^^ `a` moves here
+  | ------------------------------ the borrow is still in use here
+  |             - shared borrow of `a` starts here
+  |
+help: move `a` after its last borrow, or move a copy: `a.clone()`
+  = explain: run `enrang explain EN0709`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,204 @@
+// SPEC O11's table (A:1252) and the EN0710 mapping (A:1289), one body per row; the
+// loans are shared or exclusive by N3 rule (a) alone, so the codes do not depend on
+// the argument modes of plan d.7.
+// Source:
+//   e706() { let x = 1; const r = &x; x = 2; console.log(*r); }       // EN0706 at `x = 2`
+//   e707() { let x = 12; const y = &x; x = 3; *y = 13; }              // EN0707 at `x = 3` (O7)
+//   e708() { let x = 12; const y = &x; const v = x; *y = 13; }        // EN0708 at `x` (O7)
+//   e709(v: i64[]) { const r = &v; const t = v; console.log(*r); }    // EN0709 at `v`
+//   e712() { const s = first(&pair()); console.log(*s); }             // EN0712 where the temporary ends (S:949)
+//   g10(): &i64 { const s = 1; return &s; }                          // EN0710 at `&s` (G10)
+//   guard() { const x = 1; { const g = new Guard { r: &x }; } }      // compiles: a destructor runs on `g`
+//   guarded() { let x = 1; const g = new Guard { r: &x }; x = 2; }    // EN0706: the scope-end drop runs `g`'s destructor
+//   plain() { let x = 1; const t = new Tagged { r: &x }; x = 2; }     // compiles: no destructor, `t` is dead
+// Shapes: reference locals' copies as reborrows (A:935), `console.log` as a form on a
+// reborrow (c.7 D19), a statement temporary borrowed `[temp-arg]` and ended at the
+// statement (c.3, c.5), `return &s` into `_0` then the scope end (c.9), a named
+// form (c.10) and the scope-end `drop` of a value with a destructor (c.3).
+class Guard {
+  r: &i64;
+}
+fn Guard::#dtor(_1: &Guard) -> void;
+class Tagged {
+  r: &i64;
+}
+fn first(_1: &i64[2]) -> &i64 perms(read) sources(0) result writable;
+fn pair() -> i64[2];
+
+fn e706() -> void {
+  let mut _1: i64; // x
+  let _2: &i64; // r
+  let _3: &i64 temp;
+  let _4: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = const 1: i64;
+    storage_live(_2);
+    _2 = &_1 [explicit];
+    _1 = const 2: i64; //~ EN0706
+    _3 = &*_2 [reborrow];
+    _4 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}
+fn e707() -> void {
+  let mut _1: i64; // x
+  let _2: &i64; // y
+  bb0: {
+    storage_live(_1);
+    _1 = const 12: i64;
+    storage_live(_2);
+    _2 = &_1 [explicit];
+    _1 = const 3: i64; //~ EN0707
+    *_2 = const 13: i64;
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}
+fn e708() -> void {
+  let mut _1: i64; // x
+  let _2: &i64; // y
+  let _3: i64; // v
+  bb0: {
+    storage_live(_1);
+    _1 = const 12: i64;
+    storage_live(_2);
+    _2 = &_1 [explicit];
+    storage_live(_3);
+    _3 = copy _1; //~ EN0708
+    *_2 = const 13: i64;
+    storage_dead(_3);
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}
+fn e709(_1: i64[]) -> void {
+  let _2: &i64[]; // r
+  let _3: i64[]; // t
+  let _4: &i64[] temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = &_1 [explicit];
+    storage_live(_3);
+    _3 = move _1; //~ EN0709
+    _4 = &*_2 [reborrow];
+    _5 = form log(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+fn e712() -> void {
+  let _1: &i64; // s
+  let _2: i64[2] temp;
+  let _3: &i64[2] temp;
+  let _4: &i64 temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_1);
+    storage_live(_2);
+    _2 = pair() -> bb1;
+  }
+  bb1: {
+    _3 = &_2 [temp-arg];
+    _1 = first(move _3) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2); //~ EN0712
+    _4 = &*_1 [reborrow];
+    _5 = form log(move _4) -> bb3;
+  }
+  bb3: {
+    storage_dead(_1);
+    return;
+  }
+}
+fn g10() -> &i64 {
+  let _1: i64; // s
+  bb0: {
+    storage_live(_1);
+    _1 = const 1: i64;
+    _0 = &_1 [explicit]; //~ EN0710
+    storage_dead(_1);
+    return;
+  }
+}
+fn guard() -> void {
+  let _1: i64; // x
+  let _2: Guard; // g
+  let _3: &i64 temp;
+  let _4: *Guard temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = const 1: i64;
+    storage_live(_2);
+    _3 = &_1 [explicit];
+    _4 = addr_of _2;
+    _5 = named_fill Guard leaving()(copy _4) -> bb1;
+  }
+  bb1: {
+    _2.r = move _3;
+    drop(_2);
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}
+fn guarded() -> void {
+  let mut _1: i64; // x
+  let _2: Guard; // g
+  let _3: &i64 temp;
+  let _4: *Guard temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = const 1: i64;
+    storage_live(_2);
+    _3 = &_1 [explicit];
+    _4 = addr_of _2;
+    _5 = named_fill Guard leaving()(copy _4) -> bb1;
+  }
+  bb1: {
+    _2.r = move _3;
+    _1 = const 2: i64; //~ EN0706
+    drop(_2);
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}
+fn plain() -> void {
+  let mut _1: i64; // x
+  let _2: Tagged; // t
+  let _3: &i64 temp;
+  let _4: *Tagged temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = const 1: i64;
+    storage_live(_2);
+    _3 = &_1 [explicit];
+    _4 = addr_of _2;
+    _5 = named_fill Tagged leaving()(copy _4) -> bb1;
+  }
+  bb1: {
+    _2.r = move _3;
+    _1 = const 2: i64;
+    drop(_2);
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}

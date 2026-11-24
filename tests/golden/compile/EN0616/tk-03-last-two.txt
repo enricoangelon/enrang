@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0616/tk-03-last-two.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `lastTwo`
+ --> tests/compile/EN0616/tk-03-last-two.fail.en:4:3
+  |
+4 |   *p[0] = 0; *p[1] = 0; //~ EN0616
+  |   ^^^^^^^^^ written here
+  |
+  = note: `lastTwo` returns two references that may point at the same data
+  = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot change the object returned by `lastTwo`
+ --> tests/compile/EN0616/tk-03-last-two.fail.en:4:14
+  |
+4 |   *p[0] = 0; *p[1] = 0; //~ EN0616
+  |              ^^^^^^^^^ written here
+  |
+  = note: `lastTwo` returns two references that may point at the same data
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,16 @@
+let lib = new Library();
+lib.book(1).title = "Dune";
+console.log(lib.book(1).title);
+
+public class Book {
+  public id: i64 = 0;
+  public title: string = "";
+}
+
+public class Library {
+  private books: Book[] = [new Book { id: 1, title: "Emma" }];
+
+  public book(id: i64): &Book {
+    return &this.books[id - 1];
+  }
+}

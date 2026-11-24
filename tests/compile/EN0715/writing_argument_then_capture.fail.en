@@ -1,0 +1,9 @@
+//! covers: H19
+let n: i64 = 1;
+const r = &n;
+both(r, () => { *r += 1; }); //~ EN0715 "`r` is locked while"
+
+private function both(x: &i64, f: () => void): void {
+  f();
+  *x += 1;
+}

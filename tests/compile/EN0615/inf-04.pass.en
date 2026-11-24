@@ -1,0 +1,43 @@
+let text: string = "abc";
+let h = new Holder(&text);
+attachTemp(&h, show);
+
+private function attachTemp(h: &Holder, f: fn(let h: &Holder, s: &string) => void): void {
+  const tmp = "temp" + "!";
+  f(h, &tmp);
+}
+
+private function show(h: &Holder, s: &string): void {
+  console.log(h.size(), s);
+}
+
+public class Holder {
+  private src: &string;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public setSrc(s: &string): void { this.src = s; }
+
+  public size(): isize { return this.src.length(); }
+}
+
+public class Base {
+  private r: &string;
+  private n: isize = 0;
+
+  public constructor(r: &string) { this.r = r; }
+
+  public attach(s: &string): void { this.n = s.length(); }
+}
+
+public class Keeper extends Base {
+  private b: &string;
+  private m: isize = 0;
+
+  public constructor(r: &string, b: &string) {
+    this.b = b;
+    super(r);
+  }
+
+  public override attach(s: &string): void { this.m = s.length(); }
+}

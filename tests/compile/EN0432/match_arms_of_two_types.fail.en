@@ -1,0 +1,4 @@
+public function describe(x: i64): void {
+  const y = match (x) { 1 => true, default => "many" }; //~ EN0432 "`bool` and `string`"
+  console.log(y);
+}

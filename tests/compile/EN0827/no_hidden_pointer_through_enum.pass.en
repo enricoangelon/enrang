@@ -1,0 +1,18 @@
+@repr("C") public final class Regs {
+  public slot: Slot;
+  public fine: Plain;
+}
+
+public enum Slot {
+  Held { a: Animal },
+  Empty,
+}
+
+public enum Plain {
+  Held { n: u8 },
+  Empty,
+}
+
+public final class Animal implements Copy {
+  public legs: u8 = 4;
+}

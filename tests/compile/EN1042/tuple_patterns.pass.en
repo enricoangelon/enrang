@@ -1,0 +1,20 @@
+const xs = [3, 1, 2];
+const [lo, hi] = minMax(&xs);
+let a = 1;
+let b = 2;
+[a, b] = [b, a];
+const t: [i64, i64] = [1, 2];
+const [x, y] = t;
+const h = new Holder { pair: [1, 2], list: [3, 4] };
+const { pair: [p, q] } = h;
+const nested: [[i64, i64], i64] = [[1, 2], 3];
+const [[n1, n2], n3] = nested;
+const first = xs[0];
+console.log(lo, hi, a, b, x, y, p, q, n1, n2, n3, first);
+
+private function minMax(v: &i64[]): [i64, i64] { return [v[0], v[1]]; }
+
+public final class Holder {
+  public pair: [i64, i64];
+  public list: i64[];
+}

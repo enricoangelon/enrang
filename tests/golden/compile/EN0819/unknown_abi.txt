@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0819/unknown_abi.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0819]: unknown ABI `fastcall`
+ --> tests/compile/EN0819/unknown_abi.fail.en:1:6
+  |
+1 | @abi("fastcall") public function fc(n: i32): i32 { //~ EN0819 "unknown ABI `fastcall`"
+  |      ^^^^^^^^^^ `win64` or `sysv`
+  |
+  = explain: run `enrang explain EN0819`
+
+error[EN0819]: unknown ABI `vectorcall`
+ --> tests/compile/EN0819/unknown_abi.fail.en:5:23
+  |
+5 | public type Cb = @abi("vectorcall") unsafe fn(n: i32) => void; //~ EN0819 "unknown ABI `vectorcall`"
+  |                       ^^^^^^^^^^^^ `win64` or `sysv`
+  |
+  = explain: run `enrang explain EN0819`
+
+error: aborting due to 2 previous errors

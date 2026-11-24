@@ -1,0 +1,32 @@
+const text = "let x = 42";
+let v = new View(&text);
+firstTwo(&v); //~ EN0701 "because `View` holds a reference"
+firstTwoOf(&v); //~ EN0701 "because `View` holds a reference"
+
+public interface TokenReader {
+  next(): readonly &string | null;
+}
+
+private class View implements TokenReader {
+  private text: &string;
+  private pos: isize = 0;
+  public constructor(text: &string) {
+    this.text = text;
+  }
+  public next(): readonly &string | null {
+    if (this.pos >= this.text.length()) {
+      return null;
+    }
+    const start = this.pos;
+    this.pos = this.text.length();
+    return this.text.slice(start, this.pos);
+  }
+}
+
+private function firstTwo(t: &TokenReader): void {
+  console.log(t.next(), t.next());
+}
+
+private function firstTwoOf<T extends TokenReader>(t: &T): void {
+  console.log(t.next(), t.next());
+}

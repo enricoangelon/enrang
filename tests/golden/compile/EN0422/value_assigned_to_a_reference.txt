@@ -1,0 +1,45 @@
+$ enrang check tests/compile/EN0422/value_assigned_to_a_reference.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0422]: `r` is a reference: write through it with `*r`
+ --> tests/compile/EN0422/value_assigned_to_a_reference.fail.en:6:3
+  |
+6 |   r = s; //~ EN0422 "`r` is a reference: write through it with `*r`"
+  |   ^^^^^ `r` is `&i64`
+  |
+help: write through it: `*r`
+  |
+6 |   *r = s; //~ EN0422 "`r` is a reference: write through it with `*r`"
+  |   +
+help: or point it at another place: `&s`
+  |
+6 |   r = &s; //~ EN0422 "`r` is a reference: write through it with `*r`"
+  |       +
+  = explain: run `enrang explain EN0422`
+
+error[EN0422]: `r` is a reference: write through it with `*r`
+ --> tests/compile/EN0422/value_assigned_to_a_reference.fail.en:7:3
+  |
+7 |   r += 1; //~ EN0422
+  |   ^^^^^^ `r` is `&i64`
+  |
+help: write through it: `*r`
+  |
+7 |   *r += 1; //~ EN0422
+  |   +
+  = explain: run `enrang explain EN0422`
+
+error[EN0422]: `r` is a reference: write through it with `*r`
+ --> tests/compile/EN0422/value_assigned_to_a_reference.fail.en:8:3
+  |
+8 |   r++; //~ EN0422
+  |   ^^^ `r` is `&i64`
+  |
+help: write through it: `(*r)++`
+  |
+8 |   (*r)++; //~ EN0422
+  |   ~~~~
+  = explain: run `enrang explain EN0422`
+
+error: aborting due to 3 previous errors

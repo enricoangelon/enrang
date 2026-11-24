@@ -1,0 +1,7 @@
+$ enrang explain EN0902
+[exit 0]
+[stdout]
+EN0902: unknown mnemonic
+
+No explain page yet: it arrives with milestone M5, and this is milestone M3.
+[stderr]

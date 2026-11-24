@@ -1,0 +1,24 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0609/reference_to_field.fail.en. Its row's codes: EN0609.
+module "tests/compile/EN0609/reference_to_field.fail";
+class Board {
+  private readonly cells: i64[] = default;
+}
+
+fn Board::poke(_1: &Board) -> void {
+  let _1: &Board; // this
+  let _2: &i64[]; // r
+  let _3: isize temp;
+  let _4: isize temp;
+  bb0: {
+    storage_live(_2);
+    _2 = &(*_1).cells [explicit];
+    _3 = const 0: isize;
+    _4 = len(*_2);
+    check_bounds(copy _3, copy _4);
+    (*_2)[_3] = const 9: i64; //~ EN0609
+    storage_dead(_2);
+    return;
+  }
+}

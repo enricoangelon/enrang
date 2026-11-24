@@ -1,0 +1,8 @@
+const a = new Point { x: 1, y: 2 };
+const b = new Point { x: 1, y: 2 };
+console.log(a == b); //~ EN0421 "`==` needs `Point` to implement `Eq`"
+
+public class Point {
+  public x: i64;
+  public y: i64;
+}

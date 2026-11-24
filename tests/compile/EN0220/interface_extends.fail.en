@@ -1,0 +1,3 @@
+public interface Shape extends Named { //~ EN0220
+  area(): f64;
+}

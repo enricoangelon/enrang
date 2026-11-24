@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0501/missing_case.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0501]: `match` doesn't handle `Shape.Empty`
+  --> tests/compile/EN0501/missing_case.fail.en:8:17
+   |
+ 4 |   Empty,
+   |   ----- `Shape.Empty` is declared here
+...
+ 8 |   return match (s) { //~ EN0501 "`match` doesn't handle `Shape.Empty`"
+   |                 ^ missing `Shape.Empty`
+   |
+help: add `Shape.Empty => ...`, or a `default` arm
+   |
+11 +     Shape.Empty => panic("unhandled"),
+   = explain: run `enrang explain EN0501`
+
+error: aborting due to 1 previous error

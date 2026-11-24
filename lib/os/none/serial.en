@@ -1,0 +1,14 @@
+// SPEC 8.4, `serial`: `os/none/serial`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+public enum UartKind {
+  None,
+  Uart8250,
+  Uart16550,
+}
+
+public function init(const b: &BootInfo): void { unreachable(); }
+
+public function write(const b: &BootInfo, const s: &string): void { unreachable(); }
+
+public function writeByte(const b: &BootInfo, v: u8): void { unreachable(); }
+
+public function kind(): UartKind { unreachable(); }

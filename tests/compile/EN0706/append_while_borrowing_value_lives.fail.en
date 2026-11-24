@@ -1,0 +1,10 @@
+let source = "let x = 1".toString();
+let lx = new Lexer(&source);
+source += "!"; //~ EN0706 "`source` cannot change while `lx` still points into it"
+console.log(lx.size());
+
+public class Lexer {
+  private src: &string;
+  public constructor(src: &string) { this.src = src; }
+  public size(): isize { return this.src.length(); }
+}

@@ -1,0 +1,9 @@
+//! row: A returned element with no `_src`: `publ
+let q: i64[] = [1, 5, 3, 7];
+const e = f(&q);
+*e = 0;
+console.log(q);
+
+public function f(xs: &Slice<i64>): &i64 { for (const x of xs) { if (c(x)) { return x; } } panic("none"); }
+
+private function c(x: &i64): bool { return *x > 3; }

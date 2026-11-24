@@ -1,0 +1,9 @@
+@private fn f(_1: i64 | null) -> i64 {
+  let _1: i64 | null; // x
+  let _2: i64 temp;
+  bb0: {
+    check_tag(_1, Present);
+    _0 = copy (_1 as Present).0;
+    return;
+  }
+}

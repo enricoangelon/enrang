@@ -1,0 +1,8 @@
+//! row: `take(q); break;`; `take(q); return;`; `
+let q: string[] = ["a", "b"];
+for (const x of &q) {
+  take(q); //~ EN0709
+  q = []; //~ EN0706
+}
+
+private function take(v: string[]): void { console.log(v); }

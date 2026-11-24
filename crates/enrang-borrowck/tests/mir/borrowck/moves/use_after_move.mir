@@ -1,0 +1,124 @@
+// Moves and uses (plan d.2, EN0601). Shapes: c.9 (plan line 1051) a `let` with an
+// initialiser is `storage_live` then the value; c.7 (line 1010) a by-value argument is
+// the moved place; c.3 (lines 902-906) a moved local still gets its scope-end `drop`.
+// EN0601 head (plan e): `u` was moved into `archive`.
+@final class User {
+  name: string;
+}
+fn make() -> User;
+fn archive(_1: User) -> void;
+fn keep(_1: string) -> void;
+
+fn twice() -> void {
+  let _1: User; // u
+  let _2: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = make() -> bb1;
+  }
+  bb1: {
+    _2 = archive(move _1) -> bb2;
+  }
+  bb2: {
+    _2 = archive(move _1) -> bb3; //~ EN0601
+  }
+  bb3: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+// A field moved out, then the whole value used: EN0601 at the use. Setting the field
+// again first is no error.
+fn part() -> void {
+  let mut _1: User; // u
+  let _2: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = make() -> bb1;
+  }
+  bb1: {
+    _2 = keep(move _1.name) -> bb2;
+  }
+  bb2: {
+    _2 = archive(move _1) -> bb3; //~ EN0601
+  }
+  bb3: {
+    _1 = make() -> bb4;
+  }
+  bb4: {
+    _2 = keep(move _1.name) -> bb5;
+  }
+  bb5: {
+    drop(_1.name) [assign];
+    _1.name = const "again": string;
+    _2 = archive(move _1) -> bb6;
+  }
+  bb6: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+// Two reads reached by the same move: one report, at the first.
+fn reads() -> void {
+  let _1: User; // u
+  let _2: void temp;
+  let _3: &User temp;
+  bb0: {
+    storage_live(_1);
+    _1 = make() -> bb1;
+  }
+  bb1: {
+    _2 = archive(move _1) -> bb2;
+  }
+  bb2: {
+    _3 = &_1 [auto-borrow]; //~ EN0601
+    _2 = form log(move _3) -> bb3;
+  }
+  bb3: {
+    _3 = &_1 [auto-borrow];
+    _2 = form log(move _3) -> bb4;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+// Moved on one branch only: still not definitely initialised at the join.
+fn branch(_1: bool) -> void {
+  let _2: User; // u
+  let _3: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = make() -> bb1;
+  }
+  bb1: {
+    switch copy _1 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _3 = archive(move _2) -> bb3;
+  }
+  bb3: {
+    _3 = archive(move _2) -> bb4; //~ EN0601
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+// A call through a closure parameter reads it: no error.
+fn call(_1: (i64) => i64) -> i64 {
+  bb0: {
+    _0 = closure _1(const 1: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

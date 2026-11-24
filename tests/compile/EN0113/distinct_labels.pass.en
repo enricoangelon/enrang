@@ -1,0 +1,7 @@
+let running = true;
+const xs = [1, 2];
+outer: while (running) {
+  inner: for (const x of &xs) {
+    break outer;
+  }
+}

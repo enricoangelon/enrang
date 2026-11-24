@@ -1,0 +1,20 @@
+const a = new Color(); //~ EN0221 "`new` needs a class, and `Color` is an enum"
+const b = new Speaker(); //~ EN0221 "`new` needs a class, and `Speaker` is an interface"
+const c = new i64(); //~ EN0221 "`new` needs a class, not `i64`"
+const d = new Num(); //~ EN0221 "`new` needs a class, not `i64`"
+console.log(a, b, c, d);
+
+public enum Color {
+  Red,
+  Green,
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public type Num = i64;
+
+public function make<T>(): void {
+  const x = new T(); //~ EN0221 "`new` needs a class, and `T` is a type parameter"
+}

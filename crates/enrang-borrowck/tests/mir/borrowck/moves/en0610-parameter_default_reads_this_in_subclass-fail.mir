@@ -1,0 +1,97 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0610/parameter_default_reads_this_in_subclass.fail.en. Its row's codes: EN0610.
+module "tests/compile/EN0610/parameter_default_reads_this_in_subclass.fail";
+class Animal {
+  name: string;
+}
+class Dog extends Animal {
+  label: string = default;
+}
+
+fn Animal::#ctor(_1: &Animal, _2: string) -> void {
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn Animal::tag(_1: &Animal) -> string {
+  let _1: &Animal; // this
+  let _2: string temp;
+  let _3: &string temp;
+  bb0: {
+    _2 = const "a": string;
+    _3 = &_2 [temp-arg];
+    _0 = form to_string(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: string, _3: string = default) -> void {
+  let _1: &Dog; // this
+  let _2: string; // name
+  let _3: string; // label
+  let _4: isize arg; // #supplied
+  let _5: bool temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  let _8: string temp;
+  let _9: void temp;
+  let _10: &Dog temp;
+  let _11: &Animal temp;
+  defaults _4;
+  bb0: {
+    switch const overridden(label): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _5 = lt(copy _4, const 2: isize);
+    switch move _5 [0: bb4, otherwise: bb3];
+  }
+  bb2: {
+    field_init((*_1).label, const "": string);
+    goto bb1;
+  }
+  bb3: {
+    _6 = &*_1 [reborrow]; //~ EN0610
+    _7 = convert(upcast, move _6);
+    _3 = virtual Animal::tag [copy _7](move _7) -> bb5;
+  }
+  bb4: {
+    _8 = move _3;
+    drop((*_1).label) [assign];
+    (*_1).label = move _8;
+    drop(_8);
+    storage_dead(_8);
+    _10 = &*_1 [reborrow];
+    _11 = convert(upcast, move _10);
+    _9 = Animal::#ctor(move _11, move _2) -> bb6;
+  }
+  bb5: {
+    goto bb4;
+  }
+  bb6: {
+    drop(_3);
+    drop(_2);
+    return;
+  }
+}

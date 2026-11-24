@@ -1,0 +1,3 @@
+public class Packet {
+  public body: Slice<u8>; //~ EN0401 "`Slice<u8>` is a view, so it exists only behind `&`"
+}

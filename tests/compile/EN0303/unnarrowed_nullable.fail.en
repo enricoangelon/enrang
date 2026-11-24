@@ -1,0 +1,12 @@
+const name: string | null = null;
+console.log(name.length()); //~ EN0303 "has no member `length`"
+const a: Wrapper | null = null;
+console.log(a?.b.c); //~ EN0303 "has no member `c`"
+
+public class Inner {
+  public c: i64;
+}
+
+public class Wrapper {
+  public b: Inner;
+}

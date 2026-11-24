@@ -1,0 +1,73 @@
+$ enrang check --emit=mir main.en
+[exit 0]
+[stdout]
+statements (_1: string[]) -> int {
+  phase elaborated;
+  let _1: string[]; // args
+  let mut _2: i64; // total
+  let _3: (i64) => void; // add
+  let _4: &i64 temp;
+  let _5: [&i64] temp;
+  let _6: void temp;
+  let _7: void temp;
+  let _8: &((i64) => void) temp;
+  let _9: void temp;
+  let _10: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 0: i64;
+    storage_live(_3);
+    _4 = &_2 [closure-capture];
+    _5 = env(move _4);
+    _3 = closure(arrow#0, _5);
+    _6 = closure _3(const 2: i64) -> bb1;
+  }
+  bb1: {
+    _8 = &_3 [hidden-arg];
+    _7 = twice(move _8) -> bb2;
+  }
+  bb2: {
+    _10 = &_2 [auto-borrow];
+    _9 = form log(move _10) -> bb3;
+  }
+  bb3: {
+    storage_dead(_3);
+    storage_dead(_2);
+    drop_glue(_1);
+    return;
+  }
+}
+
+arrow#0 of statements (_1: &[&i64], _2: i64) -> void {
+  phase elaborated;
+  let _1: &[&i64] env;
+  let _2: i64; // x
+  let _3: i64 temp;
+  capture total: &i64 path;
+  bb0: {
+    _3 = copy *(*_1).0;
+    *(*_1).0 = checked_add(copy _3, copy _2);
+    return;
+  }
+}
+
+@private @local fn twice() -> void perms(read) sources() result none {
+  phase elaborated;
+  let _1: &((i64) => void) arg; // add
+  let _2: void temp;
+  let _3: (i64) => void temp;
+  let _4: void temp;
+  let _5: (i64) => void temp;
+  bb0: {
+    _3 = closure_reborrow(*_1);
+    _2 = closure _3(const 1: i64) -> bb1;
+  }
+  bb1: {
+    _5 = closure_reborrow(*_1);
+    _4 = closure _5(const 1: i64) -> bb2;
+  }
+  bb2: {
+    return;
+  }
+}
+[stderr]

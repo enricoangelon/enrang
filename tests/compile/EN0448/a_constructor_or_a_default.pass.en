@@ -1,0 +1,20 @@
+const ada = new User { name: "Ada" };
+const team = new Team(ada);
+const counter = new Counter { size: 2 };
+console.log(team.size, counter.size);
+
+public class User {
+  public name: string;
+}
+
+public class Team {
+  private owner: User;
+  public size: i64 = 0;
+
+  public constructor(owner: User) { this.owner = owner; }
+}
+
+public class Counter {
+  private hidden: i64;
+  public size: i64;
+}

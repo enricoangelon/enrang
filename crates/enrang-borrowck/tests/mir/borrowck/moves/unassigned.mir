@@ -1,0 +1,122 @@
+// Uses before any assignment (plan d.2, EN0602; `x.f = v` row). Shapes: c.9 (plan line
+// 1052) a `let` with no initialiser and no type default stays uninitialised; c.8 (line
+// 1028) a field store is `drop(x.f) [assign]` then the store; c.10 (lines 1070-1078) a
+// `new` is `set_table`, then `_r = &dest [auto-borrow]` and the constructor with `this`
+// first, a named form `named_fill` with `addr_of(dest)` then the named stores.
+// EN0602 head (plan e): `g` is used before it has a value, label a `User` has no
+// default value.
+@final class User {
+  name: string;
+}
+@final class Pair {
+  a: User;
+  b: User;
+}
+class Animal {
+  n: i64;
+}
+fn Animal::#ctor(_1: &Animal) -> void;
+fn make() -> User;
+fn archive(_1: User) -> void;
+fn adopt(_1: Animal) -> void;
+fn split(_1: Pair) -> void;
+
+fn never() -> void {
+  let _1: User; // g
+  let _2: void temp;
+  bb0: {
+    storage_live(_1);
+    _2 = archive(move _1) -> bb1; //~ EN0602
+  }
+  bb1: {
+    storage_dead(_1);
+    return;
+  }
+}
+
+// `p.a = v` with `p` never assigned: EN0602 once, the later whole use included.
+fn field() -> void {
+  let mut _1: Pair; // p
+  let _2: User temp;
+  let _3: void temp;
+  bb0: {
+    storage_live(_1);
+    _2 = make() -> bb1;
+  }
+  bb1: {
+    _1.a = move _2; //~ EN0602
+    _3 = split(move _1) -> bb2;
+  }
+  bb2: {
+    storage_dead(_1);
+    return;
+  }
+}
+
+// `p.a = v` after `p` is moved: EN0601; after only `p.a` is moved: none.
+fn refill(_1: Pair) -> void {
+  let _2: void temp;
+  let _3: User temp;
+  bb0: {
+    _2 = archive(move _1.a) -> bb1;
+  }
+  bb1: {
+    _3 = make() -> bb2;
+  }
+  bb2: {
+    _1.a = move _3;
+    _2 = split(move _1) -> bb3;
+  }
+  bb3: {
+    _3 = make() -> bb4;
+  }
+  bb4: {
+    _1.a = move _3; //~ EN0601
+    return;
+  }
+}
+
+// A constructor call initialises its destination; its `this` borrow is exempt.
+fn build() -> void {
+  let _1: Animal; // a
+  let _2: &Animal temp;
+  let _3: void temp;
+  bb0: {
+    storage_live(_1);
+    set_table(_1, Animal);
+    _2 = &_1 [auto-borrow];
+    _3 = Animal::#ctor(move _2) -> bb1;
+  }
+  bb1: {
+    _3 = adopt(move _1) -> bb2;
+  }
+  bb2: {
+    storage_dead(_1);
+    return;
+  }
+}
+
+// A named form into a `const` local: the shim's fields and the named stores
+// initialise it; no EN0602, and no EN0608 for the stores.
+fn named() -> void {
+  let _1: Pair; // p
+  let _2: *Pair temp;
+  let _3: void temp;
+  let _4: User temp;
+  bb0: {
+    storage_live(_1);
+    _4 = make() -> bb1;
+  }
+  bb1: {
+    _2 = addr_of _1;
+    _3 = named_fill Pair leaving(b)(move _2) -> bb2;
+  }
+  bb2: {
+    _1.a = move _4;
+    _3 = split(move _1) -> bb3;
+  }
+  bb3: {
+    storage_dead(_1);
+    return;
+  }
+}

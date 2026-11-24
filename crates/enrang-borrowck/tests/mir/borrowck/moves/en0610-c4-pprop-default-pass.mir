@@ -1,0 +1,114 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0610/c4-pprop-default.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0610/c4-pprop-default.pass";
+class Animal {
+  sound: string = default;
+  name: string = default;
+  nick?: string | null = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Animal; // a
+  let _3: &Animal temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &string temp;
+  let _7: &(string | null) temp;
+  let _8: Animal; // b
+  let _9: &Animal temp;
+  let _10: void temp;
+  let _11: void temp;
+  let _12: &string temp;
+  let _13: &(string | null) temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, Animal);
+    _3 = &_2 [auto-borrow];
+    _4 = Animal::#ctor(move _3, const 0: isize) -> bb1;
+  }
+  bb1: {
+    _6 = &_2.name [auto-borrow];
+    _7 = &_2.nick [auto-borrow];
+    _5 = form log(move _6, move _7) -> bb2;
+  }
+  bb2: {
+    storage_live(_8);
+    set_table(_8, Animal);
+    _9 = &_8 [auto-borrow];
+    _10 = Animal::#ctor(move _9, const "Rex": string, const 1: isize) -> bb3;
+  }
+  bb3: {
+    _12 = &_8.name [auto-borrow];
+    _13 = &_8.nick [auto-borrow];
+    _11 = form log(move _12, move _13) -> bb4;
+  }
+  bb4: {
+    drop(_8);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Animal::#ctor(_1: &Animal, _2: string = default, _3: string | null = default) -> void {
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: string | null; // nick
+  let _4: isize arg; // #supplied
+  let _5: string | null temp;
+  let _6: bool temp;
+  let _7: string temp;
+  let _8: string | null temp;
+  defaults _4;
+  bb0: {
+    switch const overridden(sound): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    switch const overridden(name): bool [0: bb4, otherwise: bb3];
+  }
+  bb2: {
+    field_init((*_1).sound, const "...": string);
+    goto bb1;
+  }
+  bb3: {
+    switch const overridden(nick): bool [0: bb6, otherwise: bb5];
+  }
+  bb4: {
+    field_init((*_1).name, const "": string);
+    goto bb3;
+  }
+  bb5: {
+    _6 = lt(copy _4, const 1: isize);
+    switch move _6 [0: bb8, otherwise: bb7];
+  }
+  bb6: {
+    _5 = null;
+    field_init((*_1).nick, move _5);
+    drop(_5);
+    storage_dead(_5);
+    goto bb5;
+  }
+  bb7: {
+    _2 = const "anon": string;
+    goto bb8;
+  }
+  bb8: {
+    _7 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _7;
+    drop(_7);
+    storage_dead(_7);
+    _8 = move _3;
+    drop((*_1).nick) [assign];
+    (*_1).nick = move _8;
+    drop(_8);
+    storage_dead(_8);
+    drop(_3);
+    drop(_2);
+    return;
+  }
+}

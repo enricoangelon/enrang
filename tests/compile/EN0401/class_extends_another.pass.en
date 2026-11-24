@@ -1,0 +1,8 @@
+const pup = new Puppy {};
+console.log(pup.legs);
+
+public class Dog {
+  public legs: i64 = 4;
+}
+
+public class Puppy extends Dog {}

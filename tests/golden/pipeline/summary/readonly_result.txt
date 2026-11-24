@@ -1,0 +1,2 @@
+module "main"
+fn Counter::count(_1: &Counter) -> readonly &isize perms(read) sources(0) result readonly(declared);

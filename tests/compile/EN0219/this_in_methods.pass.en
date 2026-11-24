@@ -1,0 +1,17 @@
+let c = new Counter(1);
+c.bump();
+console.log(c.read());
+
+public class Counter {
+  private n: i64;
+  public constructor(n: i64) {
+    this.n = n;
+  }
+  public bump(): void {
+    this.n += 1;
+  }
+  public read(): i64 {
+    const get = (): i64 => this.n;
+    return get();
+  }
+}

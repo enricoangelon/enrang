@@ -1,0 +1,10 @@
+let src = "abc".toString();
+let lx = new Lexer(&src);
+const moved = src; //~ EN0709 "cannot move `src` while it is borrowed"
+console.log(lx.peek(), moved);
+
+public class Lexer {
+  private src: &string;
+  public constructor(src: &string) { this.src = src; }
+  public peek(): isize { return this.src.length(); }
+}

@@ -1,0 +1,9 @@
+//! row: Under `p != null`: `for (const x of &p) { p = null; b
+public function f(c: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) {
+      p = null; break;
+    }
+  }
+}

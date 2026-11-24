@@ -1,0 +1,64 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/s2-30-cell.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/s2-30-cell.pass";
+extend "core/ptr"::#extend0<T>: *T;
+fn "core/ptr"::#extend0<T>::add(_1: &*T, _2: isize) -> *T;
+@private static cells: u16[4];
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: &u16; // a
+  let _3: &u16; // b
+  let _4: void temp;
+  let _5: &u16 temp;
+  let _6: void temp;
+  let _7: &u16 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = cell(const 0: isize) -> bb1;
+  }
+  bb1: {
+    storage_live(_3);
+    _3 = cell(const 0: isize) -> bb2;
+  }
+  bb2: {
+    _5 = &*_2 [auto-borrow];
+    _4 = form log(move _5) -> bb3;
+  }
+  bb3: {
+    _7 = &*_3 [auto-borrow];
+    _6 = form log(move _7) -> bb4;
+  }
+  bb4: {
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn cell(_1: isize) -> &u16 {
+  let _1: isize; // i
+  let _2: *u16; // p
+  let _3: *u16[4] temp;
+  let _4: &u16 temp;
+  let _5: *u16 temp;
+  let _6: &*u16 temp;
+  let _7: *u16 temp;
+  region r0: block;
+  bb0: {
+    storage_live(_2) @ r0;
+    _3 = const static_addr(cells): *u16[4] @ r0;
+    _4 = &(*_3)[0] [explicit] @ r0;
+    _2 = cast(ref_to_raw, move _4, *u16) @ r0;
+    _6 = &_2 [auto-borrow] @ r0;
+    _5 = "core/ptr"::#extend0<u16>::add(move _6, copy _1) -> bb1 @ r0;
+  }
+  bb1: {
+    _7 = move _5 @ r0;
+    _0 = &*_7 [explicit] @ r0;
+    storage_dead(_2) @ r0;
+    return @ r0;
+  }
+}

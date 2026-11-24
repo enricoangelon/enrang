@@ -1,0 +1,9 @@
+//! row: Under `p != null`: `for (const x of &p) { p = null; }
+public function replaced(c: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) {
+      mem.replace(&p, null); //~ EN0401 "mismatched types: expected `string[]`, found `null`"
+    }
+  }
+}

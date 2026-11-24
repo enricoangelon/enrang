@@ -1,0 +1,7 @@
+//! target: i386-none
+@panicHandler private function onPanic(info: &PanicInfo): never {
+  mark(info);
+  halt();
+}
+
+private function mark(p: &PanicInfo): void {}

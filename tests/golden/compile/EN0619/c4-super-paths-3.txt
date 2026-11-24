@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0619/c4-super-paths-3.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0610]: `this` can't be used before `super(...)` runs
+  --> tests/compile/EN0619/c4-super-paths-3.fail.en:18:17
+   |
+18 |     console.log(this); //~ EN0610
+   |                 ^^^^ `this` is used here, before the base part is built
+   |
+help: before `super(...)`, a constructor may only assign its own fields
+   = explain: run `enrang explain EN0610`
+
+error[EN0619]: `super(name)` isn't called on every path before the constructor returns
+  --> tests/compile/EN0619/c4-super-paths-3.fail.en:19:3
+   |
+19 |   } //~ EN0619 "`super(name)` isn't called on every path before the constructor returns"
+   |   ^ the constructor may return here without `super(name)`
+   |
+   = note: when `quiet` is true
+   = explain: run `enrang explain EN0619`
+
+error: aborting due to 2 previous errors

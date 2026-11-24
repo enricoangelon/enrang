@@ -1,0 +1,27 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0602/assigned_on_one_path_only.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0602/assigned_on_one_path_only.pass";
+
+fn grade(_1: i64) -> string {
+  let _1: i64; // s
+  let mut _2: string; // g
+  let _3: bool temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "": string;
+    _3 = ge(copy _1, const 90: i64);
+    switch move _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    drop(_2) [assign];
+    _2 = const "A": string;
+    goto bb2;
+  }
+  bb2: {
+    _0 = move _2;
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}

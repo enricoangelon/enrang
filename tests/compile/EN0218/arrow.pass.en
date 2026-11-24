@@ -1,0 +1,2 @@
+const double = (x: i64): i64 => x * 2;
+console.log(double(2));

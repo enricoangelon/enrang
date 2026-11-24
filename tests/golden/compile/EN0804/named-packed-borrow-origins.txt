@@ -1,0 +1,68 @@
+$ enrang check tests/compile/EN0804/named-packed-borrow-origins.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0804]: reference to the packed field `p.b`, which may be misaligned
+ --> tests/compile/EN0804/named-packed-borrow-origins.fail.en:3:11
+  |
+3 | const e = &p.b; //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+  |           ^^^^ a `@packed` class aligns its fields to 1 byte
+  |
+help: copy the field into a local first: `const v = p.b;`
+  = explain: run `enrang explain EN0804`
+
+error[EN0804]: reference to the packed field `p.b`, which may be misaligned
+ --> tests/compile/EN0804/named-packed-borrow-origins.fail.en:5:11
+  |
+5 | const c = p.b.checkedAdd(1); //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+  |           ^^^ a `@packed` class aligns its fields to 1 byte
+  |
+help: copy the field into a local first: `const v = p.b;`
+  = explain: run `enrang explain EN0804`
+
+error[EN0804]: reference to the packed field `rp.b`, which may be misaligned
+ --> tests/compile/EN0804/named-packed-borrow-origins.fail.en:8:11
+  |
+8 | const q = &rp.b; //~ EN0804 "reference to the packed field `rp.b`, which may be misaligned"
+  |           ^^^^^ a `@packed` class aligns its fields to 1 byte
+  |
+help: copy the field into a local first: `const v = rp.b;`
+  = explain: run `enrang explain EN0804`
+
+error[EN0804]: reference to the packed field `p.b`, which may be misaligned
+  --> tests/compile/EN0804/named-packed-borrow-origins.fail.en:10:18
+   |
+10 | const { a, b } = &p; //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+   |                  ^^ a `@packed` class aligns its fields to 1 byte
+   |
+help: copy the field into a local first: `const v = p.b;`
+   = explain: run `enrang explain EN0804`
+
+error[EN0804]: reference to the packed field `p.g`, which may be misaligned
+  --> tests/compile/EN0804/named-packed-borrow-origins.fail.en:12:17
+   |
+12 | for (const x of &p.g) { //~ EN0804 "reference to the packed field `p.g`, which may be misaligned"
+   |                 ^^^^ a `@packed` class aligns its fields to 1 byte
+   |
+help: copy the field into a local first: `const v = p.g;`
+   = explain: run `enrang explain EN0804`
+
+error[EN0804]: reference to the packed field `p.g[r]`, which may be misaligned
+  --> tests/compile/EN0804/named-packed-borrow-origins.fail.en:16:17
+   |
+16 | for (const y of &p.g[r]) { //~ EN0804 "reference to the packed field `p.g[r]`, which may be misaligned"
+   |                 ^^^^^^^ a `@packed` class aligns its fields to 1 byte
+   |
+help: copy the field into a local first: `const v = p.g[r];`
+   = explain: run `enrang explain EN0804`
+
+error[EN0804]: reference to the packed field `p.b`, which may be misaligned
+  --> tests/compile/EN0804/named-packed-borrow-origins.fail.en:19:6
+   |
+19 | show(&p.b); //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+   |      ^^^^ a `@packed` class aligns its fields to 1 byte
+   |
+help: copy the field into a local first: `const v = p.b;`
+   = explain: run `enrang explain EN0804`
+
+error: aborting due to 7 previous errors

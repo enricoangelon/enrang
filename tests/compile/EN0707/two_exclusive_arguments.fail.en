@@ -1,0 +1,8 @@
+function swapFirst(a: &Slice<i64>, b: &Slice<i64>): void {
+  const t = a[0];
+  a[0] = b[0];
+  b[0] = t;
+}
+
+let xs = [1, 2];
+swapFirst(&xs, &xs); //~ EN0707 "cannot borrow `xs` as exclusive twice at the same time"

@@ -1,0 +1,224 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0614/tk-01-dup.fail.en. Its row's codes: EN0614, EN0616.
+module "tests/compile/EN0614/tk-01-dup.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[][]; // grid
+  let _3: i64[] temp;
+  let _4: i64[] temp;
+  let _5: [&i64[], &i64[]] | null; // p
+  let _6: &i64[][] temp;
+  let _7: &Slice<i64[]> temp;
+  let _8: bool temp;
+  let _9: u32 temp;
+  let _10: &i64[]; // a
+  let _11: &i64[]; // b
+  let _12: &i64; // e
+  let _13: isize temp;
+  let _14: isize temp;
+  let _15: void temp;
+  let _16: &i64[] temp;
+  let _17: void temp;
+  let _18: &i64 temp;
+  let mut _19: i64[][]; // grid2
+  let _20: i64[] temp;
+  let _21: i64[] temp;
+  let _22: [&i64[], &i64[]] | null; // p2
+  let _23: &i64[][] temp;
+  let _24: &Slice<i64[]> temp;
+  let _25: bool temp;
+  let _26: u32 temp;
+  let _27: void temp;
+  let _28: &i64[] temp;
+  let _29: &i64[] temp;
+  fact f0: _5 nonnull;
+  fact f1: _22 nonnull;
+  use f0 at bb2[1];
+  use f0 at bb2[4];
+  use f1 at bb7[0];
+  use f1 at bb7[2];
+  test f0 at bb2;
+  test f1 at bb7;
+  bb0: {
+    storage_live(_2);
+    _3 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    _4 = intrinsic AllocArray<i64>(const 3: i64, const 4: i64);
+    _2 = intrinsic AllocArray<i64[]>(move _3, move _4);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = &_2 [explicit];
+    _7 = convert(array_to_slice, move _6);
+    _5 = dup(move _7) -> bb1;
+  }
+  bb1: {
+    _9 = discriminant(_5);
+    _8 = ne(move _9, const 0: u32);
+    switch move _8 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_10);
+    check_tag(_5, Present);
+    _10 = copy (_5 as Present).0.0;
+    storage_live(_11);
+    check_tag(_5, Present);
+    _11 = copy (_5 as Present).0.1;
+    storage_live(_12);
+    _13 = const 0: isize;
+    _14 = len(*_10);
+    check_bounds(copy _13, copy _14);
+    _12 = &(*_10)[_13] [explicit];
+    _16 = &*_11 [reborrow];
+    _15 = "alloc/array"::Array<i64>::push(move _16, const 9: i64) -> bb4; //~ EN0614
+  }
+  bb3: {
+    storage_live(_19);
+    _20 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    _21 = intrinsic AllocArray<i64>(const 3: i64, const 4: i64);
+    _19 = intrinsic AllocArray<i64[]>(move _20, move _21);
+    drop(_21);
+    storage_dead(_21);
+    drop(_20);
+    storage_dead(_20);
+    storage_live(_22);
+    _23 = &_19 [explicit];
+    _24 = convert(array_to_slice, move _23);
+    _22 = dup(move _24) -> bb6;
+  }
+  bb4: {
+    _18 = &*_12 [auto-borrow];
+    _17 = form log(move _18) -> bb5;
+  }
+  bb5: {
+    storage_dead(_12);
+    storage_dead(_11);
+    storage_dead(_10);
+    goto bb3;
+  }
+  bb6: {
+    _26 = discriminant(_22);
+    _25 = ne(move _26, const 0: u32);
+    switch move _25 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    check_tag(_22, Present);
+    _28 = copy (_22 as Present).0.0;
+    check_tag(_22, Present);
+    _29 = copy (_22 as Present).0.1; //~ EN0616
+    _27 = clash(move _28, move _29) -> bb9;
+  }
+  bb8: {
+    storage_dead(_22);
+    drop(_19);
+    storage_dead(_19);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb9: {
+    goto bb8;
+  }
+}
+
+fn clash(_1: &i64[], _2: &i64[]) -> void {
+  let _1: &i64[]; // x
+  let _2: &i64[]; // y
+  let _3: &i64; // first
+  let _4: isize temp;
+  let _5: isize temp;
+  let _6: i64[] temp;
+  let _7: void temp;
+  let _8: &i64 temp;
+  bb0: {
+    storage_live(_3);
+    _4 = const 0: isize;
+    _5 = len(*_1);
+    check_bounds(copy _4, copy _5);
+    _3 = &(*_1)[_4] [explicit];
+    _6 = intrinsic AllocArray<i64>(const 9: i64);
+    drop(*_2) [assign];
+    *_2 = move _6;
+    drop(_6);
+    storage_dead(_6);
+    _8 = &*_3 [auto-borrow];
+    _7 = form log(move _8) -> bb1;
+  }
+  bb1: {
+    storage_dead(_3);
+    return;
+  }
+}
+
+fn dup(_1: &Slice<i64[]>) -> [&i64[], &i64[]] | null {
+  let _1: &Slice<i64[]>; // rows
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &i64[]; // r
+  let _6: [&i64[], &i64[]] temp;
+  let _7: &i64[] temp;
+  let _8: &i64[] temp;
+  loop l0: path *_1 preheader bb5 head bb1 bind bb2[2] binding _5;
+  bb0: {
+    goto bb5;
+  }
+  bb1: {
+    _3 = len(*_1);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &(*_1)[_2] [for-of-element];
+    _2 = add(copy _2, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _0 = null;
+    return;
+  }
+  bb5: {
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _7 = &*_5 [reborrow];
+    _8 = &*_5 [reborrow];
+    _6 = two(move _7, move _8) -> bb7;
+  }
+  bb7: {
+    _0 = present(move _6);
+    storage_dead(_5);
+    return;
+  }
+}
+
+fn two(_1: &i64[], _2: &i64[]) -> [&i64[], &i64[]] {
+  let _1: &i64[]; // a
+  let _2: &i64[]; // b
+  let _3: &i64[] temp;
+  let _4: &i64[] temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _0 = tuple(move _3, move _4);
+    return;
+  }
+}

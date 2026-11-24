@@ -1,0 +1,18 @@
+const name: string | null = null;
+if (name != null) {
+  console.log(name.length());
+}
+console.log(name?.length());
+const a: Wrapper | null = null;
+console.log(a?.b?.c);
+const x: i64 | null = null;
+const y: i64 | null = 2;
+console.log(x ?? y ?? 3);
+
+public class Inner {
+  public c: i64;
+}
+
+public class Wrapper {
+  public b: Inner | null;
+}

@@ -1,0 +1,9 @@
+let u = new User(1);
+u.id = 2;
+
+public class User {
+  public id: i64;
+  public constructor(id: i64) {
+    this.id = id;
+  }
+}

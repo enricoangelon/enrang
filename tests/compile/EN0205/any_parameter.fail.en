@@ -1,0 +1,3 @@
+public function show(value: any): void { //~ EN0205 "`any` does not exist in Enrang"
+  console.log(value);
+}

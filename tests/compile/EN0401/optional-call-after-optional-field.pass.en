@@ -1,0 +1,8 @@
+const a = new Node(1, null);
+const lbl = a.next?.next?.label();
+console.log(lbl ?? "none");
+
+private class Node {
+  public constructor(public value: i64, public next: Box<Node> | null) {}
+  public label(): string { return `node ${this.value}`; }
+}

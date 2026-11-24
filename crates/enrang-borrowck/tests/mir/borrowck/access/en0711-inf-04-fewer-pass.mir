@@ -1,0 +1,196 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0711/inf-04-fewer.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0711/inf-04-fewer.pass";
+class Base {
+  private src: &Slice<u8>;
+  private other: &Base | null = default;
+}
+class Holder extends Base {
+  private mine: &Slice<u8>;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: u8[2]; // table
+  let mut _3: Holder; // h
+  let _4: &u8[2] temp;
+  let _5: &Slice<u8> temp;
+  let _6: &Holder temp;
+  let _7: void temp;
+  let _8: &Base; // b
+  let _9: &Holder temp;
+  let _10: Base; // tmp
+  let _11: &u8[2] temp;
+  let _12: &Slice<u8> temp;
+  let _13: &Base temp;
+  let _14: void temp;
+  let _15: void temp;
+  let _16: &Base temp;
+  let _17: &Base temp;
+  let _18: void temp;
+  let _19: &Holder temp;
+  let _20: &Base temp;
+  bb0: {
+    storage_live(_2);
+    _2 = fixed<u8>[const 7: u8, const 8: u8];
+    storage_live(_3);
+    set_table(_3, Holder);
+    _4 = &_2 [explicit];
+    _5 = convert(fixed_to_slice, move _4);
+    _6 = &_3 [auto-borrow];
+    _7 = Holder::#ctor(move _6, move _5) -> bb1;
+  }
+  bb1: {
+    storage_live(_8);
+    _9 = &_3 [explicit];
+    _8 = convert(upcast, move _9);
+    storage_live(_10);
+    set_table(_10, Base);
+    _11 = &_2 [explicit];
+    _12 = convert(fixed_to_slice, move _11);
+    _13 = &_10 [auto-borrow];
+    _14 = Base::#ctor(move _13, move _12) -> bb2;
+  }
+  bb2: {
+    _16 = &_10 [explicit];
+    _17 = &*_8 [reborrow];
+    _15 = virtual Base::adopt [copy _17](move _17, move _16) -> bb3;
+  }
+  bb3: {
+    _19 = &_3 [auto-borrow];
+    _20 = convert(upcast, move _19);
+    _18 = Base::show(move _20) -> bb4;
+  }
+  bb4: {
+    storage_dead(_10);
+    storage_dead(_8);
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Base::#ctor(_1: &Base, _2: &Slice<u8>) -> void {
+  let _1: &Base; // this
+  let _2: &Slice<u8>; // src
+  let _3: &Base | null temp;
+  let _4: &Slice<u8> temp;
+  bb0: {
+    switch const overridden(other): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    return;
+  }
+  bb2: {
+    _3 = null;
+    field_init((*_1).other, move _3);
+    goto bb1;
+  }
+}
+
+fn Base::adopt(_1: &Base, _2: &Base) -> void {
+  let _1: &Base; // this
+  let _2: &Base; // o
+  let _3: &Base temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).other = present(move _3);
+    return;
+  }
+}
+
+fn Base::peek(_1: &Base) -> readonly &u8 {
+  let _1: &Base; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).src);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).src)[_2] [explicit];
+    return;
+  }
+}
+
+fn Base::show(_1: &Base) -> void {
+  let _1: &Base; // this
+  let _2: &Base | null; // o
+  let _3: bool temp;
+  let _4: u32 temp;
+  let _5: void temp;
+  let _6: &u8 temp;
+  let _7: &Base temp;
+  fact f0: _2 nonnull;
+  use f0 at bb1[0];
+  test f0 at bb1;
+  bb0: {
+    storage_live(_2);
+    _2 = copy (*_1).other;
+    _4 = discriminant(_2);
+    _3 = ne(move _4, const 0: u32);
+    switch move _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    check_tag(_2, Present);
+    _7 = &*(_2 as Present).0 [reborrow];
+    _6 = virtual Base::peek [copy _7](move _7) -> bb3;
+  }
+  bb2: {
+    storage_dead(_2);
+    return;
+  }
+  bb3: {
+    _5 = form log(move _6) -> bb4;
+  }
+  bb4: {
+    goto bb2;
+  }
+}
+
+fn Base::view(_1: &Base) -> readonly &Slice<u8> {
+  let _1: &Base; // this
+  bb0: {
+    _0 = copy (*_1).src;
+    return;
+  }
+}
+
+fn Holder::#ctor(_1: &Holder, _2: &Slice<u8>) -> void {
+  let _1: &Holder; // this
+  let _2: &Slice<u8>; // src
+  let _3: &Slice<u8> temp;
+  let _4: void temp;
+  let _5: &Slice<u8> temp;
+  let _6: &Holder temp;
+  let _7: &Base temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).mine = move _3;
+    _5 = &*_2 [reborrow];
+    _6 = &*_1 [reborrow];
+    _7 = convert(upcast, move _6);
+    _4 = Base::#ctor(move _7, move _5) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@override fn Holder::adopt(_1: &Holder, _2: &Base) -> void {
+  let _1: &Holder; // this
+  let _2: &Base; // o
+  let _3: &Slice<u8> temp;
+  let _4: &Base temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = virtual Base::view [copy _4](move _4) -> bb1;
+  }
+  bb1: {
+    (*_1).mine = move _3;
+    return;
+  }
+}

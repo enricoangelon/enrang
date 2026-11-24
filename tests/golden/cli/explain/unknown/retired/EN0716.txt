@@ -1,0 +1,5 @@
+$ enrang explain EN0716
+[exit 2]
+[stdout]
+[stderr]
+error: `EN0716` is retired: `from` is removed; returned-reference sources are inferred

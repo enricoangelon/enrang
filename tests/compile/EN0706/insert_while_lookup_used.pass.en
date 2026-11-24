@@ -1,0 +1,26 @@
+public function getOrInsert(m: &Table, k: i64): &Entry {
+  const hit = m.find(k);
+  if (hit != null) { return hit; }
+  m.insert(k);
+  return m.last();
+}
+
+public class Entry {
+  public key: i64 = 0;
+}
+
+public class Table {
+  public entries: Entry[] = [];
+  public find(k: i64): &Entry | null {
+    for (const e of &this.entries) {
+      if (e.key == k) { return e; }
+    }
+    return null;
+  }
+  public insert(k: i64): void {
+    this.entries.push(new Entry { key: k });
+  }
+  public last(): &Entry {
+    return &this.entries[this.entries.length() - 1];
+  }
+}

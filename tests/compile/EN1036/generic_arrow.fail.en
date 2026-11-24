@@ -1,0 +1,2 @@
+const id = <T>(x: T): T => x; //~ EN1036 "generic arrows are not supported yet"
+console.log(id(1));

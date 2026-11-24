@@ -1,0 +1,11 @@
+public enum Shape {
+  Circle { radius: f64 },
+  Empty,
+}
+
+public function name(s: &Shape): string {
+  return match (s) {
+    Circle => "circle", //~ EN0502 "`Circle` is a case of `Shape`: write `Shape.Circle`"
+    Shape.Empty => "empty",
+  };
+}

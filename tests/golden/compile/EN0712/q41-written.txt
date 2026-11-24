@@ -1,0 +1,38 @@
+$ enrang check tests/compile/EN0712/q41-written.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0712]: the temporary is dropped while `p` still borrows it
+ --> tests/compile/EN0712/q41-written.fail.en:1:1
+  |
+1 | const p: &Slice<i64> = &[2, 3, 5, 7]; //~ EN0712
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the temporary is dropped here
+  |                        ------------- borrow of the temporary starts here
+2 | p[0] = 1;
+  | - the borrow is still in use here
+  |
+help: bind the value to a local first, then borrow the local
+  = explain: run `enrang explain EN0712`
+
+error[EN0710]: cannot return a reference to a temporary, `&[n, n]`
+ --> tests/compile/EN0712/q41-written.fail.en:7:10
+  |
+7 |   return &[n, n]; //~ EN0710
+  |          ^^^^^^^ this reference would point at freed memory
+  |
+  = rule: a returned reference must borrow from a parameter, and `pair` has no reference parameters.
+  = explain: run `enrang explain EN0710`
+
+error[EN0712]: the temporary is dropped while `w` still borrows it
+  --> tests/compile/EN0712/q41-written.fail.en:11:3
+   |
+11 |   const w: &Slice<i64> = &[n, 2]; //~ EN0712
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the temporary is dropped here
+   |                          ------- borrow of the temporary starts here
+12 |   console.log(w);
+   |               - the borrow is still in use here
+   |
+help: bind the value to a local first, then borrow the local
+   = explain: run `enrang explain EN0712`
+
+error: aborting due to 3 previous errors

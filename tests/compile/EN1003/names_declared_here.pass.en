@@ -1,0 +1,9 @@
+const w = new Worker { name: "job" };
+spawn(1);
+let pending: Worker | null = null;
+
+private function spawn(n: i64): void {}
+
+public final class Worker {
+  public name: string;
+}

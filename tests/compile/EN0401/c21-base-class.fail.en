@@ -1,0 +1,10 @@
+//! covers: C21
+const rex = new Dog { name: "Rex" };
+const a: Animal = rex; //~ EN0401 "mismatched types: expected `Animal`, found `Dog`"
+console.log(a.name);
+
+public class Animal {
+  public name: string;
+}
+
+public class Dog extends Animal {}

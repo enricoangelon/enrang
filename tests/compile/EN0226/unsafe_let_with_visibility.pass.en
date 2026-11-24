@@ -1,0 +1,2 @@
+@globalAllocator
+private unsafe let heap: FreeListHeap;

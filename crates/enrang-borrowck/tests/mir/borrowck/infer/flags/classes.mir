@@ -1,0 +1,103 @@
+// Class flags (plan d.8 stage 3, A:1338) with rule (e) (plan d.7), in one SCC
+// with the class's bodies: `Holder.poke` writes through a reference read from
+// `r`, so `Holder`'s flag is set, `poke`'s `this` is Write (the write goes
+// through it), and its constructor's store into `r` makes the stored parameter
+// Write; `Reader` only reads through `r`; `Ro` writes through
+// `w` and never through its `readonly &` field `r`, whose store stays Read; a
+// tuple field with a writable part sets `Pad`'s flag, one whose reference parts
+// are all `readonly` leaves `Pad2`'s off; `Sub` inherits `Holder`'s (H38).
+// MIR shapes: constructor bodies storing reborrowed parameters into `(*_1).f`
+// (plan c.10, plan.md:1079; this is `_1`, plan i.28), field copies and writes
+// through references (plan c.4, plan.md:913-914), reborrows (plan c.6,
+// plan.md:975).
+class Holder {
+  r: &i64;
+}
+fn Holder::#ctor(_1: &Holder, _2: &i64) -> void {
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    return;
+  }
+}
+fn Holder::poke(_1: &Holder) -> void {
+  bb0: {
+    *(*_1).r = const 0: i64;
+    return;
+  }
+}
+class Sub extends Holder {
+  k: i64;
+}
+class Reader {
+  r: &i64;
+}
+fn Reader::#ctor(_1: &Reader, _2: &i64) -> void {
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    return;
+  }
+}
+fn Reader::get(_1: &Reader) -> i64 {
+  let _2: &i64 temp;
+  bb0: {
+    _2 = copy (*_1).r;
+    _0 = copy *_2;
+    return;
+  }
+}
+class Ro {
+  r: readonly &i64;
+  w: &i64;
+}
+fn Ro::#ctor(_1: &Ro, _2: &i64, _3: &i64) -> void {
+  let _4: &i64 temp;
+  let _5: &i64 temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).r = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).w = move _5;
+    return;
+  }
+}
+fn Ro::step(_1: &Ro) -> void {
+  let _2: &i64; // t
+  bb0: {
+    _2 = copy (*_1).w;
+    *_2 = const 1: i64;
+    return;
+  }
+}
+class Pad {
+  t: [&i64, i64];
+}
+class Pad2 {
+  t: [&i64, i64] readonly_at([0]);
+}
+//= class Holder writes_through_fields
+//= //   flag: writes through a reference read from its fields
+//= fn Holder::#ctor(_1: &Holder, _2: &i64) -> void perms(write, write)
+//= //   #0: writes through it
+//= //   #1: writes through it
+//= fn Holder::poke(_1: &Holder) -> void perms(write) sources() result none;
+//= //   #0: writes through it
+//= class Pad writes_through_fields
+//= //   flag: its field `t` holds writable parts
+//= class Pad2
+//= class Reader
+//= fn Reader::#ctor(_1: &Reader, _2: &i64) -> void perms(write, read)
+//= //   #0: writes through it
+//= fn Reader::get(_1: &Reader) -> i64 perms(read) sources() result none;
+//= class Ro writes_through_fields
+//= //   flag: writes through a reference read from its fields
+//= fn Ro::#ctor(_1: &Ro, _2: &i64, _3: &i64) -> void perms(write, read, write)
+//= //   #0: writes through it
+//= //   #2: writes through it
+//= fn Ro::step(_1: &Ro) -> void perms(write) sources() result none;
+//= //   #0: writes through it
+//= class Sub writes_through_fields
+//= //   flag: its base writes through its fields

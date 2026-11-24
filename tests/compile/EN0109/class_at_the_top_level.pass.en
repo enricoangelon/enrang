@@ -1,0 +1,5 @@
+public function build(): i64 {
+  return 1;
+}
+
+private class Point {}

@@ -1,0 +1,9 @@
+let p = new P { a: 1, b: 2 };
+const f = () => { console.log(p.b); };
+f();
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32;
+}

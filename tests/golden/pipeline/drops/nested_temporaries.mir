@@ -1,0 +1,106 @@
+fn demo() -> void perms() sources() result none {
+  phase elaborated;
+  let _1: void temp;
+  let _2: string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: string temp;
+  let _8: &string temp;
+  let _9: &string temp;
+  let _10: string[] temp;
+  let _11: string temp;
+  let _12: &string temp;
+  let _13: string temp;
+  let _14: &string temp;
+  let _15: string temp;
+  let _16: &string temp;
+  let _17: &string[] temp;
+  let _18: &string[] #src;
+  let _19: isize #i;
+  let _20: isize #n;
+  let _21: bool temp;
+  let _22: &string; // w
+  let _23: void temp;
+  let _24: &string temp;
+  loop l0: once _18 preheader bb10 head bb4 bind bb5[2] binding _22;
+  bb0: {
+    _3 = const "a": string;
+    _4 = &_3 [temp-arg];
+    _5 = const "b": string;
+    _6 = &_5 [temp-arg];
+    _7 = form concat(move _4, move _6) -> bb1;
+  }
+  bb1: {
+    _8 = &_7 [temp-arg];
+    _2 = mk(move _8) -> bb2;
+  }
+  bb2: {
+    _9 = &_2 [temp-arg];
+    _1 = show(move _9) -> bb3;
+  }
+  bb3: {
+    drop_glue(_2);
+    storage_dead(_2);
+    drop_glue(_7);
+    storage_dead(_7);
+    drop_glue(_5);
+    storage_dead(_5);
+    drop_glue(_3);
+    storage_dead(_3);
+    _11 = const "c": string;
+    _12 = &_11 [temp-arg];
+    _13 = const "d": string;
+    _14 = &_13 [temp-arg];
+    _15 = form concat(move _12, move _14) -> bb8;
+  }
+  bb4: {
+    _20 = len(*_18);
+    _21 = lt(copy _19, copy _20);
+    switch move _21 [0: bb7, otherwise: bb5];
+  }
+  bb5: {
+    storage_live(_22);
+    check_bounds(copy _19, copy _20);
+    _22 = &(*_18)[_19] [for-of-element];
+    _19 = add(copy _19, const 1: isize);
+    goto bb11;
+  }
+  bb6: {
+    goto bb4;
+  }
+  bb7: {
+    drop_glue(_10);
+    storage_dead(_10);
+    drop_glue(_15);
+    storage_dead(_15);
+    drop_glue(_13);
+    storage_dead(_13);
+    drop_glue(_11);
+    storage_dead(_11);
+    return;
+  }
+  bb8: {
+    _16 = &_15 [temp-arg];
+    _10 = wordsOf(move _16) -> bb9;
+  }
+  bb9: {
+    _17 = &_10 [temp-arg];
+    _18 = move _17;
+    goto bb10;
+  }
+  bb10: {
+    storage_live(_19);
+    _19 = const 0: isize;
+    goto bb4;
+  }
+  bb11: {
+    _24 = &*_22 [reborrow];
+    _23 = show(move _24) -> bb12;
+  }
+  bb12: {
+    storage_dead(_22);
+    goto bb6;
+  }
+}

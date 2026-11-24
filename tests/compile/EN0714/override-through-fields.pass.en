@@ -1,0 +1,24 @@
+public final class Item {
+  public name: string = "item";
+  private src: &string;
+
+  public constructor(src: &string) {
+    this.src = src;
+  }
+
+  public text(): readonly &string {
+    return this.src;
+  }
+}
+
+public class Namer {
+  public label(o: &Item): readonly &string {
+    return o.text();
+  }
+}
+
+public class Loud extends Namer {
+  public override label(o: &Item): readonly &string {
+    return o.text().slice(0, 1);
+  }
+}

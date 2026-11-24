@@ -1,0 +1,5 @@
+let s: string = "ab".toString();
+s += "-".repeat(s.length());
+console.log(s);
+s += s.toUpperCase();
+console.log(s);

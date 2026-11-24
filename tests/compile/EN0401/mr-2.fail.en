@@ -1,0 +1,11 @@
+let buf: u8[4] = [0; 4];
+addOne(&buf); //~ EN0401 "a fixed array can't grow"
+reset(&buf); //~ EN0401 "a fixed array can't grow"
+
+private function addOne(xs: &u8[]): void {
+  xs.push(1);
+}
+
+private function reset(xs: &u8[]): void {
+  mem.replace(xs, [9]);
+}

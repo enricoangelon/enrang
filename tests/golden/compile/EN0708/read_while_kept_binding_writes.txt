@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0708/read_while_kept_binding_writes.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `q` can't be read while `keep` may write into it
+ --> tests/compile/EN0708/read_while_kept_binding_writes.fail.en:6:13
+  |
+3 | for (const x of &q) {
+  |                  - borrowed for writing here, because `keep` writes on line 7
+4 |   if (*x > 2) { keep = x; }
+5 | }
+6 | console.log(q[0]); //~ EN0708 "`q` can't be read while `keep` may write into it"
+  |             ^^^^ read here
+7 | if (keep != null) { *keep = 0; }
+  |     ---- the write
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `q` before line 3 or after line 7
+  = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

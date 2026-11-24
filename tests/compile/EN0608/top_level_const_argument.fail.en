@@ -1,0 +1,7 @@
+zero(&TABLE); //~ EN0608
+
+private const TABLE: i64[3] = [1, 2, 3];
+
+public function zero(xs: &i64[3]): void {
+  xs[0] = 0;
+}

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/loop_binding_readonly_field.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `firstCell`
+ --> tests/compile/EN0616/loop_binding_readonly_field.fail.en:5:3
+  |
+5 |   *c = 9; //~ EN0616 "cannot change the object returned by `firstCell`"
+  |   ^^^^^^ written here
+  |
+  = note: `firstCell` returns a reference reached from the `readonly` field `cells`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

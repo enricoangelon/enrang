@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0504/arm_types.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0504]: `Shape.Circle` can't match a `Color`
+  --> tests/compile/EN0504/arm_types.fail.en:13:5
+   |
+13 |     Shape.Circle => "circle", //~ EN0504 "`Shape.Circle` can't match a `Color`"
+   |     ^^^^^^^^^^^^ the subject is `Color`
+   |
+   = explain: run `enrang explain EN0504`
+
+error[EN0504]: `"one"` can't match an `i64`
+  --> tests/compile/EN0504/arm_types.fail.en:20:5
+   |
+20 |     "one" => "one", //~ EN0504 "can't match an `i64`"
+   |     ^^^^^ the subject is `i64`
+   |
+   = explain: run `enrang explain EN0504`
+
+error: aborting due to 2 previous errors

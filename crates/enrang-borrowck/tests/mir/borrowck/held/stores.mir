@@ -1,0 +1,188 @@
+// Writes and stores (A:1112-1206): the read-set check's parameter and local parts,
+// a nested value's, the store into `caller(m)`, a store through a capture and
+// through a consumed value, a whole-value write (FV-02-copier, FV-02-alias,
+// FV-02-nested-ref, D20-core-5, A:1200).
+// Source:
+//   class Copier { private src: readonly &Slice<u8>; private dst: &Slice<u8>; private pos: isize;
+//     step() writes through dst; setSrc(s: &Slice<u8>) { this.src = s; } }   // body-less here
+//   class Outer { inner: Copier; }
+//   fused(c: &Copier) { c.src = c.dst; }                        // EN0616
+//   fromParam(c: &Copier, s: &Slice<u8>) { c.src = s; }         // stores (1, 0) read
+//   fromSrc(c: &Copier) { c.src = c.src; }
+//   local(s: &Slice<u8>, d: &Slice<u8>) { let w = new Copier { src: s, dst: d, pos: 0 }; const p = w.dst; w.src = p; }   // EN0616
+//   nested(s, d) { let o = new Outer { inner: new Copier { src: s, dst: d, pos: 0 } }; const p = o.inner.dst; o.inner.src = p; }   // EN0616
+//   reset(c: &Copier, n: Copier) { *c = n; }                    // a whole value
+//   byval(let w: Copier, s: &Slice<u8>) { const r = &w; r.setSrc(s); }   // EN0616, consumed
+//   Copier.consume(s), a `move` method: { this.setSrc(s); }     // EN0616, consumed `this`
+//   user(lx: &Copier) { const f = (w: &Slice<u8>) => { lx.setSrc(w); }; }   // EN0616 in the arrow
+// Shapes: field copies through `*_1` and of a local's field as one `Use(Copy)`
+// (A:935), writes of a field through `*_1` and of a local's field (c.8), a whole
+// value through `*_1` after its `drop [assign]` (c.8), named forms as `named_fill`
+// then each field written (c.10), receivers' reborrows and
+// auto-borrows emitted last (c.2, c.6, c.7), an arrow's capture through `*_1`
+// (c.16).
+@final class Copier writes_through_fields {
+  src: readonly &Slice<u8>;
+  dst: &Slice<u8>;
+  pos: isize;
+}
+class Outer {
+  inner: Copier;
+}
+fn Copier::setSrc(_1: &Copier, _2: &Slice<u8>) -> void perms(write, read) sources() stores(1 -> 0 read) result none;
+
+fn fused(_1: &Copier) -> void {
+  let _2: &Slice<u8> temp;
+  bb0: {
+    _2 = copy (*_1).dst;
+    (*_1).src = move _2; //~ EN0616
+    return;
+  }
+}
+fn fromParam(_1: &Copier, _2: &Slice<u8>) -> void {
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+fn fromSrc(_1: &Copier) -> void {
+  let _2: &Slice<u8> temp;
+  bb0: {
+    _2 = copy (*_1).src;
+    (*_1).src = move _2;
+    return;
+  }
+}
+fn local(_1: &Slice<u8>, _2: &Slice<u8>) -> void {
+  let mut _3: Copier; // w
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  let _6: &Slice<u8>; // p
+  let _7: &Slice<u8> temp;
+  let _8: *Copier temp;
+  let _9: void temp;
+  bb0: {
+    storage_live(_3);
+    _4 = &*_1 [reborrow];
+    _5 = &*_2 [reborrow];
+    _8 = addr_of _3;
+    _9 = named_fill Copier leaving()(copy _8) -> bb1;
+  }
+  bb1: {
+    _3.src = move _4;
+    _3.dst = move _5;
+    _3.pos = const 0: isize;
+    storage_live(_6);
+    _6 = copy _3.dst;
+    _7 = &*_6 [reborrow];
+    _3.src = move _7; //~ EN0616
+    storage_dead(_6);
+    storage_dead(_3);
+    return;
+  }
+}
+fn nested(_1: &Slice<u8>, _2: &Slice<u8>) -> void {
+  let mut _3: Outer; // o
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  let _6: Copier temp;
+  let _7: &Slice<u8>; // p
+  let _8: &Slice<u8> temp;
+  let _9: *Copier temp;
+  let _10: void temp;
+  let _11: *Outer temp;
+  bb0: {
+    storage_live(_3);
+    _4 = &*_1 [reborrow];
+    _5 = &*_2 [reborrow];
+    _9 = addr_of _6;
+    _10 = named_fill Copier leaving()(copy _9) -> bb1;
+  }
+  bb1: {
+    _6.src = move _4;
+    _6.dst = move _5;
+    _6.pos = const 0: isize;
+    _11 = addr_of _3;
+    _10 = named_fill Outer leaving()(copy _11) -> bb2;
+  }
+  bb2: {
+    _3.inner = move _6;
+    storage_live(_7);
+    _7 = copy _3.inner.dst;
+    _8 = &*_7 [reborrow];
+    _3.inner.src = move _8; //~ EN0616
+    storage_dead(_7);
+    storage_dead(_3);
+    return;
+  }
+}
+fn reset(_1: &Copier, _2: Copier) -> void {
+  bb0: {
+    drop(*_1) [assign];
+    *_1 = move _2;
+    return;
+  }
+}
+fn byval(let _1: Copier, _2: &Slice<u8>) -> void {
+  let _3: &Copier; // r
+  let _4: &Copier temp;
+  let _5: &Slice<u8> temp;
+  let _6: void temp;
+  bb0: {
+    storage_live(_3);
+    _3 = &_1 [explicit];
+    _5 = &*_2 [reborrow];
+    _4 = &*_3 [reborrow];
+    _6 = Copier::setSrc(move _4, move _5) -> bb1; //~ EN0616
+  }
+  bb1: {
+    storage_dead(_3);
+    return;
+  }
+}
+move fn Copier::consume(_1: &Copier, _2: &Slice<u8>) -> void {
+  let _3: &Copier temp;
+  let _4: &Slice<u8> temp;
+  let _5: void temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = &*_1 [reborrow];
+    _5 = Copier::setSrc(move _3, move _4) -> bb1; //~ EN0616
+  }
+  bb1: {
+    return;
+  }
+}
+fn user(_1: &Copier) -> void {
+  bb0: {
+    return;
+  }
+}
+arrow#0 of fn user (_1: &[&Copier], _2: &Slice<u8>) -> void {
+  let _1: &[&Copier] env;
+  capture lx: &Copier through_ref;
+  let _3: &Copier temp;
+  let _4: &Slice<u8> temp;
+  let _5: void temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = &*(*_1).0 [reborrow];
+    _5 = Copier::setSrc(move _3, move _4) -> bb1; //~ EN0616
+  }
+  bb1: {
+    return;
+  }
+}
+fn Copier::step(_1: &Copier) -> void {
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = copy (*_1).pos;
+    _3 = len((*(*_1).dst));
+    check_bounds(copy _2, copy _3);
+    (*(*_1).dst)[_2] = const 0: u8;
+    return;
+  }
+}

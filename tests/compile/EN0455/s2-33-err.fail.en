@@ -1,0 +1,30 @@
+show(checkName(""));
+
+public function checkName(name: &string): Result<string> {
+  let msg: string = "";
+  if (name.isEmpty()) {
+    msg = "name is empty";
+  }
+  if (!msg.isEmpty()) {
+    return msg; //~ EN0455 "`msg` could be a success or an error here"
+  }
+  return Ok(name.toUpperCase());
+}
+
+public function checkNameUpper(name: &string): Result<string> {
+  let msg: string = "";
+  if (name.isEmpty()) {
+    msg = "name is empty";
+  }
+  if (!msg.isEmpty()) {
+    return Err(msg);
+  }
+  return name.toUpperCase(); //~ EN0455 "could be a success or an error here"
+}
+
+public function show(r: Result<string>): void {
+  match (r) {
+    Ok => console.log(r.value),
+    Err => console.log(`caught: ${r.error}`),
+  }
+}

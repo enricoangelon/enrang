@@ -1,0 +1,13 @@
+//! covers: H16
+let p = new P { a: 1, b: 2 };
+show(&p.b); //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+
+private function show(x: &u32): void {
+  console.log(*x);
+}
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32;
+}

@@ -1,0 +1,5 @@
+$ enrang check main.en
+[exit 2]
+[stdout]
+[stderr]
+error: enrang.json is not valid JSON: line 3, column 1

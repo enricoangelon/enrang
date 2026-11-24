@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/loop_binding_readonly_reference_field.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `find`
+ --> tests/compile/EN0616/loop_binding_readonly_reference_field.fail.en:6:3
+  |
+6 |   *hit = [9]; //~ EN0616 "cannot change the object returned by `find`"
+  |   ^^^^^^^^^^ written here
+  |
+  = note: `find` returns a reference reached from the `readonly &` field `rows`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

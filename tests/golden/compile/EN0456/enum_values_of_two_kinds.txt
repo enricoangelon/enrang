@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0456/enum_values_of_two_kinds.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0456]: `Status` mixes number and text values
+ --> tests/compile/EN0456/enum_values_of_two_kinds.fail.en:3:13
+  |
+2 |   Ok = 200,
+  |        --- the first value is a number
+3 |   Missing = "not found", //~ EN0456 "`Status` mixes number and text values"
+  |             ^^^^^^^^^^^ a text after number values
+  |
+  = explain: run `enrang explain EN0456`
+
+error: aborting due to 1 previous error

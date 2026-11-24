@@ -1,0 +1,12 @@
+let a: i64 = 1;
+let r: &i64 = &a;
+const xs: i64[] = [1, 2];
+xs.forEach((x: &i64) => { console.log(*x, *r); });
+apply((x: &i64): void => { console.log(*x, *r); });
+const f = (x: &i64): void => { console.log(*x, *r); };
+console.log(*r);
+
+private function apply(g: (x: &i64) => void): void {
+  let k: i64 = 0;
+  g(&k);
+}

@@ -1,0 +1,41 @@
+$ enrang check tests/compile/EN0609/h42-shape.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0609]: `setx` can write `c.x`, but `x` is `readonly`
+  --> tests/compile/EN0609/h42-shape.fail.en:6:6
+   |
+ 6 | setx(&c); //~ EN0609 "`setx` can write `c.x`, but `x` is `readonly`"
+   |      ^^ `setx` writes through it
+...
+12 |   public readonly x: i64 = 1;
+   |   --------------------------- `x` is declared `readonly` here
+   |
+   = note: a `readonly` field is set only by its class's constructor
+   = explain: run `enrang explain EN0609`
+
+error[EN0609]: `sety` can write `c.y`, but `y` is `readonly`
+  --> tests/compile/EN0609/h42-shape.fail.en:7:6
+   |
+ 7 | sety(&c); //~ EN0609 "`sety` can write `c.y`, but `y` is `readonly`"
+   |      ^^ `sety` writes through it
+...
+13 |   public readonly y: i64 = 2;
+   |   --------------------------- `y` is declared `readonly` here
+   |
+   = note: a `readonly` field is set only by its class's constructor
+   = explain: run `enrang explain EN0609`
+
+error[EN0609]: `setz` can write `c.z`, but `z` is `readonly`
+  --> tests/compile/EN0609/h42-shape.fail.en:8:6
+   |
+ 8 | setz(c); //~ EN0609 "`setz` can write `c.z`, but `z` is `readonly`"
+   |      ^ `setz` writes through it
+...
+14 |   public readonly z: i64 = 3;
+   |   --------------------------- `z` is declared `readonly` here
+   |
+   = note: a `readonly` field is set only by its class's constructor
+   = explain: run `enrang explain EN0609`
+
+error: aborting due to 3 previous errors

@@ -1,0 +1,12 @@
+private class Pad {
+  private t: [readonly &i64[], i32];
+  public constructor(v: &i64[]) {
+    this.t = [v, 0];
+  }
+  public first(): readonly &i64 {
+    return &this.t[0][0];
+  }
+  public grow(): void {
+    this.t[0].push(4); //~ EN0614
+  }
+}

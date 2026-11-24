@@ -1,0 +1,3 @@
+let k: keyof Point = "x"; //~ EN1023 "type-level computation is not supported yet"
+let m: { [K in Keys]: i64 } = n; //~ EN1023 "type-level computation is not supported yet"
+let c: T extends U ? X : Y = v; //~ EN1023 "type-level computation is not supported yet"

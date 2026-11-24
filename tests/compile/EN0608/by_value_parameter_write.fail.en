@@ -1,0 +1,8 @@
+public class Point {
+  public x: i64 = 0;
+}
+
+public function reset(p: Point): void {
+  p.x = 1; //~ EN0608
+  console.log(p.x);
+}

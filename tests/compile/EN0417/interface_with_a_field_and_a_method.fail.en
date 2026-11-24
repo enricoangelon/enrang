@@ -1,0 +1,4 @@
+public interface Named {
+  name: string; //~ EN0417 "interface `Named` mixes fields and methods"
+  greet(): string;
+}

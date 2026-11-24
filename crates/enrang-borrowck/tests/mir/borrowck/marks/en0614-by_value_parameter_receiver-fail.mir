@@ -1,0 +1,30 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0614/by_value_parameter_receiver.fail.en. Its row's codes: EN0614.
+module "tests/compile/EN0614/by_value_parameter_receiver.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+fn addOne(_1: i64[]) -> isize {
+  let _1: i64[]; // xs
+  let _2: void temp;
+  let _3: &i64[] temp;
+  let _4: &i64[] temp;
+  bb0: {
+    _3 = &_1 [auto-borrow];
+    _2 = "alloc/array"::Array<i64>::push(move _3, const 1: i64) -> bb1; //~ EN0614
+  }
+  bb1: {
+    _4 = &_1 [auto-borrow];
+    _0 = "alloc/array"::Array<i64>::length(move _4) -> bb2;
+  }
+  bb2: {
+    drop(_1);
+    return;
+  }
+}

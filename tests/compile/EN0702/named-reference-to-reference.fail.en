@@ -1,0 +1,2 @@
+//! row: `&&T`
+public function f<T>(r: &&T): void {} //~ EN0702 "a reference can't point to a reference"

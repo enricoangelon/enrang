@@ -1,0 +1,15 @@
+public class Person {
+  public constructor(public name: string) {}
+}
+
+public class Shape {
+  public color: string = "red";
+  public owner: Person;
+}
+
+public class Circle extends Shape {
+  public constructor(public r: i64, o: Person) {
+    super();
+    console.log(o.name);
+  } //~ EN0610 "`owner` is not set"
+}

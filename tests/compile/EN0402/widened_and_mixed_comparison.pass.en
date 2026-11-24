@@ -1,0 +1,10 @@
+const data: u8[] = [1, 2, 3];
+const pos: int = 1;
+const left = data.length() - (pos as isize);
+const small: i32 = 2;
+const wide: i64 = 3;
+const sum = (small as i64) + wide;
+console.log(left, sum, pos >= data.length());
+const count: i64 = 3;
+const limit: f64 = 2.5;
+console.log((count as f64) < limit);

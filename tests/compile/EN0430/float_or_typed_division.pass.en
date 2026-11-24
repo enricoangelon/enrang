@@ -1,0 +1,4 @@
+const half = 7.0 / 2.0;
+const n: i64 = 7;
+const m = n / 2;
+console.log(half, m);

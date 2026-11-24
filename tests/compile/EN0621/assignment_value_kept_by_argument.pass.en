@@ -1,0 +1,10 @@
+let s: string = "a".toString();
+look(&(s += "?"));
+
+public function keep(t: string): void {
+  console.log(t);
+}
+
+public function look(t: &string): void {
+  console.log(t);
+}

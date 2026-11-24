@@ -1,0 +1,10 @@
+let a = new Pt(1, 2);
+let r = &a;
+const t = r.clone().taken();
+console.log(t.x);
+
+private class Pt implements Clone {
+  public constructor(public x: i64, public y: i64) {}
+  public clone(): Pt { return new Pt(this.x, this.y); }
+  public move taken(): Pt { return this; }
+}

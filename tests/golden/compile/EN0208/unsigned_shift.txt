@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0208/unsigned_shift.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0208]: `>>>` does not exist in Enrang
+ --> tests/compile/EN0208/unsigned_shift.fail.en:2:13
+  |
+2 | const y = x >>> 2; //~ EN0208
+  |             ^^^ use `>>` here
+  |
+  = from TypeScript: `>>` shifts zeros in on an unsigned type and copies the sign bit on a signed one, so the operand's type picks the shift.
+help: replace `>>>` with `>>`, on an unsigned operand
+  |
+2 | const y = x >> 2; //~ EN0208
+  |             ~~
+  = explain: run `enrang explain EN0208`
+
+error: aborting due to 1 previous error

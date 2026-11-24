@@ -1,0 +1,7 @@
+let count: i64 = 0;
+const r = peek();
+console.log(*r);
+
+function peek(): &i64 {
+  return &count; //~ EN0714
+}

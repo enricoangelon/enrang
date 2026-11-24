@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0614/attack1-h31-copy-join.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `lanes` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/attack1-h31-copy-join.fail.en:7:1
+  |
+7 | v.push(3); //~ EN0614
+  | ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

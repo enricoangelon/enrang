@@ -1,0 +1,10 @@
+//! row: `const a: i64[3] = [...b];`, `const n: (
+//! covers: H03
+const b: i64[] = [1, 2, 3];
+const xs: i64[] = [1, 2];
+const a: i64[3] = [...b]; //~ EN0401
+const n: (i64 | null)[] = [...xs]; //~ EN0401
+const m: (i64 | null)[] = [0, ...xs]; //~ EN0401
+const p: i32[] = [1];
+const q: i64[] = [2];
+const both = [...p, ...q]; //~ EN0401

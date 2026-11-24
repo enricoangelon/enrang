@@ -1,0 +1,7 @@
+public function run(): void {
+  try { //~ EN0207 "`try` does not exist in Enrang"
+    work();
+  } catch (e) {
+    console.log("failed");
+  }
+}

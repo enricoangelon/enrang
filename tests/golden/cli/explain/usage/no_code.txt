@@ -1,0 +1,6 @@
+$ enrang explain
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang explain` needs a code
+usage: enrang explain <code>

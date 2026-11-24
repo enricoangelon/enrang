@@ -1,0 +1,17 @@
+public function written(xs: &Slice<i64>): void {
+  for (const a of xs) {
+    for (const b of xs) { //~ EN0707
+      *b = 1;
+    }
+    *a = 2;
+  }
+}
+
+public function read(xs: &Slice<i64>): void {
+  for (const a of xs) {
+    for (const b of xs) { //~ EN0708
+      console.log(*b);
+    }
+    *a = 2;
+  }
+}

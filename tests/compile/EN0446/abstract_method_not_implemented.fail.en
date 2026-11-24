@@ -1,0 +1,7 @@
+public abstract class Shape {
+  public abstract area(): f64;
+}
+
+public class Square extends Shape { //~ EN0446 "`Square` does not implement `Shape.area`"
+  public side: f64;
+}

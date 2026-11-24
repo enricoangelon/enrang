@@ -1,0 +1,6 @@
+let n = 1;
+bump(&n);
+
+function bump(x: &i64): void {
+  *x += 1;
+}

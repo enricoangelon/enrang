@@ -1,0 +1,79 @@
+$ enrang check --emit=mir main.en
+[exit 0]
+[stdout]
+statements (_1: string[]) -> int {
+  phase elaborated;
+  let _1: string[]; // args
+  let mut _2: string; // a
+  let _3: string temp;
+  let _4: &string temp;
+  let mut _5: string; // b
+  let _6: string temp;
+  let _7: &string temp;
+  let _8: void temp;
+  let _9: [string, string] temp;
+  let _10: string temp;
+  let _11: string temp;
+  let mut _12: int; // n
+  let mut _13: int; // m
+  let _14: void temp;
+  let _15: [int, int] temp;
+  let _16: int temp;
+  let _17: int temp;
+  let _18: void temp;
+  let _19: &string temp;
+  let _20: &string temp;
+  let _21: &int temp;
+  let _22: &int temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "left": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop_glue(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = const "right": string;
+    _7 = &_6 [temp-arg];
+    _5 = form to_string(move _7) -> bb2;
+  }
+  bb2: {
+    drop_glue(_6);
+    storage_dead(_6);
+    _9 = tuple(move _5, move _2);
+    _10 = move _9.0;
+    _2 = move _10;
+    _11 = move _9.1;
+    _5 = move _11;
+    storage_dead(_11);
+    storage_dead(_10);
+    storage_dead(_9);
+    storage_live(_12);
+    _12 = const 1: int;
+    storage_live(_13);
+    _13 = const 2: int;
+    _15 = tuple(copy _13, copy _12);
+    _16 = copy _15.0;
+    _12 = copy _16;
+    _17 = copy _15.1;
+    _13 = copy _17;
+    _19 = &_2 [auto-borrow];
+    _20 = &_5 [auto-borrow];
+    _21 = &_12 [auto-borrow];
+    _22 = &_13 [auto-borrow];
+    _18 = form log(move _19, move _20, move _21, move _22) -> bb3;
+  }
+  bb3: {
+    storage_dead(_13);
+    storage_dead(_12);
+    drop_glue(_5);
+    storage_dead(_5);
+    drop_glue(_2);
+    storage_dead(_2);
+    drop_glue(_1);
+    return;
+  }
+}
+[stderr]

@@ -1,0 +1,7 @@
+$ enrang targets --evidence=yes
+[exit 2]
+[stdout]
+[stderr]
+error: `--evidence=yes` is not a flag of `enrang targets`
+help: did you mean `--evidence`?
+usage: enrang targets [--evidence]

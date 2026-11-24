@@ -1,0 +1,10 @@
+error[EN0610]: `owner` is not set
+ --> main.en:6:3
+  |
+6 |   }
+  |   ^ the constructor returns here
+  |
+help: assign this.owner after super()
+  = explain: run `enrang explain EN0610`
+
+error: aborting due to 1 previous error

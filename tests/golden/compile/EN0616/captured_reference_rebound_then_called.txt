@@ -1,0 +1,39 @@
+$ enrang check tests/compile/EN0616/captured_reference_rebound_then_called.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot repoint captured `r` inside the arrow
+ --> tests/compile/EN0616/captured_reference_rebound_then_called.fail.en:3:32
+  |
+3 | const f = (x: &i64): void => { r = x; }; //~ EN0616 "cannot repoint captured `r` inside the arrow"
+  |                                ^^^^^ repointed here
+  |
+  = note: the arrow holds its own copy of the reference `r`, so the change would not reach the variable outside
+help: return the new reference and assign it to `r` outside, or write through it with `*r`
+  = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot repoint captured `q` inside the arrow
+  --> tests/compile/EN0616/captured_reference_rebound_then_called.fail.en:11:5
+   |
+11 |     q = x; //~ EN0616 "cannot repoint captured `q` inside the arrow"
+   |     ^^^^^ repointed here
+   |
+   = note: the arrow holds its own copy of the reference `q`, so the change would not reach the variable outside
+help: return the new reference and assign it to `q` outside, or write through it with `*q`
+   = explain: run `enrang explain EN0616`
+
+error[EN0708]: `c` can't be read while `q` may write into it
+  --> tests/compile/EN0616/captured_reference_rebound_then_called.fail.en:14:5
+   |
+ 9 |   let q: &i64 = &c;
+   |                 -- borrowed for writing here, because `q` writes on line 14
+...
+14 |   g(&c); //~ EN0708 "`c` can't be read while `q` may write into it"
+   |     ^^ read here
+   |   - the write
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `c` before line 9 or after line 14
+   = explain: run `enrang explain EN0708`
+
+error: aborting due to 3 previous errors

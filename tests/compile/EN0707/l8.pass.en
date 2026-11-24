@@ -1,0 +1,13 @@
+//! row: `l8`: a local function's hidden argument
+//! row: `l1`-`l10`, local functions, among them `let
+let count = 0;
+function next(): i64 {
+  count += 1;
+  return count;
+}
+const k = next();
+bump(&count, k);
+
+function bump(x: &i64, k: i64): void {
+  *x += k;
+}

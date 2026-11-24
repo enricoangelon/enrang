@@ -1,0 +1,13 @@
+@packed public class P1 { //~ EN0827 "a `@packed` class must be `final`"
+  public a: u8;
+}
+
+public class Base {}
+
+@packed public final class P2 extends Base { //~ EN0827 "a `@packed` class can't extend another class"
+  public a: u8;
+}
+
+@align(16) public class Al { //~ EN0827 "a `@align(16)` class must be `final`"
+  public a: u8;
+}

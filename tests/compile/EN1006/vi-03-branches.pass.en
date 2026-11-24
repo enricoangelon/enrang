@@ -1,0 +1,28 @@
+const c = true;
+relay(c ? new Dog {} : new Dog {});
+const rex = new Dog {};
+const robo = new Robot {};
+console.log(pick(&rex, &robo, true).speak(), pick(&rex, &robo, false).speak());
+repoint(&rex, &robo);
+
+private function relay(x: Speaker): void { console.log(x.speak()); }
+
+private function pick(a: &Speaker, b: &Speaker, first: bool): &Speaker { return first ? a : b; }
+
+private function repoint(a: &Speaker, b: &Speaker): void {
+  let t: &Speaker = a;
+  t = b;
+  console.log(t.speak());
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Dog implements Speaker {
+  public speak(): string { return "Rex barks"; }
+}
+
+public final class Robot implements Speaker {
+  public speak(): string { return "beep"; }
+}

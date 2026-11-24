@@ -1,0 +1,15 @@
+target "i386-linux";
+module "src/app";
+class "lib/geo"::Point {
+  x: isize;
+}
+fn "lib/geo"::origin() -> Point;
+
+fn make() -> Point {
+  bb0: {
+    _0 = "lib/geo"::origin() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

@@ -1,0 +1,38 @@
+let source: string = "abc";
+let lx = new Lexer(&source);
+let words: string[] = ["a".toString(), "b".toString()];
+words.forEach((w: &string) => { lx.setSrc(w); }); //~ EN0616
+words = [];
+console.log(lx.next());
+
+let lx2 = new Lexer(&source);
+{
+  const tmp = "x" + "y";
+  const g = () => { lx2.setSrc(&tmp); }; //~ EN0616
+  g();
+}
+
+private function run(f: () => void): void {
+  f();
+}
+
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();
+    return this.src.slice(start, this.pos);
+  }
+
+  public setSrc(s: &string): void { this.src = s; }
+
+  public reset(): void {
+    const tmp = "x" + "y";
+    run(() => { this.src = &tmp; }); //~ EN0616
+  }
+}

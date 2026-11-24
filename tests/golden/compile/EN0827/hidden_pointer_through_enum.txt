@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0827/hidden_pointer_through_enum.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0827]: a `@repr("C")` class can't hold `Animal` inline
+ --> tests/compile/EN0827/hidden_pointer_through_enum.fail.en:2:16
+  |
+2 |   public slot: Slot; //~ EN0827 "class can't hold `Animal` inline"
+  |                ^^^^ `Animal` carries a hidden method-table pointer
+  |
+  = explain: run `enrang explain EN0827`
+
+error: aborting due to 1 previous error

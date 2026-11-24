@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0460/method_taking_an_interface_or_an_object_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0460]: `hear` takes an interface by value, so it can't be overridden
+  --> tests/compile/EN0460/method_taking_an_interface_or_an_object_type.fail.en:16:19
+   |
+ 6 |   public hear(s: Speaker): string {
+   |          ---- `Animal.hear` is declared here
+...
+16 |   public override hear(s: Speaker): string { //~ EN0460 "`hear` takes an interface by value, so it can't be overridden"
+   |                   ^^^^ `Animal.hear` is compiled once per type, so it has no method-table slot
+   |
+help: give Dog's method another name
+   = explain: run `enrang explain EN0460`
+
+error[EN0460]: `greet` takes an object type, so it can't be overridden
+  --> tests/compile/EN0460/method_taking_an_interface_or_an_object_type.fail.en:20:19
+   |
+10 |   public greet(x: { name: string }): void {
+   |          ----- `Animal.greet` is declared here
+...
+20 |   public override greet(x: { name: string }): void { //~ EN0460 "`greet` takes an object type, so it can't be overridden"
+   |                   ^^^^^ `Animal.greet` is compiled once per type, so it has no method-table slot
+   |
+help: give Dog's method another name
+   = explain: run `enrang explain EN0460`
+
+error: aborting due to 2 previous errors

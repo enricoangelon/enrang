@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0621/assignment_value_kept_by_chain.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0621]: an assignment's value can't be kept
+ --> tests/compile/EN0621/assignment_value_kept_by_chain.fail.en:3:5
+  |
+3 | a = b = "xx".toString(); //~ EN0621 "an assignment's value can't be kept"
+  |     ^^^^^^^^^^^^^^^^^^^ `b = "xx".toString()` is still owned by `b`
+  |
+help: assign one at a time: `b = "xx".toString(); a = b.clone();`
+  = explain: run `enrang explain EN0621`
+
+error: aborting due to 1 previous error

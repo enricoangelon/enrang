@@ -1,0 +1,10 @@
+private unsafe let hits: i64 = 0;
+
+public class Counter {
+  private n: i64 = 0;
+
+  public pick(a: &i64): &i64 {
+    unsafe { hits += 1; }
+    return a; //~ EN0714
+  }
+}

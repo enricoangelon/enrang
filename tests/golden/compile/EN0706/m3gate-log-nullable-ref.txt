@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0706/m3gate-log-nullable-ref.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `a` cannot change while a borrow of it is still used
+ --> tests/compile/EN0706/m3gate-log-nullable-ref.fail.en:3:21
+  |
+2 | const f = a.first();
+  |           - shared borrow of `a` starts here
+3 | console.log(f, grow(&a)); //~ EN0706 "`a` cannot change while a"
+  |                     ^^ `a` changes here
+  | ------------------------ the borrow is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

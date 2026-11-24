@@ -1,0 +1,10 @@
+// A generic `&T | null` result with `T` bound to `string`, plain and bounded.
+const words: string[] = ["a", "b"];
+const w = first(&words);
+const x: &string = w ?? "none";
+const m = maxOf(&words) ?? "none";
+console.log(x, m);
+
+private function first<T>(xs: &T[]): &T | null { return xs.first(); }
+
+private function maxOf<T extends Ord>(xs: &T[]): &T | null { return xs.first(); }

@@ -1,0 +1,37 @@
+$ enrang check tests/compile/EN0826/packed_fields.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0826]: `@packed` field must be Copy and non-generic
+ --> tests/compile/EN0826/packed_fields.fail.en:2:13
+  |
+2 |   public s: string; //~ EN0826 "`@packed` field must be Copy and non-generic"
+  |             ^^^^^^ `string` is not Copy
+  |
+  = explain: run `enrang explain EN0826`
+
+error[EN0826]: `@packed` field must be Copy and non-generic
+ --> tests/compile/EN0826/packed_fields.fail.en:6:13
+  |
+6 |   public v: T; //~ EN0826 "`@packed` field must be Copy and non-generic"
+  |             ^ `T` is generic
+  |
+  = explain: run `enrang explain EN0826`
+
+error[EN0826]: `@packed` field must be Copy and non-generic
+  --> tests/compile/EN0826/packed_fields.fail.en:10:14
+   |
+10 |   public xs: u8[]; //~ EN0826 "`@packed` field must be Copy and non-generic"
+   |              ^^^^ `u8[]` is not Copy
+   |
+   = explain: run `enrang explain EN0826`
+
+error[EN0826]: `@packed` field must be Copy and non-generic
+  --> tests/compile/EN0826/packed_fields.fail.en:11:13
+   |
+11 |   public b: Box<u8>; //~ EN0826 "`@packed` field must be Copy and non-generic"
+   |             ^^^^^^^ `Box<u8>` is not Copy
+   |
+   = explain: run `enrang explain EN0826`
+
+error: aborting due to 4 previous errors

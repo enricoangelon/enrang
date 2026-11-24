@@ -1,0 +1,45 @@
+$ enrang check tests/compile/EN0707/s2-22-string.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: `s` can't be borrowed for writing while the assignment to it waits
+ --> tests/compile/EN0707/s2-22-string.fail.en:3:14
+  |
+3 |   s += reset(&s); //~ EN0707
+  |              ^^ exclusive borrow while the assignment waits to store
+  |   -------------- the assignment reserves `s` here
+  |
+help: run the right side first: `const r = reset(&s); s += r;`
+  = explain: run `enrang explain EN0707`
+
+error[EN0707]: `names` can't be borrowed for writing while the assignment to it waits
+ --> tests/compile/EN0707/s2-22-string.fail.en:9:20
+  |
+9 |   names[0] += take(&names); //~ EN0707
+  |                    ^^^^^^ exclusive borrow while the assignment waits to store
+  |   ------------------------ the assignment reserves `names` here
+  |
+help: run the right side first: `const r = take(&names); names[0] += r;`
+  = explain: run `enrang explain EN0707`
+
+error[EN0708]: `s` can't be read here while the assignment appends to it
+  --> tests/compile/EN0707/s2-22-string.fail.en:15:8
+   |
+15 |   s += s.slice(0, 1); //~ EN0708
+   |        ^^^^^^^^^^^^^ read here, and still used when the assignment stores
+   |
+help: append a copy: `s += s.slice(0, 1).toString();`
+   = explain: run `enrang explain EN0708`
+
+error[EN0709]: cannot move `s` while it is borrowed
+  --> tests/compile/EN0707/s2-22-string.fail.en:21:8
+   |
+21 |   s += eat(s); //~ EN0709
+   |        ^^^^^^ `s` moves here
+   |   ----------- exclusive borrow of `s` starts here
+   |   ----------- the borrow is still in use here
+   |
+help: move `s` after its last borrow, or move a copy: `s.clone()`
+   = explain: run `enrang explain EN0709`
+
+error: aborting due to 4 previous errors

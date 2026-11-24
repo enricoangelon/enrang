@@ -1,0 +1,19 @@
+//! row: `for (const a of &q) { for (const b of &
+private function nested(): void {
+  let q: i64[] = [1, 2];
+  for (const a of &q) {
+    for (const b of &q) {
+      console.log(a, b);
+    }
+  }
+  q.push(1);
+}
+
+private function twoPushes(): void {
+  let queue = ["a", "b"];
+  for (const job of &queue) {
+    queue.push("x");
+    queue.push("y");
+    break;
+  }
+}

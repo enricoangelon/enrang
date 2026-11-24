@@ -1,0 +1,91 @@
+$ enrang check tests/compile/EN0706/forof-source-forms.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `this.items` cannot change while a borrow of it is still used
+ --> tests/compile/EN0706/forof-source-forms.fail.en:7:7
+  |
+6 |     for (const x of this.view()) {
+  |                     ---- shared borrow of `this` starts here
+  |                     ----------- the borrow is used again here
+7 |       this.items.push(1); //~ EN0706
+  |       ^^^^^^^^^^^^^^^^^^ `push` changes `this.items`, so it needs exclusive access to it
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: `q` cannot change while a borrow of it is still used
+  --> tests/compile/EN0706/forof-source-forms.fail.en:17:5
+   |
+16 |   for (const x of first(&q)) {
+   |                   --------- the borrow is used again here
+   |                         -- shared borrow of `q` starts here
+17 |     q.push(1); //~ EN0706
+   |     ^^^^^^^^^ `push` changes `q`, so it needs exclusive access to it
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0707]: cannot borrow `q` as exclusive twice at the same time
+  --> tests/compile/EN0706/forof-source-forms.fail.en:25:27
+   |
+23 |   for (const x of first(&q)) {
+   |                   --------- `the borrow` is used again here
+   |                         -- first exclusive borrow
+24 |     *x = 1;
+25 |     for (const y of first(&q)) { //~ EN0707
+   |                           ^^ second exclusive borrow
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error[EN0707]: cannot borrow `q` as exclusive twice at the same time
+  --> tests/compile/EN0706/forof-source-forms.fail.en:35:21
+   |
+33 |   for (const x of first(&q)) {
+   |                   --------- `the borrow` is used again here
+   |                         -- first exclusive borrow
+34 |     *x = 1;
+35 |     const s = first(&q); //~ EN0707
+   |                     ^^ second exclusive borrow
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error[EN0706]: `a` cannot change while a borrow of it is still used
+  --> tests/compile/EN0706/forof-source-forms.fail.en:44:5
+   |
+43 |   for (const x of (c ? &a : &b)) {
+   |                    ----------- the borrow is used again here
+   |                        -- shared borrow of `a` starts here
+44 |     a.push(1); //~ EN0706
+   |     ^^^^^^^^^ `push` changes `a`, so it needs exclusive access to it
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `q` cannot change while a borrow of it is still used
+  --> tests/compile/EN0706/forof-source-forms.fail.en:52:5
+   |
+50 |   const r: &i64[] | null = &q;
+   |                            -- shared borrow of `q` starts here
+51 |   for (const x of r!) {
+   |                   -- the borrow is used again here
+52 |     q.push(1); //~ EN0706
+   |     ^^^^^^^^^ `push` changes `q`, so it needs exclusive access to it
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `grid` while iterating over it
+  --> tests/compile/EN0706/forof-source-forms.fail.en:59:5
+   |
+58 |   for (const x of &grid[r]) {
+   |                   -------- immutable borrow begins here
+59 |     grid.push([]); //~ EN0706
+   |     ^^^^^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 7 previous errors

@@ -1,0 +1,7 @@
+let q: i64[] = [1, 2];
+for (const x of &q) {
+  const last = q.last(); //~ EN0706 "cannot mutate `q` while iterating over it"
+  if (last != null) {
+    *last = 0;
+  }
+}

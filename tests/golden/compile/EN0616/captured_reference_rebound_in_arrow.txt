@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0616/captured_reference_rebound_in_arrow.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot repoint captured `r` inside the arrow
+ --> tests/compile/EN0616/captured_reference_rebound_in_arrow.fail.en:4:25
+  |
+4 | const f = (): void => { r = &b; }; //~ EN0616 "cannot repoint captured `r` inside the arrow"
+  |                         ^^^^^^ repointed here
+  |
+  = note: the arrow holds its own copy of the reference `r`, so the change would not reach the variable outside
+help: return the new reference and assign it to `r` outside, or write through it with `*r`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

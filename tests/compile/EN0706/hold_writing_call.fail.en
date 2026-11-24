@@ -1,0 +1,8 @@
+let q: i64[] = [1, 2];
+for (const x of &q) {
+  reset(&q); //~ EN0706 "cannot mutate `q` while iterating over it"
+}
+
+private function reset(v: &i64[]): void {
+  v.clear();
+}

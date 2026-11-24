@@ -1,0 +1,2 @@
+public class Point {}
+import { max } from "./math"; //~ EN0110

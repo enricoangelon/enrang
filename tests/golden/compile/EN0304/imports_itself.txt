@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0304/imports_itself.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0304]: import cycle: `imports_itself.fail.en` imports itself
+ --> tests/compile/EN0304/imports_itself.fail.en:1:21
+  |
+1 | import * as me from "./imports_itself.fail"; //~ EN0304 "import cycle: `imports_itself.fail.en` imports itself"
+  |                     ^^^^^^^^^^^^^^^^^^^^^^^ this import closes the cycle
+  |
+  = explain: run `enrang explain EN0304`
+
+error: aborting due to 1 previous error

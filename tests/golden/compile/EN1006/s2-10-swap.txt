@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN1006/s2-10-swap.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+ --> tests/compile/EN1006/s2-10-swap.fail.en:3:10
+  |
+3 | mem.swap(&*a, &*b); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  |          ^^^ `*a` is a `Speaker` by value
+  |
+  = note: `Speaker` is an interface, so the size of `*a` isn't known
+help: swap the boxes: mem.swap(&a, &b)
+  = explain: run `enrang explain EN1006`
+
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+ --> tests/compile/EN1006/s2-10-swap.fail.en:4:13
+  |
+4 | mem.replace(&*a, new Robot { id: 8 }); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  |             ^^^ `*a` is a `Speaker` by value
+  |
+  = note: `Speaker` is an interface, so the size of `*a` isn't known
+help: mem.replace(&a, new Robot { id: 8 })
+  = explain: run `enrang explain EN1006`
+
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+ --> tests/compile/EN1006/s2-10-swap.fail.en:5:6
+  |
+5 | show(&*a); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  |      ^^^ `*a` is a `Speaker` by value
+  |
+  = note: `Speaker` is an interface, so the size of `*a` isn't known
+help: show(&a)
+  = explain: run `enrang explain EN1006`
+
+error: aborting due to 3 previous errors

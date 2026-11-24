@@ -1,0 +1,12 @@
+//! row: `let q = [1, 2, 3]; for (const x of &q) 
+let q = [1, 2, 3];
+for (const x of q.clone()) {
+  console.log(x);
+  q = [];
+}
+
+let p = [1, 2, 3];
+for (const x of [...p]) {
+  console.log(x);
+  p = [7, 8, 9];
+}

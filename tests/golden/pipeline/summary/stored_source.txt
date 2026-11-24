@@ -1,0 +1,7 @@
+module "main"
+class View
+fn View::#ctor(_1: &View, _2: &i64[]) -> void perms(write, read) sources() stores(1 -> 0) result none;
+//   #0: writes through it
+fn View::first(_1: &View) -> i64 perms(read) sources() result none;
+fn View::keep(_1: &View, _2: &i64[]) -> &i64 perms(write, read) sources(1) stores(1 -> 0) result readonly(stored 1);
+//   #0: writes through it

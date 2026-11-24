@@ -1,0 +1,61 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0708/d20e-06-2.fail.en. Its row's codes: EN0708.
+module "tests/compile/EN0708/d20e-06-2.fail";
+class Cursor {
+  private p: &i64;
+}
+
+fn Cursor::#ctor(_1: &Cursor, _2: &i64) -> void {
+  let _1: &Cursor; // this
+  let _2: &i64; // p
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).p = move _3;
+    return;
+  }
+}
+
+fn Cursor::get(_1: &Cursor) -> &i64 {
+  let _1: &Cursor; // this
+  bb0: {
+    _0 = copy (*_1).p;
+    return;
+  }
+}
+
+fn Cursor::set(_1: &Cursor, _2: &i64) -> void {
+  let _1: &Cursor; // this
+  let _2: &i64; // p
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).p = move _3;
+    return;
+  }
+}
+
+@private fn aim(_1: &Cursor, _2: &i64[]) -> &i64[] {
+  let _1: &Cursor; // c
+  let _2: &i64[]; // xs
+  let _3: void temp;
+  let _4: isize temp;
+  let _5: isize temp;
+  let _6: &i64 temp;
+  let _7: &Cursor temp;
+  let _8: &i64[] temp;
+  bb0: {
+    _4 = const 0: isize;
+    _5 = len(*_2);
+    check_bounds(copy _4, copy _5);
+    _6 = &(*_2)[_4] [explicit];
+    _7 = &*_1 [reborrow];
+    _3 = virtual Cursor::set [copy _7](move _7, move _6) -> bb1;
+  }
+  bb1: {
+    _8 = &*_2 [reborrow]; //~ EN0708
+    _0 = move _8;
+    return;
+  }
+}

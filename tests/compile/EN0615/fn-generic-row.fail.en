@@ -1,0 +1,10 @@
+let s = "abc".toString();
+growVia(head, &s, "zz"); //~ EN0615
+
+private function growVia<T>(f: fn(a: &T) => &T, x: &T, v: T): void {
+  *f(x) = v;
+}
+
+private function head(s: &string): &string {
+  return s.slice(0, 1);
+}

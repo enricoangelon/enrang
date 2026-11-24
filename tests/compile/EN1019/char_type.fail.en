@@ -1,0 +1,5 @@
+const ch: char = "a"; //~ EN1019 "a character type is not supported yet"
+
+public function at(s: &string, i: isize): char { //~ EN1019 "a character type is not supported yet"
+  return s;
+}

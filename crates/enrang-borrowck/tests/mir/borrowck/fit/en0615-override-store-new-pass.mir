@@ -1,0 +1,73 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/override-store-new.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/override-store-new.pass";
+class Base {
+  private a: &string;
+  private n: i64 = default;
+}
+class Keeper extends Base {
+  private b: &string;
+}
+
+fn Base::#ctor(_1: &Base, _2: &string) -> void {
+  let _1: &Base; // this
+  let _2: &string; // a
+  let _3: &string temp;
+  bb0: {
+    switch const overridden(n): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &*_2 [reborrow];
+    (*_1).a = move _3;
+    return;
+  }
+  bb2: {
+    field_init((*_1).n, const 0: i64);
+    goto bb1;
+  }
+}
+
+fn Base::attach(_1: &Base, _2: &string) -> void {
+  let _1: &Base; // this
+  let _2: &string; // s
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).a = move _3;
+    return;
+  }
+}
+
+fn Keeper::#ctor(_1: &Keeper, _2: &string, _3: &string) -> void {
+  let _1: &Keeper; // this
+  let _2: &string; // a
+  let _3: &string; // b
+  let _4: &string temp;
+  let _5: void temp;
+  let _6: &string temp;
+  let _7: &Keeper temp;
+  let _8: &Base temp;
+  bb0: {
+    _4 = &*_3 [reborrow];
+    (*_1).b = move _4;
+    _6 = &*_2 [reborrow];
+    _7 = &*_1 [reborrow];
+    _8 = convert(upcast, move _7);
+    _5 = Base::#ctor(move _8, move _6) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@override fn Keeper::attach(_1: &Keeper, _2: &string) -> void {
+  let _1: &Keeper; // this
+  let _2: &string; // s
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).b = move _3;
+    return;
+  }
+}

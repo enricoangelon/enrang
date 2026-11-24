@@ -1,0 +1,22 @@
+$ enrang check tests/compile/EN0708/fv-02-field-copy-6.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `a` can't be read while `c` may write into it
+ --> tests/compile/EN0708/fv-02-field-copy-6.fail.en:6:13
+  |
+4 | const c: &i64[] | null = a;
+  |                          - borrowed for writing here, because `c` writes on line 8
+5 | if (a != null) {
+6 |   const e = &a[0]; //~ EN0708
+  |             ^^^^^ read here
+7 |   if (c != null) {
+  |       - still used here
+8 |     c.push(9);
+  |     --------- the write
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `a` before line 4 or after line 8
+  = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

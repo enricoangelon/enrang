@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0714/override-through-read.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0714]: `Greedy.peek` returns a reference that `Peeker.peek` does not allow
+  --> tests/compile/EN0714/override-through-read.fail.en:31:5
+   |
+24 |   public peek(o: &Copier): readonly &u8 {
+   |          ---- declared here
+...
+31 |     return o.last(); //~ EN0714
+   |     ^^^^^^^^^^^^^^^^ returned here
+   |
+help: through a `&Peeker`, callers only expect `o` or the object
+   = explain: run `enrang explain EN0714`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0709/move_while_exclusive.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0709]: cannot move `q` while it is borrowed
+ --> tests/compile/EN0709/move_while_exclusive.fail.en:3:1
+  |
+2 | const r = &q;
+  |           -- exclusive borrow of `q` starts here, held by `r`
+3 | take(q); //~ EN0709 "cannot move `q` while it is borrowed"
+  | ^^^^^^^ `q` moves here
+4 | r.push(2);
+  | - the borrow is still in use here
+  |
+help: move `q` after its last borrow, or move a copy: `q.clone()`
+  = explain: run `enrang explain EN0709`
+
+error: aborting due to 1 previous error

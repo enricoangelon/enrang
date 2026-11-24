@@ -1,0 +1,196 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/forof-inner-source-outer-element.fail.en. Its row's codes: EN0706, EN0706.
+module "tests/compile/EN0706/forof-inner-source-outer-element.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+@private fn innerBreak() -> void {
+  let mut _1: i64[][]; // grid
+  let _2: i64[] temp;
+  let _3: i64[] temp;
+  let _4: isize #i;
+  let _5: isize #n;
+  let _6: bool temp;
+  let _7: &i64[]; // row
+  let _8: isize #i;
+  let _9: isize #n;
+  let _10: bool temp;
+  let _11: &i64; // c
+  let _12: void temp;
+  let _13: i64[] temp;
+  let _14: &i64[][] temp;
+  loop l0: path _1 preheader bb5 head bb1 bind bb2[2] binding _7;
+  loop l1: path *_7 preheader bb11 head bb7 bind bb8[2] binding _11;
+  bb0: {
+    storage_live(_1);
+    _2 = intrinsic AllocArray<i64>(const 1: i64);
+    _3 = intrinsic AllocArray<i64>(const 2: i64);
+    _1 = intrinsic AllocArray<i64[]>(move _2, move _3);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    goto bb5;
+  }
+  bb1: {
+    _5 = len(_1);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &_1[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_4);
+    _4 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    goto bb11;
+  }
+  bb7: {
+    _9 = len(*_7);
+    _10 = lt(copy _8, copy _9);
+    switch move _10 [0: bb10, otherwise: bb8];
+  }
+  bb8: {
+    storage_live(_11);
+    check_bounds(copy _8, copy _9);
+    _11 = &(*_7)[_8] [for-of-element];
+    _8 = add(copy _8, const 1: isize);
+    goto bb12;
+  }
+  bb9: {
+    goto bb7;
+  }
+  bb10: {
+    storage_dead(_7);
+    goto bb3;
+  }
+  bb11: {
+    storage_live(_8);
+    _8 = const 0: isize;
+    goto bb7;
+  }
+  bb12: {
+    _13 = intrinsic AllocArray<i64>();
+    _14 = &_1 [auto-borrow]; //~ EN0706
+    _12 = "alloc/array"::Array<i64[]>::push(move _14, move _13) -> bb13;
+  }
+  bb13: {
+    drop(_13);
+    storage_dead(_13);
+    storage_dead(_11);
+    goto bb10;
+  }
+}
+
+@private fn plain() -> void {
+  let mut _1: i64[][]; // grid
+  let _2: i64[] temp;
+  let _3: i64[] temp;
+  let _4: isize #i;
+  let _5: isize #n;
+  let _6: bool temp;
+  let _7: &i64[]; // row
+  let _8: isize #i;
+  let _9: isize #n;
+  let _10: bool temp;
+  let _11: &i64; // c
+  let _12: void temp;
+  let _13: i64[] temp;
+  let _14: &i64[][] temp;
+  loop l0: path _1 preheader bb5 head bb1 bind bb2[2] binding _7;
+  loop l1: path *_7 preheader bb11 head bb7 bind bb8[2] binding _11;
+  bb0: {
+    storage_live(_1);
+    _2 = intrinsic AllocArray<i64>(const 1: i64);
+    _3 = intrinsic AllocArray<i64>(const 2: i64);
+    _1 = intrinsic AllocArray<i64[]>(move _2, move _3);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    goto bb5;
+  }
+  bb1: {
+    _5 = len(_1);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &_1[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_4);
+    _4 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    goto bb11;
+  }
+  bb7: {
+    _9 = len(*_7);
+    _10 = lt(copy _8, copy _9);
+    switch move _10 [0: bb10, otherwise: bb8];
+  }
+  bb8: {
+    storage_live(_11);
+    check_bounds(copy _8, copy _9);
+    _11 = &(*_7)[_8] [for-of-element];
+    _8 = add(copy _8, const 1: isize);
+    goto bb12;
+  }
+  bb9: {
+    goto bb7;
+  }
+  bb10: {
+    storage_dead(_7);
+    goto bb3;
+  }
+  bb11: {
+    storage_live(_8);
+    _8 = const 0: isize;
+    goto bb7;
+  }
+  bb12: {
+    _13 = intrinsic AllocArray<i64>();
+    _14 = &_1 [auto-borrow]; //~ EN0706
+    _12 = "alloc/array"::Array<i64[]>::push(move _14, move _13) -> bb13;
+  }
+  bb13: {
+    drop(_13);
+    storage_dead(_13);
+    storage_dead(_11);
+    goto bb9;
+  }
+}

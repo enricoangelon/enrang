@@ -1,0 +1,46 @@
+$ enrang check tests/compile/EN0615/named-contract-clauses-3.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `put` changes `xs`, but `Sink` declares that it doesn't
+  --> tests/compile/EN0615/named-contract-clauses-3.fail.en:34:14
+   |
+23 |   put(xs: &i64[]): void;
+   |   --- declared here without `let`
+...
+34 | public class Filler { //~ EN0615 "`put` changes `xs`, but `Sink` declares that it doesn't"
+   |              ^^^^^^ `put` in `Filler` changes `xs`
+   |
+help: if implementations may change it, write `put(let xs: &i64[]): void;` in `Sink`
+   |
+23 |   put(let xs: &i64[]): void;
+   |       ++++
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `File.close` and `Closer.close` must both be `move` or both not
+  --> tests/compile/EN0615/named-contract-clauses-3.fail.en:40:14
+   |
+27 |   close(): void;
+   |   ----- declared here
+...
+40 | public class File { //~ EN0615 "`File.close` and `Closer.close` must both be `move` or both not"
+   |              ^^^^ here
+   |
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `Words.next` returns a read-only reference, but `TokenReader` declares a writable one
+  --> tests/compile/EN0615/named-contract-clauses-3.fail.en:45:14
+   |
+31 |   let next(): &string | null;
+   |       ---- declared here
+...
+45 | public class Words { //~ EN0615 "`Words.next` returns a read-only reference, but `TokenReader` declares a writable one"
+   |              ^^^^^ returns a read-only reference
+   |
+help: if callers only read it, write `let next(): readonly &string | null;` in `TokenReader`
+   |
+31 |   let next(): readonly &string | null;
+   |               +++++++++
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 3 previous errors

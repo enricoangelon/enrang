@@ -1,0 +1,6 @@
+let q = [1, 2];
+for (const x of &q) {
+  q = [];
+  break;
+}
+console.log(q);

@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0447/naming_the_fields_of_a_class_with_a_constructor.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0447]: `User` has a constructor: write `new User(...)`
+ --> tests/compile/EN0447/naming_the_fields_of_a_class_with_a_constructor.fail.en:1:11
+  |
+1 | const b = new User { name: "Ada", age: 36 }; //~ EN0447 "`User` has a constructor: write `new User(...)`"
+  |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ naming the fields skips the constructor
+  |
+  = explain: run `enrang explain EN0447`
+
+error[EN0447]: `User` has a constructor: write `new User(...)`
+ --> tests/compile/EN0447/naming_the_fields_of_a_class_with_a_constructor.fail.en:2:17
+  |
+2 | const c: User = { name: "Ada", age: 36 }; //~ EN0447
+  |                 ^^^^^^^^^^^^^^^^^^^^^^^^ naming the fields skips the constructor
+  |
+  = explain: run `enrang explain EN0447`
+
+error[EN0447]: `Dog` has a constructor: write `new Dog(...)`
+ --> tests/compile/EN0447/naming_the_fields_of_a_class_with_a_constructor.fail.en:3:11
+  |
+3 | const e = new Dog { name: "Rex" }; //~ EN0447 "`Dog` has a constructor: write `new Dog(...)`"
+  |           ^^^^^^^^^^^^^^^^^^^^^^^ naming the fields skips the constructor
+  |
+  = explain: run `enrang explain EN0447`
+
+error: aborting due to 3 previous errors

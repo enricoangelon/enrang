@@ -1,0 +1,1 @@
+private const MAX: i64; //~ EN0116

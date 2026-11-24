@@ -1,0 +1,2 @@
+const b = new Box(5 as i64);
+*b = 6; //~ EN0608

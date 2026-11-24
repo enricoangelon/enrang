@@ -1,0 +1,7 @@
+//! row: `new Atomic<string>(...)`, generic `dup<T>(a:
+import { Atomic, AtomicValue } from "core/atomic";
+
+const count = new Atomic<u32>(0);
+dup(&count);
+
+private function dup<T extends AtomicValue>(a: &Atomic<T>): void {}

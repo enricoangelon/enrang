@@ -1,0 +1,19 @@
+let msg: string = "a";
+let sink = new Sink(&msg);
+sink.add("b");
+const r = &msg;
+console.log(r);
+let lit: string = "literal";
+const k = new Sink(&lit);
+
+public class Sink {
+  private out: &string;
+
+  public constructor(out: &string) {
+    this.out = out;
+  }
+
+  public add(s: &string): void {
+    *this.out += s;
+  }
+}

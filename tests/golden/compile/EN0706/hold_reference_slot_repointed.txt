@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0706/hold_reference_slot_repointed.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot reassign `r` during iteration
+ --> tests/compile/EN0706/hold_reference_slot_repointed.fail.en:6:3
+  |
+5 | for (const x of r) {
+  |                 - `r` is borrowed here
+6 |   r = &b; //~ EN0706 "cannot reassign `r` during iteration"
+  |   ^^^^^^ cannot reassign while borrowed
+  |
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

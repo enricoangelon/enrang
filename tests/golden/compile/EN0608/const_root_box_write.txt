@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/const_root_box_write.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `*b`, because `b` is `const`
+ --> tests/compile/EN0608/const_root_box_write.fail.en:2:1
+  |
+2 | *b = 6; //~ EN0608
+  | ^^^^^^ written here
+  |
+help: declare it `let b`
+  |
+1 | let b = new Box(5 as i64);
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

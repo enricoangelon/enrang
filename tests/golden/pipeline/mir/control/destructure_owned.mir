@@ -1,0 +1,12 @@
+@private fn f(_1: [i64, string]) -> void {
+  let _1: [i64, string]; // t
+  let _2: i64; // a
+  let _3: string; // b
+  bb0: {
+    storage_live(_2);
+    _2 = copy _1.0;
+    storage_live(_3);
+    _3 = move _1.1;
+    return;
+  }
+}

@@ -1,0 +1,9 @@
+const name = "Ada".toString();
+run(() => {
+  const n = name; //~ EN0617 "cannot move `name` out of the arrow's capture"
+  console.log(n);
+});
+
+public function run(f: () => void): void {
+  f();
+}

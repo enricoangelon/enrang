@@ -1,0 +1,37 @@
+let source: string = "abc";
+let lx = new Lexer(&source);
+const tmp = "x" + "y";
+const f: fn(let lx: &Lexer, s: &string) => void = reset; //~ EN0615
+f(&lx, &tmp);
+
+private function reset(lx: &Lexer, s: &string): void {
+  lx.setSrc(s);
+}
+
+public interface Sink {
+  let put(s: &string): void;
+}
+
+private class Keeper implements Sink { //~ EN0615
+  private r: &string;
+
+  public constructor(r: &string) { this.r = r; }
+
+  public put(s: &string): void { this.r = s; }
+}
+
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();
+    return this.src.slice(start, this.pos);
+  }
+
+  public setSrc(s: &string): void { this.src = s; }
+}

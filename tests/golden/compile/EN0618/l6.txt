@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0618/l6.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0618]: `report()` reads `count` before it is declared
+ --> tests/compile/EN0618/l6.fail.en:2:1
+  |
+2 | report(); //~ EN0618 "`report()` reads `count` before it is declared"
+  | ^^^^^^^^ `count` is declared on line 3
+  |
+help: move this call below `let count = 0;`
+  = explain: run `enrang explain EN0618`
+
+error: aborting due to 1 previous error

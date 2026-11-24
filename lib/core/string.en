@@ -1,0 +1,24 @@
+// SPEC 8.2, `string`: `core/string`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// Read-only members, which need no heap; the growing ones are in `alloc/string`.
+@lang("string") public final class string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+  public length(): isize;
+  public charCount(): isize;
+  public isEmpty(): bool;
+  public byteAt(i: isize): u8;
+  public codePointAt(i: isize): u32;
+  @mustUse public slice(a: isize, b?: isize): readonly &string;
+  public splitAt(i: isize): readonly [&string, &string];
+  public startsWith(s: &string): bool;
+  public endsWith(s: &string): bool;
+  public indexOf(s: &string): isize;
+  public includes(s: &string): bool;
+  public equals(other: &string): bool;
+  public compare(other: &string): i32;
+  public parseInt(): i64 | null;
+  public parseFloat(): f64 | null;
+  public asPtr(): *u8;
+  public fmt(let f: &Formatter): void;
+}

@@ -1,0 +1,11 @@
+//! covers: H23
+let p = new P { a: 1, b: [1, 2, 3, 4] };
+for (const x of &p.b) {
+  console.log(x);
+}
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u8[4];
+}

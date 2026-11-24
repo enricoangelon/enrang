@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/f6.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `nums`, because `nums` is `const`
+ --> tests/compile/EN0608/f6.fail.en:4:18
+  |
+4 | for (const n of &nums) { //~ EN0608
+  |                  ^^^^ written here
+  |
+help: declare it `let nums`
+  |
+2 | let nums: i64[] = [1, 5, 3];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

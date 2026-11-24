@@ -1,0 +1,14 @@
+public class OddError implements Error {}
+
+public function check(n: i64): void {
+  if (n < 0) {
+    panic("negative");
+  }
+}
+
+public function half(n: i64): Result<i64> {
+  if (n % 2 != 0) {
+    return Err(new OddError {});
+  }
+  return Ok(n / 2);
+}

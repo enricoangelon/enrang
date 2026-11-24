@@ -1,0 +1,4 @@
+//! row: The source forms: `this.view()` with `pu
+public unsafe function raw(p: *i64[]): void {
+  unsafe { for (const x of &*p) { (*p)[0] = 1; } }
+}

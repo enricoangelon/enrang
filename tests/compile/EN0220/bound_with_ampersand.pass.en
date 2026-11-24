@@ -1,0 +1,11 @@
+public interface Shape {
+  area(): f64;
+}
+
+public interface Named {
+  name(): string;
+}
+
+public function show<T extends Shape & Named>(s: &T): void {
+  console.log(s.area());
+}

@@ -1,0 +1,9 @@
+console.log(describe(true)); //~ EN0451 "no overload of `describe` matches these arguments"
+
+public function describe(n: int): string {
+  return `number ${n}`;
+}
+
+public function describe(s: &string): string {
+  return `text ${s}`;
+}

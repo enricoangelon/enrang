@@ -1,0 +1,7 @@
+let q: i64[] = [9, 1, 5, 3, 7];
+const p = tailMixed(&q);
+if (p != null) {
+  *p[0] = 0; *p[1] = 0; //~ EN0616
+}
+
+public function tailMixed(xs: &Slice<i64>): [&i64, &i64] | null { const a = &xs[1]; for (const x of xs.slice(1)) { if (*x > 2) { return [a, x]; } } return null; }

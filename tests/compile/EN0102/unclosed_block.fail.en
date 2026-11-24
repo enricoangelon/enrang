@@ -1,0 +1,2 @@
+public function greet(name: string): void { //~ EN0102 "the file ended with `{` still open"
+  console.log(name);

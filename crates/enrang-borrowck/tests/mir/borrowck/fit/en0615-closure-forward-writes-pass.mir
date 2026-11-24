@@ -1,0 +1,73 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/closure-forward-writes.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/closure-forward-writes.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64; // n
+  let _3: void temp;
+  let _4: (let &i64) => void temp;
+  let _5: [] temp;
+  let _6: &i64 temp;
+  let _7: void temp;
+  let _8: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 1: i64;
+    _5 = env();
+    _4 = closure(arrow#0, _5);
+    _6 = &_2 [explicit];
+    _3 = outer(move _4, move _6) -> bb1;
+  }
+  bb1: {
+    _8 = &_2 [auto-borrow];
+    _7 = form log(move _8) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+arrow#0 of statements (_1: &[], _2: &i64) -> void {
+  let _1: &[] env;
+  let _2: &i64; // x
+  let _3: i64 temp;
+  bb0: {
+    _3 = copy *_2;
+    *_2 = checked_add(copy _3, const 1: i64);
+    return;
+  }
+}
+
+@private fn inner(_1: (let &i64) => void, _2: &i64) -> void {
+  let _1: (let &i64) => void; // g
+  let _2: &i64; // n
+  let _3: void temp;
+  let _4: &i64 temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = closure _1(move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn outer(_1: (let &i64) => void, _2: &i64) -> void {
+  let _1: (let &i64) => void; // f
+  let _2: &i64; // n
+  let _3: void temp;
+  let _4: (let &i64) => void temp;
+  let _5: &i64 temp;
+  bb0: {
+    _4 = closure_reborrow(_1);
+    _5 = &*_2 [reborrow];
+    _3 = inner(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

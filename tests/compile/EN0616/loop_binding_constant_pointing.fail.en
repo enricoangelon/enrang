@@ -1,0 +1,13 @@
+//! covers: H28
+*firstOf() = 1; //~ EN0616 "`firstOf` returns a reference that may point at a constant"
+
+public function zeros(): &Slice<i64> {
+  return &[0, 0];
+}
+
+public function firstOf(): &i64 {
+  for (const x of zeros()) {
+    return x;
+  }
+  panic("none");
+}

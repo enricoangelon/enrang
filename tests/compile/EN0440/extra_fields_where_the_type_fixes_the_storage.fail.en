@@ -1,0 +1,3 @@
+const p = { name: "Ada", age: 36 };
+const q: { name: string } = p; //~ EN0440 "`p` has a field `age` that `{ name: string }` does not have"
+console.log(q.name);

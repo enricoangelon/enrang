@@ -1,0 +1,7 @@
+const d = new D("a".toString());
+dispose(d);
+
+private class D {
+  public constructor(public name: string) {}
+  public destructor() { console.log(`drop ${this.name}`); }
+}

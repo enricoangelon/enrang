@@ -1,0 +1,15 @@
+let p = new Player {};
+p.update();
+console.log(p.x);
+
+public class Entity {
+  public x: i64 = 0;
+
+  public let update(): void {}
+}
+
+public class Player extends Entity {
+  public override update(): void {
+    this.x += 1;
+  }
+}

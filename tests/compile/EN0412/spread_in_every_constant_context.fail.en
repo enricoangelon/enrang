@@ -1,0 +1,7 @@
+assert([...X].length() == 3, "three"); //~ EN0412 "constant evaluation failed: `...` is not constant"
+
+private const X: i64[3] = [1, 2, 3];
+private const Y: i64[3] = [...X]; //~ EN0412 "constant evaluation failed: `...` is not constant"
+private unsafe let counts: i64[3] = [...X]; //~ EN0412 "constant evaluation failed: `...` is not constant"
+private const Z: u8[[...X].length()] = [0; 3]; //~ EN0412 "constant evaluation failed: `...` is not constant"
+private const W: u8[3] = [0; [...X].length()]; //~ EN0412 "constant evaluation failed: `...` is not constant"

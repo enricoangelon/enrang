@@ -1,0 +1,8 @@
+//! row: `for (const x of &(queue)) { queue.push(
+let queue = ["a", "b"];
+for (const x of &(queue)) {
+  queue.push("r"); //~ EN0706
+}
+for (const x of (&queue)) {
+  queue.push("r"); //~ EN0706
+}

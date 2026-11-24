@@ -1,0 +1,24 @@
+private unsafe let count: i64 = 0;
+private unsafe let buf: u8[16];
+private unsafe let p: *u8;
+private unsafe let flag: bool;
+private unsafe let ratio: f64;
+private unsafe let c: Color = Color.Red;
+private unsafe let n: i64 | null = null;
+private unsafe let point: Point;
+private unsafe let origin: Point = new Point { x: 1, y: 2 };
+private unsafe let shared: Shared = new Shared {};
+
+public enum Color {
+  Red,
+  Green,
+}
+
+public final class Point {
+  public x: i32 = 0;
+  public y: i32 = 0;
+}
+
+public class Shared {
+  public hits: u32;
+}

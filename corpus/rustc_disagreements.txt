@@ -1,0 +1,42 @@
+# The named intended disagreements with rustc (TESTING 13), one row each, in the
+# order TESTING 13 names them. The meta case `disagreements` reads this file: a row
+# for every disagreement TESTING 13 names, none for any other, so a stale row fails.
+#
+# Columns, separated by one tab:
+#   1. the ID: the TESTING 18 row that holds the program, or, for a disagreement
+#      TESTING 13 names by its words alone, the ID chosen for it (NLL-3, R1,
+#      ONE-PART-WRITABLE);
+#   2. Enrang's outcome: `compiles`, or the codes `enrang check` reports, space
+#      separated;
+#   3. rustc's outcome on the twin: `compiles`, the error codes it reports, or
+#      `rejects` where TESTING names no code;
+#   4. the compile fixture that shows Enrang's outcome: a `.pass.en` for
+#      `compiles`, a `.fail.en` that anchors each code otherwise, under
+#      `tests/compile/<CODE>/`, `*` standing for whichever code's directory holds
+#      it; `<name>-<n>` counts as `<name>`;
+#   5. the twin: a Rust program run by rustc only when RUSTC_TWINS is set
+#      (TESTING 20), never in the default run.
+NLL-3	compiles	rejects	tests/compile/*/nll-3.pass.en	corpus/twins/NLL-3.rs
+F12	EN0708	compiles	tests/compile/*/f12.fail.en	corpus/twins/F12.rs
+OQ25-order	compiles	compiles	tests/compile/*/oq25-order.pass.en	corpus/twins/OQ25-order.rs
+S2-22-copy	compiles	compiles	tests/compile/*/s2-22-copy.pass.en	corpus/twins/S2-22-copy.rs
+R1	EN0701	compiles	tests/compile/EN0701/array_of_a_borrowing_class.fail.en	corpus/twins/R1.rs
+ONE-PART-WRITABLE	compiles	rejects	tests/compile/*/one-part-writable.pass.en	corpus/twins/ONE-PART-WRITABLE.rs
+TK-02-reassign-break	compiles	E0506	tests/compile/*/tk-02-reassign-break.pass.en	corpus/twins/TK-02-reassign-break.rs
+SLB-02-element	compiles	E0502	tests/compile/*/slb-02-element.pass.en	corpus/twins/SLB-02-element.rs
+TK-03-first-two	EN0616	compiles	tests/compile/*/tk-03-first-two.fail.en	corpus/twins/TK-03-first-two.rs
+TK-03-last-two	EN0616	compiles	tests/compile/*/tk-03-last-two.fail.en	corpus/twins/TK-03-last-two.rs
+TK-03-fields-of-turn	EN0614	compiles	tests/compile/*/tk-03-fields-of-turn.fail.en	corpus/twins/TK-03-fields-of-turn.rs
+TK-01-local-ref	EN0614	compiles	tests/compile/*/tk-01-local-ref.fail.en	corpus/twins/TK-01-local-ref.rs
+FV-02-alias	EN0616 EN0709	compiles	tests/compile/*/fv-02-alias.fail.en	corpus/twins/FV-02-alias.rs
+FV-02-alias-peek	EN0616	compiles	tests/compile/*/fv-02-alias-peek.fail.en	corpus/twins/FV-02-alias-peek.rs
+FV-02-alias-split	EN0616	compiles	tests/compile/*/fv-02-alias-split.fail.en	corpus/twins/FV-02-alias-split.rs
+FV-02-reset	EN0616	compiles	tests/compile/*/fv-02-reset.fail.en	corpus/twins/FV-02-reset.rs
+FV-02-upcast-local	EN0616	compiles	tests/compile/*/fv-02-upcast-local.fail.en	corpus/twins/FV-02-upcast-local.rs
+FV-02-field-copy	EN0706	compiles	tests/compile/*/fv-02-field-copy.fail.en	corpus/twins/FV-02-field-copy.rs
+FV-02-through-ref	EN0706	compiles	tests/compile/*/fv-02-through-ref.fail.en	corpus/twins/FV-02-through-ref.rs
+FV-02-lost-store	EN0616	compiles	tests/compile/*/fv-02-lost-store.fail.en	corpus/twins/FV-02-lost-store.rs
+FV-02-skip	EN0707 EN0616	compiles	tests/compile/*/fv-02-skip.fail.en	corpus/twins/FV-02-skip.rs
+FV-02-move	EN0709	compiles	tests/compile/*/fv-02-move.fail.en	corpus/twins/FV-02-move.rs
+D20-core-3	EN0711	compiles	tests/compile/*/d20-core-3.fail.en	corpus/twins/D20-core-3.rs
+FV-02-closure	EN0706	compiles	tests/compile/*/fv-02-closure.fail.en	corpus/twins/FV-02-closure.rs

@@ -1,0 +1,136 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/named-cursor-walk.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/named-cursor-walk.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+class Node {
+  val: i64 = default;
+  next: Box<Node> | null = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Node; // head
+  let _3: Box<Node> temp;
+  let _4: Node temp;
+  let _5: Box<Node> temp;
+  let _6: Node temp;
+  let _7: *Node temp;
+  let _8: void temp;
+  let _9: &Box<Node> temp;
+  let _10: void temp;
+  let _11: Box<Node> | null temp;
+  let _12: *Node temp;
+  let _13: void temp;
+  let _14: &Box<Node> temp;
+  let _15: void temp;
+  let _16: Box<Node> | null temp;
+  let _17: *Node temp;
+  let _18: void temp;
+  let mut _19: &Node; // cur
+  let mut _20: i64; // sum
+  let _21: bool temp;
+  let _22: &i64; // v
+  let _23: i64 temp;
+  let _24: bool temp;
+  let _25: u32 temp;
+  let _26: &Box<Node> temp;
+  let _27: void temp;
+  let _28: &i64 temp;
+  let _29: void temp;
+  let _30: &i64 temp;
+  fact f0: _19.*.next nonnull;
+  use f0 at bb10[0];
+  test f0 at bb10;
+  bb0: {
+    storage_live(_2);
+    _7 = addr_of _6;
+    _8 = named_fill Node leaving(next)(move _7) -> bb1;
+  }
+  bb1: {
+    _6.val = const 3: i64;
+    _9 = &_5 [auto-borrow];
+    _10 = "alloc/box"::Box<Node>::#ctor(move _9, move _6) -> bb2;
+  }
+  bb2: {
+    _11 = present(move _5);
+    _12 = addr_of _4;
+    _13 = named_fill Node leaving()(move _12) -> bb3;
+  }
+  bb3: {
+    _4.val = const 2: i64;
+    _4.next = move _11;
+    _14 = &_3 [auto-borrow];
+    _15 = "alloc/box"::Box<Node>::#ctor(move _14, move _4) -> bb4;
+  }
+  bb4: {
+    _16 = present(move _3);
+    _17 = addr_of _2;
+    _18 = named_fill Node leaving()(move _17) -> bb5;
+  }
+  bb5: {
+    _2.val = const 1: i64;
+    _2.next = move _16;
+    drop(_16);
+    storage_dead(_16);
+    drop(_11);
+    storage_dead(_11);
+    drop(_6);
+    storage_dead(_6);
+    drop(_5);
+    storage_dead(_5);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_19);
+    _19 = &_2 [explicit];
+    storage_live(_20);
+    _20 = const 0: i64;
+    goto bb6;
+  }
+  bb6: {
+    _21 = const true: bool;
+    switch move _21 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    storage_live(_22);
+    _22 = &(*_19).val [explicit];
+    _23 = copy _20;
+    _20 = checked_add(copy _23, copy *_22);
+    _25 = discriminant((*_19).next);
+    _24 = eq(move _25, const 0: u32);
+    switch move _24 [0: bb10, otherwise: bb9];
+  }
+  bb8: {
+    _30 = &_20 [auto-borrow];
+    _29 = form log(move _30) -> bb12;
+  }
+  bb9: {
+    storage_dead(_22);
+    goto bb8;
+  }
+  bb10: {
+    check_tag((*_19).next, Present);
+    _26 = &((*_19).next as Present).0 [explicit];
+    _19 = &**_26 [reborrow];
+    storage_dead(_26);
+    _28 = &*_22 [auto-borrow];
+    _27 = form log(move _28) -> bb11;
+  }
+  bb11: {
+    storage_dead(_22);
+    goto bb6;
+  }
+  bb12: {
+    storage_dead(_20);
+    storage_dead(_19);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

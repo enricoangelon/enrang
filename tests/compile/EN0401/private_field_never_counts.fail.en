@@ -1,0 +1,11 @@
+const user = new User { name: "Ada" };
+showSecret(&user); //~ EN0401 "`User` has no public field `secret`"
+
+private function showSecret(x: &{ secret: int }): void {
+  console.log(x.secret);
+}
+
+public class User {
+  public name: string;
+  private secret: int = 0;
+}

@@ -1,0 +1,14 @@
+const s: string = "hello".toString();
+const m: &Measured = s.slice(1, 3); //~ EN0401 "a `&string` can't become a `&Measured`, because it may be a part of a string"
+console.log(m.length());
+const k = keep(s.slice(1, 3)); //~ EN0401 "a `&string` can't become a `&Measured`, because it may be a part of a string"
+const w: &Measured = &s; //~ EN0401 "a `&string` can't become a `&Measured`, because it may be a part of a string"
+console.log(w.length());
+
+private function keep(m: &Measured): &Measured {
+  return m;
+}
+
+public interface Measured {
+  length(): isize;
+}

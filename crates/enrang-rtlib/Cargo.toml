@@ -1,0 +1,17 @@
+[package]
+name = "enrang-rtlib"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+build = "build.rs"
+
+[lib]
+test = false
+
+[dev-dependencies]
+enrang-testkit = { path = "../enrang-testkit" }
+
+[[test]]
+name = "rtlib"
+path = "tests/rtlib/main.rs"
+harness = false

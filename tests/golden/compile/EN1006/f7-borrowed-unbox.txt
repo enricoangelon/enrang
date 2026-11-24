@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1006/f7-borrowed-unbox.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+ --> tests/compile/EN1006/f7-borrowed-unbox.fail.en:2:12
+  |
+2 | introduce(&b.unbox()); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  |            ^^^^^^^^^ this is a `Speaker` by value
+  |
+  = note: `Speaker` is an interface, so the size of `b.unbox()` isn't known
+help: `&Speaker` to refer to one, `Box<Speaker>` to own one
+  = explain: run `enrang explain EN1006`
+
+error: aborting due to 1 previous error

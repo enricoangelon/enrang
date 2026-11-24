@@ -1,0 +1,11 @@
+//! row: Elements: a class with a destructor and 
+public class Handle {
+  public n: i64 = 0;
+  public destructor() { console.log("close"); }
+}
+
+public class Raw { public p: *u8 = 0 as *u8; public names: string[] = []; }
+
+public function handles(xs: &Handle[]): Handle[] { return [...xs]; } //~ EN0438
+
+public function raws(xs: &Raw[]): Raw[] { return [...xs]; } //~ EN0438

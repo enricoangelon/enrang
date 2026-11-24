@@ -1,0 +1,16 @@
+//! row: `for (const x of this.items)` in a method,
+public class Holder {
+  public items: string[] = [];
+
+  public show(): void {
+    for (const x of this.items) { //~ EN0603 "cannot move `this.items` out of `this`"
+      console.log(x);
+    }
+  }
+}
+
+public function visit(h: &Holder): void {
+  for (const x of h.items) { //~ EN0603
+    console.log(x);
+  }
+}

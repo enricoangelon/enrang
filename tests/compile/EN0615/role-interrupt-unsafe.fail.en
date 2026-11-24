@@ -1,0 +1,7 @@
+//! target: i386-none
+private unsafe let ticks: usize = 0;
+
+@interrupt private function onTimer(frame: &InterruptFrame): void {
+  unsafe { ticks += frame.eip; }
+  frame.eip = 0; //~ EN0615
+}

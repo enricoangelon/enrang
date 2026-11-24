@@ -1,0 +1,53 @@
+$ enrang check tests/compile/EN0711/d20-core-3.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0711]: `tmp` is dropped while `pair` still borrows it
+ --> tests/compile/EN0711/d20-core-3.fail.en:7:3
+  |
+4 |     const tmp = "xy" + "z";
+  |           --- `tmp` lives until the end of this block
+5 |     const t = &pair;
+6 |     *t = [&tmp, 1];
+  |           ---- exclusive borrow of `tmp` starts here, held by `pair`
+7 |   } //~ EN0711
+  |   ^ `tmp` is dropped here
+8 |   console.log(pair[0]);
+  |               ---- the borrow is still in use here
+  |
+help: declare `tmp` outside the block so it lives as long as `pair`
+  = explain: run `enrang explain EN0711`
+
+error[EN0711]: `pair` is dropped while `keep` still borrows it
+  --> tests/compile/EN0711/d20-core-3.fail.en:18:3
+   |
+15 |     const pair: [&string, int] = [&tmp, 1];
+   |           ---- `pair` lives until the end of this block
+16 |     const r = &pair;
+   |               ----- shared borrow of `pair` starts here, held by `keep`
+17 |     keep = *r;
+18 |   } //~ EN0711
+   |   ^ `pair` is dropped here
+19 |   console.log(keep[0]);
+   |               ---- the borrow is still in use here
+   |
+help: declare `pair` outside the block so it lives as long as `keep`
+   = explain: run `enrang explain EN0711`
+
+error[EN0711]: `pair` is dropped while `keep` still borrows it
+  --> tests/compile/EN0711/d20-core-3.fail.en:29:3
+   |
+26 |     const pair: [&string, int] = [&tmp, 1];
+   |           ---- `pair` lives until the end of this block
+27 |     const r = &pair;
+   |               ----- shared borrow of `pair` starts here, held by `keep`
+28 |     keep = *r;
+29 |   } //~ EN0711
+   |   ^ `pair` is dropped here
+30 |   console.log(keep[0]);
+   |               ---- the borrow is still in use here
+   |
+help: declare `pair` outside the block so it lives as long as `keep`
+   = explain: run `enrang explain EN0711`
+
+error: aborting due to 3 previous errors

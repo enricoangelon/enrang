@@ -1,0 +1,25 @@
+//! covers: H34
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public retarget(v: &u8[]): void {
+    this.src = v;
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+}
+
+public final class Wrapper {
+  private cp: &Copier;
+  public constructor(cp: &Copier) {
+    this.cp = cp;
+  }
+  public static relinkBy(w: Wrapper, s: &u8[]): void {
+    w.cp.retarget(s); //~ EN0616 "cannot store a reference into a value reached through by-value `w`"
+  }
+}

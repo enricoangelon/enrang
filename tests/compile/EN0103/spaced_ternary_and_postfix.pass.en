@@ -1,0 +1,10 @@
+public function parse(s: string): Result<isize> {
+  return Ok(s.length());
+}
+
+public function twice(s: string, flag: bool): Result<isize> {
+  const n = parse(s)?;
+  const pick = flag ? 1 : 2;
+  const xs = flag ? [1] : [];
+  return Ok(n * pick + xs.length());
+}

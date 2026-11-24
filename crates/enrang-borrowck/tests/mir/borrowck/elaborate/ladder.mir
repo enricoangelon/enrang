@@ -1,0 +1,69 @@
+// Partly moved values (plan d.12; A:603-604): a class's remaining fields in reverse
+// declaration order; a nullable's tag switch first, then its payload behind its flag,
+// as `f(null, true)` of `if (o != null && c) { take(o); }` needs. Shapes: c.7 (plan
+// line 1010) a moved field argument; c.11 (lines 1094-1112) a narrowed payload is
+// `check_tag` then `(o as Present).0`; c.3 (line 905) parameters drop at the exit.
+@final class User {
+  name: string;
+}
+@final class Pair {
+  a: User;
+  b: User;
+  n: i64;
+  c: User;
+}
+enum Shape { Circle { r: User }, Square { a: User, b: User } }
+fn archive(_1: User) -> void;
+fn keep(_1: string) -> void;
+
+fn half(_1: Pair) -> void {
+  let _2: void temp;
+  bb0: {
+    _2 = archive(move _1.a) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}
+
+fn f(_1: string | null, _2: bool) -> void {
+  let _3: u32 temp;
+  let _4: void temp;
+  let _5: string temp;
+  bb0: {
+    _3 = discriminant(_1);
+    switch move _3 [0: bb3, otherwise: bb1];
+  }
+  bb1: {
+    switch copy _2 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    check_tag(_1, Present);
+    _5 = move (_1 as Present).0;
+    _4 = keep(move _5) -> bb3;
+  }
+  bb3: {
+    drop(_1);
+    return;
+  }
+}
+
+// An enum's tag first, then the active case's fields left; a tuple's parts left.
+fn shape(_1: Shape, _2: [User, User]) -> void {
+  let _3: void temp;
+  let _4: User temp;
+  bb0: {
+    check_tag(_1, Square);
+    _4 = move (_1 as Square).a;
+    _3 = archive(move _4) -> bb1;
+  }
+  bb1: {
+    _3 = archive(move _2.0) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    drop(_1);
+    return;
+  }
+}

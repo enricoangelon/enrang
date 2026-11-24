@@ -1,0 +1,30 @@
+$ enrang check tests/compile/EN0312/imports_a_script.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0312]: `script.pass.en` has top-level statements, so it can't be imported
+ --> tests/compile/EN0312/imports_a_script.fail.en:1:23
+  |
+1 | import { greet } from "./script.pass"; //~ EN0312 "`script.pass.en` has top-level statements, so it can't be imported"
+  |                       ^^^^^^^^^^^^^^^ imported here
+ --> tests/compile/EN0312/script.pass.en:1:1
+  |
+1 | console.log(greet("Ada"));
+  | -------------------------- the first top-level statement is here
+  |
+  = explain: run `enrang explain EN0312`
+
+error[EN0312]: `counter.pass.en` has top-level statements, so it can't be imported
+ --> tests/compile/EN0312/imports_a_script.fail.en:2:22
+  |
+2 | import { zero } from "./counter.pass"; //~ EN0312 "`counter.pass.en` has top-level statements, so it can't be imported"
+  |                      ^^^^^^^^^^^^^^^^ imported here
+ --> tests/compile/EN0312/counter.pass.en:1:1
+  |
+1 | let count = 0;
+  | -------------- a plain top-level `let` is a statement
+  |
+help: for static storage, write `unsafe let`
+  = explain: run `enrang explain EN0312`
+
+error: aborting due to 2 previous errors

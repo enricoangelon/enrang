@@ -1,0 +1,9 @@
+//! row: `const ys = [...xs];` in a function, and
+private const BASE: i64[2] = [1, 2];
+
+public class Bag { public items: i64[] = [...BASE]; }
+
+public function copyOf(xs: &i64[]): i64[] {
+  const ys = [...xs];
+  return ys;
+}

@@ -1,0 +1,7 @@
+$ enrang fmt --check src
+[exit 1]
+[stdout]
+src/fail.en would be reformatted
+src/x.failure.en would be reformatted
+2 of 2 files would change
+[stderr]

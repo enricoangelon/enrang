@@ -1,0 +1,14 @@
+const user = new User {};
+console.log(label(&user)); //~ EN0419 "`User` does not satisfy `Named`"
+
+private function label<T extends Named>(x: &T): string {
+  return x.name().toString();
+}
+
+public interface Named {
+  name(): &string;
+}
+
+public class User {
+  public name: string = "Ada";
+}

@@ -1,0 +1,4 @@
+let a: i64[] = [1];
+const f = a.first();
+console.log(f, grow(&a)); //~ EN0706 "`a` cannot change while a"
+function grow(x: &i64[]): i64 { x.push(1); x.push(2); x.push(3); return 0; }

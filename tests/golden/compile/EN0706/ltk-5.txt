@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0706/ltk-5.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot reassign `this.view` during iteration
+ --> tests/compile/EN0706/ltk-5.fail.en:9:7
+  |
+7 |     for (const x of this.view) {
+  |                     --------- `this.view` is borrowed here
+8 |       console.log(x);
+9 |       this.view = other; //~ EN0706 "cannot reassign `this.view` during iteration"
+  |       ^^^^^^^^^^^^^^^^^ cannot reassign while borrowed
+  |
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

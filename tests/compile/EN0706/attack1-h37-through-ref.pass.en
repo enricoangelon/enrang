@@ -1,0 +1,32 @@
+//! covers: H37
+let buf: u8[] = [1];
+let t: [&u8[], i32] = [&buf, 1];
+const r = &t;
+const e = &r[0][0];
+console.log(*e);
+t[0].push(9);
+
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+
+  public peek(): readonly &u8 { return &this.src[0]; }
+
+  public step(): void { this.dst.push(1); }
+
+  public static g(): void {
+    const tbl: u8[] = [7];
+    let out: u8[] = [];
+    let c = new Copier(&tbl, &out);
+    const rc = &c;
+    const a = &rc.src[0];
+    c.step();
+    c.step();
+    console.log(*a, out);
+  }
+}

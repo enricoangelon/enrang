@@ -1,0 +1,63 @@
+$ enrang check tests/compile/EN0706/attack1-h33-field-copy.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `b2` cannot change while `x` still points into it
+  --> tests/compile/EN0706/attack1-h33-field-copy.fail.en:5:12
+   |
+ 4 | const x = &pair[0][0];
+   |           ----------- shared borrow of `pair` starts here, held by `x`
+ 5 | const b2 = pair[0]; //~ EN0706
+   |            ^^^^^^^ `b2` changes here
+...
+10 | console.log(*x);
+   |              - `x` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0708]: `a` can't be read while `c` may write into it
+  --> tests/compile/EN0706/attack1-h33-field-copy.fail.en:16:13
+   |
+14 | const c: &i64[] | null = a;
+   |                          - borrowed for writing here, because `c` writes on line 18
+15 | if (a != null) {
+16 |   const e = &a[0]; //~ EN0708
+   |             ^^^^^ read here
+17 |   if (c != null) {
+   |       - still used here
+18 |     c.push(9);
+   |     --------- the write
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `a` before line 14 or after line 18
+   = explain: run `enrang explain EN0708`
+
+error[EN0706]: `q` cannot change while `p` still points into it
+  --> tests/compile/EN0706/attack1-h33-field-copy.fail.en:42:15
+   |
+41 |     const p = c.dst;
+   |               ----- shared borrow of `c` starts here, held by `p`
+42 |     const q = c.dst; //~ EN0706
+   |               ^^^^^ `q` changes here
+43 |     let c2 = new Copier(p, q);
+   |                         - `p` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `b` cannot change while `a` still points into it
+  --> tests/compile/EN0706/attack1-h33-field-copy.fail.en:60:15
+   |
+59 |     const a = &this.v[0];
+   |               ---------- shared borrow of `this` starts here, held by `a`
+60 |     const b = this.v; //~ EN0706
+   |               ^^^^^^ `b` changes here
+61 |     b.push(9);
+62 |     console.log(*a);
+   |                  - `a` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 4 previous errors

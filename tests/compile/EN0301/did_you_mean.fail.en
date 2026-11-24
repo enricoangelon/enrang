@@ -1,0 +1,2 @@
+const total = 10;
+console.log(totl); //~ EN0301 "cannot find `totl` in this scope"

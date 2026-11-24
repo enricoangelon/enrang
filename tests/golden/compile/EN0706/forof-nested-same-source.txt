@@ -1,0 +1,48 @@
+$ enrang check tests/compile/EN0706/forof-nested-same-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `q` while iterating over it
+ --> tests/compile/EN0706/forof-nested-same-source.fail.en:6:7
+  |
+4 |   for (const a of &q) {
+  |                   -- immutable borrow begins here
+5 |     for (const b of &q) {
+6 |       q.push(1); //~ EN0706
+  |       ^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `queue` while iterating over it
+  --> tests/compile/EN0706/forof-nested-same-source.fail.en:14:5
+   |
+13 |   for (const job of &queue) {
+   |                     ------ immutable borrow begins here
+14 |     queue.push("x"); //~ EN0706
+   |     ^^^^^^^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+help: collect new jobs separately, or loop over a copy
+   |
+13 |   for (const job of [...queue]) {
+   |                     ~~~~     +
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `queue` while iterating over it
+  --> tests/compile/EN0706/forof-nested-same-source.fail.en:15:5
+   |
+13 |   for (const job of &queue) {
+   |                     ------ immutable borrow begins here
+14 |     queue.push("x"); //~ EN0706
+15 |     queue.push("y"); //~ EN0706
+   |     ^^^^^^^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+help: collect new jobs separately, or loop over a copy
+   |
+13 |   for (const job of [...queue]) {
+   |                     ~~~~     +
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 3 previous errors

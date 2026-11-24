@@ -1,0 +1,49 @@
+$ enrang check tests/compile/EN1007/capture_in_field_and_return.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1007]: a function pointer cannot capture variables
+ --> tests/compile/EN1007/capture_in_field_and_return.fail.en:2:28
+  |
+2 | const b = new Button { on: () => console.log(count) }; //~ EN1007 "a function pointer cannot capture variables"
+  |                            ^^^^^^^^^^^^^^^^^^^^^^^^ this arrow uses `count`
+  |                                              ----- `count` is captured here
+  |
+  = note: an `fn` value holds no variables; only a closure parameter takes an arrow that uses them
+help: Keep it in a local or pass it as a closure parameter, or pass the data explicitly
+  = explain: run `enrang explain EN1007`
+
+error[EN1007]: a function pointer cannot capture variables
+ --> tests/compile/EN1007/capture_in_field_and_return.fail.en:4:30
+  |
+3 | const add = (x: i64) => x + count;
+  |                             ----- `count` is captured here
+4 | const h: fn(x: i64) => i64 = add; //~ EN1007 "a function pointer cannot capture variables"
+  |                              ^^^ `add` holds an arrow that uses `count`
+  |
+  = note: an `fn` value holds no variables; only a closure parameter takes an arrow that uses them
+help: Keep it in a local or pass it as a closure parameter, or pass the data explicitly
+  = explain: run `enrang explain EN1007`
+
+error[EN1007]: a function pointer cannot capture variables
+ --> tests/compile/EN1007/capture_in_field_and_return.fail.en:7:10
+  |
+7 |   return () => n; //~ EN1007 "a function pointer cannot capture variables"
+  |          ^^^^^^^ this arrow uses `n`
+  |                - `n` is captured here
+  |
+  = note: an `fn` value holds no variables; only a closure parameter takes an arrow that uses them
+help: Keep it in a local or pass it as a closure parameter, or pass the data explicitly
+  = explain: run `enrang explain EN1007`
+
+error[EN1007]: a function pointer cannot capture variables
+  --> tests/compile/EN1007/capture_in_field_and_return.fail.en:11:10
+   |
+11 |   return g; //~ EN1007 "a function pointer cannot capture variables"
+   |          ^ `g` is a closure parameter, which may use outer variables
+   |
+   = note: an `fn` value holds no variables; only a closure parameter takes an arrow that uses them
+help: Keep it in a local or pass it as a closure parameter, or pass the data explicitly
+   = explain: run `enrang explain EN1007`
+
+error: aborting due to 4 previous errors

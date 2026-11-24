@@ -1,0 +1,5 @@
+import * as parts from "./parts.pass";
+
+const p = new parts.Part { id: 1 };
+console.log(parts); //~ EN0301 "`parts` is a namespace, not a value"
+console.log(parts.describe(&p), parts.nothing(&p)); //~ EN0301 "cannot find `nothing` in `parts`"

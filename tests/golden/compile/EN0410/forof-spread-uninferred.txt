@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0410/forof-spread-uninferred.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0410]: cannot infer the type of `q`
+ --> tests/compile/EN0410/forof-spread-uninferred.fail.en:3:15
+  |
+3 | const c = [...q]; //~ EN0410
+  |               ^ nothing here decides its type
+  |
+help: add a type annotation
+  = explain: run `enrang explain EN0410`
+
+error[EN0410]: cannot infer the type of `[...[]]`
+ --> tests/compile/EN0410/forof-spread-uninferred.fail.en:6:11
+  |
+6 | const d = [...[]]; //~ EN0410
+  |           ^^^^^^^ nothing here decides its type
+  |
+help: add a type annotation
+  = explain: run `enrang explain EN0410`
+
+error: aborting due to 2 previous errors

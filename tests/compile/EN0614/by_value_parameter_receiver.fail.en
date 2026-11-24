@@ -1,0 +1,4 @@
+public function addOne(xs: i64[]): isize {
+  xs.push(1); //~ EN0614
+  return xs.length();
+}

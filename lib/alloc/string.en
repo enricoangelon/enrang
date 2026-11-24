@@ -1,0 +1,22 @@
+// SPEC 8.3, `string`'s growing members: `alloc/string`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `+`, `+=` and `toString()` are the compiler's (SPEC 6).
+extend string {
+  public static withCapacity(n: isize): string;
+  public clone(): string;
+  @mustUse public trim(): string;
+  @mustUse public toUpperCase(): string;
+  @mustUse public toLowerCase(): string;
+  @mustUse public replace(a: &string, b: &string): string;
+  @mustUse public repeat(n: isize): string;
+  public split(sep: &string): string[];
+  public let pushByte(b: u8): void;
+  public let pushCodePoint(c: u32): void;
+  public let unsafe pushByteUnchecked(b: u8): void;
+  public static fromUtf8(b: u8[]): string | null;
+}
+
+// `Err(x)` of an error value at `Failure`, and `?` into `Failure`, where the text is built at run time
+// (SPEC 6, ARCHITECTURE 5): an `alloc` lang item, since `core` has no allocator (ARCHITECTURE 10).
+@lang("failure_from_display") public function failureFromDisplay<T>(x: &T): Failure {
+  unreachable();
+}

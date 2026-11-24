@@ -1,0 +1,7 @@
+//! row: `const x = 12; let y = &x; *y = 13;`; the
+const x = 12;
+let z = 14;
+let y = &x;
+y = &z;
+*y = 13;
+console.log(z);

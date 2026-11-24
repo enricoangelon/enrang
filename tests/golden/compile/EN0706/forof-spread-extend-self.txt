@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0706/forof-spread-extend-self.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `a` cannot change while a borrow of it is still used
+ --> tests/compile/EN0706/forof-spread-extend-self.fail.en:3:1
+  |
+3 | a.extendCloned(&a); //~ EN0706
+  | ^^^^^^^^^^^^^^^^^^ `extendCloned` changes `a`, so it needs exclusive access to it
+  | ------------------ the borrow is used again here
+  |                -- shared borrow of `a` starts here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

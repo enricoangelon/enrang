@@ -1,0 +1,14 @@
+public class Person {
+  public constructor(public name: string) {}
+}
+
+public class Pet {
+  public owner: Person;
+
+  public constructor(owner: Person, early: bool) {
+    if (early) {
+      return; //~ EN0610 "`owner` is not set"
+    }
+    this.owner = owner;
+  }
+}

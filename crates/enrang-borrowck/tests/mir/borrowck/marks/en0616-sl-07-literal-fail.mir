@@ -1,0 +1,36 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/sl-07-literal.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/sl-07-literal.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: &Slice<i64> temp;
+  let _3: isize temp;
+  let _4: isize temp;
+  bb0: {
+    _2 = zeros() -> bb1;
+  }
+  bb1: {
+    _3 = const 0: isize;
+    _4 = len(*_2);
+    check_bounds(copy _3, copy _4);
+    (*_2)[_3] = const 1: i64; //~ EN0616
+    drop(_1);
+    return;
+  }
+}
+
+@private @local fn zeros() -> &Slice<i64> {
+  let _1: i64[2] temp;
+  let _2: &i64[2] temp;
+  let _3: &Slice<i64> temp;
+  bb0: {
+    _1 = fixed<i64>[const 0: i64, const 0: i64];
+    _2 = &_1 [literal-view];
+    _3 = convert(fixed_to_slice, move _2);
+    _0 = move _3;
+    storage_dead(_1);
+    return;
+  }
+}

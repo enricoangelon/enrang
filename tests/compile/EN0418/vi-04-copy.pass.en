@@ -1,0 +1,12 @@
+const p = new Point3 { x: 1, y: 2, z: 3 };
+const q = p;
+console.log(p, q);
+
+public class Point2 {
+  public x: i64;
+  public y: i64;
+}
+
+public class Point3 extends Point2 implements Copy {
+  public z: i64;
+}

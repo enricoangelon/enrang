@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0100/ternary_without_colon.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0100]: expected `:` to finish the choice
+ --> tests/compile/EN0100/ternary_without_colon.fail.en:2:27
+  |
+2 | const label = ready ? "go"; //~ EN0100 "expected `:` to finish the choice"
+  |                           ^ expected `:`
+  |
+  = explain: run `enrang explain EN0100`
+
+error: aborting due to 1 previous error

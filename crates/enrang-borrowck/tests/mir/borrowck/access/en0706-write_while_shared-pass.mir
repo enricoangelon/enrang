@@ -1,0 +1,27 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/write_while_shared.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/write_while_shared.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int; // x
+  let _3: &int; // y
+  let _4: void temp;
+  let _5: &int temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 12: int;
+    storage_live(_3);
+    _3 = &_2 [explicit];
+    _5 = &*_3 [reborrow];
+    _4 = form log(move _5) -> bb1;
+  }
+  bb1: {
+    _2 = const 13: int;
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

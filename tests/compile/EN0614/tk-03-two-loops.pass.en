@@ -1,0 +1,21 @@
+//! covers: H27
+let g: i64[][] = [[0], [1, 2]]; const p = twoLoops(&g, 1);
+if (p != null) {
+  const [p0, p1] = p; const e = &p0[0];
+  console.log(*e, *p1);
+}
+
+public function twoLoops(rows: &Slice<i64[]>, k: isize): [&i64[], &i64[]] | null {
+  let keep: &i64[] | null = null;
+  let i: isize = 0;
+  for (const x of rows.slice(0)) {
+    if (i == k) { keep = x; break; }
+    i += 1;
+  }
+  let b: &i64[] | null = null;
+  for (const z of rows.slice(0)) {
+    if (b != null) { return [keep ?? b, z]; }
+    b = z;
+  }
+  return null;
+}

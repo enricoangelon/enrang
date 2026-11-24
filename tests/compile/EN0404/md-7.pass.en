@@ -1,0 +1,5 @@
+const xs: i64[] = [1, 2, 3];
+const p = &xs[0] as *i64;
+console.log(p as usize);
+console.log((p as usize) % 64 == 0);
+console.log(0xB8000 as *u16);

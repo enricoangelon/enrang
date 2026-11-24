@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN0616/captured_reference_rebound_through_parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot repoint captured `r` inside the arrow
+ --> tests/compile/EN0616/captured_reference_rebound_through_parameter.fail.en:4:27
+  |
+4 | xs.forEach((x: &i64) => { r = x; }); //~ EN0616 "cannot repoint captured `r` inside the arrow"
+  |                           ^^^^^ repointed here
+  |
+  = note: the arrow holds its own copy of the reference `r`, so the change would not reach the variable outside
+help: return the new reference and assign it to `r` outside, or write through it with `*r`
+  = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot repoint captured `r` inside the arrow
+ --> tests/compile/EN0616/captured_reference_rebound_through_parameter.fail.en:5:28
+  |
+5 | apply((x: &i64): void => { r = x; }); //~ EN0616 "cannot repoint captured `r` inside the arrow"
+  |                            ^^^^^ repointed here
+  |
+  = note: the arrow holds its own copy of the reference `r`, so the change would not reach the variable outside
+help: return the new reference and assign it to `r` outside, or write through it with `*r`
+  = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot repoint captured `r` inside the arrow
+ --> tests/compile/EN0616/captured_reference_rebound_through_parameter.fail.en:6:32
+  |
+6 | const f = (x: &i64): void => { r = x; }; //~ EN0616 "cannot repoint captured `r` inside the arrow"
+  |                                ^^^^^ repointed here
+  |
+  = note: the arrow holds its own copy of the reference `r`, so the change would not reach the variable outside
+help: return the new reference and assign it to `r` outside, or write through it with `*r`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 3 previous errors

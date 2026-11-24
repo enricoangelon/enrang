@@ -1,0 +1,13 @@
+$ enrang check --emit=summary main.en
+[exit 0]
+[stdout]
+module "main"
+class Holder writes_through_fields
+//   flag: returns a writable reference read from its fields
+fn Holder::#ctor(_1: &Holder, _2: &i64[]) -> void perms(write, write) sources() stores(1 -> 0) result none;
+//   #0: writes through it
+//   #1: writes through it
+fn Holder::first(_1: &Holder) -> &i64 perms(read) sources(0) result writable;
+fn Holder::grow(_1: &Holder) -> void perms(write) sources() result none;
+//   #0: passes it to `Array.push` from `alloc/array`, which changes it
+[stderr]

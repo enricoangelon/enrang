@@ -1,0 +1,10 @@
+let source = "let x = 1".toString();
+let lx = new Lexer(&source);
+console.log(lx.size());
+source += "!";
+
+public class Lexer {
+  private src: &string;
+  public constructor(src: &string) { this.src = src; }
+  public size(): isize { return this.src.length(); }
+}

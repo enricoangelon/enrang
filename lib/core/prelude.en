@@ -1,0 +1,27 @@
+// SPEC 8.1, `core`'s prelude: `core/prelude`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+public import { Formatter } from "./fmt";
+public import * as mem from "./mem";
+public import * as ptr from "./ptr";
+public import { Failure, Ok, Result } from "./result";
+public import { Slice } from "./slice";
+
+@lang("copy") public interface Copy {}
+
+@lang("clone") public interface Clone {
+  clone(): Self;
+}
+
+@lang("eq") public interface Eq {
+  equals(other: &Self): bool;
+}
+
+@lang("ord") public interface Ord {
+  compare(other: &Self): i32;
+}
+
+@lang("display") public interface Display {
+  fmt(let f: &Formatter): void;
+}
+
+// SPEC 4.4 says `Error` extends `Display`, which an interface can't write (3.1); every type meets `Display` anyway.
+@lang("error") public interface Error {}

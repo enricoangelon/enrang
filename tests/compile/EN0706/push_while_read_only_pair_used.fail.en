@@ -1,0 +1,19 @@
+let q: i64[] = [1, 5, 3, 7];
+const p = firstTwo(&q);
+if (p != null) {
+  console.log(*p[0]);
+  q.push(1); //~ EN0706 "`q` cannot change while `p` still points into it"
+  console.log(*p[1]);
+}
+
+public function firstTwo(xs: &Slice<i64>): [&i64, &i64] | null {
+  let a: &i64 | null = null;
+  let b: &i64 | null = null;
+  for (const x of xs) {
+    if (*x > 2) {
+      if (a == null) { a = x; } else { b = x; break; }
+    }
+  }
+  if (a != null && b != null) { return [a, b]; }
+  return null;
+}

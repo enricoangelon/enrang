@@ -1,0 +1,28 @@
+// Tuple parts (plan d.7 wslots, A:1350): a borrowing tuple held directly is
+// tracked part by part, so writing through `t[0]` makes only the first part's
+// borrow exclusive, until a reference to the tuple is taken: a write-live `&t`
+// makes every reference part write-live.
+// MIR shapes: a tuple literal of borrows (plan c.5, plan.md:943), an explicit
+// borrow of a local (plan c.5, plan.md:956).
+fn tuples() -> void {
+  let mut _1: i64; // a
+  let mut _2: i64; // b
+  let _3: &i64 temp;
+  let _4: &i64 temp;
+  let mut _5: [&i64, &i64]; // t
+  let _6: &[&i64, &i64]; // r
+  bb0: {
+    _1 = const 0: i64;
+    _2 = const 0: i64;
+    _3 = &_1 [explicit]; // exclusive
+    _4 = &_2 [explicit]; // shared
+    _5 = tuple(move _3, move _4);
+    *_5.0 = const 1: i64;
+    _3 = &_1 [explicit]; // exclusive
+    _4 = &_2 [explicit]; // exclusive
+    _5 = tuple(move _3, move _4);
+    _6 = &_5 [explicit]; // exclusive
+    *(*_6).1 = const 2: i64;
+    return;
+  }
+}

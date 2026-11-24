@@ -1,0 +1,37 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/readonly_tuple_part_receiver.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/readonly_tuple_part_receiver.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@final class Pad {
+  private t: [&i64[], int];
+}
+
+fn Pad::#ctor(_1: &Pad, _2: &i64[]) -> void {
+  let _1: &Pad; // this
+  let _2: &i64[]; // a
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).t = tuple(move _3, const 1: int);
+    return;
+  }
+}
+
+fn Pad::poke(_1: &Pad) -> void {
+  let _1: &Pad; // this
+  let _2: void temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = copy (*_1).t.0;
+    _2 = "alloc/array"::Array<i64>::push(move _3, const 4: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

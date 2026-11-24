@@ -1,0 +1,9 @@
+function swapFirst(a: &Slice<i64>, b: &Slice<i64>): void {
+  const t = a[0];
+  a[0] = b[0];
+  b[0] = t;
+}
+
+let xs = [1, 2];
+let ys = [3, 4];
+swapFirst(&xs, &ys);

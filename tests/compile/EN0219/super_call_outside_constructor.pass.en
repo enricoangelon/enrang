@@ -1,0 +1,17 @@
+public class Animal {
+  public constructor(public age: i64) {}
+
+  public reset(): void {
+    this.age = 1;
+  }
+}
+
+public class Dog extends Animal {
+  public constructor(age: i64) {
+    super(age);
+  }
+
+  public override reset(): void {
+    super.reset();
+  }
+}

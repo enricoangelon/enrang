@@ -1,0 +1,30 @@
+@lang("error") interface "core/prelude"::Error { }
+@lang("result") enum "core/result"::Result<T, E extends Error> { Ok { value: T }, Err { error: E } }
+@private enum E { A }
+
+@private fn f(_1: Result<i64, E>) -> i64 {
+  let _1: Result<i64, E>; // r
+  let _2: void temp;
+  let _3: isize temp;
+  fact f0: _1 case Ok;
+  fact f1: _1 case Err;
+  test f0 at bb2;
+  test f1 at bb3;
+  bb0: {
+    _3 = discriminant(_1);
+    switch move _3 [0: bb2, 1: bb3, otherwise: bb4];
+  }
+  bb1: {
+    return;
+  }
+  bb2: {
+    _0 = const 1: i64;
+    return;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    unreachable;
+  }
+}

@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0402/mixed_integer_arithmetic.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0402]: cannot subtract `int` from `isize`
+ --> tests/compile/EN0402/mixed_integer_arithmetic.fail.en:3:14
+  |
+3 | const left = data.length() - pos; //~ EN0402 "cannot subtract `int` from `isize`"
+  |              ^^^^^^^^^^^^^^^^^^^ `isize` and `int` are different types
+  |
+help: convert it, which never fails: `(pos as isize)`
+  |
+3 | const left = data.length() - (pos as isize); //~ EN0402 "cannot subtract `int` from `isize`"
+  |                              +   ++++++++++
+  = explain: run `enrang explain EN0402`
+
+error[EN0402]: cannot add `i64` to `int`
+ --> tests/compile/EN0402/mixed_integer_arithmetic.fail.en:6:13
+  |
+6 | const sum = small + wide; //~ EN0402 "cannot add `i64` to `int`"
+  |             ^^^^^^^^^^^^ `int` and `i64` are different types
+  |
+help: convert it, which never fails: `(small as i64)`
+  |
+6 | const sum = (small as i64) + wide; //~ EN0402 "cannot add `i64` to `int`"
+  |             +     ++++++++
+  = explain: run `enrang explain EN0402`
+
+error: aborting due to 2 previous errors

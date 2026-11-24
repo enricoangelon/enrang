@@ -1,0 +1,6 @@
+//! row: `f1`-`f6`, loop bindings, among them `le
+let nums: i64[] = [1, 2];
+for (const n of &nums) { bump(n); }
+console.log(nums);
+
+function bump(x: &i64): void { *x += 1; }

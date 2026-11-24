@@ -1,0 +1,7 @@
+let s: string = "ab";
+const w = wrap(&s);
+*w[0] += "!";
+
+private function wrap(let s: &string): [&string, i32] {
+  return [s, 1];
+}

@@ -1,0 +1,15 @@
+function report(): void {
+  console.log(`count = ${count}`); //~ EN0313 "`count` is a top-level variable, which `report` can't see"
+}
+let count = 0;
+report();
+
+public class Tally {
+  public show(): void {
+    console.log(count); //~ EN0313 "`count` is a top-level variable, which `Tally` can't see"
+  }
+}
+
+private function peek(): i64 {
+  return count; //~ EN0313 "`count` is a top-level variable, which `peek` can't see"
+}

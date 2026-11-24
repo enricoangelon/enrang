@@ -1,0 +1,204 @@
+=== EN0801
+--- rule
+`unsafe { }` blocks and `unsafe function` bodies grant exactly five powers, and using any of them outside `unsafe` is EN0801: dereferencing a raw pointer, with `*p` or its `read`, `write`, `readVolatile` and `writeVolatile` methods; calling an `unsafe function` or method, a `declare function`, or a function pointer that is an `unsafe fn` or has an `@abi` tag; `asm`; reading, writing or borrowing an `unsafe let`; and using `@at` storage. Calling a `@requires` function outside `unsafe` is EN0907. Write `unsafe { }` around the operation once you have checked what it relies on, such as an address being valid. `unsafe` relaxes nothing else: types, moves and borrows are checked inside it as everywhere.
+--- failing
+const VGA = 0xB8000 as *u16;
+VGA.writeVolatile(0x0741);
+--- fixed
+const VGA = 0xB8000 as *u16;
+unsafe { VGA.writeVolatile(0x0741); }
+--- typescript
+TypeScript has no raw pointers: every object is reached through a reference that the runtime manages. Enrang lets a program use an address it computed, and marks each such use with `unsafe`, so that a reader can find every place where the compiler trusts the programmer.
+=== EN0802
+--- rule
+An `unsafe let` is storage that lasts as long as the program and is never dropped, so its type must not have a destructor or own memory: a type that holds a `string`, a `T[]` or a `Box` is EN0802, and so are `void` and references. With no initialiser the storage is filled with zeros, so its type must be zeroable: integers, floats, `bool`, raw pointers, fixed arrays, and `final` classes with no base whose fields, private ones included, are all of these. A class that can be extended carries a hidden method-table pointer that zero would leave null, so declare it `final`, or give the storage a value. A class in `@at` storage, which the compiler never fills, must likewise be `final` with no base.
+--- failing
+public class Stats {
+  public hits: u64 = 0;
+}
+
+private unsafe let stats: Stats;
+--- fixed
+public final class Stats {
+  public hits: u64 = 0;
+}
+
+private unsafe let stats: Stats;
+--- typescript
+A TypeScript module-level `let` may hold any value, and the garbage collector frees it. An Enrang `unsafe let` is fixed memory, filled before the program starts and never cleaned up, so it holds plain data only.
+=== EN0803
+--- rule
+An `unsafe function`, a `@requires` function, a `declare function` and a `@naked` function each have conditions that their caller must meet, which is why a call to one needs `unsafe`. None of them becomes a safe `fn` value or a closure parameter, through which code could call it without `unsafe`: that is EN0803. Convert it to an `unsafe fn(...)` type of the same signature instead, which only `unsafe` code may call. An `@interrupt` function converts only to `InterruptHandler`, for `idt.set`. A local function among a program's top-level statements that uses top-level variables never becomes an `fn` either, because it takes them as hidden arguments that only a direct call passes; pass it as a closure parameter instead.
+--- failing
+public unsafe function peek(p: *u8): u8 { return p.read(); }
+
+public function apply(f: fn(p: *u8) => u8, p: *u8): u8 { return f(p); }
+
+public function first(p: *u8): u8 { return apply(peek, p); }
+--- fixed
+public unsafe function peek(p: *u8): u8 { return p.read(); }
+
+public unsafe function apply(f: unsafe fn(p: *u8) => u8, p: *u8): u8 { return f(p); }
+
+public unsafe function first(p: *u8): u8 { return apply(peek, p); }
+=== EN0804
+--- rule
+A `@packed` class has no padding, so a field may start at any byte, and a `u32` field need not sit at an address divisible by 4, as a `&u32` must. A reference into a packed field whose type needs more than 1-byte alignment is EN0804, however it arises: `&h.size`, a method called on the field, a `for...of` over it, a destructuring binding or a spread. Copy the field by value instead, as `const size = h.size;` does; `console.log` and template holes copy it by themselves. A field of a 1-byte type, such as `u8` or `u8[16]`, can be borrowed.
+--- failing
+const h = new Header { tag: 1, size: 512 };
+const size = &h.size;
+console.log(*size);
+
+@packed
+private final class Header {
+  public tag: u8;
+  public size: u32;
+}
+--- fixed
+const h = new Header { tag: 1, size: 512 };
+const size = h.size;
+console.log(size);
+
+@packed
+private final class Header {
+  public tag: u8;
+  public size: u32;
+}
+=== EN0805
+--- rule
+`readVolatile` and `writeVolatile` compile to exactly one load or store of the value's width, so the value's type must satisfy the sealed bound `VolatileValue`: `u8`, `u16`, `u32`, `i8`, `i16`, `i32`, `usize`, `isize`, `bool` and raw pointers, plus `u64` and `i64` on `x86_64-*` targets. Any other type is EN0805 at the call, in generic code too: a float, a class, and `u64` or `i64` on `i386-*` targets, where one access would be split in two and could tear. Access the bits through a pointer to an integer, with `toBits()` for a float, or one field at a time. Generic code states the bound, as in `<T extends VolatileValue>`.
+--- failing
+const gain = 0xFEE00000 as *f32;
+unsafe { gain.writeVolatile(0.5); }
+--- fixed
+const gain = 0xFEE00000 as *u32;
+const half: f32 = 0.5;
+unsafe { gain.writeVolatile(half.toBits()); }
+=== EN0806
+--- rule
+Decorators are a fixed set, each allowed on certain declarations: `@entry`, `@panicHandler` and `@interrupt` on functions, `@abi` on functions and function pointer types, `@naked` and `@bits` on an `unsafe function`, `@requires` and `@mustUse` on functions and methods, `@section` on functions, constants and `unsafe let`, `@at` and `@globalAllocator` on an `unsafe let`, `@packed`, `@repr` and `@align` on classes and enums, `@align` on an `unsafe let` too, `@dll` on a `declare function`, and `@was` and `@devMigrate`, which `enrang dev` reads. An unknown decorator, or a known one on a declaration it does not fit, is EN0806, and so is a form only the standard library may use, `extend`, `@lang`, `@intrinsic`, `@hostCall` or `@owner`, in user code. A decorator through which the compiler, a runtime or foreign code calls a function, such as `@entry` or `@interrupt`, is EN0806 on a local function that uses top-level variables too, since only the program's statements can pass those to it.
+--- failing
+@inline
+public function square(x: i64): i64 { return x * x; }
+--- fixed
+public function square(x: i64): i64 { return x * x; }
+--- typescript
+A TypeScript decorator is a function that runs when the class is defined, so any function in scope can be one. An Enrang decorator is an instruction to the compiler, and only the ones it knows exist.
+=== EN0807
+--- rule
+An `@interrupt` function is called by the CPU when its interrupt arrives, through a stub that the compiler writes to save the registers and return with `iret`. Enrang code never calls one, which is EN0807: register it with `idt.set(vector, handler)`, where it converts to an `InterruptHandler`, and put work that other code needs too in an ordinary function that both call. Interrupt handlers belong to freestanding targets, so the examples are checked with `--target=i386-none`, as their first line says.
+--- failing
+//! target: i386-none
+@interrupt
+public function onTimer(frame: &InterruptFrame): void {}
+
+public function tick(frame: &InterruptFrame): void { onTimer(frame); }
+--- fixed
+//! target: i386-none
+import { idt } from "os";
+
+@interrupt
+public function onTimer(frame: &InterruptFrame): void {}
+
+public function install(): void { idt.set(32, onTimer); }
+=== EN0808
+--- rule
+The CPU enters an interrupt handler with a fixed frame on the stack, so the handler's signature is fixed too: one `frame: &InterruptFrame` parameter, a second `code: usize` parameter only with `@interrupt({ errorCode: true })`, for the exceptions where the CPU pushes an error code, and a result of `void` or `never`. Any other signature is EN0808. Interrupt handlers belong to freestanding targets, so the examples are checked with `--target=i386-none`, as their first line says.
+--- failing
+//! target: i386-none
+@interrupt
+public function onFault(frame: &InterruptFrame, code: usize): never { panic("page fault"); }
+--- fixed
+//! target: i386-none
+@interrupt({ errorCode: true })
+public function onFault(frame: &InterruptFrame, code: usize): never { panic("page fault"); }
+=== EN0814
+--- rule
+`@section("name")` places a function, a constant or an `unsafe let` in a named output section. The compiler sets no flags for a section it does not know, so a hosted target, Linux or Windows, accepts only names that start with `.text.`, `.data.`, `.rodata.` or `.bss.`, whose flags follow from the prefix. `.bss.stack` holds the compiler's own stack and is reserved on every target. A name the target does not accept is EN0814. On freestanding targets other names are allowed, and sections whose names begin with `.boot` go first in the image.
+--- failing
+@section(".boot")
+public function start(): void { console.log("starting"); }
+--- fixed
+@section(".text.start")
+public function start(): void { console.log("starting"); }
+=== EN0815
+--- rule
+A `declare function` has no body: it names a function that another binary provides. The only such binaries are Windows DLLs, so the declaration names its DLL, as in `@dll("kernel32.dll")`, and the compiler writes the import table; a `declare function` without `@dll` is EN0815. Linux and freestanding targets have no dynamic linker and no libc: reach the system there with inline assembly, `asm`, in an `unsafe function`. Calling a declared function needs `unsafe`.
+--- failing
+public declare function GetCurrentProcessId(): u32;
+--- fixed
+@dll("kernel32.dll")
+public declare function GetCurrentProcessId(): u32;
+--- typescript
+TypeScript's `declare function` tells the type checker that some script defines the function when the program runs. In Enrang it imports a foreign function, which needs the DLL it comes from.
+=== EN0816
+--- rule
+Foreign code knows nothing of Enrang's types, so the parameters and result of a `declare function`, and those of an `@abi` `fn` type, are limited to scalars, enums without fields, raw pointers and `fn` pointers, a pointer optionally `| null`. A `string`, an array, `T[]` or `T[N]`, a reference, a view, a closure, a type parameter or a nullable scalar such as `i32 | null` there is EN0816; a class or another aggregate passed by value is EN1030. Pass a raw pointer to the data instead, with its length as a separate argument when the callee needs one.
+--- failing
+@dll("kernel32.dll")
+public declare function OutputDebugStringA(text: string): void;
+--- fixed
+@dll("kernel32.dll")
+public declare function OutputDebugStringA(text: *u8): void;
+=== EN0817
+--- rule
+Layout decorators must agree. `@packed` removes a class's padding and sets its alignment to 1, so it can't stand with `@align(n)`, which raises the alignment, or with `@repr`, which fixes another layout, and a layout decorator written twice on one declaration contradicts itself. Each of these is EN0817, at the second decorator. Keep the one the layout needs: `@packed` for fields at fixed byte offsets with no gaps between them, `@align(n)` for a value that must start at an `n`-byte boundary.
+--- failing
+@packed
+@align(16)
+public final class Header {
+  public magic: u32 = 0;
+  public flags: u8 = 0;
+}
+--- fixed
+@packed
+public final class Header {
+  public magic: u32 = 0;
+  public flags: u8 = 0;
+}
+=== EN0819
+--- rule
+`@abi` names the calling convention of a function that foreign code calls, or of a function pointer through which Enrang calls foreign code: `@abi("win64")`, the convention of 64-bit Windows, which UEFI uses too, or `@abi("sysv")`, the System V convention, which C code on Linux uses. Any other name is EN0819, except `cdecl` and `stdcall`, the 32-bit conventions, which are EN1030. For a C callback on Linux, write `sysv`.
+--- failing
+public type Compare = @abi("C") unsafe fn(a: *u8, b: *u8) => i32;
+--- fixed
+public type Compare = @abi("sysv") unsafe fn(a: *u8, b: *u8) => i32;
+=== EN0826
+--- rule
+A field of a `@packed` class may sit at any byte offset, so its type must be Copy and not generic: then no destructor ever runs on it, and its alignment is known when the class is checked. A field whose type is not Copy, such as `string`, `T[]` or a class with a destructor, or whose type is a type parameter, is EN0826. Keep such data outside the packed class, or store a fixed-size copy of it, such as a `u8[N]` of bytes.
+--- failing
+@packed
+public final class Record {
+  public id: u32 = 0;
+  public name: string = "";
+}
+--- fixed
+@packed
+public final class Record {
+  public id: u32 = 0;
+  public name: u8[16] = [0; 16];
+}
+=== EN0827
+--- rule
+`@repr("C")`, `@packed` and `@align(n)` promise a class an exact layout, which only a `final` class that extends no class can keep: a class that can be extended, and every class that extends one, carries a hidden method-table pointer. A layout decorator on a class that is not `final`, or on one that extends a class, is EN0827, and so is one on a class with a field that holds, inline, a class carrying such a pointer. Write the class `final` and remove its `extends`; a class that needs a base keeps the default layout.
+--- failing
+@packed
+public class GdtPointer {
+  public limit: u16 = 0;
+  public base: u32 = 0;
+}
+--- fixed
+@packed
+public final class GdtPointer {
+  public limit: u16 = 0;
+  public base: u32 = 0;
+}
+=== EN0828
+--- rule
+A function that is not `unsafe` but reads or writes through one of its raw-pointer parameters gets warning EN0828: any caller may call it with any address, so an `unsafe` block inside it cannot know that the address is valid. Mark it `unsafe function`, so that its callers state that they checked the address, or take a reference, which the compiler checks. A method whose signature a safe interface member or a safe base method fixes is exempt, since neither change could be made there.
+--- failing
+public function peek(p: *u8): u8 {
+  unsafe { return p.read(); }
+}
+--- fixed
+public unsafe function peek(p: *u8): u8 { return p.read(); }

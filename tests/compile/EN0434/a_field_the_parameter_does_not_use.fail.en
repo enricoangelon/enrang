@@ -1,0 +1,5 @@
+greet(&{ name: "Bo", age: 1 }); //~ EN0434 "`greet` doesn't use the field `age`, so it would be thrown away"
+
+public function greet(x: &{ name: string }): void {
+  console.log(`hi ${x.name}`);
+}

@@ -1,0 +1,12 @@
+//! covers: H42
+function showx(p: &{ x: i64 }): void { console.log(p.x); }
+function sety(p: &HasY): void { p.y = 5; }
+let c = new C();
+showx(&c);
+sety(&c);
+
+public interface HasY { y: i64; }
+public class C implements HasY {
+  public readonly x: i64 = 1;
+  public y: i64 = 2;
+}

@@ -1,0 +1,8 @@
+const d = new Dog { name: "Rex" };
+look(&d);
+
+private function look(x: &Clone): void {}
+
+public final class Dog implements Eq {
+  public name: string;
+}

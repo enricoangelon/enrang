@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0616/fv-01-arrow-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot write through `this.src`, because it is `readonly &`
+ --> tests/compile/EN0616/fv-01-arrow-2.fail.en:7:23
+  |
+2 |   private src: readonly &Slice<u8>;
+  |   --------------------------------- `src` is declared `readonly &` here
+...
+7 |     const f = () => { this.src[0] = 9; }; //~ EN0616 "src"
+  |                       ^^^^^^^^^^^^^^^ written here
+  |
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

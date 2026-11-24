@@ -1,0 +1,17 @@
+error[EN0601]: `q` was used up by the loop
+ --> main.en:3:13
+  |
+1 | let q = ["a", "b"];
+  |     - `q` owns this `string[]`, which is not Copy
+2 | for (const x of q) { console.log(x); }
+  |                 - the loop takes `q`, because there is no `&`
+3 | console.log(q);
+  |             ^ used here afterwards
+  |
+help: to keep `q`, borrow it: `for (const x of &q)`
+  |
+2 | for (const x of &q) { console.log(x); }
+  |                 +
+  = explain: run `enrang explain EN0601`
+
+error: aborting due to 1 previous error

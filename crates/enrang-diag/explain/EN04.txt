@@ -1,0 +1,910 @@
+=== EN0401
+--- rule
+A value must have the type that its place expects: the annotation of the variable it initialises, the parameter it is passed to, the target of an assignment, the result type of a `return`, the element type of an array, the field it sets. The compiler converts a value only by the fixed table of coercions, such as a value to `T | null` or a whole array to a view `&Slice<T>`, and never between numbers and strings. The same code covers the other shapes of a mismatch, each with its own message: a `Dog` where an `Animal` is expected, a fixed array where a growable one is, a `Slice<u8>` without `&`, a text that is not a value of a string-literal union. The help shows an explicit conversion where one exists, such as `.toString()`.
+--- failing
+const count = 3;
+const label: string = count;
+console.log(label);
+--- fixed
+const count = 3;
+const label: string = count.toString();
+console.log(label);
+--- typescript
+TypeScript also rejects a number where a `string` is declared, but converts freely in `+` and template literals. Enrang converts only where you write it, so `count.toString()` and `${count}` are the two ways to turn a number into text.
+=== EN0402
+--- rule
+Arithmetic needs both operands of one type, because Enrang never converts a number implicitly: `i32 + i64` and `isize - int` are errors, and an integer never compares with a float. A literal takes the type of the other operand, so this happens between two values that already have their types. The fix-it converts one operand with `as` to the wider type, which never fails: `total - (used as isize)`.
+--- failing
+public function remaining(total: isize, used: i32): isize { return total - used; }
+--- fixed
+public function remaining(total: isize, used: i32): isize { return total - (used as isize); }
+--- typescript
+Every TypeScript number is a double, so there is one numeric type and nothing to mix. Enrang has a type for each width and signedness, and makes each conversion between them visible.
+=== EN0403
+--- rule
+The bitwise operators `&`, `|`, `^` and `~` and the shifts `<<` and `>>` need integer operands; a shift count may have any integer type. A number written with a decimal point is a float, and a float has no bits to combine. Use an integer type, or, for the bits of a float, `x.toBits()`.
+--- failing
+const flags = 6.0;
+console.log(flags & 4);
+--- fixed
+const flags = 6;
+console.log(flags & 4);
+--- typescript
+TypeScript converts both operands of a bitwise operator to 32-bit integers, silently dropping a fraction. Enrang refuses instead, so a float never loses its fraction without a written `as`.
+=== EN0404
+--- rule
+`x as T` converts only where a conversion is defined: between numeric types, from a payload-free enum or a `bool` to an integer, between raw pointers and `usize`, and from a reference to a raw pointer. An integer never becomes an enum or a `bool`, an enum whose cases carry texts has no number, and a `string` or a class has no `as` conversion at all. Compare with `!= 0` to get a `bool`, use `match` to turn a number into an enum case, and call a method such as `toString()` or `parseInt()` to move between numbers and text. The help shows the comparison where one fits.
+--- failing
+const flag = 1 as bool;
+console.log(flag);
+--- fixed
+const flag = 1 != 0;
+console.log(flag);
+--- typescript
+In TypeScript `as` changes only what the compiler believes, and nothing happens when the program runs. In Enrang `as` converts the value, so it exists only where a conversion is defined.
+=== EN0405
+--- rule
+An index must be an integer; any integer type will do, and a negative index panics as out of bounds. A float is never an index, even when its value is whole, because nothing converts it implicitly. Keep positions in an integer variable, or convert a computed float with `as isize`, which drops the fraction.
+--- failing
+const xs = [10, 20, 30];
+const at = 1.0;
+console.log(xs[at]);
+--- fixed
+const xs = [10, 20, 30];
+const at = 1;
+console.log(xs[at]);
+--- typescript
+A TypeScript array is an object whose index becomes a property key, so `xs[1.0]` reads `xs[1]` and `xs[1.5]` gives `undefined`. Enrang arrays are indexed by integers only.
+=== EN0406
+--- rule
+The only union of types is `T | null`. A value that is one of several kinds, such as a number or a text, is an enum with a case for each kind, and `match` tells the cases apart. A union of string literals in a type alias, `type Direction = "left" | "right";`, is a payload-free enum, and is valid.
+--- failing
+public function show(value: i64 | string): void { console.log("value"); }
+--- fixed
+public enum Value {
+  Number { n: i64 },
+  Text { s: string },
+}
+
+public function show(value: Value): void { console.log("value"); }
+--- typescript
+TypeScript tells a union's members apart while the program runs, with `typeof`. Enrang values carry no type at run time, so the enum's case records which kind is stored.
+=== EN0408
+--- rule
+A class or enum cannot contain itself, through a field or a case's payload, because a value holds its fields in place, so its size would have no end. Put the recursive part in a `Box`, which stores it on the heap and holds only its address. The fix-it writes `Box<Node> | null`.
+--- failing
+public class Node {
+  public value: i64 = 0;
+  public next: Node | null = null;
+}
+--- fixed
+public class Node {
+  public value: i64 = 0;
+  public next: Box<Node> | null = null;
+}
+--- typescript
+Every TypeScript object is reached through a reference, so a `Node` field holds an address. An Enrang class value holds its fields directly, and `Box` is the explicit address.
+=== EN0409
+--- rule
+Every parameter and field states its type, because types in signatures are never inferred. An arrow's parameter may leave its type out only where the arrow is passed or stored where a closure or `fn` type is expected, which gives the parameter its type.
+--- failing
+const double = x => x * 2;
+console.log(double(21));
+--- fixed
+const double = (x: i64) => x * 2;
+console.log(double(21));
+--- typescript
+TypeScript gives such a parameter the type `any`, or reports it under `noImplicitAny`. Enrang has no `any`, so the type must come from the code.
+=== EN0410
+--- rule
+Inference runs over one body, and some expressions do not decide their own type: an empty array `[]` with no expected type and no later `push`, `null` alone, the bare name of an overloaded function, a type parameter that no argument binds, and a member read on a value whose type is still unknown. Give the type where the value starts: annotate the variable, as the help says, or give a call its type arguments, `f<i64>(...)`.
+--- failing
+const items = [];
+console.log(items.length());
+--- fixed
+const items: string[] = [];
+console.log(items.length());
+--- typescript
+In TypeScript an empty array literal with no annotation becomes `any[]` or `never[]`, depending on the compiler's options. An Enrang array holds one element type, which must be known when the program is compiled.
+=== EN0411
+--- rule
+An integer literal must fit its final type, which comes from an annotation, from the other operand, or from the default `int`, which is `i32`. When the default was used, the fix-it adds `: i64`. The same holds for a literal before `as`, so `300 as u8` is refused, and for a constant that does not fit the target: the compiler never truncates a literal. A `-` written right before a literal counts as part of it, so `const m: i64 = -9223372036854775808;` fits.
+--- failing
+const big = 3_000_000_000;
+console.log(big);
+--- fixed
+const big: i64 = 3_000_000_000;
+console.log(big);
+--- typescript
+A TypeScript number holds integers exactly up to 2^53. Enrang integers have fixed widths, and the default `int` has 32 bits, so that a loop counter fits one register on `i386`.
+=== EN0412
+--- rule
+A `const` initialiser, an array length, a repeat count and a compile-time `assert` are evaluated when the program is compiled, and evaluation can fail: arithmetic that overflows the constant's type, a division by zero, an operand that is not a constant, a constant that uses itself through others, a spread `...`, which allocates at run time, `sizeOf` of a class that holds a reference, and an `@repr` value that does not fit. Widen the type, or change the expression; the label shows the values that failed.
+--- failing
+public const LIMIT: u8 = 200;
+public const DOUBLE: u8 = LIMIT * 2;
+--- fixed
+public const LIMIT: u8 = 200;
+public const DOUBLE: u16 = (LIMIT as u16) * 2;
+=== EN0413
+--- rule
+`p?.f` reads through `p`: it gives a reference to the field, and `p?.m()` calls the method on `p` where it is. An owned `T | null` that is stored nowhere, such as the result of a call, has no place to read through, so `?.` on it is refused. Bind the value to a variable first, then use `?.` on the variable, as the help says. On a variable, a field or a reference, `?.` works as in TypeScript.
+--- failing
+console.log(find("ada")?.length());
+
+public function find(name: &string): string | null {
+  if (name == "") { return null; }
+  return name.toUpperCase();
+}
+--- fixed
+const found = find("ada");
+console.log(found?.length());
+
+public function find(name: &string): string | null {
+  if (name == "") { return null; }
+  return name.toUpperCase();
+}
+=== EN0415
+--- rule
+An `assert` at the top level of a module, outside a program's statements, is checked when the program is compiled: its condition must be a constant, and when it is `false` the build stops with the assert's message. Use it to state what constants must satisfy, such as a size or an alignment, and change the constants until it holds.
+--- failing
+public const SLOTS: usize = 6;
+assert(SLOTS % 4 == 0, "SLOTS must be a multiple of 4");
+--- fixed
+public const SLOTS: usize = 8;
+assert(SLOTS % 4 == 0, "SLOTS must be a multiple of 4");
+--- typescript
+TypeScript checks nothing about values before the program runs. A compile-time `assert` is closer to C's `static_assert`: it costs nothing at run time.
+=== EN0416
+--- rule
+`implements I` asserts that a class satisfies the interface `I`, and is checked at the class. Each member of `I` needs a member of the class that is public, is a method, has the same unsafety, has no `@requires`, and has equal type parameters, parameter types and return type; the message names the condition that fails. Without `implements`, the same check runs where the class is used as an `I`, as EN0419.
+--- failing
+public interface Named {
+  name(): string;
+}
+
+public class User implements Named {
+  private label: string = "ada";
+  private name(): string { return this.label.toString(); }
+}
+--- fixed
+public interface Named {
+  name(): string;
+}
+
+public class User implements Named {
+  private label: string = "ada";
+  public name(): string { return this.label.toString(); }
+}
+--- typescript
+TypeScript checks `implements` too, but accepts any compatible member, such as a method with fewer parameters. Enrang wants the exact signature, because a call through the interface runs the class's method as it is.
+=== EN0417
+--- rule
+An interface lists either fields, which makes it an object type, or methods, never both. Turn each field into a method that returns it: for a field `name: string`, the fix-it writes `name(): &string`.
+--- failing
+public interface Shape {
+  name: string;
+  area(): f64;
+}
+--- fixed
+public interface Shape {
+  name(): &string;
+  area(): f64;
+}
+--- typescript
+A TypeScript interface may mix both. In Enrang an interface of fields is an object type, a shape of data, and an interface of methods is a set of operations, so one interface cannot be both.
+=== EN0418
+--- rule
+`implements Copy` makes a class's values copy on assignment instead of moving, which is valid only when a copy is harmless: every field, inherited ones included, must be Copy, and neither the class nor any base may have a destructor, which would run once for each copy. A `string`, an array or a `Box` owns memory on the heap, so a class holding one is not Copy. Remove `implements Copy` and call `clone()` where a copy is needed, as the help says.
+--- failing
+public class Tag implements Copy {
+  public label: string = "";
+}
+--- fixed
+public class Tag implements Copy {
+  public id: u32 = 0;
+}
+=== EN0419
+--- rule
+A type argument must satisfy each bound of its type parameter, written `T extends B` or in a `where` clause; the secondary label points at the bound. An interface bound such as `Copy`, `Clone`, `Eq` or `Ord` is met by the types that implement it, and a class bound by that class and its subclasses. User code cannot implement a sealed interface such as `__Int` or `VolatileValue`. Pass a type that satisfies the bound, or loosen the bound to what the function needs.
+--- failing
+const pair = twice("hi");
+console.log(pair.length());
+
+public function twice<T extends Copy>(x: T): T[] { return [x, x]; }
+--- fixed
+const pair = twice("hi");
+console.log(pair.length());
+
+public function twice<T extends Clone>(x: T): T[] { return [x.clone(), x]; }
+--- typescript
+TypeScript checks a bound too, `<T extends Named>`, by shape. Enrang checks it the same way for method interfaces, while `Copy` and `Error` are met only by types that declare them.
+=== EN0420
+--- rule
+Some operators do not apply to some types. `<`, `<=`, `>` and `>=` order numbers only, so strings are ordered with `a.compare(&b)`, which the fix-it writes. Arithmetic has no meaning on a `bool` or a class. And `a & b == c` reads as `a & (b == c)`, as in JavaScript, which mixes an integer with a `bool`; the fix-it adds the parentheses that were meant, `(a & b) == c`.
+--- failing
+const a = "apple";
+const b = "banana";
+console.log(a < b);
+--- fixed
+const a = "apple";
+const b = "banana";
+console.log(a.compare(&b) < 0);
+--- typescript
+TypeScript compares strings with `<` by their UTF-16 code units. Enrang makes the ordering a method, so it is visible where it happens.
+=== EN0421
+--- rule
+`==` and `!=` on a class or an enum whose cases hold fields call the type's `equals`, from `implements Eq`. A type without it has no equality, because comparing objects by address, as TypeScript does, is not what Enrang values mean. Declare `implements Eq`, which compares field by field when the class writes no `equals`, or compare the fields themselves, as the help says.
+--- failing
+const a = new Point { x: 1, y: 2 };
+const b = new Point { x: 1, y: 2 };
+console.log(a == b);
+
+public class Point {
+  public x: i64 = 0;
+  public y: i64 = 0;
+}
+--- fixed
+const a = new Point { x: 1, y: 2 };
+const b = new Point { x: 1, y: 2 };
+console.log(a == b);
+
+public class Point implements Eq {
+  public x: i64 = 0;
+  public y: i64 = 0;
+}
+--- typescript
+In TypeScript `a == b` on two objects asks whether they are the same object, so two equal points compare `false`. In Enrang a class is a value, and `==` compares values through `Eq`.
+=== EN0422
+--- rule
+A reference variable holds where a value is, not the value. Assigning it another reference, `r = &s`, points it elsewhere; changing the value it refers to needs `*`: `*r = v`, `*r += 1`. So `r = v` with a value, `r += 1` and `r++` are refused, with fix-its that write through the reference or take one with `&`.
+--- failing
+public function bump(count: &i64): void { count += 1; }
+--- fixed
+public function bump(count: &i64): void { *count += 1; }
+--- typescript
+TypeScript has no references to numbers: a function cannot change a caller's `number`. In Enrang it can, through a `&i64`, and the `*` shows where it does.
+=== EN0423
+--- rule
+A call passes as many arguments as the function has parameters, less any that have a default or are optional (`x?: T`). With one function of that name, a call with too many or too few is refused; with several overloads, it is EN0451 instead.
+--- failing
+console.log(area(2.0, 3.0, 4.0));
+
+public function area(w: f64, h: f64): f64 { return w * h; }
+--- fixed
+console.log(area(2.0, 3.0));
+
+public function area(w: f64, h: f64): f64 { return w * h; }
+--- typescript
+TypeScript refuses extra arguments too, but a JavaScript function ignores them. In Enrang a call always matches the function's parameters.
+=== EN0424
+--- rule
+`e?` returns early from the enclosing function or arrow when `e` is an error or `null`, so that function must return a `Result`, for a `Result` operand, or a `T | null`, for a nullable one. Change the return type, or handle the value where it is: `match` on a `Result`, `??` or `if (x != null)` on a nullable. Inside a function returning `Result<T | null>`, `?` on a nullable is refused too, because `?` never wraps its early return as a success, and a bare `null` is no error.
+--- failing
+public function port(s: &string): i64 {
+  const n = s.parseInt()?;
+  return n;
+}
+--- fixed
+public function port(s: &string): i64 | null {
+  const n = s.parseInt()?;
+  return n;
+}
+=== EN0425
+--- rule
+`?` on a `Result<T, E>` returns its error unchanged from the enclosing function, so that function must return a `Result` with the same `E`, or a `Result<T>`, which is `Result<T, Failure>`, into which `?` turns any error into its text. The help suggests `Result<T>`. To keep a typed error of the function's own type, convert it with `match` and `return Err(...)`.
+--- failing
+public enum DiskError {
+  Missing,
+  Locked,
+}
+
+public enum AgeError {
+  Negative,
+  TooLarge,
+}
+
+public function readAge(path: &string): Result<i64, DiskError> {
+  if (path == "") { return Err(DiskError.Missing); }
+  return 42;
+}
+
+public function checkAge(path: &string): Result<i64, AgeError> {
+  const age = readAge(path)?;
+  if (age < 0) { return Err(AgeError.Negative); }
+  return age;
+}
+--- fixed
+public enum DiskError {
+  Missing,
+  Locked,
+}
+
+public enum AgeError {
+  Negative,
+  TooLarge,
+}
+
+public function readAge(path: &string): Result<i64, DiskError> {
+  if (path == "") { return Err(DiskError.Missing); }
+  return 42;
+}
+
+public function checkAge(path: &string): Result<i64> {
+  const age = readAge(path)?;
+  if (age < 0) { return Err("negative age"); }
+  return age;
+}
+=== EN0426
+--- rule
+An expression statement whose value is a `Result` throws it away, and an error with it. Handle it: `?` passes the error up, `match` handles each case, and `void f();` discards it on purpose, which the help writes.
+--- failing
+public function saveAll(names: &Slice<string>): Result<void> {
+  for (const n of names) { save(n); }
+}
+
+public function save(name: &string): Result<void> {
+  if (name == "") { return Err("no name"); }
+}
+--- fixed
+public function saveAll(names: &Slice<string>): Result<void> {
+  for (const n of names) { save(n)?; }
+}
+
+public function save(name: &string): Result<void> {
+  if (name == "") { return Err("no name"); }
+}
+--- typescript
+A thrown exception cannot be ignored by accident, and in Enrang neither can a returned error.
+=== EN0427
+--- rule
+A function that returns a value must return one on every path, so the end of its body must not be reachable. Add a final `return`, or end with a statement that never finishes, such as `panic("...")`. A `void` function may end, and so may one returning `Result<void, E>`, where the end means `return Ok();`.
+--- failing
+public function sign(n: i64): string {
+  if (n < 0) { return "negative"; }
+  if (n > 0) { return "positive"; }
+}
+--- fixed
+public function sign(n: i64): string {
+  if (n < 0) { return "negative"; }
+  if (n > 0) { return "positive"; }
+  return "zero";
+}
+--- typescript
+TypeScript reports this under `noImplicitReturns`, and otherwise returns `undefined`. Enrang has no `undefined` to return.
+=== EN0428
+--- rule
+Only functions and closures can be called. A closure that may be absent, of type `((n: i64) => void) | null`, must be tested first: inside `if (handler != null)` its type is narrowed to the closure, and the call is valid, as the help shows.
+--- failing
+public function run(handler: ((n: i64) => void) | null): void { handler(1); }
+--- fixed
+public function run(handler: ((n: i64) => void) | null): void {
+  if (handler != null) { handler(1); }
+}
+--- typescript
+TypeScript reports a possibly `undefined` callee under `strictNullChecks`. Enrang always checks: test the closure, then call it.
+=== EN0429
+--- rule
+`?` applies to a `Result`, which it unwraps or returns the error of, and to a `T | null`, which it unwraps or returns `null` for. On any other value there is nothing to test. A plain value returned from a function whose result is a `Result` is already a success, so `return n / 2;` needs no `?`.
+--- failing
+public function half(n: i64): Result<i64> {
+  if (n % 2 != 0) { return Err("odd"); }
+  return (n / 2)?;
+}
+--- fixed
+public function half(n: i64): Result<i64> {
+  if (n % 2 != 0) { return Err("odd"); }
+  return n / 2;
+}
+--- typescript
+TypeScript's `?.` is optional chaining. Enrang has `?.` too, while a `?` after a value is the early return of Rust, which only an error or a `null` triggers.
+=== EN0430
+--- rule
+Warning: `/` on two integers gives an integer, rounded toward zero, so `7 / 2` is `3`. When both operands come from integer literals with no type of their own, where TypeScript would give `3.5`, the compiler warns. For a fraction, divide floats, `7.0 / 2.0`, which the fix-it writes; for an integer division, give an operand its type first, `const n: i64 = 7;`, and the warning goes.
+--- failing
+const half = 7 / 2;
+console.log(half);
+--- fixed
+const half = 7.0 / 2.0;
+console.log(half);
+--- typescript
+TypeScript would give `3.5` for `7 / 2`, because every number is a double. In Enrang the literals are integers, and so is their quotient.
+=== EN0432
+--- rule
+With no expected type, the two branches of a ternary, and the arms of a `match` used as a value, must have one type, so that the whole expression has one. Make every branch give the same type, or annotate the variable, so that each branch converts to the expected type, as the help says.
+--- failing
+const n = 3;
+const label = n > 1 ? "many" : 1;
+console.log(label);
+--- fixed
+const n = 3;
+const label = n > 1 ? "many" : "one";
+console.log(label);
+--- typescript
+TypeScript types such a ternary as the union `string | number`. Enrang has no such unions (EN0406), so the branches must agree.
+=== EN0433
+--- rule
+Every field must have a value when an object is created. A field with no `= value` starts at its type's default: `0`, `false`, `""`, `[]` or `null`. A class, an enum, a `Box`, a `Result` and a reference have no default, so such a field must be set: in the named form, `new Team { owner: ... }`, and so `new Team()` is refused too. A variable of an anonymous object type that lacks an optional field of the expected type is refused as well, with a help that adds `subtitle: null`.
+--- failing
+const t = new Team { name: "core" };
+console.log(t.name);
+
+public class User {
+  public name: string;
+}
+
+public class Team {
+  public name: string;
+  public owner: User;
+}
+--- fixed
+const t = new Team { name: "core", owner: new User { name: "Ada" } };
+console.log(t.name);
+
+public class User {
+  public name: string;
+}
+
+public class Team {
+  public name: string;
+  public owner: User;
+}
+--- typescript
+TypeScript checks this too, for a property that is not optional. Enrang adds defaults, so only a field with no default must be named.
+=== EN0434
+--- rule
+A literal may set only the fields its type has. In a named form, `new Point { ... }`, a field the class lacks is refused. Where the expected type is an object type with fewer fields, as a parameter `&{ name: string }`, a field written in the literal that the type lacks would be thrown away, and is refused too.
+--- failing
+const p = new Point { x: 1, y: 2, z: 3 };
+console.log(p.x);
+
+public class Point {
+  public x: i64 = 0;
+  public y: i64 = 0;
+}
+--- fixed
+const p = new Point { x: 1, y: 2 };
+console.log(p.x);
+
+public class Point {
+  public x: i64 = 0;
+  public y: i64 = 0;
+}
+--- typescript
+TypeScript refuses such a field in an object literal as an excess property, but accepts it from a variable. Enrang accepts a value with extra fields only where it keeps the real shape (EN0440).
+=== EN0435
+--- rule
+A type, a static or a stack frame is too large for the target: a type or a static above `isize.MAX` bytes, a fixed array whose length is above `isize.MAX`, or a function whose locals take more than 2147483647 bytes of stack. The limits depend on the target, so code that builds for `x86_64` may not build for `i386`. Keep large data in a growable array, which lives on the heap.
+--- failing
+public function main(): void {
+  const cells: u8[3000000000] = [0; 3000000000];
+  console.log(cells[0]);
+}
+--- fixed
+public function main(): void {
+  let cells: u8[] = [];
+  cells.reserve(3000000000);
+  cells.push(0);
+  console.log(cells[0]);
+}
+=== EN0436
+--- rule
+In a file with no top-level statements, `function main` is the entry point. It takes no parameters and returns `void`, `i32`, which becomes the exit code, or `Result<void, E>`, whose error is printed before the program exits with 1. The program's arguments come from `os.args()`.
+--- failing
+public function main(): i64 { return 0; }
+--- fixed
+public function main(): i32 { return 0; }
+--- typescript
+A TypeScript program starts at the top of its entry file, which Enrang allows too. `main` is for a program written as declarations only, as in C.
+=== EN0437
+--- rule
+A type alias is another name for the type it stands for, expanded wherever it is used, so it cannot refer to itself, directly or through other aliases: its expansion would never end. A recursive structure is a class, whose field holds the recursion in an array or a `Box`.
+--- failing
+public type Tree = Tree[];
+--- fixed
+public class Tree {
+  public children: Tree[] = [];
+}
+--- typescript
+TypeScript accepts many recursive aliases, because its types only describe values. An Enrang alias is replaced by what it names, and a class is how a type refers to itself.
+=== EN0438
+--- rule
+`[...xs]` copies each element of `xs` into a new array, so `xs` must be an array, a fixed array or a view, by value or behind one `&`, and its elements must be `Clone`. In a generic function that means a `T extends Clone` bound, which the fix-it adds. A spread of a number, a string or an object is refused too: `...` needs an array.
+--- failing
+public function snapshot<T>(xs: &T[]): T[] { return [...xs]; }
+--- fixed
+public function snapshot<T extends Clone>(xs: &T[]): T[] { return [...xs]; }
+--- typescript
+A JavaScript spread copies references to the same objects. In Enrang a value has one owner, so `...` copies the elements too.
+=== EN0439
+--- rule
+`extend` adds members to a type that has no class body of its own, and only the libraries `core`, `alloc` and `os` may write it. An anonymous object type or a tuple, written out or named by a `type` alias, cannot have methods, so `extend` on one is refused there. In user code every `extend` is EN0806, with the help `make it a class`: a class holds fields and methods together. The examples are library code, as their first line says.
+--- failing
+//! library
+public type Point = { x: f64, y: f64 };
+
+extend Point {
+  public length(): f64;
+}
+--- fixed
+//! library
+public class Point {
+  public x: f64;
+  public y: f64;
+  public length(): f64 { return this.x + this.y; }
+}
+--- typescript
+TypeScript has no `extend`, and adds methods to a shape through a class or a prototype. An Enrang object type is plain data, and methods belong to a class.
+=== EN0440
+--- rule
+A value with more fields than an object type is accepted only where the compiler keeps its real shape: a parameter, by value or by reference. Where the declared type fixes the storage, in an annotated variable, a function result, a class field or an array element, the extra fields would have no room, and are refused. Build the smaller object from the fields that are needed, or keep a reference to the whole value; the helps show both.
+--- failing
+const p = { name: "Ada", age: 36 };
+const q: { name: string } = p;
+console.log(q.name);
+--- fixed
+const p = { name: "Ada", age: 36 };
+const q: { name: string } = { name: p.name };
+console.log(q.name);
+--- typescript
+TypeScript accepts the extra fields and keeps them, because an object is reached through a reference. An Enrang value is stored in place, at the size of its declared type.
+=== EN0441
+--- rule
+`length` is a method, on strings and arrays alike: write `s.length()`. On a string it counts bytes, and `s.charCount()` counts characters, which reads the whole string; the help gives both.
+--- failing
+const word = "hello";
+console.log(word.length);
+--- fixed
+const word = "hello";
+console.log(word.length());
+--- typescript
+A TypeScript string's `length` is a property that counts UTF-16 code units. An Enrang string holds UTF-8, so a method says which count is meant.
+=== EN0442
+--- rule
+A `final` class cannot be extended. If the class is yours and subclasses are intended, remove `final`; otherwise hold an instance of it in a field of the new class. A class that can be extended carries a hidden method-table pointer, which `final` saves.
+--- failing
+public final class Animal {
+  public name: string;
+}
+
+public class Dog extends Animal {
+  public breed: string;
+}
+--- fixed
+public class Animal {
+  public name: string;
+}
+
+public class Dog extends Animal {
+  public breed: string;
+}
+=== EN0443
+--- rule
+`override` says that a member replaces one of a class above. It must match one: a method of that name with the same parameter types, or a field the subclass can see, with the same type, `readonly` and visibility. A misspelt name, other parameter types, and a `private` base member, which subclasses cannot see, all leave it replacing nothing.
+--- failing
+public class Animal {
+  public speak(): string { return "..."; }
+}
+
+public class Dog extends Animal {
+  public override sound(): string { return "woof"; }
+}
+--- fixed
+public class Animal {
+  public speak(): string { return "..."; }
+}
+
+public class Dog extends Animal {
+  public override speak(): string { return "woof"; }
+}
+--- typescript
+TypeScript reports this too, so a misspelt name never creates a second method beside the one it meant to replace.
+=== EN0444
+--- rule
+A method or field that replaces a member of a class above, one the subclass can see, with the same parameter types, must say `override`, so that a replacement is never an accident; the fix-it adds it. A method of the same name with other parameter types is an overload, and a subclass member named like a `private` one is a new member; neither needs `override`.
+--- failing
+public class Animal {
+  public speak(): string { return "..."; }
+}
+
+public class Dog extends Animal {
+  public speak(): string { return "woof"; }
+}
+--- fixed
+public class Animal {
+  public speak(): string { return "..."; }
+}
+
+public class Dog extends Animal {
+  public override speak(): string { return "woof"; }
+}
+--- typescript
+TypeScript asks for `override` only under `noImplicitOverride`. Enrang always does.
+=== EN0445
+--- rule
+An abstract class exists to be extended: it may leave methods without a body, so it cannot be created itself. Create a subclass that implements every abstract method, and refer to it as `&Shape` or `Box<Shape>` where any shape will do.
+--- failing
+const s = new Shape();
+
+public abstract class Shape {
+  public abstract area(): f64;
+}
+--- fixed
+const s = new Square { side: 2.0 };
+console.log(s.area());
+
+public abstract class Shape {
+  public abstract area(): f64;
+}
+
+public class Square extends Shape {
+  public side: f64;
+  public override area(): f64 { return this.side * this.side; }
+}
+=== EN0446
+--- rule
+A class that is not `abstract` must implement every abstract method it inherits, each with `override`. Implement the missing method, or declare the class `abstract` too, as the help says.
+--- failing
+public abstract class Shape {
+  public abstract area(): f64;
+}
+
+public class Square extends Shape {
+  public side: f64;
+}
+--- fixed
+public abstract class Shape {
+  public abstract area(): f64;
+}
+
+public class Square extends Shape {
+  public side: f64;
+  public override area(): f64 { return this.side * this.side; }
+}
+=== EN0447
+--- rule
+A class that declares a constructor, or inherits one, is created only through it, `new User("Ada", 36)`, so that the checks in the constructor cannot be skipped. Naming the fields, `new User { ... }` or an object literal where a `User` is expected, is the way to create a class with no constructor in its chain.
+--- failing
+const u = new User { name: "Ada", age: 36 };
+console.log(u.name);
+
+public class User {
+  public name: string;
+  public age: i64;
+  public constructor(name: &string, age: i64) {
+    this.name = name.toString();
+    this.age = age;
+  }
+}
+--- fixed
+const u = new User("Ada", 36);
+console.log(u.name);
+
+public class User {
+  public name: string;
+  public age: i64;
+  public constructor(name: &string, age: i64) {
+    this.name = name.toString();
+    this.age = age;
+  }
+}
+=== EN0448
+--- rule
+A class with no constructor is created by naming its fields, and a field whose type has no default, a class, an enum, a `Box`, a `Result` or a reference, must be named each time. A `private` field cannot be named outside the class, so a `private` field with no default needs a constructor, and so does a subclass's own field with no default. Give the field a default, or write a constructor that sets it, as the help says.
+--- failing
+public class User {
+  public name: string;
+}
+
+public class Team {
+  private owner: User;
+}
+--- fixed
+public class User {
+  public name: string;
+}
+
+public class Team {
+  private owner: User;
+  public constructor(owner: User) { this.owner = owner; }
+}
+=== EN0449
+--- rule
+Arguments to `new C(...)` go to a constructor, so a class with none in its chain takes none: create it by naming its fields, `new Counter { count: 5 }`, or with `new Counter()` for every default. In a subclass's constructor, `super(...)` with arguments is refused for the same reason when no class above declares a constructor; call `super()`.
+--- failing
+const c = new Counter(5);
+console.log(c.count);
+
+public class Counter {
+  public count: i64 = 0;
+}
+--- fixed
+const c = new Counter { count: 5 };
+console.log(c.count);
+
+public class Counter {
+  public count: i64 = 0;
+}
+=== EN0450
+--- rule
+The overloads of one name must be told apart by the arguments of every call. Two that differ only in their return type, or that one call could match both of through a default parameter, are refused at the second declaration. Give them different names, or different parameter types.
+--- failing
+public function parse(s: &string): i64 { return 0; }
+
+public function parse(s: &string): f64 { return 0.0; }
+--- fixed
+public function parseInt(s: &string): i64 { return 0; }
+
+public function parseFloat(s: &string): f64 { return 0.0; }
+=== EN0451
+--- rule
+A call to an overloaded name picks the overload whose parameter types match the arguments exactly: there are no implicit numeric conversions, though the reference conversions apply. When none matches, or two still tie after the three preferences (a non-generic overload first, then one that needs no conversion chain, then the more specific), the call is refused, with each candidate in a note. Convert the argument, or add the overload that is needed.
+--- failing
+show(true);
+
+public function show(n: i64): void { console.log("a number"); }
+
+public function show(s: &string): void { console.log("a string"); }
+--- fixed
+show(1);
+
+public function show(n: i64): void { console.log("a number"); }
+
+public function show(s: &string): void { console.log("a string"); }
+--- typescript
+TypeScript overloads are signatures over one body, and a call is checked against each in turn. Enrang overloads are separate functions, and the call must pick exactly one.
+=== EN0452
+--- rule
+The parts of a tuple may have different types, so each is read by a constant index, from `0` to one less than the tuple's length. An index past the end is refused, and so is a variable index, whose part would have no single type. Destructuring, `const [a, b] = pair;`, names every part.
+--- failing
+const pair: [i64, i64] = [1, 2];
+console.log(pair[2]);
+--- fixed
+const pair: [i64, i64] = [1, 2];
+console.log(pair[1]);
+--- typescript
+TypeScript also refuses an index past the end of a tuple type, but accepts a variable index and types the result as a union of the parts. Enrang has no such unions (EN0406).
+=== EN0453
+--- rule
+Warning: a method that returns a new value and leaves the original as it was, such as `trim`, `toUpperCase`, `replace`, `slice`, `wrap` and the checked arithmetic, did nothing when its result is dropped. Keep the result, often in the same variable: the fix-it writes `name = name.trim();`. A function of your own opts in with the decorator `@mustUse`.
+--- failing
+let name = "  Ada  ";
+name.trim();
+console.log(name);
+--- fixed
+let name = "  Ada  ";
+name = name.trim();
+console.log(name);
+--- typescript
+TypeScript strings cannot change either, so `name.trim();` does nothing there too, in silence.
+=== EN0454
+--- rule
+The error type `E` of a `Result<T, E>` must be an error type. Every enum is one, and so is `Failure`, the prelude class that holds a text, while any other class is one only with `implements Error`. A `string`, a number, a plain class and a `Box` are not, so `Result<i64, string>` is refused, with the help to return `Result<i64>` and write the text in `Err("...")`. A reference or a class that holds one is EN0701 there instead.
+--- failing
+public function parsePort(s: &string): Result<i64, string> {
+  const n = s.parseInt();
+  if (n == null) { return Err("not a number"); }
+  return n;
+}
+--- fixed
+public function parsePort(s: &string): Result<i64> {
+  const n = s.parseInt();
+  if (n == null) { return Err("not a number"); }
+  return n;
+}
+--- typescript
+TypeScript can throw any value, a string included. An Enrang error is a value of an error type, so that `?` and printing know what to do with it, and a text is a `Failure`.
+=== EN0455
+--- rule
+In a function whose result is `Result<T, E>`, a plain value counts as a success: `return x;` means `return Ok(x);`. Where `Err` would take the same value as it is, the meaning is unclear, and the value must be wrapped: a text in a `Result<string>`, whose error, a `Failure`, holds a text too, a text that is a value of a string-literal union `E`, and a value whose type is `E` itself, as in a `Result<Token, Token>`. Write `Ok(...)` for a success or `Err(...)` for an error, as the help says.
+--- failing
+public function lookup(key: &string): Result<string> {
+  if (key == "") { return "no key given"; }
+  return Ok(key.toUpperCase());
+}
+--- fixed
+public function lookup(key: &string): Result<string> {
+  if (key == "") { return Err("no key given"); }
+  return Ok(key.toUpperCase());
+}
+=== EN0456
+--- rule
+An enum's `=` values are all integers, its discriminants, or all texts, which its cases carry and print; a mix of the two is refused. Pick one kind for every case. An integer enum converts to its number with `as`; a text enum has no number.
+--- failing
+public enum Level {
+  Low = 1,
+  High = "high",
+}
+--- fixed
+public enum Level {
+  Low = "low",
+  High = "high",
+}
+--- typescript
+TypeScript allows such heterogeneous enums. Enrang keeps each enum one kind, so it is either a number or a text, never a mixture that each use must sort out.
+=== EN0457
+--- rule
+`super.m()` calls the implementation of `m` in the nearest class above. When that declaration is abstract, there is no body to call. Call `super.m()` only where a class above implements `m`, or write the body in the subclass.
+--- failing
+public abstract class Shape {
+  public abstract area(): f64;
+}
+
+public class Square extends Shape {
+  public side: f64;
+  public override area(): f64 { return super.area(); }
+}
+--- fixed
+public abstract class Shape {
+  public abstract area(): f64;
+}
+
+public class Square extends Shape {
+  public side: f64;
+  public override area(): f64 { return this.side * this.side; }
+}
+=== EN0458
+--- rule
+A `move` method takes the whole object as `this`, and disposes of what it does not move out as an object of the class that declares the body. On a receiver whose class inherits such a method without overriding it, the body would dispose of the object as the wrong class, so the call is refused, and so is every `super.m()` whose target is a `move` method. Override the method in the class itself, as the help says. To share the work, let a `protected` method that is not `move` take the state out with `mem.replace`, and call it from each class's own `move` method.
+--- failing
+const b = new HtmlBuilder();
+const out = b.build();
+console.log(out.length());
+
+public class Builder {
+  private parts: string[] = [];
+  public constructor() {}
+  public move build(): string[] { return this.parts; }
+}
+
+public class HtmlBuilder extends Builder {
+  public constructor() { super(); }
+}
+--- fixed
+const b = new HtmlBuilder();
+const out = b.build();
+console.log(out.length());
+
+public class Builder {
+  private parts: string[] = [];
+  public constructor() {}
+  public move build(): string[] { return this.takeParts(); }
+  protected takeParts(): string[] { return mem.replace(&this.parts, []); }
+}
+
+public class HtmlBuilder extends Builder {
+  public constructor() { super(); }
+  public override move build(): string[] { return this.takeParts(); }
+}
+=== EN0459
+--- rule
+Warning: a `move` method with a body in an `abstract` class can never run. Every object of the class belongs to a subclass, where a call that reaches that body is EN0458, and one in generic code panics on entry. Declare the method `abstract`, as the help says, and implement it in each subclass.
+--- failing
+public abstract class Task {
+  public move run(): string { return "done"; }
+}
+--- fixed
+public abstract class Task {
+  public abstract move run(): string;
+}
+=== EN0460
+--- rule
+A method compiled once per type, one with type parameters of its own, a by-value interface parameter or an object-type parameter, gets no method-table slot, since no single function could fill one, so every call to it runs the body of the class that declares it. A subclass therefore cannot override it: an `override` of one, or a subclass method with its signature, is refused, and so is such a method declared `abstract`, which no subclass could implement. Give the subclass's method another name, as the help says.
+--- failing
+public class Animal {
+  public show<T>(x: &T): void { console.log("an animal"); }
+}
+
+public class Dog extends Animal {
+  public override show<T>(x: &T): void { console.log("a dog"); }
+}
+--- fixed
+public class Animal {
+  public show<T>(x: &T): void { console.log("an animal"); }
+}
+
+public class Dog extends Animal {
+  public showDog<T>(x: &T): void { console.log("a dog"); }
+}
+--- typescript
+TypeScript generic methods are one function that works on any type, so they override freely. Enrang compiles a generic method once for each type it is used with, and a table slot holds one function only.

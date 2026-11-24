@@ -1,0 +1,14 @@
+console.log(sign(3), save());
+
+private function sign(n: i64): i64 {
+  if (n > 0) {
+    return 1;
+  } else if (n < 0) {
+    return -1;
+  }
+  return 0;
+}
+
+private function save(): Result<void> {
+  console.log("saved");
+}

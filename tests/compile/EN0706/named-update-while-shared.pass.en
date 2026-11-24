@@ -1,0 +1,14 @@
+//! row: `function read(x: &i64): void { console.log(*x);
+let n: i64 = 1;
+const r = &n;
+read(&n);
+console.log(*r);
+update(&n);
+
+function read(x: &i64): void {
+  console.log(*x);
+}
+
+function update(x: &i64): void {
+  *x = 42;
+}

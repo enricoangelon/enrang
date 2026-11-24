@@ -1,0 +1,8 @@
+//! row: `@packed public final class P { public s:
+@packed public final class P {
+  public s: string; //~ EN0826 "`@packed` field must be Copy and non-generic"
+}
+
+@packed public final class G<T> {
+  public v: T; //~ EN0826 "`@packed` field must be Copy and non-generic"
+}

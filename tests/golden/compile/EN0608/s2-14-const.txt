@@ -1,0 +1,33 @@
+$ enrang check tests/compile/EN0608/s2-14-const.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `TABLE`, because it is a top-level `const`
+  --> tests/compile/EN0608/s2-14-const.fail.en:1:17
+   |
+ 1 | for (const t of &TABLE) { //~ EN0608
+   |                 ^^^^^^ written here
+...
+16 | private const TABLE: i64[3] = [1, 2, 3];
+   |               ----- declared `const` here
+   |
+   = explain: run `enrang explain EN0608`
+
+error[EN0616]: `pick` returns a reference that may point at a constant
+ --> tests/compile/EN0608/s2-14-const.fail.en:6:17
+  |
+6 | for (const x of pick(&v)) { //~ EN0616
+  |                 ^^^^^^^^ written here
+  |
+  = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot change the object returned by `view`
+  --> tests/compile/EN0608/s2-14-const.fail.en:12:17
+   |
+12 | for (const x of r) { //~ EN0616
+   |                 ^ `view` returns a `readonly` reference
+   |
+help: to allow this, remove `readonly` from the return type of `view`
+   = explain: run `enrang explain EN0616`
+
+error: aborting due to 3 previous errors

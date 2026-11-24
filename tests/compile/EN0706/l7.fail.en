@@ -1,0 +1,11 @@
+//! row: `l1`-`l10`, local functions, among them `let
+let count = 0;
+function inc(): void {
+  count += 1;
+}
+function relay(): void {
+  inc();
+}
+const r = &count;
+relay(); //~ EN0706 "`count` cannot change while `r` still points into it"
+console.log(r);

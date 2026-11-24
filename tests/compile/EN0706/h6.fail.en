@@ -1,0 +1,13 @@
+//! row: `h1`-`h8`, hold slots: loans on the sour
+let a: i64[] = [1, 2, 3]; let b: i64[] = [7, 8, 9]; let w = new Walker(&a); w.run(&b);
+
+public class Walker {
+  private view: &Slice<i64>;
+  public constructor(v: &Slice<i64>) { this.view = v; }
+  public run(other: &Slice<i64>): void {
+    for (const x of this.view) {
+      console.log(x);
+      this.view = other; //~ EN0706
+    }
+  }
+}

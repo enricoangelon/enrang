@@ -1,0 +1,6 @@
+public function load(path: &string): Result<string> {
+  if (path.isEmpty()) {
+    return "file missing"; //~ EN0455 "could be a success or an error here"
+  }
+  return `read ${path}`; //~ EN0455 "could be a success or an error here"
+}

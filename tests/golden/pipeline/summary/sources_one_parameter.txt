@@ -1,0 +1,2 @@
+module "main"
+fn first(_1: &Slice<string>, _2: &string) -> &string perms(read, read) sources(0) result writable;

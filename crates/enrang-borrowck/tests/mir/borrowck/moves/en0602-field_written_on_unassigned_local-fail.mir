@@ -1,0 +1,21 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0602/field_written_on_unassigned_local.fail.en. Its row's codes: EN0602.
+module "tests/compile/EN0602/field_written_on_unassigned_local.fail";
+class User {
+  name: string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: User; // g
+  bb0: {
+    storage_live(_2);
+    drop(_2.name) [assign];
+    _2.name = const "Ada": string; //~ EN0602 "`g` is used before it has a value"
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

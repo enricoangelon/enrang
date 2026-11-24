@@ -1,0 +1,21 @@
+[package]
+name = "enrang-layout"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+test = false
+
+[dependencies]
+enrang-base = { path = "../enrang-base" }
+enrang-target = { path = "../enrang-target" }
+enrang-hir = { path = "../enrang-hir" }
+
+[dev-dependencies]
+enrang-testkit = { path = "../enrang-testkit" }
+
+[[test]]
+name = "layout"
+path = "tests/layout/main.rs"
+harness = false

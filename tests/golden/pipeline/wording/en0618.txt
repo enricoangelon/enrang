@@ -1,0 +1,10 @@
+error[EN0618]: `report()` reads `count` before it is declared
+ --> main.en:1:1
+  |
+1 | report();
+  | ^^^^^^^^ `count` is declared on line 2
+  |
+help: move this call below `let count = 0;`
+  = explain: run `enrang explain EN0618`
+
+error: aborting due to 1 previous error

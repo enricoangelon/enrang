@@ -1,0 +1,20 @@
+//! covers: H18
+private function use(r: &Holder): void {
+  if (r.item != null) {
+    const r2 = r;
+    console.log(r2.count());
+    console.log(r.item.n);
+  }
+}
+
+private class Item {
+  public n: i64 = 1;
+}
+
+private class Holder {
+  public item: Item | null = new Item();
+
+  public count(): i64 {
+    return this.item == null ? 0 : 1;
+  }
+}

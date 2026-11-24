@@ -1,0 +1,5 @@
+$ enrang explain EN1040
+[exit 2]
+[stdout]
+[stderr]
+error: `EN1040` is retired: enum cases may carry texts now: `Negative = "negative age"`

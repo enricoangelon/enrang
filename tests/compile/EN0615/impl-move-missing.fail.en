@@ -1,0 +1,8 @@
+public interface Closer {
+  move close(): void;
+}
+
+public class File implements Closer { //~ EN0615
+  private fd: i64 = 3;
+  public close(): void {}
+}

@@ -1,0 +1,7 @@
+$ enrang explain T0005
+[exit 0]
+[stdout]
+T0005: `test.panics` body did not panic as expected
+
+No explain page yet: it arrives with milestone M4, and this is milestone M3.
+[stderr]

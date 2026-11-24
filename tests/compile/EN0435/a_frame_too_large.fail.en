@@ -1,0 +1,5 @@
+//! target: x86_64-linux
+public function f(): void {
+  const big: u8[3000000000] = [0; 3000000000]; //~ EN0435 "the stack frame of `f` is too large for `x86_64-linux`"
+  console.log(big[0]);
+}

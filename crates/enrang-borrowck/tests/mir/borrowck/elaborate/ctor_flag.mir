@@ -1,0 +1,19 @@
+// A constructor's field with no default that a class below may override starts
+// maybe-initialised, its flag from `overridden(f)` at entry, and guards the D3 drop of
+// its assignment (plan d.12; A:605). Shapes: c.10 (plan lines 1079-1089) `this` is
+// `_1: &C` and the body stores `(*_1).f`; c.8 (line 1028) `drop(x) [assign]` then the
+// store.
+@final class Tag {
+  s: string;
+}
+class Named {
+  tag: Tag;
+}
+
+fn Named::#ctor(_1: &Named, _2: Tag) -> void {
+  bb0: {
+    drop((*_1).tag) [assign];
+    (*_1).tag = move _2;
+    return;
+  }
+}

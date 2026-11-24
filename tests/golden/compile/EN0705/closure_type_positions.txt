@@ -1,0 +1,37 @@
+$ enrang check tests/compile/EN0705/closure_type_positions.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0705]: a closure type can be written only as a parameter's type
+ --> tests/compile/EN0705/closure_type_positions.fail.en:1:10
+  |
+1 | const f: (x: i64) => i64 = (x: i64) => x; //~ EN0705 "a closure type can be written only as a parameter's type"
+  |          ^^^^^^^^^^^^^^^ not a parameter's type
+  |
+  = explain: run `enrang explain EN0705`
+
+error[EN0705]: a closure type can be written only as a parameter's type
+ --> tests/compile/EN0705/closure_type_positions.fail.en:5:14
+  |
+5 |   public on: () => void; //~ EN0705 "a closure type can be written only as a parameter's type"
+  |              ^^^^^^^^^^ not a parameter's type
+  |
+  = explain: run `enrang explain EN0705`
+
+error[EN0705]: a closure type can be written only as a parameter's type
+ --> tests/compile/EN0705/closure_type_positions.fail.en:8:25
+  |
+8 | public function make(): (x: i64) => i64 { //~ EN0705 "a closure type can be written only as a parameter's type"
+  |                         ^^^^^^^^^^^^^^^ not a parameter's type
+  |
+  = explain: run `enrang explain EN0705`
+
+error[EN0705]: a closure type can be written only as a parameter's type
+  --> tests/compile/EN0705/closure_type_positions.fail.en:12:28
+   |
+12 | public function run(f: (g: (k: u8) => void) => void): void {} //~ EN0705 "a closure type can be written only as a parameter's type"
+   |                            ^^^^^^^^^^^^^^^ inside another closure type
+   |
+   = explain: run `enrang explain EN0705`
+
+error: aborting due to 4 previous errors

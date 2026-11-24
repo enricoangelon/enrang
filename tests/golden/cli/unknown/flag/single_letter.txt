@@ -1,0 +1,6 @@
+$ enrang -x
+[exit 2]
+[stdout]
+[stderr]
+error: `-x` is not a flag of `enrang`
+usage: enrang <command> [arguments]

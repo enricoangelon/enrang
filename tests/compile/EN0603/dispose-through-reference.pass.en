@@ -1,0 +1,4 @@
+let s = "a".toString();
+kill(s);
+
+private function kill(r: string): void { dispose(r); }

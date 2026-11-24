@@ -1,0 +1,7 @@
+//! covers: H21
+let q: i64[] = [1, 2, 3];
+for (const x of &q) {
+  console.log(x);
+  q.pop();
+  break;
+}

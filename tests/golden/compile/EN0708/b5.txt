@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0708/b5.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `players` can't be read while a borrow of it may write into it
+ --> tests/compile/EN0708/b5.fail.en:2:23
+  |
+2 | setTo(players.last(), players.length()); //~ EN0708 "`players` can't be read while"
+  |                       ^^^^^^^^^^^^^^^^ read here
+  | --------------------------------------- the write
+  |       ------- borrowed for writing here, because it writes on line 2
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `players` into a local before this statement
+  = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

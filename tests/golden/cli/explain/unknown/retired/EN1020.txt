@@ -1,0 +1,5 @@
+$ enrang explain EN1020
+[exit 2]
+[stdout]
+[stderr]
+error: `EN1020` is retired: `--float=x87` is accepted; it is the default at `i586` and `i686`

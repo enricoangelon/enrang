@@ -1,0 +1,9 @@
+const s = "hello".repeat(2);
+const o = { b: s.length(), a: consume(s) };
+console.log(o.a, o.b);
+const t = "ab".toString();
+const r = Shape.Named { size: t.length() as i64, label: t };
+console.log(r);
+
+private enum Shape { Named { size: i64, label: string } }
+private function consume(v: string): isize { return v.length(); }

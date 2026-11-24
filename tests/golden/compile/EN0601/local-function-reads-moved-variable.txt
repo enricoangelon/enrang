@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0601/local-function-reads-moved-variable.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `s` was moved into `take`
+ --> tests/compile/EN0601/local-function-reads-moved-variable.fail.en:4:1
+  |
+1 | let s = "a".toString();
+  |     - `s` owns this `string`, which is not Copy
+2 | function show(): void { console.log(s); }
+3 | take(s);
+  |      - `s` moves here, because `take` takes `string`, not `&string`
+4 | show(); //~ EN0601 "`s` was moved into `take`"
+  | ^^^^^^ used here, after the move
+  |
+  = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `s` hands it over.
+help: if `take` only needs to look at it, change the parameter to `x: &string`
+  |
+3 | take(&s);
+  |      +
+6 | private function take(x: &string): void { console.log(x); }
+  |                          +
+help: to keep your own, pass a copy: `take(s.clone())`
+  |
+3 | take(s.clone());
+  |       ++++++++
+  = explain: run `enrang explain EN0601`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,15 @@
+public function parse(s: &string): i64 {
+  return 0;
+}
+
+public function parse(s: &string): f64 { //~ EN0450 "a call can't tell these overloads of `parse` apart"
+  return 0.0;
+}
+
+public function pad(s: &string): string {
+  return s.toString();
+}
+
+public function pad(s: &string, width: i64 = 8): string { //~ EN0450 "a call can't tell these overloads of `pad` apart"
+  return s.toString();
+}

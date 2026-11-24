@@ -1,0 +1,15 @@
+let n: i64 = 3;
+const flag = n > 1;
+do {
+  n -= 1;
+} while (n > 0);
+for (let i: i64 = 3; i > 0; i--) {
+  console.log(i);
+}
+const both = flag && n != 0;
+const either = n == 0 || flag;
+const word = match (true) {
+  n > 0 => "some",
+  default => "none",
+};
+console.log(both, either, word);

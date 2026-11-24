@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0706/fv-02-nested.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `table` cannot change while `a` still points into it
+  --> tests/compile/EN0706/fv-02-nested.fail.en:12:5
+   |
+10 |     const o = new Outer(new Copier(&table, &out));
+   |                                    ------ shared borrow of `table` starts here, held by `a`
+11 |     const a = o.inner.peek();
+12 |     table = [1]; //~ EN0706 "`table` cannot change while `a` still points into it"
+   |     ^^^^^^^^^^^ `table` changes here
+13 |     console.log(a);
+   |                 - `a` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

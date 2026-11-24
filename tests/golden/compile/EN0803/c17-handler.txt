@@ -1,0 +1,21 @@
+$ enrang check --target=i386-none tests/compile/EN0803/c17-handler.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0803]: `onTimer` is an `@interrupt` function, so it can only become an `InterruptHandler`
+ --> tests/compile/EN0803/c17-handler.fail.en:8:49
+  |
+8 |   const f: fn(frame: &InterruptFrame) => void = onTimer; //~ EN0803 "`onTimer` is an `@interrupt` function, so it can only become an `InterruptHandler`"
+  |                                                 ^^^^^^^ the CPU calls it, never code
+  |
+  = explain: run `enrang explain EN0803`
+
+error[EN0803]: `onTimer` is an `@interrupt` function, so it can only become an `InterruptHandler`
+ --> tests/compile/EN0803/c17-handler.fail.en:9:7
+  |
+9 |   run(onTimer); //~ EN0803 "`onTimer` is an `@interrupt` function, so it can only become an `InterruptHandler`"
+  |       ^^^^^^^ the CPU calls it, never code
+  |
+  = explain: run `enrang explain EN0803`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,7 @@
+private function peek(a: &(Acc | null)): i64 {
+  return a == null ? 0 : 1;
+}
+
+private class Acc {
+  public n: i64 = 0;
+}

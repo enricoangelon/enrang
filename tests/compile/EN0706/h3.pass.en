@@ -1,0 +1,9 @@
+//! row: `h1`-`h8`, hold slots: loans on the sour
+let a: i64[] = [1];
+let b: i64[] = [2];
+let r = &a;
+for (const x of r) {
+  console.log(x);
+}
+r = &b;
+console.log(r);

@@ -1,0 +1,7 @@
+public class Part {
+  public id: i64;
+}
+
+public function describe(p: &Part): string {
+  return `part ${p.id}`;
+}

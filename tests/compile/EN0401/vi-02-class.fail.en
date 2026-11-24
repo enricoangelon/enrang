@@ -1,0 +1,14 @@
+let s = "hello".toString();
+const k = new Keeper<string> {}; //~ EN0401 "a `&string` can't become a `&Measured`, because it may be a part of a string"
+k.show(s.slice(1, 3));
+
+public interface Measured {
+  length(): isize;
+}
+
+public class Keeper<T extends Measured> {
+  public show(x: &T): void {
+    const m: &Measured = x;
+    console.log(m.length());
+  }
+}

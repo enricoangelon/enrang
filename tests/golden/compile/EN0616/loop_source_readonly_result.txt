@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/loop_source_readonly_result.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `view`
+ --> tests/compile/EN0616/loop_source_readonly_result.fail.en:4:17
+  |
+4 | for (const x of r) { //~ EN0616 "cannot change the object returned by `view`"
+  |                 ^ `view` returns a `readonly` reference
+  |
+help: to allow this, remove `readonly` from the return type of `view`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

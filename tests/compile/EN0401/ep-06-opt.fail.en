@@ -1,0 +1,7 @@
+const five: i64 | null = 5;
+let a: Opt<i64 | null> = { v: five };
+const w: { v?: i64 | null } = a; //~ EN0401
+let b: Opt<i64 | null> = { v: 5 }; //~ EN0401 "expected `(i64 | null) | null`, found `int`"
+console.log(w.v, b.v);
+
+public type Opt<T> = { v?: T };

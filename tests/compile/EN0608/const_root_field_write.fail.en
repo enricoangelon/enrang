@@ -1,0 +1,6 @@
+const p = new Point();
+p.x = 1; //~ EN0608
+
+public class Point {
+  public x: i64 = 0;
+}

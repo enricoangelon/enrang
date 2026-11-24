@@ -1,0 +1,6 @@
+$ enrang fmt --bogus
+[exit 2]
+[stdout]
+[stderr]
+error: `--bogus` is not a flag of `enrang fmt`
+usage: enrang fmt [paths] [--check]

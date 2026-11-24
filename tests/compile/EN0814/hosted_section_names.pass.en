@@ -1,0 +1,8 @@
+//! target: x86_64-linux
+@section(".text.hot") public function hot(): void {}
+
+@section(".bss.counters") private unsafe let bootCount: u32;
+
+@section(".rodata.tables") public const T: i64 = 2;
+
+@section(".data.vars") private unsafe let v: u32 = 1;

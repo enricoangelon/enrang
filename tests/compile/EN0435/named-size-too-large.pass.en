@@ -1,0 +1,3 @@
+//! target: i386-linux
+//! row: `u64[536870912]` on `i386`, whose size wraps
+private unsafe let fits: u64[536870];

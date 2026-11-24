@@ -1,0 +1,7 @@
+const users = [new User { name: "Ada" }];
+const { name } = users[0]; //~ EN0604 "cannot move out of `users[0]`"
+console.log(name);
+
+public class User {
+  public name: string;
+}

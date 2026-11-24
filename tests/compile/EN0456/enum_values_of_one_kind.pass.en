@@ -1,0 +1,9 @@
+public enum Status {
+  Ok = 200,
+  Missing = 404,
+}
+
+public enum Direction {
+  Left = "left",
+  Right = "right",
+}

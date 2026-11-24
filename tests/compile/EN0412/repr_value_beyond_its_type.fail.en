@@ -1,0 +1,6 @@
+@repr("u8")
+public enum Opcode {
+  Nop = 0,
+  Halt = 255,
+  Wide = 256, //~ EN0412
+}

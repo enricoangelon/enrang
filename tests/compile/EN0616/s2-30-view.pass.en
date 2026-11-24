@@ -1,0 +1,17 @@
+let s = new Screen();
+s.pixels()[0] = 7;
+
+public final class Screen {
+  private base: *u16;
+  private n: isize = 4;
+
+  public constructor() {
+    this.base = 753664 as *u16;
+  }
+
+  public pixels(): &Slice<u16> {
+    unsafe {
+      return Slice<u16>.fromRaw(this.base, this.n);
+    }
+  }
+}

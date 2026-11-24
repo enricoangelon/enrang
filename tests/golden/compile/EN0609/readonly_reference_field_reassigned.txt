@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0609/readonly_reference_field_reassigned.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0609]: cannot write `this.src`, because it is `readonly`
+ --> tests/compile/EN0609/readonly_reference_field_reassigned.fail.en:7:5
+  |
+2 |   private readonly src: readonly &Slice<u8>;
+  |   ------------------------------------------ `src` is declared `readonly` here
+...
+7 |     this.src = s; //~ EN0609 "cannot write `this.src`, because it is `readonly`"
+  |     ^^^^^^^^^^^^ written here
+  |
+  = note: a `readonly` field is set only by its class's constructor
+  = explain: run `enrang explain EN0609`
+
+error: aborting due to 1 previous error

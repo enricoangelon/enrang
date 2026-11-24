@@ -1,0 +1,14 @@
+private function main(): Result<void> {
+  console.log(["it's", "a\\b", "x\ny", "\x01", "\0"]);
+  console.log({ quote: 'say "hi"' });
+  const name = "Ada";
+  console.log("top level:", name);
+  console.log(`hole: ${name}`);
+  console.log(PacketError.Bad { msg: "a, b: c" });
+  return Err("disk, full");
+}
+
+public enum PacketError {
+  Bad { msg: string },
+  Short { got: string[] },
+}

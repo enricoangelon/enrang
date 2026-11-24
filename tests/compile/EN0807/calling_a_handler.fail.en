@@ -1,0 +1,14 @@
+//! target: i386-none
+@interrupt private function onTimer(frame: &InterruptFrame): void {}
+
+private function forward(frame: &InterruptFrame): void {
+  onTimer(frame); //~ EN0807 "an interrupt handler can't be called"
+}
+
+@entry private function kmain(boot: &BootInfo): never {
+  const f = 0x1000 as *InterruptFrame;
+  unsafe {
+    onTimer(&*f); //~ EN0807 "an interrupt handler can't be called"
+  }
+  halt();
+}

@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/b1.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot mutate immutable data
+ --> tests/compile/EN0608/b1.fail.en:8:1
+  |
+8 | *r = 5; //~ EN0608 "cannot mutate immutable data"
+  | ^^^^^^ `r` points at `k`, which is `const`
+  |
+help: declare it `let k`
+  |
+2 | let k = 2;
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

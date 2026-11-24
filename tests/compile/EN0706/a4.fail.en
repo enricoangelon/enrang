@@ -1,0 +1,6 @@
+let q = [1, 2];
+for (const x of &q) {
+  q = []; //~ EN0706 "`q` cannot change while `x` still points into it"
+  console.log(x);
+  break;
+}

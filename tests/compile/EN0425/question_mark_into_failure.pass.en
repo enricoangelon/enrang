@@ -1,0 +1,14 @@
+console.log(age("x"));
+
+private function age(s: &string): Result<i64> {
+  const n = read(s)?;
+  return n;
+}
+
+private function read(s: &string): Result<i64, DiskError> {
+  return Err(DiskError.Timeout);
+}
+
+public enum DiskError {
+  Timeout,
+}

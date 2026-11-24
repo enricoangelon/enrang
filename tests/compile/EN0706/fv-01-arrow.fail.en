@@ -1,0 +1,19 @@
+let data: i64[] = [1];
+let g = new Grower(&data);
+const t = g.first();
+g.grow(); //~ EN0706
+console.log(*t);
+
+private class Grower {
+  private v: &i64[];
+  public constructor(v: &i64[]) {
+    this.v = v;
+  }
+  public first(): readonly &i64 {
+    return &this.v[0];
+  }
+  public grow(): void {
+    const f = () => { this.v.push(1); };
+    f();
+  }
+}

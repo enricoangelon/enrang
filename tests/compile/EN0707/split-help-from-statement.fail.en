@@ -1,0 +1,11 @@
+public function appendReset(): void {
+  let s: string = "a".toString(); s += reset(&s); console.log(s); //~ EN0707
+}
+
+public function appendResetComment(): void {
+  let s: string = "a".toString();
+  s += reset(&s); //~ EN0707
+  console.log(s);
+}
+
+private function reset(t: &string): &string { *t = "b".toString(); return "!"; }

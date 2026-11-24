@@ -1,0 +1,11 @@
+//! covers: H26
+const fixed: i32[3] = [1, 2, 3];
+const copied = [...fixed];
+let grown: i32[] = [4, 5];
+const viewed = [...grown.slice(0, 1)];
+for (const x of &grown) {
+  const again = [...grown];
+  console.log(x, again);
+}
+grown.push(6);
+console.log(copied, viewed, grown);

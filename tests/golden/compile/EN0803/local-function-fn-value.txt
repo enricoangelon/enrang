@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0803/local-function-fn-value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0803]: `grow` uses top-level variables, so it can't become an `fn`
+ --> tests/compile/EN0803/local-function-fn-value.fail.en:3:11
+  |
+3 | const f = grow; //~ EN0803 "`grow` uses top-level variables, so it can't become an `fn`"
+  |           ^^^^ it takes `v` as a hidden argument
+  |
+help: pass it where a closure parameter is expected, which may use them
+  = explain: run `enrang explain EN0803`
+
+error: aborting due to 1 previous error

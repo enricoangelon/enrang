@@ -1,0 +1,13 @@
+//! covers: H28
+let st = new Stack();
+const r = st.view();
+for (const x of r) {
+  *x = 0;
+}
+
+public class Stack {
+  private items: i64[] = [1, 2];
+  public view(): &i64[] {
+    return &this.items;
+  }
+}

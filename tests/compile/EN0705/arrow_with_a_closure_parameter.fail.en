@@ -1,0 +1,2 @@
+const h = (g: (k: u8) => void) => g(1); //~ EN0705 "a closure type can be written only as a parameter's type"
+h((k: u8) => console.log(k));

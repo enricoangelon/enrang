@@ -1,0 +1,23 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0603/value_moved_out_of_reference_deref.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0603/value_moved_out_of_reference_deref.pass";
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+
+fn copyOf(_1: &string) -> string {
+  let _1: &string; // r
+  let _2: string; // s
+  let _3: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = "alloc/string"::#extend0::clone(move _3) -> bb1;
+  }
+  bb1: {
+    _0 = move _2;
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}

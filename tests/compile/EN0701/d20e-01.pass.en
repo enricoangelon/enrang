@@ -1,0 +1,25 @@
+const b = make();
+b.show();
+
+public interface Shower {
+  show(): void;
+}
+
+private class View implements Shower {
+  private s: string;
+  public constructor(s: string) {
+    this.s = s;
+  }
+  public show(): void {
+    console.log(this.s);
+  }
+}
+
+private function wrap(s: Shower): Box<Shower> {
+  return new Box(s);
+}
+
+private function make(): Box<Shower> {
+  const tmp = "abc";
+  return wrap(new View(tmp.clone()));
+}

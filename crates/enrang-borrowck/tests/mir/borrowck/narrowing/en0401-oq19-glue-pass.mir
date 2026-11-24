@@ -1,0 +1,81 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/oq19-glue.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/oq19-glue.pass";
+enum DiskError { BadSector { lba: u64 }, Timeout }
+class Header {
+  len: u16;
+  flags: u8;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: void temp;
+  let _3: void temp;
+  let _4: DiskError; // e
+  let _5: void temp;
+  let _6: &DiskError temp;
+  bb0: {
+    _2 = first() -> bb1;
+  }
+  bb1: {
+    _3 = second() -> bb2;
+  }
+  bb2: {
+    storage_live(_4);
+    _4 = DiskError::BadSector { lba: const 42: u64 };
+    _6 = &_4 [auto-borrow];
+    _5 = form log(move _6) -> bb3;
+  }
+  bb3: {
+    storage_dead(_4);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn first() -> void {
+  let _1: Header; // h
+  let _2: *Header temp;
+  let _3: void temp;
+  let _4: void temp;
+  let _5: &Header temp;
+  bb0: {
+    storage_live(_1);
+    _2 = addr_of _1;
+    _3 = named_fill Header leaving()(move _2) -> bb1;
+  }
+  bb1: {
+    _1.len = const 3: u16;
+    _1.flags = const 0: u8;
+    _5 = &_1 [auto-borrow];
+    _4 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    storage_dead(_1);
+    return;
+  }
+}
+
+@private fn second() -> void {
+  let _1: Header; // h
+  let _2: *Header temp;
+  let _3: void temp;
+  let _4: void temp;
+  let _5: &Header temp;
+  bb0: {
+    storage_live(_1);
+    _2 = addr_of _1;
+    _3 = named_fill Header leaving()(move _2) -> bb1;
+  }
+  bb1: {
+    _1.len = const 3: u16;
+    _1.flags = const 0: u8;
+    _5 = &_1 [auto-borrow];
+    _4 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    storage_dead(_1);
+    return;
+  }
+}

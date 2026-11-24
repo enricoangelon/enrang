@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0206/undefined_value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0206]: `undefined` does not exist in Enrang
+ --> tests/compile/EN0206/undefined_value.fail.en:1:13
+  |
+1 | let found = undefined; //~ EN0206 "`undefined` does not exist in Enrang"
+  |             ^^^^^^^^^ absence has one spelling
+  |
+help: replace `undefined` with `null`, which needs a nullable type
+  |
+1 | let found: i64 | null = null; //~ EN0206 "`undefined` does not exist in Enrang"
+  |          ++++++++++++   ~~~~
+  = explain: run `enrang explain EN0206`
+
+error[EN0206]: `undefined` does not exist in Enrang
+ --> tests/compile/EN0206/undefined_value.fail.en:2:20
+  |
+2 | let name: string | undefined = null; //~ EN0206
+  |                    ^^^^^^^^^ absence has one spelling
+  |
+help: replace `undefined` with `null`
+  |
+2 | let name: string | null = null; //~ EN0206
+  |                    ~~~~
+  = explain: run `enrang explain EN0206`
+
+error: aborting due to 2 previous errors

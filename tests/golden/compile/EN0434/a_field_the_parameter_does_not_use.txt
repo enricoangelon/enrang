@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0434/a_field_the_parameter_does_not_use.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0434]: `greet` doesn't use the field `age`, so it would be thrown away
+ --> tests/compile/EN0434/a_field_the_parameter_does_not_use.fail.en:1:22
+  |
+1 | greet(&{ name: "Bo", age: 1 }); //~ EN0434 "`greet` doesn't use the field `age`, so it would be thrown away"
+  |                      ^^^ not a field of `{ name: string }`
+  |
+  = explain: run `enrang explain EN0434`
+
+error: aborting due to 1 previous error

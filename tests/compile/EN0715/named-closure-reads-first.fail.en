@@ -1,0 +1,22 @@
+//! row: `both(() => { const e = first(r); touch();
+public function go(r: &string[]): void {
+  both(() => { const e = first(r); touch(); console.log(e); }, r); //~ EN0715 "`r` is locked while"
+}
+
+public function go2(r: &string[]): void {
+  both2(r, () => { const e = first(r); touch(); console.log(e); }); //~ EN0715 "`r` is locked while"
+}
+
+private function first(xs: &string[]): &string {
+  return &xs[0];
+}
+
+private function touch(): void {}
+
+private function both(f: () => void, let xs: &string[]): void {
+  f();
+}
+
+private function both2(let xs: &string[], f: () => void): void {
+  f();
+}

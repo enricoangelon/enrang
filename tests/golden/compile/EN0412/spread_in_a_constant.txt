@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0412/spread_in_a_constant.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0412]: constant evaluation failed: `...` is not constant
+ --> tests/compile/EN0412/spread_in_a_constant.fail.en:2:20
+  |
+2 | private const Y = [...X]; //~ EN0412 "constant evaluation failed: `...` is not constant"
+  |                    ^^^ this spread
+  |
+  = note: a spread allocates at run time
+  = explain: run `enrang explain EN0412`
+
+error: aborting due to 1 previous error

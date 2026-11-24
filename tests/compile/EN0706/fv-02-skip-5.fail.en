@@ -1,0 +1,33 @@
+//! covers: H36
+let table: u8[] = [7, 8, 9];
+const other: u8[] = [1];
+let v = new View(&other);
+let f = new Feeder(&table, &v);
+f.share();
+table.push(4); //~ EN0706
+console.log(v.first());
+
+public final class View {
+  private x: readonly &u8[];
+  public constructor(x: &u8[]) {
+    this.x = x;
+  }
+  public setX(s: &u8[]): void {
+    this.x = s;
+  }
+  public first(): u8 {
+    return this.x[0];
+  }
+}
+
+public final class Feeder {
+  private src: readonly &u8[];
+  private sink: &View;
+  public constructor(s: &u8[], v: &View) {
+    this.src = s;
+    this.sink = v;
+  }
+  public share(): void {
+    this.sink.setX(this.src);
+  }
+}

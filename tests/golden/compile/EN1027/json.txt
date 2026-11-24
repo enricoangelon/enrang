@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN1027/json.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1027]: `JSON` is not supported yet
+ --> tests/compile/EN1027/json.fail.en:1:11
+  |
+1 | const j = JSON.stringify(1); //~ EN1027 "`JSON` is not supported yet"
+  |           ^^^^ not supported yet
+  |
+  = note: the standard library has no JSON parser or printer yet.
+  = explain: run `enrang explain EN1027`
+
+error[EN1027]: `JSON` is not supported yet
+ --> tests/compile/EN1027/json.fail.en:2:11
+  |
+2 | const v = JSON.parse("[1]"); //~ EN1027 "`JSON` is not supported yet"
+  |           ^^^^ not supported yet
+  |
+  = note: the standard library has no JSON parser or printer yet.
+  = explain: run `enrang explain EN1027`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0401/mr-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: a fixed array can't grow
+ --> tests/compile/EN0401/mr-2.fail.en:2:8
+  |
+2 | addOne(&buf); //~ EN0401 "a fixed array can't grow"
+  |        ^^^^ expected `&u8[]`, found `&u8[4]`
+  |
+help: if `addOne` only reads or sets elements, take `xs: &Slice<u8>`; to let it grow, make `buf` a `u8[]`
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: a fixed array can't grow
+ --> tests/compile/EN0401/mr-2.fail.en:3:7
+  |
+3 | reset(&buf); //~ EN0401 "a fixed array can't grow"
+  |       ^^^^ expected `&u8[]`, found `&u8[4]`
+  |
+help: if `reset` only reads or sets elements, take `xs: &Slice<u8>`; to let it grow, make `buf` a `u8[]`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,74 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/c14-closure-parameter.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/c14-closure-parameter.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64; // total
+  let _3: void temp;
+  let _4: (i64) => void temp;
+  let _5: &i64 temp;
+  let _6: [&i64] temp;
+  let _7: void temp;
+  let _8: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 0: i64;
+    _5 = &_2 [closure-capture];
+    _6 = env(move _5);
+    _4 = closure(arrow#0, _6);
+    _3 = twice(move _4) -> bb1;
+  }
+  bb1: {
+    _8 = &_2 [auto-borrow];
+    _7 = form log(move _8) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+arrow#0 of statements (_1: &[&i64], _2: i64) -> void {
+  let _1: &[&i64] env;
+  let _2: i64; // x
+  let _3: i64 temp;
+  capture total: &i64 path;
+  bb0: {
+    _3 = copy *(*_1).0;
+    *(*_1).0 = checked_add(copy _3, copy _2);
+    return;
+  }
+}
+
+@private fn run(_1: (i64) => void) -> void {
+  let _1: (i64) => void; // f
+  let _2: void temp;
+  bb0: {
+    _2 = closure _1(const 1: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn twice(_1: (i64) => void) -> void {
+  let _1: (i64) => void; // g
+  let _2: void temp;
+  let _3: (i64) => void temp;
+  let _4: void temp;
+  let _5: (i64) => void temp;
+  bb0: {
+    _3 = closure_reborrow(_1);
+    _2 = run(move _3) -> bb1;
+  }
+  bb1: {
+    _5 = closure_reborrow(_1);
+    _4 = run(move _5) -> bb2;
+  }
+  bb2: {
+    return;
+  }
+}

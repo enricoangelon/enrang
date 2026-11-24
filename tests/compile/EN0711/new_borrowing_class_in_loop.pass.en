@@ -1,0 +1,11 @@
+for (let i = 0; i < 2; i++) {
+  const a = "a".toString();
+  const c = new Cell(&a);
+  console.log(c.get());
+}
+
+private class Cell {
+  private r: &string;
+  public constructor(r: &string) { this.r = r; }
+  public get(): readonly &string { return this.r; }
+}

@@ -1,0 +1,36 @@
+let b = new HtmlBuilder();
+b.add("a");
+console.log(b.build());
+console.log(consume(new PlainHtmlBuilder()));
+
+public function consume(b: Buildable): string[] { return b.build(); }
+
+public interface Buildable {
+  move build(): string[];
+}
+
+public class Builder {
+  private parts: string[] = [];
+
+  public constructor() {}
+
+  public add(s: &string): void { this.parts.push(s.toString()); }
+
+  public move build(): string[] { return this.parts; }
+
+  protected takeParts(): string[] { return mem.replace(&this.parts, []); }
+}
+
+public class HtmlBuilder extends Builder {
+  public constructor() { super(); }
+
+  public override move build(): string[] { return this.takeParts(); }
+}
+
+public class PlainHtmlBuilder extends Builder {
+  public constructor() { super(); }
+}
+
+public abstract class Task {
+  public abstract move run(): string;
+}

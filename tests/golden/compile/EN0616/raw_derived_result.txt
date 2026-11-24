@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0616/raw_derived_result.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `cell`
+ --> tests/compile/EN0616/raw_derived_result.fail.en:2:1
+  |
+2 | *a = 7; //~ EN0616
+  | ^^^^^^ written here
+  |
+  = note: `cell` returns a read-only reference
+help: take a `&` parameter that owns the storage
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

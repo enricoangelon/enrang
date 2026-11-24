@@ -1,0 +1,7 @@
+//! target: i386-none
+@panicHandler private function onPanic(info: &PanicInfo): never {
+  mark(info); //~ EN0615
+  halt();
+}
+
+private function mark(let p: &PanicInfo): void {}

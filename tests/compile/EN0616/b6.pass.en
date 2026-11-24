@@ -1,0 +1,7 @@
+let n = 6;
+console.log(bump(&n));
+
+function bump(x: &i64): readonly &i64 {
+  *x += 1;
+  return x;
+}

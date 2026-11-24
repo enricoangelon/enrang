@@ -1,0 +1,38 @@
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public static make(s: &u8[], d: &u8[]): Copier {
+    return new Copier(s, d);
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+  public static nest(): void {
+    let buf: u8[] = [1];
+    const tbl: u8[] = [0];
+    let o = new Outer(new Copier(&tbl, &buf));
+    const r = &o.inner;
+    const p = r.dst;
+    r.src = p; //~ EN0616
+    const a = o.inner.peek(); //~ EN0708
+    o.inner.step(); //~ EN0707
+    o.inner.step(); //~ EN0707
+    o.inner.step(); //~ EN0707
+    o.inner.step(); //~ EN0707
+    console.log(*a);
+  }
+}
+
+public final class Outer {
+  public inner: Copier;
+  public constructor(c: Copier) {
+    this.inner = c;
+  }
+}

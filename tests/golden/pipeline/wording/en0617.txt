@@ -1,0 +1,11 @@
+error[EN0617]: cannot move `name` out of the arrow's capture
+ --> main.en:2:29
+  |
+2 | const f = () => { const n = name; console.log(n); };
+  |                             ^^^^ `name` is captured, so the arrow can't give it away
+  |
+  = note: an arrow or a local function may run more than once, so what it captures stays where it is
+help: move a copy instead: `name.clone()`
+  = explain: run `enrang explain EN0617`
+
+error: aborting due to 1 previous error

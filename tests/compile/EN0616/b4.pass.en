@@ -1,0 +1,6 @@
+let players = [1, 0];
+const q = players.last();
+if (q != null) {
+  *q = 1;
+}
+console.log(players);

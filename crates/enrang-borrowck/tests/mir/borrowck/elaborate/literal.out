@@ -1,0 +1,30 @@
+fn fill(let _1: &Slice<i64>, _2: i64) -> void;
+fn total(_1: &Slice<i64>) -> i64;
+
+fn lit() -> i64 perms() sources() result none {
+  phase elaborated;
+  let _1: i64[3] temp;
+  let _2: &i64[3] temp;
+  let _3: &Slice<i64> temp;
+  let _4: i64[3] temp;
+  let _5: &i64[3] temp;
+  let _6: &Slice<i64> temp;
+  let _7: void temp;
+  literal#0: i64[3] = [2, 3, 5];
+  bb0: {
+    _2 = const static_addr(literal#0): &i64[3];
+    _3 = convert(fixed_to_slice, move _2);
+    _0 = total(move _3) -> bb1;
+  }
+  bb1: {
+    storage_live(_4);
+    _4 = fixed<i64>[const 1: i64, const 2: i64, const 3: i64];
+    _5 = &_4 [literal-view];
+    _6 = convert(fixed_to_slice, move _5);
+    _7 = fill(move _6, const 7: i64) -> bb2;
+  }
+  bb2: {
+    storage_dead(_4);
+    return;
+  }
+}

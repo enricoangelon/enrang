@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0619/c4-super-paths.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0619]: `super(name)` isn't called on every path before the constructor returns
+  --> tests/compile/EN0619/c4-super-paths.fail.en:19:7
+   |
+19 |       return; //~ EN0619 "`super(name)` isn't called on every path before the constructor returns"
+   |       ^^^^^^^ the constructor may return here without `super(name)`
+   |
+   = note: when `quick` is true
+   = explain: run `enrang explain EN0619`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,8 @@
+const f = 1.5;
+const bits = f.toBits();
+const n: i64 = 300;
+const low = n as u8;
+const t = transmute(5);
+console.log(bits, low, t);
+
+private function transmute(n: i64): i64 { return n; }

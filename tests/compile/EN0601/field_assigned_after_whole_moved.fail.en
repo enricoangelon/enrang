@@ -1,0 +1,27 @@
+let p = new Pair { first: "a", second: "b" };
+take(p);
+p.first = "c"; //~ EN0601 "`p` was moved into `take`"
+let f = new File { first: "a", fd: 3 };
+close(f);
+f.first = "c"; //~ EN0601 "`f` was moved into `close`"
+
+public class Pair {
+  public first: string;
+  public second: string;
+}
+
+public class File {
+  public first: string;
+  public fd: i64;
+  public destructor() {
+    console.log("close", this.fd);
+  }
+}
+
+public function take(p: Pair): void {
+  console.log(p.first);
+}
+
+public function close(f: File): void {
+  console.log(f.first);
+}

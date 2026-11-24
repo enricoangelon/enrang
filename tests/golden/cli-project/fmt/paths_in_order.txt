@@ -1,0 +1,9 @@
+$ enrang fmt --check top.en src/sub src/a.en
+[exit 1]
+[stdout]
+top.en would be reformatted
+src/sub/c.en would be reformatted
+src/sub/c.test.en would be reformatted
+src/a.en would be reformatted
+4 of 4 files would change
+[stderr]

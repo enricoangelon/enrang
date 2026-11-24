@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN1037/class_expression.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1037]: class expressions are not supported yet
+ --> tests/compile/EN1037/class_expression.fail.en:1:15
+  |
+1 | const Point = class {}; //~ EN1037 "class expressions are not supported yet"
+  |               ^^^^^ a class expression
+  |
+  = note: every class is declared at the top level, with a name.
+help: Declare a class
+  = explain: run `enrang explain EN1037`
+
+error[EN1037]: class expressions are not supported yet
+ --> tests/compile/EN1037/class_expression.fail.en:2:15
+  |
+2 | const p = new class {}; //~ EN1037 "class expressions are not supported yet"
+  |               ^^^^^ an anonymous class
+  |
+  = note: every class is declared at the top level, with a name.
+help: Declare a class
+  = explain: run `enrang explain EN1037`
+
+error: aborting due to 2 previous errors

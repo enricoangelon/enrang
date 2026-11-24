@@ -1,0 +1,61 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0710/move_method_returns_field_with_drop.fail.en. Its row's codes: EN0710.
+module "tests/compile/EN0710/move_method_returns_field_with_drop.fail";
+class Envelope {
+  inside: Letter = default;
+}
+class Letter {
+  text: string = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Envelope; // e
+  let _3: Letter temp;
+  let _4: *Letter temp;
+  let _5: void temp;
+  let _6: *Envelope temp;
+  let _7: void temp;
+  let _8: &Letter; // l
+  let _9: void temp;
+  let _10: &string temp;
+  bb0: {
+    storage_live(_2);
+    _4 = addr_of _3;
+    _5 = named_fill Letter leaving()(move _4) -> bb1;
+  }
+  bb1: {
+    _3.text = const "hi": string;
+    _6 = addr_of _2;
+    _7 = named_fill Envelope leaving()(move _6) -> bb2;
+  }
+  bb2: {
+    _2.inside = move _3;
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_8);
+    _8 = Envelope::open(move _2) -> bb3;
+  }
+  bb3: {
+    _10 = &(*_8).text [auto-borrow];
+    _9 = form log(move _10) -> bb4;
+  }
+  bb4: {
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+move fn Envelope::open(_1: &Envelope) -> &Letter {
+  let _1: &Envelope; // this
+  bb0: {
+    check_class(*_1, move_this(open), ref);
+    _0 = &(*_1).inside [explicit];
+    drop(*_1);
+    return; //~ EN0710 "`open` returns a reference into the object it consumes"
+  }
+}

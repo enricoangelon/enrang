@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0416/satisfy-field.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0416]: `User` does not satisfy `Named`: `name` is a field
+ --> tests/compile/EN0416/satisfy-field.fail.en:5:30
+  |
+5 | public class User implements Named { //~ EN0416 "`User` does not satisfy `Named`: `name` is a field"
+  |                              ^^^^^ required by this `implements`
+  |
+  = explain: run `enrang explain EN0416`
+
+error: aborting due to 1 previous error

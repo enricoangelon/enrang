@@ -1,0 +1,93 @@
+$ enrang check tests/compile/EN0801/five_powers_outside_unsafe.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0801]: reading through a raw pointer needs `unsafe`
+  --> tests/compile/EN0801/five_powers_outside_unsafe.fail.en:10:13
+   |
+10 |   const v = *p; //~ EN0801 "reading through a raw pointer needs `unsafe`"
+   |             ^^ this dereferences `p`, a `*u8`
+   |
+   = rule: `unsafe` grants exactly five powers; this one is "dereference a raw pointer". Nothing checks the address for you.
+help: state that you have checked the address, in an `unsafe { }` block
+   = explain: run `enrang explain EN0801`
+
+error[EN0801]: writing through a raw pointer needs `unsafe`
+  --> tests/compile/EN0801/five_powers_outside_unsafe.fail.en:11:3
+   |
+11 |   p.write(3); //~ EN0801 "writing through a raw pointer needs `unsafe`"
+   |   ^^^^^^^^^^ `write` dereferences `p`, a `*u8`
+   |
+   = rule: `unsafe` grants exactly five powers; this one is "dereference a raw pointer". Nothing checks the address for you.
+help: state that you have checked the address
+   |
+11 |   unsafe { p.write(3); } //~ EN0801 "writing through a raw pointer needs `unsafe`"
+   |   +++++++++           ++
+   = explain: run `enrang explain EN0801`
+
+error[EN0801]: calling `poke` needs `unsafe`
+  --> tests/compile/EN0801/five_powers_outside_unsafe.fail.en:12:3
+   |
+12 |   poke(p, 7); //~ EN0801 "calling `poke` needs `unsafe`"
+   |   ^^^^^^^^^^ `poke` is `unsafe`
+   |
+   = rule: `unsafe` grants exactly five powers; this one is "call an `unsafe` function". Nothing checks that its conditions hold.
+help: state that you have met its conditions
+   |
+12 |   unsafe { poke(p, 7); } //~ EN0801 "calling `poke` needs `unsafe`"
+   |   +++++++++           ++
+   = explain: run `enrang explain EN0801`
+
+error[EN0801]: `asm` needs `unsafe`
+  --> tests/compile/EN0801/five_powers_outside_unsafe.fail.en:13:3
+   |
+13 |   asm("nop"); //~ EN0801 "`asm` needs `unsafe`"
+   |   ^^^^^^^^^^ this runs instructions no check can see into
+   |
+   = rule: `unsafe` grants exactly five powers; this one is "`asm`". Nothing checks what the instructions do.
+help: state that you have checked the instructions
+   |
+13 |   unsafe { asm("nop"); } //~ EN0801 "`asm` needs `unsafe`"
+   |   +++++++++           ++
+   = explain: run `enrang explain EN0801`
+
+error[EN0801]: using `count`, an `unsafe let`, needs `unsafe`
+  --> tests/compile/EN0801/five_powers_outside_unsafe.fail.en:14:3
+   |
+14 |   count = count + 1; //~ EN0801 "using `count`, an `unsafe let`, needs `unsafe`"
+   |   ^^^^^ this writes the static storage `count`
+   |
+   = rule: `unsafe` grants exactly five powers; this one is "read, write or borrow an `unsafe let`". Nothing keeps other accesses to it apart.
+help: state that no other access overlaps this one
+   |
+14 |   unsafe { count = count + 1; } //~ EN0801 "using `count`, an `unsafe let`, needs `unsafe`"
+   |   +++++++++                  ++
+   = explain: run `enrang explain EN0801`
+
+error[EN0801]: using `count`, an `unsafe let`, needs `unsafe`
+  --> tests/compile/EN0801/five_powers_outside_unsafe.fail.en:14:11
+   |
+14 |   count = count + 1; //~ EN0801 "using `count`, an `unsafe let`, needs `unsafe`"
+   |           ^^^^^ this reads the static storage `count`
+   |
+   = rule: `unsafe` grants exactly five powers; this one is "read, write or borrow an `unsafe let`". Nothing keeps other accesses to it apart.
+help: state that no other access overlaps this one
+   |
+14 |   unsafe { count = count + 1; } //~ EN0801 "using `count`, an `unsafe let`, needs `unsafe`"
+   |   +++++++++                  ++
+   = explain: run `enrang explain EN0801`
+
+error[EN0801]: using `screen`, an `unsafe let`, needs `unsafe`
+  --> tests/compile/EN0801/five_powers_outside_unsafe.fail.en:15:3
+   |
+15 |   screen[0] = 0x0741; //~ EN0801 "using `screen`, an `unsafe let`, needs `unsafe`"
+   |   ^^^^^^ this writes the static storage `screen`
+   |
+   = rule: `unsafe` grants exactly five powers; this one is "access `@at` storage". Nothing checks the address for you.
+help: state that you have checked the address
+   |
+15 |   unsafe { screen[0] = 0x0741; } //~ EN0801 "using `screen`, an `unsafe let`, needs `unsafe`"
+   |   +++++++++                   ++
+   = explain: run `enrang explain EN0801`
+
+error: aborting due to 7 previous errors

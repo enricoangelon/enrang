@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/element_write_while_shared.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `xs[1]` cannot change while `r` still points into it
+ --> tests/compile/EN0706/element_write_while_shared.fail.en:3:1
+  |
+2 | const r = &xs[0];
+  |           ------ shared borrow of `xs` starts here, held by `r`
+3 | xs[1] = 5; //~ EN0706 "`xs[1]` cannot change while `r` still points into it"
+  | ^^^^^^^^^ `xs[1]` changes here
+4 | console.log(*r);
+  |              - `r` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

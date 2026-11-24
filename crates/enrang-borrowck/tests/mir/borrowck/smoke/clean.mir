@@ -1,0 +1,17 @@
+class P {
+  x: i64;
+}
+fn get(let _1: &P) -> &i64 perms(write) sources(0) result writable;
+
+fn clean(_1: &P) -> i64 {
+  let _2: &P temp;
+  let _3: &i64 temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _3 = get(move _2) -> bb1;
+  }
+  bb1: {
+    _0 = copy *_3;
+    return;
+  }
+}

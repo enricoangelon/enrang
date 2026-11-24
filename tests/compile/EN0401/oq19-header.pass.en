@@ -1,0 +1,39 @@
+const h = new Header { len: 3, flags: 0 };
+console.log(h);
+console.log(`header: ${h}`);
+console.log(h.toString());
+
+const p = new PrivateHeader(3, 0);
+console.log(p);
+console.log(`header: ${p}`);
+console.log(p.toString());
+
+const hs = [new Header { len: 3, flags: 0 }, new Header { len: 4, flags: 1 }];
+console.log(hs.join(", "));
+
+const w = new WrittenHeader { len: 3, flags: 0 };
+console.log(w);
+console.log(`header: ${w}`);
+console.log(w.toString());
+
+public class Header {
+  public len: u16;
+  public flags: u8;
+}
+
+public class PrivateHeader {
+  public len: u16;
+  private flags: u8;
+
+  public constructor(len: u16, flags: u8) {
+    this.len = len;
+    this.flags = flags;
+  }
+}
+
+public class WrittenHeader {
+  public len: u16;
+  public flags: u8;
+
+  public fmt(let f: &Formatter): void { writeTo(f, `len ${this.len}`); }
+}

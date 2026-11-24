@@ -1,0 +1,41 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/constant_pointing_result.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/constant_pointing_result.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: void temp;
+  let _3: &Slice<i64> temp;
+  let _4: isize temp;
+  let _5: isize temp;
+  let _6: &i64 temp;
+  bb0: {
+    _3 = zeros() -> bb1;
+  }
+  bb1: {
+    _4 = const 0: isize;
+    _5 = len(*_3);
+    check_bounds(copy _4, copy _5);
+    _6 = &(*_3)[_4] [auto-borrow];
+    _2 = form log(move _6) -> bb2;
+  }
+  bb2: {
+    drop(_1);
+    return;
+  }
+}
+
+fn zeros() -> &Slice<i64> {
+  let _1: i64[2] temp;
+  let _2: &i64[2] temp;
+  let _3: &Slice<i64> temp;
+  bb0: {
+    _1 = fixed<i64>[const 0: i64, const 0: i64];
+    _2 = &_1 [literal-view];
+    _3 = convert(fixed_to_slice, move _2);
+    _0 = move _3;
+    storage_dead(_1);
+    return;
+  }
+}

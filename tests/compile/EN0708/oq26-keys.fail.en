@@ -1,0 +1,37 @@
+public function secondLoop(): void {
+  let q: i64[] = [1, 5, 3, 7];
+  let keep: &i64 | null = null;
+  for (const x of &q) {
+    if (x > 2) { keep = x; }
+  }
+  for (const y of &q) { //~ EN0708
+    console.log(y);
+  }
+  if (keep != null) { *keep = 0; }
+  console.log(q);
+}
+
+public function readFirst(): void {
+  let q: i64[] = [1, 5, 3, 7];
+  let keep: &i64 | null = null;
+  for (const x of &q) {
+    if (x > 2) { keep = x; }
+  }
+  console.log(q[0]); //~ EN0708
+  if (keep != null) { *keep = 0; }
+  console.log(q);
+}
+
+public function twoRuns(): void {
+  let q: i64[] = [1, 5, 3, 7];
+  let keep: &i64 | null = null;
+  let n = 0;
+  while (n < 2) {
+    for (const x of &q) { //~ EN0707
+      keep = x;
+    }
+    n += 1;
+  }
+  if (keep != null) { *keep = 0; }
+  console.log(q);
+}

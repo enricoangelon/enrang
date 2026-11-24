@@ -1,0 +1,118 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0610/c4-ctorless-base-2.fail.en. Its row's codes: EN0610.
+module "tests/compile/EN0610/c4-ctorless-base-2.fail";
+class Circle extends Shape {
+  r: i64;
+}
+class Person {
+  name: string;
+}
+class Shape {
+  protected color: string = default;
+  owner: Person;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: void temp;
+  let _3: string temp;
+  let _4: Circle temp;
+  let _5: Person temp;
+  let _6: &Person temp;
+  let _7: void temp;
+  let _8: &Circle temp;
+  let _9: void temp;
+  let _10: &Circle temp;
+  let _11: &Shape temp;
+  let _12: &string temp;
+  bb0: {
+    set_table(_4, Circle);
+    set_table(_5, Person);
+    _6 = &_5 [auto-borrow];
+    _7 = Person::#ctor(move _6, const "Ada": string) -> bb1;
+  }
+  bb1: {
+    _8 = &_4 [auto-borrow];
+    _9 = Circle::#ctor(move _8, const 2: i64, move _5) -> bb2;
+  }
+  bb2: {
+    _10 = &_4 [temp-arg];
+    _11 = convert(upcast, move _10);
+    _3 = Shape::describe(move _11) -> bb3;
+  }
+  bb3: {
+    _12 = &_3 [temp-arg];
+    _2 = form log(move _12) -> bb4;
+  }
+  bb4: {
+    drop(_3);
+    storage_dead(_3);
+    drop(_5);
+    storage_dead(_5);
+    drop(_4);
+    storage_dead(_4);
+    drop(_1);
+    return;
+  }
+}
+
+fn Circle::#ctor(_1: &Circle, _2: i64, _3: Person) -> void {
+  let _1: &Circle; // this
+  let _2: i64; // r
+  let _3: Person; // o
+  let _4: void temp;
+  let _5: *Circle temp;
+  bb0: {
+    switch const overridden(r): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    (*_1).r = copy _2;
+    _5 = addr_of *_1;
+    _4 = implicit_ctor Shape(move _5) -> bb3;
+  }
+  bb2: {
+    field_init((*_1).r, const 0: i64);
+    goto bb1;
+  }
+  bb3: {
+    drop(_3);
+    return; //~ EN0610 "`owner` is not set"
+  }
+}
+
+fn Person::#ctor(_1: &Person, _2: string) -> void {
+  let _1: &Person; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn Shape::describe(_1: &Shape) -> string {
+  let _1: &Shape; // this
+  let _2: &string temp;
+  let _3: &string temp;
+  bb0: {
+    _2 = &(*_1).color [auto-borrow];
+    _3 = &(*_1).owner.name [auto-borrow];
+    _0 = form template(const "": &string, move _2, const " shape of ": &string, move _3, const "": &string) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

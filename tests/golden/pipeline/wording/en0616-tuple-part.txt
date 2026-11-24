@@ -1,0 +1,20 @@
+error[EN0616]: `src` is declared `readonly &`, so it can't hold a reference from `dst`
+ --> main.en:6:128
+  |
+6 |   public static nested(s: &u8[], d: &u8[]): [Copier, i32] { let t: [Copier, i32] = [Copier.make(s, d), 0]; const p = t[0].dst; t[0].src = p; return t; } }
+  |                                                                                                                                ^^^^^^^^^^^^ stored here
+  |
+help: store a reference from a parameter, or from another `readonly &` field
+  = explain: run `enrang explain EN0616`
+
+error[EN0709]: cannot move `t` while it is borrowed
+ --> main.en:6:149
+  |
+6 |   public static nested(s: &u8[], d: &u8[]): [Copier, i32] { let t: [Copier, i32] = [Copier.make(s, d), 0]; const p = t[0].dst; t[0].src = p; return t; } }
+  |                                                                                                                                                     ^ `t` moves here
+  |                                                                                                                      -------- shared borrow of `t` starts here
+  |
+help: move `t` after its last borrow
+  = explain: run `enrang explain EN0709`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,8 @@
+//! row: `const { name, pos: { x } } = ada;` then
+const ada = new Person { name: "Ada", pos: new Pos { x: 3, y: 4 } };
+const { name, pos: { x } } = &ada;
+console.log(ada.name, name, x);
+
+public class Pos { public x: i64; public y: i64; }
+
+public class Person { public name: string; public pos: Pos; }

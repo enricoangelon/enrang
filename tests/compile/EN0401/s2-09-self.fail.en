@@ -1,0 +1,31 @@
+const d = new Dog { name: "Rex" };
+const r = new Robot { a: 1, b: 2, c: 3 };
+console.log(same(&d, &r));
+
+private function same(a: &Eq, b: &Eq): bool {
+  return a.equals(b); //~ EN0401 "`b` may hold another class than `a`"
+}
+
+private function keep(b: Box<Clone>): void {} //~ EN1006
+
+private function first(a: &Clone, b: &Clone): &Clone { //~ EN1006
+  return a;
+}
+
+public final class Dog implements Eq {
+  public name: string;
+}
+
+public final class Robot implements Eq {
+  public a: i64;
+  public b: i64;
+  public c: i64;
+}
+
+private class Holder {
+  private c: &Clone; //~ EN1006
+
+  public constructor(c: &Clone) {
+    this.c = c;
+  }
+}

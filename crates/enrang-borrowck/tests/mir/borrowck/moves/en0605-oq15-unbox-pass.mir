@@ -1,0 +1,175 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0605/oq15-unbox.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0605/oq15-unbox.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+move fn "alloc/box"::Box<T>::unbox(_1: &Box<T>) -> T;
+class Animal {
+  protected name: string;
+}
+class Dog extends Animal { }
+
+fn Animal::#ctor(_1: &Animal, _2: string) -> void {
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn Animal::speak(_1: &Animal) -> string {
+  let _1: &Animal; // this
+  let _2: &string temp;
+  bb0: {
+    _2 = &(*_1).name [auto-borrow];
+    _0 = form template(const "": &string, move _2, const " makes a sound": &string) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@override fn Dog::speak(_1: &Dog) -> string {
+  let _1: &Dog; // this
+  let _2: &string temp;
+  bb0: {
+    _2 = &(*_1).name [auto-borrow];
+    _0 = form template(const "": &string, move _2, const " barks": &string) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn boxedAnimal() -> void {
+  let _1: Box<Animal>; // pet
+  let _2: Animal temp;
+  let _3: &Animal temp;
+  let _4: void temp;
+  let _5: &Box<Animal> temp;
+  let _6: void temp;
+  let _7: void temp;
+  let _8: string temp;
+  let _9: &Animal temp;
+  let _10: &string temp;
+  let mut _11: Animal; // a
+  let _12: void temp;
+  let _13: string temp;
+  let _14: &Animal temp;
+  let _15: &string temp;
+  bb0: {
+    storage_live(_1);
+    set_table(_2, Animal);
+    _3 = &_2 [auto-borrow];
+    _4 = Animal::#ctor(move _3, const "Generic": string) -> bb1;
+  }
+  bb1: {
+    _5 = &_1 [auto-borrow];
+    _6 = "alloc/box"::Box<Animal>::#ctor(move _5, move _2) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    _9 = &*_1 [auto-borrow];
+    _8 = virtual Animal::speak [copy _9](move _9) -> bb3;
+  }
+  bb3: {
+    _10 = &_8 [temp-arg];
+    _7 = form log(move _10) -> bb4;
+  }
+  bb4: {
+    drop(_8);
+    storage_dead(_8);
+    storage_live(_11);
+    check_class(*_1, unbox, box);
+    _11 = "alloc/box"::Box<Animal>::unbox(move _1) -> bb5;
+  }
+  bb5: {
+    _14 = &_11 [auto-borrow];
+    _13 = Animal::speak(move _14) -> bb6;
+  }
+  bb6: {
+    _15 = &_13 [temp-arg];
+    _12 = form log(move _15) -> bb7;
+  }
+  bb7: {
+    drop(_13);
+    storage_dead(_13);
+    drop(_11);
+    storage_dead(_11);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn boxedDog() -> void {
+  let _1: Box<Animal>; // pet
+  let _2: Box<Dog> temp;
+  let _3: Dog temp;
+  let _4: &Dog temp;
+  let _5: &Animal temp;
+  let _6: void temp;
+  let _7: &Box<Dog> temp;
+  let _8: void temp;
+  let _9: void temp;
+  let _10: string temp;
+  let _11: &Animal temp;
+  let _12: &string temp;
+  let mut _13: Animal; // a
+  bb0: {
+    storage_live(_1);
+    set_table(_3, Dog);
+    _4 = &_3 [auto-borrow];
+    _5 = convert(upcast, move _4);
+    _6 = Animal::#ctor(move _5, const "Rex": string) -> bb1;
+  }
+  bb1: {
+    _7 = &_2 [auto-borrow];
+    _8 = "alloc/box"::Box<Dog>::#ctor(move _7, move _3) -> bb2;
+  }
+  bb2: {
+    _1 = convert(upcast, move _2);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    _11 = &*_1 [auto-borrow];
+    _10 = virtual Animal::speak [copy _11](move _11) -> bb3;
+  }
+  bb3: {
+    _12 = &_10 [temp-arg];
+    _9 = form log(move _12) -> bb4;
+  }
+  bb4: {
+    drop(_10);
+    storage_dead(_10);
+    storage_live(_13);
+    check_class(*_1, unbox, box);
+    _13 = "alloc/box"::Box<Animal>::unbox(move _1) -> bb5;
+  }
+  bb5: {
+    drop(_13);
+    storage_dead(_13);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}

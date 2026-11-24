@@ -1,0 +1,4 @@
+for (const x of a? ..b) {}
+match (s) {
+  c? ..d => {},
+}

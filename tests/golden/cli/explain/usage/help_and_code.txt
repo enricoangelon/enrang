@@ -1,0 +1,6 @@
+$ enrang explain --help EN1301
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang explain` takes one code
+usage: enrang explain <code>

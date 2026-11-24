@@ -1,0 +1,7 @@
+const check = (s: &string): Result<isize> => {
+  if (s.isEmpty()) {
+    return Err("empty");
+  }
+  return s.length();
+};
+console.log(check("a"));

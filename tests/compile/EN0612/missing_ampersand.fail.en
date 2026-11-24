@@ -1,0 +1,6 @@
+function bump(xs: &i64[]): void {
+  xs.push(1);
+}
+
+let a: i64[] = [];
+bump(a); //~ EN0612 "missing `&`: `bump` takes a reference"

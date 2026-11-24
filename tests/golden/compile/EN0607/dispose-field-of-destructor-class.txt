@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0607/dispose-field-of-destructor-class.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0607]: cannot move `d.name` out of `d`, because `D` has a destructor
+ --> tests/compile/EN0607/dispose-field-of-destructor-class.fail.en:2:9
+  |
+2 | dispose(d.name); //~ EN0607 "cannot move `d.name` out of `d`, because `D` has a destructor"
+  |         ^^^^^^ `D`'s destructor needs every field when it runs
+  |
+help: copy it: `d.name.clone()`
+  = explain: run `enrang explain EN0607`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,4 @@
+public function next(): i64 {
+  const x = yield 1; //~ EN1002 "generators are not supported yet"
+  return x;
+}

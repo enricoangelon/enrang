@@ -1,0 +1,17 @@
+@private const S: &string = "hi";
+
+@private fn f() -> void {
+  let _1: i64 temp;
+  let _2: i64[2][2] temp;
+  let _3: i64[2] temp;
+  let _4: i64[2] temp;
+  let _5: &string temp;
+  bb0: {
+    _1 = const 5: i64;
+    _3 = fixed<i64>[const 1: i64, const 2: i64];
+    _4 = fixed<i64>[const 3: i64, const 4: i64];
+    _2 = fixed<i64[2]>[move _3, move _4];
+    _5 = const static_addr(S): &string;
+    return;
+  }
+}

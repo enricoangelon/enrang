@@ -1,0 +1,19 @@
+@packed @align(4) public final class A { //~ EN0817 "conflicting layout attributes"
+  public a: u8;
+}
+
+@packed @repr("C") public final class B { //~ EN0817 "conflicting layout attributes"
+  public a: u8;
+}
+
+@align(8) @align(16) public final class D { //~ EN0817 "conflicting layout attributes"
+  public a: u8;
+}
+
+@packed @packed public final class E { //~ EN0817 "conflicting layout attributes"
+  public a: u8;
+}
+
+@repr("u8") @repr("u16") public enum K { //~ EN0817 "conflicting layout attributes"
+  A,
+}

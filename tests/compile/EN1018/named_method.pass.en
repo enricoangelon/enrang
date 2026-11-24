@@ -1,0 +1,7 @@
+public class Vec2 {
+  public x: f64 = 0.0;
+
+  public add(o: &Vec2): Vec2 {
+    return new Vec2 { x: this.x + o.x };
+  }
+}

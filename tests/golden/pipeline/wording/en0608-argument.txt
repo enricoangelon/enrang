@@ -1,0 +1,13 @@
+error[EN0608]: `fill` can change `buf`, but `data` is `const`
+ --> main.en:2:6
+  |
+2 | fill(&data);
+  |      ^^^^^ `fill` writes through it
+  |
+help: declare it `let data`
+  |
+1 | let data: i64[] = [1];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

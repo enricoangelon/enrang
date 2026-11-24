@@ -1,0 +1,69 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0619/c4-ctorless-base-4.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0619/c4-ctorless-base-4.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+class Circle extends Shape {
+  private r: Box<i64>;
+}
+class Shape {
+  color: string = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Circle; // c
+  let _3: Box<i64> temp;
+  let _4: &Box<i64> temp;
+  let _5: void temp;
+  let _6: &Circle temp;
+  let _7: void temp;
+  let _8: void temp;
+  let _9: &string temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, Circle);
+    _4 = &_3 [auto-borrow];
+    _5 = "alloc/box"::Box<i64>::#ctor(move _4, const 2: i64) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [auto-borrow];
+    _7 = Circle::#ctor(move _6, move _3) -> bb2;
+  }
+  bb2: {
+    drop(_3);
+    storage_dead(_3);
+    _9 = &_2.color [auto-borrow];
+    _8 = form log(move _9) -> bb3;
+  }
+  bb3: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Circle::#ctor(_1: &Circle, _2: Box<i64>) -> void {
+  let _1: &Circle; // this
+  let _2: Box<i64>; // r
+  let _3: Box<i64> temp;
+  let _4: void temp;
+  let _5: *Circle temp;
+  bb0: {
+    _3 = move _2;
+    drop((*_1).r) [assign];
+    (*_1).r = move _3;
+    drop(_3);
+    storage_dead(_3);
+    _5 = addr_of *_1;
+    _4 = implicit_ctor Shape(move _5) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    return;
+  }
+}

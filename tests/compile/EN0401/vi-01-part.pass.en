@@ -1,0 +1,12 @@
+const s: string = "hello".toString();
+console.log(keepT(s.slice(1, 3)).length());
+const b: Box<Measured> = new Box("hello".toString());
+console.log(b.length());
+
+private function keepT<T extends Measured>(m: &T): &T {
+  return m;
+}
+
+public interface Measured {
+  length(): isize;
+}

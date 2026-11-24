@@ -1,0 +1,16 @@
+public interface Speaker {
+  speak(): string;
+}
+
+public class Dog implements Speaker {
+  public speak(): string {
+    return "woof";
+  }
+}
+
+// At `implements` the type is the class itself, and a class has no auto-deref:
+// `kennel.dog.speak()` reaches `speak` only through the `Box` field, which never
+// satisfies, so `speak` is missing.
+public class Kennel implements Speaker { //~ EN0416 "`Kennel` does not satisfy `Speaker`: `speak` is missing"
+  public dog: Box<Dog> = new Box(new Dog {});
+}

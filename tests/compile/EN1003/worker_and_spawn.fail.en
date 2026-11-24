@@ -1,0 +1,3 @@
+const w = new Worker("job.en"); //~ EN1003 "threads are not supported yet"
+spawn(() => console.log("hi")); //~ EN1003 "threads are not supported yet"
+let pending: Worker | null = null; //~ EN1003 "threads are not supported yet"

@@ -1,0 +1,21 @@
+$ enrang explain EN1041
+[exit 0]
+[stdout]
+EN1041: `--multiboot`, `--coverage`
+
+The flags `--multiboot` and `--coverage` are not supported yet. A kernel boots from the disk image that `--image` writes, and the VM counts the blocks a program runs internally but does not report coverage yet.
+
+Failing:
+
+    $ enrang check --coverage
+    error[EN1041]: this flag is not supported yet
+      = note: `--coverage` is outside the prototype
+    help: Boot through `--image`; the VM counts blocks internally but reports no coverage yet
+      = explain: run `enrang explain EN1041`
+
+    error: aborting due to 1 previous error
+
+Fixed:
+
+    $ enrang check
+[stderr]

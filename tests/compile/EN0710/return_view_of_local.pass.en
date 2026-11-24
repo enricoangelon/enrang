@@ -1,0 +1,3 @@
+public function head(xs: &i64[]): &Slice<i64> {
+  return xs.slice(0, 2);
+}

@@ -1,0 +1,98 @@
+@final class Pair {
+  a: User;
+  b: User;
+  n: i64;
+  c: User;
+}
+enum Shape { Circle { r: User }, Square { a: User, b: User } }
+@final class User {
+  name: string;
+}
+fn archive(_1: User) -> void;
+fn keep(_1: string) -> void;
+
+fn f(_1: string | null, _2: bool) -> void perms() sources() moves(1, 0) result none {
+  phase elaborated;
+  let _3: u32 temp;
+  let _4: void temp;
+  let _5: string temp;
+  let _6: bool flag;
+  let _7: u32 temp;
+  drop_flag _6: (_1 as Present).0;
+  bb0: {
+    _6 = const true: bool;
+    _3 = discriminant(_1);
+    switch move _3 [0: bb3, otherwise: bb1];
+  }
+  bb1: {
+    switch copy _2 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    check_tag(_1, Present);
+    _5 = move (_1 as Present).0;
+    _6 = const false: bool;
+    _4 = keep(move _5) -> bb3;
+  }
+  bb3: {
+    _7 = discriminant(_1);
+    switch move _7 [1: bb5, otherwise: bb4];
+  }
+  bb4: {
+    _6 = const false: bool;
+    return;
+  }
+  bb5: {
+    switch copy _6 [0: bb7, otherwise: bb6];
+  }
+  bb6: {
+    drop_glue((_1 as Present).0);
+    goto bb7;
+  }
+  bb7: {
+    goto bb4;
+  }
+}
+
+fn half(_1: Pair) -> void perms() sources() moves(1) result none {
+  phase elaborated;
+  let _2: void temp;
+  bb0: {
+    _2 = archive(move _1.a) -> bb1;
+  }
+  bb1: {
+    drop_glue(_1.c);
+    drop_glue(_1.b);
+    return;
+  }
+}
+
+fn shape(_1: Shape, _2: [User, User]) -> void perms() sources() moves(1, 1) result none {
+  phase elaborated;
+  let _3: void temp;
+  let _4: User temp;
+  let _5: u32 temp;
+  bb0: {
+    check_tag(_1, Square);
+    _4 = move (_1 as Square).a;
+    _3 = archive(move _4) -> bb1;
+  }
+  bb1: {
+    _3 = archive(move _2.0) -> bb2;
+  }
+  bb2: {
+    drop_glue(_2.1);
+    _5 = discriminant(_1);
+    switch move _5 [0: bb4, 1: bb5, otherwise: bb3];
+  }
+  bb3: {
+    return;
+  }
+  bb4: {
+    drop_glue((_1 as Circle).r);
+    goto bb3;
+  }
+  bb5: {
+    drop_glue((_1 as Square).b);
+    goto bb3;
+  }
+}

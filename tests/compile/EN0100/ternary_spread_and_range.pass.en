@@ -1,0 +1,9 @@
+const ready = true;
+const label = ready ? "go" : "wait";
+const a = [1, 2];
+const n = 3;
+const copy = [...a];
+const zeros = [0; 3];
+for (const i of 1..n) {
+  console.log(label, copy, zeros, i);
+}

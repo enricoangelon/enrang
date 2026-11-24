@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0801/q39-from-raw.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0801]: calling `fromRaw` needs `unsafe`
+ --> tests/compile/EN0801/q39-from-raw.fail.en:2:13
+  |
+2 |   const v = Slice<u8>.fromRaw(p, 4); //~ EN0801 "calling `fromRaw` needs `unsafe`"
+  |             ^^^^^^^^^^^^^^^^^^^^^^^ `fromRaw` is `unsafe`
+  |
+  = rule: `unsafe` grants exactly five powers; this one is "call an `unsafe` function". Nothing checks that its conditions hold.
+help: state that you have met its conditions, in an `unsafe { }` block
+  = explain: run `enrang explain EN0801`
+
+error: aborting due to 1 previous error

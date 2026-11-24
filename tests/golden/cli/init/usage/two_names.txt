@@ -1,0 +1,6 @@
+$ enrang init a b
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang init` takes one name
+usage: enrang init [name] [--kernel]

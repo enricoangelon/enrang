@@ -1,0 +1,56 @@
+class Node {
+  next: Node | null;
+  v: i64;
+}
+enum Shape { Circle { r: i64 }, Square }
+
+fn meta(_1: &i64[], _2: i64 | null, _3: &Node, _4: Shape, _5: i64 = default) -> void {
+  let _6: isize arg; // #supplied
+  let _7: isize #i;
+  let _8: isize #n;
+  let _9: &i64; // x
+  let _10: bool temp;
+  let _11: i64 temp;
+  let _12: &Node #src;
+  let _13: isize #cur;
+  let _14: isize #end;
+  let _15: &i64 #iter;
+  loop l0: path *_1 preheader bb0 head bb1 bind bb2[2] binding _9;
+  loop l1: once _12 preheader bb3 head bb3 bind bb2[2] binding _9;
+  fact f0: _2 nonnull;
+  fact f1: _3.*.next.?.v nonnull;
+  fact f2: _4 case Square;
+  record f0 at bb3[0] _11 copy;
+  record f1 at bb3[0] _11 call_arg;
+  record f1 at bb3[0] _11 receiver;
+  record f1 at bb3[0] _11 binding;
+  record f1 at bb3[0] _11 capture;
+  record f1 at bb3[0] _11 hidden_arg;
+  use f0 at bb3[1];
+  test f0 at bb3;
+  assign_value bb3[2];
+  defaults _6;
+  bb0: {
+    _7 = const 0: isize;
+    goto bb1;
+  }
+  bb1: {
+    _8 = len(*_1);
+    _10 = lt(copy _7, copy _8);
+    switch move _10 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_9);
+    check_bounds(copy _7, copy _8);
+    _9 = &(*_1)[_7] [for-of-element];
+    _7 = add(copy _7, const 1: isize);
+    storage_dead(_9);
+    goto bb1;
+  }
+  bb3: {
+    _11 = copy _5;
+    check_tag(_2, Present);
+    _11 = move (_2 as Present).0;
+    return;
+  }
+}

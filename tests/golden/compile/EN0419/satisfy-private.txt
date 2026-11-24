@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0419/satisfy-private.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `Dog` does not satisfy `Speaker`
+ --> tests/compile/EN0419/satisfy-private.fail.en:2:19
+  |
+2 | console.log(greet(&dog)); //~ EN0419 "`Dog` does not satisfy `Speaker`"
+  |                   ^^^^ `T` must satisfy `Speaker`
+3 |
+4 | private function greet<T extends Speaker>(x: &T): string {
+  |                        - the bound on `T`
+  |
+  = explain: run `enrang explain EN0419`
+
+error: aborting due to 1 previous error

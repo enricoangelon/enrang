@@ -1,0 +1,15 @@
+let bags: Bag[] = [new Bag()];
+bags[0].items.push(1);
+const t = two(&bags);
+for (let i = 0; i < 3; i++) {
+  t[0].items.push(i); //~ EN0614 "`two` returns two references that may point at the same data"
+}
+console.log(t[1]);
+
+private function two(list: &Slice<Bag>): [&Bag, &i64] {
+  return [&list[0], &list[0].items[0]];
+}
+
+public class Bag {
+  public items: i64[] = [];
+}

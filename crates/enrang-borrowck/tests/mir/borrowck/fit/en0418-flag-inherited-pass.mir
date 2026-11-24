@@ -1,0 +1,55 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0418/flag-inherited.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0418/flag-inherited.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+class Base {
+  private dst: &u8[];
+}
+@final @copy class Sub extends Base { }
+
+fn Base::#ctor(_1: &Base, _2: &u8[]) -> void {
+  let _1: &Base; // this
+  let _2: &u8[]; // d
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).dst = move _3;
+    return;
+  }
+}
+
+fn Base::step(_1: &Base) -> isize {
+  let _1: &Base; // this
+  let _2: &u8[] temp;
+  bb0: {
+    _2 = copy (*_1).dst;
+    _0 = "alloc/array"::Array<u8>::length(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Sub::#ctor(_1: &Sub, _2: &u8[]) -> void {
+  let _1: &Sub; // this
+  let _2: &u8[]; // d
+  let _3: void temp;
+  let _4: &u8[] temp;
+  let _5: &Sub temp;
+  let _6: &Base temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _5 = &*_1 [reborrow];
+    _6 = convert(upcast, move _5);
+    _3 = Base::#ctor(move _6, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

@@ -1,0 +1,2 @@
+const b = new Box("a".toString());
+dispose(*b); //~ EN0605

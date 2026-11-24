@@ -1,0 +1,14 @@
+let grid: i64[][] = [[1, 2], [3, 4]];
+const p = dup(&grid);
+if (p != null) {
+  const [a, b] = p;
+  const e = &a[0];
+  console.log(*e, *b);
+}
+
+public function two(a: &i64[], b: &i64[]): [&i64[], &i64[]] { return [a, b]; }
+
+public function dup(rows: &Slice<i64[]>): [&i64[], &i64[]] | null {
+  for (const r of rows) { return two(r, r); }
+  return null;
+}

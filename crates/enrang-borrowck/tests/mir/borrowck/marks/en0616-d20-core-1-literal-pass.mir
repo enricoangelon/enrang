@@ -1,0 +1,113 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/d20-core-1-literal.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/d20-core-1-literal.pass";
+class Appender {
+  private s: &string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // base
+  let mut _3: Appender; // a
+  let _4: &string temp;
+  let _5: &Appender temp;
+  let _6: void temp;
+  let mut _7: string; // hi
+  let _8: void temp;
+  let _9: &string temp;
+  let _10: &Appender temp;
+  let mut _11: string; // t
+  let _12: string temp;
+  let _13: &string temp;
+  let _14: void temp;
+  let _15: &string temp;
+  let _16: &Appender temp;
+  let _17: void temp;
+  let _18: &Appender temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "x": string;
+    storage_live(_3);
+    set_table(_3, Appender);
+    _4 = &_2 [explicit];
+    _5 = &_3 [auto-borrow];
+    _6 = Appender::#ctor(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    storage_live(_7);
+    _7 = const "hi": string;
+    _9 = &_7 [explicit];
+    _10 = &_3 [auto-borrow];
+    _8 = Appender::setS(move _10, move _9) -> bb2;
+  }
+  bb2: {
+    storage_live(_11);
+    _12 = const "ok": string;
+    _13 = &_12 [temp-arg];
+    _11 = form to_string(move _13) -> bb3;
+  }
+  bb3: {
+    drop(_12);
+    storage_dead(_12);
+    _15 = &_11 [explicit];
+    _16 = &_3 [auto-borrow];
+    _14 = Appender::setS(move _16, move _15) -> bb4;
+  }
+  bb4: {
+    _18 = &_3 [auto-borrow];
+    _17 = Appender::add(move _18) -> bb5;
+  }
+  bb5: {
+    drop(_11);
+    storage_dead(_11);
+    drop(_7);
+    storage_dead(_7);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Appender::#ctor(_1: &Appender, _2: &string) -> void {
+  let _1: &Appender; // this
+  let _2: &string; // s
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).s = move _3;
+    return;
+  }
+}
+
+fn Appender::add(_1: &Appender) -> void {
+  let _1: &Appender; // this
+  let _2: &string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  bb0: {
+    _2 = &*(*_1).s [compound-target];
+    _3 = const "!": string;
+    _4 = &_3 [temp-arg];
+    _5 = form append(move _2, move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}
+
+fn Appender::setS(_1: &Appender, _2: &string) -> void {
+  let _1: &Appender; // this
+  let _2: &string; // s
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).s = move _3;
+    return;
+  }
+}

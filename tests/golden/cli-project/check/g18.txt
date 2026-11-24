@@ -1,0 +1,20 @@
+$ enrang check g18.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `inc` changes the object, but `Counter` declares that it doesn't
+ --> g18.en:7:24
+  |
+2 |   inc(): void;
+  |   --- declared here without `let`
+...
+7 |   public inc(): void { this.n += 1; }
+  |                        ^^^^^^^^^^^ this write needs exclusive access to `this`
+  |
+help: if implementations may change the object, write `let inc(): void;` in `Counter`
+  |
+2 |   let inc(): void;
+  |   ++++
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

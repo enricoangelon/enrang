@@ -1,0 +1,31 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/readonly_reference_field_write.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/readonly_reference_field_write.fail";
+@final class ByteLexer {
+  private src: readonly &Slice<u8>;
+}
+
+fn ByteLexer::#ctor(_1: &ByteLexer, _2: &Slice<u8>) -> void {
+  let _1: &ByteLexer; // this
+  let _2: &Slice<u8>; // src
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn ByteLexer::poke(_1: &ByteLexer) -> void {
+  let _1: &ByteLexer; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).src);
+    check_bounds(copy _2, copy _3);
+    (*(*_1).src)[_2] = const 9: u8; //~ EN0616
+    return;
+  }
+}

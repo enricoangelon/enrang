@@ -1,0 +1,21 @@
+//! covers: H18
+private function use(h: &Holder): void {
+  if (h.item != null) {
+    for (let i = 0; i < 2; i += 1) {
+      console.log(h.item.n);
+    }
+    wipe(h);
+  }
+}
+
+private function wipe(h: &Holder): void {
+  h.item = null;
+}
+
+private class Item {
+  public n: i64 = 1;
+}
+
+private class Holder {
+  public item: Item | null = new Item();
+}

@@ -1,0 +1,27 @@
+let a = new Bag();
+a.items.push(1);
+let start = new Bag();
+let h = new Holder(&start);
+const p = h.keep(&a);
+const e = h.first();
+for (let i = 0; i < 3; i++) {
+  console.log(p.items[0], i);
+}
+console.log(e);
+
+public class Bag {
+  public items: i64[] = [];
+}
+
+public class Holder {
+  private r: &Bag;
+
+  public constructor(r: &Bag) { this.r = r; }
+
+  public keep(x: &Bag): &Bag {
+    this.r = x;
+    return x;
+  }
+
+  public first(): readonly &i64 { return &this.r.items[0]; }
+}

@@ -1,0 +1,2 @@
+let r: Result<i64>;
+console.log(r); //~ EN0602 "`r` is used before it has a value"

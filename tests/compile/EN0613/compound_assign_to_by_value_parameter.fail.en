@@ -1,0 +1,4 @@
+public function bump(x: i64): void {
+  x += 1; //~ EN0613 "cannot assign to parameter `x`"
+  console.log(x);
+}

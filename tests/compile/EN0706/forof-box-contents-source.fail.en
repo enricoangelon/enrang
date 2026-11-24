@@ -1,0 +1,31 @@
+//! row: `for (const x of &*b)` with `b: Box<T[]>
+public function assignDead(): void {
+  let b: Box<i64[]> = new Box([1, 2]);
+  for (const x of &*b) {
+    b = new Box([3]); //~ EN0706
+  }
+}
+
+public function assignLive(): void {
+  let b: Box<i64[]> = new Box([1, 2]);
+  for (const x of &*b) {
+    b = new Box([3]); //~ EN0706
+    console.log(x);
+  }
+}
+
+public function unboxDead(): void {
+  let b: Box<i64[]> = new Box([1, 2]);
+  for (const x of &*b) {
+    const v = b.unbox(); //~ EN0709
+    console.log(v);
+  }
+}
+
+public function unboxLive(): void {
+  let b: Box<i64[]> = new Box([1, 2]);
+  for (const x of &*b) {
+    const v = b.unbox(); //~ EN0709
+    console.log(v, x);
+  }
+}

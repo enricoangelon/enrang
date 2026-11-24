@@ -1,0 +1,9 @@
+public const PRIMES: &Slice<i64> = &[2, 3, 5, 7];
+
+public function total(xs: &Slice<i64>): i64 {
+  let sum: i64 = 0;
+  for (const x of xs) {
+    sum += *x;
+  }
+  return sum;
+}

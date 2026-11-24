@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0210/unknown_parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0210]: `unknown` does not exist in Enrang
+ --> tests/compile/EN0210/unknown_parameter.fail.en:1:29
+  |
+1 | public function show(value: unknown): void { //~ EN0210
+  |                             ^^^^^^^ every value has one known type
+  |
+help: accept every value type with a generic
+  |
+1 | public function show<T>(value: &T): void { //~ EN0210
+  |                     +++        ~~
+  = explain: run `enrang explain EN0210`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,37 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0609/q38-readonly-field-3.fail.en. Its row's codes: EN0609.
+module "tests/compile/EN0609/q38-readonly-field-3.fail";
+@private class ByteLexer {
+  private readonly src: readonly &Slice<u8>;
+  private pos: isize = default;
+}
+
+fn ByteLexer::#ctor(_1: &ByteLexer, _2: &Slice<u8>) -> void {
+  let _1: &ByteLexer; // this
+  let _2: &Slice<u8>; // src
+  let _3: &Slice<u8> temp;
+  bb0: {
+    switch const overridden(pos): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+  bb2: {
+    field_init((*_1).pos, const 0: isize);
+    goto bb1;
+  }
+}
+
+fn ByteLexer::retarget(_1: &ByteLexer, _2: &Slice<u8>) -> void {
+  let _1: &ByteLexer; // this
+  let _2: &Slice<u8>; // s
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3; //~ EN0609
+    return;
+  }
+}

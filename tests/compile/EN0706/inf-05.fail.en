@@ -1,0 +1,21 @@
+let x = new Bag();
+x.items.push(1);
+let y = new Bag();
+y.items.push(2);
+const pk = new Picker();
+const r = pk.pick(&x, &y, 1);
+for (let i = 0; i < 3; i++) {
+  y.items.push(i); //~ EN0706
+}
+console.log(r);
+
+public class Bag {
+  public items: i64[] = [];
+}
+
+public class Picker {
+  public pick(a: &Bag, b: &Bag, n: i64): &i64 {
+    if (n == 0) { return &a.items[0]; }
+    return this.pick(b, a, n - 1);
+  }
+}

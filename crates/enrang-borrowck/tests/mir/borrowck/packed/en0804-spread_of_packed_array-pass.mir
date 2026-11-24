@@ -1,0 +1,61 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0804/spread_of_packed_array.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0804/spread_of_packed_array.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_extend_cloned") fn "alloc/array"::Array<T>::extendCloned(let _1: &Array<T>, _2: &Slice<T>) -> void where T extends Clone;
+@lang("clone") interface "core/prelude"::Clone { }
+@final class P {
+  a: u8;
+  b: u8[4];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: P; // p
+  let _3: u8[4] temp;
+  let _4: *P temp;
+  let _5: void temp;
+  let _6: u8[]; // c
+  let _7: u8[] temp;
+  let _8: &u8[4] temp;
+  let _9: &Slice<u8> temp;
+  let _10: &u8[] temp;
+  let _11: void temp;
+  let _12: void temp;
+  let _13: &u8[] temp;
+  bb0: {
+    storage_live(_2);
+    _3 = fixed<u8>[const 1: u8, const 2: u8, const 3: u8, const 4: u8];
+    _4 = addr_of _2;
+    _5 = named_fill P leaving()(move _4) -> bb1;
+  }
+  bb1: {
+    _2.a = const 1: u8;
+    _2.b = move _3;
+    storage_live(_6);
+    _7 = intrinsic AllocArray<u8>();
+    _8 = &_2.b [auto-borrow];
+    _9 = convert(fixed_to_slice, move _8);
+    _10 = &_7 [auto-borrow];
+    _11 = "alloc/array"::Array<u8>::extendCloned(move _10, move _9) -> bb2;
+  }
+  bb2: {
+    _6 = move _7;
+    drop(_7);
+    storage_dead(_7);
+    _13 = &_6 [auto-borrow];
+    _12 = form log(move _13) -> bb3;
+  }
+  bb3: {
+    drop(_6);
+    storage_dead(_6);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

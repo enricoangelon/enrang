@@ -1,0 +1,26 @@
+let one: Box<i64> = new Box(1);
+let h = new Holder(&one);
+const w1 = h.take();
+const w2 = h.take(); //~ EN0708
+const inner: &i64 = w2;
+*w1 = new Box(7);
+console.log(*inner);
+
+let two: Box<i64> = new Box(2);
+let k = new Holder(&two);
+const v1 = k.take();
+const v2 = k.take(); //~ EN0707
+*v2 = new Box(8);
+*v1 = new Box(7);
+
+public class Holder {
+  private slot: &Box<i64>;
+
+  public constructor(slot: &Box<i64>) {
+    this.slot = slot;
+  }
+
+  public take(): &Box<i64> {
+    return this.slot;
+  }
+}

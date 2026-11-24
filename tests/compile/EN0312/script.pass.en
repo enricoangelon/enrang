@@ -1,0 +1,5 @@
+console.log(greet("Ada"));
+
+public function greet(name: &string): string {
+  return `Hello, ${name}!`;
+}

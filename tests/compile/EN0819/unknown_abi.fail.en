@@ -1,0 +1,5 @@
+@abi("fastcall") public function fc(n: i32): i32 { //~ EN0819 "unknown ABI `fastcall`"
+  return n;
+}
+
+public type Cb = @abi("vectorcall") unsafe fn(n: i32) => void; //~ EN0819 "unknown ABI `vectorcall`"

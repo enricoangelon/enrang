@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0409/arrow_parameter_without_a_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0409]: `x` needs a type annotation
+ --> tests/compile/EN0409/arrow_parameter_without_a_type.fail.en:1:17
+  |
+1 | const double = (x) => x * 2; //~ EN0409 "`x` needs a type annotation"
+  |                 ^ nothing here gives `x` a type
+  |
+help: annotate it, or pass the arrow where an `fn` or closure type is expected
+  = explain: run `enrang explain EN0409`
+
+error: aborting due to 1 previous error

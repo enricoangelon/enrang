@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0419/satisfy-unsafe-member.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `Device` does not satisfy `Port`
+ --> tests/compile/EN0419/satisfy-unsafe-member.fail.en:2:7
+  |
+2 | touch(&device); //~ EN0419 "`Device` does not satisfy `Port`"
+  |       ^^^^^^^ `T` must satisfy `Port`
+3 |
+4 | private function touch<T extends Port>(p: &T): void {
+  |                        - the bound on `T`
+  |
+  = explain: run `enrang explain EN0419`
+
+error: aborting due to 1 previous error

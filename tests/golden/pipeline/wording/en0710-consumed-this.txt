@@ -1,0 +1,11 @@
+error[EN0710]: `posRef` returns a reference into the object it consumes
+ --> main.en:3:32
+  |
+3 |   public move posRef(): &i64 { return &this.pos; }
+  |                                ^^^^^^^^^^^^^^^^^ this reference would point at the consumed object
+  |
+  = note: a `move` method gives up its object, which is disposed of when the method ends
+help: return the value itself, or take `this` by reference
+  = explain: run `enrang explain EN0710`
+
+error: aborting due to 1 previous error

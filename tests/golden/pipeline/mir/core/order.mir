@@ -1,0 +1,118 @@
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // xs
+  let mut _3: isize; // i
+  let _4: void temp;
+  let _5: isize temp;
+  let _6: &i64[] temp;
+  let _7: i64 temp;
+  let _8: &i64[] temp;
+  let _9: isize temp;
+  let _10: i64 temp;
+  let _11: isize temp;
+  let mut _12: i64; // k
+  let _13: void temp;
+  let _14: i64 temp;
+  let _15: i64 temp;
+  let _16: &i64 temp;
+  let mut _17: string; // s
+  let _18: &string temp;
+  let _19: string temp;
+  let _20: isize temp;
+  let _21: &string temp;
+  let _22: &isize temp;
+  let _23: &string temp;
+  let _24: void temp;
+  let _25: isize temp;
+  let _26: i64 temp;
+  let _27: isize temp;
+  let _28: isize temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    storage_live(_3);
+    _3 = const 0: isize;
+    _6 = &_2 [auto-borrow];
+    _5 = "alloc/array"::Array<i64>::length(move _6) -> bb1;
+  }
+  bb1: {
+    _7 = cast(int_to_int, move _5, i64);
+    _8 = &_2 [auto-borrow];
+    _4 = "alloc/array"::Array<i64>::push(move _8, move _7) -> bb2;
+  }
+  bb2: {
+    _9 = copy _3;
+    _10 = cast(int_to_int, copy _3, i64);
+    _11 = len(_2);
+    check_bounds(copy _9, copy _11);
+    _2[_9] = move _10;
+    storage_live(_12);
+    _12 = const 1: i64;
+    _15 = copy _12;
+    _12 = const 5: i64;
+    _14 = pair(move _15, const 5: i64) -> bb3;
+  }
+  bb3: {
+    _16 = &_14 [temp-arg];
+    _13 = form log(move _16) -> bb4;
+  }
+  bb4: {
+    storage_dead(_14);
+    storage_live(_17);
+    _17 = const "ab": string;
+    _18 = &_17 [compound-target];
+    _21 = &_17 [auto-borrow];
+    _20 = "core/string"::string::length(move _21) -> bb5;
+  }
+  bb5: {
+    _22 = &_20 [temp-arg];
+    _19 = form to_string(move _22) -> bb6;
+  }
+  bb6: {
+    _23 = &_19 [temp-arg];
+    _24 = form append(move _18, move _23) -> bb7;
+  }
+  bb7: {
+    drop(_19);
+    storage_dead(_19);
+    storage_dead(_20);
+    _25 = const 1: isize;
+    _27 = len(_2);
+    check_bounds(copy _25, copy _27);
+    _26 = copy _2[_25];
+    _28 = len(_2);
+    check_bounds(copy _25, copy _28);
+    _2[_25] = checked_add(copy _26, copy _12);
+    drop(_17);
+    storage_dead(_17);
+    storage_dead(_12);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn pair(_1: i64, _2: i64) -> i64 {
+  let _1: i64; // a
+  let _2: i64; // b
+  bb0: {
+    _0 = checked_sub(copy _1, copy _2);
+    return;
+  }
+}

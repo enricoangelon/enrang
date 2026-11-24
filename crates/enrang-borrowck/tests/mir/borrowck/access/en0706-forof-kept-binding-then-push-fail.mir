@@ -1,0 +1,141 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/forof-kept-binding-then-push.fail.en. Its row's codes: EN0706, EN0706.
+module "tests/compile/EN0706/forof-kept-binding-then-push.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string[]; // queue
+  let mut _3: &string | null; // saved
+  let _4: isize #i;
+  let _5: isize #n;
+  let _6: bool temp;
+  let _7: &string; // job
+  let _8: &string temp;
+  let _9: void temp;
+  let _10: &string[] temp;
+  let _11: void temp;
+  let mut _12: i64[]; // q
+  let mut _13: &i64 | null; // best
+  let _14: isize #i;
+  let _15: isize #n;
+  let _16: bool temp;
+  let _17: &i64; // x
+  let _18: &i64 temp;
+  let _19: void temp;
+  let _20: &i64[] temp;
+  let _21: void temp;
+  let _22: &(&i64 | null) temp;
+  loop l0: path _2 preheader bb5 head bb1 bind bb2[2] binding _7;
+  loop l1: path _12 preheader bb13 head bb9 bind bb10[2] binding _17;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<string>(const "a": string, const "b": string);
+    storage_live(_3);
+    _3 = null;
+    goto bb5;
+  }
+  bb1: {
+    _5 = len(_2);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &_2[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    storage_live(_12);
+    _12 = intrinsic AllocArray<i64>(const 3: i64, const 1: i64);
+    storage_live(_13);
+    _13 = null;
+    goto bb13;
+  }
+  bb5: {
+    storage_live(_4);
+    _4 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _8 = &*_7 [reborrow];
+    _3 = present(move _8);
+    _10 = &_2 [auto-borrow]; //~ EN0706
+    _9 = "alloc/array"::Array<string>::push(move _10, const "s": string) -> bb7;
+  }
+  bb7: {
+    _11 = use(copy _3) -> bb8;
+  }
+  bb8: {
+    storage_dead(_7);
+    goto bb3;
+  }
+  bb9: {
+    _15 = len(_12);
+    _16 = lt(copy _14, copy _15);
+    switch move _16 [0: bb12, otherwise: bb10];
+  }
+  bb10: {
+    storage_live(_17);
+    check_bounds(copy _14, copy _15);
+    _17 = &_12[_14] [for-of-element];
+    _14 = add(copy _14, const 1: isize);
+    goto bb14;
+  }
+  bb11: {
+    goto bb9;
+  }
+  bb12: {
+    storage_dead(_13);
+    drop(_12);
+    storage_dead(_12);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb13: {
+    storage_live(_14);
+    _14 = const 0: isize;
+    goto bb9;
+  }
+  bb14: {
+    _18 = &*_17 [reborrow];
+    _13 = present(move _18);
+    _20 = &_12 [auto-borrow]; //~ EN0706
+    _19 = "alloc/array"::Array<i64>::push(move _20, const 1: i64) -> bb15;
+  }
+  bb15: {
+    _22 = &_13 [auto-borrow];
+    _21 = form log(move _22) -> bb16;
+  }
+  bb16: {
+    storage_dead(_17);
+    goto bb11;
+  }
+}
+
+@private fn use(_1: &string | null) -> void {
+  let _1: &string | null; // s
+  let _2: void temp;
+  let _3: &(&string | null) temp;
+  bb0: {
+    _3 = &_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

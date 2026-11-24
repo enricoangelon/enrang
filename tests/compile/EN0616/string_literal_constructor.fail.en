@@ -1,0 +1,11 @@
+const k = new Sink("literal"); //~ EN0616 "cannot change a string literal"
+
+public class Sink {
+  private out: &string;
+  public constructor(o: &string) {
+    this.out = o;
+  }
+  public grow(): void {
+    *this.out += "!";
+  }
+}

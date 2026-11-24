@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN1015/forof-box-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1015]: this `for...of` source is not supported yet
+ --> tests/compile/EN1015/forof-box-source.fail.en:3:17
+  |
+3 | for (const x of b) { //~ EN1015
+  |                 ^ this is `Box<i64[]>`
+  |
+  = note: a loop goes over an array, a fixed array, a view or a range, through at most one `&`, and a `Box` is none of them
+help: loop over the array in the box: `&*b`
+  |
+3 | for (const x of &*b) { //~ EN1015
+  |                 ~~~
+  = explain: run `enrang explain EN1015`
+
+error: aborting due to 1 previous error

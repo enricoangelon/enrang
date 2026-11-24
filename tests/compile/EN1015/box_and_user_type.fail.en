@@ -1,0 +1,12 @@
+const b: Box<i64[]> = new Box([1, 2]);
+for (const x of b) { //~ EN1015 "this `for...of` source is not supported yet"
+  console.log(x);
+}
+const bag = new Bag {};
+for (const x of bag) { //~ EN1015 "this `for...of` source is not supported yet"
+  console.log(x);
+}
+
+public final class Bag {
+  public items: i64[] = [];
+}

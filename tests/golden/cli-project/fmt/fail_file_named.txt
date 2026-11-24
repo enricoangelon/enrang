@@ -1,0 +1,15 @@
+$ enrang fmt src/sub/snippet.fail.en
+[exit 0]
+[stdout]
+[stderr]
+[file src/sub/c.en]
+f( 1,2 );
+[file src/sub/c.test.en]
+test("one",() => {
+  expect(1).toBe(1);
+});
+[file src/sub/snippet.fail.en]
+const   x=1;
+if (x == 1) {
+      console.log(x);
+}

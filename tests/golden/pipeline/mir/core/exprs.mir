@@ -1,0 +1,191 @@
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::equals(_1: &string, _2: &string) -> bool;
+enum Color { Red, Green }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: i64; // a
+  let _3: i64; // b
+  let _4: bool; // c
+  let _5: bool temp;
+  let _6: i64; // d
+  let _7: i64 temp;
+  let _8: i64 temp;
+  let _9: i64 temp;
+  let _10: i64 temp;
+  let _11: i64; // e
+  let _12: i64 temp;
+  let _13: i64 temp;
+  let _14: f64; // f
+  let _15: f64 temp;
+  let _16: bool; // g
+  let _17: bool temp;
+  let _18: bool temp;
+  let _19: string; // h
+  let _20: bool temp;
+  let _21: string; // s
+  let _22: &string temp;
+  let _23: string temp;
+  let _24: &string temp;
+  let _25: string temp;
+  let _26: bool; // same
+  let _27: &string temp;
+  let _28: string temp;
+  let _29: &string temp;
+  let _30: bool temp;
+  let _31: i64[3]; // fx
+  let _32: i64[4]; // rep
+  let _33: [i64, string]; // tup
+  let _34: { x: int, y: bool }; // obj
+  let _35: Color; // col
+  let _36: f64; // casted
+  let _37: string; // tpl
+  let _38: &i64 temp;
+  let _39: &string temp;
+  let _40: u8; // w
+  let _41: bool; // mixed
+  let _42: i64 temp;
+  let _43: i64 | null; // n
+  let _44: bool; // isNull
+  let _45: u32 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 7: i64;
+    storage_live(_3);
+    _3 = checked_neg(copy _2);
+    storage_live(_4);
+    _5 = gt(copy _2, const 3: i64);
+    _4 = not(move _5);
+    storage_live(_6);
+    _7 = checked_div(copy _2, const 2: i64);
+    _8 = checked_rem(copy _2, const 3: i64);
+    _9 = checked_add(move _7, move _8);
+    _10 = checked_shl(copy _2, const 1: int);
+    _6 = checked_sub(move _9, move _10);
+    storage_live(_11);
+    _12 = bit_and(copy _2, const 3: i64);
+    _13 = bit_xor(const 4: i64, const 1: i64);
+    _11 = bit_or(move _12, move _13);
+    storage_live(_14);
+    _15 = mul(const 1.5: f64, const 2.0: f64);
+    _14 = div(move _15, const 3.0: f64);
+    storage_live(_16);
+    _18 = gt(copy _2, const 2: i64);
+    switch copy _18 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _17 = lt(copy _3, const 0: i64);
+    goto bb3;
+  }
+  bb2: {
+    _17 = copy _18;
+    goto bb3;
+  }
+  bb3: {
+    switch copy _17 [0: bb4, otherwise: bb5];
+  }
+  bb4: {
+    _16 = copy _4;
+    goto bb6;
+  }
+  bb5: {
+    _16 = copy _17;
+    goto bb6;
+  }
+  bb6: {
+    storage_live(_19);
+    _20 = gt(copy _2, const 5: i64);
+    switch move _20 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    _19 = const "big": string;
+    goto bb9;
+  }
+  bb8: {
+    _19 = const "small": string;
+    goto bb9;
+  }
+  bb9: {
+    storage_live(_21);
+    _22 = &_19 [auto-borrow];
+    _23 = const "!": string;
+    _24 = &_23 [temp-arg];
+    _25 = form concat(move _22, move _24) -> bb10;
+  }
+  bb10: {
+    _21 = move _25;
+    drop(_25);
+    storage_dead(_25);
+    drop(_23);
+    storage_dead(_23);
+    storage_live(_26);
+    _27 = &_21 [auto-borrow];
+    _28 = const "big!": string;
+    _29 = &_28 [temp-arg];
+    _30 = "core/string"::string::equals(move _27, move _29) -> bb11;
+  }
+  bb11: {
+    _26 = move _30;
+    drop(_28);
+    storage_dead(_28);
+    storage_live(_31);
+    _31 = fixed<i64>[const 1: i64, const 2: i64, const 3: i64];
+    storage_live(_32);
+    _32 = repeat(const 0: i64; 4);
+    storage_live(_33);
+    _33 = tuple(const 1: i64, const "x": string);
+    storage_live(_34);
+    _34 = object { x: int, y: bool } { x: const 1: int, y: const true: bool };
+    storage_live(_35);
+    _35 = Color::Green {};
+    storage_live(_36);
+    _36 = cast(int_to_float, copy _2, f64);
+    storage_live(_37);
+    _38 = &_2 [auto-borrow];
+    _39 = &_21 [auto-borrow];
+    _37 = form template(const "": &string, move _38, const "-": &string, move _39, const "": &string) -> bb12;
+  }
+  bb12: {
+    storage_live(_40);
+    _40 = const 3: u8;
+    storage_live(_41);
+    _42 = cast(int_to_int, copy _40, i64);
+    _41 = lt(move _42, copy _2);
+    storage_live(_43);
+    _43 = null;
+    storage_live(_44);
+    _45 = discriminant(_43);
+    _44 = eq(move _45, const 0: u32);
+    storage_dead(_44);
+    storage_dead(_43);
+    storage_dead(_41);
+    storage_dead(_40);
+    drop(_37);
+    storage_dead(_37);
+    storage_dead(_36);
+    storage_dead(_35);
+    storage_dead(_34);
+    drop(_33);
+    storage_dead(_33);
+    storage_dead(_32);
+    storage_dead(_31);
+    storage_dead(_26);
+    drop(_21);
+    storage_dead(_21);
+    drop(_19);
+    storage_dead(_19);
+    storage_dead(_16);
+    storage_dead(_14);
+    storage_dead(_11);
+    storage_dead(_6);
+    storage_dead(_4);
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

@@ -1,0 +1,10 @@
+public function load(path: &string): Result<string> {
+  if (path.isEmpty()) { return Err("file missing"); }
+  return Ok(`read ${path}`);
+}
+
+public function token(): Result<Token> { return Token.End; }
+
+public enum Token {
+  End,
+}

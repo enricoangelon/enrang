@@ -1,0 +1,10 @@
+error[EN0619]: `super(age)` may already have run here
+ --> main.en:5:5
+  |
+5 |     super(age);
+  |     ^^^^^^^^^^ a second `super(...)` on this path
+  |
+  = note: every constructor of a class with a base runs `super(...)` exactly once on every path
+  = explain: run `enrang explain EN0619`
+
+error: aborting due to 1 previous error

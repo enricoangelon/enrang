@@ -1,0 +1,10 @@
+const a: D[3] = [new D {}, new D {}, new D {}];
+for (const x of &a) { console.log(x.n); }
+const nums: i32[3] = [1, 2, 3];
+for (const x of nums) { console.log(x); }
+const owned: D[] = [new D {}, new D {}];
+for (const x of owned) { console.log(x.n); }
+
+public final class D {
+  public n: string = "d";
+}

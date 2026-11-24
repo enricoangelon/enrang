@@ -1,0 +1,27 @@
+@lang("error") interface "core/prelude"::Error { }
+@lang("result") enum "core/result"::Result<T, E extends Error> { Ok { value: T }, Err { error: E } }
+@private enum E { A }
+
+@private fn f(_1: Result<i64, E>) -> Result<i64, E> {
+  let _1: Result<i64, E>; // r
+  let _2: i64 temp;
+  let _3: Result<i64, E> temp;
+  let _4: isize temp;
+  let _5: i64 temp;
+  bb0: {
+    _3 = copy _1;
+    _4 = discriminant(_3);
+    switch move _4 [0: bb1, otherwise: bb2];
+  }
+  bb1: {
+    check_tag(_3, Ok);
+    _5 = copy (_3 as Ok).value;
+    _2 = copy _5;
+    return;
+  }
+  bb2: {
+    check_tag(_3, Err);
+    _0 = Result<i64, E>::Err { error: copy (_3 as Err).error };
+    return;
+  }
+}

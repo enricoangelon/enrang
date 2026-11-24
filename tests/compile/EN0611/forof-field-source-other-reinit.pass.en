@@ -1,0 +1,27 @@
+//! row: Source `&h.items`: `take(h.other); h.oth
+public class H { public items: i64[] = [1, 2]; public other: string[] = []; }
+
+private function take(v: string[]): void { console.log(v); }
+
+public function reinit(): void {
+  let h = new H();
+  for (const x of &h.items) {
+    take(h.other); h.other = [];
+  }
+}
+
+public function leave(): void {
+  let h = new H();
+  for (const x of &h.items) {
+    take(h.other); break;
+  }
+}
+
+public function reinitWithBinding(): void {
+  let h = new H();
+  h.other.push("a");
+  let names: string[] = ["n"];
+  for (const x of &names) {
+    take(h.other); h.other = [x.clone()];
+  }
+}

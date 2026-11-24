@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0419/satisfy-field.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `User` does not satisfy `Named`
+ --> tests/compile/EN0419/satisfy-field.fail.en:2:19
+  |
+2 | console.log(label(&user)); //~ EN0419 "`User` does not satisfy `Named`"
+  |                   ^^^^^ `T` must satisfy `Named`
+3 |
+4 | private function label<T extends Named>(x: &T): string {
+  |                        - the bound on `T`
+  |
+  = explain: run `enrang explain EN0419`
+
+error: aborting due to 1 previous error

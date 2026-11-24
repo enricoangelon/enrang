@@ -1,0 +1,41 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0609/constructor_reference.fail.en. Its row's codes: EN0609.
+module "tests/compile/EN0609/constructor_reference.fail";
+class Board {
+  private readonly cells: i64[];
+}
+
+fn Board::#ctor(_1: &Board) -> void {
+  let _1: &Board; // this
+  let _2: i64[] temp;
+  let _3: i64[] temp;
+  let _4: &i64[]; // r
+  let _5: isize temp;
+  let _6: isize temp;
+  bb0: {
+    switch const overridden(cells): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    drop((*_1).cells) [assign];
+    (*_1).cells = move _3;
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_4);
+    _4 = &(*_1).cells [explicit];
+    _5 = const 0: isize;
+    _6 = len(*_4);
+    check_bounds(copy _5, copy _6);
+    (*_4)[_5] = const 9: i64; //~ EN0609
+    storage_dead(_4);
+    return;
+  }
+  bb2: {
+    _2 = intrinsic AllocArray<i64>();
+    field_init((*_1).cells, move _2);
+    drop(_2);
+    storage_dead(_2);
+    goto bb1;
+  }
+}

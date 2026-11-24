@@ -1,0 +1,5 @@
+//! row: `const q = [1]; for (const x of &q) { q.
+const q = [1];
+for (const x of &q) {
+  q.push(2); //~ EN0614 //~ EN0706
+}

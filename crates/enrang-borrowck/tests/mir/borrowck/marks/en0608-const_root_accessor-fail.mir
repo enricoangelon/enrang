@@ -1,0 +1,52 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/const_root_accessor.fail.en. Its row's codes: EN0608.
+module "tests/compile/EN0608/const_root_accessor.fail";
+class Book {
+  title: string = default;
+}
+class Library {
+  private books: Book[] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Library; // lib
+  let _3: *Library temp;
+  let _4: void temp;
+  let _5: &Book temp;
+  let _6: &Library temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Library leaving(books)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [auto-borrow];
+    _5 = Library::book(move _6, const 1: i64) -> bb2; //~ EN0608 "`book` hands out a writable reference, but `lib` is `const`"
+  }
+  bb2: {
+    drop((*_5).title) [assign];
+    (*_5).title = const "Dune": string;
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Library::book(_1: &Library, _2: i64) -> &Book {
+  let _1: &Library; // this
+  let _2: i64; // id
+  let _3: i64 temp;
+  let _4: isize temp;
+  let _5: isize temp;
+  bb0: {
+    _3 = checked_sub(copy _2, const 1: i64);
+    _4 = cast(int_to_int, move _3, isize);
+    _5 = len((*_1).books);
+    check_bounds(copy _4, copy _5);
+    _0 = &(*_1).books[_4] [explicit];
+    return;
+  }
+}

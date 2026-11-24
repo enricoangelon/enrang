@@ -1,0 +1,41 @@
+$ enrang check tests/compile/EN0438/spread_of_a_value_that_is_no_array.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0438]: `...` needs an array, found `int`
+ --> tests/compile/EN0438/spread_of_a_value_that_is_no_array.fail.en:2:14
+  |
+2 |   const a = [...5]; //~ EN0438 "`...` needs an array, found `int`"
+  |              ^^^^ this is `int`
+  |
+  = explain: run `enrang explain EN0438`
+
+error[EN0438]: `...` needs an array, found `string`
+ --> tests/compile/EN0438/spread_of_a_value_that_is_no_array.fail.en:3:14
+  |
+3 |   const c = [..."abc"]; //~ EN0438 "`...` needs an array, found `string`"
+  |              ^^^^^^^^ this is `string`
+  |
+  = explain: run `enrang explain EN0438`
+
+error[EN0438]: `...` needs an array, found `i64[] | null`
+ --> tests/compile/EN0438/spread_of_a_value_that_is_no_array.fail.en:4:14
+  |
+4 |   const d = [...o]; //~ EN0438 "`...` needs an array, found `i64[] | null`"
+  |              ^^^^ this is `i64[] | null`
+  |
+  = explain: run `enrang explain EN0438`
+
+error[EN0438]: `...` needs an array, found `Box<i64[]>`
+ --> tests/compile/EN0438/spread_of_a_value_that_is_no_array.fail.en:5:14
+  |
+5 |   const e = [...b]; //~ EN0438 "`...` needs an array, found `Box<i64[]>`"
+  |              ^^^^ this is `Box<i64[]>`
+  |
+help: spread the array in the box: `...*b`
+  |
+5 |   const e = [...*b]; //~ EN0438 "`...` needs an array, found `Box<i64[]>`"
+  |                 +
+  = explain: run `enrang explain EN0438`
+
+error: aborting due to 4 previous errors

@@ -1,0 +1,97 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0711/d20e-10.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0711/d20e-10.pass";
+@private class Guard {
+  private r: &string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: Guard; // g
+  let _4: &string temp;
+  let _5: &Guard temp;
+  let _6: void temp;
+  let _7: void temp;
+  let _8: void temp;
+  let _9: &string temp;
+  let mut _10: string; // s2
+  let _11: Guard; // g2
+  let _12: &string temp;
+  let _13: &Guard temp;
+  let _14: void temp;
+  let _15: void temp;
+  let _16: Guard temp;
+  let _17: void temp;
+  let _18: &string temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "abc": string;
+    storage_live(_3);
+    set_table(_3, Guard);
+    _4 = &_2 [explicit];
+    _5 = &_3 [auto-borrow];
+    _6 = Guard::#ctor(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    drop(_2) [assign];
+    _2 = const "def": string;
+    _9 = &_2 [auto-borrow];
+    _8 = form log(move _9) -> bb2;
+  }
+  bb2: {
+    storage_live(_10);
+    _10 = const "abc": string;
+    storage_live(_11);
+    set_table(_11, Guard);
+    _12 = &_10 [explicit];
+    _13 = &_11 [auto-borrow];
+    _14 = Guard::#ctor(move _13, move _12) -> bb3;
+  }
+  bb3: {
+    _16 = move _11;
+    storage_dead(_16);
+    drop(_10) [assign];
+    _10 = const "def": string;
+    _18 = &_10 [auto-borrow];
+    _17 = form log(move _18) -> bb4;
+  }
+  bb4: {
+    drop(_11);
+    storage_dead(_11);
+    drop(_10);
+    storage_dead(_10);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Guard::#ctor(_1: &Guard, _2: &string) -> void {
+  let _1: &Guard; // this
+  let _2: &string; // r
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    return;
+  }
+}
+
+fn Guard::#dtor(_1: &Guard) -> void {
+  let _1: &Guard; // this
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = copy (*_1).r;
+    _2 = form log(const "drop ": &string, move _3, const "": &string) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

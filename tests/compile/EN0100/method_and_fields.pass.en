@@ -1,0 +1,12 @@
+public class Account {
+  private cents: i64 = 0;
+
+  public balance(): i64 {
+    return this.cents;
+  }
+}
+
+public interface Point {
+  x: i64;
+  y: i64;
+}

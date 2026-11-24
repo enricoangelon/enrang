@@ -1,0 +1,364 @@
+=== EN0201
+--- rule
+`===` and `!==` do not exist. Enrang's `==` and `!=` never convert their operands, so they already mean what the strict forms mean in TypeScript. The fix-it replaces `===` with `==` and `!==` with `!=`.
+--- failing
+const n = 3;
+if (n === 3) { console.log("three"); }
+--- fixed
+const n = 3;
+if (n == 3) { console.log("three"); }
+--- typescript
+In TypeScript `==` converts its operands, so `"1" == 1` is `true`, and style guides ask for `===` everywhere. Enrang's `==` never coerces, so the strict form is the only form.
+=== EN0202
+--- rule
+`var` does not exist. Declare a binding that changes with `let` and one that does not with `const`; both belong to the block they are declared in. The fix-it writes `let`.
+--- failing
+var count = 0;
+count += 1;
+console.log(count);
+--- fixed
+let count = 0;
+count += 1;
+console.log(count);
+--- typescript
+A TypeScript `var` belongs to the whole function and is hoisted to its top, which is why `let` and `const` replaced it. Enrang keeps only the two block-scoped forms.
+=== EN0203
+--- rule
+A condition must be a `bool`: the condition of `if`, `while`, `do...while` and `for`, the first operand of a ternary, a `match` guard, and each operand of `!`, `&&` and `||`. There is no truthiness, so `if (count)` and `if (name)` are EN0203. Compare a number with `count != 0`, and test a nullable with `name != null`, which also narrows `name` inside the branch. The help writes the comparison.
+--- failing
+let count = 0;
+count += 2;
+if (count) { console.log(`${count} items`); }
+--- fixed
+let count = 0;
+count += 2;
+if (count != 0) { console.log(`${count} items`); }
+--- typescript
+In TypeScript any value can be a condition, and `0`, `""`, `NaN`, `null` and `undefined` all count as false, so an empty string and a missing one look the same. Enrang asks for the comparison you mean.
+=== EN0205
+--- rule
+`any` does not exist: every value has one type, known when the program is compiled. A function that accepts a value of any type takes a type parameter, usually behind a reference: `function count<T>(xs: &T[]): isize`. A value that is one of a few known kinds is an enum. The help makes the function generic.
+--- failing
+public function count(xs: any[]): isize { return xs.length(); }
+--- fixed
+public function count<T>(xs: &T[]): isize { return xs.length(); }
+--- typescript
+In TypeScript `any` switches the checks off for a value. Enrang has no checks to switch off: a generic function is compiled for each type it is called with, so it is as fast as one written for that type, and each call is checked.
+=== EN0206
+--- rule
+`undefined` does not exist: absence has one spelling, `null`, and only a nullable type `T | null` holds it. A parameter or field declared `x?: T` is `null` when it is left out. The help replaces `undefined` with `null`, and gives a binding with no type a nullable one.
+--- failing
+let best: i64 | null = undefined;
+console.log(best);
+--- fixed
+let best: i64 | null = null;
+console.log(best);
+--- typescript
+TypeScript has both `undefined` and `null`, and code must often handle both. Enrang has only `null`, and the compiler makes you check for it before you use the value: `?.`, `??` and `x!` work as in TypeScript.
+=== EN0207
+--- rule
+Enrang has no exceptions, so `throw`, `try`, `catch` and `finally` do not exist. A function that can fail returns `Result<T>`, gives its error with `return Err("...")`, and returns a plain value for success. Its caller handles the result with `match`, or passes the error up with `?`. A mistake that should stop the program is `panic("...")`. A value's destructor runs on every exit from its scope, `return` and `?` included, so cleanup needs no `finally`.
+--- failing
+public function parsePort(s: &string): i64 {
+  const n = s.parseInt();
+  if (n == null) { throw new Error("not a number"); }
+  return n;
+}
+--- fixed
+public function parsePort(s: &string): Result<i64> {
+  const n = s.parseInt();
+  if (n == null) { return Err("not a number"); }
+  return n;
+}
+--- typescript
+In TypeScript any call may throw, and nothing in its type says so. In Enrang a function that can fail says so in its return type, and each `?` shows a place where an error leaves.
+=== EN0208
+--- rule
+`>>>` does not exist. `>>` shifts by the type of its left operand: it is logical, filling with zeros, on unsigned types, and arithmetic, copying the sign bit, on signed types. For a logical shift, use an unsigned type.
+--- failing
+const flags: u32 = 0x80000000;
+const top = flags >>> 28;
+console.log(top);
+--- fixed
+const flags: u32 = 0x80000000;
+const top = flags >> 28;
+console.log(top);
+--- typescript
+In TypeScript every number is a double, `>>` treats it as a signed 32-bit integer and `>>>` as an unsigned one. Enrang integers carry their signedness in their type, so one operator is enough.
+=== EN0209
+--- rule
+`switch` and `case` do not exist; `match` takes their place. Each arm lists one or more values, or `default`, then `=>` and one expression or block. Arms never fall through, so there is no `break`, and a `match` on an enum must handle every case.
+--- failing
+const n = 2;
+switch (n) {
+  case 1: console.log("one"); break;
+  default: console.log("many");
+}
+--- fixed
+const n = 2;
+match (n) {
+  1 => console.log("one"),
+  default => console.log("many"),
+}
+--- typescript
+A TypeScript `switch` falls through unless each case ends with `break`, and checks nothing about coverage. `match` has no fall-through, and the compiler checks that it handles every value.
+=== EN0210
+--- rule
+`unknown` does not exist. In TypeScript it holds a value whose type is found out at run time; in Enrang every type is known when the program is compiled. Accept a value of any type with a type parameter, `<T>`, usually behind a reference, or a value of a few known kinds with an enum.
+--- failing
+public function report(value: unknown): void { console.log("got a value"); }
+--- fixed
+public function report<T>(value: &T): void { console.log("got a value"); }
+--- typescript
+TypeScript's `unknown` is a safe `any`: before using the value, code narrows it with `typeof` or `instanceof`. Enrang has neither operator, because no value's type is left to find out.
+=== EN0211
+--- rule
+`typeof` and `instanceof` do not exist, as operators or in types: there is no type to ask about at run time. A value that is one of several kinds is an enum, and `match` names its case; inside an arm, the value is narrowed to that case, so its fields can be read.
+--- failing
+const s = Shape.Circle { radius: 2.0 };
+if (s instanceof Circle) { console.log("a circle"); }
+
+private enum Shape {
+  Circle { radius: f64 },
+  Square { side: f64 },
+}
+--- fixed
+const s = Shape.Circle { radius: 2.0 };
+match (s) {
+  Shape.Circle => console.log("a circle"),
+  Shape.Square => console.log("a square"),
+}
+
+private enum Shape {
+  Circle { radius: f64 },
+  Square { side: f64 },
+}
+--- typescript
+A TypeScript discriminated union, with a `kind` field and `typeof` or `instanceof` checks, becomes an enum whose cases carry their fields, and the checks become one `match`.
+=== EN0213
+--- rule
+`using` does not exist, because every binding already works that way: when a binding goes out of scope its value is dropped, and a class's `destructor` runs. Write `const` or `let`, and put the cleanup in the class's `destructor`.
+--- failing
+using timer = new Timer("load");
+console.log("loading");
+
+private class Timer {
+  public constructor(public name: string) {}
+
+  public destructor() { console.log(`${this.name} done`); }
+}
+--- fixed
+const timer = new Timer("load");
+console.log("loading");
+
+private class Timer {
+  public constructor(public name: string) {}
+
+  public destructor() { console.log(`${this.name} done`); }
+}
+--- typescript
+TypeScript's `using` calls a value's `[Symbol.dispose]()` when its scope ends. In Enrang every owned value is dropped when its scope ends, in reverse order of declaration, so no keyword asks for it.
+=== EN0214
+--- rule
+`readonly` before a type is allowed in two places: before a function's return type, where it makes the returned reference read-only, as in `get(i: isize): readonly &T | null`, and before the type of a reference field, where it says the class never writes through that reference. Before a parameter's type, a local's type or a type that holds no reference, it is EN0214. A parameter needs no `readonly`: whether a function writes through a `&T` is inferred from its body and checked at every call. When a return type is a name, whether it holds a reference is known only once names are resolved, so that case is checked then.
+--- failing
+public function total(xs: readonly &Slice<i64>): i64 {
+  let t = 0;
+  for (const x of xs) { t += x; }
+  return t;
+}
+--- fixed
+public function total(xs: &Slice<i64>): i64 {
+  let t = 0;
+  for (const x of xs) { t += x; }
+  return t;
+}
+--- typescript
+TypeScript's `readonly T[]` makes an array read-only for whoever holds it. In Enrang a function's own body says whether it writes through a reference, so the signature does not repeat it, and a `const` binding is read-only all the way down.
+=== EN0215
+--- rule
+`|` cannot join object types. A value that has one of several shapes is an enum whose cases carry their fields, and `match` tells the cases apart; or declare a class for each shape. The only other unions are `T | null` and a `type` alias made of string literals.
+--- failing
+public function area(s: { radius: f64 } | { side: f64 }): f64 { return 0.0; }
+--- fixed
+public enum Shape {
+  Circle { radius: f64 },
+  Square { side: f64 },
+}
+
+public function area(s: &Shape): f64 {
+  return match (s) {
+    Shape.Circle => 3.14159 * s.radius * s.radius,
+    Shape.Square => s.side * s.side,
+  };
+}
+--- typescript
+This is TypeScript's discriminated union. In Enrang the cases are named in an enum, so no `kind` field is needed, and `match` checks that every case is handled.
+=== EN0216
+--- rule
+A union of string literals is a payload-free enum, and it is written as a whole `type` alias: `type Direction = "left" | "right";`. A string literal as a type anywhere else, or a union that mixes string literals with other types, is EN0216. Declare the alias and use its name.
+--- failing
+let direction: "left" | "right" = "left";
+console.log(direction);
+--- fixed
+let direction: Direction = "left";
+console.log(direction);
+
+private type Direction = "left" | "right";
+--- typescript
+TypeScript lets literal types appear anywhere. In Enrang a string-literal union is an enum stored as a small integer, and its alias is where the enum is declared.
+=== EN0218
+--- rule
+A `function` expression does not exist: the only function written as an expression is an arrow, `(x: i64): i64 => x * 2`. A function with a name of its own is declared at the top level.
+--- failing
+const double = function (x: i64): i64 { return x * 2; };
+console.log(double(21));
+--- fixed
+const double = (x: i64): i64 => x * 2;
+console.log(double(21));
+--- typescript
+TypeScript has both forms, and they differ in how they bind `this`. Enrang keeps the arrow, which never has a `this` of its own.
+=== EN0219
+--- rule
+`this` is the object a method was called on, so it exists only in an instance method, a constructor, a destructor and the arrows written inside them. A function, a local function, a `static` method, a constant and the top-level statements have no object, and `this` or `super` there is EN0219. So is `super` in a class that extends no class, and `super(...)` anywhere but a constructor, since only a constructor calls its base's; one inside an arrow or a local function of a constructor is EN0619. Pass the object as a parameter, or make the function a method of its class.
+--- failing
+const c = new Counter { count: 2 };
+console.log(describe(&c));
+
+private function describe(c: &Counter): string { return `count is ${this.count}`; }
+
+private class Counter {
+  public count: i64 = 0;
+}
+--- fixed
+const c = new Counter { count: 2 };
+console.log(describe(&c));
+
+private function describe(c: &Counter): string { return `count is ${c.count}`; }
+
+private class Counter {
+  public count: i64 = 0;
+}
+--- typescript
+In TypeScript every `function` has a `this`, set by how it is called, and it is `undefined` in strict mode when the function is called on its own. Enrang gives `this` only to methods, so a function that needs an object takes it as a parameter.
+=== EN0220
+--- rule
+An interface does not extend other interfaces. Keep each interface to its own members, and where a value must satisfy several, list them as bounds joined by `&`: `function label<T extends Named & Owned>(pet: &T)`. A class may implement several interfaces, `class Dog implements Named, Owned`.
+--- failing
+public interface Named {
+  name(): string;
+}
+
+public interface Pet extends Named {
+  owner(): string;
+}
+--- fixed
+public interface Named {
+  name(): string;
+}
+
+public interface Owned {
+  owner(): string;
+}
+
+public function label<T extends Named & Owned>(pet: &T): string {
+  return `${pet.name()} belongs to ${pet.owner()}`;
+}
+--- typescript
+TypeScript builds interfaces on one another with `extends`. Enrang composes them where they are used instead, at the bound.
+=== EN0221
+--- rule
+`new` creates an object of a class: `new C(...)` runs its constructor, and `new C { ... }` names its fields. An enum, an interface, a primitive type, a type parameter and an alias of one of these are no class, and `new` on them is EN0221. An enum value is written without `new`, as `Light.Red` or `Shape.Circle { radius: 2.0 }`, and a number or a string is a literal.
+--- failing
+const light = new Light();
+console.log(light);
+
+private enum Light {
+  Red,
+  Yellow,
+  Green,
+}
+--- fixed
+const light = Light.Red;
+console.log(light);
+
+private enum Light {
+  Red,
+  Yellow,
+  Green,
+}
+--- typescript
+In TypeScript `new` works on anything with a constructor at run time, and an enum member is a plain value. Enrang enums are values too, built from their cases, so `new` belongs to classes alone.
+=== EN0222
+--- rule
+`namespace` and `delete` do not exist. A file is already a namespace: put the declarations in their own file, `geometry.en`, and import it, `import * as geometry from "./geometry";`. A value's fields are fixed by its type, so none can be deleted; to make a field absent, give it a nullable type and set it to `null`.
+--- failing
+namespace geometry {
+  export const PI = 3.14159;
+}
+--- fixed
+public const PI = 3.14159;
+--- typescript
+TypeScript's namespaces predate modules, and `delete` removes a property from an object at run time. In Enrang modules are files, and an object's shape never changes.
+=== EN0224
+--- rule
+A bare arrow parameter, as in `x => x * 2`, carries no type and nothing may follow it before `=>`. `x: i64 => x * 2` is EN0224: put the parameter in parentheses to give it a type, `(x: i64) => x * 2`, and write a return type after the parentheses if you want one, `(x: i64): i64 => x * 2`.
+--- failing
+const double = x: i64 => x * 2;
+console.log(double(21));
+--- fixed
+const double = (x: i64) => x * 2;
+console.log(double(21));
+--- typescript
+TypeScript needs the parentheses too, and `enrang fmt` removes them only around a single parameter with no type.
+=== EN0225
+--- rule
+`number` does not exist. Enrang has sized number types: `f64` for numbers with a fraction, which is what TypeScript's `number` is, and integer types for whole numbers, `int` (32 bits), `i64`, `u8` and the others.
+--- failing
+let price: number = 9.99;
+console.log(price);
+--- fixed
+let price: f64 = 9.99;
+console.log(price);
+--- typescript
+TypeScript's `number` is always a double. A counter or an index is better as an integer, which is exact and fast on every CPU Enrang targets, including those with no floating-point unit.
+=== EN0226
+--- rule
+Every top-level declaration says who may use it: `public`, for other files that import it, or `private`, for its own module only. Class members and enum methods say `public`, `private` or `protected`. A declaration with none is EN0226, and so is `export`, with a fix-it to `public`. A local function among a program's top-level statements, an `extend` block, a top-level `assert`, a test item and an interface member state none.
+--- failing
+export function area(w: f64, h: f64): f64 { return w * h; }
+--- fixed
+public function area(w: f64, h: f64): f64 { return w * h; }
+--- typescript
+In TypeScript a declaration is private to its module unless it is exported, and class members are public unless marked. Enrang asks for the choice to be written, so a reader never has to know the default.
+=== EN0227
+--- rule
+A parameter or field may have `?` or a default, not both. `x?: T` already means `x: T | null = null`, so a `?` with a default would say two things about one value. Keep the default, `x: T = v`, or keep the `?`.
+--- failing
+public function greet(name?: string = "world"): void { console.log(`hello, ${name}`); }
+--- fixed
+public function greet(name: string = "world"): void { console.log(`hello, ${name}`); }
+--- typescript
+TypeScript rejects `?` together with an initialiser on a parameter too.
+=== EN0228
+--- rule
+There is no `move` operator: a value moves wherever no `&` is written, so `queue.push(task)` already moves `task` into the queue, or copies it when its type is Copy. `move` before an expression is EN0228, and the fix-it deletes it. `move` before a method's name, which marks a method that consumes `this`, is unaffected.
+--- failing
+let queue: string[] = [];
+const task = "build".toString();
+queue.push(move task);
+--- fixed
+let queue: string[] = [];
+const task = "build".toString();
+queue.push(task);
+--- typescript
+TypeScript passes objects by reference and never moves them. In Enrang `f(x)` hands `x` over and `f(&x)` lends it, so nothing more needs writing.
+=== EN0229
+--- rule
+Parameters with a default, or with `?`, come last, because a call can leave out arguments only at the end. A parameter with neither, after one with either, is EN0229: move it before them, or give it a default too.
+--- failing
+public function span(start?: i64, end: i64): i64 { return end - (start ?? 0); }
+--- fixed
+public function span(end: i64, start?: i64): i64 { return end - (start ?? 0); }
+--- typescript
+TypeScript rejects a required parameter after an optional one too, but accepts one after a parameter with a default, which a caller can skip only by passing `undefined`. Enrang has no `undefined`, so the rule covers both.

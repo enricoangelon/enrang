@@ -1,0 +1,14 @@
+//! covers: H33
+let v: i64[] = [1, 2];
+const a: &i64[] | null = &v;
+const c: &i64[] | null = a;
+if (a != null) {
+  const e = &a[0]; //~ EN0708
+  if (c != null) {
+    c.push(9);
+    c.push(9);
+    c.push(9);
+    c.push(9);
+  }
+  console.log(*e);
+}

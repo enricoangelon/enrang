@@ -1,0 +1,2 @@
+const maybe: i64 | null = 5;
+console.log(maybe == 5); //~ EN0401 "mismatched types: expected `i64 | null`, found `i64`"

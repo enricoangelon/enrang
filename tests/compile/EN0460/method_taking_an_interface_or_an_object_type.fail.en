@@ -1,0 +1,23 @@
+public interface Speaker {
+  speak(): string;
+}
+
+public class Animal {
+  public hear(s: Speaker): string {
+    return s.speak();
+  }
+
+  public greet(x: { name: string }): void {
+    console.log(x.name);
+  }
+}
+
+public class Dog extends Animal {
+  public override hear(s: Speaker): string { //~ EN0460 "`hear` takes an interface by value, so it can't be overridden"
+    return "woof";
+  }
+
+  public override greet(x: { name: string }): void { //~ EN0460 "`greet` takes an object type, so it can't be overridden"
+    console.log("woof");
+  }
+}

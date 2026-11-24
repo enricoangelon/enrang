@@ -1,0 +1,11 @@
+public class Cursor implements Copy {
+  private xs: &i64[];
+
+  public constructor(xs: &i64[]) {
+    this.xs = xs;
+  }
+
+  public size(): isize {
+    return this.xs.length();
+  }
+}

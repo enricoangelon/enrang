@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0616/d20-core-5.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot store a reference into captured `lx`
+ --> tests/compile/EN0616/d20-core-5.fail.en:5:21
+  |
+5 |   const f = () => { lx.setSrc(&tmp); }; //~ EN0616
+  |                     ^^^^^^^^^^^^^^^ stored here
+  |
+  = note: what an arrow captures lives outside it, so a reference stored there could outlive what it points at
+  = explain: run `enrang explain EN0616`
+
+error[EN0615]: this arrow stores `s` into `l`, which `(let l: &Lexer, s: &string) => void` can't declare
+  --> tests/compile/EN0616/d20-core-5.fail.en:12:7
+   |
+12 | apply((l: &Lexer, s: &string) => { l.setSrc(s); }, &lx2, &tmp2); //~ EN0615
+   |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ converted here
+   |
+   = note: a function value may write only what its type's `let` marks allow, and store nothing
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 2 previous errors

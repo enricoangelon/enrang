@@ -1,0 +1,4 @@
+//! covers: C04
+const b = new Box(5 as i64);
+const x: i64 = b; //~ EN0401 "mismatched types: expected `i64`, found `Box<i64>`"
+console.log(x);

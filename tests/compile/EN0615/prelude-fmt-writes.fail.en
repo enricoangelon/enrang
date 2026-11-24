@@ -1,0 +1,11 @@
+let a = new Tally();
+console.log(`${a}`);
+
+public class Tally implements Display {
+  private n: i64 = 0;
+
+  public fmt(f: &Formatter): void {
+    this.n += 1; //~ EN0615
+    f.write("t");
+  }
+}

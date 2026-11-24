@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0614/tk-01-local-ref.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `pair` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-01-local-ref.fail.en:2:1
+  |
+2 | x.push(3); y.push(4); //~ EN0614
+  | ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0614]: `pair` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-01-local-ref.fail.en:2:12
+  |
+2 | x.push(3); y.push(4); //~ EN0614
+  |            ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 2 previous errors

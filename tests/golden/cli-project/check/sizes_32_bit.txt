@@ -1,0 +1,4 @@
+$ enrang check --target=i386-linux sizes.en
+[exit 0]
+[stdout]
+[stderr]

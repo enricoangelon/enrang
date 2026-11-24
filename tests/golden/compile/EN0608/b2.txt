@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/b2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `*b`, because `b` is `const`
+ --> tests/compile/EN0608/b2.fail.en:2:1
+  |
+2 | *b = 2; //~ EN0608 "cannot change `*b`, because `b` is `const`"
+  | ^^^^^^ written here
+  |
+help: declare it `let b`
+  |
+1 | let b = new Box(1);
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

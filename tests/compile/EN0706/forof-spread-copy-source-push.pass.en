@@ -1,0 +1,5 @@
+//! row: `for (const j of [...queue]) { queue.pus
+let queue: i64[] = [1, 2];
+const s: i64 = 3;
+for (const j of [...queue]) { queue.push(s); }
+for (const j of [...queue.clone()]) { queue.push(s); }

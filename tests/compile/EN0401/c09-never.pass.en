@@ -1,0 +1,4 @@
+//! covers: C09
+const ready = false;
+const x: i64 = ready ? 1 : panic("no");
+console.log(x);

@@ -1,0 +1,6 @@
+console.log(new Pair().b);
+
+private class Pair {
+  public a: i64 = 1;
+  public b: i64 = 1 + 1;
+}

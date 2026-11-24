@@ -1,0 +1,14 @@
+let root = new Node(); let kid = new Node(); kid.val.push(1); root.kids.push(kid);
+const [ki, w] = snapDown(&root); const k = ki[0];
+k.val = []; w.push(5);
+console.log(root.kids[0].val, root.val);
+
+const [k2, w2] = pick([&root.kids[0], 0], &root.val);
+k2.val = []; w2.push(1);
+console.log(root.val);
+
+public class Node { public val: i64[] = []; public kids: Node[] = []; }
+
+public function pick(t: [&Node, i32], v: &i64[]): [&Node, &i64[]] { return [t[0], v]; }
+
+public function snapDown(node: &Node): [[&Node, i32], &i64[]] { const t: [&Node, i32] = [&node.kids[0], 0]; return [t, &node.val]; }

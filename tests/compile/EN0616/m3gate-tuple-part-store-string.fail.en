@@ -1,0 +1,6 @@
+let s = "hello world".toString();
+let o = "x".toString();
+let t: [&string, i32] = [&o, 0];
+t[0] = s.slice(0, 2);
+*t[0] = "a much longer replacement".toString(); //~ EN0616 "a part of a string"
+console.log(s);

@@ -1,0 +1,301 @@
+// Turn keys and bind marks (A:1044-1072, A:1227, TESTING TK-03): bodies that
+// compile, whose `held` sets stage 4's part test reads (plan d.8).
+// Source:
+//   markLiteral(xs: &Slice<i64>) { const whole = xs; for (const x of xs) { const t = [whole, x]; } }  // TK-03-mark-literal
+//   staleRuns(xs: &Slice<i64>, c: bool) { let other = 0; let keep = &other;
+//     while (c) { for (const x of xs) { keep = x; } } console.log(*keep); }          // TK-03-stale-join
+//   innerPair(s: &Slice<i64>, l: &i64) { let w = new W { src: s, last: l }; for (const x of w.src) { w.last = x; } }  // TK-03-inner-pair
+//   tail(xs: &Slice<i64>) { for (const x of xs.slice(1)) { } }                          // TK-03-tail
+//   markJoin(rows: &Slice<i64[]>, c: bool) { let other = 0; let keep = &other;
+//     for (const r of rows) { keep = &r[0]; for (const y of r) { if (c) { keep = y; } } } }  // TK-03-mark-rename's join
+// Shapes: c.13 for a path source and for a once-evaluated one (`_src` the call's
+// destination), copies of reference locals as reborrows (A:935), a tuple literal of
+// reborrows (c.5), a named form (c.10), a field write of a local borrowing value (c.8).
+class W {
+  src: &Slice<i64>;
+  last: &i64;
+}
+fn slice(_1: &Slice<i64>, _2: isize) -> &Slice<i64> perms(read) sources(0) result writable;
+
+fn markLiteral(_1: &Slice<i64>) -> void {
+  let _2: &Slice<i64>; // whole
+  let _3: &Slice<i64> temp;
+  let _4: isize #i;
+  let _5: isize #n;
+  let _6: bool temp;
+  let _7: &i64; // x
+  let _8: [&Slice<i64>, &i64]; // t
+  let _9: &Slice<i64> temp;
+  let _10: &i64 temp;
+  loop l0: path *_1 preheader bb1 head bb2 bind bb3[2] binding _7;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = move _3;
+    goto bb1;
+  }
+  bb1: {
+    storage_live(_4);
+    _4 = const 0: isize;
+    goto bb2;
+  }
+  bb2: {
+    _5 = len(*_1);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &(*_1)[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb4;
+  }
+  bb4: {
+    storage_live(_8);
+    _9 = &*_2 [reborrow];
+    _10 = &*_7 [reborrow];
+    _8 = tuple(move _9, move _10);
+    storage_dead(_8);
+    storage_dead(_7);
+    goto bb2;
+  }
+  bb5: {
+    storage_dead(_4);
+    storage_dead(_2);
+    return;
+  }
+}
+fn staleRuns(_1: &Slice<i64>, _2: bool) -> void {
+  let _3: i64; // other
+  let mut _4: &i64; // keep
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64; // x
+  let _9: &i64 temp;
+  let _10: &i64 temp;
+  let _11: void temp;
+  loop l0: path *_1 preheader bb2 head bb3 bind bb4[2] binding _8;
+  bb0: {
+    storage_live(_3);
+    _3 = const 0: i64;
+    storage_live(_4);
+    _4 = &_3 [explicit];
+    goto bb1;
+  }
+  bb1: {
+    switch copy _2 [0: bb6, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb3;
+  }
+  bb3: {
+    _6 = len(*_1);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb7, otherwise: bb4];
+  }
+  bb4: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_1)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb5;
+  }
+  bb5: {
+    _9 = &*_8 [reborrow];
+    _4 = move _9;
+    storage_dead(_8);
+    goto bb3;
+  }
+  bb7: {
+    storage_dead(_5);
+    goto bb1;
+  }
+  bb6: {
+    _10 = &*_4 [reborrow];
+    _11 = form log(move _10) -> bb8;
+  }
+  bb8: {
+    storage_dead(_4);
+    storage_dead(_3);
+    return;
+  }
+}
+fn innerPair(_1: &Slice<i64>, _2: &i64) -> void {
+  let mut _3: W; // w
+  let _4: &Slice<i64> temp;
+  let _5: &i64 temp;
+  let _6: isize #i;
+  let _7: isize #n;
+  let _8: bool temp;
+  let _9: &i64; // x
+  let _10: &i64 temp;
+  let _11: *W temp;
+  let _12: void temp;
+  loop l0: path *_3.src preheader bb1 head bb2 bind bb3[2] binding _9;
+  bb0: {
+    storage_live(_3);
+    _4 = &*_1 [reborrow];
+    _5 = &*_2 [reborrow];
+    _11 = addr_of _3;
+    _12 = named_fill W leaving()(copy _11) -> bb6;
+  }
+  bb6: {
+    _3.src = move _4;
+    _3.last = move _5;
+    goto bb1;
+  }
+  bb1: {
+    storage_live(_6);
+    _6 = const 0: isize;
+    goto bb2;
+  }
+  bb2: {
+    _7 = len(*_3.src);
+    _8 = lt(copy _6, copy _7);
+    switch move _8 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_9);
+    check_bounds(copy _6, copy _7);
+    _9 = &(*_3.src)[_6] [for-of-element];
+    _6 = add(copy _6, const 1: isize);
+    goto bb4;
+  }
+  bb4: {
+    _10 = &*_9 [reborrow];
+    _3.last = move _10;
+    storage_dead(_9);
+    goto bb2;
+  }
+  bb5: {
+    storage_dead(_6);
+    storage_dead(_3);
+    return;
+  }
+}
+fn tail(_1: &Slice<i64>) -> void {
+  let _2: &Slice<i64> #src;
+  let _3: &Slice<i64> temp;
+  let _4: isize #i;
+  let _5: isize #n;
+  let _6: bool temp;
+  let _7: &i64; // x
+  loop l0: once _2 preheader bb0 head bb2 bind bb3[2] binding _7;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = slice(move _3, const 1: isize) -> bb1;
+  }
+  bb1: {
+    storage_live(_4);
+    _4 = const 0: isize;
+    goto bb2;
+  }
+  bb2: {
+    _5 = len(*_2);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &(*_2)[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb4;
+  }
+  bb4: {
+    storage_dead(_7);
+    goto bb2;
+  }
+  bb5: {
+    storage_dead(_4);
+    storage_dead(_2);
+    return;
+  }
+}
+fn markJoin(_1: &Slice<i64[]>, _2: bool) -> void {
+  let _3: i64; // other
+  let mut _4: &i64; // keep
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64[]; // r
+  let _9: isize temp;
+  let _10: isize temp;
+  let _11: isize #i;
+  let _12: isize #n;
+  let _13: bool temp;
+  let _14: &i64; // y
+  let _15: &i64 temp;
+  loop l0: path *_1 preheader bb1 head bb2 bind bb3[2] binding _8;
+  loop l1: path *_8 preheader bb4 head bb5 bind bb6[2] binding _14;
+  bb0: {
+    storage_live(_3);
+    _3 = const 0: i64;
+    storage_live(_4);
+    _4 = &_3 [explicit];
+    goto bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb2;
+  }
+  bb2: {
+    _6 = len(*_1);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb10, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_1)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    _9 = const 0: isize;
+    _10 = len(*_8);
+    check_bounds(copy _9, copy _10);
+    _4 = &(*_8)[_9] [explicit];
+    goto bb4;
+  }
+  bb4: {
+    storage_live(_11);
+    _11 = const 0: isize;
+    goto bb5;
+  }
+  bb5: {
+    _12 = len(*_8);
+    _13 = lt(copy _11, copy _12);
+    switch move _13 [0: bb9, otherwise: bb6];
+  }
+  bb6: {
+    storage_live(_14);
+    check_bounds(copy _11, copy _12);
+    _14 = &(*_8)[_11] [for-of-element];
+    _11 = add(copy _11, const 1: isize);
+    switch copy _2 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    _15 = &*_14 [reborrow];
+    _4 = move _15;
+    goto bb8;
+  }
+  bb8: {
+    storage_dead(_14);
+    goto bb5;
+  }
+  bb9: {
+    storage_dead(_11);
+    storage_dead(_8);
+    goto bb2;
+  }
+  bb10: {
+    storage_dead(_5);
+    storage_dead(_4);
+    storage_dead(_3);
+    return;
+  }
+}

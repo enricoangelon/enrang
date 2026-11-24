@@ -1,0 +1,56 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/fv-02-field-copy-3.fail.en. Its row's codes: EN0706.
+module "tests/compile/EN0706/fv-02-field-copy-3.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@final class Holder {
+  private v: &u8[];
+}
+
+fn Holder::#ctor(_1: &Holder, _2: &u8[]) -> void {
+  let _1: &Holder; // this
+  let _2: &u8[]; // v
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).v = move _3;
+    return;
+  }
+}
+
+fn Holder::dup(_1: &Holder) -> void {
+  let _1: &Holder; // this
+  let _2: &u8; // a
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: &u8[]; // b
+  let _6: void temp;
+  let _7: &u8[] temp;
+  let _8: void temp;
+  let _9: &u8 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const 0: isize;
+    _4 = len(*(*_1).v);
+    check_bounds(copy _3, copy _4);
+    _2 = &(*(*_1).v)[_3] [explicit];
+    storage_live(_5);
+    _5 = copy (*_1).v; //~ EN0706
+    _7 = &*_5 [reborrow];
+    _6 = "alloc/array"::Array<u8>::push(move _7, const 9: u8) -> bb1;
+  }
+  bb1: {
+    _9 = &*_2 [auto-borrow];
+    _8 = form log(move _9) -> bb2;
+  }
+  bb2: {
+    storage_dead(_5);
+    storage_dead(_2);
+    return;
+  }
+}

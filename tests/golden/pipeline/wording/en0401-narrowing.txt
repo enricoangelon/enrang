@@ -1,0 +1,11 @@
+error[EN0401]: `h.v` may be `null` here
+ --> main.en:4:38
+  |
+4 |   if (h.v != null) { poke(h); return h.v; }
+  |                                      ^^^ the test before this may no longer hold
+  |                           - this may write through it
+  |
+  = note: a writing reference may have changed `h.v`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

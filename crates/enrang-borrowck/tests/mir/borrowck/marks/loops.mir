@@ -1,0 +1,215 @@
+// A `for...of` binding carries its source's mark, reported once at the source (plan
+// d.3; A:1009, S 5.6). Shapes: c.13 (plan lines 1128-1155) the pre-header (a `Once`
+// source's `_src` is a reference rvalue), head, bind `x = &S[_i] [for-of-element]` and
+// body; c.18 (line 1202) a constant's address `const static_addr(def): &T`; c.5 (line
+// 960) `present(op)` into a nullable.
+// Heads (plan e): cannot change `x`, because it is `const`, at the source.
+const TABLE: i64[2] = [1, 2];
+const K: i64[2] = [3, 4];
+
+// `for (const t of &TABLE) { *t = 0; }`
+fn table() -> void {
+  let _1: &i64[2] #src;
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &i64; // t
+  loop l0: once _1 preheader bb0 head bb1 bind bb2[2] binding _5; //~ EN0608
+  bb0: {
+    _1 = const static_addr(TABLE): &i64[2];
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb1: {
+    _3 = len(*_1);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &(*_1)[_2] [for-of-element];
+    _2 = add(copy _2, const 1: isize);
+    goto bb3;
+  }
+  bb3: {
+    *_5 = const 0: i64;
+    storage_dead(_5);
+    goto bb1;
+  }
+  bb4: {
+    return;
+  }
+}
+
+// `let keep = null; for (const x of &K) { keep = x; } if (keep != null) { *keep = 0; }`:
+// one EN0608, at the source, none at `*keep = 0`.
+fn keep() -> void {
+  let mut _1: &i64 | null; // keep
+  let _2: &i64[2] #src;
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &i64; // x
+  let _7: u32 temp;
+  loop l0: once _2 preheader bb1 head bb2 bind bb3[2] binding _6; //~ EN0608
+  bb0: {
+    storage_live(_1);
+    _1 = null;
+    goto bb1;
+  }
+  bb1: {
+    _2 = const static_addr(K): &i64[2];
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb2;
+  }
+  bb2: {
+    _4 = len(*_2);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &(*_2)[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb4;
+  }
+  bb4: {
+    _1 = present(copy _6);
+    storage_dead(_6);
+    goto bb2;
+  }
+  bb5: {
+    _7 = discriminant(_1);
+    switch move _7 [0: bb7, otherwise: bb6];
+  }
+  bb6: {
+    check_tag(_1, Present);
+    *(_1 as Present).0 = const 0: i64;
+    goto bb7;
+  }
+  bb7: {
+    return;
+  }
+}
+
+// Over a `const` local's elements, written: EN0608 at the source; over a `let` one: none.
+fn local(_1: i64[]) -> void {
+  let _2: i64[]; // q
+  let mut _3: i64[]; // w
+  let _4: isize #i;
+  let _5: isize #n;
+  let _6: bool temp;
+  let _7: &i64; // x
+  loop l0: path _2 preheader bb1 head bb2 bind bb3[2] binding _7; //~ EN0608
+  loop l1: path _3 preheader bb5 head bb6 bind bb7[2] binding _7;
+  bb0: {
+    storage_live(_2);
+    _2 = move _1;
+    storage_live(_3);
+    _3 = intrinsic AllocArray<i64>();
+    goto bb1;
+  }
+  bb1: {
+    storage_live(_4);
+    _4 = const 0: isize;
+    goto bb2;
+  }
+  bb2: {
+    _5 = len(_2);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &_2[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb4;
+  }
+  bb4: {
+    *_7 = const 0: i64;
+    storage_dead(_7);
+    goto bb2;
+  }
+  bb5: {
+    _4 = const 0: isize;
+    goto bb6;
+  }
+  bb6: {
+    _5 = len(_3);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb9, otherwise: bb7];
+  }
+  bb7: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &_3[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb8;
+  }
+  bb8: {
+    *_7 = const 0: i64;
+    storage_dead(_7);
+    goto bb6;
+  }
+  bb9: {
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+// `while (c) { for (const x of &K) { keep = x; } }`: the inner pre-header makes the
+// mark `keep` got through the inner bind in an earlier outer turn plain.
+fn nested(_1: bool) -> void {
+  let mut _2: &i64 | null; // keep
+  let _3: &i64[2] #src;
+  let _4: isize #i;
+  let _5: isize #n;
+  let _6: bool temp;
+  let _7: &i64; // x
+  loop l0: once _3 preheader bb2 head bb3 bind bb4[2] binding _7;
+  bb0: {
+    storage_live(_2);
+    _2 = null;
+    goto bb1;
+  }
+  bb1: {
+    switch copy _1 [0: bb7, otherwise: bb2];
+  }
+  bb2: {
+    _3 = const static_addr(K): &i64[2];
+    storage_live(_4);
+    _4 = const 0: isize;
+    goto bb3;
+  }
+  bb3: {
+    _5 = len(*_3);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb6, otherwise: bb4];
+  }
+  bb4: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &(*_3)[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb5;
+  }
+  bb5: {
+    _2 = present(copy _7);
+    storage_dead(_7);
+    goto bb3;
+  }
+  bb6: {
+    goto bb1;
+  }
+  bb7: {
+    return;
+  }
+}

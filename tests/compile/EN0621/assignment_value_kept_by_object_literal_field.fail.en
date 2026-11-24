@@ -1,0 +1,7 @@
+let s: string = "a".toString();
+const u = new User { name: s = "b".toString() }; //~ EN0621 "an assignment's value can't be kept"
+console.log(u.name);
+
+public class User {
+  public name: string;
+}

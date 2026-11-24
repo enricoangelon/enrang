@@ -1,0 +1,2 @@
+let dir: "left" | "right" = "left"; //~ EN0216
+console.log(dir);

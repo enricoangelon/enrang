@@ -1,0 +1,7 @@
+$ enrang check
+[exit 2]
+[stdout]
+[stderr]
+error: `targte` in enrang.json is not one of its keys
+help: did you mean `target`?
+note: the keys of enrang.json are `name`, `entry`, `target`, `cpu`, `float` and `base`

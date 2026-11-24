@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0608/top_level_const_reference_argument.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `GREETING`, because it is a top-level `const`
+ --> tests/compile/EN0608/top_level_const_reference_argument.fail.en:2:7
+  |
+2 | l.log(GREETING); //~ EN0608
+  |       ^^^^^^^^ `log` writes through it
+3 |
+4 | private const GREETING: &string = "hi";
+  |               -------- declared `const` here
+  |
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

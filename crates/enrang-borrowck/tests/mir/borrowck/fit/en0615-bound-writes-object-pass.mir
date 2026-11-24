@@ -1,0 +1,63 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/bound-writes-object.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/bound-writes-object.pass";
+class Clicks {
+  private n: i64 = default;
+}
+interface Counter { }
+fn Counter::get(let _1: &Self) -> i64;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Clicks; // k
+  let _3: *Clicks temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &Clicks temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Clicks leaving(n)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [explicit];
+    _5 = tick<Clicks>(move _6) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Clicks::get(_1: &Clicks) -> i64 {
+  let _1: &Clicks; // this
+  let _2: i64 temp;
+  bb0: {
+    _2 = copy (*_1).n;
+    (*_1).n = checked_add(copy _2, const 1: i64);
+    _0 = copy (*_1).n;
+    return;
+  }
+}
+
+@private fn tick<T extends Counter>(_1: &T) -> void {
+  let _1: &T; // c
+  let _2: void temp;
+  let _3: i64 temp;
+  let _4: &T temp;
+  let _5: &i64 temp;
+  bb0: {
+    _4 = &*_1 [reborrow];
+    _3 = Counter::get(move _4) -> bb1;
+  }
+  bb1: {
+    _5 = &_3 [temp-arg];
+    _2 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    storage_dead(_3);
+    return;
+  }
+}

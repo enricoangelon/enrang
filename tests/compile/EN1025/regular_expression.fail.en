@@ -1,0 +1,3 @@
+const text = "a  b";
+const words = text.split(/ +/); //~ EN1025 "regular expressions are not supported yet"
+console.log(words);

@@ -1,0 +1,14 @@
+let v: i64[] = [];
+const f = new Filler();
+f.fill(&v);
+console.log(v);
+
+public class Source {
+  public fill(let xs: &i64[]): void {}
+}
+
+public class Filler extends Source {
+  public override fill(xs: &i64[]): void {
+    xs.push(7);
+  }
+}

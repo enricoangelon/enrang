@@ -1,0 +1,60 @@
+$ enrang check tests/compile/EN0419/named-satisfaction-clauses.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `Device` does not satisfy `Port`
+  --> tests/compile/EN0419/named-satisfaction-clauses.fail.en:3:7
+   |
+ 3 | touch(&device); //~ EN0419 "`Device` does not satisfy `Port`"
+   |       ^^^^^^^ `T` must satisfy `Port`
+...
+13 | private function touch<T extends Port>(p: &T): void {
+   |                        - the bound on `T`
+   |
+   = explain: run `enrang explain EN0419`
+
+error[EN0419]: `Dog` does not satisfy `Speaker`
+  --> tests/compile/EN0419/named-satisfaction-clauses.fail.en:5:19
+   |
+ 5 | console.log(greet(&dog)); //~ EN0419 "`Dog` does not satisfy `Speaker`"
+   |                   ^^^^ `T` must satisfy `Speaker`
+...
+17 | private function greet<T extends Speaker>(x: &T): string {
+   |                        - the bound on `T`
+   |
+   = explain: run `enrang explain EN0419`
+
+error[EN0419]: `Cat` does not satisfy `Speaker`
+  --> tests/compile/EN0419/named-satisfaction-clauses.fail.en:7:19
+   |
+ 7 | console.log(greet(&cat)); //~ EN0419 "`Cat` does not satisfy `Speaker`"
+   |                   ^^^^ `T` must satisfy `Speaker`
+...
+17 | private function greet<T extends Speaker>(x: &T): string {
+   |                        - the bound on `T`
+   |
+   = explain: run `enrang explain EN0419`
+
+error[EN0419]: `Ticks` does not satisfy `Counter`
+  --> tests/compile/EN0419/named-satisfaction-clauses.fail.en:9:19
+   |
+ 9 | console.log(total(&ticks)); //~ EN0419 "`Ticks` does not satisfy `Counter`"
+   |                   ^^^^^^ `T` must satisfy `Counter`
+...
+21 | private function total<T extends Counter>(c: &T): i64 {
+   |                        - the bound on `T`
+   |
+   = explain: run `enrang explain EN0419`
+
+error[EN0419]: `Box<Parrot>` does not satisfy `Speaker`
+  --> tests/compile/EN0419/named-satisfaction-clauses.fail.en:11:19
+   |
+11 | console.log(greet(&boxed)); //~ EN0419 "`Box<Parrot>` does not satisfy `Speaker`"
+   |                   ^^^^^^ `T` must satisfy `Speaker`
+...
+17 | private function greet<T extends Speaker>(x: &T): string {
+   |                        - the bound on `T`
+   |
+   = explain: run `enrang explain EN0419`
+
+error: aborting due to 5 previous errors

@@ -1,0 +1,11 @@
+let t = new Thermo();
+*t.peek() = 5;
+console.log(*t.peek());
+
+public class Thermo {
+  private kelvin: i64 = 300;
+
+  public peek(): &i64 {
+    return &this.kelvin;
+  }
+}

@@ -1,0 +1,18 @@
+const generic = new Animal("Generic");
+console.log(generic.takeName());
+const max = new LoudDog("Max");
+console.log(max.takeName());
+
+public class Animal {
+  public constructor(public name: string) {}
+
+  public move takeName(): string { return this.name; }
+}
+
+public class LoudDog extends Animal {
+  private tricks: string[] = [];
+
+  public override move takeName(): string { return mem.replace(&this.name, ""); }
+
+  public destructor() { console.log("bye"); }
+}

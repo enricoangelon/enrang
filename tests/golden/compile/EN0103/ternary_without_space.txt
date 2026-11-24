@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0103/ternary_without_space.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0103]: a ternary `?` needs a space before it
+ --> tests/compile/EN0103/ternary_without_space.fail.en:2:19
+  |
+2 | const pick = ready? 1 : 2; //~ EN0103
+  |                   ^ this `?` starts a choice
+  |
+  = note: with no space before it, `?` passes an error or `null` up, as in `f()?`
+help: add a space before `?`
+  |
+2 | const pick = ready ? 1 : 2; //~ EN0103
+  |                   +
+  = explain: run `enrang explain EN0103`
+
+error: aborting due to 1 previous error

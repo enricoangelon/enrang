@@ -1,0 +1,27 @@
+let other: i64[] = [1];
+let data: i64[] = [1];
+const g = new Grower(&data);
+const o = &other[0];
+console.log(*o);
+other.push(2);
+
+let kept: i64[] = [1];
+const h = new Grower(&kept);
+h.show();
+take(kept);
+
+let v: i64[] = [1];
+const r = &v[0];
+console.log(*r);
+v.push(2);
+
+private function take(xs: i64[]): void { console.log(xs); }
+
+private class Grower {
+  private v: &i64[];
+  public constructor(v: &i64[]) {
+    this.v = v;
+    this.v.push(0);
+  }
+  public show(): void { console.log(this.v); }
+}

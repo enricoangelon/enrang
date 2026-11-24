@@ -1,0 +1,5 @@
+let a: string = "".toString();
+let b: string = "".toString();
+b = "xx".toString();
+a = b.clone();
+console.log(a, b);

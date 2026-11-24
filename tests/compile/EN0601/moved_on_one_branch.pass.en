@@ -1,0 +1,15 @@
+public function show(u: User, quick: bool): void {
+  if (quick) {
+    archive(u);
+    return;
+  }
+  console.log(u.name);
+}
+
+public function archive(u: User): void {
+  console.log(u.name);
+}
+
+public class User {
+  public name: string;
+}

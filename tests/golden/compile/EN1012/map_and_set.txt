@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN1012/map_and_set.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1012]: `Map` and `Set` are not supported yet
+ --> tests/compile/EN1012/map_and_set.fail.en:1:15
+  |
+1 | const m = new Map(); //~ EN1012 "`Map` and `Set` are not supported yet"
+  |               ^^^ not supported yet
+  |
+  = note: the standard library has no hashed or ordered collections yet.
+help: Use a sorted `T[]`
+  = explain: run `enrang explain EN1012`
+
+error[EN1012]: `Map` and `Set` are not supported yet
+ --> tests/compile/EN1012/map_and_set.fail.en:2:9
+  |
+2 | let st: Set<i64> | null = null; //~ EN1012 "`Map` and `Set` are not supported yet"
+  |         ^^^ not supported yet
+  |
+  = note: the standard library has no hashed or ordered collections yet.
+help: Use a sorted `T[]`
+  = explain: run `enrang explain EN1012`
+
+error[EN1012]: `Map` and `Set` are not supported yet
+ --> tests/compile/EN1012/map_and_set.fail.en:4:32
+  |
+4 | public function lookup(index: &Map<string, i64>): void {} //~ EN1012 "`Map` and `Set` are not supported yet"
+  |                                ^^^ not supported yet
+  |
+  = note: the standard library has no hashed or ordered collections yet.
+help: Use a sorted `T[]`
+  = explain: run `enrang explain EN1012`
+
+error: aborting due to 3 previous errors

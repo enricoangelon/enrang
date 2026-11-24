@@ -1,0 +1,3 @@
+public function sum(...xs: i64[]): i64 { //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  return 0;
+}

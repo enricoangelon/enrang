@@ -1,0 +1,36 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0418/flag-write-through.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0418/flag-write-through.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+@copy class Cursor {
+  private xs: &i64[];
+}
+
+fn Cursor::#ctor(_1: &Cursor, _2: &i64[]) -> void {
+  let _1: &Cursor; // this
+  let _2: &i64[]; // xs
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).xs = move _3;
+    return;
+  }
+}
+
+fn Cursor::size(_1: &Cursor) -> isize {
+  let _1: &Cursor; // this
+  let _2: &i64[] temp;
+  bb0: {
+    _2 = copy (*_1).xs;
+    _0 = "alloc/array"::Array<i64>::length(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

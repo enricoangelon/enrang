@@ -1,0 +1,14 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/impl-move-missing.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/impl-move-missing.pass";
+class File {
+  private fd: i64 = default;
+}
+
+fn File::close(_1: &File) -> void {
+  let _1: &File; // this
+  bb0: {
+    return;
+  }
+}

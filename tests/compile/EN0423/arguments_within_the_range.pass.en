@@ -1,0 +1,10 @@
+console.log(add(1, 2), add(1));
+console.log(greet("Ada"), greet("Bo", "hi"));
+
+private function add(a: i64, b: i64 = 10): i64 {
+  return a + b;
+}
+
+private function greet(name: &string, greeting: &string = "hello"): string {
+  return `${greeting}, ${name}`;
+}

@@ -1,0 +1,64 @@
+// Rules (b) and (d) (plan d.7) through the contract a call applies (A:1176-1179):
+// a `let` parameter, a Read one, a source whose result is written or only read,
+// a `Virtual` call whose declared sources add `this` (A:1279) beside a direct
+// call that applies the body's own, and a by-value tuple argument whose parts
+// follow their own permissions (A:1350).
+// MIR shapes: arguments borrowed into temporaries and moved (plan c.7,
+// plan.md:989), a receiver reborrowed through a reference (plan c.6,
+// plan.md:975), a tuple literal of reborrows (plan c.5, plan.md:943).
+fn fill(let _1: &i64, _2: &i64) -> void;
+fn pick(_1: &i64, _2: &i64) -> &i64 sources(1) result writable;
+fn grow(_1: [&i64, &i64]) -> void perms(write, read) sources() result none;
+class Animal {
+  n: i64;
+}
+fn Animal::label(_1: &Animal) -> &i64 sources() result writable;
+fn calls(_1: &Animal) -> void {
+  let mut _2: i64; // a
+  let mut _3: i64; // b
+  let _4: &i64 temp;
+  let _5: &i64 temp;
+  let _6: void temp;
+  let _7: &i64; // p
+  let _8: [&i64, &i64] temp;
+  let _9: &Animal temp;
+  let _10: &i64; // t
+  bb0: {
+    _2 = const 1: i64;
+    _3 = const 2: i64;
+    _4 = &_2 [explicit]; // exclusive
+    _5 = &_3 [explicit]; // shared
+    _6 = fill(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    _4 = &_2 [explicit]; // shared
+    _5 = &_3 [explicit]; // exclusive
+    _7 = pick(move _4, move _5) -> bb2;
+  }
+  bb2: {
+    *_7 = const 3: i64;
+    _4 = &_2 [explicit]; // shared
+    _5 = &_3 [explicit]; // shared
+    _7 = pick(move _4, move _5) -> bb3;
+  }
+  bb3: {
+    _2 = copy *_7;
+    _4 = &_2 [explicit]; // exclusive
+    _5 = &_3 [explicit]; // shared
+    _8 = tuple(move _4, move _5);
+    _6 = grow(move _8) -> bb4;
+  }
+  bb4: {
+    _9 = &*_1 [reborrow]; // exclusive
+    _10 = virtual Animal::label [copy _9](move _9) -> bb5;
+  }
+  bb5: {
+    *_10 = const 4: i64;
+    _9 = &*_1 [reborrow]; // shared
+    _10 = Animal::label(move _9) -> bb6;
+  }
+  bb6: {
+    *_10 = const 5: i64;
+    return;
+  }
+}

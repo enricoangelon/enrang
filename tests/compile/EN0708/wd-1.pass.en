@@ -1,0 +1,32 @@
+let none: string[] = [];
+let data: string[] = ["ab".toString(), "cd".toString()];
+let c = new Cursor(&none);
+c.setXs(&data);
+const t = c.next()!;
+*t = "x" + "y";
+const part = data[0].slice(0, 1);
+console.log(part);
+
+let data2: string[] = ["ab".toString(), "cd".toString()];
+let c2 = new Cursor(&data2);
+const t2 = c2.next()!;
+*t2 = "x" + "y";
+const part2 = data2[0].slice(0, 1);
+console.log(part2);
+
+public class Cursor {
+  private xs: &string[];
+  private i: isize = 0;
+
+  public constructor(xs: &string[]) {
+    this.xs = xs;
+  }
+
+  public setXs(xs: &string[]): void {
+    this.xs = xs;
+  }
+
+  public next(): &string | null {
+    return this.xs.get(this.i);
+  }
+}

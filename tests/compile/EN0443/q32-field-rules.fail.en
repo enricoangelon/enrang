@@ -1,0 +1,31 @@
+public class Animal {
+  public sound: string = "...";
+
+  public constructor() {
+    console.log(`ctor: ${this.sound}`);
+  }
+}
+
+public class WrongType extends Animal {
+  public override sound: i64 = 1; //~ EN0443 "`sound` overrides nothing in `Animal`"
+}
+
+public class WrongVisibility extends Animal {
+  protected override sound: string = "woof"; //~ EN0443 "`sound` overrides nothing in `Animal`"
+}
+
+public class NoOverride extends Animal {
+  public sound: string = "woof"; //~ EN0444 "`sound` replaces `Animal.sound` without `override`"
+}
+
+public class NoVolume extends Animal {
+  public override volume: i64 = 3; //~ EN0443 "`volume` overrides nothing in `Animal`"
+}
+
+public class Secret {
+  private sound: string = "...";
+}
+
+public class SecretDog extends Secret {
+  private override sound: string = "woof"; //~ EN0443 "`sound` overrides nothing in `Secret`"
+}

@@ -1,0 +1,40 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0707/s2-22-copy.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0707/s2-22-copy.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64; // x
+  let _3: i64 temp;
+  let _4: i64 temp;
+  let _5: &i64 temp;
+  let _6: void temp;
+  let _7: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 1: i64;
+    _3 = copy _2;
+    _5 = &_2 [explicit];
+    _4 = bump(move _5) -> bb1;
+  }
+  bb1: {
+    _2 = checked_add(copy _3, move _4);
+    _7 = &_2 [auto-borrow];
+    _6 = form log(move _7) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn bump(_1: &i64) -> i64 {
+  let _1: &i64; // x
+  bb0: {
+    *_1 = const 100: i64;
+    _0 = const 10: i64;
+    return;
+  }
+}

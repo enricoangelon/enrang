@@ -1,0 +1,64 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0708/fv-02-part-copy.fail.en. Its row's codes: EN0708.
+module "tests/compile/EN0708/fv-02-part-copy.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // v
+  let mut _3: [&i64[], int]; // t
+  let _4: &i64[] temp;
+  let _5: &i64[]; // a
+  let _6: &i64[]; // b
+  let _7: &i64; // e
+  let _8: isize temp;
+  let _9: isize temp;
+  let _10: void temp;
+  let _11: &i64[] temp;
+  let _12: void temp;
+  let _13: &i64[] temp;
+  let _14: void temp;
+  let _15: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    storage_live(_3);
+    _4 = &_2 [explicit];
+    _3 = tuple(move _4, const 1: int);
+    storage_live(_5);
+    _5 = copy _3.0;
+    storage_live(_6);
+    _6 = copy _3.0; //~ EN0708
+    storage_live(_7);
+    _8 = const 0: isize;
+    _9 = len(*_6);
+    check_bounds(copy _8, copy _9);
+    _7 = &(*_6)[_8] [explicit];
+    _11 = &*_5 [reborrow];
+    _10 = "alloc/array"::Array<i64>::push(move _11, const 3: i64) -> bb1;
+  }
+  bb1: {
+    _13 = &*_5 [reborrow];
+    _12 = "alloc/array"::Array<i64>::push(move _13, const 4: i64) -> bb2;
+  }
+  bb2: {
+    _15 = &*_7 [auto-borrow];
+    _14 = form log(move _15) -> bb3;
+  }
+  bb3: {
+    storage_dead(_7);
+    storage_dead(_6);
+    storage_dead(_5);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

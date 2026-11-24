@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/c18-loan.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `r` cannot change while `s` still points into it
+ --> tests/compile/EN0706/c18-loan.fail.en:6:3
+  |
+5 |   const s: &Slice<i64> = r;
+  |                          - shared borrow of `r` starts here, held by `s`
+6 |   r.push(4); //~ EN0706
+  |   ^^^^^^^^^ `push` changes `r`, so it needs exclusive access to it
+7 |   return s[0];
+  |          - `s` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

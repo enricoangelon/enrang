@@ -1,0 +1,9 @@
+public interface Speaker {
+  speak(): string;
+}
+
+public class Dog implements Speaker { //~ EN0416 "`Dog` does not satisfy `Speaker`: `speak` is private"
+  private speak(): string {
+    return "woof";
+  }
+}

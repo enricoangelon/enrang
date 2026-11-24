@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0608/named-const-to-writer.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `bump` can change `x`, but `n` is `const`
+ --> tests/compile/EN0608/named-const-to-writer.fail.en:3:6
+  |
+3 | bump(&n); //~ EN0608 "`bump` can change `x`, but `n` is `const`"
+  |      ^^ `bump` writes through it
+  |
+help: declare it `let n`
+  |
+2 | let n = 1;
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error[EN0608]: `fill` can change `buf`, but `data` is `const`
+ --> tests/compile/EN0608/named-const-to-writer.fail.en:5:6
+  |
+5 | fill(&data); //~ EN0608 "`fill` can change `buf`, but `data` is `const`"
+  |      ^^^^^ `fill` writes through it
+  |
+help: declare it `let data`
+  |
+4 | let data: u8[] = [1, 2];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 2 previous errors

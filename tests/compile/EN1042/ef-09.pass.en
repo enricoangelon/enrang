@@ -1,0 +1,8 @@
+const h = new Holder { pair: [1, 2], list: [3, 4] };
+const { pair: [a, b] } = h;
+console.log(a, b);
+
+public final class Holder {
+  public pair: [i64, i64];
+  public list: i64[];
+}

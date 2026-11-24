@@ -1,0 +1,56 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0601/forof-destructure-nested-move.fail.en. Its row's codes: EN0601.
+module "tests/compile/EN0601/forof-destructure-nested-move.fail";
+class Person {
+  name: string;
+  pos: Pos;
+}
+class Pos {
+  x: i64;
+  y: i64;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Person; // ada
+  let _3: Pos temp;
+  let _4: *Pos temp;
+  let _5: void temp;
+  let _6: *Person temp;
+  let _7: void temp;
+  let _8: string; // name
+  let _9: i64; // x
+  let _10: void temp;
+  let _11: &string temp;
+  bb0: {
+    storage_live(_2);
+    _4 = addr_of _3;
+    _5 = named_fill Pos leaving()(move _4) -> bb1;
+  }
+  bb1: {
+    _3.x = const 3: i64;
+    _3.y = const 4: i64;
+    _6 = addr_of _2;
+    _7 = named_fill Person leaving()(move _6) -> bb2;
+  }
+  bb2: {
+    _2.name = const "Ada": string;
+    _2.pos = move _3;
+    storage_live(_8);
+    _8 = move _2.name;
+    storage_live(_9);
+    _9 = copy _2.pos.x;
+    _11 = &_2.name [auto-borrow]; //~ EN0601 "`ada.name` was moved into `name`"
+    _10 = form log(move _11) -> bb3;
+  }
+  bb3: {
+    storage_dead(_9);
+    drop(_8);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

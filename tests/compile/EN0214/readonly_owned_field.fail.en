@@ -1,0 +1,3 @@
+private class Shelf {
+  private books: readonly string[]; //~ EN0214
+}

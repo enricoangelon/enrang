@@ -1,0 +1,15 @@
+//! covers: C14
+let total: i64 = 0;
+twice((x: i64) => {
+  total += x;
+});
+console.log(total);
+
+private function run(f: (x: i64) => void): void {
+  f(1);
+}
+
+private function twice(g: (x: i64) => void): void {
+  run(g);
+  run(g);
+}

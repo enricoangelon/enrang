@@ -1,0 +1,5 @@
+public class Animal {
+  public constructor(public name: string) {
+    super(); //~ EN0219 "`super` in `Animal`, which extends no class"
+  }
+}

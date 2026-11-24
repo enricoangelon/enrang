@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/q38-readonly-field-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `next`
+ --> tests/compile/EN0616/q38-readonly-field-2.fail.en:3:1
+  |
+3 | ly.next()![0] = 9; //~ EN0616
+  | ^^^^^^^^^^^^^^^^^ written here
+  |
+  = note: `next` returns a reference reached from the `readonly &` field `src`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

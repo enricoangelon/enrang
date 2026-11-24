@@ -1,0 +1,96 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0714/override-through-read.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0714/override-through-read.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+}
+class Greedy extends Peeker { }
+class Peeker { }
+
+fn Copier::#ctor(_1: &Copier, _2: &u8[], _3: &u8[]) -> void {
+  let _1: &Copier; // this
+  let _2: &u8[]; // s
+  let _3: &u8[]; // d
+  let _4: &u8[] temp;
+  let _5: &u8[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+fn Copier::first(_1: &Copier) -> readonly &u8 {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).src);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).src)[_2] [explicit];
+    return;
+  }
+}
+
+fn Copier::last(_1: &Copier) -> readonly &u8 {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).dst);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).dst)[_2] [explicit];
+    return;
+  }
+}
+
+fn Copier::step(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: void temp;
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_1).dst;
+    _2 = "alloc/array"::Array<u8>::push(move _3, const 1: u8) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@override fn Greedy::peek(_1: &Greedy, _2: &Copier) -> readonly &u8 {
+  let _1: &Greedy; // this
+  let _2: &Copier; // o
+  let _3: &Copier temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    _0 = Copier::first(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Peeker::peek(_1: &Peeker, _2: &Copier) -> readonly &u8 {
+  let _1: &Peeker; // this
+  let _2: &Copier; // o
+  let _3: &Copier temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    _0 = Copier::first(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

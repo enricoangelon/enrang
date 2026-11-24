@@ -1,0 +1,3 @@
+import { readFile } from "os/fs";
+
+const text = readFile("a.txt");

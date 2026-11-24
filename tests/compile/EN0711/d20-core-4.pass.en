@@ -1,0 +1,41 @@
+let source: string = "abc";
+let lx = new Lexer(&source);
+const tmp = "xy" + "z";
+{
+  const r = id(&lx);
+  r.setSrc(&tmp);
+}
+console.log(lx.next());
+
+let lx2 = new Lexer(&source);
+let w = new Wrapper(&lx2);
+{
+  w.retarget(&tmp);
+}
+console.log(lx2.next());
+
+private function id(t: &Lexer): &Lexer { return t; }
+
+private class Wrapper {
+  private lx: &Lexer;
+
+  public constructor(lx: &Lexer) { this.lx = lx; }
+
+  public retarget(s: &string): void { this.lx.setSrc(s); }
+}
+
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();
+    return this.src.slice(start, this.pos);
+  }
+
+  public setSrc(s: &string): void { this.src = s; }
+}

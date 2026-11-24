@@ -1,0 +1,62 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/s2-30-view.fail.en. Its row's codes: EN0616, EN0616.
+module "tests/compile/EN0616/s2-30-view.fail";
+@private static cells: u16[4];
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: &Slice<u16>; // a
+  let _3: &Slice<u16>; // b
+  let _4: isize temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  let _8: void temp;
+  let _9: isize temp;
+  let _10: isize temp;
+  let _11: &u16 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = cells4() -> bb1;
+  }
+  bb1: {
+    storage_live(_3);
+    _3 = cells4() -> bb2;
+  }
+  bb2: {
+    _4 = const 0: isize;
+    _5 = len(*_2);
+    check_bounds(copy _4, copy _5);
+    (*_2)[_4] = const 7: u16; //~ EN0616
+    _6 = const 0: isize;
+    _7 = len(*_3);
+    check_bounds(copy _6, copy _7);
+    (*_3)[_6] = const 8: u16; //~ EN0616
+    _9 = const 0: isize;
+    _10 = len(*_2);
+    check_bounds(copy _9, copy _10);
+    _11 = &(*_2)[_9] [auto-borrow];
+    _8 = form log(move _11) -> bb3;
+  }
+  bb3: {
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn cells4() -> &Slice<u16> {
+  let _1: *u16[4] temp;
+  let _2: &u16 temp;
+  let _3: *u16 temp;
+  region r0: block;
+  bb0: {
+    _1 = const static_addr(cells): *u16[4] @ r0;
+    _2 = &(*_1)[0] [explicit] @ r0;
+    _3 = cast(ref_to_raw, move _2, *u16) @ r0;
+    _0 = intrinsic SliceFromRaw<u16>(move _3, const 4: isize) @ r0;
+    return @ r0;
+  }
+}

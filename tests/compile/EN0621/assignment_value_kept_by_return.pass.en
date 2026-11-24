@@ -1,0 +1,4 @@
+public function grow(let s: string): string {
+  s += "!";
+  return s;
+}

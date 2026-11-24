@@ -1,0 +1,59 @@
+const r = new Robot {};
+const p = new Parrot {};
+const pet: Box<Animal> = new Box(new Dog {});
+console.log(pet.hear(&r), pet.hear(&p));
+const f: fn(s: &Speaker) => string = describe;
+console.log(f(&r));
+const rex = new Pup {};
+greet(&rex);
+const h = new Hex {};
+dumpOne(&h);
+
+private function describe(s: &Speaker): string { return s.speak(); }
+
+private function greet(p: &Beast): void {
+  const n: i64 = 42;
+  const s = "hi";
+  p.show(&n);
+  p.show(&s);
+}
+
+private function dumpOne<D extends Dumper>(d: &D): void {
+  const n: i64 = 7;
+  d.dump(&n);
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public interface Dumper {
+  dump<T>(x: &T): void;
+}
+
+public final class Hex implements Dumper {
+  public dump<T>(x: &T): void { console.log(sizeOf<T>()); }
+}
+
+public class Animal {
+  public hear(s: &Speaker): string { return `animal hears ${s.speak()}`; }
+}
+
+public class Dog extends Animal {
+  public override hear(s: &Speaker): string { return `dog hears ${s.speak()}`; }
+}
+
+public final class Robot implements Speaker {
+  public speak(): string { return "beep"; }
+}
+
+public final class Parrot implements Speaker {
+  public word: string = "hello";
+  public speak(): string { return this.word.clone(); }
+}
+
+public class Beast {
+  public show<T>(x: &T): void { console.log("Beast.show:", x); }
+}
+
+public class Pup extends Beast {}

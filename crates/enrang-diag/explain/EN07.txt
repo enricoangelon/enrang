@@ -1,0 +1,284 @@
+=== EN0701
+--- rule
+A reference lives only in a slot: a parameter, a local, a return value, a `private` field of a class, or a part of a tuple. A class with a reference field holds a reference too, and lives only where a reference can: in locals, parameters, return values and fields of another such class. So a reference, or a class that holds one, as an array element, an enum case's field, a generic argument such as `Box<Lexer>`, an interface value, or a field that is not `private`, is EN0701. Own the data instead, as `private src: string;` does, or keep the value that borrows in a local.
+--- failing
+const source = "let x = 1;";
+let lx = new Lexer(&source);
+let all: Lexer[] = [lx];
+
+private class Lexer {
+  private src: &string;
+  private pos: isize = 0;
+  public constructor(src: &string) { this.src = src; }
+}
+--- fixed
+const source = "let x = 1;";
+let lx = new Lexer(source);
+let all: Lexer[] = [lx];
+
+private class Lexer {
+  private src: string;
+  private pos: isize = 0;
+  public constructor(src: string) { this.src = src; }
+}
+--- typescript
+In TypeScript every object is reached through a reference, and the garbage collector keeps alive whatever an array holds. Enrang checks when the program is compiled that data outlives each reference to it, which it can do for locals and parameters but not for the elements of an array that may live anywhere.
+=== EN0702
+--- rule
+A reference points to a value that holds no reference of its own: `&&T` and `&(&T | null)` are EN0702. A variable that already holds a reference is passed as it is, and `&r` with `r: &T` means `r`, so a function that reads or changes a value through a reference takes `&T`. The one exception is a reference to a class that holds a reference, which is written as for any class: `&Lexer`.
+--- failing
+const n: i64 = 5;
+const r = &n;
+show(&r);
+
+private function show(x: &&i64): void { console.log(**x); }
+--- fixed
+const n: i64 = 5;
+const r = &n;
+show(r);
+
+private function show(x: &i64): void { console.log(*x); }
+--- typescript
+TypeScript has no reference types to nest. C has pointers to pointers and Rust has `&&T`; Enrang keeps one level, since `&r` of a reference is that same reference.
+=== EN0703
+--- rule
+A type parameter stands for a value, never for a reference. When an argument `&x` meets a parameter of type `T`, the call binds `T` from its other arguments if it can, reads through the reference when `x` is `Copy`, and is otherwise EN0703, since `T` would be the reference itself. Pass the value, which moves it, or a copy made with `clone()`; or declare the parameter `x: &T` when the function only needs to look. The nullable methods, such as `isNull()`, are EN0703 on a nullable reference too, with a fix-it to `== null`.
+--- failing
+const ada = new User { name: "Ada" };
+const boxed = wrap(&ada);
+console.log(boxed.name);
+
+private function wrap<T>(x: T): Box<T> { return new Box(x); }
+
+private class User {
+  public name: string;
+}
+--- fixed
+const ada = new User { name: "Ada" };
+const boxed = wrap(ada);
+console.log(boxed.name);
+
+private function wrap<T>(x: T): Box<T> { return new Box(x); }
+
+private class User {
+  public name: string;
+}
+--- typescript
+A TypeScript type parameter takes any type, and an object type is always a reference. An Enrang generic owns what it holds, so a `Box<T>` cannot hold a borrowed `&User`: either the box owns the user, or the code keeps the reference in a local.
+=== EN0705
+--- rule
+A closure type, `(x: S) => V`, may be written only as the type of a parameter, with or without `| null` at the top, and closure types do not nest: one as a parameter of another closure type is EN0705 too. A closure may refer to the variables it uses, so it cannot be kept where they might not outlive it: in a field, an array, a return type or a local's annotation. To keep a function in a field, use the function pointer type `fn(x: S) => V`, which an arrow becomes when it uses no outer variable.
+--- failing
+const ok = new Button { label: "OK", onClick: () => console.log("clicked") };
+console.log(ok.label);
+
+private class Button {
+  public label: string;
+  public onClick: () => void;
+}
+--- fixed
+const ok = new Button { label: "OK", onClick: () => console.log("clicked") };
+console.log(ok.label);
+
+private class Button {
+  public label: string;
+  public onClick: fn() => void;
+}
+--- typescript
+TypeScript function types go anywhere, and a stored callback keeps what it uses alive through the garbage collector. Enrang has two kinds: a closure type for parameters, which may use outer variables, and `fn` for anything kept, which may not.
+=== EN0706
+--- rule
+While something still points into a value, the value cannot change: assigning it, writing an element of it or a field the borrow covers, calling a method that changes it, such as `push` or `clear`, or passing it to a parameter that changes it, is EN0706. A borrow lasts from the `&`, or from a view such as the one `slice` returns, to the last use of whatever holds it, and the error shows both ends. A loop over `&q` holds `q` while another turn can follow, so changing `q` in its body is EN0706 too, also through a local function it calls or an arrow written in it, unless `break` or `return` comes next. Finish with the reference before the change, keep a copy, as `queue[0].clone()` is, or loop over a copy, as `[...queue]` is.
+--- failing
+let queue: string[] = ["a", "b"];
+const first = &queue[0];
+queue.clear();
+console.log(first);
+--- fixed
+let queue: string[] = ["a", "b"];
+const first = queue[0].clone();
+queue.clear();
+console.log(first);
+--- typescript
+In TypeScript a variable taken from `queue[0]` would still hold the string after `clear()`, since the garbage collector frees nothing that is still reached. Enrang frees the elements at `clear()`, and a `push` may move them all to new memory, so the compiler checks that nothing points into a value when it changes.
+=== EN0707
+--- rule
+A borrow through which its holder writes is exclusive: from the `&` to the holder's last use, nothing else may change the value or take another borrow of it that writes. A second such borrow, as `swapFirst(&xs, &xs)` takes when both parameters write, or a change of the value itself while a reference will still write into it, is EN0707. A borrow is exclusive when the parameter it is passed to writes, or when the reference that holds it writes later, so finish with the first holder before the second use: pass two different values, or do both changes through the one reference. To exchange two elements of one array, call `xs.swap(i, j)`. Reading the value meanwhile is EN0708.
+--- failing
+let xs = [1, 2];
+let ys = [3, 4];
+swapFirst(&xs, &xs);
+console.log(xs, ys);
+
+private function swapFirst(a: &Slice<i64>, b: &Slice<i64>): void {
+  const t = a[0];
+  a[0] = b[0];
+  b[0] = t;
+}
+--- fixed
+let xs = [1, 2];
+let ys = [3, 4];
+swapFirst(&xs, &ys);
+console.log(xs, ys);
+
+private function swapFirst(a: &Slice<i64>, b: &Slice<i64>): void {
+  const t = a[0];
+  a[0] = b[0];
+  b[0] = t;
+}
+--- typescript
+TypeScript lets two parameters name the same array, so a function that writes through one must expect the other to change too. An Enrang function that writes through a reference may rely on nothing else reaching that data during the call, because every call is checked for it.
+=== EN0708
+--- rule
+A reference that writes into a value is the only way to that value from its `&` to its last use, so the value cannot even be read in between: a read, a copy or a shared borrow there, directly or through another reference, is EN0708. Whether a borrow writes follows from the code after it: `const q = &players;` writes because `q.push(30)` comes later, while a reference that only reads may be used alongside the value. Read the value before the borrow or after the reference's last use, or read it through the reference.
+--- failing
+let players: i64[] = [10, 20];
+const q = &players;
+console.log(players.length());
+q.push(30);
+--- fixed
+let players: i64[] = [10, 20];
+const q = &players;
+q.push(30);
+console.log(players.length());
+=== EN0709
+--- rule
+A value cannot move while something still points into it: assigning it to another variable, or passing it to a parameter that takes it by value, while a reference, a view or a borrowing value that borrows it will still be used, is EN0709. A loop over `&q` holds `q`, so moving `q` in its body is EN0709 too, unless `break` or `return` comes next. Move the value after the last use of what borrows it, or move a copy, `names.clone()`.
+--- failing
+let names = ["Ada", "Bo"];
+const first = &names[0];
+const all = names;
+console.log(first, all);
+--- fixed
+let names = ["Ada", "Bo"];
+const first = &names[0];
+console.log(first);
+const all = names;
+console.log(all);
+--- typescript
+In TypeScript `const all = names;` gives the array a second name. In Enrang it moves the array: `all` owns it from then on and may change it or free it, which `first` would never know of.
+=== EN0710
+--- rule
+A function's locals, its by-value parameters included, are dropped when it returns, so a reference it returns must point at data that outlives the call: data reached through one of its reference parameters or `this`, or a string literal. Returning a reference to a local, or into one, is EN0710, and so is returning a reference into the object from a `move` method, which consumes it. Return the value itself, a `string` in place of a `&string`, and the caller owns it from then on.
+--- failing
+console.log(greeting("Ada"));
+
+private function greeting(name: &string): &string {
+  const s = `hello, ${name}`;
+  return &s;
+}
+--- fixed
+console.log(greeting("Ada"));
+
+private function greeting(name: &string): string {
+  const s = `hello, ${name}`;
+  return s;
+}
+--- typescript
+In TypeScript a function may return a reference to any object it made, and the garbage collector keeps that object alive while the caller uses it. Enrang frees a function's locals when it returns, so the function hands the value over instead.
+=== EN0711
+--- rule
+A local is dropped at the end of the block that declares it. A reference to it, or a value that borrows it, that is still used after that point would point at freed memory: EN0711, at the closing brace where the local is dropped. Declare the local in the outer block, so that it lives as long as the reference, or keep a copy in place of the reference. A temporary that something still borrows after its statement is EN0712.
+--- failing
+const name = "Ada";
+let label: &string = &name;
+if (name.length() < 5) {
+  const loud = name.toUpperCase();
+  label = &loud;
+}
+console.log(label);
+--- fixed
+const name = "Ada";
+const loud = name.toUpperCase();
+let label: &string = &name;
+if (name.length() < 5) { label = &loud; }
+console.log(label);
+--- typescript
+In TypeScript a value made inside a block lives on after the block ends for as long as anything points at it. In Enrang it is freed at the closing brace, whatever still points at it.
+=== EN0712
+--- rule
+A value that no variable holds, such as a call's result or `a + b`, is a temporary, and it is dropped at the end of its statement. A borrow of it may be used within that statement, but one kept past it, in a variable, as in `const r = &make();`, or in the result of a call that returns a reference into its argument, is EN0712: the life of a temporary is never extended. Bind the value to a variable first, and borrow the variable.
+--- failing
+const word = longer(&"Ada".toUpperCase(), "Bo");
+console.log(word);
+
+private function longer(a: &string, b: &string): &string {
+  if (a.length() >= b.length()) { return a; }
+  return b;
+}
+--- fixed
+const loud = "Ada".toUpperCase();
+const word = longer(&loud, "Bo");
+console.log(word);
+
+private function longer(a: &string, b: &string): &string {
+  if (a.length() >= b.length()) { return a; }
+  return b;
+}
+--- typescript
+TypeScript keeps every value alive while something points at it, temporaries included. Enrang drops a temporary at the end of its statement, and never extends its life: Rust keeps the temporary of `let r = &make();` alive for as long as `r`, Enrang does not.
+=== EN0714
+--- rule
+Where callers cannot learn from a body what its returned reference borrows, a declaration fixes the parameters it may come from. An override returns into `this` or into a source of the base method, since a call through a `&Labeler` may run either body; the implementation of an interface member returns into `this`, as the member's signature says; and so does a method that contains `unsafe`, whose body is not trusted for this. Returning a reference that comes from any other parameter is EN0714, at the `return`. A local function's hidden arguments are never sources either, so it cannot return a reference into a top-level variable. Return from an allowed source, or return an owned copy.
+--- failing
+public class Labeler {
+  public label(name: &string, fallback: &string): &string { return name; }
+}
+
+public class Strict extends Labeler {
+  public override label(name: &string, fallback: &string): &string { return fallback; }
+}
+--- fixed
+public class Labeler {
+  public label(name: &string, fallback: &string): &string { return name; }
+}
+
+public class Strict extends Labeler {
+  public tag: string = "strict";
+
+  public override label(name: &string, fallback: &string): &string { return &this.tag; }
+}
+--- typescript
+TypeScript checks only that an override's types match. Enrang also checks where its returned reference points, because a caller that holds a `&Labeler` locks only `name` and the object while it uses the result, so `fallback` could change under it.
+=== EN0715
+--- rule
+An arrow that uses outer variables borrows them, shared for those it reads and exclusive for those it changes, and keeps the borrows while it can still be called: until the last use of the local that holds it, or for the call it is passed to. Using a captured variable against such a borrow in the meantime is EN0715: reading `count` between two calls of an arrow that changes it, or changing a variable that a stored arrow reads. An arrow made before a loop over `&q`, that changes `q` and is called in the loop, is EN0715 at the loop's source. Use the variable after the arrow's last use, or pass it to the arrow as a parameter instead of capturing it.
+--- failing
+let count = 0;
+const inc = () => { count += 1; };
+inc();
+console.log(count);
+inc();
+--- fixed
+let count = 0;
+const inc = () => { count += 1; };
+inc();
+inc();
+console.log(count);
+--- typescript
+A TypeScript closure shares its variables with the code around it, and either may read or change them at any time. An Enrang arrow borrows what it uses, as a reference does, for as long as it can still be called.
+=== EN0718
+--- rule
+A closure value is used exclusively, as a reference that writes is: calling a closure parameter, passing a closure as an argument, and capturing it in another arrow each hold it until that use ends. A second use while the first is live, as `both(f, f)` or `both(f, () => { f(); })`, is EN0718, since the closure could then run while another run of it is under way and see its captures change under it. Pass it once and let the callee call it as often as it needs; separate calls, `visit(f, n); visit(f, m);`, are fine. An arrow that uses no outer variables is an `fn` value, which may be passed any number of times.
+--- failing
+let n = 0;
+const bump = () => { n += 1; };
+both(bump, bump);
+console.log(n);
+
+private function both(f: () => void, g: () => void): void {
+  f();
+  g();
+}
+--- fixed
+let n = 0;
+const bump = () => { n += 1; };
+twice(bump);
+console.log(n);
+
+private function twice(f: () => void): void {
+  f();
+  f();
+}
+--- typescript
+TypeScript lets a function receive the same callback twice, or call it from inside itself. An Enrang closure borrows what it captures, so only one use of it runs at a time, as with Rust's `FnMut`.

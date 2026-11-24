@@ -1,0 +1,7 @@
+public class User {
+  public constructor(private name: string) {}
+
+  public label(): Result<string> {
+    return this.name; //~ EN0455 "`this.name` could be a success or an error here"
+  }
+}

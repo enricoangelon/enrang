@@ -1,0 +1,9 @@
+let players: i64[] = [1, 2];
+const q = players.last();
+if (q != null) {
+  *q = 5;
+}
+players.push(3); //~ EN0707 "cannot borrow `players` as exclusive twice at the same time"
+if (q != null) {
+  *q = 6;
+}

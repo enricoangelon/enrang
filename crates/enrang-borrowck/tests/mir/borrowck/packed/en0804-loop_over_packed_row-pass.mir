@@ -1,0 +1,82 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0804/loop_over_packed_row.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0804/loop_over_packed_row.pass";
+@final class P {
+  a: u8;
+  g: u8[2][2];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: P; // p
+  let _3: u8[2] temp;
+  let _4: u8[2] temp;
+  let _5: u8[2][2] temp;
+  let _6: *P temp;
+  let _7: void temp;
+  let _8: isize; // r
+  let _9: isize temp;
+  let _10: isize temp;
+  let _11: &u8[2] #src;
+  let _12: isize #i;
+  let _13: isize #n;
+  let _14: bool temp;
+  let _15: &u8; // x
+  let _16: void temp;
+  let _17: &u8 temp;
+  loop l0: once _11 preheader bb6 head bb2 bind bb3[2] binding _15;
+  bb0: {
+    storage_live(_2);
+    _3 = fixed<u8>[const 1: u8, const 2: u8];
+    _4 = fixed<u8>[const 3: u8, const 4: u8];
+    _5 = fixed<u8[2]>[move _3, move _4];
+    _6 = addr_of _2;
+    _7 = named_fill P leaving()(move _6) -> bb1;
+  }
+  bb1: {
+    _2.a = const 1: u8;
+    _2.g = move _5;
+    storage_live(_8);
+    _8 = const 1: isize;
+    _9 = copy _8;
+    _10 = len(_2.g);
+    check_bounds(copy _9, copy _10);
+    _11 = &_2.g[_9] [for-of-hidden];
+    goto bb6;
+  }
+  bb2: {
+    _13 = len(*_11);
+    _14 = lt(copy _12, copy _13);
+    switch move _14 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_15);
+    check_bounds(copy _12, copy _13);
+    _15 = &(*_11)[_12] [for-of-element];
+    _12 = add(copy _12, const 1: isize);
+    goto bb7;
+  }
+  bb4: {
+    goto bb2;
+  }
+  bb5: {
+    storage_dead(_8);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb6: {
+    storage_live(_12);
+    _12 = const 0: isize;
+    goto bb2;
+  }
+  bb7: {
+    _17 = &*_15 [reborrow];
+    _16 = form log(move _17) -> bb8;
+  }
+  bb8: {
+    storage_dead(_15);
+    goto bb4;
+  }
+}

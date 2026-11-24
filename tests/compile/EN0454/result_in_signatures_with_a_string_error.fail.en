@@ -1,0 +1,15 @@
+public function parseAge(s: &string): Result<i64, string> { //~ EN0454 "`string` is not an error type"
+  return 0;
+}
+
+public function keep(r: Result<i64, i64>): void { //~ EN0454 "`i64` is not an error type"
+  console.log(1);
+}
+
+public class Holder {
+  public r: Result<i64, Plain>; //~ EN0454 "`Plain` is not an error type"
+}
+
+public class Plain {
+  public code: i64;
+}

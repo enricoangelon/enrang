@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0401/vi-02-class.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: a `&string` can't become a `&Measured`, because it may be a part of a string
+  --> tests/compile/EN0401/vi-02-class.fail.en:2:15
+   |
+ 2 | const k = new Keeper<string> {}; //~ EN0401 "a `&string` can't become a `&Measured`, because it may be a part of a string"
+   |               ^^^^^^^^^^^^^^ this binds `T` to `string`
+...
+11 |     const m: &Measured = x;
+   |     ----------------------- here a `&T` becomes a `&Measured`
+   |
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

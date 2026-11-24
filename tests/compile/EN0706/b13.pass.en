@@ -1,0 +1,7 @@
+let q: i64[] = [1];
+for (const x of &q) {
+  const last = q.last();
+  if (last != null) {
+    console.log(*last);
+  }
+}

@@ -1,0 +1,18 @@
+public enum Shape {
+  Circle { radius: f64 },
+  Empty,
+}
+
+public function name(s: &Shape): string {
+  return match (s) {
+    Shape.Circle => "circle",
+    Shape.Empty => "empty",
+  };
+}
+
+public function status(r: &Result<i64>): string {
+  return match (r) {
+    Ok => `ok ${r.value}`,
+    Err => "failed",
+  };
+}

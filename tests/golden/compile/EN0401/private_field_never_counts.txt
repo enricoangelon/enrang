@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/private_field_never_counts.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `User` has no public field `secret`
+ --> tests/compile/EN0401/private_field_never_counts.fail.en:2:12
+  |
+2 | showSecret(&user); //~ EN0401 "`User` has no public field `secret`"
+  |            ^^^^^ this is `User`
+  |
+  = note: `secret` is private to `User`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

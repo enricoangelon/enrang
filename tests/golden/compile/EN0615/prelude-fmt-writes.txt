@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0615/prelude-fmt-writes.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `fmt` changes the object, but `Display` declares that it doesn't
+  --> tests/compile/EN0615/prelude-fmt-writes.fail.en:8:5
+   |
+ 8 |     this.n += 1; //~ EN0615
+   |     ^^^^^^^^^^^ this write needs exclusive access to `this`
+  --> lib/core/prelude.en:23:3
+   |
+23 |   fmt(let f: &Formatter): void;
+   |   --- declared here without `let`
+   |
+help: an implementation of `Display.fmt` may only read the object
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

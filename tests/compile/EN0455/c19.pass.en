@@ -1,0 +1,16 @@
+//! covers: C19
+const twice = (n: i64): Result<i64> => n * 2;
+console.log(twice(4));
+
+public function half(n: i64): Result<i64> {
+  if (n % 2 != 0) { return Err("odd"); }
+  return n;
+}
+
+public function pick(c: bool, n: i64): Result<i64> { return c ? n : Err("none"); }
+
+public function pair(a: i64, b: i64): Result<[i64, i64]> { return [a, b]; }
+
+public function nothing(c: bool): Result<void> {
+  if (c) { return; }
+}

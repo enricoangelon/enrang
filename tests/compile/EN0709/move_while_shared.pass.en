@@ -1,0 +1,5 @@
+let q = [1];
+const r = &q;
+console.log(r);
+const m = q;
+console.log(m);

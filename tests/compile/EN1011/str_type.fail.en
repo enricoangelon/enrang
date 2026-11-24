@@ -1,0 +1,3 @@
+const s: str = "abc"; //~ EN1011 "range indexing is not supported yet"
+
+public function first(x: &str): void {} //~ EN1011 "range indexing is not supported yet"

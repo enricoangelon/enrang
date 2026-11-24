@@ -1,0 +1,7 @@
+public function pick(xs: &i64[]): &i64 {
+  const fallback: i64[] = [0];
+  if (xs.length() > 0) {
+    return &xs[0];
+  }
+  return &fallback[0]; //~ EN0710 "cannot return a reference to local `fallback`"
+}

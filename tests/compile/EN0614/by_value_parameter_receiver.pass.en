@@ -1,0 +1,4 @@
+public function addOne(let xs: i64[]): isize {
+  xs.push(1);
+  return xs.length();
+}

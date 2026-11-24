@@ -1,0 +1,110 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/named-contract-clauses.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/named-contract-clauses.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+class Door {
+  private n: i64 = default;
+}
+class File {
+  private fd: i64 = default;
+}
+class Keeper {
+  private r: &string;
+}
+class Words {
+  private text: string = default;
+  private pos: isize = default;
+}
+
+fn Door::open(_1: &Door) -> void {
+  let _1: &Door; // this
+  bb0: {
+    return;
+  }
+}
+
+move fn File::close(_1: &File) -> void {
+  let _1: &File; // this
+  bb0: {
+    check_class(*_1, move_this(close), ref);
+    return;
+  }
+}
+
+fn Keeper::#ctor(_1: &Keeper, _2: &string) -> void {
+  let _1: &Keeper; // this
+  let _2: &string; // r
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    return;
+  }
+}
+
+fn Keeper::put(_1: &Keeper, _2: &string) -> void {
+  let _1: &Keeper; // this
+  let _2: &string; // s
+  let _3: void temp;
+  let _4: &string temp;
+  let _5: &string temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _5 = copy (*_1).r;
+    _3 = form log(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Words::next(_1: &Words) -> &string | null {
+  let _1: &Words; // this
+  let _2: bool temp;
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: &string temp;
+  let _6: isize; // start
+  let _7: isize temp;
+  let _8: &string temp;
+  let _9: &string temp;
+  let _10: isize | null temp;
+  let _11: &string temp;
+  bb0: {
+    _3 = copy (*_1).pos;
+    _5 = &(*_1).text [auto-borrow];
+    _4 = "core/string"::string::length(move _5) -> bb3;
+  }
+  bb1: {
+    _0 = null;
+    return;
+  }
+  bb2: {
+    storage_live(_6);
+    _6 = copy (*_1).pos;
+    _8 = &(*_1).text [auto-borrow];
+    _7 = "core/string"::string::length(move _8) -> bb4;
+  }
+  bb3: {
+    _2 = ge(move _3, move _4);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb4: {
+    (*_1).pos = move _7;
+    _10 = present(copy (*_1).pos);
+    _11 = &(*_1).text [auto-borrow];
+    _9 = "core/string"::string::slice(move _11, copy _6, move _10, const 2: isize) -> bb5;
+  }
+  bb5: {
+    _0 = present(move _9);
+    storage_dead(_6);
+    return;
+  }
+}

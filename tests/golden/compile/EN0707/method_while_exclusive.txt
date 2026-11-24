@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0707/method_while_exclusive.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: cannot borrow `xs` as exclusive twice at the same time
+ --> tests/compile/EN0707/method_while_exclusive.fail.en:3:1
+  |
+2 | const r = &xs;
+  |           --- first exclusive borrow, held by `r`
+3 | xs.push(9); //~ EN0707 "cannot borrow `xs` as exclusive twice at the same time"
+  | ^^^^^^^^^^ second exclusive borrow
+4 | r.push(1);
+  | - `r` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 1 previous error

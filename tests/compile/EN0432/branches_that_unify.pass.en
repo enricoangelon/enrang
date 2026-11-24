@@ -1,0 +1,12 @@
+const ready = true;
+const label = ready ? "yes" : "no";
+const count = ready ? 1 : 2;
+const wide: i64 | null = ready ? 7 : null;
+console.log(label, count, wide);
+
+public function describe(x: i64): string {
+  return match (x) {
+    1 => "one",
+    default => "many",
+  };
+}

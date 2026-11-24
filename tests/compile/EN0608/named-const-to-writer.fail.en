@@ -1,0 +1,13 @@
+//! row: `const n = 1; bump(&n);` with a `bump` that
+const n = 1;
+bump(&n); //~ EN0608 "`bump` can change `x`, but `n` is `const`"
+const data: u8[] = [1, 2];
+fill(&data); //~ EN0608 "`fill` can change `buf`, but `data` is `const`"
+
+function bump(x: &i64): void {
+  *x += 1;
+}
+
+function fill(let buf: &Slice<u8>): void {
+  console.log(buf.length());
+}

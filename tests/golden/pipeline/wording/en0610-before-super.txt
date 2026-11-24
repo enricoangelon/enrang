@@ -1,0 +1,10 @@
+error[EN0610]: `this` can't be used before `super(...)` runs
+ --> main.en:5:17
+  |
+5 |     console.log(this.name);
+  |                 ^^^^^^^^^ `this` is used here, before the base part is built
+  |
+help: before `super(...)`, a constructor may only assign its own fields
+  = explain: run `enrang explain EN0610`
+
+error: aborting due to 1 previous error

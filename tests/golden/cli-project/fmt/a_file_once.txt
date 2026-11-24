@@ -1,0 +1,6 @@
+$ enrang fmt --check src/a.en src/a.en
+[exit 1]
+[stdout]
+src/a.en would be reformatted
+1 of 1 file would change
+[stderr]

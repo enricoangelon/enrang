@@ -1,0 +1,3 @@
+public function zeros(): readonly i64[] { //~ EN0214
+  return [];
+}

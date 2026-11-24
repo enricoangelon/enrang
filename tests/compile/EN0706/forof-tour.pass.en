@@ -1,0 +1,60 @@
+//! row: The tour, `Ownership in three lines`, S5
+// tour.en: run with `enrang run tour.en`
+const prog = [Op.Push { value: 2 }, Op.Push { value: 40 }, Op.Add, Op.Print];
+const r = run(&prog);  // `&prog` lends the array; the result is owned
+match (r) {  // `Ok` and `Err` arms read `r.value` and `r.error`
+  Ok => console.log(`result ${r.value}`),
+  Err => console.log(`error: ${r.error}`),
+}
+
+private enum Op {
+  Push { value: i64 },
+  Add,
+  Mul,
+  Print,
+}
+
+private class Stack<T> {
+  private items: T[] = [];
+
+  public push(x: T): void { this.items.push(x); }  // `x` moves in; the body writes `this`
+  public pop(): T | null { return this.items.pop(); }
+  public top(): &T | null { return this.items.last(); }  // borrows from `this`, as changeable as the stack (R3)
+  public size(): isize { return this.items.length(); }
+}
+
+private class Trace {
+  public constructor(public name: string) {}
+  public destructor() { console.log(`[${this.name}] done`); }
+}
+
+private function pop2(s: &Stack<i64>): Result<i64> {
+  const v = s.pop();
+  if (v == null) { return Err("stack underflow"); }
+  return v;  // narrowed to i64; a plain value means `Ok(v)`
+}
+
+private function run(program: &Slice<Op>): Result<i64> {
+  const _trace = new Trace("vm");  // its destructor runs on every exit, `?` included
+  let s = new Stack<i64>();
+  for (const op of program) {  // op: &Op
+    match (op) {  // arms name the case; inside an arm, `op` is narrowed to it
+      Op.Push => s.push(op.value),  // `op.value` reads through `&Op`, since i64 is Copy
+      Op.Add => {
+        const b = pop2(&s)?;
+        const a = pop2(&s)?;
+        s.push(a + b);
+      },
+      Op.Mul => {
+        const b = pop2(&s)?;
+        const a = pop2(&s)?;
+        s.push(a * b);
+      },
+      Op.Print => {
+        const t = s.top();
+        if (t != null) { console.log(`top = ${t}`); }  // last use: the loan ends here
+      },
+    }
+  }
+  return pop2(&s);
+}

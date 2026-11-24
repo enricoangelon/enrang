@@ -1,0 +1,40 @@
+$ enrang check tests/compile/EN0303/oq13-slice.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: a fixed array can't grow
+ --> tests/compile/EN0303/oq13-slice.fail.en:3:8
+  |
+3 | addOne(&sector); //~ EN0401 "a fixed array can't grow"
+  |        ^^^^^^^ expected `&u8[]`, found `&u8[8]`
+  |
+help: if `addOne` only reads or sets elements, take `xs: &Slice<u8>`; to let it grow, make `sector` a `u8[]`
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: a part of an array can't grow
+ --> tests/compile/EN0303/oq13-slice.fail.en:4:8
+  |
+4 | addOne(list.slice(0, 2)); //~ EN0401 "a part of an array can't grow"
+  |        ^^^^^^^^^^^^^^^^ `addOne` takes `xs: &u8[]`, a whole array it may grow
+  |
+help: pass the whole array: addOne(&list)
+  = explain: run `enrang explain EN0401`
+
+error[EN0303]: `Slice<u8>` has no member `push`
+ --> tests/compile/EN0303/oq13-slice.fail.en:5:20
+  |
+5 | sector.slice(0, 4).push(1); //~ EN0303 "has no member `push`"
+  |                    ^^^^ no such member
+  |
+  = explain: run `enrang explain EN0303`
+
+error[EN0401]: `Slice<u8>` is a view, so it exists only behind `&`
+  --> tests/compile/EN0303/oq13-slice.fail.en:12:13
+   |
+12 |   public s: Slice<u8>; //~ EN0401 "`Slice<u8>` is a view, so it exists only behind `&`"
+   |             ^^^^^^^^^ a view by value
+   |
+help: write `&Slice<u8>`, or `u8[]` for an array of its own
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 4 previous errors

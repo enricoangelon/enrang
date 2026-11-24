@@ -1,0 +1,75 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/forof-const-source.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/forof-const-source.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int[]; // xs
+  let _3: void temp;
+  let _4: &int[] temp;
+  let mut _5: i64[]; // ys
+  let _6: isize #i;
+  let _7: isize #n;
+  let _8: bool temp;
+  let _9: &i64; // y
+  let _10: void temp;
+  let _11: &int[] temp;
+  let _12: &i64[] temp;
+  loop l0: path _5 preheader bb6 head bb2 bind bb3[2] binding _9;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<int>();
+    _4 = &_2 [auto-borrow];
+    _3 = "alloc/array"::Array<int>::push(move _4, const 1: int) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _5 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    goto bb6;
+  }
+  bb2: {
+    _7 = len(_5);
+    _8 = lt(copy _6, copy _7);
+    switch move _8 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_9);
+    check_bounds(copy _6, copy _7);
+    _9 = &_5[_6] [for-of-element];
+    _6 = add(copy _6, const 1: isize);
+    goto bb7;
+  }
+  bb4: {
+    goto bb2;
+  }
+  bb5: {
+    _11 = &_2 [auto-borrow];
+    _12 = &_5 [auto-borrow];
+    _10 = form log(move _11, move _12) -> bb8;
+  }
+  bb6: {
+    storage_live(_6);
+    _6 = const 0: isize;
+    goto bb2;
+  }
+  bb7: {
+    *_9 = const 1: i64;
+    storage_dead(_9);
+    goto bb4;
+  }
+  bb8: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

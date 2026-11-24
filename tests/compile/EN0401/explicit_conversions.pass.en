@@ -1,0 +1,13 @@
+const count: i64 = 5;
+const label: string = count.toString();
+greet("42");
+greet(&label);
+console.log(half(8));
+
+private function greet(name: &string): void {
+  console.log(name);
+}
+
+private function half(n: i64): i64 {
+  return n / 2;
+}

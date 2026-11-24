@@ -1,0 +1,70 @@
+$ enrang check --target=x86_64-windows tests/compile/EN0801/unsafe_calls_outside_unsafe.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0801]: calling `set` needs `unsafe`
+ --> tests/compile/EN0801/unsafe_calls_outside_unsafe.fail.en:7:3
+  |
+7 |   mem.set(p, 0, 4); //~ EN0801 "calling `set` needs `unsafe`"
+  |   ^^^^^^^^^^^^^^^^ `set` is `unsafe`
+  |
+  = rule: `unsafe` grants exactly five powers; this one is "call an `unsafe` function". Nothing checks that its conditions hold.
+help: state that you have met its conditions
+  |
+7 |   unsafe { mem.set(p, 0, 4); } //~ EN0801 "calling `set` needs `unsafe`"
+  |   +++++++++                 ++
+  = explain: run `enrang explain EN0801`
+
+error[EN0801]: calling `f` needs `unsafe`
+ --> tests/compile/EN0801/unsafe_calls_outside_unsafe.fail.en:8:3
+  |
+8 |   f(); //~ EN0801 "calling `f` needs `unsafe`"
+  |   ^^^ `f` is an `unsafe fn`
+  |
+  = rule: `unsafe` grants exactly five powers; this one is "call an `unsafe` function". Nothing checks that its conditions hold.
+help: state that you have met its conditions
+  |
+8 |   unsafe { f(); } //~ EN0801 "calling `f` needs `unsafe`"
+  |   +++++++++    ++
+  = explain: run `enrang explain EN0801`
+
+error[EN0801]: calling `g` needs `unsafe`
+  --> tests/compile/EN0801/unsafe_calls_outside_unsafe.fail.en:10:3
+   |
+10 |   g(); //~ EN0801 "calling `g` needs `unsafe`"
+   |   ^^^ `g` is an `unsafe fn`
+   |
+   = rule: `unsafe` grants exactly five powers; this one is "call an `unsafe` function". Nothing checks that its conditions hold.
+help: state that you have met its conditions
+   |
+10 |   unsafe { g(); } //~ EN0801 "calling `g` needs `unsafe`"
+   |   +++++++++    ++
+   = explain: run `enrang explain EN0801`
+
+error[EN0801]: calling `cb` needs `unsafe`
+  --> tests/compile/EN0801/unsafe_calls_outside_unsafe.fail.en:11:3
+   |
+11 |   cb(1); //~ EN0801 "calling `cb` needs `unsafe`"
+   |   ^^^^^ `cb` runs foreign code through `@abi("sysv")`
+   |
+   = rule: `unsafe` grants exactly five powers; this one is "call an `unsafe` function". Nothing checks that its conditions hold.
+help: state that you have met its conditions
+   |
+11 |   unsafe { cb(1); } //~ EN0801 "calling `cb` needs `unsafe`"
+   |   +++++++++      ++
+   = explain: run `enrang explain EN0801`
+
+error[EN0801]: calling `Beep` needs `unsafe`
+  --> tests/compile/EN0801/unsafe_calls_outside_unsafe.fail.en:12:3
+   |
+12 |   Beep(440, 100); //~ EN0801 "calling `Beep` needs `unsafe`"
+   |   ^^^^^^^^^^^^^^ `Beep` is a `declare function`
+   |
+   = rule: `unsafe` grants exactly five powers; this one is "call an `unsafe` function". Nothing checks that its conditions hold.
+help: state that you have met its conditions
+   |
+12 |   unsafe { Beep(440, 100); } //~ EN0801 "calling `Beep` needs `unsafe`"
+   |   +++++++++               ++
+   = explain: run `enrang explain EN0801`
+
+error: aborting due to 5 previous errors

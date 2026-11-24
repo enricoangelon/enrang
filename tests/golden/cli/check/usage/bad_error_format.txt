@@ -1,0 +1,7 @@
+$ enrang check --error-format=xml
+[exit 2]
+[stdout]
+[stderr]
+error: `--error-format=xml` is not a value of `--error-format`
+note: the values of `--error-format` are `human` and `json`
+usage: enrang check [file] [flags]

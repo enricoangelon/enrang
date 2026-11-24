@@ -1,0 +1,131 @@
+@private @copy class C {
+  n: i64;
+}
+@private enum Shape { Rect { w: string, h: string } }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: { a: string, b: string }; // o
+  let _3: string temp;
+  let _4: string temp;
+  let _5: Shape; // r
+  let _6: string temp;
+  let _7: string temp;
+  let mut _8: C; // c
+  let _9: *C temp;
+  let _10: void temp;
+  let _11: void temp;
+  let _12: C temp;
+  let _13: i64 temp;
+  let _14: &C temp;
+  let _15: i64; // x
+  let _16: void temp;
+  let _17: &i64 temp;
+  let _18: &string temp;
+  let _19: void temp;
+  let _20: &i64 temp;
+  let _21: &i64 temp;
+  let _22: &Shape temp;
+  bb0: {
+    storage_live(_2);
+    _3 = f(const "b": string) -> bb1;
+  }
+  bb1: {
+    _4 = f(const "a": string) -> bb2;
+  }
+  bb2: {
+    _2 = object { a: string, b: string } { a: move _4, b: move _3 };
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = f(const "h": string) -> bb3;
+  }
+  bb3: {
+    _7 = f(const "w": string) -> bb4;
+  }
+  bb4: {
+    _5 = Shape::Rect { w: move _7, h: move _6 };
+    drop(_7);
+    storage_dead(_7);
+    drop(_6);
+    storage_dead(_6);
+    storage_live(_8);
+    _9 = addr_of _8;
+    _10 = named_fill C leaving()(move _9) -> bb5;
+  }
+  bb5: {
+    _8.n = const 1: i64;
+    _12 = copy _8;
+    _14 = &_8 [explicit];
+    _13 = bump(move _14) -> bb6;
+  }
+  bb6: {
+    _11 = C::show(move _12, move _13) -> bb7;
+  }
+  bb7: {
+    storage_live(_15);
+    _15 = const 1: i64;
+    _17 = &_15 [auto-borrow];
+    _18 = &_2.a [auto-borrow];
+    _16 = form log[3, 1, 1](const "": &string, move _17, const "": &string, move _18, const "z": &string) -> bb8;
+  }
+  bb8: {
+    _20 = &_15 [auto-borrow];
+    _21 = &_15 [auto-borrow];
+    _22 = &_5 [auto-borrow];
+    _19 = form log[5, 1](const "": &string, move _20, const "": &string, move _21, const "z": &string, move _22) -> bb9;
+  }
+  bb9: {
+    storage_dead(_15);
+    storage_dead(_8);
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+move fn C::show(_1: &C, _2: i64) -> void {
+  let _1: &C; // this
+  let _2: i64; // x
+  let _3: void temp;
+  let _4: &i64 temp;
+  let _5: &i64 temp;
+  bb0: {
+    check_class(*_1, move_this(show), ref);
+    _4 = &(*_1).n [auto-borrow];
+    _5 = &_2 [auto-borrow];
+    _3 = form log(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn bump(_1: &C) -> i64 {
+  let _1: &C; // c
+  bb0: {
+    (*_1).n = const 2: i64;
+    _0 = const 0: i64;
+    return;
+  }
+}
+
+@private fn f(_1: string) -> string {
+  let _1: string; // s
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    _0 = move _1;
+    drop(_1);
+    return;
+  }
+}

@@ -1,0 +1,28 @@
+//! row: With `h: &H`: `const g = h; g.items = nu
+public class H { public items: string[] | null = null; public other: string[] | null = null; }
+
+public function viaDestructure(h: &H): void {
+  if (h.items != null) {
+    const { items } = h;
+    console.log(items);
+    console.log(h.items.length());
+  }
+}
+
+public function beside(h: &H): void {
+  if (h.items != null) {
+    const { other } = h;
+    *other = null;
+    console.log(h.items.length());
+  }
+}
+
+public function retested(h: &H): void {
+  if (h.items != null) {
+    const { items } = h;
+    *items = null;
+    if (h.items != null) {
+      console.log(h.items.length());
+    }
+  }
+}

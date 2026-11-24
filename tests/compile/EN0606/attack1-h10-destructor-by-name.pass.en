@@ -1,0 +1,22 @@
+//! covers: H10
+let f = new File(3);
+f.close();
+dispose(f);
+
+public interface Closer {
+  close(): void;
+}
+
+public class File implements Closer {
+  private fd: i64;
+
+  public constructor(fd: i64) { this.fd = fd; }
+
+  public close(): void { console.log(this.fd); }
+
+  public destructor() { console.log("closed"); }
+}
+
+public function shut<T extends Closer>(x: &T): void {
+  x.close();
+}

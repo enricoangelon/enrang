@@ -1,0 +1,67 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0708/d20-core-1-both.fail.en. Its row's codes: EN0708.
+module "tests/compile/EN0708/d20-core-1-both.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Keeper {
+  private v: &i64[];
+}
+
+fn Keeper::#ctor(_1: &Keeper, _2: &i64[]) -> void {
+  let _1: &Keeper; // this
+  let _2: &i64[]; // v
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).v = move _3;
+    return;
+  }
+}
+
+fn Keeper::grow(_1: &Keeper) -> void {
+  let _1: &Keeper; // this
+  let _2: void temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = copy (*_1).v;
+    _2 = "alloc/array"::Array<i64>::push(move _3, const 4: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Keeper::set(_1: &Keeper, _2: &i64[]) -> void {
+  let _1: &Keeper; // this
+  let _2: &i64[]; // v
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).v = move _3;
+    return;
+  }
+}
+
+fn both(_1: &Keeper, _2: &i64[]) -> &i64[] {
+  let _1: &Keeper; // k
+  let _2: &i64[]; // a
+  let _3: void temp;
+  let _4: &i64[] temp;
+  let _5: &Keeper temp;
+  let _6: &i64[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _5 = &*_1 [reborrow];
+    _3 = virtual Keeper::set [copy _5](move _5, move _4) -> bb1;
+  }
+  bb1: {
+    _6 = &*_2 [reborrow]; //~ EN0708
+    _0 = move _6;
+    return;
+  }
+}

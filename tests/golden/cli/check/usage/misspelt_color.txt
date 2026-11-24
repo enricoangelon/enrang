@@ -1,0 +1,8 @@
+$ enrang check --color=alway main.en
+[exit 2]
+[stdout]
+[stderr]
+error: `--color=alway` is not a value of `--color`
+help: did you mean `--color=always`?
+note: the values of `--color` are `auto`, `always` and `never`
+usage: enrang check [file] [flags]

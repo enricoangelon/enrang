@@ -1,0 +1,13 @@
+error[EN0712]: the temporary is dropped while `r` still borrows it
+ --> main.en:1:1
+  |
+1 | const r = first(&"a".toString());
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ the temporary is dropped here
+  |                 --------------- borrow of the temporary starts here
+2 | console.log(r);
+  |             - the borrow is still in use here
+  |
+help: bind the argument first
+  = explain: run `enrang explain EN0712`
+
+error: aborting due to 1 previous error

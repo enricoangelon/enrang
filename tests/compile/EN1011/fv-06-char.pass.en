@@ -1,0 +1,2 @@
+console.log("città".slice(5, 2));
+console.log("città".slice(-1));

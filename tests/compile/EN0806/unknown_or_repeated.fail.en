@@ -1,0 +1,13 @@
+@inline public function a(): void {} //~ EN0806 "unknown decorator `@inline`"
+
+@mustuse public function b(): i64 { //~ EN0806 "unknown decorator `@mustuse`"
+  return 1;
+}
+
+@mustUse @mustUse public function c(): i64 { //~ EN0806 "`@mustUse` is written twice"
+  return 1;
+}
+
+@requires("sse9") public function g(): void {} //~ EN0806 "unknown CPU feature `sse9`"
+
+@section(1) public function h(): void {} //~ EN0806 "`@section` takes a section name"

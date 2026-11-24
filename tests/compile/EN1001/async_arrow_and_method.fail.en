@@ -1,0 +1,5 @@
+const g = async () => 1; //~ EN1001 "async functions are not supported yet"
+
+public class Loader {
+  public async load(): void {} //~ EN1001 "async functions are not supported yet"
+}

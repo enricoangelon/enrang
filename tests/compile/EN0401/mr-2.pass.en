@@ -1,0 +1,7 @@
+let buf: u8[4] = [0; 4];
+fill(&buf);
+console.log(buf);
+
+private function fill(xs: &Slice<u8>): void {
+  xs[0] = 1;
+}

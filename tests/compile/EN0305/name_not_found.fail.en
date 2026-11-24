@@ -1,0 +1,5 @@
+import { Part, Widget } from "./parts.pass"; //~ EN0305 "`Widget` is neither an item nor a module of `./parts.pass`"
+import { vga } from "os"; //~ EN0305 "`vga` is neither an item nor a module of `os`"
+
+const p = new Part { id: 1 };
+console.log(p);

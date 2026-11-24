@@ -1,0 +1,57 @@
+$ enrang check tests/compile/EN0612/reference_sites.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0612]: missing `&`: `report` takes a reference
+ --> tests/compile/EN0612/reference_sites.fail.en:1:8
+  |
+1 | report(new Circle(2.0)); //~ EN0612 "missing `&`: `report` takes a reference"
+  |        ^^^^^^^^^^^^^^^ expected `&Circle`, found `Circle`
+  |
+  = note: a reference is only ever made by writing `&`; with no `&`, a value is moved or copied.
+help: write `&new Circle(2.0)`
+  |
+1 | report(&new Circle(2.0)); //~ EN0612 "missing `&`: `report` takes a reference"
+  |        +
+  = explain: run `enrang explain EN0612`
+
+error[EN0612]: missing `&`: a reference is expected here
+ --> tests/compile/EN0612/reference_sites.fail.en:3:17
+  |
+3 | const r: &i64 = n; //~ EN0612 "missing `&`: a reference is expected here"
+  |                 ^ expected `&i64`, found `i64`
+  |
+  = note: a reference is only ever made by writing `&`; with no `&`, a value is moved or copied.
+help: write `&n`
+  |
+3 | const r: &i64 = &n; //~ EN0612 "missing `&`: a reference is expected here"
+  |                 +
+  = explain: run `enrang explain EN0612`
+
+error[EN0612]: missing `&`: `total` takes a reference
+ --> tests/compile/EN0612/reference_sites.fail.en:5:19
+  |
+5 | console.log(total(a)); //~ EN0612 "missing `&`: `total` takes a reference"
+  |                   ^ expected `&Slice<i64>`, found `i64[]`
+  |
+  = note: a reference is only ever made by writing `&`; with no `&`, a value is moved or copied.
+help: write `&a`
+  |
+5 | console.log(total(&a)); //~ EN0612 "missing `&`: `total` takes a reference"
+  |                   +
+  = explain: run `enrang explain EN0612`
+
+error[EN0612]: missing `&`: `label` returns a reference
+  --> tests/compile/EN0612/reference_sites.fail.en:11:12
+   |
+11 |     return this.name; //~ EN0612 "missing `&`: `label` returns a reference"
+   |            ^^^^^^^^^ expected `&string`, found `string`
+   |
+   = note: a reference is only ever made by writing `&`; with no `&`, a value is moved or copied.
+help: write `&this.name`
+   |
+11 |     return &this.name; //~ EN0612 "missing `&`: `label` returns a reference"
+   |            +
+   = explain: run `enrang explain EN0612`
+
+error: aborting due to 4 previous errors

@@ -1,0 +1,44 @@
+@private fn f(_1: i64) -> i64 {
+  let _1: i64; // n
+  let _2: bool temp;
+  let _3: bool temp;
+  let _4: bool temp;
+  let _5: bool temp;
+  bb0: {
+    _2 = eq(copy _1, const 1: i64);
+    switch move _2 [0: bb4, otherwise: bb2];
+  }
+  bb1: {
+    return;
+  }
+  bb2: {
+    _0 = const 10: i64;
+    goto bb1;
+  }
+  bb3: {
+    _4 = le(const 3: i64, copy _1);
+    switch move _4 [0: bb6, otherwise: bb7];
+  }
+  bb4: {
+    _3 = eq(copy _1, const 2: i64);
+    switch move _3 [0: bb3, otherwise: bb2];
+  }
+  bb5: {
+    _0 = const 20: i64;
+    goto bb1;
+  }
+  bb6: {
+    goto bb8;
+  }
+  bb7: {
+    _5 = lt(copy _1, const 7: i64);
+    switch move _5 [0: bb6, otherwise: bb5];
+  }
+  bb8: {
+    _0 = const 30: i64;
+    goto bb1;
+  }
+  bb9: {
+    unreachable;
+  }
+}

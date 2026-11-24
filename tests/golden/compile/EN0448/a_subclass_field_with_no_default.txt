@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0448/a_subclass_field_with_no_default.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0448]: `Circle` needs a constructor: `owner` has no default
+  --> tests/compile/EN0448/a_subclass_field_with_no_default.fail.en:9:14
+   |
+ 9 | public class Circle extends Shape { //~ EN0448 "`Circle` needs a constructor: `owner` has no default"
+   |              ^^^^^^ a subclass with no constructor needs a default for each field of its own
+10 |   public owner: Person;
+   |   --------------------- `owner` has type `Person`, which has no default
+   |
+help: give `owner` a default, or write a constructor that sets it
+   = explain: run `enrang explain EN0448`
+
+error: aborting due to 1 previous error

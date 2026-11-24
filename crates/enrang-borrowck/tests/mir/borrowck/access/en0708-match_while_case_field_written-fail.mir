@@ -1,0 +1,73 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0708/match_while_case_field_written.fail.en. Its row's codes: EN0708.
+module "tests/compile/EN0708/match_while_case_field_written.fail";
+enum Shape { Circle { radius: i64 }, Empty }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Shape; // s
+  let _3: void temp;
+  let _4: isize temp;
+  let _5: &i64; // r
+  let _6: bool; // big
+  let _7: isize temp;
+  let _8: void temp;
+  let _9: &bool temp;
+  fact f0: _2 case Circle;
+  use f0 at bb2[1];
+  test f0 at bb2;
+  test f0 at bb5;
+  bb0: {
+    storage_live(_2);
+    _2 = Shape::Circle { radius: const 1: i64 };
+    _4 = discriminant(_2);
+    switch move _4 [0: bb2, otherwise: bb3];
+  }
+  bb1: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb2: {
+    storage_live(_5);
+    check_tag(_2, Circle);
+    _5 = &(_2 as Circle).radius [explicit];
+    storage_live(_6);
+    _7 = discriminant(_2); //~ EN0708 "`s` can't be read while `r` may write into it"
+    switch move _7 [0: bb5, otherwise: bb6];
+  }
+  bb3: {
+    goto bb10;
+  }
+  bb4: {
+    *_5 = const 2: i64;
+    _9 = &_6 [auto-borrow];
+    _8 = form log(move _9) -> bb9;
+  }
+  bb5: {
+    _6 = const true: bool;
+    goto bb4;
+  }
+  bb6: {
+    goto bb7;
+  }
+  bb7: {
+    _6 = const false: bool;
+    goto bb4;
+  }
+  bb8: {
+    unreachable;
+  }
+  bb9: {
+    storage_dead(_6);
+    storage_dead(_5);
+    goto bb1;
+  }
+  bb10: {
+    goto bb1;
+  }
+  bb11: {
+    unreachable;
+  }
+}

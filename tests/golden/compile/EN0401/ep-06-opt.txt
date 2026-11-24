@@ -1,0 +1,22 @@
+$ enrang check tests/compile/EN0401/ep-06-opt.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `{ v?: i64 | null }`, found `{ v?: (i64 | null) | null }`
+ --> tests/compile/EN0401/ep-06-opt.fail.en:3:31
+  |
+3 | const w: { v?: i64 | null } = a; //~ EN0401
+  |                               ^ this is `{ v?: (i64 | null) | null }`
+  |          ------------------ `{ v?: i64 | null }` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: mismatched types: expected `(i64 | null) | null`, found `int`
+ --> tests/compile/EN0401/ep-06-opt.fail.en:4:31
+  |
+4 | let b: Opt<i64 | null> = { v: 5 }; //~ EN0401 "expected `(i64 | null) | null`, found `int`"
+  |                               ^ this is `int`
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

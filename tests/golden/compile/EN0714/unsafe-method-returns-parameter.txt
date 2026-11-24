@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0714/unsafe-method-returns-parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0714]: `Counter.pick` returns a reference its signature does not allow
+ --> tests/compile/EN0714/unsafe-method-returns-parameter.fail.en:8:5
+  |
+8 |     return a; //~ EN0714
+  |     ^^^^^^^^^ returned here
+  |
+  = note: a returned reference may borrow only from the parameters its signature names as sources
+  = explain: run `enrang explain EN0714`
+
+error: aborting due to 1 previous error

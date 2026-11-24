@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN1006/vi-03-branches.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+ --> tests/compile/EN1006/vi-03-branches.fail.en:2:7
+  |
+2 | relay(c ? new Dog {} : new Robot {}); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ its branches may hold different classes
+  |
+  = note: this `Speaker` may be a `Dog` or a `Robot`, so its class isn't known
+help: call relay in each branch
+  = explain: run `enrang explain EN1006`
+
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+ --> tests/compile/EN1006/vi-03-branches.fail.en:5:9
+  |
+5 |   relay(c ? s : o); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  |         ^^^^^^^^^ its branches may hold different classes
+  |
+  = note: this `Speaker` may be the class of `s` or the class of `o`, so its class isn't known
+help: call relay in each branch
+  = explain: run `enrang explain EN1006`
+
+error: aborting due to 2 previous errors

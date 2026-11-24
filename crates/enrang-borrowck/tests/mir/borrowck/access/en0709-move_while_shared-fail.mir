@@ -1,0 +1,34 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0709/move_while_shared.fail.en. Its row's codes: EN0709.
+module "tests/compile/EN0709/move_while_shared.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int[]; // q
+  let _3: &int[]; // r
+  let _4: int[]; // m
+  let _5: void temp;
+  let _6: &int[] temp;
+  let _7: &int[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<int>(const 1: int);
+    storage_live(_3);
+    _3 = &_2 [explicit];
+    storage_live(_4);
+    _4 = move _2; //~ EN0709 "cannot move `q` while it is borrowed"
+    _6 = &*_3 [reborrow];
+    _7 = &_4 [auto-borrow];
+    _5 = form log(move _6, move _7) -> bb1;
+  }
+  bb1: {
+    drop(_4);
+    storage_dead(_4);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

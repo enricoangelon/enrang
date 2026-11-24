@@ -1,0 +1,4 @@
+let n: i64 = 1;
+const f: fn(let x: &i64) => void = (x: &i64) => { *x += 1; };
+f(&n);
+console.log(n);

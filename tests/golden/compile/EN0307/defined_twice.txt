@@ -1,0 +1,46 @@
+$ enrang check tests/compile/EN0307/defined_twice.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0307]: `area` is defined twice
+ --> tests/compile/EN0307/defined_twice.fail.en:8:15
+  |
+4 | private function area(): f64 {
+  |                  ---- the first `area` is here
+...
+8 | private class area {} //~ EN0307 "`area` is defined twice"
+  |               ^^^^ defined again here
+  |
+  = explain: run `enrang explain EN0307`
+
+error[EN0307]: `fd` is defined twice
+  --> tests/compile/EN0307/defined_twice.fail.en:12:10
+   |
+11 |   private fd: i64 = 0;
+   |           -- the first `fd` is here
+12 |   public fd: i64 = 1; //~ EN0307 "`fd` is defined twice"
+   |          ^^ defined again here
+   |
+   = explain: run `enrang explain EN0307`
+
+error[EN0307]: `destructor` is defined twice
+  --> tests/compile/EN0307/defined_twice.fail.en:14:10
+   |
+13 |   public destructor() {}
+   |          ---------- the first `destructor` is here
+14 |   public destructor() {} //~ EN0307 "`destructor` is defined twice"
+   |          ^^^^^^^^^^ defined again here
+   |
+   = explain: run `enrang explain EN0307`
+
+error[EN0307]: `x` is defined twice
+  --> tests/compile/EN0307/defined_twice.fail.en:18:7
+   |
+17 | private function scale(x: i64): i64 {
+   |                        - the first `x` is here
+18 |   let x = 2; //~ EN0307 "`x` is defined twice"
+   |       ^ defined again here
+   |
+   = explain: run `enrang explain EN0307`
+
+error: aborting due to 4 previous errors

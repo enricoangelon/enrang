@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0103/postfix_with_space.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0103]: a postfix `?` takes no space before it
+ --> tests/compile/EN0103/postfix_with_space.fail.en:6:22
+  |
+6 |   const n = parse(s) ?; //~ EN0103
+  |                      ^ this `?` passes an error or `null` up
+  |
+  = note: with a space before it, `?` starts a choice, `a ? b : c`
+help: remove the space before `?`
+  |
+6 |   const n = parse(s)?; //~ EN0103
+  |                     ~
+  = explain: run `enrang explain EN0103`
+
+error: aborting due to 1 previous error

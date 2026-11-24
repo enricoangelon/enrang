@@ -1,0 +1,6 @@
+$ enrang fmt --check top.en
+[exit 1]
+[stdout]
+top.en would be reformatted
+1 of 1 file would change
+[stderr]

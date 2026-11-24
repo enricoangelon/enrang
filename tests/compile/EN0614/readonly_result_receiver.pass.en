@@ -1,0 +1,9 @@
+let s = new Stack();
+s.view().push(99);
+
+public class Stack {
+  private items: i64[] = [1, 2];
+  public view(): &i64[] {
+    return &this.items;
+  }
+}

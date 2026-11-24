@@ -1,0 +1,5 @@
+//! covers: H01
+let xs: i64[] = [1, 2, 3];
+const first = &xs[0];
+xs.push(4); //~ EN0706 "`xs` cannot change while `first` still points into it"
+console.log(*first);

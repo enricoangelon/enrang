@@ -1,0 +1,19 @@
+public enum Color {
+  Red,
+  Green,
+}
+
+public function name(c: Color): string {
+  return match (c) {
+    Color.Red => "red",
+    default => "other",
+  };
+}
+
+public function word(n: i64): string {
+  return match (n) {
+    1 => "one",
+    -1 => "minus one",
+    default => "other",
+  };
+}

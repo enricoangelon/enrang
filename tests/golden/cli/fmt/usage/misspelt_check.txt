@@ -1,0 +1,7 @@
+$ enrang fmt --chek src
+[exit 2]
+[stdout]
+[stderr]
+error: `--chek` is not a flag of `enrang fmt`
+help: did you mean `--check`?
+usage: enrang fmt [paths] [--check]

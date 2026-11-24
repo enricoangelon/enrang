@@ -1,0 +1,103 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0601/field_assigned_after_whole_moved.fail.en. Its row's codes: EN0601, EN0601.
+module "tests/compile/EN0601/field_assigned_after_whole_moved.fail";
+class File {
+  first: string;
+  fd: i64;
+}
+class Pair {
+  first: string;
+  second: string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Pair; // p
+  let _3: *Pair temp;
+  let _4: void temp;
+  let _5: void temp;
+  let mut _6: File; // f
+  let _7: *File temp;
+  let _8: void temp;
+  let _9: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Pair leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _2.first = const "a": string;
+    _2.second = const "b": string;
+    _5 = take(move _2) -> bb2;
+  }
+  bb2: {
+    drop(_2.first) [assign];
+    _2.first = const "c": string; //~ EN0601 "`p` was moved into `take`"
+    storage_live(_6);
+    _7 = addr_of _6;
+    _8 = named_fill File leaving()(move _7) -> bb3;
+  }
+  bb3: {
+    _6.first = const "a": string;
+    _6.fd = const 3: i64;
+    _9 = close(move _6) -> bb4;
+  }
+  bb4: {
+    drop(_6.first) [assign];
+    _6.first = const "c": string; //~ EN0601 "`f` was moved into `close`"
+    drop(_6);
+    storage_dead(_6);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn File::#dtor(_1: &File) -> void {
+  let _1: &File; // this
+  let _2: void temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: &i64 temp;
+  bb0: {
+    _3 = const "close": string;
+    _4 = &_3 [temp-arg];
+    _5 = &(*_1).fd [auto-borrow];
+    _2 = form log(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}
+
+fn close(_1: File) -> void {
+  let _1: File; // f
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &_1.first [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}
+
+fn take(_1: Pair) -> void {
+  let _1: Pair; // p
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &_1.first [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}

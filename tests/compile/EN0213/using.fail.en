@@ -1,0 +1,2 @@
+using file = open("log.txt"); //~ EN0213
+console.log(file);

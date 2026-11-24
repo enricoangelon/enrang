@@ -1,0 +1,18 @@
+//! covers: H05
+const k = [0];
+let c = new Outer(&k);
+c.fix();
+c = new Outer(&k); //~ EN0707 "cannot change `c` while it"
+console.log("end");
+
+private class Guard {
+  private v: readonly &i64[];
+  public constructor(v: &i64[]) { this.v = v; }
+  public destructor() { console.log(this.v); }
+}
+private class Outer {
+  private g: Guard;
+  private buf: i64[] = [1, 2, 3];
+  public constructor(k: &i64[]) { this.g = new Guard(k); }
+  public fix(): void { this.g = new Guard(&this.buf); }
+}

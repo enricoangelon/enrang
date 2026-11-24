@@ -1,0 +1,143 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/inf-05.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/inf-05.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Bag {
+  items: i64[] = default;
+}
+class Picker { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Bag; // x
+  let _3: *Bag temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &i64[] temp;
+  let mut _7: Bag; // y
+  let _8: *Bag temp;
+  let _9: void temp;
+  let _10: void temp;
+  let _11: &i64[] temp;
+  let _12: Picker; // pk
+  let _13: *Picker temp;
+  let _14: void temp;
+  let _15: &i64; // r
+  let _16: &Bag temp;
+  let _17: &Bag temp;
+  let _18: &Picker temp;
+  let _19: void temp;
+  let _20: &i64 temp;
+  let mut _21: i64; // i
+  let _22: bool temp;
+  let _23: void temp;
+  let _24: &i64[] temp;
+  let _25: i64 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Bag leaving(items)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2.items [auto-borrow];
+    _5 = "alloc/array"::Array<i64>::push(move _6, const 1: i64) -> bb2;
+  }
+  bb2: {
+    storage_live(_7);
+    _8 = addr_of _7;
+    _9 = named_fill Bag leaving(items)(move _8) -> bb3;
+  }
+  bb3: {
+    _11 = &_7.items [auto-borrow];
+    _10 = "alloc/array"::Array<i64>::push(move _11, const 2: i64) -> bb4;
+  }
+  bb4: {
+    storage_live(_12);
+    _13 = addr_of _12;
+    _14 = named_fill Picker leaving()(move _13) -> bb5;
+  }
+  bb5: {
+    storage_live(_15);
+    _16 = &_2 [explicit];
+    _17 = &_7 [explicit];
+    _18 = &_12 [auto-borrow];
+    _15 = Picker::pick(move _18, move _16, move _17, const 1: i64) -> bb6;
+  }
+  bb6: {
+    _20 = &*_15 [reborrow];
+    _19 = form log(move _20) -> bb7;
+  }
+  bb7: {
+    storage_live(_21);
+    _21 = const 0: i64;
+    goto bb8;
+  }
+  bb8: {
+    _22 = lt(copy _21, const 3: i64);
+    switch move _22 [0: bb11, otherwise: bb9];
+  }
+  bb9: {
+    _24 = &_7.items [auto-borrow];
+    _23 = "alloc/array"::Array<i64>::push(move _24, copy _21) -> bb12;
+  }
+  bb10: {
+    _25 = copy _21;
+    _21 = checked_add(copy _25, const 1: i64);
+    goto bb8;
+  }
+  bb11: {
+    storage_dead(_21);
+    storage_dead(_15);
+    storage_dead(_12);
+    drop(_7);
+    storage_dead(_7);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb12: {
+    goto bb10;
+  }
+}
+
+fn Picker::pick(_1: &Picker, _2: &Bag, _3: &Bag, _4: i64) -> &i64 {
+  let _1: &Picker; // this
+  let _2: &Bag; // a
+  let _3: &Bag; // b
+  let _4: i64; // n
+  let _5: bool temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  let _8: &Bag temp;
+  let _9: &Bag temp;
+  let _10: i64 temp;
+  let _11: &Picker temp;
+  bb0: {
+    _5 = eq(copy _4, const 0: i64);
+    switch move _5 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _6 = const 0: isize;
+    _7 = len((*_2).items);
+    check_bounds(copy _6, copy _7);
+    _0 = &(*_2).items[_6] [explicit];
+    return;
+  }
+  bb2: {
+    _8 = &*_3 [reborrow];
+    _9 = &*_2 [reborrow];
+    _10 = checked_sub(copy _4, const 1: i64);
+    _11 = &*_1 [reborrow];
+    _0 = virtual Picker::pick [copy _11](move _11, move _8, move _9, move _10) -> bb3;
+  }
+  bb3: {
+    return;
+  }
+}

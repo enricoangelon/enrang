@@ -1,0 +1,8 @@
+//! covers: H07
+public function nameOf(u: &User): string {
+  return u.name.clone();
+}
+
+public class User {
+  public name: string;
+}

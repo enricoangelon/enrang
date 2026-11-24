@@ -1,0 +1,3 @@
+SKIP OVMF not found: 40 tests not run
+SKIP as not found: 2400 oracle tests not run
+SKIP qemu-system-i386 not found: 212 tests not run

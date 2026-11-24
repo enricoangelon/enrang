@@ -1,0 +1,6 @@
+let a: i64 = 1;
+let r: &i64 | null = &a;
+const p = r;
+if (p != null) {
+  console.log(*p);
+}

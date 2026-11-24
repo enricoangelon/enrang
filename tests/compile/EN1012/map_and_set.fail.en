@@ -1,0 +1,4 @@
+const m = new Map(); //~ EN1012 "`Map` and `Set` are not supported yet"
+let st: Set<i64> | null = null; //~ EN1012 "`Map` and `Set` are not supported yet"
+
+public function lookup(index: &Map<string, i64>): void {} //~ EN1012 "`Map` and `Set` are not supported yet"

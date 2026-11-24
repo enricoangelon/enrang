@@ -1,0 +1,5 @@
+let a: i64[] = [1];
+const f = a.first();
+console.log(f, 0);
+console.log(grow(&a));
+function grow(x: &i64[]): i64 { x.push(1); x.push(2); x.push(3); return 0; }

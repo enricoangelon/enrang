@@ -1,0 +1,35 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0718/parameter_forwarded_twice.fail.en. Its row's codes: EN0718.
+module "tests/compile/EN0718/parameter_forwarded_twice.fail";
+
+@private fn run2(_1: () => void, _2: () => void) -> void {
+  let _1: () => void; // a
+  let _2: () => void; // b
+  let _3: void temp;
+  let _4: void temp;
+  bb0: {
+    _3 = closure _1() -> bb1;
+  }
+  bb1: {
+    _4 = closure _2() -> bb2;
+  }
+  bb2: {
+    return;
+  }
+}
+
+@private fn twiceOf(_1: () => void) -> void {
+  let _1: () => void; // f
+  let _2: void temp;
+  let _3: () => void temp;
+  let _4: () => void temp;
+  bb0: {
+    _3 = closure_reborrow(_1);
+    _4 = closure_reborrow(_1); //~ EN0718 "`f` is used twice at once"
+    _2 = run2(move _3, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

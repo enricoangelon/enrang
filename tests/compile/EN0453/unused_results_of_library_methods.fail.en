@@ -1,0 +1,7 @@
+let name = "  Ada  ".toString();
+name.toUpperCase(); //~ EN0453 "the result of `toUpperCase` is not used"
+name.slice(1); //~ EN0453 "the result of `slice` is not used"
+const n: i64 = 5;
+n.checkedAdd(1); //~ EN0453 "the result of `checkedAdd` is not used"
+void name.trim();
+console.log(name, n);

@@ -1,0 +1,6 @@
+$ enrang init -h hello
+[exit 2]
+[stdout]
+[stderr]
+error: `-h` takes no other arguments
+usage: enrang init [name] [--kernel]

@@ -1,0 +1,12 @@
+public class Point {
+  public x: i64 = 0;
+}
+
+public function reset(p: Point): i64 {
+  bump(&p.x); //~ EN0608
+  return p.x;
+}
+
+public function bump(x: &i64): void {
+  *x += 1;
+}

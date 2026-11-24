@@ -1,0 +1,27 @@
+$ enrang check tests/compile/EN0616/sl-09-split.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `splitAt`
+  --> tests/compile/EN0616/sl-09-split.fail.en:11:3
+   |
+11 |   lo[0] = hi[0]; //~ EN0616
+   |   ^^^^^^^^^^^^^ written here
+   |
+   = note: `splitAt` returns two references that may point at the same data
+   = explain: run `enrang explain EN0616`
+
+error[EN0707]: cannot borrow `v` as exclusive twice at the same time
+  --> tests/compile/EN0616/sl-09-split.fail.en:18:13
+   |
+17 |   const a = v.slice(0, 2);
+   |             - first exclusive borrow, held by `a`
+18 |   const b = v.slice(2, 4); //~ EN0707
+   |             ^^^^^^^^^^^^^ second exclusive borrow
+19 |   a[0] = b[0];
+   |   - `a` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error: aborting due to 2 previous errors

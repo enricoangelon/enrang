@@ -1,0 +1,3 @@
+public function grow(let s: string): string {
+  return s += "!"; //~ EN0621 "an assignment's value can't be kept"
+}

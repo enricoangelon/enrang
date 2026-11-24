@@ -1,0 +1,44 @@
+// G11 (SPEC 14, A:1323): a reference kept past the scope of what it borrows.
+//   let r: &i64; { const s: i64 = 1; r = &s; } console.log(r);
+// Shapes: scope-end storage_dead at the closing brace (plan c.3, c.1 spans);
+// `r = &s` a whole-local repoint (c.8); a reference argument of a form is a
+// reborrow `&*r [reborrow]` (c.6, c.7 D19).
+fn g11() -> void {
+  let _1: &i64; // r
+  let _2: i64; // s
+  let _3: &i64 temp;
+  let _4: void temp;
+  bb0: {
+    storage_live(_1);
+    storage_live(_2);
+    _2 = const 1: i64;
+    _1 = &_2 [explicit];
+    storage_dead(_2); //~ EN0711
+    _3 = &*_1 [reborrow];
+    _4 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    storage_dead(_1);
+    return;
+  }
+}
+// The near miss: the use comes before the scope ends.
+fn g11_ok() -> void {
+  let _1: &i64; // r
+  let _2: i64; // s
+  let _3: &i64 temp;
+  let _4: void temp;
+  bb0: {
+    storage_live(_1);
+    storage_live(_2);
+    _2 = const 1: i64;
+    _1 = &_2 [explicit];
+    _3 = &*_1 [reborrow];
+    _4 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}

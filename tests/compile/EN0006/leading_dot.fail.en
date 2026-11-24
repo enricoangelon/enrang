@@ -1,0 +1,2 @@
+const half = .5; //~ EN0006
+console.log(half);

@@ -1,0 +1,6 @@
+const flags: u8 = 0b1010;
+const count: i64 = 2;
+const mask = flags & 0b0010;
+const shifted = flags << count;
+const flipped = ~flags;
+console.log(mask, shifted, flipped, flags ^ 1, flags | 4);

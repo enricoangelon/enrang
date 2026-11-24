@@ -1,0 +1,118 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/override-store-fields-order.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/override-store-fields-order.pass";
+class Keeper {
+  private w: &string | null = default;
+  private lx: &Lexer | null = default;
+}
+@final class Lexer {
+  private src: &string;
+}
+class Sub extends Keeper {
+  private w2: &string | null = default;
+  private lx2: &Lexer | null = default;
+}
+
+fn Keeper::#ctor(_1: &Keeper) -> void {
+  let _1: &Keeper; // this
+  let _2: &string | null temp;
+  let _3: &Lexer | null temp;
+  bb0: {
+    switch const overridden(w): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    switch const overridden(lx): bool [0: bb4, otherwise: bb3];
+  }
+  bb2: {
+    _2 = null;
+    field_init((*_1).w, move _2);
+    goto bb1;
+  }
+  bb3: {
+    return;
+  }
+  bb4: {
+    _3 = null;
+    field_init((*_1).lx, move _3);
+    goto bb3;
+  }
+}
+
+fn Keeper::take(_1: &Keeper, _2: &Lexer) -> void {
+  let _1: &Keeper; // this
+  let _2: &Lexer; // o
+  let _3: &Lexer temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).lx = present(move _3);
+    return;
+  }
+}
+
+fn Lexer::#ctor(_1: &Lexer, _2: &string) -> void {
+  let _1: &Lexer; // this
+  let _2: &string; // src
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn Lexer::text(_1: &Lexer) -> readonly &string {
+  let _1: &Lexer; // this
+  bb0: {
+    _0 = copy (*_1).src;
+    return;
+  }
+}
+
+fn Sub::#ctor(_1: &Sub) -> void {
+  let _1: &Sub; // this
+  let _2: &string | null temp;
+  let _3: &Lexer | null temp;
+  let _4: void temp;
+  let _5: &Sub temp;
+  let _6: &Keeper temp;
+  bb0: {
+    switch const overridden(w2): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    switch const overridden(lx2): bool [0: bb4, otherwise: bb3];
+  }
+  bb2: {
+    _2 = null;
+    field_init((*_1).w2, move _2);
+    goto bb1;
+  }
+  bb3: {
+    _5 = &*_1 [reborrow];
+    _6 = convert(upcast, move _5);
+    _4 = Keeper::#ctor(move _6) -> bb5;
+  }
+  bb4: {
+    _3 = null;
+    field_init((*_1).lx2, move _3);
+    goto bb3;
+  }
+  bb5: {
+    return;
+  }
+}
+
+@override fn Sub::take(_1: &Sub, _2: &Lexer) -> void {
+  let _1: &Sub; // this
+  let _2: &Lexer; // o
+  let _3: &string temp;
+  let _4: &Lexer temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = Lexer::text(move _4) -> bb1;
+  }
+  bb1: {
+    (*_1).w2 = present(move _3);
+    return;
+  }
+}

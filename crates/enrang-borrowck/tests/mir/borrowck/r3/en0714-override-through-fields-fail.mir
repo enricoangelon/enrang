@@ -1,0 +1,52 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0714/override-through-fields.fail.en. Its row's codes: EN0714.
+module "tests/compile/EN0714/override-through-fields.fail";
+@final class Item {
+  name: string = default;
+  private src: &string;
+}
+class Loud extends Namer { }
+class Namer { }
+
+fn Item::#ctor(_1: &Item, _2: &string) -> void {
+  let _1: &Item; // this
+  let _2: &string; // src
+  let _3: &string temp;
+  bb0: {
+    (*_1).name = const "item": string;
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn Item::text(_1: &Item) -> readonly &string {
+  let _1: &Item; // this
+  bb0: {
+    _0 = copy (*_1).src;
+    return;
+  }
+}
+
+@override fn Loud::label(_1: &Loud, _2: &Item) -> readonly &string {
+  let _1: &Loud; // this
+  let _2: &Item; // o
+  bb0: {
+    _0 = &(*_2).name [explicit];
+    return; //~ EN0714
+  }
+}
+
+fn Namer::label(_1: &Namer, _2: &Item) -> readonly &string {
+  let _1: &Namer; // this
+  let _2: &Item; // o
+  let _3: &Item temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    _0 = Item::text(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

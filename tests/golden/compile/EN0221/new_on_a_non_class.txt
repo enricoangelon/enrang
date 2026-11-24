@@ -1,0 +1,45 @@
+$ enrang check tests/compile/EN0221/new_on_a_non_class.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0221]: `new` needs a class, and `Color` is an enum
+ --> tests/compile/EN0221/new_on_a_non_class.fail.en:1:15
+  |
+1 | const a = new Color(); //~ EN0221 "`new` needs a class, and `Color` is an enum"
+  |               ^^^^^ not a class
+  |
+  = explain: run `enrang explain EN0221`
+
+error[EN0221]: `new` needs a class, and `Speaker` is an interface
+ --> tests/compile/EN0221/new_on_a_non_class.fail.en:2:15
+  |
+2 | const b = new Speaker(); //~ EN0221 "`new` needs a class, and `Speaker` is an interface"
+  |               ^^^^^^^ not a class
+  |
+  = explain: run `enrang explain EN0221`
+
+error[EN0221]: `new` needs a class, not `i64`
+ --> tests/compile/EN0221/new_on_a_non_class.fail.en:3:15
+  |
+3 | const c = new i64(); //~ EN0221 "`new` needs a class, not `i64`"
+  |               ^^^ not a class
+  |
+  = explain: run `enrang explain EN0221`
+
+error[EN0221]: `new` needs a class, not `i64`
+ --> tests/compile/EN0221/new_on_a_non_class.fail.en:4:15
+  |
+4 | const d = new Num(); //~ EN0221 "`new` needs a class, not `i64`"
+  |               ^^^ not a class
+  |
+  = explain: run `enrang explain EN0221`
+
+error[EN0221]: `new` needs a class, and `T` is a type parameter
+  --> tests/compile/EN0221/new_on_a_non_class.fail.en:19:17
+   |
+19 |   const x = new T(); //~ EN0221 "`new` needs a class, and `T` is a type parameter"
+   |                 ^ not a class
+   |
+   = explain: run `enrang explain EN0221`
+
+error: aborting due to 5 previous errors

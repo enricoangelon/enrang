@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0616/fv-02-lost-store-3.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot store a reference into a value reached through by-value `w`
+  --> tests/compile/EN0616/fv-02-lost-store-3.fail.en:31:5
+   |
+31 |     c.retarget(s); //~ EN0616 "cannot store a reference into a value reached through by-value `w`"
+   |     ^^^^^^^^^^^^^ stored here
+   |
+   = note: a consumed value is disposed of when the function ends, so nothing stored in it reaches the caller
+help: write the field directly, or take the value by reference
+   = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

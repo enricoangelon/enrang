@@ -1,0 +1,16 @@
+$ enrang init
+[exit 0]
+[stdout]
+created enrang.json
+created src/main.en
+created src/main.test.en
+created .gitignore
+[stderr]
+[file .gitignore]
+/out/
+[file src/main.en]
+console.log(greeting("world"));
+
+private function greeting(name: &string): string { return `Hello, ${name}!`; }
+[file src/main.test.en]
+test("greets by name", () => { expect(greeting("Ada")).toBe("Hello, Ada!"); });

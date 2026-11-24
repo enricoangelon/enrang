@@ -1,0 +1,2 @@
+const five = 5.; //~ EN0006
+console.log(five);

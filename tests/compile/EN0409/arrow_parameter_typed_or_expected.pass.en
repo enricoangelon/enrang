@@ -1,0 +1,4 @@
+const double = (x: i64) => x * 2;
+const xs: i64[] = [1, 2, 3];
+xs.forEach(x => console.log(x));
+console.log(double(4));

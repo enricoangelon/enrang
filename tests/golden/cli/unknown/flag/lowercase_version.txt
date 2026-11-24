@@ -1,0 +1,6 @@
+$ enrang -v
+[exit 2]
+[stdout]
+[stderr]
+error: `-v` is not a flag of `enrang`
+usage: enrang <command> [arguments]

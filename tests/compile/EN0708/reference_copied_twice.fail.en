@@ -1,0 +1,8 @@
+let v: i64[] = [1, 2];
+const r = &v;
+const a = r;
+const b = r; //~ EN0708 "can't be read while `a` may write into it"
+const e = &b[0];
+a.push(3);
+a.push(4);
+console.log(*e);

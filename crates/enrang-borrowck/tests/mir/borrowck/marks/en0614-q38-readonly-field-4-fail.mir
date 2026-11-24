@@ -1,0 +1,50 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0614/q38-readonly-field-4.fail.en. Its row's codes: EN0614.
+module "tests/compile/EN0614/q38-readonly-field-4.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@private class Pad {
+  private t: [&i64[], int] readonly_at([0]);
+}
+
+fn Pad::#ctor(_1: &Pad, _2: &i64[]) -> void {
+  let _1: &Pad; // this
+  let _2: &i64[]; // v
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).t = tuple(move _3, const 0: int);
+    return;
+  }
+}
+
+fn Pad::first(_1: &Pad) -> readonly &i64 {
+  let _1: &Pad; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).t.0);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).t.0)[_2] [explicit];
+    return;
+  }
+}
+
+fn Pad::grow(_1: &Pad) -> void {
+  let _1: &Pad; // this
+  let _2: void temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = copy (*_1).t.0;
+    _2 = "alloc/array"::Array<i64>::push(move _3, const 4: i64) -> bb1; //~ EN0614
+  }
+  bb1: {
+    return;
+  }
+}

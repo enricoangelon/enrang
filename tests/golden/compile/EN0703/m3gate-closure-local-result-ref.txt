@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0703/m3gate-closure-local-result-ref.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0703]: a closure can't return `&i64`, which holds a reference
+ --> tests/compile/EN0703/m3gate-closure-local-result-ref.fail.en:4:17
+  |
+4 |   const f = (): &i64 => &b; //~ EN0703 "a closure can't return `&i64`,"
+  |                 ^^^^ the result of a closure is a value that holds no reference
+  |
+  = explain: run `enrang explain EN0703`
+
+error: aborting due to 1 previous error

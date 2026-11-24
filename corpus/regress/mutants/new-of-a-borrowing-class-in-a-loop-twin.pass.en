@@ -1,0 +1,6 @@
+const xs = [1, 2, 3];
+for (const x of &xs) {
+let mutant_a: i64 = 1; let mutant_b: i64 = 2; let mutant_c = new MutantCell(&mutant_a); mutant_c.set(&mutant_b); const mutant_f = (): i64 => mutant_c.get(); mutant_f();
+}
+private class MutantCell { private r: &i64; public constructor(r: &i64) { this.r = r; } public set(r: &i64): void { this.r = r; } public get(): i64 { return *this.r; } }
+// Mutants (TESTING 14): the fixed twin of a store into a capture into tests/compile/EN0613/assign_to_const_local_in_loop.pass.en, ENRANG_SEED=0x454e52414e47.

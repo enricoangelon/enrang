@@ -1,0 +1,17 @@
+const a: i64 = 5;
+show(&a);
+let total: i64 = 0;
+const xs: i64[] = [1, 2, 3];
+xs.forEach(x => { const f = () => { total += *x; }; f(); });
+let b: i64 = 2;
+const g = () => { total += b; };
+console.log(b);
+g();
+console.log(total);
+
+private function show(x: &i64): void {
+  let sum: i64 = 0;
+  const f = () => { sum += *x; };
+  f();
+  console.log(sum);
+}

@@ -1,0 +1,11 @@
+public function grade(s: i64): Grade {
+  let g: Grade;
+  if (s >= 90) {
+    g = new Grade { letter: "A" };
+  }
+  return g; //~ EN0602 "`g` is used before it has a value"
+}
+
+public class Grade {
+  public letter: string;
+}

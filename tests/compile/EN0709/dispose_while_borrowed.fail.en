@@ -1,0 +1,4 @@
+let q: string[] = ["a"];
+const first = &q[0];
+dispose(q); //~ EN0709 "cannot move `q` while it is borrowed"
+console.log(first);

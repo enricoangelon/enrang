@@ -1,0 +1,33 @@
+//! covers: H27
+let grid: i64[][] = [[1], [2]];
+const [p0, p1] = twice(&grid);
+clash(p0, p1); //~ EN0616
+
+const d = dup(&grid);
+if (d != null) {
+  *d[0] = [5]; //~ EN0616
+}
+
+public function twice(rows: &Slice<i64[]>): [&i64[], &i64[]] {
+  let first: &i64[] | null = null;
+  while (true) {
+    for (const r of rows) {
+      if (first != null) { return [first, r]; }
+      first = r;
+      break;
+    }
+  }
+}
+
+public function clash(x: &i64[], y: &i64[]): void {
+  const first = &x[0];
+  *y = [9];
+  console.log(*first);
+}
+
+public function dup(rows: &Slice<i64[]>): [&i64[], &i64[]] | null {
+  for (const r of rows) {
+    return [r, r];
+  }
+  return null;
+}

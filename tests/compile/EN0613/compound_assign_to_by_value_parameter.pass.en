@@ -1,0 +1,4 @@
+public function bump(let x: i64): void {
+  x += 1;
+  console.log(x);
+}

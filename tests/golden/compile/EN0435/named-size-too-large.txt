@@ -1,0 +1,13 @@
+$ enrang check --target=i386-linux tests/compile/EN0435/named-size-too-large.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0435]: `u64[536870912]` is too large for `i386-linux`
+ --> tests/compile/EN0435/named-size-too-large.fail.en:3:20
+  |
+3 | private unsafe let wraps: u64[536870912]; //~ EN0435 "`u64[536870912]` is too large for `i386-linux`"
+  |                    ^^^^^ it takes more than `isize.MAX` bytes (2147483647)
+  |
+  = explain: run `enrang explain EN0435`
+
+error: aborting due to 1 previous error

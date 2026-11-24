@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0101/every_statement.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0101]: missing `;` after this statement
+ --> tests/compile/EN0101/every_statement.fail.en:1:12
+  |
+1 | const a = 1 //~ EN0101
+  |            ^ expected `;` here
+  |
+  = note: 2 more statements in this file are missing `;`
+  = from TypeScript: Enrang has no automatic semicolon insertion.
+help: add the semicolons
+  |
+1 | const a = 1; //~ EN0101
+  |            +
+2 | const b = 2;
+  |            +
+3 | console.log(a + b);
+  |                   +
+  = explain: run `enrang explain EN0101`
+
+error: aborting due to 1 previous error

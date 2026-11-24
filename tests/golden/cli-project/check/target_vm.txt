@@ -1,0 +1,10 @@
+$ enrang check --target=vm32 main.en
+[exit 2]
+[stdout]
+[stderr]
+error[EN1303]: unknown target `vm32`
+  = note: targets are `x86_64-linux`, `x86_64-windows`, `i386-linux`, `i386-none` and `x86_64-none`
+help: `vm32` is a layout of the VM, chosen by `enrang run --vm --layout=vm32` from milestone M4
+  = explain: run `enrang explain EN1303`
+
+error: aborting due to 1 previous error

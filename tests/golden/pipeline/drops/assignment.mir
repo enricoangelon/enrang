@@ -1,0 +1,36 @@
+fn demo() -> i64 perms() sources() result none {
+  phase elaborated;
+  let mut _1: i64; // n
+  let _2: i64 temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: string temp;
+  let _8: &string temp;
+  bb0: {
+    storage_live(_1);
+    _1 = const 0: i64;
+    _3 = const "a": string;
+    _4 = &_3 [temp-arg];
+    _5 = const "b": string;
+    _6 = &_5 [temp-arg];
+    _7 = form concat(move _4, move _6) -> bb1;
+  }
+  bb1: {
+    _8 = &_7 [temp-arg];
+    _2 = len(move _8) -> bb2;
+  }
+  bb2: {
+    _1 = move _2;
+    drop_glue(_7);
+    storage_dead(_7);
+    drop_glue(_5);
+    storage_dead(_5);
+    drop_glue(_3);
+    storage_dead(_3);
+    _0 = copy _1;
+    storage_dead(_1);
+    return;
+  }
+}

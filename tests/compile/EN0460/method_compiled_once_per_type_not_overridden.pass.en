@@ -1,0 +1,13 @@
+const rex = new Dog {};
+rex.show(&rex);
+rex.show(1, 2);
+
+public class Animal {
+  public show<T>(x: &T): void { console.log("Animal.show:", x); }
+}
+
+public class Dog extends Animal {
+  public show(a: i64, b: i64): void { console.log(a, b); }
+
+  public describe<T>(x: &T): void { console.log("Dog.describe:", x); }
+}

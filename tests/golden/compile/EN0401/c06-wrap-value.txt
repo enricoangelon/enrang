@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/c06-wrap-value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `(i64 | null)[]`, found `i64[]`
+ --> tests/compile/EN0401/c06-wrap-value.fail.en:3:28
+  |
+3 | const xs: (i64 | null)[] = ys; //~ EN0401 "mismatched types: expected `(i64 | null)[]`, found `i64[]`"
+  |                            ^^ this is `i64[]`
+  |           -------------- `(i64 | null)[]` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

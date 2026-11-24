@@ -1,0 +1,24 @@
+const lab = new Labeler {};
+const title = "Dune";
+console.log(tag(&lab, &title));
+
+public class Labeler {
+  protected secret: i64 = 0;
+  public label(name: &string, fallback: &string): &string {
+    return name;
+  }
+}
+
+public function tag<T extends Labeler>(x: &T, n: &string): &string {
+  console.log(x.secret); //~ EN0308 "`secret` is protected in `Labeler`"
+  return x.label(n, "none");
+}
+
+private class Lexer {
+  private src: &string;
+  public constructor(src: &string) {
+    this.src = src;
+  }
+}
+
+private function scan<T extends Lexer>(x: &T): void {} //~ EN0701 "`T` can't stand for a `Lexer`, because `Lexer` holds a reference"

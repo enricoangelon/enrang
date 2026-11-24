@@ -1,0 +1,5 @@
+const k: i64[][] = [[1, 2], [3]];
+for (const x of &k) { //~ EN0608
+  const s: &Slice<i64> = x;
+  s[0] = 9;
+}

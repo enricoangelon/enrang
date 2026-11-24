@@ -1,0 +1,206 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/fv-02-base-flag-2.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/fv-02-base-flag-2.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Base {
+  private src: readonly &u8[];
+  private dst: &u8[];
+}
+@final class Sub extends Base { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: u8[]; // tbl
+  let mut _3: u8[]; // other
+  let mut _4: u8[]; // buf2
+  let mut _5: Sub; // s2
+  let _6: &u8[] temp;
+  let _7: &u8[] temp;
+  let _8: &Sub temp;
+  let _9: void temp;
+  let mut _10: Base; // x
+  let _11: &u8[] temp;
+  let _12: &u8[] temp;
+  let _13: &Base temp;
+  let _14: void temp;
+  let _15: void temp;
+  let _16: &Sub temp;
+  let _17: &Base temp;
+  let _18: &u8; // a
+  let _19: &Base temp;
+  let _20: void temp;
+  let _21: &u8 temp;
+  let _22: void temp;
+  let _23: &Sub temp;
+  let _24: &Base temp;
+  let _25: void temp;
+  let _26: &Sub temp;
+  let _27: &Base temp;
+  let _28: void temp;
+  let _29: &Sub temp;
+  let _30: &Base temp;
+  let _31: void temp;
+  let _32: &Sub temp;
+  let _33: &Base temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 0: u8);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<u8>(const 5: u8);
+    storage_live(_4);
+    _4 = intrinsic AllocArray<u8>(const 1: u8);
+    storage_live(_5);
+    set_table(_5, Sub);
+    _6 = &_2 [explicit];
+    _7 = &_4 [explicit];
+    _8 = &_5 [auto-borrow];
+    _9 = Sub::#ctor(move _8, move _6, move _7) -> bb1;
+  }
+  bb1: {
+    storage_live(_10);
+    set_table(_10, Base);
+    _11 = &_2 [explicit];
+    _12 = &_3 [explicit];
+    _13 = &_10 [auto-borrow];
+    _14 = Base::#ctor(move _13, move _11, move _12) -> bb2;
+  }
+  bb2: {
+    _16 = &_5 [explicit];
+    _17 = &_10 [auto-borrow];
+    _15 = Base::adopt(move _17, move _16) -> bb3;
+  }
+  bb3: {
+    storage_live(_18);
+    _19 = &_10 [auto-borrow];
+    _18 = Base::peek(move _19) -> bb4;
+  }
+  bb4: {
+    _21 = &*_18 [auto-borrow];
+    _20 = form log(move _21) -> bb5;
+  }
+  bb5: {
+    _23 = &_5 [auto-borrow];
+    _24 = convert(upcast, move _23);
+    _22 = Base::step(move _24) -> bb6;
+  }
+  bb6: {
+    _26 = &_5 [auto-borrow];
+    _27 = convert(upcast, move _26);
+    _25 = Base::step(move _27) -> bb7;
+  }
+  bb7: {
+    _29 = &_5 [auto-borrow];
+    _30 = convert(upcast, move _29);
+    _28 = Base::step(move _30) -> bb8;
+  }
+  bb8: {
+    _32 = &_5 [auto-borrow];
+    _33 = convert(upcast, move _32);
+    _31 = Base::step(move _33) -> bb9;
+  }
+  bb9: {
+    storage_dead(_18);
+    storage_dead(_10);
+    storage_dead(_5);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Base::#ctor(_1: &Base, _2: &u8[], _3: &u8[]) -> void {
+  let _1: &Base; // this
+  let _2: &u8[]; // s
+  let _3: &u8[]; // d
+  let _4: &u8[] temp;
+  let _5: &u8[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+fn Base::adopt(_1: &Base, _2: &Sub) -> void {
+  let _1: &Base; // this
+  let _2: &Sub; // o
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_2).dst;
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+static fn Base::firstOf(_1: &Sub) -> readonly &u8 {
+  let _1: &Sub; // o
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).dst);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).dst)[_2] [explicit];
+    return;
+  }
+}
+
+fn Base::peek(_1: &Base) -> readonly &u8 {
+  let _1: &Base; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).src);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).src)[_2] [explicit];
+    return;
+  }
+}
+
+fn Base::step(_1: &Base) -> void {
+  let _1: &Base; // this
+  let _2: void temp;
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_1).dst;
+    _2 = "alloc/array"::Array<u8>::push(move _3, const 1: u8) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Sub::#ctor(_1: &Sub, _2: &u8[], _3: &u8[]) -> void {
+  let _1: &Sub; // this
+  let _2: &u8[]; // s
+  let _3: &u8[]; // d
+  let _4: void temp;
+  let _5: &u8[] temp;
+  let _6: &u8[] temp;
+  let _7: &Sub temp;
+  let _8: &Base temp;
+  bb0: {
+    _5 = &*_2 [reborrow];
+    _6 = &*_3 [reborrow];
+    _7 = &*_1 [reborrow];
+    _8 = convert(upcast, move _7);
+    _4 = Base::#ctor(move _8, move _5, move _6) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

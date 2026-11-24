@@ -1,0 +1,15 @@
+//! row: The loop of the row above run twice, `le
+let q: i64[] = [1, 5, 3, 7];
+let keep: &i64 | null = null;
+let n = 0;
+while (n < 2) {
+  for (const x of &q) {
+    keep = x;
+  }
+  n += 1;
+}
+use(keep);
+
+private function use(r: &i64 | null): void {
+  console.log(r);
+}

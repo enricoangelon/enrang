@@ -1,0 +1,13 @@
+let lib = new Library();
+lib.book(1).title = "Dune";
+
+public class Book {
+  public title: string = "";
+}
+
+public class Library {
+  private books: Book[] = [new Book()];
+  public book(id: i64): &Book {
+    return &this.books[id - 1];
+  }
+}

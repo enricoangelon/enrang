@@ -1,0 +1,31 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0708/copy_while_exclusive.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0708/copy_while_exclusive.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int; // n
+  let _3: &int; // r
+  let _4: int; // m
+  let _5: void temp;
+  let _6: &int temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 12: int;
+    storage_live(_3);
+    _3 = &_2 [explicit];
+    *_3 = const 13: int;
+    storage_live(_4);
+    _4 = copy _2;
+    _6 = &_4 [auto-borrow];
+    _5 = form log(move _6) -> bb1;
+  }
+  bb1: {
+    storage_dead(_4);
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

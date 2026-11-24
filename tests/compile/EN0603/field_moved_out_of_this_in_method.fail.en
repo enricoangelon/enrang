@@ -1,0 +1,6 @@
+public class User {
+  public constructor(public name: string) {}
+  public getName(): string {
+    return this.name; //~ EN0603 "cannot move `this.name` out of `this`"
+  }
+}

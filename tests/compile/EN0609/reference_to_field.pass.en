@@ -1,0 +1,7 @@
+public class Board {
+  private cells: i64[] = [1, 2];
+  public poke(): void {
+    const r = &this.cells;
+    r[0] = 9;
+  }
+}

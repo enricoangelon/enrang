@@ -1,0 +1,11 @@
+//! covers: H42
+function setx(let p: &{ x: i64 }): void { p.x = 5; }
+function setn(p: &{ x: i64 } | null): void { if (p != null) { p.x = 5; } }
+function run(f: (let p: &{ x: i64 }) => void, c: &C): void { f(c); } //~ EN0609 "cannot write `c`, because `x`"
+const f: fn(let p: &{ x: i64 }) => void = setx;
+let c = new C();
+f(&c); //~ EN0609 "cannot write `c`, because `x`"
+setn(&c); //~ EN0609 "`setn` can write `c.x`, but"
+run((let p: &{ x: i64 }): void => { p.x = 5; }, &c);
+
+public class C { public readonly x: i64 = 1; }

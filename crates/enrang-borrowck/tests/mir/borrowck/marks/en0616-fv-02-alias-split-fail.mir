@@ -1,0 +1,172 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/fv-02-alias-split.fail.en. Its row's codes: EN0616, EN0709.
+module "tests/compile/EN0616/fv-02-alias-split.fail";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::splitAt(const _1: &Slice<T>, _2: isize) -> [&Slice<T>, &Slice<T>];
+@final class Splitter {
+  private src: readonly &Slice<string>;
+  private dst: &Slice<string>;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string[]; // words
+  let _3: string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: string temp;
+  let _7: string temp;
+  let _8: &string temp;
+  let mut _9: Splitter; // s
+  let _10: &string[] temp;
+  let _11: &Slice<string> temp;
+  let _12: &string; // p
+  let _13: &Splitter temp;
+  let _14: void temp;
+  let _15: &Splitter temp;
+  let _16: void temp;
+  let _17: &string temp;
+  bb0: {
+    storage_live(_2);
+    _4 = const "a": string;
+    _5 = &_4 [temp-arg];
+    _3 = form to_string(move _5) -> bb1;
+  }
+  bb1: {
+    _7 = const "b": string;
+    _8 = &_7 [temp-arg];
+    _6 = form to_string(move _8) -> bb2;
+  }
+  bb2: {
+    _2 = intrinsic AllocArray<string>(move _3, move _6);
+    drop(_6);
+    storage_dead(_6);
+    drop(_7);
+    storage_dead(_7);
+    drop(_3);
+    storage_dead(_3);
+    drop(_4);
+    storage_dead(_4);
+    storage_live(_9);
+    _10 = &_2 [explicit];
+    _11 = convert(array_to_slice, move _10);
+    _9 = Splitter::fused(move _11) -> bb3;
+  }
+  bb3: {
+    storage_live(_12);
+    _13 = &_9 [auto-borrow];
+    _12 = Splitter::peek(move _13) -> bb4;
+  }
+  bb4: {
+    _15 = &_9 [auto-borrow];
+    _14 = Splitter::step(move _15) -> bb5;
+  }
+  bb5: {
+    _17 = &*_12 [auto-borrow];
+    _16 = form log(move _17) -> bb6;
+  }
+  bb6: {
+    storage_dead(_12);
+    storage_dead(_9);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Splitter::#ctor(_1: &Splitter, _2: &Slice<string>) -> void {
+  let _1: &Splitter; // this
+  let _2: &Slice<string>; // x
+  let _3: [&Slice<string>, &Slice<string>] temp;
+  let _4: &Slice<string> temp;
+  let _5: &Slice<string>; // a
+  let _6: &Slice<string>; // b
+  let _7: &Slice<string> temp;
+  let _8: &Slice<string> temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = "core/slice"::Slice<string>::splitAt(move _4, const 1: isize) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _5 = copy _3.0;
+    storage_live(_6);
+    _6 = copy _3.1;
+    _7 = &*_5 [reborrow];
+    (*_1).src = move _7;
+    _8 = &*_6 [reborrow];
+    (*_1).dst = move _8;
+    storage_dead(_6);
+    storage_dead(_5);
+    return;
+  }
+}
+
+static fn Splitter::fused(_1: &Slice<string>) -> Splitter {
+  let _1: &Slice<string>; // x
+  let mut _2: Splitter; // w
+  let _3: &Slice<string> temp;
+  let _4: &Splitter temp;
+  let _5: void temp;
+  let _6: &Slice<string> temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _4 = &_2 [auto-borrow];
+    _5 = Splitter::#ctor(move _4, move _3) -> bb1;
+  }
+  bb1: {
+    _6 = copy _2.dst;
+    _2.src = move _6; //~ EN0616
+    _0 = move _2; //~ EN0709
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn Splitter::peek(_1: &Splitter) -> readonly &string {
+  let _1: &Splitter; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).src);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).src)[_2] [explicit];
+    return;
+  }
+}
+
+fn Splitter::step(_1: &Splitter) -> void {
+  let _1: &Splitter; // this
+  let _2: isize temp;
+  let _3: string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _4 = const "zz": string;
+    _5 = &_4 [temp-arg];
+    _3 = form to_string(move _5) -> bb1;
+  }
+  bb1: {
+    _6 = len(*(*_1).dst);
+    check_bounds(copy _2, copy _6);
+    drop((*(*_1).dst)[_2]) [assign];
+    _7 = len(*(*_1).dst);
+    check_bounds(copy _2, copy _7);
+    (*(*_1).dst)[_2] = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_4);
+    storage_dead(_4);
+    return;
+  }
+}

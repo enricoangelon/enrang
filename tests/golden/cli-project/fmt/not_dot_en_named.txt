@@ -1,0 +1,6 @@
+$ enrang fmt --check script
+[exit 1]
+[stdout]
+script would be reformatted
+1 of 1 file would change
+[stderr]

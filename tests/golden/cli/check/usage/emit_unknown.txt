@@ -1,0 +1,7 @@
+$ enrang check --emit=ast
+[exit 2]
+[stdout]
+[stderr]
+error: `--emit=ast` is not a value `enrang check` takes
+note: `enrang check` emits `mir` or `summary`
+usage: enrang check [file] [flags]

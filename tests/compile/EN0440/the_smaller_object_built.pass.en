@@ -1,0 +1,6 @@
+const p = { name: "Ada", age: 36 };
+const q: { name: string } = { name: p.name.clone() };
+const r = &p;
+console.log(q.name, r.age);
+
+public function keepName(x: { name: string }): { name: string } { return { name: x.name.clone() }; }

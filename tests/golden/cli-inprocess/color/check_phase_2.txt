@@ -1,0 +1,15 @@
+<ESC>[1;31merror[EN0401]<ESC>[0m: <ESC>[1mmismatched types: expected `string`, found `i64`<ESC>[0m
+ <ESC>[1;34m--><ESC>[0m g05.en:3:19
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;34m3 <ESC>[0m<ESC>[1;34m|<ESC>[0m const a: string = area(2, 3);
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m                   <ESC>[1;31m^^^^^^^^^^<ESC>[0m <ESC>[1;31mthis is `i64`<ESC>[0m
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m          <ESC>[1;34m------<ESC>[0m <ESC>[1;34m`string` is required by this annotation<ESC>[0m
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+  <ESC>[1m= note:<ESC>[0m Enrang never converts between numbers and strings implicitly.
+<ESC>[1;36mhelp<ESC>[0m: convert it explicitly
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m
+<ESC>[1;34m3 <ESC>[0m<ESC>[1;34m|<ESC>[0m const a: string = area(2, 3).toString();
+<ESC>[1;34m  <ESC>[0m<ESC>[1;34m|<ESC>[0m                             <ESC>[32m+++++++++++<ESC>[0m
+  <ESC>[1m= explain:<ESC>[0m run `enrang explain EN0401`
+
+<ESC>[1;31merror<ESC>[0m: aborting due to 1 previous error

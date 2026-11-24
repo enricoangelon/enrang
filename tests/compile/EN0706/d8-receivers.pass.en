@@ -1,0 +1,18 @@
+let pets: Animal[] = [new Animal("Rex"), new Animal("Fido")];
+const t1 = new Animal("Rex").label();
+console.log(t1);
+const t2 = pets[0].label();
+pets[1].rename("Max");
+console.log(t2);
+
+public class Animal {
+  public constructor(public name: string) {}
+
+  public label(): &string {
+    return "animal";
+  }
+
+  public rename(n: string): void {
+    this.name = n;
+  }
+}

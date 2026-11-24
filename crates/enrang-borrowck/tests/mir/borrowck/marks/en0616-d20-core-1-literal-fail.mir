@@ -1,0 +1,106 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/d20-core-1-literal.fail.en. Its row's codes: EN0608, EN0616.
+module "tests/compile/EN0616/d20-core-1-literal.fail";
+class Appender {
+  private s: &string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // base
+  let mut _3: Appender; // a
+  let _4: &string temp;
+  let _5: &Appender temp;
+  let _6: void temp;
+  let _7: void temp;
+  let _8: &Appender temp;
+  let _9: string; // t
+  let _10: string temp;
+  let _11: &string temp;
+  let _12: void temp;
+  let _13: &string temp;
+  let _14: &Appender temp;
+  let _15: void temp;
+  let _16: &Appender temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "x": string;
+    storage_live(_3);
+    set_table(_3, Appender);
+    _4 = &_2 [explicit];
+    _5 = &_3 [auto-borrow];
+    _6 = Appender::#ctor(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    _8 = &_3 [auto-borrow];
+    _7 = Appender::setS(move _8, const "hi": &string) -> bb2; //~ EN0616
+  }
+  bb2: {
+    storage_live(_9);
+    _10 = const "ok": string;
+    _11 = &_10 [temp-arg];
+    _9 = form to_string(move _11) -> bb3;
+  }
+  bb3: {
+    drop(_10);
+    storage_dead(_10);
+    _13 = &_9 [explicit]; //~ EN0608
+    _14 = &_3 [auto-borrow];
+    _12 = Appender::setS(move _14, move _13) -> bb4;
+  }
+  bb4: {
+    _16 = &_3 [auto-borrow];
+    _15 = Appender::add(move _16) -> bb5;
+  }
+  bb5: {
+    drop(_9);
+    storage_dead(_9);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Appender::#ctor(_1: &Appender, _2: &string) -> void {
+  let _1: &Appender; // this
+  let _2: &string; // s
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).s = move _3;
+    return;
+  }
+}
+
+fn Appender::add(_1: &Appender) -> void {
+  let _1: &Appender; // this
+  let _2: &string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  bb0: {
+    _2 = &*(*_1).s [compound-target];
+    _3 = const "!": string;
+    _4 = &_3 [temp-arg];
+    _5 = form append(move _2, move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}
+
+fn Appender::setS(_1: &Appender, _2: &string) -> void {
+  let _1: &Appender; // this
+  let _2: &string; // s
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).s = move _3;
+    return;
+  }
+}

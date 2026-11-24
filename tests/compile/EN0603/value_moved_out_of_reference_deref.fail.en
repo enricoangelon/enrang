@@ -1,0 +1,5 @@
+//! covers: H07
+public function copyOf(r: &string): string {
+  const s = *r; //~ EN0603 "cannot move `*r` out of a reference"
+  return s;
+}

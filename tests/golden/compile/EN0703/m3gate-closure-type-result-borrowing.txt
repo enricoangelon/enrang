@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0703/m3gate-closure-type-result-borrowing.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0703]: a closure can't return `W`, which holds a reference
+ --> tests/compile/EN0703/m3gate-closure-type-result-borrowing.fail.en:5:22
+  |
+5 | function mk(f: () => W): W { return f(); } //~ EN0703 "a closure can't return `W`,"
+  |                      ^ the result of a closure is a value that holds no reference
+  |
+  = explain: run `enrang explain EN0703`
+
+error: aborting due to 1 previous error

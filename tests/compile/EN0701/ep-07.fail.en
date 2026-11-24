@@ -1,0 +1,15 @@
+const source = "let x";
+let lx = new Lexer(&source);
+show(&lx); //~ EN0701 "because `Lexer` holds a reference"
+
+private class Lexer {
+  private src: &string;
+  private pos: isize = 0;
+  public constructor(src: &string) {
+    this.src = src;
+  }
+}
+
+public function show<T>(x: &T): void {
+  console.log(x);
+}

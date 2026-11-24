@@ -1,0 +1,4 @@
+let queue = ["a", "b"];
+const first = queue[0].clone();
+queue.clear();
+console.log(first);

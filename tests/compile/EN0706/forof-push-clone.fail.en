@@ -1,0 +1,5 @@
+//! row: `queue.push(job.clone());` in the body
+let queue = ["a", "b"];
+for (const job of &queue) {
+  queue.push(job.clone()); //~ EN0706 "cannot mutate `queue` while iterating over it"
+}

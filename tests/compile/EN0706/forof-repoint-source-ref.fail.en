@@ -1,0 +1,7 @@
+//! row: `let r = &a; for (const x of r) { r = &b
+let a: i64[] = [1];
+let b: i64[] = [2];
+let r = &a;
+for (const x of r) {
+  r = &b; //~ EN0706 "cannot reassign `r` during iteration"
+}

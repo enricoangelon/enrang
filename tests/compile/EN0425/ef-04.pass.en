@@ -1,0 +1,12 @@
+//! target: i386-none
+private function report(r: Result<u8>): void {
+  match (r) {
+    Ok => {},
+    Err => {},
+  }
+}
+
+private function readSector(lba: u64): Result<u8> {
+  if (lba > 100) { return Err("disk timeout"); }
+  return 0;
+}

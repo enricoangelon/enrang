@@ -1,0 +1,58 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0621/assignment_value_kept_by_array_literal.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0621/assignment_value_kept_by_array_literal.pass";
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string[]; // xs
+  let _6: string temp;
+  let _7: &string temp;
+  let _8: string temp;
+  let _9: &string temp;
+  let _10: void temp;
+  let _11: &string temp;
+  let _12: void temp;
+  let _13: &string[] temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "a": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _7 = &_2 [compound-target];
+    _8 = const "?": string;
+    _9 = &_8 [temp-arg];
+    _10 = form append(move _7, move _9) -> bb2;
+  }
+  bb2: {
+    _11 = &_2 [auto-borrow];
+    _6 = "alloc/string"::#extend0::clone(move _11) -> bb3;
+  }
+  bb3: {
+    _5 = intrinsic AllocArray<string>(move _6);
+    drop(_6);
+    storage_dead(_6);
+    drop(_8);
+    storage_dead(_8);
+    _13 = &_5 [auto-borrow];
+    _12 = form log(move _13) -> bb4;
+  }
+  bb4: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

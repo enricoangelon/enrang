@@ -1,0 +1,9 @@
+//! row: `const xs = []; xs.push(1);`; `for (cons
+let xs = [];
+xs.push(1);
+
+let ys: i64[] = [1, 2];
+for (const y of &ys) {
+  *y = 1;
+}
+console.log(xs, ys);

@@ -1,0 +1,16 @@
+const device = new Device {};
+touch(&device); //~ EN0419 "`Device` does not satisfy `Port`"
+
+private function touch<T extends Port>(p: &T): void {
+  unsafe {
+    p.poke();
+  }
+}
+
+public interface Port {
+  unsafe poke(): void;
+}
+
+public class Device {
+  public poke(): void {}
+}

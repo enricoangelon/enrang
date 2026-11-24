@@ -1,0 +1,30 @@
+let source: string = "abc";
+let lx = new Lexer(&source);
+const tmp = "x" + "y";
+{
+  lx.restart(&tmp);
+}
+console.log(lx.next());
+
+let lx2 = new Lexer(&source);
+{
+  const r = &lx2;
+  *r = new Lexer(&tmp);
+}
+console.log(lx2.next());
+
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();
+    return this.src.slice(start, this.pos);
+  }
+
+  public restart(s: &string): void { *this = new Lexer(s); }
+}

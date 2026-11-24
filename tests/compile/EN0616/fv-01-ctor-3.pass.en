@@ -1,0 +1,10 @@
+let text: string = "ab";
+const lx = new Lexer(&text);
+
+private class Lexer {
+  private src: &string;
+  public constructor(src: &string) {
+    this.src = src;
+    *this.src += " ";
+  }
+}

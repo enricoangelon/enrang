@@ -1,0 +1,9 @@
+//! row: `let xs = []; xs[0].name; xs.push(u);`
+let xs = [];
+const u = new User {};
+xs.push(u);
+console.log(xs[0].name);
+
+public class User {
+  public name: string = "Ada";
+}

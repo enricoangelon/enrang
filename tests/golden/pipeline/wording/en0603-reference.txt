@@ -1,0 +1,13 @@
+error[EN0603]: cannot move `x.name` out of a reference
+ --> main.en:1:43
+  |
+1 | public function f(x: &P): string { return x.name; }
+  |                                           ^^^^^^ `x.name` is behind a reference
+  |
+help: to take a copy, write `x.name.clone()`
+  |
+1 | public function f(x: &P): string { return x.name.clone(); }
+  |                                                 ++++++++
+  = explain: run `enrang explain EN0603`
+
+error: aborting due to 1 previous error

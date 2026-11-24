@@ -1,0 +1,5 @@
+//! target: x86_64-linux
+//! row: `public unsafe function w<T extends Copy>(p:
+public unsafe function w<T extends ptr.VolatileValue>(p: *T, v: T): void {
+  p.writeVolatile(v);
+}

@@ -1,0 +1,6 @@
+let s: string = "a".toString();
+const f = () => {
+  const k = (s += "?"); //~ EN0621 "an assignment's value can't be kept"
+  console.log(k);
+};
+f();

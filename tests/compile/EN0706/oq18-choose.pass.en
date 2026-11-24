@@ -1,0 +1,32 @@
+private function chooseFinal(p: &FinalPicker, x: &string, y: &string): void {
+  const best = p.pick(x, y);
+  p.reset();
+  console.log(best);
+}
+
+private function chooseLocal(x: &string, y: &string): void {
+  let p = new Picker("fav");
+  const best = p.pick(x, y);
+  p.reset();
+  console.log(best);
+}
+
+public class Picker {
+  protected favorite: string;
+
+  public constructor(favorite: string) { this.favorite = favorite; }
+
+  public pick(a: &string, b: &string): &string { return a.length() > b.length() ? a : b; }
+
+  public reset(): void { this.favorite = ""; }
+}
+
+public final class FinalPicker {
+  protected favorite: string;
+
+  public constructor(favorite: string) { this.favorite = favorite; }
+
+  public pick(a: &string, b: &string): &string { return a.length() > b.length() ? a : b; }
+
+  public reset(): void { this.favorite = ""; }
+}

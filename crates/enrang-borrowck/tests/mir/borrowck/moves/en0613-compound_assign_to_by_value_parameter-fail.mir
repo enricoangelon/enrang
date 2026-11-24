@@ -1,0 +1,20 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0613/compound_assign_to_by_value_parameter.fail.en. Its row's codes: EN0613.
+module "tests/compile/EN0613/compound_assign_to_by_value_parameter.fail";
+
+fn bump(_1: i64) -> void {
+  let _1: i64; // x
+  let _2: i64 temp;
+  let _3: void temp;
+  let _4: &i64 temp;
+  bb0: {
+    _2 = copy _1;
+    _1 = checked_add(copy _2, const 1: i64); //~ EN0613 "cannot assign to parameter `x`"
+    _4 = &_1 [auto-borrow];
+    _3 = form log(move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

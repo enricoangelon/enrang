@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0828/ef-06.fail.en
+[exit 0]
+[stdout]
+[stderr]
+warning[EN0828]: `bufSink` reads through the raw pointer `bytes`
+ --> tests/compile/EN0828/ef-06.fail.en:3:15
+  |
+3 |     const b = *bytes; //~ EN0828 "`bufSink` reads through the raw pointer `bytes`"
+  |               ^^^^^^ `bytes` holds whatever address a caller passes
+  |
+help: mark it `unsafe function`, or take a reference
+
+warning[EN0828]: `bufSink` writes through the raw pointer `ctx`
+ --> tests/compile/EN0828/ef-06.fail.en:4:5
+  |
+4 |     ctx.write(b); //~ EN0828 "`bufSink` writes through the raw pointer `ctx`"
+  |     ^^^^^^^^^^^^ `ctx` holds whatever address a caller passes
+  |
+help: mark it `unsafe function`, or take a reference

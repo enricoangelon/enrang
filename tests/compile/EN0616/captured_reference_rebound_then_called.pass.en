@@ -1,0 +1,17 @@
+let a: i64 = 1;
+let r: &i64 = &a;
+const f = (x: &i64): void => { console.log(*r, *x); };
+f(&a);
+console.log(*r);
+
+public function alsoWrites(): void {
+  let c: i64 = 1;
+  let d: i64 = 2;
+  let q: &i64 = &c;
+  const g = (x: &i64): void => {
+    *q = 5;
+    console.log(*x);
+  };
+  g(&d);
+  console.log(*q);
+}

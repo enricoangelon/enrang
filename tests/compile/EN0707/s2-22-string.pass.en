@@ -1,0 +1,48 @@
+public function split(): void {
+  let s: string = "a".toString();
+  const r = reset(&s);
+  s += r;
+  console.log(s);
+  let names: string[] = ["ab".toString()];
+  const r2 = take(&names);
+  names[0] += r2;
+  console.log(names);
+}
+
+public function appendCopy(): void {
+  let s: string = "ab".toString();
+  s += s.slice(0, 1).toString();
+  console.log(s);
+}
+
+public function appendGrown(): void {
+  let s: string = "abc";
+  *grown(&s) += "!";
+  console.log(s);
+}
+
+public function appendMovedCopy(): void {
+  let s: string = "a".toString();
+  s += eat(s.clone());
+  console.log(s);
+}
+
+private function reset(t: &string): &string {
+  *t = "b".toString();
+  return "!";
+}
+
+private function take(xs: &string[]): &string {
+  xs.clear();
+  xs.push("cd".toString());
+  return "!";
+}
+
+private function grown(s: &string): &string {
+  *s += "?";
+  return s;
+}
+
+private function eat(t: string): string {
+  return t + "!";
+}

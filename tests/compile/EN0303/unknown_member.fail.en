@@ -1,0 +1,13 @@
+const p = new Point { x: 1, y: 2 };
+console.log(p.z); //~ EN0303 "`Point` has no member `z`"
+console.log(p.lenght()); //~ EN0303 "`Point` has no member `lenght`"
+const { x, size } = &p; //~ EN0303 "`Point` has no member `size`"
+console.log(x);
+
+public class Point {
+  public x: i64;
+  public y: i64;
+  public length(): i64 {
+    return this.x + this.y;
+  }
+}

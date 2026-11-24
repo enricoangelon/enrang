@@ -1,0 +1,5 @@
+//! target: i386-linux
+//! row: `public unsafe function w<T extends Copy>(p:
+public unsafe function big(p: *u64): void {
+  p.writeVolatile(1); //~ EN0805 "`u64` can't be accessed volatile on `i386-linux`"
+}

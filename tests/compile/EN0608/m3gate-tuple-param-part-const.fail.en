@@ -1,0 +1,5 @@
+const a = [1];
+let b = [2];
+g(&b, [&a, 0]); //~ EN0608 "`g` can change `t`, but"
+console.log(a);
+private function g(x: &i64[], t: [&i64[], i32]): void { t[0].push(1); }

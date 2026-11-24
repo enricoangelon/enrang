@@ -1,0 +1,12 @@
+error[EN0602]: `g` is used before it has a value
+ --> main.en:2:13
+  |
+1 | let g: User;
+  |     - `g` is declared here with no value
+2 | console.log(g.name);
+  |             ^ a `User` has no default value
+  |
+help: give `g` a value where it is declared, or on every path before this use
+  = explain: run `enrang explain EN0602`
+
+error: aborting due to 1 previous error
