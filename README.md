@@ -13,7 +13,27 @@
 Enrang is a programming language being built from scratch, for applications and for operating systems.
 
 > [!IMPORTANT]
-> **Enrang can't compile a program yet, and this repository holds only its documentation.** The language is designed and the foundation is built, but the compiler doesn't exist so far. The Enrang code on this page is specified behaviour, not something you can run today.
+> **Enrang can't build or run a program yet.** The language is designed, and the compiler checks programs for syntax, type and borrow errors, but it doesn't generate machine code yet. The Enrang code on this page is specified behaviour, not something you can run today.
+
+## Hello, world
+
+```ts
+console.log(greeting("world"));
+
+private function greeting(name: &string): string {
+  return `Hello, ${name}!`;
+}
+```
+
+Tests sit next to the code, in `main.test.en`:
+
+```ts
+test("greets by name", () => {
+  expect(greeting("Ada")).toBe("Hello, Ada!");
+});
+```
+
+`enrang init hello` starts a project with this program and its test, and `enrang check` accepts both today. Running the program, which prints `Hello, world!`, arrives with the VM in the [next milestone](docs/ARCHITECTURE.md#12-milestones).
 
 ## The story
 
@@ -32,23 +52,28 @@ The name is mine too: **Enr**ico **Ang**elon. Enrang can't compile a program yet
 - **Close to the machine:** It compiles to machine code by itself, with no LLVM and no libc, for programs and operating systems on x86 CPUs from the 80386 to today.
 - **Alive while you work:** In development, saving a file updates the running program and keeps its state. Production binaries contain none of that.
 
-## What it looks like
+## Ownership
+
+A value has one owner. `&` lends it, and passing it without `&` hands it over:
 
 ```ts
-class User {
-  constructor(public name: string) {}
+const ada = new User("Ada");
+greet(&ada);   // lent: still ours
+archive(ada);  // moved
+greet(&ada);   // error[EN0601]: `ada` was moved into `archive`
+
+private class User {
+  public constructor(public name: string) {}
 }
 
-function greet(u: &User): void { console.log(`Hello, ${u.name}`); }  // `&` lends it
-function archive(u: User): void {}                                   // no `&` hands it over
-
-function main(): void {
-  const ada = new User("Ada");
-  greet(ada);      // still ours
-  archive(ada);    // moved
-  greet(ada);      // error[EN0601]: `ada` is used after it was moved
+private function greet(u: &User): void {
+  console.log(`Hello, ${u.name}`);
 }
+
+private function archive(u: User): void {}
 ```
+
+The compiler explains the move and suggests two fixes: change the parameter to `u: &User` if `archive` only needs to look at it, or pass a copy with `archive(ada.clone())`.
 
 ## Documentation
 
@@ -60,7 +85,7 @@ function main(): void {
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). The code isn't in this repository, so the most useful thing right now is a close read of the design.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Enrang is at an early stage, so the most useful thing right now is a close read of the design.
 
 ## Licence
 
