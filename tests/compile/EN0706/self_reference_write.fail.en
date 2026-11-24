@@ -1,0 +1,6 @@
+//! covers: H05
+let other: i64[] = [1];
+let pair: [&i64[], i64[]] = [&other, [2]];
+pair[0] = &pair[1];
+pair[1] = [3]; //~ EN0706 "`pair[1]` cannot change"
+console.log(pair[0]);

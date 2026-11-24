@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0211/typeof_as_a_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0211]: `typeof` does not exist in Enrang
+ --> tests/compile/EN0211/typeof_as_a_type.fail.en:2:8
+  |
+2 | let y: typeof x = x; //~ EN0211
+  |        ^^^^^^ a type is written out, not read from a value
+  |
+help: write the type itself
+  = explain: run `enrang explain EN0211`
+
+error: aborting due to 1 previous error

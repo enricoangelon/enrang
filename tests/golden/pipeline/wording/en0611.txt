@@ -1,0 +1,12 @@
+error[EN0611]: `q` was moved in an earlier turn
+ --> main.en:5:13
+  |
+4 |   console.log(q);
+  |               - read here in the next turn
+5 |   const t = q;
+  |             ^ moved here, in an earlier turn
+  |
+help: borrow it instead (`&q`), or move a copy each turn: `q.clone()`
+  = explain: run `enrang explain EN0611`
+
+error: aborting due to 1 previous error

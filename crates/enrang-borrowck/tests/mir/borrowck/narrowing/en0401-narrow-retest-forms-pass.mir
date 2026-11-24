@@ -1,0 +1,120 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/narrow-retest-forms.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/narrow-retest-forms.pass";
+@private class Holder {
+  item: Item | null = default;
+}
+@private class Item {
+  n: i64 = default;
+}
+
+fn Holder::drop(_1: &Holder) -> void {
+  let _1: &Holder; // this
+  bb0: {
+    (*_1).item = null;
+    return;
+  }
+}
+
+@private fn a(_1: &Holder) -> void {
+  let _1: &Holder; // h
+  let _2: bool temp;
+  let _3: u32 temp;
+  let _4: void temp;
+  let _5: &Holder temp;
+  let _6: bool temp;
+  let _7: u32 temp;
+  let _8: void temp;
+  let _9: &i64 temp;
+  fact f0: _1.*.item nonnull;
+  record f0 at bb1[0] _5 receiver;
+  use f0 at bb5[0];
+  test f0 at bb1;
+  test f0 at bb7;
+  bb0: {
+    _3 = discriminant((*_1).item);
+    _2 = ne(move _3, const 0: u32);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _5 = &*_1 [reborrow];
+    _4 = virtual Holder::drop [copy _5](move _5) -> bb3;
+  }
+  bb2: {
+    return;
+  }
+  bb3: {
+    _7 = discriminant((*_1).item);
+    _6 = eq(move _7, const 0: u32);
+    switch move _6 [0: bb7, otherwise: bb6];
+  }
+  bb4: {
+    return;
+  }
+  bb5: {
+    check_tag((*_1).item, Present);
+    _9 = &((*_1).item as Present).0.n [auto-borrow];
+    _8 = form log(move _9) -> bb8;
+  }
+  bb6: {
+    goto bb4;
+  }
+  bb7: {
+    goto bb5;
+  }
+  bb8: {
+    goto bb2;
+  }
+}
+
+@private fn b(_1: &Holder) -> void {
+  let _1: &Holder; // h
+  let _2: bool temp;
+  let _3: u32 temp;
+  let _4: void temp;
+  let _5: &Holder temp;
+  let _6: bool temp;
+  let _7: u32 temp;
+  let _8: void temp;
+  let _9: &i64 temp;
+  fact f0: _1.*.item nonnull;
+  record f0 at bb2[0] _5 receiver;
+  use f0 at bb5[0];
+  test f0 at bb2;
+  test f0 at bb7;
+  bb0: {
+    _3 = discriminant((*_1).item);
+    _2 = eq(move _3, const 0: u32);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    return;
+  }
+  bb2: {
+    _5 = &*_1 [reborrow];
+    _4 = virtual Holder::drop [copy _5](move _5) -> bb3;
+  }
+  bb3: {
+    _7 = discriminant((*_1).item);
+    _6 = eq(move _7, const 0: u32);
+    switch move _6 [0: bb7, otherwise: bb6];
+  }
+  bb4: {
+    return;
+  }
+  bb5: {
+    check_tag((*_1).item, Present);
+    _9 = &((*_1).item as Present).0.n [auto-borrow];
+    _8 = form log(move _9) -> bb8;
+  }
+  bb6: {
+    goto bb4;
+  }
+  bb7: {
+    goto bb5;
+  }
+  bb8: {
+    return;
+  }
+}

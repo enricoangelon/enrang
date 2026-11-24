@@ -6,7 +6,7 @@ use enrang_target::{
     TargetSpec, all_targets, resolve,
 };
 
-use crate::commands::TARGETS;
+use crate::commands::{LATER, TARGETS};
 use crate::evidence;
 use crate::outcome::Outcome;
 use crate::report::complaint;
@@ -38,11 +38,24 @@ fn help() -> String {
 
 fn listing() -> String {
     format!(
-        "Targets:\n\n{}\nCPU levels, the values --cpu will take:\n\n{}\nCPU aliases, which --cpu will accept in place of a level:\n\n{}\nThese are design tables. This is milestone {CURRENT_MILESTONE}, which has no compiler, so nothing\ncan be built for any target yet.\n",
+        "Targets:\n\n{}\nCPU levels, the values --cpu will take:\n\n{}\nCPU aliases, which --cpu will accept in place of a level:\n\n{}\n{}",
         table(&target_rows()),
         table(&level_rows()),
         table(&alias_rows()),
+        closing(),
     )
+}
+
+/// What the tables are worth today: nothing can be built for a target until `build`
+/// arrives.
+fn closing() -> String {
+    match LATER.iter().find(|command| command.name == "build") {
+        Some(build) => format!(
+            "These are design tables. This is milestone {CURRENT_MILESTONE}, and `enrang build` arrives with milestone {},\nso nothing can be built for any target yet.\n",
+            build.since
+        ),
+        None => "These are design tables.\n".to_owned(),
+    }
 }
 
 fn row(cells: &[&str]) -> Vec<String> {

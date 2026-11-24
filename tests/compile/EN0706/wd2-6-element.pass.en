@@ -1,0 +1,22 @@
+let ps: Picker[] = [new Picker()];
+const x = "Ada";
+const y = "Grace";
+chooseFirst(&ps, &x, &y);
+
+public class Picker {
+  protected favorite: string;
+
+  public pick(a: &string, b: &string): &string {
+    return a.length() > b.length() ? a : b;
+  }
+
+  public reset(): void {
+    this.favorite = "";
+  }
+}
+
+private function chooseFirst(ps: &Slice<Picker>, x: &string, y: &string): void {
+  const best = ps[0].pick(x, y);
+  ps[0].reset();
+  console.log(best);
+}

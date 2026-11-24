@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0603/value_moved_out_of_reference_deref.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0603]: cannot move `*r` out of a reference
+ --> tests/compile/EN0603/value_moved_out_of_reference_deref.fail.en:3:13
+  |
+3 |   const s = *r; //~ EN0603 "cannot move `*r` out of a reference"
+  |             ^^ `*r` is behind a reference
+  |
+help: to take a copy, write `r.clone()`
+  |
+3 |   const s = r.clone(); //~ EN0603 "cannot move `*r` out of a reference"
+  |             ~~~~~~~~~
+  = explain: run `enrang explain EN0603`
+
+error: aborting due to 1 previous error

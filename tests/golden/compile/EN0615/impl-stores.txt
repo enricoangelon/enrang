@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0615/impl-stores.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Keeper.put` stores `s` into `this`, but `Sink.put` declares no such store
+ --> tests/compile/EN0615/impl-stores.fail.en:5:32
+  |
+2 |   let put(s: &string): void;
+  |       --- declared here
+3 | }
+4 |
+5 | public class Keeper implements Sink { //~ EN0615
+  |                                ^^^^ stored here
+  |
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

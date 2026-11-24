@@ -1,0 +1,12 @@
+//! covers: C15
+const g: unsafe fn() => void = tick;
+const f: fn() => void = tick;
+const h: unsafe fn() => void = f;
+unsafe {
+  g();
+  h();
+}
+
+private function tick(): void {
+  console.log("tick");
+}

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0611/moved_in_for_of_body.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0611]: `name` was moved in an earlier turn
+ --> tests/compile/EN0611/moved_in_for_of_body.fail.en:4:9
+  |
+4 |   greet(name); //~ EN0611 "`name` was moved in an earlier turn"
+  |         ^^^^ moved here, in an earlier turn
+  |
+help: borrow it instead (`&name`), or move a copy each turn: `name.clone()`
+  = explain: run `enrang explain EN0611`
+
+error: aborting due to 1 previous error

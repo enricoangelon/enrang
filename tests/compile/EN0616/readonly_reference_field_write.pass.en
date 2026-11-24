@@ -1,0 +1,9 @@
+public final class ByteLexer {
+  private src: &Slice<u8>;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public poke(): void {
+    this.src[0] = 9;
+  }
+}

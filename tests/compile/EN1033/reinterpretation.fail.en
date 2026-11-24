@@ -1,0 +1,2 @@
+const u = transmute(1); //~ EN1033 "unchecked reinterpretation is not supported yet"
+let un: union | null = null; //~ EN1033 "unchecked reinterpretation is not supported yet"

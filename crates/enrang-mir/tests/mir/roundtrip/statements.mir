@@ -1,0 +1,47 @@
+module "os/vm/io";
+class C {
+  x: i64;
+}
+
+fn stmts(_1: &C, _2: *u8, _3: isize) -> void {
+  let _4: i64 temp;
+  let _5: bool temp;
+  let _6: u64 temp;
+  let _7: u8 temp;
+  region r0: block;
+  region r1: asm in r0;
+  region r2: block in r0;
+  bb0: {
+    storage_live(_4);
+    check_class(*_1, assign, ref);
+    check_class(*_1, move_this(consume), box);
+    check_class(*_1, unbox, box);
+    check_class(*_1, copy_out, ref);
+    check_class(*_1, replace, ref);
+    check_class(*_1, swap, ref);
+    check_class(*_1, clone, ref);
+    set_table(*_1, C);
+    field_init((*_1).x, const 1: i64);
+    drop(_4);
+    drop(_4) [assign];
+    _6 = intrinsic SizeOf<C>();
+    _6 = intrinsic AlignOf<C>();
+    _6 = intrinsic OffsetOf<C, x>();
+    _5 = intrinsic CpuHas<"sse4.1">();
+    intrinsic AtomicAlu<xor>(copy _2, const 1: u8) @ r0;
+    _5 = intrinsic AtomicIncDecTest<true>(copy _2) @ r0;
+    _5 = intrinsic AtomicBitTest<false>(copy _2, const 3: u8) @ r0;
+    intrinsic AtomicFence();
+    intrinsic MemSet(copy _2, const 0: u8, copy _3) @ r2;
+    _7 = intrinsic VolatileRead(copy _2) @ r2;
+    asm("nop", a in copy _3, b out _4, c out, clobber "memory") @ r1;
+    _4 = host_call "vm.read"(copy _3);
+    host_call "vm.log"();
+    nop;
+    storage_dead(_4);
+    goto bb1 @ r0;
+  }
+  bb1: {
+    return;
+  }
+}

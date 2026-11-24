@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0005/legacy_octal.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0005]: leading zero in the integer literal `0755`
+ --> tests/compile/EN0005/legacy_octal.fail.en:1:14
+  |
+1 | const mode = 0755; //~ EN0005
+  |              ^^^^ a leading zero and another digit
+  |
+  = from TypeScript: a leading `0` once made a number octal, so Enrang takes no such zero.
+help: write `0o755` for octal, or `755` for decimal
+  = explain: run `enrang explain EN0005`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,11 @@
+$ enrang fmt --check a.en b
+[exit 2]
+[stdout]
+[stderr]
+error[EN1305]: file not found: `a.en`
+  = explain: run `enrang explain EN1305`
+
+error[EN1305]: file not found: `b`
+  = explain: run `enrang explain EN1305`
+
+error: aborting due to 2 previous errors

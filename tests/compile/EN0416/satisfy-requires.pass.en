@@ -1,0 +1,16 @@
+const ticks = new Ticks {};
+console.log(total(&ticks));
+
+private function total<T extends Counter>(c: &T): i64 {
+  return c.count();
+}
+
+public interface Counter {
+  count(): i64;
+}
+
+public class Ticks implements Counter {
+  public count(): i64 {
+    return 1;
+  }
+}

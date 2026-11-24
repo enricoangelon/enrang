@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0615/d20-core-5-local.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: this arrow stores `s` into `l`, which `fn(l: &Lexer, s: &string) => void` can't declare
+ --> tests/compile/EN0615/d20-core-5-local.fail.en:3:13
+  |
+3 | const put = (l: &Lexer, s: &string) => { l.setSrc(s); }; //~ EN0615
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ converted here
+  |
+  = note: a function value may write only what its type's `let` marks allow, and store nothing
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

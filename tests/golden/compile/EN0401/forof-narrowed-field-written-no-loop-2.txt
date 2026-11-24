@@ -1,0 +1,30 @@
+$ enrang check tests/compile/EN0401/forof-narrowed-field-written-no-loop-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `h.items` may be `null` here
+ --> tests/compile/EN0401/forof-narrowed-field-written-no-loop-2.fail.en:8:17
+  |
+6 |     const { items } = h;
+  |                       - this may write through it
+7 |     *items = null;
+8 |     console.log(h.items.length()); //~ EN0401 "`h.items` may be `null` here"
+  |                 ^^^^^^^ the test before this may no longer hold
+  |
+  = note: a writing reference may have changed `h.items`
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: `h.items` may be `null` here
+  --> tests/compile/EN0401/forof-narrowed-field-written-no-loop-2.fail.en:17:17
+   |
+14 |     const { other, items } = h;
+   |                              - this may write through it
+15 |     console.log(other);
+16 |     *items = null;
+17 |     console.log(h.items.length()); //~ EN0401 "`h.items` may be `null` here"
+   |                 ^^^^^^^ the test before this may no longer hold
+   |
+   = note: a writing reference may have changed `h.items`
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

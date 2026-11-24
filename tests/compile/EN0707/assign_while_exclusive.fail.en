@@ -1,0 +1,4 @@
+let xs = [1, 2];
+const r = &xs;
+xs = [3]; //~ EN0707 "cannot change `xs` while `r` may write into it"
+r.push(1);

@@ -1,0 +1,124 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/tk-01-pick-param.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/tk-01-pick-param.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Node {
+  val: i64[] = default;
+  kids: Node[] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Node; // n1
+  let _3: *Node temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &i64[] temp;
+  let _7: void temp;
+  let _8: Node temp;
+  let _9: *Node temp;
+  let _10: void temp;
+  let _11: &Node[] temp;
+  let _12: [&Node, &i64[]] temp;
+  let _13: &Node temp;
+  let _14: &Node; // all
+  let _15: &i64[]; // v
+  let _16: &i64; // e1
+  let _17: isize temp;
+  let _18: isize temp;
+  let _19: i64[] temp;
+  let _20: void temp;
+  let _21: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Node leaving(val, kids)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2.val [auto-borrow];
+    _5 = "alloc/array"::Array<i64>::push(move _6, const 1: i64) -> bb2;
+  }
+  bb2: {
+    _9 = addr_of _8;
+    _10 = named_fill Node leaving(val, kids)(move _9) -> bb3;
+  }
+  bb3: {
+    _11 = &_2.kids [auto-borrow];
+    _7 = "alloc/array"::Array<Node>::push(move _11, move _8) -> bb4;
+  }
+  bb4: {
+    drop(_8);
+    storage_dead(_8);
+    _13 = &_2 [explicit];
+    _12 = pick(move _13, const true: bool) -> bb5;
+  }
+  bb5: {
+    storage_live(_14);
+    _14 = copy _12.0;
+    storage_live(_15);
+    _15 = copy _12.1;
+    storage_live(_16);
+    _17 = const 0: isize;
+    _18 = len(*_15);
+    check_bounds(copy _17, copy _18);
+    _16 = &(*_15)[_17] [explicit];
+    _19 = intrinsic AllocArray<i64>();
+    drop((*_14).val) [assign];
+    (*_14).val = move _19; //~ EN0616
+    drop(_19);
+    storage_dead(_19);
+    _21 = &*_16 [auto-borrow];
+    _20 = form log(move _21) -> bb6;
+  }
+  bb6: {
+    storage_dead(_16);
+    storage_dead(_15);
+    storage_dead(_14);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn pick(_1: &Node, _2: bool) -> [&Node, &i64[]] {
+  let _1: &Node; // p
+  let _2: bool; // c
+  let _3: &Node; // q
+  let _4: bool temp;
+  let _5: &Node temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  let _8: &Node temp;
+  let _9: &i64[] temp;
+  bb0: {
+    storage_live(_3);
+    _4 = copy _2;
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _5 = &*_1 [reborrow];
+    _3 = move _5;
+    goto bb3;
+  }
+  bb2: {
+    _6 = const 0: isize;
+    _7 = len((*_1).kids);
+    check_bounds(copy _6, copy _7);
+    _3 = &(*_1).kids[_6] [explicit];
+    goto bb3;
+  }
+  bb3: {
+    _8 = &*_3 [reborrow];
+    _9 = &(*_1).val [explicit];
+    _0 = tuple(move _8, move _9);
+    storage_dead(_3);
+    return;
+  }
+}

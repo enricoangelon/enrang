@@ -1,0 +1,3 @@
+console.log({ name: "Ada", age: 36 });
+const c = { age: 36, name: "Ada" };
+console.log(c);

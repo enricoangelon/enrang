@@ -1,6 +1,7 @@
 //! `enrang targets` against the tables of `enrang-target` and SPEC 10.1.
 
-use enrang_diag::Code;
+use enrang_cli::LATER;
+use enrang_diag::{CURRENT_MILESTONE, Code};
 use enrang_target::{CPU_ALIASES, CodeMode, TargetOpts, all_targets, resolve};
 use enrang_testkit::Harness;
 
@@ -173,10 +174,16 @@ pub fn register(h: &mut Harness) {
     });
     h.case("targets/the listing says nothing can be built", || {
         let text = listing();
+        let build = LATER
+            .iter()
+            .find(|command| command.name == "build")
+            .expect("`build` arrives later");
+        assert!(build.since > CURRENT_MILESTONE);
         assert!(
-            text.ends_with(
-                "These are design tables. This is milestone M0, which has no compiler, so nothing\ncan be built for any target yet.\n"
-            ),
+            text.ends_with(&format!(
+                "These are design tables. This is milestone {CURRENT_MILESTONE}, and `enrang build` arrives with milestone {},\nso nothing can be built for any target yet.\n",
+                build.since
+            )),
             "{text}"
         );
     });

@@ -1,0 +1,9 @@
+let op = Op.Name { s: "abc".toString() };
+match (op) {
+  Op.Name => {
+    const o = mem.replace(&op, Op.Add);
+    console.log(op.s); //~ EN0401 "`op` may no longer be"
+  },
+  default => {},
+}
+private enum Op { Push { value: i64 }, Name { s: string }, Add }

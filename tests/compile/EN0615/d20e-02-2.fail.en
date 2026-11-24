@@ -1,0 +1,17 @@
+public abstract class Attachable {
+  public abstract attach(s: &string): void;
+}
+
+private class Tag extends Attachable {
+  private label: &string;
+
+  public constructor(label: &string) {
+    this.label = label;
+    super();
+  }
+
+  public override attach(s: &string): void {
+    this.label = s; //~ EN0615 "`attach` changes the object, but `Attachable` declares that it doesn't"
+  }
+}
+

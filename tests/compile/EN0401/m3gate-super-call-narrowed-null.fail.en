@@ -1,0 +1,14 @@
+let d = new D();
+d.go();
+public class B {
+  public s: string | null = "a".toString();
+  public clr(): void { this.s = null; }
+}
+public class D extends B {
+  public go(): void {
+    if (this.s != null) {
+      super.clr();
+      console.log(this.s.length()); //~ EN0401 "`this.s` may be `null` here"
+    }
+  }
+}

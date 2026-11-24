@@ -1,0 +1,2 @@
+const accent = "caf\u00e9"; //~ EN0003
+console.log(accent);

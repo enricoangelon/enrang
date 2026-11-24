@@ -1,0 +1,17 @@
+@at(0xB8000) private unsafe let screen: u16[2000];
+
+private unsafe let count: i64 = 0;
+
+private unsafe function poke(p: *u8, v: u8): void {
+  *p = v;
+}
+
+public function bump(p: *u8): u8 {
+  const v = *p; //~ EN0801 "reading through a raw pointer needs `unsafe`"
+  p.write(3); //~ EN0801 "writing through a raw pointer needs `unsafe`"
+  poke(p, 7); //~ EN0801 "calling `poke` needs `unsafe`"
+  asm("nop"); //~ EN0801 "`asm` needs `unsafe`"
+  count = count + 1; //~ EN0801 "using `count`, an `unsafe let`, needs `unsafe`"
+  screen[0] = 0x0741; //~ EN0801 "using `screen`, an `unsafe let`, needs `unsafe`"
+  return v;
+}

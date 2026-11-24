@@ -1,0 +1,28 @@
+const k: u8[] = [1];
+let out: u8[] = [0];
+let s = new Sub(&k, &out);
+s.mix();
+
+public class Base {
+  private src: readonly &Slice<u8>;
+
+  public constructor(s: &Slice<u8>) { this.src = s; }
+
+  public retarget(v: &Slice<u8>): void { this.src = v; }
+}
+
+public final class Sub extends Base {
+  private dst: &Slice<u8>;
+
+  public constructor(s: &Slice<u8>, d: &Slice<u8>) {
+    this.dst = d;
+    super(s);
+  }
+
+  public step(): void { this.dst[0] = 1; }
+
+  public mix(): void {
+    const b: &Base = this;
+    b.retarget(this.dst.slice(0, 1)); //~ EN0708
+  }
+}

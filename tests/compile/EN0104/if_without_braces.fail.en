@@ -1,0 +1,2 @@
+const ready = true;
+if (ready) console.log("go"); //~ EN0104

@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0102/unclosed_parenthesis.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0102]: the file ended with `(` still open
+ --> tests/compile/EN0102/unclosed_parenthesis.fail.en:1:12
+  |
+1 | console.log(1, 2 //~ EN0102
+  |            ^ this `(` has no matching `)`
+  |
+help: add the missing `)`
+  |
+1 | console.log(1, 2) //~ EN0102
+  |                 +
+  = explain: run `enrang explain EN0102`
+
+error: aborting due to 1 previous error

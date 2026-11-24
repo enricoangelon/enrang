@@ -1,0 +1,4 @@
+//! target: i386-none
+@interrupt private function onTimer(frame: &InterruptFrame): void {
+  const ip = frame.eip;
+}

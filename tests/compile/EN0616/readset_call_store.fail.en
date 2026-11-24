@@ -1,0 +1,33 @@
+//! covers: H36
+const table: u8[3] = [7, 8, 9];
+let out: u8[3] = [0, 0, 0];
+let c = new Copier(&table, &out);
+let w = new Wrapper(&c);
+Wrapper.nudge(&w); //~ EN0616
+
+public final class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize = 0;
+  public constructor(s: &Slice<u8>, d: &Slice<u8>) {
+    this.src = s;
+    this.dst = d;
+  }
+  public step(): void {
+    this.dst[this.pos] = this.src[0];
+    this.pos += 1;
+  }
+  public skip(): void {
+    this.src = this.src.slice(1, this.src.length());
+  }
+}
+
+public final class Wrapper {
+  private cp: &Copier;
+  public constructor(cp: &Copier) {
+    this.cp = cp;
+  }
+  public static nudge(w: &Wrapper): void {
+    w.cp.skip();
+  }
+}

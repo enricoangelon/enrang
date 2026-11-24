@@ -1,0 +1,115 @@
+$ enrang check --emit=mir main.en
+[exit 0]
+[stdout]
+@lang("error") interface "core/prelude"::Error { }
+@lang("failure") @final class "core/result"::Failure {
+  private text: string;
+}
+@lang("result") enum "core/result"::Result<T, E extends Error> { Ok { value: T }, Err { error: E } }
+
+statements (_1: string[]) -> int {
+  phase elaborated;
+  let _1: string[]; // args
+  let _2: Result<i64>; // r
+  let _3: void temp;
+  let _4: &Result<i64> temp;
+  let _5: Result<i64> temp;
+  let _6: &Result<i64> temp;
+  let _7: Result<i64> temp;
+  let _8: &Result<i64> temp;
+  bb0: {
+    storage_live(_2);
+    _2 = half(const 10: i64) -> bb1;
+  }
+  bb1: {
+    _4 = &_2 [auto-borrow];
+    _5 = quarter(const 10: i64) -> bb2;
+  }
+  bb2: {
+    _6 = &_5 [temp-arg];
+    _7 = half(const 3: i64) -> bb3;
+  }
+  bb3: {
+    _8 = &_7 [temp-arg];
+    _3 = form log(move _4, move _6, move _8) -> bb4;
+  }
+  bb4: {
+    drop_glue(_7);
+    storage_dead(_7);
+    drop_glue(_5);
+    storage_dead(_5);
+    drop_glue(_2);
+    storage_dead(_2);
+    drop_glue(_1);
+    return;
+  }
+}
+
+fn half(_1: i64) -> Result<i64> perms() sources() moves(0) result none {
+  phase elaborated;
+  let _1: i64; // n
+  let _2: bool temp;
+  let _3: i64 temp;
+  let _4: Failure temp;
+  let _5: i64 temp;
+  bb0: {
+    _3 = checked_rem(copy _1, const 2: i64);
+    _2 = ne(move _3, const 0: i64);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _4 = form failure_text(const "odd": &string) -> bb3;
+  }
+  bb2: {
+    _5 = checked_div(copy _1, const 2: i64);
+    _0 = Result<i64>::Ok { value: move _5 };
+    return;
+  }
+  bb3: {
+    _0 = Result<i64>::Err { error: move _4 };
+    storage_dead(_4);
+    return;
+  }
+}
+
+fn quarter(_1: i64) -> Result<i64> perms() sources() moves(0) result none {
+  phase elaborated;
+  let _1: i64; // n
+  let _2: i64; // h
+  let _3: Result<i64> temp;
+  let _4: isize temp;
+  let _5: i64 temp;
+  let _6: u32 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = half(copy _1) -> bb1;
+  }
+  bb1: {
+    _4 = discriminant(_3);
+    switch move _4 [0: bb2, otherwise: bb3];
+  }
+  bb2: {
+    check_tag(_3, Ok);
+    _5 = copy (_3 as Ok).value;
+    _2 = copy _5;
+    drop_glue(_3);
+    storage_dead(_3);
+    _0 = half(copy _2) -> bb4;
+  }
+  bb3: {
+    check_tag(_3, Err);
+    _0 = Result<i64>::Err { error: move (_3 as Err).error };
+    _6 = discriminant(_3);
+    switch move _6 [otherwise: bb5];
+  }
+  bb4: {
+    storage_dead(_2);
+    return;
+  }
+  bb5: {
+    storage_dead(_3);
+    storage_dead(_2);
+    return;
+  }
+}
+[stderr]

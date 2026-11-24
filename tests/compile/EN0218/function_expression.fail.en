@@ -1,0 +1,4 @@
+const double = function (x: i64): i64 { //~ EN0218
+  return x * 2;
+};
+console.log(double(2));

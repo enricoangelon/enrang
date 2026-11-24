@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0615/override-move-mismatch.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Tls.close` and `Conn.close` must both be `move` or both not
+ --> tests/compile/EN0615/override-move-mismatch.fail.en:8:24
+  |
+4 |   public close(): void {}
+  |          ----- declared here
+...
+8 |   public override move close(): void {} //~ EN0615
+  |                        ^^^^^ here
+  |
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,15 @@
+let r: i64[] = [1, 5, 3, 7, 1];
+const p = lastTwo(&r);
+if (p != null) {
+  console.log(*p[0], *p[1]);
+}
+
+public function lastTwo(xs: &Slice<i64>): [&i64, &i64] | null {
+  let a: &i64 | null = null;
+  let b: &i64 | null = null;
+  for (const x of xs) {
+    if (*x > 2) { b = a; a = x; }
+  }
+  if (a != null && b != null) { return [a, b]; }
+  return null;
+}

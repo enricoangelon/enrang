@@ -1,0 +1,6 @@
+$ enrang fmt --help src
+[exit 2]
+[stdout]
+[stderr]
+error: `--help` takes no other arguments
+usage: enrang fmt [paths] [--check]

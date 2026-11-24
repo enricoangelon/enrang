@@ -1,0 +1,6 @@
+public function spread(b: Box<i64[]>, o: i64[] | null): void {
+  const a = [...5]; //~ EN0438 "`...` needs an array, found `int`"
+  const c = [..."abc"]; //~ EN0438 "`...` needs an array, found `string`"
+  const d = [...o]; //~ EN0438 "`...` needs an array, found `i64[] | null`"
+  const e = [...b]; //~ EN0438 "`...` needs an array, found `Box<i64[]>`"
+}

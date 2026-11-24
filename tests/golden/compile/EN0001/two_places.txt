@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0001/two_places.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0001]: source is not valid UTF-8
+ --> tests/compile/EN0001/two_places.fail.en:1:16
+  |
+1 | const first = "�"; //~ EN0001
+  |                ^ these bytes are not UTF-8
+  |
+  = explain: run `enrang explain EN0001`
+
+error[EN0001]: source is not valid UTF-8
+ --> tests/compile/EN0001/two_places.fail.en:3:16
+  |
+3 | const third = "�("; //~ EN0001
+  |                ^ these bytes are not UTF-8
+  |
+  = explain: run `enrang explain EN0001`
+
+error: aborting due to 2 previous errors

@@ -8,7 +8,7 @@ use enrang_target::{
 };
 use enrang_testkit::{Harness, Rng, Xoshiro256, rng_for, scaled};
 
-use crate::support::{TARGETS, arch_of, opts_with, render};
+use crate::support::{TARGETS, arch_of, default_float, opts_with, render};
 
 /// Every `--cpu` value worth trying: none, each level, each alias, and two refusals.
 fn cpu_values() -> Vec<Option<String>> {
@@ -54,7 +54,8 @@ fn expected_code(target: &str, cpu: Option<&str>, float: Option<&str>) -> Option
         None => None,
         Some("soft") if arch == Arch::X86_64 => Some(Code::EN0911),
         Some("soft") => None,
-        Some("x87") => Some(Code::EN1020),
+        Some("x87") if arch == Arch::I386 => None,
+        Some("x87") => Some(Code::EN0911),
         Some("sse2") => match arch {
             Arch::Mir => Some(Code::EN0911),
             _ if level >= CpuLevel::Sse2 => None,
@@ -70,7 +71,9 @@ fn check_spec(target: &str, built: &TargetSpec, cpu: Option<&str>, float: Option
     assert_eq!(built.allowed, built.cpu.features(built.arch));
     assert!(built.allowed.contains_all(built.floor));
     assert!(built.allowed.contains(Feature::Ia32));
-    assert_ne!(built.float, FloatStrategy::X87);
+    if built.float == FloatStrategy::X87 {
+        assert_eq!(built.arch, Arch::I386, "x87 is an i386-* strategy");
+    }
     if built.float == FloatStrategy::Sse2 {
         assert!(
             built.allowed.contains(Feature::Sse2),
@@ -85,9 +88,25 @@ fn check_spec(target: &str, built: &TargetSpec, cpu: Option<&str>, float: Option
             "the host float is VM-only"
         );
     }
-    if float == Some("soft") {
-        assert_eq!(built.float, FloatStrategy::Soft);
+    match float {
+        Some("soft") => assert_eq!(built.float, FloatStrategy::Soft),
+        Some("sse2") => assert_eq!(built.float, FloatStrategy::Sse2),
+        Some("x87") => assert_eq!(built.float, FloatStrategy::X87),
+        _ => assert_eq!(
+            built.float,
+            default_float(built.arch, built.cpu),
+            "SPEC 10.1's default float for the level"
+        ),
     }
+    let reserve = match (built.stack.limit_check, built.float) {
+        (false, _) => 0,
+        (true, FloatStrategy::Soft) => 2048,
+        (true, _) => 3072,
+    };
+    assert_eq!(
+        built.stack.limit_reserve, reserve,
+        "ARCHITECTURE 7.5's reserve"
+    );
     if cpu.is_none() {
         let floor = match built.arch {
             Arch::I386 => CpuLevel::I386,

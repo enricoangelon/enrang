@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0615/d20e-02.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `reset` stores `s` into `lx`, which `fn(let lx: &Lexer, s: &string) => void` can't declare
+ --> tests/compile/EN0615/d20e-02.fail.en:4:51
+  |
+4 | const f: fn(let lx: &Lexer, s: &string) => void = reset; //~ EN0615
+  |                                                   ^^^^^ converted here
+  |
+  = note: a function value may write only what its type's `let` marks allow, and store nothing
+  = explain: run `enrang explain EN0615`
+
+error[EN0615]: `Keeper.put` stores `s` into `this`, but `Sink.put` declares no such store
+  --> tests/compile/EN0615/d20e-02.fail.en:15:33
+   |
+12 |   let put(s: &string): void;
+   |       --- declared here
+13 | }
+14 |
+15 | private class Keeper implements Sink { //~ EN0615
+   |                                 ^^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 2 previous errors

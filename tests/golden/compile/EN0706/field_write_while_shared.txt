@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/field_write_while_shared.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `p.x` cannot change while `r` still points into it
+ --> tests/compile/EN0706/field_write_while_shared.fail.en:3:1
+  |
+2 | const r = &p.x;
+  |           ---- shared borrow of `p` starts here, held by `r`
+3 | p.x = 5; //~ EN0706 "`p.x` cannot change while `r` still points into it"
+  | ^^^^^^^ `p.x` changes here
+4 | console.log(*r);
+  |              - `r` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

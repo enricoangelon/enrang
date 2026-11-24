@@ -1,0 +1,12 @@
+//! covers: H28
+public class Board {
+  private readonly cells: i64[];
+  public constructor() {
+    this.cells = [1, 2, 3];
+  }
+  public clear(): void {
+    for (const c of &this.cells) { //~ EN0609
+      *c = 0;
+    }
+  }
+}

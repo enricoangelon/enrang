@@ -1,0 +1,6 @@
+//! covers: H33
+let buf3: u8[] = [1];
+let pair: [&u8[], i32] = [&buf3, 1];
+const b2 = pair[0];
+b2.push(9);
+console.log(buf3);

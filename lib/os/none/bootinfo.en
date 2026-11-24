@@ -1,0 +1,7 @@
+// SPEC 8.4, `BootInfo`'s regions: `os/none/bootinfo`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// Kept out of the prelude, whose names SPEC 8.1 lists.
+public final class MemRegion implements Copy {
+  public start: u64;
+  public bytes: u64;
+  public usable: bool;
+}

@@ -1,0 +1,47 @@
+$ enrang check tests/compile/EN0601/named-field-assigned-after-move.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `p` was moved into `take`
+  --> tests/compile/EN0601/named-field-assigned-after-move.fail.en:5:3
+   |
+ 3 |   let p = new Node { first: "a" };
+   |       - `p` owns this `Node`, which is not Copy because it has a `string` field
+ 4 |   take(p);
+   |        - `p` moves here, because `take` takes `Node`, not `&Node`
+ 5 |   p.first = c; //~ EN0601 "`p` was moved into `take`"
+   |   ^ used here, after the move
+   |
+   = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `p` hands it over.
+help: if `take` only needs to look at it, change the parameter to `p: &Node`
+   |
+ 4 |   take(&p);
+   |        +
+14 | private function take(p: &Node): void {}
+   |                          +
+help: to keep your own, pass a copy: `take(p.clone())`
+   |
+ 4 |   take(p.clone());
+   |         ++++++++
+   = explain: run `enrang explain EN0601`
+
+error[EN0601]: `p` was moved into `drop`
+  --> tests/compile/EN0601/named-field-assigned-after-move.fail.en:11:3
+   |
+ 9 |   let p = new Res { first: "a" };
+   |       - `p` owns this `Res`, which is not Copy because it has a `string` field
+10 |   drop(p);
+   |        - `p` moves here, because `drop` takes `Res`, not `&Res`
+11 |   p.first = c; //~ EN0601 "`p` was moved into `drop`"
+   |   ^ used here, after the move
+   |
+   = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `p` hands it over.
+help: if `drop` only needs to look at it, change the parameter to `p: &Res`
+   |
+10 |   drop(&p);
+   |        +
+16 | private function drop(p: &Res): void {}
+   |                          +
+   = explain: run `enrang explain EN0601`
+
+error: aborting due to 2 previous errors

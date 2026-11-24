@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0616/attack1-h27-turn-keys.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `twice`
+ --> tests/compile/EN0616/attack1-h27-turn-keys.fail.en:4:11
+  |
+4 | clash(p0, p1); //~ EN0616
+  |           ^^ `clash` writes through it
+  |
+  = note: `twice` returns two references that may point at the same data
+  = explain: run `enrang explain EN0616`
+
+error[EN0616]: cannot change the object returned by `dup`
+ --> tests/compile/EN0616/attack1-h27-turn-keys.fail.en:8:3
+  |
+8 |   *d[0] = [5]; //~ EN0616
+  |   ^^^^^^^^^^^ written here
+  |
+  = note: `dup` returns two references that may point at the same data
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,18 @@
+//! target: i386-linux
+//! row: `u64[536870912]` on `i386`, whose size wraps
+public function f(): void {
+  let big: A<A<u64>>; //~ EN0435 "`A<A<u64>>` is too large for `i386-linux`"
+}
+
+public function g(): void {
+  let once: Big;
+}
+
+public class A<T> {
+  public a: T[65536];
+  public b: T[65536];
+}
+
+public class Big {
+  public a: u64[536870912]; //~ EN0435 "`u64[536870912]` is too large for `i386-linux`"
+}

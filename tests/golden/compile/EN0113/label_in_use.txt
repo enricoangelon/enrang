@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0113/label_in_use.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0113]: the label `outer` is already in use
+ --> tests/compile/EN0113/label_in_use.fail.en:4:3
+  |
+3 | outer: while (running) {
+  | ----- an enclosing loop has it
+4 |   outer: for (const x of xs) { //~ EN0113
+  |   ^^^^^ this label
+  |
+help: rename one of the two loops' labels
+  = explain: run `enrang explain EN0113`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0708/read_while_exclusive.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `players` can't be read while `q` may write into it
+ --> tests/compile/EN0708/read_while_exclusive.fail.en:3:13
+  |
+2 | const q = &players;
+  |           -------- borrowed for writing here, because `q` writes on line 4
+3 | console.log(players.length()); //~ EN0708 "`players` can't be read while `q` may write into it"
+  |             ^^^^^^^^^^^^^^^^ read here
+4 | q.push(1);
+  | - the write
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `players` before line 2 or after line 4
+  = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

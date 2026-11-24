@@ -1,0 +1,48 @@
+//! row: Satisfaction, one per clause: `unsafe` method,
+public interface Port {
+  poke(): void;
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public interface Counter {
+  count(): i64;
+}
+
+public class Device implements Port {
+  public poke(): void {}
+}
+
+public class Dog implements Speaker {
+  public speak(): string {
+    return "woof";
+  }
+}
+
+public class Cat implements Speaker {
+  public speak(): string {
+    return "meow";
+  }
+}
+
+public class Ticks implements Counter {
+  public count(): i64 {
+    return 1;
+  }
+}
+
+public class Parrot {
+  public speak(): string {
+    return "hello";
+  }
+}
+
+public class Cage implements Speaker {
+  public bird: Box<Parrot> = new Box(new Parrot {});
+
+  public speak(): string {
+    return this.bird.speak();
+  }
+}

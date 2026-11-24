@@ -1,0 +1,6 @@
+//! row: `for (const job of &queue) { queue.push(
+let queue = ["a", "b"];
+for (const job of &queue) {
+  queue.push("retry"); //~ EN0706 "cannot mutate `queue` while iterating over it"
+  console.log(job);
+}

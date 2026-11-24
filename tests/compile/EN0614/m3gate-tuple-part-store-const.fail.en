@@ -1,0 +1,6 @@
+const k = [1];
+let o = [0];
+let t: [&i64[], i32] = [&o, 0];
+t[0] = &k;
+t[0].push(1); //~ EN0614 "`k` is `const`, so `push`"
+console.log(k);

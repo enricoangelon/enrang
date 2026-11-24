@@ -1,0 +1,5 @@
+$ enrang explain EN0810
+[exit 2]
+[stdout]
+[stderr]
+error: `EN0810` is retired: there is one raw pointer kind, `*T`

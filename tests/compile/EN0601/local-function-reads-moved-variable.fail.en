@@ -1,0 +1,6 @@
+let s = "a".toString();
+function show(): void { console.log(s); }
+take(s);
+show(); //~ EN0601 "`s` was moved into `take`"
+
+private function take(x: string): void { console.log(x); }

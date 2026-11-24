@@ -1,0 +1,8 @@
+let players: i64[] = [1, 2];
+setTo(players.last(), players.length()); //~ EN0708 "`players` can't be read while"
+
+function setTo(x: &i64 | null, n: isize): void {
+  if (x != null) {
+    *x = n as i64;
+  }
+}

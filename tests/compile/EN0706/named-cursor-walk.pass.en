@@ -1,0 +1,19 @@
+//! row: Cursor walk with a held field reborrow, `const
+const head = new Node { val: 1, next: new Box(new Node { val: 2, next: new Box(new Node { val: 3 }) }) };
+let cur: &Node = &head;
+let sum = 0;
+while (true) {
+  const v = &(*cur).val;
+  sum += *v;
+  if ((*cur).next == null) {
+    break;
+  }
+  cur = &(*cur).next;
+  console.log(*v);
+}
+console.log(sum);
+
+public class Node {
+  public val: i64 = 0;
+  public next: Box<Node> | null = null;
+}

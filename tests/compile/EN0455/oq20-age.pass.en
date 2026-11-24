@@ -1,0 +1,18 @@
+show(parseAge("x"));
+
+public function parseAge(s: &string): Result<i64> {
+  const n = s.parseInt();
+  if (n == null) { return Err(AgeError.NotANumber); }
+  return n;
+}
+
+public function show(r: Result<i64>): void {
+  match (r) {
+    Ok => console.log(`${r.value}`),
+    Err => console.log(`caught: ${r.error}`),
+  }
+}
+
+public enum AgeError {
+  NotANumber = "not a number",
+}

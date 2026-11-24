@@ -1,0 +1,7 @@
+public class Vec2 {
+  public x: f64 = 0.0;
+
+  public operator +(o: Vec2): Vec2 { //~ EN1018 "operator overloading is not supported yet"
+    return o;
+  }
+}

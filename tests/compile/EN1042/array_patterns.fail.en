@@ -1,0 +1,10 @@
+const xs: i64[] = [1, 2, 3];
+const fixed: i64[2] = [4, 5];
+const [a, r] = xs; //~ EN1042 "array destructuring is not supported yet"
+const [f0, f1] = fixed; //~ EN1042 "array destructuring is not supported yet"
+let c = 0;
+let d = 0;
+[c, d] = xs; //~ EN1042 "array destructuring is not supported yet"
+[c, d] = fixed; //~ EN1042 "array destructuring is not supported yet"
+const nested: [i64[], i64] = [[1], 2];
+const [[n1], n2] = nested; //~ EN1042 "array destructuring is not supported yet"

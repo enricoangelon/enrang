@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0111/break_outside_a_loop.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0111]: `break` outside a loop
+ --> tests/compile/EN0111/break_outside_a_loop.fail.en:2:3
+  |
+2 |   break; //~ EN0111
+  |   ^^^^^ no loop encloses it
+  |
+  = explain: run `enrang explain EN0111`
+
+error: aborting due to 1 previous error

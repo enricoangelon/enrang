@@ -1,0 +1,6 @@
+function greet(ready: bool): void {
+  if (ready) {
+    console.log("hi");
+  }
+}
+greet(true);

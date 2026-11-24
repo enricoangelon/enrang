@@ -1,0 +1,6 @@
+let b = new Bag(); b.tally(); console.log(b.count);
+let s = new S(); let r = &s; for (const x of &r.items) { r.count += 1; } console.log(s.count);
+
+public class Bag { public items: i64[] = [1, 2, 3]; public count: i64 = 0; public tally(): void { for (const x of &this.items) { this.count += x; } } }
+
+public class S { public items: i64[] = [1, 2]; public count: i64 = 0; }

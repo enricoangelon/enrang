@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0621/assignment_value_kept_by_argument.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0621]: an assignment's value can't be kept
+ --> tests/compile/EN0621/assignment_value_kept_by_argument.fail.en:2:6
+  |
+2 | keep(s += "?"); //~ EN0621 "an assignment's value can't be kept"
+  |      ^^^^^^^^ `s += "?"` is still owned by `s`
+  |
+help: assign first, then copy: `s += "?";`, then write `s.clone()` in its place
+  = explain: run `enrang explain EN0621`
+
+error: aborting due to 1 previous error

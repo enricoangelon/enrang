@@ -1,0 +1,12 @@
+error[EN0604]: cannot move out of `names[0]`
+ --> main.en:2:11
+  |
+2 | const n = names[0];
+  |           ^^^^^^^^ an element of an array can't be moved out
+  |
+help: borrow it: `&names[0]`
+help: or copy it: `names[0].clone()`
+help: or take it out of the array: `names.remove(0)`
+  = explain: run `enrang explain EN0604`
+
+error: aborting due to 1 previous error

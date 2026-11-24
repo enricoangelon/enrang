@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0112/misspelt_label.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0112]: no enclosing loop is labelled `otuer`
+ --> tests/compile/EN0112/misspelt_label.fail.en:3:9
+  |
+3 |   break otuer; //~ EN0112
+  |         ^^^^^ unknown label
+  |
+help: did you mean `outer`?
+  |
+3 |   break outer; //~ EN0112
+  |         ~~~~~
+  = explain: run `enrang explain EN0112`
+
+error: aborting due to 1 previous error

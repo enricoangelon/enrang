@@ -1,0 +1,57 @@
+//! row: Contracts, one per clause: an implementation
+let f = new Filler();
+let xs: i64[] = [];
+fill(&f, &xs);
+let file = new File();
+shut(&file);
+let w = new Words();
+read(&w);
+
+private function fill<T extends Sink>(s: &T, xs: &i64[]): void {
+  s.put(xs);
+}
+
+private function shut<T extends Closer>(c: &T): void {
+  console.log(1);
+}
+
+private function read<T extends TokenReader>(r: &T): void {
+  console.log(r.next());
+}
+
+public interface Sink {
+  put(xs: &i64[]): void;
+}
+
+public interface Closer {
+  close(): void;
+}
+
+public interface TokenReader {
+  let next(): &string | null;
+}
+
+public class Filler { //~ EN0615 "`put` changes `xs`, but `Sink` declares that it doesn't"
+  public put(xs: &i64[]): void {
+    xs.push(1);
+  }
+}
+
+public class File { //~ EN0615 "`File.close` and `Closer.close` must both be `move` or both not"
+  private fd: i64 = 3;
+  public move close(): void {}
+}
+
+public class Words { //~ EN0615 "`Words.next` returns a read-only reference, but `TokenReader` declares a writable one"
+  private text: string = "let x = 42";
+  private pos: isize = 0;
+
+  public next(): &string | null {
+    if (this.pos >= this.text.length()) {
+      return null;
+    }
+    const start = this.pos;
+    this.pos = this.text.length();
+    return this.text.slice(start, this.pos);
+  }
+}

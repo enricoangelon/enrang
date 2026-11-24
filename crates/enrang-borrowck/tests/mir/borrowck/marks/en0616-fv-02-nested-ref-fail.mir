@@ -1,0 +1,170 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/fv-02-nested-ref.fail.en. Its row's codes: EN0616, EN0707, EN0707, EN0707, EN0707, EN0708.
+module "tests/compile/EN0616/fv-02-nested-ref.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+}
+@final class Outer {
+  inner: Copier;
+}
+
+fn Copier::#ctor(_1: &Copier, _2: &u8[], _3: &u8[]) -> void {
+  let _1: &Copier; // this
+  let _2: &u8[]; // s
+  let _3: &u8[]; // d
+  let _4: &u8[] temp;
+  let _5: &u8[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+static fn Copier::make(_1: &u8[], _2: &u8[]) -> Copier {
+  let _1: &u8[]; // s
+  let _2: &u8[]; // d
+  let _3: &u8[] temp;
+  let _4: &u8[] temp;
+  let _5: &Copier temp;
+  let _6: void temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _5 = &_0 [auto-borrow];
+    _6 = Copier::#ctor(move _5, move _3, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+static fn Copier::nest() -> void {
+  let mut _1: u8[]; // buf
+  let _2: u8[]; // tbl
+  let mut _3: Outer; // o
+  let _4: Copier temp;
+  let _5: &u8[] temp;
+  let _6: &u8[] temp;
+  let _7: &Copier temp;
+  let _8: void temp;
+  let _9: &Outer temp;
+  let _10: void temp;
+  let _11: &Copier; // r
+  let _12: &u8[]; // p
+  let _13: &u8[] temp;
+  let _14: &u8; // a
+  let _15: &Copier temp;
+  let _16: void temp;
+  let _17: &Copier temp;
+  let _18: void temp;
+  let _19: &Copier temp;
+  let _20: void temp;
+  let _21: &Copier temp;
+  let _22: void temp;
+  let _23: &Copier temp;
+  let _24: void temp;
+  let _25: &u8 temp;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<u8>(const 1: u8);
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 0: u8);
+    storage_live(_3);
+    _5 = &_2 [explicit];
+    _6 = &_1 [explicit];
+    _7 = &_4 [auto-borrow];
+    _8 = Copier::#ctor(move _7, move _5, move _6) -> bb1;
+  }
+  bb1: {
+    _9 = &_3 [auto-borrow];
+    _10 = Outer::#ctor(move _9, move _4) -> bb2;
+  }
+  bb2: {
+    storage_live(_11);
+    _11 = &_3.inner [explicit];
+    storage_live(_12);
+    _12 = copy (*_11).dst;
+    _13 = &*_12 [reborrow];
+    (*_11).src = move _13; //~ EN0616
+    storage_live(_14);
+    _15 = &_3.inner [auto-borrow]; //~ EN0708
+    _14 = Copier::peek(move _15) -> bb3;
+  }
+  bb3: {
+    _17 = &_3.inner [auto-borrow]; //~ EN0707
+    _16 = Copier::step(move _17) -> bb4;
+  }
+  bb4: {
+    _19 = &_3.inner [auto-borrow]; //~ EN0707
+    _18 = Copier::step(move _19) -> bb5;
+  }
+  bb5: {
+    _21 = &_3.inner [auto-borrow]; //~ EN0707
+    _20 = Copier::step(move _21) -> bb6;
+  }
+  bb6: {
+    _23 = &_3.inner [auto-borrow]; //~ EN0707
+    _22 = Copier::step(move _23) -> bb7;
+  }
+  bb7: {
+    _25 = &*_14 [auto-borrow];
+    _24 = form log(move _25) -> bb8;
+  }
+  bb8: {
+    storage_dead(_14);
+    storage_dead(_12);
+    storage_dead(_11);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn Copier::peek(_1: &Copier) -> readonly &u8 {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).src);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).src)[_2] [explicit];
+    return;
+  }
+}
+
+fn Copier::step(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: void temp;
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_1).dst;
+    _2 = "alloc/array"::Array<u8>::push(move _3, const 1: u8) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Outer::#ctor(_1: &Outer, _2: Copier) -> void {
+  let _1: &Outer; // this
+  let _2: Copier; // c
+  bb0: {
+    (*_1).inner = move _2;
+    return;
+  }
+}

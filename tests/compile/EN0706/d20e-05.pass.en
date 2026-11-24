@@ -1,0 +1,62 @@
+let xs: i64[] = [1, 2];
+const first = &xs[0];
+console.log(*first);
+{
+  const p = new Pusher(&xs);
+  console.log(p.size());
+}
+
+let ys: i64[] = [1, 2];
+const head = &ys[0];
+console.log(*head);
+{
+  let p = new Adder(&ys);
+  p.add(2);
+}
+
+let n: i64 = 5;
+{
+  const b = new Bumper(&n);
+}
+
+public class Pusher {
+  private xs: &i64[];
+
+  public constructor(xs: &i64[]) {
+    this.xs = xs;
+  }
+
+  public size(): isize {
+    return this.xs.length();
+  }
+
+  public destructor() {
+    for (let i = 0; i < 8; i++) {
+      this.xs.push(i);
+    }
+  }
+}
+
+public class Adder {
+  private xs: &i64[];
+
+  public constructor(xs: &i64[]) {
+    this.xs = xs;
+  }
+
+  public add(v: i64): void {
+    this.xs.push(v);
+  }
+}
+
+public class Bumper {
+  private r: &i64;
+
+  public constructor(r: &i64) {
+    this.r = r;
+  }
+
+  public destructor() {
+    *this.r += 1;
+  }
+}

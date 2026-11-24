@@ -1,0 +1,53 @@
+$ enrang check tests/compile/EN0214/rr-05.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0214]: `readonly` before a return type that holds no reference
+ --> tests/compile/EN0214/rr-05.fail.en:2:22
+  |
+2 | public function f(): readonly Plain { return new Plain {}; } //~ EN0214
+  |                      ^^^^^^^^ `Plain` holds no reference for `readonly` to make read-only
+  |
+help: remove `readonly`
+  |
+2 | public function f(): Plain { return new Plain {}; } //~ EN0214
+  |                      ~
+  = explain: run `enrang explain EN0214`
+
+error[EN0214]: `readonly` before a return type that holds no reference
+ --> tests/compile/EN0214/rr-05.fail.en:4:22
+  |
+4 | public function c(): readonly Color { return Color.Red; } //~ EN0214
+  |                      ^^^^^^^^ `Color` holds no reference for `readonly` to make read-only
+  |
+help: remove `readonly`
+  |
+4 | public function c(): Color { return Color.Red; } //~ EN0214
+  |                      ~
+  = explain: run `enrang explain EN0214`
+
+error[EN0214]: `readonly` before a return type that holds no reference
+ --> tests/compile/EN0214/rr-05.fail.en:5:29
+  |
+5 | public function g<T>(x: T): readonly T { return x; } //~ EN0214
+  |                             ^^^^^^^^ `T` holds no reference for `readonly` to make read-only
+  |
+help: remove `readonly`
+  |
+5 | public function g<T>(x: T): T { return x; } //~ EN0214
+  |                             ~
+  = explain: run `enrang explain EN0214`
+
+error[EN0214]: `readonly` before a return type that holds no reference
+ --> tests/compile/EN0214/rr-05.fail.en:6:22
+  |
+6 | public function h(): readonly Plain | null { return null; } //~ EN0214
+  |                      ^^^^^^^^ `Plain | null` holds no reference for `readonly` to make read-only
+  |
+help: remove `readonly`
+  |
+6 | public function h(): Plain | null { return null; } //~ EN0214
+  |                      ~
+  = explain: run `enrang explain EN0214`
+
+error: aborting due to 4 previous errors

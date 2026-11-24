@@ -1,0 +1,497 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/forof-tour.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/forof-tour.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::last(_1: &Array<T>) -> &T | null;
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+fn "alloc/array"::Array<T>::pop(let _1: &Array<T>) -> T | null;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("error") interface "core/prelude"::Error { }
+@lang("failure") @final class "core/result"::Failure {
+  private text: string;
+}
+@lang("result") enum "core/result"::Result<T, E extends Error> { Ok { value: T }, Err { error: E } }
+@private enum Op { Push { value: i64 }, Add, Mul, Print }
+@private class Stack<T> {
+  private items: T[] = default;
+}
+@private class Trace {
+  name: string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Op[]; // prog
+  let _3: Op temp;
+  let _4: Op temp;
+  let _5: Op temp;
+  let _6: Op temp;
+  let _7: Result<i64>; // r
+  let _8: &Op[] temp;
+  let _9: &Slice<Op> temp;
+  let _10: void temp;
+  let _11: isize temp;
+  let _12: &i64 temp;
+  let _13: &Failure temp;
+  fact f0: _7 case Ok;
+  fact f1: _7 case Err;
+  use f0 at bb3[0];
+  use f1 at bb4[0];
+  test f0 at bb3;
+  test f1 at bb4;
+  bb0: {
+    storage_live(_2);
+    _3 = Op::Push { value: const 2: i64 };
+    _4 = Op::Push { value: const 40: i64 };
+    _5 = Op::Add {};
+    _6 = Op::Print {};
+    _2 = intrinsic AllocArray<Op>(move _3, move _4, move _5, move _6);
+    storage_live(_7);
+    _8 = &_2 [explicit];
+    _9 = convert(array_to_slice, move _8);
+    _7 = run(move _9) -> bb1;
+  }
+  bb1: {
+    _11 = discriminant(_7);
+    switch move _11 [0: bb3, 1: bb4, otherwise: bb5];
+  }
+  bb2: {
+    drop(_7);
+    storage_dead(_7);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb3: {
+    check_tag(_7, Ok);
+    _12 = &(_7 as Ok).value [auto-borrow];
+    _10 = form log(const "result ": &string, move _12, const "": &string) -> bb6;
+  }
+  bb4: {
+    check_tag(_7, Err);
+    _13 = &(_7 as Err).error [auto-borrow];
+    _10 = form log(const "error: ": &string, move _13, const "": &string) -> bb7;
+  }
+  bb5: {
+    unreachable;
+  }
+  bb6: {
+    goto bb2;
+  }
+  bb7: {
+    goto bb2;
+  }
+}
+
+fn Stack<T>::pop(_1: &Stack<T>) -> T | null {
+  let _1: &Stack<T>; // this
+  let _2: &T[] temp;
+  bb0: {
+    _2 = &(*_1).items [auto-borrow];
+    _0 = "alloc/array"::Array<T>::pop(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Stack<T>::push(_1: &Stack<T>, _2: T) -> void {
+  let _1: &Stack<T>; // this
+  let _2: T; // x
+  let _3: void temp;
+  let _4: &T[] temp;
+  bb0: {
+    _4 = &(*_1).items [auto-borrow];
+    _3 = "alloc/array"::Array<T>::push(move _4, move _2) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    return;
+  }
+}
+
+fn Stack<T>::size(_1: &Stack<T>) -> isize {
+  let _1: &Stack<T>; // this
+  let _2: &T[] temp;
+  bb0: {
+    _2 = &(*_1).items [auto-borrow];
+    _0 = "alloc/array"::Array<T>::length(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Stack<T>::top(_1: &Stack<T>) -> &T | null {
+  let _1: &Stack<T>; // this
+  let _2: &T[] temp;
+  bb0: {
+    _2 = &(*_1).items [auto-borrow];
+    _0 = "alloc/array"::Array<T>::last(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Trace::#ctor(_1: &Trace, _2: string) -> void {
+  let _1: &Trace; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn Trace::#dtor(_1: &Trace) -> void {
+  let _1: &Trace; // this
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &(*_1).name [auto-borrow];
+    _2 = form log(const "[": &string, move _3, const "] done": &string) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn pop2(_1: &Stack<i64>) -> Result<i64> {
+  let _1: &Stack<i64>; // s
+  let _2: i64 | null; // v
+  let _3: &Stack<i64> temp;
+  let _4: bool temp;
+  let _5: u32 temp;
+  let _6: Failure temp;
+  let _7: i64 temp;
+  fact f0: _2 nonnull;
+  use f0 at bb3[0];
+  test f0 at bb3;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = virtual Stack<i64>::pop [copy _3](move _3) -> bb1;
+  }
+  bb1: {
+    _5 = discriminant(_2);
+    _4 = eq(move _5, const 0: u32);
+    switch move _4 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _6 = form failure_text(const "stack underflow": &string) -> bb4;
+  }
+  bb3: {
+    check_tag(_2, Present);
+    _7 = copy (_2 as Present).0;
+    _0 = Result<i64>::Ok { value: move _7 };
+    storage_dead(_2);
+    return;
+  }
+  bb4: {
+    _0 = Result<i64>::Err { error: move _6 };
+    drop(_6);
+    storage_dead(_6);
+    storage_dead(_2);
+    return;
+  }
+}
+
+@private fn run(_1: &Slice<Op>) -> Result<i64> {
+  let _1: &Slice<Op>; // program
+  let _2: Trace; // _trace
+  let _3: &Trace temp;
+  let _4: void temp;
+  let mut _5: Stack<i64>; // s
+  let _6: *Stack<i64> temp;
+  let _7: void temp;
+  let _8: isize #i;
+  let _9: isize #n;
+  let _10: bool temp;
+  let _11: &Op; // op
+  let _12: void temp;
+  let _13: isize temp;
+  let _14: i64 temp;
+  let _15: &Stack<i64> temp;
+  let _16: i64; // b
+  let _17: Result<i64> temp;
+  let _18: &Stack<i64> temp;
+  let _19: isize temp;
+  let _20: i64 temp;
+  let _21: i64; // a
+  let _22: Result<i64> temp;
+  let _23: &Stack<i64> temp;
+  let _24: isize temp;
+  let _25: i64 temp;
+  let _26: void temp;
+  let _27: i64 temp;
+  let _28: &Stack<i64> temp;
+  let _29: i64; // b
+  let _30: Result<i64> temp;
+  let _31: &Stack<i64> temp;
+  let _32: isize temp;
+  let _33: i64 temp;
+  let _34: i64; // a
+  let _35: Result<i64> temp;
+  let _36: &Stack<i64> temp;
+  let _37: isize temp;
+  let _38: i64 temp;
+  let _39: void temp;
+  let _40: i64 temp;
+  let _41: &Stack<i64> temp;
+  let _42: &i64 | null; // t
+  let _43: &Stack<i64> temp;
+  let _44: bool temp;
+  let _45: u32 temp;
+  let _46: void temp;
+  let _47: &i64 temp;
+  let _48: &Stack<i64> temp;
+  loop l0: path *_1 preheader bb7 head bb3 bind bb4[2] binding _11;
+  fact f0: _11.* case Push;
+  fact f1: _11.* case Add;
+  fact f2: _11.* case Mul;
+  fact f3: _11.* case Print;
+  fact f4: _42 nonnull;
+  use f0 at bb10[0];
+  use f4 at bb31[0];
+  test f0 at bb10;
+  test f1 at bb11;
+  test f2 at bb12;
+  test f3 at bb13;
+  test f4 at bb31;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, Trace);
+    _3 = &_2 [auto-borrow];
+    _4 = Trace::#ctor(move _3, const "vm": string) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _6 = addr_of _5;
+    _7 = named_fill Stack<i64> leaving(items)(move _6) -> bb2;
+  }
+  bb2: {
+    goto bb7;
+  }
+  bb3: {
+    _9 = len(*_1);
+    _10 = lt(copy _8, copy _9);
+    switch move _10 [0: bb6, otherwise: bb4];
+  }
+  bb4: {
+    storage_live(_11);
+    check_bounds(copy _8, copy _9);
+    _11 = &(*_1)[_8] [for-of-element];
+    _8 = add(copy _8, const 1: isize);
+    goto bb8;
+  }
+  bb5: {
+    goto bb3;
+  }
+  bb6: {
+    _48 = &_5 [explicit];
+    _0 = pop2(move _48) -> bb34;
+  }
+  bb7: {
+    storage_live(_8);
+    _8 = const 0: isize;
+    goto bb3;
+  }
+  bb8: {
+    _13 = discriminant(*_11);
+    switch move _13 [0: bb10, 1: bb11, 2: bb12, 3: bb13, otherwise: bb14];
+  }
+  bb9: {
+    storage_dead(_11);
+    goto bb5;
+  }
+  bb10: {
+    check_tag(*_11, Push);
+    _14 = copy (*_11 as Push).value;
+    _15 = &_5 [auto-borrow];
+    _12 = Stack<i64>::push(move _15, move _14) -> bb15;
+  }
+  bb11: {
+    storage_live(_16);
+    _18 = &_5 [explicit];
+    _17 = pop2(move _18) -> bb16;
+  }
+  bb12: {
+    storage_live(_29);
+    _31 = &_5 [explicit];
+    _30 = pop2(move _31) -> bb23;
+  }
+  bb13: {
+    storage_live(_42);
+    _43 = &_5 [auto-borrow];
+    _42 = Stack<i64>::top(move _43) -> bb30;
+  }
+  bb14: {
+    unreachable;
+  }
+  bb15: {
+    goto bb9;
+  }
+  bb16: {
+    _19 = discriminant(_17);
+    switch move _19 [0: bb17, otherwise: bb18];
+  }
+  bb17: {
+    check_tag(_17, Ok);
+    _20 = copy (_17 as Ok).value;
+    _16 = copy _20;
+    drop(_17);
+    storage_dead(_17);
+    storage_live(_21);
+    _23 = &_5 [explicit];
+    _22 = pop2(move _23) -> bb19;
+  }
+  bb18: {
+    check_tag(_17, Err);
+    _0 = Result<i64>::Err { error: move (_17 as Err).error };
+    drop(_17);
+    storage_dead(_17);
+    storage_dead(_16);
+    storage_dead(_11);
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+  bb19: {
+    _24 = discriminant(_22);
+    switch move _24 [0: bb20, otherwise: bb21];
+  }
+  bb20: {
+    check_tag(_22, Ok);
+    _25 = copy (_22 as Ok).value;
+    _21 = copy _25;
+    drop(_22);
+    storage_dead(_22);
+    _27 = checked_add(copy _21, copy _16);
+    _28 = &_5 [auto-borrow];
+    _26 = Stack<i64>::push(move _28, move _27) -> bb22;
+  }
+  bb21: {
+    check_tag(_22, Err);
+    _0 = Result<i64>::Err { error: move (_22 as Err).error };
+    drop(_22);
+    storage_dead(_22);
+    storage_dead(_21);
+    storage_dead(_16);
+    storage_dead(_11);
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+  bb22: {
+    storage_dead(_21);
+    storage_dead(_16);
+    goto bb9;
+  }
+  bb23: {
+    _32 = discriminant(_30);
+    switch move _32 [0: bb24, otherwise: bb25];
+  }
+  bb24: {
+    check_tag(_30, Ok);
+    _33 = copy (_30 as Ok).value;
+    _29 = copy _33;
+    drop(_30);
+    storage_dead(_30);
+    storage_live(_34);
+    _36 = &_5 [explicit];
+    _35 = pop2(move _36) -> bb26;
+  }
+  bb25: {
+    check_tag(_30, Err);
+    _0 = Result<i64>::Err { error: move (_30 as Err).error };
+    drop(_30);
+    storage_dead(_30);
+    storage_dead(_29);
+    storage_dead(_11);
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+  bb26: {
+    _37 = discriminant(_35);
+    switch move _37 [0: bb27, otherwise: bb28];
+  }
+  bb27: {
+    check_tag(_35, Ok);
+    _38 = copy (_35 as Ok).value;
+    _34 = copy _38;
+    drop(_35);
+    storage_dead(_35);
+    _40 = checked_mul(copy _34, copy _29);
+    _41 = &_5 [auto-borrow];
+    _39 = Stack<i64>::push(move _41, move _40) -> bb29;
+  }
+  bb28: {
+    check_tag(_35, Err);
+    _0 = Result<i64>::Err { error: move (_35 as Err).error };
+    drop(_35);
+    storage_dead(_35);
+    storage_dead(_34);
+    storage_dead(_29);
+    storage_dead(_11);
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+  bb29: {
+    storage_dead(_34);
+    storage_dead(_29);
+    goto bb9;
+  }
+  bb30: {
+    _45 = discriminant(_42);
+    _44 = ne(move _45, const 0: u32);
+    switch move _44 [0: bb32, otherwise: bb31];
+  }
+  bb31: {
+    check_tag(_42, Present);
+    _47 = &*(_42 as Present).0 [reborrow];
+    _46 = form log(const "top = ": &string, move _47, const "": &string) -> bb33;
+  }
+  bb32: {
+    storage_dead(_42);
+    goto bb9;
+  }
+  bb33: {
+    goto bb32;
+  }
+  bb34: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}

@@ -1,0 +1,5 @@
+let s = "hello world".toString();
+let b = "x".toString();
+g([s.slice(0, 2), 0], &b);
+console.log(s);
+private function g(t: [&string, i32], x: &string): void { *x = "a much longer replacement".toString(); }

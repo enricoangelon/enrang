@@ -1,0 +1,28 @@
+//! covers: H37
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();  // a sketch: the rest of the text is one token
+    return this.src.slice(start, this.pos);
+  }
+
+  public setSrc(s: &string): void {
+    this.src = s;
+  }
+
+  public static demo(): void {
+    const base = "ab".toString();
+    const other = "xy".toString();
+    let lx = new Lexer(&base);
+    const r = &lx;
+    const t = r.src.slice(0, 1);
+    lx.setSrc(&other); //~ EN0706
+    console.log(t);
+  }
+}

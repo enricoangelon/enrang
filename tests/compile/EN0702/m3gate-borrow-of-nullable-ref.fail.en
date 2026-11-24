@@ -1,0 +1,10 @@
+let a: i64 = 1;
+let r: &i64 | null = &a;
+const p = &r; //~ EN0702 "a reference can't point to"
+{
+  let b: i64 = 2;
+  *p = &b;
+}
+if (r != null) {
+  console.log(*r);
+}

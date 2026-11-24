@@ -1,0 +1,2 @@
+const price = 5€; //~ EN0008
+console.log(price);

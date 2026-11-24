@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0615/inf-04-fields-only.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Holder.adopt` keeps `o` itself, but `Base.adopt` keeps only what `o`'s fields hold
+  --> tests/compile/EN0615/inf-04-fields-only.fail.en:25:19
+   |
+17 |   public adopt(o: &Base): void { this.src = o.src; }
+   |          ----- declared here
+...
+25 |   public override adopt(o: &Base): void { this.other = o; } //~ EN0615
+   |                   ^^^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,16 @@
+public class Person {
+  public constructor(public name: string) {}
+}
+
+public class Animal {
+  public constructor(public name: string) {}
+}
+
+public class Dog extends Animal {
+  public owner: Person;
+
+  public constructor(name: string, owner: Person) {
+    super(name); //~ EN0610 "`this.owner` is not set when `super(name)` runs"
+    this.owner = owner;
+  }
+}

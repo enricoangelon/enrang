@@ -1,0 +1,7 @@
+//! row: `if (p != null) { xs.forEach(x => { p =
+let p: i64 | null = 1;
+const xs = [1, 2];
+if (p != null) {
+  xs.forEach(x => { p = null; });
+  console.log(p);
+}

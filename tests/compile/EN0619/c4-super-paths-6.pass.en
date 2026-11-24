@@ -1,0 +1,15 @@
+public class Animal {
+  public tricks: string[];
+
+  public constructor(public name: string) {}
+
+  public destructor() {
+    console.log(`bye, ${this.name}`);
+  }
+}
+
+public class Dog extends Animal {
+  public constructor(name: string) {
+    super(name);
+  }
+}

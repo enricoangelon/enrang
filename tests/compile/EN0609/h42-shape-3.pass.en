@@ -1,0 +1,7 @@
+//! covers: H42
+function px(p: &{ x: i64 }): &i64 { return &p.x; }
+let c = new C();
+console.log(*px(&c));
+*px(&c) = 5;
+
+public class C { public x: i64 = 1; }

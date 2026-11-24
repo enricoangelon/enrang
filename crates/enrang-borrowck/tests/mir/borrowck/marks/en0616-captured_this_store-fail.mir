@@ -1,0 +1,89 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/captured_this_store.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/captured_this_store.fail";
+@private class Lexer {
+  private src: &string;
+  private pos: isize = default;
+}
+
+fn Lexer::#ctor(_1: &Lexer, _2: &string) -> void {
+  let _1: &Lexer; // this
+  let _2: &string; // src
+  let _3: &string temp;
+  bb0: {
+    switch const overridden(pos): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+  bb2: {
+    field_init((*_1).pos, const 0: isize);
+    goto bb1;
+  }
+}
+
+fn Lexer::reset(_1: &Lexer) -> void {
+  let _1: &Lexer; // this
+  let _2: string; // tmp
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: string temp;
+  let _8: void temp;
+  let _9: () => void temp;
+  let _10: &Lexer temp;
+  let _11: &string temp;
+  let _12: [&Lexer, &string] temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "x": string;
+    _4 = &_3 [temp-arg];
+    _5 = const "y": string;
+    _6 = &_5 [temp-arg];
+    _7 = form concat(move _4, move _6) -> bb1;
+  }
+  bb1: {
+    _2 = move _7;
+    drop(_7);
+    storage_dead(_7);
+    drop(_5);
+    storage_dead(_5);
+    drop(_3);
+    storage_dead(_3);
+    _10 = &*_1 [closure-capture];
+    _11 = &_2 [closure-capture];
+    _12 = env(move _10, move _11);
+    _9 = closure(arrow#0, _12);
+    _8 = run(move _9) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}
+
+arrow#0 of fn Lexer::reset (_1: &[&Lexer, &string]) -> void {
+  let _1: &[&Lexer, &string] env;
+  capture this: &Lexer through_ref;
+  capture tmp: &string path;
+  bb0: {
+    (*(*_1).0).src = &*(*_1).1 [explicit]; //~ EN0616 "cannot store a reference into captured `this`"
+    return;
+  }
+}
+
+@private fn run(_1: () => void) -> void {
+  let _1: () => void; // f
+  let _2: void temp;
+  bb0: {
+    _2 = closure _1() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

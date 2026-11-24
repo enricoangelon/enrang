@@ -1,0 +1,6 @@
+//! row: `let q; const c = [...q]; q = [1];`; `le
+let q;
+const c = [...q]; //~ EN0410
+q = [1];
+
+const d = [...[]]; //~ EN0410

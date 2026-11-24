@@ -1,0 +1,21 @@
+$ enrang explain EN0909
+[exit 0]
+[stdout]
+EN0909: unknown or rejected `--cpu`
+
+`--cpu` names the oldest CPU the output must run on: a level, `i386`, `i486`, `i586`, `i686`, `sse2` or `x86-64`, or the name of a chip, such as `pentium`, `k6-2` or `core2`, which resolves to a level and prints a note saying which. A name that is neither is EN0909, with a did-you-mean when one is close. `--cpu=native` is EN0909 too: the host is never the target, so output runs on the chips it was built for and not only on the machine that built it. `enrang targets` lists every level and chip name.
+
+Failing:
+
+    $ enrang check --cpu=native
+    error[EN0909]: `--cpu=native` is rejected
+      = note: the host is never the target: output runs on the chips it was built for, not on the machine building it
+    help: name a level or a chip; `enrang targets` lists them
+      = explain: run `enrang explain EN0909`
+
+    error: aborting due to 1 previous error
+
+Fixed:
+
+    $ enrang check --cpu=x86-64
+[stderr]

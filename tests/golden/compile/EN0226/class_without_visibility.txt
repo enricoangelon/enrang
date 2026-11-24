@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0226/class_without_visibility.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0226]: this declaration needs `public` or `private`
+ --> tests/compile/EN0226/class_without_visibility.fail.en:1:1
+  |
+1 | class Point { //~ EN0226
+  | ^^^^^ no visibility is stated
+  |
+  = note: `public` lets other files import it; `private` keeps it to its own module
+help: keep it to this module
+  |
+1 | private class Point { //~ EN0226
+  | ++++++++
+  = explain: run `enrang explain EN0226`
+
+error: aborting due to 1 previous error

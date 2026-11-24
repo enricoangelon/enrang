@@ -1,0 +1,144 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/forof-spread-order.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/forof-spread-order.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_extend_cloned") fn "alloc/array"::Array<T>::extendCloned(let _1: &Array<T>, _2: &Slice<T>) -> void where T extends Clone;
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("clone") interface "core/prelude"::Clone { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // a
+  let _3: i64; // x
+  let _4: i64[]; // b
+  let _5: i64[] temp;
+  let _6: &i64[] temp;
+  let _7: &Slice<i64> temp;
+  let _8: &i64[] temp;
+  let _9: void temp;
+  let _10: i64 temp;
+  let _11: &i64[] temp;
+  let _12: &i64[] temp;
+  let _13: void temp;
+  let _14: i64[]; // c
+  let _15: i64[] temp;
+  let _16: i64 temp;
+  let _17: &i64[] temp;
+  let _18: &i64[] temp;
+  let _19: void temp;
+  let _20: &i64[] temp;
+  let _21: &Slice<i64> temp;
+  let _22: &i64[] temp;
+  let _23: void temp;
+  let _24: i64[] temp;
+  let _25: i64[] temp;
+  let _26: &i64[] temp;
+  let _27: &Slice<i64> temp;
+  let _28: &i64[] temp;
+  let _29: void temp;
+  let _30: i64 temp;
+  let _31: &i64[] temp;
+  let _32: void temp;
+  let _33: void temp;
+  let _34: &i64[] temp;
+  let _35: &i64[] temp;
+  let _36: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    storage_live(_3);
+    _3 = const 3: i64;
+    storage_live(_4);
+    _5 = intrinsic AllocArray<i64>();
+    _6 = &_2 [auto-borrow];
+    _7 = convert(array_to_slice, move _6);
+    _8 = &_5 [auto-borrow];
+    _9 = "alloc/array"::Array<i64>::extendCloned(move _8, move _7) -> bb1;
+  }
+  bb1: {
+    _11 = &_2 [explicit];
+    _10 = f(move _11) -> bb2;
+  }
+  bb2: {
+    _12 = &_5 [auto-borrow];
+    _13 = "alloc/array"::Array<i64>::push(move _12, copy _10) -> bb3;
+  }
+  bb3: {
+    _4 = move _5;
+    drop(_5);
+    storage_dead(_5);
+    storage_live(_14);
+    _15 = intrinsic AllocArray<i64>();
+    _17 = &_2 [explicit];
+    _16 = f(move _17) -> bb4;
+  }
+  bb4: {
+    _18 = &_15 [auto-borrow];
+    _19 = "alloc/array"::Array<i64>::push(move _18, copy _16) -> bb5;
+  }
+  bb5: {
+    _20 = &_2 [auto-borrow];
+    _21 = convert(array_to_slice, move _20);
+    _22 = &_15 [auto-borrow];
+    _23 = "alloc/array"::Array<i64>::extendCloned(move _22, move _21) -> bb6;
+  }
+  bb6: {
+    _14 = move _15;
+    drop(_15);
+    storage_dead(_15);
+    _25 = intrinsic AllocArray<i64>();
+    _26 = &_2 [auto-borrow];
+    _27 = convert(array_to_slice, move _26);
+    _28 = &_25 [auto-borrow];
+    _29 = "alloc/array"::Array<i64>::extendCloned(move _28, move _27) -> bb7;
+  }
+  bb7: {
+    _30 = copy _3;
+    _31 = &_25 [auto-borrow];
+    _32 = "alloc/array"::Array<i64>::push(move _31, copy _30) -> bb8;
+  }
+  bb8: {
+    _24 = move _25;
+    drop(_2) [assign];
+    _2 = move _24;
+    drop(_24);
+    storage_dead(_24);
+    drop(_25);
+    storage_dead(_25);
+    _34 = &_2 [auto-borrow];
+    _35 = &_4 [auto-borrow];
+    _36 = &_14 [auto-borrow];
+    _33 = form log(move _34, move _35, move _36) -> bb9;
+  }
+  bb9: {
+    drop(_14);
+    storage_dead(_14);
+    drop(_4);
+    storage_dead(_4);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn f(_1: &i64[]) -> i64 {
+  let _1: &i64[]; // xs
+  let _2: isize temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = "alloc/array"::Array<i64>::length(move _3) -> bb1;
+  }
+  bb1: {
+    _0 = cast(int_to_int, move _2, i64);
+    return;
+  }
+}

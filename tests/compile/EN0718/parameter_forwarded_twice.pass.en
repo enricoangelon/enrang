@@ -1,0 +1,8 @@
+private function twiceOf(f: () => void): void {
+  run1(f);
+  run1(f);
+}
+
+private function run1(a: () => void): void {
+  a();
+}

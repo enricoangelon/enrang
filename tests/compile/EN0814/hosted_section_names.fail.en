@@ -1,0 +1,8 @@
+//! target: x86_64-linux
+@section(".boot") public function early(): void {} //~ EN0814 "section `.boot` is not allowed on `x86_64-linux`"
+
+@section(".text") public function plain(): void {} //~ EN0814 "section `.text` is not allowed on `x86_64-linux`"
+
+@section(".bss.stack") private unsafe let stack: u8[4096]; //~ EN0814 "section `.bss.stack` is reserved"
+
+@section("custom") public const C: i64 = 1; //~ EN0814 "section `custom` is not allowed on `x86_64-linux`"

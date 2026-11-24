@@ -1,0 +1,22 @@
+const found = find();
+const name = found?.name;
+const team = new Team {};
+const petName = team.lead?.pet?.name;
+console.log(name, petName);
+
+private function find(): User | null {
+  return new User { name: "Ada" };
+}
+
+public class Pet {
+  public name: string;
+}
+
+public class User {
+  public name: string;
+  public pet: Pet | null = null;
+}
+
+public class Team {
+  public lead: User | null = null;
+}

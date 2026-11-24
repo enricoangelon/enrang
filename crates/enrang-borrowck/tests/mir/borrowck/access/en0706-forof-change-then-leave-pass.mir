@@ -1,0 +1,319 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/forof-change-then-leave.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/forof-change-then-leave.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::clear(let _1: &Array<T>) -> void;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // q
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &i64; // x
+  let _7: void temp;
+  let _8: &i64[] temp;
+  let _9: isize #i;
+  let _10: isize #n;
+  let _11: bool temp;
+  let _12: &i64; // x
+  let _13: i64[] temp;
+  let _14: isize #i;
+  let _15: isize #n;
+  let _16: bool temp;
+  let _17: &i64; // x
+  let _18: void temp;
+  let _19: &i64 temp;
+  let _20: i64[] temp;
+  let mut _21: int; // i
+  let _22: bool temp;
+  let _23: void temp;
+  let _24: &i64[] temp;
+  let _25: int temp;
+  let mut _26: i64[]; // xs
+  let _27: isize #i;
+  let _28: isize #n;
+  let _29: bool temp;
+  let _30: &i64; // x
+  let _31: void temp;
+  let _32: &i64[] temp;
+  let _33: &i64[] temp;
+  loop l0: path _2 preheader bb5 head bb1 bind bb2[2] binding _6;
+  loop l1: path _2 preheader bb12 head bb8 bind bb9[2] binding _12;
+  loop l2: path _2 preheader bb18 head bb14 bind bb15[2] binding _17;
+  loop l4: path _26 preheader bb30 head bb26 bind bb27[2] binding _30;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    goto bb5;
+  }
+  bb1: {
+    _4 = len(_2);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &_2[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    goto bb12;
+  }
+  bb5: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _8 = &_2 [auto-borrow];
+    _7 = "alloc/array"::Array<i64>::push(move _8, const 1: i64) -> bb7;
+  }
+  bb7: {
+    storage_dead(_6);
+    goto bb4;
+  }
+  bb8: {
+    _10 = len(_2);
+    _11 = lt(copy _9, copy _10);
+    switch move _11 [0: bb11, otherwise: bb9];
+  }
+  bb9: {
+    storage_live(_12);
+    check_bounds(copy _9, copy _10);
+    _12 = &_2[_9] [for-of-element];
+    _9 = add(copy _9, const 1: isize);
+    goto bb13;
+  }
+  bb10: {
+    goto bb8;
+  }
+  bb11: {
+    goto bb18;
+  }
+  bb12: {
+    storage_live(_9);
+    _9 = const 0: isize;
+    goto bb8;
+  }
+  bb13: {
+    _13 = intrinsic AllocArray<i64>();
+    drop(_2) [assign];
+    _2 = move _13;
+    drop(_13);
+    storage_dead(_13);
+    storage_dead(_12);
+    goto bb11;
+  }
+  bb14: {
+    _15 = len(_2);
+    _16 = lt(copy _14, copy _15);
+    switch move _16 [0: bb17, otherwise: bb15];
+  }
+  bb15: {
+    storage_live(_17);
+    check_bounds(copy _14, copy _15);
+    _17 = &_2[_14] [for-of-element];
+    _14 = add(copy _14, const 1: isize);
+    goto bb19;
+  }
+  bb16: {
+    goto bb14;
+  }
+  bb17: {
+    _20 = intrinsic AllocArray<i64>();
+    drop(_2) [assign];
+    _2 = move _20;
+    drop(_20);
+    storage_dead(_20);
+    storage_live(_21);
+    _21 = const 0: int;
+    goto bb21;
+  }
+  bb18: {
+    storage_live(_14);
+    _14 = const 0: isize;
+    goto bb14;
+  }
+  bb19: {
+    _19 = &*_17 [reborrow];
+    _18 = form log(move _19) -> bb20;
+  }
+  bb20: {
+    storage_dead(_17);
+    goto bb16;
+  }
+  bb21: {
+    _22 = lt(copy _21, const 2: int);
+    switch move _22 [0: bb24, otherwise: bb22];
+  }
+  bb22: {
+    _24 = &_2 [auto-borrow];
+    _23 = "alloc/array"::Array<i64>::push(move _24, const 1: i64) -> bb25;
+  }
+  bb23: {
+    _25 = copy _21;
+    _21 = checked_add(copy _25, const 1: int);
+    goto bb21;
+  }
+  bb24: {
+    storage_dead(_21);
+    storage_live(_26);
+    _26 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    goto bb30;
+  }
+  bb25: {
+    goto bb23;
+  }
+  bb26: {
+    _28 = len(_26);
+    _29 = lt(copy _27, copy _28);
+    switch move _29 [0: bb29, otherwise: bb27];
+  }
+  bb27: {
+    storage_live(_30);
+    check_bounds(copy _27, copy _28);
+    _30 = &_26[_27] [for-of-element];
+    _27 = add(copy _27, const 1: isize);
+    goto bb31;
+  }
+  bb28: {
+    goto bb26;
+  }
+  bb29: {
+    _32 = &_2 [auto-borrow];
+    _33 = &_26 [auto-borrow];
+    _31 = form log(move _32, move _33) -> bb32;
+  }
+  bb30: {
+    storage_live(_27);
+    _27 = const 0: isize;
+    goto bb26;
+  }
+  bb31: {
+    *_30 = const 1: i64;
+    storage_dead(_30);
+    goto bb28;
+  }
+  bb32: {
+    drop(_26);
+    storage_dead(_26);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn clearAndReturn() -> void {
+  let mut _1: i64[]; // q
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &i64; // x
+  let _6: void temp;
+  let _7: &i64[] temp;
+  loop l0: path _1 preheader bb5 head bb1 bind bb2[2] binding _5;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    goto bb5;
+  }
+  bb1: {
+    _3 = len(_1);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &_1[_2] [for-of-element];
+    _2 = add(copy _2, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _7 = &_1 [auto-borrow];
+    _6 = "alloc/array"::Array<i64>::clear(move _7) -> bb7;
+  }
+  bb7: {
+    storage_dead(_5);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+@private fn reassignAndReturn() -> void {
+  let mut _1: i64[]; // q
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &i64; // x
+  let _6: i64[] temp;
+  loop l0: path _1 preheader bb5 head bb1 bind bb2[2] binding _5;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    goto bb5;
+  }
+  bb1: {
+    _3 = len(_1);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &_1[_2] [for-of-element];
+    _2 = add(copy _2, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _6 = intrinsic AllocArray<i64>();
+    drop(_1) [assign];
+    _1 = move _6;
+    drop(_6);
+    storage_dead(_6);
+    storage_dead(_5);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}

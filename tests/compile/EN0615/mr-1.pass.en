@@ -1,0 +1,29 @@
+let msg: string = "hi";
+run(shout, &msg);
+run(show, &msg);
+const k = new Quiet {};
+emit(&k, &msg);
+
+private function run(f: fn(let s: &string) => void, s: &string): void {
+  f(s);
+}
+
+private function shout(s: &string): void {
+  *s += "!";
+}
+
+private function show(s: &string): void {
+  console.log(s);
+}
+
+private function emit(k: &Sink, s: &string): void {
+  k.put(s);
+}
+
+public abstract class Sink {
+  public abstract put(let s: &string): void;
+}
+
+public class Quiet extends Sink {
+  public override put(s: &string): void { console.log(s.length()); }
+}

@@ -1,0 +1,14 @@
+//! row: Nested: `const { name: who, pos: { x, y 
+const ada = new Person { name: "Ada", pos: new Pos { x: 3, y: 4 }, scores: [10, 20] };
+const { name: who, pos: { x, y } } = &ada;
+console.log(who, x, y);
+const { scores: [first, second] } = ada;
+console.log(first, second);
+const pairs: [i64, Person][] = [[1, new Person { name: "Ada", pos: new Pos { x: 0, y: 0 }, scores: [0, 0] }]];
+for (const [i, { name }] of &pairs) {
+  console.log(i, name);
+}
+
+public class Pos { public x: i64; public y: i64; }
+
+public class Person { public name: string; public pos: Pos; public scores: [i64, i64]; }

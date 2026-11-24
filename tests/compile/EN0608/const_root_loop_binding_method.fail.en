@@ -1,0 +1,5 @@
+//! covers: H28
+const rows: i64[][] = [[1], [2]];
+for (const r of &rows) { //~ EN0608
+  r.push(3);
+}

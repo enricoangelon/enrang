@@ -1,0 +1,11 @@
+//! row: `let r = &a; for (const x of r) { saved 
+let a = ["a", "b"];
+let r = &a;
+let saved: &string | null = null;
+for (const x of r) {
+  saved = x;
+  a.push("s"); //~ EN0706
+  use(saved);
+}
+
+private function use(s: &string | null): void { console.log(s); }

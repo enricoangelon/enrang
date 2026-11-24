@@ -1,0 +1,2 @@
+const path = "C:\data"; //~ EN0003
+console.log(path);

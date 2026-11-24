@@ -1,0 +1,33 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0602/field_written_on_unassigned_local.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0602/field_written_on_unassigned_local.pass";
+class User {
+  name: string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: User; // g
+  let _3: User temp;
+  let _4: *User temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_2);
+    _4 = addr_of _3;
+    _5 = named_fill User leaving()(move _4) -> bb1;
+  }
+  bb1: {
+    _3.name = const "": string;
+    drop(_2) [assign];
+    _2 = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2.name) [assign];
+    _2.name = const "Ada": string;
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

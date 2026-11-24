@@ -1,0 +1,214 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0601/moved-twice-in-one-call.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0601/moved-twice-in-one-call.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+class Pair {
+  first: string;
+  n: i64;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  let _6: string temp;
+  let _7: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "x": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    _7 = &_2 [auto-borrow];
+    _6 = "alloc/string"::#extend0::clone(move _7) -> bb2;
+  }
+  bb2: {
+    _5 = both(move _6, move _2) -> bb3;
+  }
+  bb3: {
+    drop(_6);
+    storage_dead(_6);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn both(_1: string, _2: string) -> void {
+  let _1: string; // a
+  let _2: string; // b
+  let _3: void temp;
+  let _4: &string temp;
+  let _5: &string temp;
+  bb0: {
+    _4 = &_1 [auto-borrow];
+    _5 = &_2 [auto-borrow];
+    _3 = form log(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn literal() -> void {
+  let _1: string; // t
+  let _2: string temp;
+  let _3: &string temp;
+  let _4: string[]; // pair
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: void temp;
+  let _8: isize temp;
+  let _9: &string[] temp;
+  let _10: &isize temp;
+  bb0: {
+    storage_live(_1);
+    _2 = const "y": string;
+    _3 = &_2 [temp-arg];
+    _1 = form to_string(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    storage_live(_4);
+    _6 = &_1 [auto-borrow];
+    _5 = "alloc/string"::#extend0::clone(move _6) -> bb2;
+  }
+  bb2: {
+    _4 = intrinsic AllocArray<string>(move _5, move _1);
+    drop(_5);
+    storage_dead(_5);
+    _9 = &_4 [auto-borrow];
+    _8 = "alloc/array"::Array<string>::length(move _9) -> bb3;
+  }
+  bb3: {
+    _10 = &_8 [temp-arg];
+    _7 = form log(move _10) -> bb4;
+  }
+  bb4: {
+    storage_dead(_8);
+    drop(_4);
+    storage_dead(_4);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn part() -> void {
+  let _1: Pair; // p
+  let _2: *Pair temp;
+  let _3: void temp;
+  let _4: void temp;
+  bb0: {
+    storage_live(_1);
+    _2 = addr_of _1;
+    _3 = named_fill Pair leaving()(move _2) -> bb1;
+  }
+  bb1: {
+    _1.first = const "a": string;
+    _1.n = const 1: i64;
+    _4 = takeBoth(copy _1.n, move _1) -> bb2;
+  }
+  bb2: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+@private fn run(_1: (() => void) | null = default, _2: (() => void) | null = default) -> void {
+  let _1: (() => void) | null; // a
+  let _2: (() => void) | null; // b
+  let _3: isize arg; // #supplied
+  let _4: bool temp;
+  let _5: u32 temp;
+  let _6: void temp;
+  let _7: () => void temp;
+  let _8: bool temp;
+  let _9: u32 temp;
+  let _10: void temp;
+  let _11: () => void temp;
+  fact f0: _1 nonnull;
+  fact f1: _2 nonnull;
+  test f0 at bb1;
+  test f1 at bb4;
+  defaults _3;
+  bb0: {
+    _5 = discriminant(_1);
+    _4 = ne(move _5, const 0: u32);
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    check_tag(_1, Present);
+    _7 = closure_reborrow((_1 as Present).0);
+    _6 = closure _7() -> bb3;
+  }
+  bb2: {
+    _9 = discriminant(_2);
+    _8 = ne(move _9, const 0: u32);
+    switch move _8 [0: bb5, otherwise: bb4];
+  }
+  bb3: {
+    goto bb2;
+  }
+  bb4: {
+    check_tag(_2, Present);
+    _11 = closure_reborrow((_2 as Present).0);
+    _10 = closure _11() -> bb6;
+  }
+  bb5: {
+    return;
+  }
+  bb6: {
+    goto bb5;
+  }
+}
+
+@private fn takeBoth(_1: i64, _2: Pair) -> void {
+  let _1: i64; // n
+  let _2: Pair; // p
+  let _3: void temp;
+  let _4: &string temp;
+  let _5: &i64 temp;
+  bb0: {
+    _4 = &_2.first [auto-borrow];
+    _5 = &_1 [auto-borrow];
+    _3 = form log(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    return;
+  }
+}
+
+fn twice(_1: (() => void) | null = default) -> void {
+  let _1: (() => void) | null; // h
+  let _2: isize arg; // #supplied
+  let _3: void temp;
+  let _4: (() => void) | null temp;
+  defaults _2;
+  bb0: {
+    _4 = null;
+    _3 = run(move _1, move _4, const 2: isize) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

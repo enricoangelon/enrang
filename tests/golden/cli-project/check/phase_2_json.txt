@@ -1,0 +1,7 @@
+$ enrang check --error-format=json main.en
+[exit 1]
+[stdout]
+[stderr]
+{"version":1,"severity":"error","code":"EN0401","message":"mismatched types: expected `i64`, found `string`","primary":{"text":"this is `string`","span":{"file":"main.en","lo":15,"hi":21,"line":1,"col":16,"end_line":1,"end_col":22}},"secondary":[{"text":"`i64` is required by this annotation","span":{"file":"main.en","lo":9,"hi":12,"line":1,"col":10,"end_line":1,"end_col":13}}],"entries":[{"kind":"note","text":"Enrang never converts between numbers and strings implicitly."}],"helps":[],"explain":"enrang explain EN0401"}
+{"version":1,"severity":"error","code":"EN0301","message":"cannot find `totl` in this scope","primary":{"text":"not found","span":{"file":"main.en","lo":35,"hi":39,"line":2,"col":13,"end_line":2,"end_col":17}},"secondary":[],"entries":[],"helps":[],"explain":"enrang explain EN0301"}
+{"version":1,"severity":"error","code":"EN0401","message":"mismatched types: expected `bool`, found `int`","primary":{"text":"this is `int`","span":{"file":"main.test.en","lo":38,"hi":39,"line":2,"col":19,"end_line":2,"end_col":20}},"secondary":[{"text":"`bool` is required by this annotation","span":{"file":"main.test.en","lo":31,"hi":35,"line":2,"col":12,"end_line":2,"end_col":16}}],"entries":[],"helps":[],"explain":"enrang explain EN0401"}

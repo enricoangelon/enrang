@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/insert_while_lookup_used.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `m` cannot change while `hit` still points into it
+ --> tests/compile/EN0706/insert_while_lookup_used.fail.en:3:3
+  |
+2 |   const hit = m.find(k);
+  |               - shared borrow of `m` starts here, held by `hit`
+3 |   m.insert(k); //~ EN0706 "cannot change while `hit` still points into it"
+  |   ^^^^^^^^^^^ `insert` changes `m`, so it needs exclusive access to it
+4 |   if (hit != null) { return hit; }
+  |       --- `hit` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

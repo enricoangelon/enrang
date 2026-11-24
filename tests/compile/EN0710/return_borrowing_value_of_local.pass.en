@@ -1,0 +1,8 @@
+public function make(s: &string): Lexer {
+  return new Lexer(s);
+}
+
+public class Lexer {
+  private src: &string;
+  public constructor(src: &string) { this.src = src; }
+}

@@ -1,0 +1,52 @@
+//! row: Contracts, one per clause: an implementation
+public interface Closer {
+  close(): void;
+}
+
+public interface Opener {
+  move open(): void;
+}
+
+public interface TokenReader {
+  let next(): &string | null;
+}
+
+public interface Sink {
+  let put(s: &string): void;
+}
+
+public class File implements Closer { //~ EN0615 "`File.close` and `Closer.close` must both be `move` or both not"
+  private fd: i64 = 3;
+  public move close(): void {}
+}
+
+public class Door implements Opener { //~ EN0615 "`Door.open` and `Opener.open` must both be `move` or both not"
+  private n: i64 = 3;
+  public open(): void {}
+}
+
+public class Words implements TokenReader { //~ EN0615 "`Words.next` returns a read-only reference, but `TokenReader` declares a writable one"
+  private text: string = "let x = 42";
+  private pos: isize = 0;
+
+  public next(): &string | null {
+    if (this.pos >= this.text.length()) {
+      return null;
+    }
+    const start = this.pos;
+    this.pos = this.text.length();
+    return this.text.slice(start, this.pos);
+  }
+}
+
+public class Keeper implements Sink { //~ EN0615 "`Keeper.put` stores `s` into `this`, but `Sink.put` declares no such store"
+  private r: &string;
+
+  public constructor(r: &string) {
+    this.r = r;
+  }
+
+  public put(s: &string): void {
+    this.r = s;
+  }
+}

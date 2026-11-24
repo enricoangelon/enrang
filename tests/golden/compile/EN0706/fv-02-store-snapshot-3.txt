@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/fv-02-store-snapshot-3.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `buf` cannot change while `h` still points into it
+  --> tests/compile/EN0706/fv-02-store-snapshot-3.fail.en:10:1
+   |
+ 9 | link(&h, &c, &buf);
+   |              ---- shared borrow of `buf` starts here, held by `h`
+10 | buf.push(2); //~ EN0706
+   | ^^^^^^^^^^^ `push` changes `buf`, so it needs exclusive access to it
+11 | console.log(h.first());
+   |             - `h` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,19 @@
+let s = "abc".toString();
+let g = new Guard(&s);
+consume(g);
+s = "def".toString();
+g = new Guard(&s);
+console.log(s);
+for (let i = 0; i < 2; i++) {
+  dispose(g);
+  s = "ghi".toString();
+  g = new Guard(&s);
+}
+
+private class Guard {
+  private r: &string;
+  public constructor(r: &string) { this.r = r; }
+  public destructor() { console.log(`drop ${this.r}`); }
+}
+
+private function consume(g: Guard): void {}

@@ -1,0 +1,10 @@
+const b = new Build {};
+console.log(b.run());
+
+public abstract class Task {
+  public abstract move run(): string;
+}
+
+public class Build extends Task {
+  public override move run(): string { return "built"; }
+}

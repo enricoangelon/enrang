@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0714/abstract-returns-parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0714]: `Cell.pick` returns a reference into `a`, but `Slot.pick` returns only into `this`
+ --> tests/compile/EN0714/abstract-returns-parameter.fail.en:9:5
+  |
+2 |   public abstract pick(a: &i64): &i64;
+  |                   ---- declared here
+...
+9 |     return a; //~ EN0714
+  |     ^^^^^^^^^ returned here
+  |
+help: through a `&Slot`, callers only expect the object
+  = explain: run `enrang explain EN0714`
+
+error: aborting due to 1 previous error

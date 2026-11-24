@@ -1,0 +1,65 @@
+$ enrang check tests/compile/EN0706/fv-02-base-flag.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `s` cannot change while `t` still points into it
+  --> tests/compile/EN0706/fv-02-base-flag.fail.en:6:1
+   |
+ 5 | const t = Base.firstOf(&s);
+   |                        -- shared borrow of `s` starts here, held by `t`
+ 6 | s.step(); //~ EN0706
+   | ^ `s` changes here
+...
+10 | console.log(*t);
+   |              - `t` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `s` cannot change while `t` still points into it
+  --> tests/compile/EN0706/fv-02-base-flag.fail.en:7:1
+   |
+ 5 | const t = Base.firstOf(&s);
+   |                        -- shared borrow of `s` starts here, held by `t`
+ 6 | s.step(); //~ EN0706
+ 7 | s.step(); //~ EN0706
+   | ^ `s` changes here
+ 8 | s.step(); //~ EN0706
+ 9 | s.step(); //~ EN0706
+10 | console.log(*t);
+   |              - `t` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `s` cannot change while `t` still points into it
+  --> tests/compile/EN0706/fv-02-base-flag.fail.en:8:1
+   |
+ 5 | const t = Base.firstOf(&s);
+   |                        -- shared borrow of `s` starts here, held by `t`
+ 6 | s.step(); //~ EN0706
+ 7 | s.step(); //~ EN0706
+ 8 | s.step(); //~ EN0706
+   | ^ `s` changes here
+ 9 | s.step(); //~ EN0706
+10 | console.log(*t);
+   |              - `t` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `s` cannot change while `t` still points into it
+  --> tests/compile/EN0706/fv-02-base-flag.fail.en:9:1
+   |
+ 5 | const t = Base.firstOf(&s);
+   |                        -- shared borrow of `s` starts here, held by `t`
+...
+ 9 | s.step(); //~ EN0706
+   | ^ `s` changes here
+10 | console.log(*t);
+   |              - `t` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 4 previous errors

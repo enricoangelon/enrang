@@ -1,0 +1,41 @@
+$ enrang check tests/compile/EN0203/truthiness.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0203]: a condition must be `bool`, found `i64`
+ --> tests/compile/EN0203/truthiness.fail.en:3:5
+  |
+3 | if (count) { //~ EN0203 "a condition must be `bool`, found `i64`"
+  |     ^^^^^ this is `i64`
+  |
+help: compare it: `count != 0`
+  = explain: run `enrang explain EN0203`
+
+error[EN0203]: a condition must be `bool`, found `string | null`
+ --> tests/compile/EN0203/truthiness.fail.en:6:8
+  |
+6 | while (name) { //~ EN0203 "a condition must be `bool`, found `string | null`"
+  |        ^^^^ this is `string | null`
+  |
+help: test it: `name != null`
+  = explain: run `enrang explain EN0203`
+
+error[EN0203]: a condition must be `bool`, found `i64`
+ --> tests/compile/EN0203/truthiness.fail.en:9:14
+  |
+9 | const word = count ? "some" : "none"; //~ EN0203 "a condition must be `bool`, found `i64`"
+  |              ^^^^^ this is `i64`
+  |
+help: compare it: `count != 0`
+  = explain: run `enrang explain EN0203`
+
+error[EN0203]: a condition must be `bool`, found `i64`
+  --> tests/compile/EN0203/truthiness.fail.en:10:16
+   |
+10 | const empty = !count; //~ EN0203 "a condition must be `bool`, found `i64`"
+   |                ^^^^^ this is `i64`
+   |
+help: compare it: `count != 0`
+   = explain: run `enrang explain EN0203`
+
+error: aborting due to 4 previous errors

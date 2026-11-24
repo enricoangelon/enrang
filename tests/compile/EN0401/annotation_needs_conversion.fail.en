@@ -1,0 +1,3 @@
+const count: i64 = 5;
+const label: string = count; //~ EN0401 "mismatched types: expected `string`, found `i64`"
+console.log(label);

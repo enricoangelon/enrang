@@ -1,0 +1,55 @@
+$ enrang check tests/compile/EN0706/forof-box-contents-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot reassign `b` during iteration
+ --> tests/compile/EN0706/forof-box-contents-source.fail.en:5:5
+  |
+4 |   for (const x of &*b) {
+  |                   --- `b` is borrowed here
+5 |     b = new Box([3]); //~ EN0706
+  |     ^^^^^^^^^^^^^^^^ cannot reassign while borrowed
+  |
+help: iterate over `(*b).clone()` if reassignment is intentional
+  |
+4 |   for (const x of (*b).clone()) {
+  |                   ~~~~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot reassign `b` during iteration
+  --> tests/compile/EN0706/forof-box-contents-source.fail.en:12:5
+   |
+11 |   for (const x of &*b) {
+   |                   --- `b` is borrowed here
+12 |     b = new Box([3]); //~ EN0706
+   |     ^^^^^^^^^^^^^^^^ cannot reassign while borrowed
+   |
+help: iterate over `(*b).clone()` if reassignment is intentional
+   |
+11 |   for (const x of (*b).clone()) {
+   |                   ~~~~~~~~~~~~
+   = explain: run `enrang explain EN0706`
+
+error[EN0709]: cannot move `b` while iterating over it
+  --> tests/compile/EN0706/forof-box-contents-source.fail.en:20:15
+   |
+19 |   for (const x of &*b) {
+   |                   --- `b` is borrowed here
+20 |     const v = b.unbox(); //~ EN0709
+   |               ^^^^^^^^^ `b` moves here
+   |
+help: move `b` after the loop, or move a copy: `b.clone()`
+   = explain: run `enrang explain EN0709`
+
+error[EN0709]: cannot move `b` while iterating over it
+  --> tests/compile/EN0706/forof-box-contents-source.fail.en:28:15
+   |
+27 |   for (const x of &*b) {
+   |                   --- `b` is borrowed here
+28 |     const v = b.unbox(); //~ EN0709
+   |               ^^^^^^^^^ `b` moves here
+   |
+help: move `b` after the loop, or move a copy: `b.clone()`
+   = explain: run `enrang explain EN0709`
+
+error: aborting due to 4 previous errors

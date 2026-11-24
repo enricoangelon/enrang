@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1018/operator_method.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1018]: operator overloading is not supported yet
+ --> tests/compile/EN1018/operator_method.fail.en:4:10
+  |
+4 |   public operator +(o: Vec2): Vec2 { //~ EN1018 "operator overloading is not supported yet"
+  |          ^^^^^^^^^^ an operator method
+  |
+  = note: each operator has one meaning, on the built-in types.
+help: Write a named method
+  = explain: run `enrang explain EN1018`
+
+error: aborting due to 1 previous error

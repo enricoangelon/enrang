@@ -1,0 +1,48 @@
+$ enrang check tests/compile/EN0621/slb-01-value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0621]: an assignment's value can't be kept
+ --> tests/compile/EN0621/slb-01-value.fail.en:3:14
+  |
+3 |   const t = (s += "?"); //~ EN0621 "an assignment's value can't be kept"
+  |              ^^^^^^^^ `s += "?"` is still owned by `s`
+  |
+help: assign first, then copy: `s += "?"; const t = s.clone();`
+  = explain: run `enrang explain EN0621`
+
+error[EN0621]: an assignment's value can't be kept
+  --> tests/compile/EN0621/slb-01-value.fail.en:10:7
+   |
+10 |   a = b = "xx".toString(); //~ EN0621
+   |       ^^^^^^^^^^^^^^^^^^^ `b = "xx".toString()` is still owned by `b`
+   |
+help: assign one at a time: `b = "xx".toString(); a = b.clone();`
+   = explain: run `enrang explain EN0621`
+
+error[EN0708]: `s` can't be read while a borrow of it may write into it
+  --> tests/compile/EN0621/slb-01-value.fail.en:16:21
+   |
+16 |   both(&(s += "c"), &s); //~ EN0708
+   |                     ^^ read here
+   |   --------------------- the write
+   |        ----------- borrowed for writing here, because it writes on line 16
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `s` into a local before this statement
+   = explain: run `enrang explain EN0708`
+
+error[EN0706]: `s` cannot change while `r` still points into it
+  --> tests/compile/EN0621/slb-01-value.fail.en:22:3
+   |
+21 |   const r = head(&(s += "c"));
+   |                  ----------- shared borrow of `s` starts here, held by `r`
+22 |   s = "z".toString(); //~ EN0706
+   |   ^^^^^^^^^^^^^^^^^^ `s` changes here
+23 |   console.log(r);
+   |               - `r` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 4 previous errors

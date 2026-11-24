@@ -1,0 +1,8 @@
+//! target: i386-none
+@section(".boot") private function early(): void {}
+
+@section(".bss.kstack") private unsafe let kernelStack: u8[16384];
+
+@section("custom") private const C: i64 = 1;
+
+@entry private function kmain(boot: &BootInfo): never { halt(); }

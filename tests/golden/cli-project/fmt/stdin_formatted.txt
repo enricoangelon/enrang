@@ -1,0 +1,7 @@
+$ enrang fmt
+[stdin]
+console.log(1);
+[exit 0]
+[stdout]
+console.log(1);
+[stderr]

@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN1001/async_arrow_and_method.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1001]: async functions are not supported yet
+ --> tests/compile/EN1001/async_arrow_and_method.fail.en:1:11
+  |
+1 | const g = async () => 1; //~ EN1001 "async functions are not supported yet"
+  |           ^^^^^ an async function
+  |
+  = note: Enrang has no event loop yet, so nothing can wait without blocking.
+help: Run blocking; threads and an event loop come later
+  = explain: run `enrang explain EN1001`
+
+error[EN1001]: async functions are not supported yet
+ --> tests/compile/EN1001/async_arrow_and_method.fail.en:4:10
+  |
+4 |   public async load(): void {} //~ EN1001 "async functions are not supported yet"
+  |          ^^^^^ an async method
+  |
+  = note: Enrang has no event loop yet, so nothing can wait without blocking.
+help: Run blocking; threads and an event loop come later
+  = explain: run `enrang explain EN1001`
+
+error: aborting due to 2 previous errors

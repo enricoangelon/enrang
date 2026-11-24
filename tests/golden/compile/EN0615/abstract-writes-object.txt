@@ -1,0 +1,20 @@
+$ enrang check tests/compile/EN0615/abstract-writes-object.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `area` changes the object, but `Shape` declares that it doesn't
+ --> tests/compile/EN0615/abstract-writes-object.fail.en:9:5
+  |
+2 |   public abstract area(): i64;
+  |                   ---- declared here without `let`
+...
+9 |     this.calls += 1; //~ EN0615 "`area` changes the object, but `Shape` declares that it doesn't"
+  |     ^^^^^^^^^^^^^^^ this write needs exclusive access to `this`
+  |
+help: if implementations may change the object, write `let area(): i64;` in `Shape`
+  |
+2 |   public abstract let area(): i64;
+  |                   ++++
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

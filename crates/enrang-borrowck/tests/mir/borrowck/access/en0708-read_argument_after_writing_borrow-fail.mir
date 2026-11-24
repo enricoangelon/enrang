@@ -1,0 +1,52 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0708/read_argument_after_writing_borrow.fail.en. Its row's codes: EN0708.
+module "tests/compile/EN0708/read_argument_after_writing_borrow.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // a
+  let _3: void temp;
+  let _4: &i64[] temp;
+  let _5: isize temp;
+  let _6: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    _4 = &_2 [explicit];
+    _6 = &_2 [auto-borrow]; //~ EN0708 "`a` can't be read while a borrow of it may write into it"
+    _5 = "alloc/array"::Array<i64>::length(move _6) -> bb1;
+  }
+  bb1: {
+    _3 = fill(move _4, move _5) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn fill(_1: &i64[], _2: isize) -> void {
+  let _1: &i64[]; // xs
+  let _2: isize; // n
+  let _3: void temp;
+  let _4: i64 temp;
+  let _5: &i64[] temp;
+  bb0: {
+    _4 = cast(int_to_int, copy _2, i64);
+    _5 = &*_1 [reborrow];
+    _3 = "alloc/array"::Array<i64>::push(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

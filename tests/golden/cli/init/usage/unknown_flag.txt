@@ -1,0 +1,6 @@
+$ enrang init --bogus
+[exit 2]
+[stdout]
+[stderr]
+error: `--bogus` is not a flag of `enrang init`
+usage: enrang init [name] [--kernel]

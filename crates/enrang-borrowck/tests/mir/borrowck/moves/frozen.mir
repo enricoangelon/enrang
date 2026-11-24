@@ -1,0 +1,87 @@
+// Assignments to `const` locals and by-value parameters (plan d.2, EN0613; S:772).
+// Shapes: c.9 (plan line 1051) `storage_live` then the initialiser; c.8 (line 1028) an
+// assignment to a place whose type needs drop is `drop(x) [assign]` then the store.
+// EN0613 heads (plan e): cannot assign to parameter `x`; cannot assign to `x`, because
+// it is `const`.
+fn clamp(_1: i64) -> i64 {
+  bb0: {
+    _1 = const 10: i64; //~ EN0613
+    _0 = copy _1;
+    return;
+  }
+}
+
+// `function clamp(let x: i64)`: no error.
+fn clamp2(let _1: i64) -> i64 {
+  bb0: {
+    _1 = const 10: i64;
+    _0 = copy _1;
+    return;
+  }
+}
+
+fn twice() -> void {
+  let _1: i64; // x
+  bb0: {
+    storage_live(_1);
+    _1 = const 1: i64;
+    _1 = const 2: i64; //~ EN0613
+    storage_dead(_1);
+    return;
+  }
+}
+
+// Reported at the assignment's drop, once.
+fn named() -> void {
+  let _1: string; // s
+  bb0: {
+    storage_live(_1);
+    _1 = const "a": string;
+    drop(_1) [assign]; //~ EN0613
+    _1 = const "b": string;
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+// A `const` assigned on one path only, then once: no error.
+fn late(_1: bool) -> void {
+  let _2: i64; // y
+  bb0: {
+    storage_live(_2);
+    switch copy _1 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _2 = const 1: i64;
+    goto bb3;
+  }
+  bb2: {
+    _2 = const 2: i64;
+    goto bb3;
+  }
+  bb3: {
+    storage_dead(_2);
+    return;
+  }
+}
+
+// A left-out parameter's default is stored where `lt(copy #supplied, 1)` holds (plan
+// c.10 (2), line 1083; A:937): no EN0613 there, one for a later store.
+fn opt(_1: i64 = default, _2: isize) -> i64 {
+  let _3: bool temp;
+  defaults _2;
+  bb0: {
+    _3 = lt(copy _2, const 1: isize);
+    switch move _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _1 = const 5: i64;
+    goto bb2;
+  }
+  bb2: {
+    _1 = const 6: i64; //~ EN0613
+    _0 = copy _1;
+    return;
+  }
+}

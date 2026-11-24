@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0416/satisfy-unsafe-member.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0416]: `Device` does not satisfy `Port`: `poke` is not `unsafe`
+ --> tests/compile/EN0416/satisfy-unsafe-member.fail.en:5:32
+  |
+5 | public class Device implements Port { //~ EN0416 "`Device` does not satisfy `Port`: `poke` is not `unsafe`"
+  |                                ^^^^ required by this `implements`
+6 |   public poke(): void {}
+  |          ---- `Device.poke` is not `unsafe`
+  |
+  = explain: run `enrang explain EN0416`
+
+error: aborting due to 1 previous error

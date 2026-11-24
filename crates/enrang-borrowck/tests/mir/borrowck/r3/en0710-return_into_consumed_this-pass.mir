@@ -1,0 +1,15 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0710/return_into_consumed_this.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0710/return_into_consumed_this.pass";
+class Lexer {
+  pos: isize = default;
+}
+
+fn Lexer::posRef(_1: &Lexer) -> &isize {
+  let _1: &Lexer; // this
+  bb0: {
+    _0 = &(*_1).pos [explicit];
+    return;
+  }
+}

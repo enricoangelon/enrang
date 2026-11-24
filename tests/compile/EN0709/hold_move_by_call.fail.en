@@ -1,0 +1,9 @@
+//! covers: H22
+let q: string[] = ["a", "b"];
+for (const x of &q) {
+  take(q); //~ EN0709 "cannot move `q` while iterating over it"
+}
+
+private function take(v: string[]): void {
+  console.log(v);
+}

@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0455/c19.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0455]: `s` could be a success or an error here
+ --> tests/compile/EN0455/c19.fail.en:2:45
+  |
+2 | const echo = (s: string): Result<string> => s; //~ EN0455 "`s` could be a success or an error here"
+  |                                             ^ `Err` would take this as it is
+  |
+help: write `Ok(s)` or `Err(s)`
+  = explain: run `enrang explain EN0455`
+
+error[EN0455]: `msg` could be a success or an error here
+  --> tests/compile/EN0455/c19.fail.en:10:10
+   |
+10 |   return msg; //~ EN0455 "`msg` could be a success or an error here"
+   |          ^^^ `Err` would take this as it is
+   |
+help: write `Ok(msg)` or `Err(msg)`
+   = explain: run `enrang explain EN0455`
+
+error[EN0455]: `s` could be a success or an error here
+  --> tests/compile/EN0455/c19.fail.en:14:14
+   |
+14 |   return c ? s : Err("none"); //~ EN0455 "`s` could be a success or an error here"
+   |              ^ `Err` would take this as it is
+   |
+help: write `Ok(s)` or `Err(s)`
+   = explain: run `enrang explain EN0455`
+
+error: aborting due to 3 previous errors

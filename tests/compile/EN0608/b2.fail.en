@@ -1,0 +1,2 @@
+const b = new Box(1);
+*b = 2; //~ EN0608 "cannot change `*b`, because `b` is `const`"

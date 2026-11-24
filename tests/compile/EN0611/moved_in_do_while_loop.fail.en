@@ -1,0 +1,10 @@
+let q = ["a", "b"];
+let i = 0;
+do {
+  take(q); //~ EN0611 "`q` was moved in an earlier turn"
+  i++;
+} while (i < 2);
+
+public function take(xs: string[]): void {
+  console.log(xs);
+}

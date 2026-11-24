@@ -1,0 +1,5 @@
+let n = 0;
+const f = () => { n += 1; };
+const g = () => { f(); };
+f(); //~ EN0718 "`f` is used twice at once"
+g();

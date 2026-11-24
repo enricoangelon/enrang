@@ -1,0 +1,52 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0605/box_contents_moved_out.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0605/box_contents_moved_out.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+move fn "alloc/box"::Box<T>::unbox(_1: &Box<T>) -> T;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Box<string>; // b
+  let _3: string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: &Box<string> temp;
+  let _7: void temp;
+  let _8: string; // s
+  let _9: void temp;
+  let _10: &string temp;
+  bb0: {
+    storage_live(_2);
+    _4 = const "a": string;
+    _5 = &_4 [temp-arg];
+    _3 = form to_string(move _5) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [auto-borrow];
+    _7 = "alloc/box"::Box<string>::#ctor(move _6, move _3) -> bb2;
+  }
+  bb2: {
+    drop(_3);
+    storage_dead(_3);
+    drop(_4);
+    storage_dead(_4);
+    storage_live(_8);
+    _8 = "alloc/box"::Box<string>::unbox(move _2) -> bb3;
+  }
+  bb3: {
+    _10 = &_8 [auto-borrow];
+    _9 = form log(move _10) -> bb4;
+  }
+  bb4: {
+    drop(_8);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

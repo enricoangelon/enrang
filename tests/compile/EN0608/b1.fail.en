@@ -1,0 +1,8 @@
+let a = 1;
+const k = 2;
+const branch = true;
+let r = &a;
+if (branch) {
+  r = &k;
+}
+*r = 5; //~ EN0608 "cannot mutate immutable data"

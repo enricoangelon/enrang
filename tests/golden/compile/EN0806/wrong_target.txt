@@ -1,0 +1,45 @@
+$ enrang check tests/compile/EN0806/wrong_target.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0806]: `@packed` can't be used on a function
+ --> tests/compile/EN0806/wrong_target.fail.en:1:1
+  |
+1 | @packed public function d(): void {} //~ EN0806 "`@packed` can't be used on a function"
+  | ^^^^^^^ `@packed` goes on a class or an enum
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: `@at` can't be used on a constant
+ --> tests/compile/EN0806/wrong_target.fail.en:3:1
+  |
+3 | @at(0x1000) public const E: i64 = 1; //~ EN0806 "`@at` can't be used on a constant"
+  | ^^^^^^^^^^^ `@at` goes on an `unsafe let`
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: `@naked` can be used only on an `unsafe function`
+ --> tests/compile/EN0806/wrong_target.fail.en:5:1
+  |
+5 | @naked public function f(): void {} //~ EN0806 "`@naked` can be used only on an `unsafe function`"
+  | ^^^^^^ this function is not `unsafe`
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: `@devMigrate` needs a function with an object-typed parameter
+ --> tests/compile/EN0806/wrong_target.fail.en:7:1
+  |
+7 | @devMigrate public function migrate(n: i64): Shape { //~ EN0806 "`@devMigrate` needs a function with an object-typed parameter"
+  | ^^^^^^^^^^^ no parameter has an object type
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: `@entry` can't be used on a method
+  --> tests/compile/EN0806/wrong_target.fail.en:12:3
+   |
+12 |   @entry public area(): void {} //~ EN0806 "`@entry` can't be used on a method"
+   |   ^^^^^^ `@entry` goes on a function
+   |
+   = explain: run `enrang explain EN0806`
+
+error: aborting due to 5 previous errors

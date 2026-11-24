@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0701/s2-15-field.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0701]: `t` holds a reference, so it must be `private`
+ --> tests/compile/EN0701/s2-15-field.fail.en:6:13
+  |
+6 |   public t: [&i64[], i32]; //~ EN0701 "`t` holds a reference, so it must be `private`"
+  |             ^^^^^^^^^^^^^ a reference in a `public` field
+  |
+  = rule: a reference field is seen only inside its class, so the class can keep track of what it borrows.
+help: make it `private`: `private t: [&i64[], i32];`
+  = explain: run `enrang explain EN0701`
+
+error: aborting due to 1 previous error

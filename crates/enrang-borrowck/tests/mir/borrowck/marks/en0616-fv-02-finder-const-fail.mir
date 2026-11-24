@@ -1,0 +1,118 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/fv-02-finder-const.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/fv-02-finder-const.fail";
+@final class Finder2 {
+  private src: readonly &Slice<i64>;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Finder2; // f
+  let _3: i64[4] temp;
+  let _4: &i64[4] temp;
+  let _5: &Slice<i64> temp;
+  let _6: &Finder2 temp;
+  let _7: void temp;
+  let _8: &i64 | null; // h
+  let _9: &Finder2 temp;
+  let _10: bool temp;
+  let _11: u32 temp;
+  fact f0: _8 nonnull;
+  use f0 at bb3[0];
+  test f0 at bb3;
+  bb0: {
+    storage_live(_2);
+    _3 = fixed<i64>[const 2: i64, const 3: i64, const 5: i64, const 7: i64];
+    _4 = &_3 [literal-view];
+    _5 = convert(fixed_to_slice, move _4);
+    _6 = &_2 [auto-borrow];
+    _7 = Finder2::#ctor(move _6, move _5) -> bb1;
+  }
+  bb1: {
+    storage_dead(_3);
+    storage_live(_8);
+    _9 = &_2 [auto-borrow];
+    _8 = Finder2::find(move _9, const 5: i64) -> bb2;
+  }
+  bb2: {
+    _11 = discriminant(_8);
+    _10 = ne(move _11, const 0: u32);
+    switch move _10 [0: bb4, otherwise: bb3];
+  }
+  bb3: {
+    check_tag(_8, Present);
+    *(_8 as Present).0 = const 0: i64; //~ EN0616
+    goto bb4;
+  }
+  bb4: {
+    storage_dead(_8);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Finder2::#ctor(_1: &Finder2, _2: &Slice<i64>) -> void {
+  let _1: &Finder2; // this
+  let _2: &Slice<i64>; // src
+  let _3: &Slice<i64> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn Finder2::find(_1: &Finder2, _2: i64) -> &i64 | null {
+  let _1: &Finder2; // this
+  let _2: i64; // v
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &i64; // x
+  let _7: bool temp;
+  let _8: &i64 temp;
+  loop l0: path *(*_1).src preheader bb5 head bb1 bind bb2[2] binding _6;
+  bb0: {
+    goto bb5;
+  }
+  bb1: {
+    _4 = len(*(*_1).src);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &(*(*_1).src)[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _0 = null;
+    return;
+  }
+  bb5: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _7 = eq(copy *_6, copy _2);
+    switch move _7 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    _8 = &*_6 [reborrow];
+    _0 = present(move _8);
+    storage_dead(_6);
+    return;
+  }
+  bb8: {
+    storage_dead(_6);
+    goto bb3;
+  }
+}

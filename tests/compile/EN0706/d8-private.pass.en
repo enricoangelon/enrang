@@ -1,0 +1,21 @@
+let c = new Counter();
+const word = "hi";
+c.run(&word);
+
+public class Counter {
+  private n: i64 = 0;
+
+  public run(x: &string): void {
+    const h = this.helper(x);
+    this.reset();
+    console.log(h);
+  }
+
+  private helper(a: &string): &string {
+    return a;
+  }
+
+  public reset(): void {
+    this.n = 0;
+  }
+}

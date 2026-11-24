@@ -1,0 +1,44 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0617/arrow_in_method_moves_field_of_this.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0617/arrow_in_method_moves_field_of_this.pass";
+class Holder {
+  items: string[] = default;
+}
+
+fn Holder::each(_1: &Holder) -> void {
+  let _1: &Holder; // this
+  let _2: () => void; // f
+  let _3: &Holder temp;
+  let _4: [&Holder] temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [closure-capture];
+    _4 = env(move _3);
+    _2 = closure(arrow#0, _4);
+    _5 = closure _2() -> bb1;
+  }
+  bb1: {
+    storage_dead(_2);
+    return;
+  }
+}
+
+arrow#0 of fn Holder::each (_1: &[&Holder]) -> void {
+  let _1: &[&Holder] env;
+  let _2: &string[]; // all
+  let _3: void temp;
+  let _4: &string[] temp;
+  capture this: &Holder through_ref;
+  bb0: {
+    storage_live(_2);
+    _2 = &(*(*_1).0).items [explicit];
+    _4 = &*_2 [reborrow];
+    _3 = form log(move _4) -> bb1;
+  }
+  bb1: {
+    storage_dead(_2);
+    return;
+  }
+}

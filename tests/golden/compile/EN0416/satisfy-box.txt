@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0416/satisfy-box.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0416]: `Kennel` does not satisfy `Speaker`: `speak` is missing
+  --> tests/compile/EN0416/satisfy-box.fail.en:14:32
+   |
+ 2 |   speak(): string;
+   |   ----- `Speaker.speak` is declared here
+...
+14 | public class Kennel implements Speaker { //~ EN0416 "`Kennel` does not satisfy `Speaker`: `speak` is missing"
+   |                                ^^^^^^^ required by this `implements`
+   |
+   = explain: run `enrang explain EN0416`
+
+error: aborting due to 1 previous error

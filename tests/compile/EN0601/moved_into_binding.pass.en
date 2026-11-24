@@ -1,0 +1,4 @@
+const a = "x".toString();
+const b = a.clone();
+console.log(b);
+console.log(a);

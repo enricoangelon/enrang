@@ -1,0 +1,14 @@
+//! row: `function read(x: &i64): void { console.log(*x);
+let n: i64 = 1;
+const r = &n;
+read(&n);
+update(&n); //~ EN0706 "`n` cannot change while `r` still points into it"
+console.log(*r);
+
+function read(x: &i64): void {
+  console.log(*x);
+}
+
+function update(x: &i64): void {
+  *x = 42;
+}

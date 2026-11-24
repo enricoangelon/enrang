@@ -1,0 +1,17 @@
+@private class Point {
+  x: i64 = default;
+  y: i64 = default;
+}
+
+@private fn f(_1: Point) -> void {
+  let _1: Point; // p
+  let _2: &i64; // x
+  let _3: &i64; // y
+  bb0: {
+    storage_live(_2);
+    _2 = &_1.x [destructure];
+    storage_live(_3);
+    _3 = &_1.y [destructure];
+    return;
+  }
+}

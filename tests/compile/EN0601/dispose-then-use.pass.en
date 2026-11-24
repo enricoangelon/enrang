@@ -1,0 +1,8 @@
+const f = new File("a".toString());
+console.log(f.name);
+dispose(f);
+
+private class File {
+  public constructor(public name: string) {}
+  public destructor() { console.log(`drop ${this.name}`); }
+}

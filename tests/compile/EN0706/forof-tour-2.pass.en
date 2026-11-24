@@ -1,0 +1,17 @@
+//! row: The tour, `Ownership in three lines`, S5
+function total(xs: &Slice<i64>): i64 {
+  let t = 0;
+  for (const x of xs) { t += x; }
+  return t;
+}
+
+function bump(xs: &Slice<i64>): void {
+  for (const x of xs) { *x += 1; }
+}
+
+function keep(xs: i64[]): i64[] { return xs; }
+
+let a = [1, 2, 3];
+total(&a);  // lent for reading
+bump(&a);  // lent for writing, because `bump` writes the elements
+const b = keep(a);  // moved; using `a` now is EN0601

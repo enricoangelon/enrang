@@ -1,0 +1,9 @@
+private unsafe let stats: Stats; //~ EN0802 "an `unsafe let` can't hold a `Stats`"
+
+@at(0x1000) private unsafe let placed: Stats; //~ EN0802 "an `unsafe let` can't hold a `Stats`"
+
+@at(0x2000) private unsafe let filled: Stats = new Stats {}; //~ EN0802 "an `unsafe let` can't hold a `Stats`"
+
+public class Stats {
+  public hits: u32;
+}

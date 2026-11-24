@@ -1,0 +1,7 @@
+const ratio: f64 = 1.5;
+const mask = ratio & 2; //~ EN0403 "`&` needs integers, found `f64`"
+const shifted = ratio << 1; //~ EN0403
+const count: i64 = 1;
+const byFraction = count << 1.5; //~ EN0403 "`<<` needs integers, found `f64`"
+const byFloat = count >> ratio; //~ EN0403 "`>>` needs integers, found `f64`"
+console.log(mask, shifted, byFraction, byFloat);

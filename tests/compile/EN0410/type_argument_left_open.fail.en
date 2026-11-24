@@ -1,0 +1,6 @@
+const x = make(); //~ EN0410
+console.log(x);
+
+private function make<T>(): T[] {
+  return [];
+}

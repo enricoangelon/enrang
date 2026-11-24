@@ -10,7 +10,7 @@ pub(crate) const USAGE: &str = "enrang <command> [arguments]";
 
 pub(crate) fn version() -> String {
     format!(
-        "enrang {} (milestone {CURRENT_MILESTONE}, no compiler yet)\n",
+        "enrang {} (milestone {CURRENT_MILESTONE})\n",
         env!("CARGO_PKG_VERSION")
     )
 }
@@ -34,8 +34,8 @@ pub(crate) fn text() -> String {
     format!(
         "The Enrang command line, milestone {CURRENT_MILESTONE}.
 
-Enrang is designed but not built: this milestone has no compiler, so it cannot
-compile, check or run a program.
+Enrang is being built: it checks syntax and formats code, and it cannot yet
+compile or run a program.
 
 Usage: {USAGE}
 
@@ -48,8 +48,8 @@ Outside the prototype, each reported as EN1301:
 
 Flags:
 {flags}
-Exit status: 0 success, 1 compile errors, failed tests or lost output, 2 usage,
-3 internal compiler error.
+Exit status: 0 success, 1 compile errors, failed tests, lost output or a file that
+`fmt --check` would change, 2 usage, 3 internal compiler error.
 ",
         working = table(&working),
         later = table(&later),

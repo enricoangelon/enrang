@@ -1,0 +1,4 @@
+public function second(t: [int, string]): int {
+  console.log(t[1]);
+  return t[0];
+}

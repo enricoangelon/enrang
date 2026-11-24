@@ -1,0 +1,28 @@
+let a: Box<Speaker> = new Box(new Dog { name: "Rex", tricks: [] });
+let b: Box<Speaker> = new Box(new Robot { id: 7 });
+mem.swap(&*a, &*b); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+mem.replace(&*a, new Robot { id: 8 }); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+show(&*a); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+
+private function show<T>(x: &T): void {
+  console.log(x);
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Dog implements Speaker {
+  public name: string;
+  public tricks: string[];
+  public speak(): string {
+    return `${this.name} woof`;
+  }
+}
+
+public final class Robot implements Speaker {
+  public id: i64;
+  public speak(): string {
+    return `beep ${this.id}`;
+  }
+}

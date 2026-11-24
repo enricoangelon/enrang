@@ -1,0 +1,8 @@
+private function twiceOf(f: () => void): void {
+  run2(f, f); //~ EN0718 "`f` is used twice at once"
+}
+
+private function run2(a: () => void, b: () => void): void {
+  a();
+  b();
+}

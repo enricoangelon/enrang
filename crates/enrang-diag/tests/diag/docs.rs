@@ -65,7 +65,7 @@ pub fn register(h: &mut Harness) {
         let src = Src::new("moved.en", source);
         let diag = Diagnostic::new(
             Code::EN0601,
-            "`u` is used after it was moved",
+            "`u` was moved into `archive`",
             src.on_line(6, "u"),
             "used here, after the move",
         )
@@ -75,7 +75,7 @@ pub fn register(h: &mut Harness) {
         )
         .with_secondary(
             src.on_line(5, "u"),
-            "moved here: `archive` takes `u: User` by value",
+            "`u` moves here, because `archive` takes `User`, not `&User`",
         )
         .note("<free text; continuation lines indented to align after \"note: \">")
         .with_help(Help::suggest(
@@ -125,11 +125,11 @@ pub fn register(h: &mut Harness) {
             "actual",
         )
         .with_secondary(
-            src.on_line(11, "User { name: \"Grace\", age: 86 }"),
+            src.on_line(11, "new User { name: \"Grace\", age: 86 }"),
             "expected",
         )
         .note(
-            "difference at `.age`:\n  User {\n    name: \"Grace\",\n-   age: 86,   expected\n+   age: 85,   actual\n  }",
+            "difference at `.age`:\n  User {\n    name: 'Grace',\n-   age: 86,   expected\n+   age: 85,   actual\n  }",
         )
         .note("`s.pop()` has type `User | null`; the non-null payload was compared.")
         .note("ran on vm64, used 1204 of 200000000 fuel")

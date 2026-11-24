@@ -1,0 +1,7 @@
+let s: string = "ab";
+const w = wrap(&s);
+*w[0] += "!"; //~ EN0616 "`wrap` returns a string that may be a part, so it can't grow"
+
+private function wrap(s: &string): [&string, i32] {
+  return [s, 1];
+}

@@ -1,0 +1,7 @@
+//! covers: C12
+const xs = [1, 2, 3];
+xs.forEach(show); //~ EN0803 "`show` is an `unsafe function`, so it can't become a closure"
+
+private unsafe function show(x: &i64): void {
+  console.log(x);
+}

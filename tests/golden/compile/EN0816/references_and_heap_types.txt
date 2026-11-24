@@ -1,0 +1,85 @@
+$ enrang check --target=x86_64-windows tests/compile/EN0816/references_and_heap_types.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0816]: `string` can't cross into foreign code
+ --> tests/compile/EN0816/references_and_heap_types.fail.en:2:57
+  |
+2 | @dll("kernel32.dll") public declare function GetName(s: string): void; //~ EN0816 "`string` can't cross into foreign code"
+  |                                                         ^^^^^^ foreign code takes scalars, raw pointers and `fn` pointers
+  |
+  = explain: run `enrang explain EN0816`
+
+error[EN0816]: `int[]` can't cross into foreign code
+ --> tests/compile/EN0816/references_and_heap_types.fail.en:4:55
+  |
+4 | @dll("kernel32.dll") public declare function Fill(xs: i32[], ys: u8[4], r: &i32, v: &Slice<u8>): void; //~ EN0816 "`int[]` can't cross into foreign code" //~ EN0816 "`&int` can't cross into foreign code"
+  |                                                       ^^^^^ foreign code takes scalars, raw pointers and `fn` pointers
+  |
+  = explain: run `enrang explain EN0816`
+
+error[EN0816]: `u8[4]` can't cross into foreign code
+ --> tests/compile/EN0816/references_and_heap_types.fail.en:4:66
+  |
+4 | @dll("kernel32.dll") public declare function Fill(xs: i32[], ys: u8[4], r: &i32, v: &Slice<u8>): void; //~ EN0816 "`int[]` can't cross into foreign code" //~ EN0816 "`&int` can't cross into foreign code"
+  |                                                                  ^^^^^ foreign code takes scalars, raw pointers and `fn` pointers
+  |
+  = explain: run `enrang explain EN0816`
+
+error[EN0816]: `&int` can't cross into foreign code
+ --> tests/compile/EN0816/references_and_heap_types.fail.en:4:76
+  |
+4 | @dll("kernel32.dll") public declare function Fill(xs: i32[], ys: u8[4], r: &i32, v: &Slice<u8>): void; //~ EN0816 "`int[]` can't cross into foreign code" //~ EN0816 "`&int` can't cross into foreign code"
+  |                                                                            ^^^^ foreign code takes scalars, raw pointers and `fn` pointers
+  |
+  = explain: run `enrang explain EN0816`
+
+error[EN0816]: `&Slice<u8>` can't cross into foreign code
+ --> tests/compile/EN0816/references_and_heap_types.fail.en:4:85
+  |
+4 | @dll("kernel32.dll") public declare function Fill(xs: i32[], ys: u8[4], r: &i32, v: &Slice<u8>): void; //~ EN0816 "`int[]` can't cross into foreign code" //~ EN0816 "`&int` can't cross into foreign code"
+  |                                                                                     ^^^^^^^^^^ foreign code takes scalars, raw pointers and `fn` pointers
+  |
+  = explain: run `enrang explain EN0816`
+
+error[EN0816]: `(int) => void` can't cross into foreign code
+ --> tests/compile/EN0816/references_and_heap_types.fail.en:6:53
+  |
+6 | @dll("kernel32.dll") public declare function Run(f: (x: i32) => void, n: i32 | null): void; //~ EN0816 "`(int) => void` can't cross into foreign code"
+  |                                                     ^^^^^^^^^^^^^^^^ foreign code takes scalars, raw pointers and `fn` pointers
+  |
+  = explain: run `enrang explain EN0816`
+
+error[EN0816]: `int | null` can't cross into foreign code
+ --> tests/compile/EN0816/references_and_heap_types.fail.en:6:74
+  |
+6 | @dll("kernel32.dll") public declare function Run(f: (x: i32) => void, n: i32 | null): void; //~ EN0816 "`(int) => void` can't cross into foreign code"
+  |                                                                          ^^^^^^^^^^ foreign code takes scalars, raw pointers and `fn` pointers
+  |
+  = explain: run `enrang explain EN0816`
+
+error[EN0816]: `T` can't cross into foreign code
+ --> tests/compile/EN0816/references_and_heap_types.fail.en:8:56
+  |
+8 | @dll("kernel32.dll") public declare function Gen<T>(x: T): void; //~ EN0816 "`T` can't cross into foreign code"
+  |                                                        ^ foreign code takes scalars, raw pointers and `fn` pointers
+  |
+  = explain: run `enrang explain EN0816`
+
+error[EN0816]: `string` can't cross into foreign code
+  --> tests/compile/EN0816/references_and_heap_types.fail.en:10:53
+   |
+10 | @dll("kernel32.dll") public declare function Ret(): string; //~ EN0816 "`string` can't cross into foreign code"
+   |                                                     ^^^^^^ foreign code takes scalars, raw pointers and `fn` pointers
+   |
+   = explain: run `enrang explain EN0816`
+
+error[EN0816]: `&string` can't cross into foreign code
+  --> tests/compile/EN0816/references_and_heap_types.fail.en:12:45
+   |
+12 | public type Cb = @abi("win64") unsafe fn(s: &string) => void; //~ EN0816 "`&string` can't cross into foreign code"
+   |                                             ^^^^^^^ foreign code takes scalars, raw pointers and `fn` pointers
+   |
+   = explain: run `enrang explain EN0816`
+
+error: aborting due to 10 previous errors

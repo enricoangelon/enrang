@@ -1,0 +1,8 @@
+private const FALLBACK: i64 = 0;
+
+public function pick(xs: &i64[]): readonly &i64 {
+  if (xs.length() > 0) {
+    return &xs[0];
+  }
+  return &FALLBACK;
+}

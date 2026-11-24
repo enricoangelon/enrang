@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0438/forof-spread-element-destructor.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0438]: `...` clones each element, and `Handle` is not `Clone`
+ --> tests/compile/EN0438/forof-spread-element-destructor.fail.en:9:60
+  |
+9 | public function handles(xs: &Handle[]): Handle[] { return [...xs]; } //~ EN0438
+  |                                                            ^^^^^ each element of `xs` would be cloned here
+  |
+  = from TypeScript: JS spread copies references to the same objects. In Enrang a value has one owner, so `...` copies the elements too.
+  = explain: run `enrang explain EN0438`
+
+error[EN0438]: `...` clones each element, and `Raw` is not `Clone`
+  --> tests/compile/EN0438/forof-spread-element-destructor.fail.en:11:51
+   |
+11 | public function raws(xs: &Raw[]): Raw[] { return [...xs]; } //~ EN0438
+   |                                                   ^^^^^ each element of `xs` would be cloned here
+   |
+   = from TypeScript: JS spread copies references to the same objects. In Enrang a value has one owner, so `...` copies the elements too.
+   = explain: run `enrang explain EN0438`
+
+error: aborting due to 2 previous errors

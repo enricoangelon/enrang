@@ -1,0 +1,241 @@
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::length(_1: &Slice<T>) -> isize;
+class Animal {
+  name: string = default;
+}
+class Dog extends Animal { }
+interface Named { }
+fn Named::label(_1: &Self) -> string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Dog; // d
+  let _3: *Dog temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  let _8: i64[]; // xs
+  let _9: void temp;
+  let _10: isize temp;
+  let _11: &i64[] temp;
+  let _12: &Slice<i64> temp;
+  let _13: &isize temp;
+  let _14: i64[2]; // fx
+  let _15: void temp;
+  let _16: isize temp;
+  let _17: &i64[2] temp;
+  let _18: &Slice<i64> temp;
+  let _19: &isize temp;
+  let _20: i64 | null; // n
+  let _21: &string; // lit
+  let _22: &i64; // r
+  let _23: isize temp;
+  let _24: isize temp;
+  let _25: i64; // v
+  let _26: &Named; // named
+  let _27: &Dog temp;
+  let _28: Box<Named>; // boxed
+  let _29: Box<Dog> temp;
+  let _30: Dog temp;
+  let _31: *Dog temp;
+  let _32: void temp;
+  let _33: &Box<Dog> temp;
+  let _34: void temp;
+  let _35: &i64 | null; // op
+  let _36: &i64 temp;
+  let _37: i64 | null; // copied
+  let _38: i64 | null temp;
+  let _39: u32 temp;
+  let _40: i64 temp;
+  let _41: fn(i64) => i64; // f
+  let _42: void temp;
+  let _43: &(i64 | null) temp;
+  let _44: &string temp;
+  let _45: &i64 temp;
+  let _46: string temp;
+  let _47: &Named temp;
+  let _48: &string temp;
+  let _49: string temp;
+  let _50: &Named temp;
+  let _51: &string temp;
+  let _52: &(i64 | null) temp;
+  let _53: i64 temp;
+  let _54: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Dog leaving(name)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [explicit];
+    _7 = convert(upcast, move _6);
+    _5 = take(move _7) -> bb2;
+  }
+  bb2: {
+    storage_live(_8);
+    _8 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    _11 = &_8 [explicit];
+    _12 = convert(array_to_slice, move _11);
+    _10 = total(move _12) -> bb3;
+  }
+  bb3: {
+    _13 = &_10 [temp-arg];
+    _9 = form log(move _13) -> bb4;
+  }
+  bb4: {
+    storage_dead(_10);
+    storage_live(_14);
+    _14 = fixed<i64>[const 3: i64, const 4: i64];
+    _17 = &_14 [explicit];
+    _18 = convert(fixed_to_slice, move _17);
+    _16 = total(move _18) -> bb5;
+  }
+  bb5: {
+    _19 = &_16 [temp-arg];
+    _15 = form log(move _19) -> bb6;
+  }
+  bb6: {
+    storage_dead(_16);
+    storage_live(_20);
+    _20 = present(const 5: i64);
+    storage_live(_21);
+    _21 = const "hi": &string;
+    storage_live(_22);
+    _23 = const 0: isize;
+    _24 = len(_8);
+    check_bounds(copy _23, copy _24);
+    _22 = &_8[_23] [explicit];
+    storage_live(_25);
+    _25 = copy *_22;
+    storage_live(_26);
+    _27 = &_2 [explicit];
+    _26 = convert(ref_to_interface, move _27);
+    storage_live(_28);
+    _31 = addr_of _30;
+    _32 = named_fill Dog leaving(name)(move _31) -> bb7;
+  }
+  bb7: {
+    _33 = &_29 [auto-borrow];
+    _34 = "alloc/box"::Box<Dog>::#ctor(move _33, move _30) -> bb8;
+  }
+  bb8: {
+    _28 = convert(box_to_interface, move _29);
+    drop(_29);
+    storage_dead(_29);
+    drop(_30);
+    storage_dead(_30);
+    storage_live(_35);
+    _36 = &*_22 [reborrow];
+    _35 = present(move _36);
+    storage_live(_37);
+    _39 = discriminant(_35);
+    switch move _39 [0: bb10, otherwise: bb9];
+  }
+  bb9: {
+    check_tag(_35, Present);
+    _40 = copy *(_35 as Present).0;
+    _38 = present(move _40);
+    goto bb11;
+  }
+  bb10: {
+    _38 = null;
+    goto bb11;
+  }
+  bb11: {
+    _37 = move _38;
+    storage_live(_41);
+    _41 = const fn twice: fn(i64) => i64;
+    _43 = &_20 [auto-borrow];
+    _44 = &*_21 [reborrow];
+    _45 = &_25 [auto-borrow];
+    _47 = &*_26 [reborrow];
+    _46 = virtual Named::label [copy _47](move _47) -> bb12;
+  }
+  bb12: {
+    _48 = &_46 [temp-arg];
+    _50 = &*_28 [auto-borrow];
+    _49 = virtual Named::label [copy _50](move _50) -> bb13;
+  }
+  bb13: {
+    _51 = &_49 [temp-arg];
+    _52 = &_37 [auto-borrow];
+    _53 = fnptr(copy _41)(const 1: i64) -> bb14;
+  }
+  bb14: {
+    _54 = &_53 [temp-arg];
+    _42 = form log(move _43, move _44, move _45, move _48, move _51, move _52, move _54) -> bb15;
+  }
+  bb15: {
+    storage_dead(_53);
+    drop(_49);
+    storage_dead(_49);
+    drop(_46);
+    storage_dead(_46);
+    storage_dead(_41);
+    storage_dead(_37);
+    storage_dead(_35);
+    drop(_28);
+    storage_dead(_28);
+    storage_dead(_26);
+    storage_dead(_25);
+    storage_dead(_22);
+    storage_dead(_21);
+    storage_dead(_20);
+    storage_dead(_14);
+    drop(_8);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Dog::label(_1: &Dog) -> string {
+  let _1: &Dog; // this
+  bb0: {
+    _0 = const "dog": string;
+    return;
+  }
+}
+
+fn take(_1: &Animal) -> void {
+  let _1: &Animal; // a
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &(*_1).name [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn total(_1: &Slice<i64>) -> isize {
+  let _1: &Slice<i64>; // s
+  let _2: &Slice<i64> temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = "core/slice"::Slice<i64>::length(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn twice(_1: i64) -> i64 {
+  let _1: i64; // x
+  bb0: {
+    _0 = checked_mul(copy _1, const 2: i64);
+    return;
+  }
+}

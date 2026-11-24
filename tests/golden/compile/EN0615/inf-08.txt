@@ -1,0 +1,46 @@
+$ enrang check tests/compile/EN0615/inf-08.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: cannot borrow `t` as exclusive twice at the same time
+ --> tests/compile/EN0615/inf-08.fail.en:3:13
+  |
+2 |   const a = t.next();
+  |             - first exclusive borrow, held by `a`
+3 |   const b = t.next(); //~ EN0707
+  |             ^^^^^^^^ second exclusive borrow
+4 |   console.log(a, b);
+  |               - `a` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0707`
+
+error[EN0707]: cannot borrow `t` as exclusive twice at the same time
+  --> tests/compile/EN0615/inf-08.fail.en:9:13
+   |
+ 8 |   const a = t.next();
+   |             - first exclusive borrow, held by `a`
+ 9 |   const b = t.next(); //~ EN0707
+   |             ^^^^^^^^ second exclusive borrow
+10 |   console.log(a, b);
+   |               - `a` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error[EN0615]: `LooseTokens.next` returns a read-only reference, but `LooseReader` declares a writable one
+  --> tests/compile/EN0615/inf-08.fail.en:35:37
+   |
+18 |   let next(): &string | null;
+   |       ---- declared here
+...
+35 | public class LooseTokens implements LooseReader { //~ EN0615
+   |                                     ^^^^^^^^^^^ returns a read-only reference
+   |
+help: if callers only read it, write `let next(): readonly &string | null;` in `LooseReader`
+   |
+18 |   let next(): readonly &string | null;
+   |               +++++++++
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 3 previous errors

@@ -1,0 +1,18 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0603/field_moved_through_raw_pointer.fail.en. Its row's codes: EN0603.
+module "tests/compile/EN0603/field_moved_through_raw_pointer.fail";
+class User {
+  name: string;
+}
+
+@unsafe fn nameAt(_1: *User) -> string {
+  let _1: *User; // p
+  let _2: *User temp;
+  region r0: whole;
+  bb0: {
+    _2 = copy _1 @ r0;
+    _0 = move (*_2).name @ r0; //~ EN0603
+    return @ r0;
+  }
+}

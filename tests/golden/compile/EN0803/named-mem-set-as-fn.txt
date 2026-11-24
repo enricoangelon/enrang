@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0803/named-mem-set-as-fn.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0803]: `mem.set` is a `declare function`, so it can't become a safe `fn`
+ --> tests/compile/EN0803/named-mem-set-as-fn.fail.en:2:48
+  |
+2 | const f: fn(d: *u8, v: u8, n: usize) => void = mem.set; //~ EN0803 "is a `declare function`, so it can't become a safe `fn`"
+  |                                                ^^^^^^^ foreign code is called only from `unsafe`
+  |
+help: convert it to an `unsafe fn(...)` type of the same ABI
+  = explain: run `enrang explain EN0803`
+
+error: aborting due to 1 previous error

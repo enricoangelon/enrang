@@ -1,0 +1,9 @@
+let n: i64 = 5;
+let s: i64 = 9;
+bump(&n, s);
+
+private function bump(r: &i64, s: i64): void {
+  r = s; //~ EN0422 "`r` is a reference: write through it with `*r`"
+  r += 1; //~ EN0422
+  r++; //~ EN0422
+}

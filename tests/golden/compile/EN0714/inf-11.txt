@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0714/inf-11.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0714]: `Fixed.pick` returns a reference into `ready`, but `Picker.pick` returns only into `this`
+  --> tests/compile/EN0714/inf-11.fail.en:13:5
+   |
+ 2 |   pick(ready: &Task[]): &Task;
+   |   ---- declared here
+...
+13 |     return &ready[0]; //~ EN0714 "`Fixed.pick` returns a reference into `ready`, but `Picker.pick` returns only into `this`"
+   |     ^^^^^^^^^^^^^^^^^ returned here
+   |
+help: through a `&Picker`, callers only expect the object
+   = explain: run `enrang explain EN0714`
+
+error[EN0714]: `Fifo.pick` returns a reference into `ready`, but `Base.pick` returns only into `this`
+  --> tests/compile/EN0714/inf-11.fail.en:27:5
+   |
+20 |   public pick(ready: &Task[]): &Task {
+   |          ---- declared here
+...
+27 |     return &ready[0]; //~ EN0714 "`Fifo.pick` returns a reference into `ready`, but `Base.pick` returns only into `this`"
+   |     ^^^^^^^^^^^^^^^^^ returned here
+   |
+help: through a `&Base`, callers only expect the object
+   = explain: run `enrang explain EN0714`
+
+error: aborting due to 2 previous errors

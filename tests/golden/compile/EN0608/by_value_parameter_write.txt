@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/by_value_parameter_write.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `p.x`, because `p` is a parameter not marked `let`
+ --> tests/compile/EN0608/by_value_parameter_write.fail.en:6:3
+  |
+6 |   p.x = 1; //~ EN0608
+  |   ^^^^^^^ written here
+  |
+help: mark it `let p`
+  |
+5 | public function reset(let p: Point): void {
+  |                       ++++
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,33 @@
+// SPEC 8.3, `T[]`: `alloc/array`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `T[]` is this class's only spelling. It declares `slice`, `get` and `last` with their marks (ARCHITECTURE 10)
+// and reaches every other member of `Slice<T>` through C18.
+@lang("array") public final class Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+  public static withCapacity(n: isize): T[];
+  public length(): isize;
+  public capacity(): isize;
+  public isEmpty(): bool;
+  @mustUse public const slice(a: isize, b?: isize): &Slice<T>;
+  public get(i: isize): &T | null;
+  public last(): &T | null;
+  @lang("array_push") public let push(x: T): void;
+  public let pop(): T | null;
+  public let insert(i: isize, x: T): void;
+  public let remove(i: isize): T;
+  public let swapRemove(i: isize): T;
+  public let clear(): void;
+  public let truncate(n: isize): void;
+  public let extend(o: T[]): void;
+  @lang("array_extend_cloned") public let extendCloned(o: &Slice<T>): void where T extends Clone;
+  public let reserve(n: isize): void;
+  public clone(): T[] where T extends Clone;
+}
+
+// On `T[]` and on `&Slice<T>` alike (SPEC 8.3).
+extend<T> Slice<T> {
+  public map<U>(f: (x: &T) => U): U[];
+  public filter(f: (x: &T) => bool): T[] where T extends Clone;
+  public join(sep: &string): string;
+}

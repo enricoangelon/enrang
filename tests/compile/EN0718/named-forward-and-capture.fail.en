@@ -1,0 +1,9 @@
+//! row: `both(f, () => { f(); })`
+let n = 0;
+const f = () => { n += 1; };
+both(f, () => { f(); }); //~ EN0718 "`f` is used twice at once"
+
+private function both(a: () => void, b: () => void): void {
+  a();
+  b();
+}

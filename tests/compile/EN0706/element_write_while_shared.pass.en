@@ -1,0 +1,4 @@
+let xs: i64[] = [1, 2];
+const r = &xs[0];
+console.log(*r);
+xs[1] = 5;

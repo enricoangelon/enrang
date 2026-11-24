@@ -1,0 +1,24 @@
+//! target: x86_64-windows
+//! row: `unsafe`, `@requires`, `declare`, `@naked`,
+//! row: The same five at `unsafe fn(...)`, or `InterruptHandler`
+private unsafe function poke(p: *u8, v: u8): void {}
+
+@requires("cmov") private function pick(p: *u8, v: u8): void {}
+
+@dll("kernel32") private declare function Beep(p: *u8, v: u8): void;
+
+@naked private unsafe function stub(p: *u8, v: u8): void {
+  asm("ret");
+}
+
+private function run(f: unsafe fn(p: *u8, v: u8) => void): void {}
+
+private function runForeign(f: @abi("win64") unsafe fn(p: *u8, v: u8) => void): void {}
+
+public function wire(): void {
+  const a: unsafe fn(p: *u8, v: u8) => void = poke;
+  run(pick);
+  const c: @abi("win64") unsafe fn(p: *u8, v: u8) => void = Beep;
+  runForeign(Beep);
+  run(stub);
+}

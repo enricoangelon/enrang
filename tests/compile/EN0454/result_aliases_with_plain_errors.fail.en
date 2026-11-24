@@ -1,0 +1,6 @@
+public type Parsed = Result<i64, string>; //~ EN0454 "`string` is not an error type"
+public type Loaded = Result<i64, Plain>; //~ EN0454 "`Plain` is not an error type"
+
+public class Plain {
+  public code: i64;
+}

@@ -1,0 +1,19 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/abstract-writes-object.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/abstract-writes-object.pass";
+@abstract class Shape { }
+class Square extends Shape {
+  private calls: i64 = default;
+}
+
+@override fn Square::area(_1: &Square) -> i64 {
+  let _1: &Square; // this
+  let _2: i64 temp;
+  bb0: {
+    _2 = copy (*_1).calls;
+    (*_1).calls = checked_add(copy _2, const 1: i64);
+    _0 = const 4: i64;
+    return;
+  }
+}

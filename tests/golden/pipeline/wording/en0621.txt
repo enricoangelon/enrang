@@ -1,0 +1,10 @@
+error[EN0621]: an assignment's value can't be kept
+ --> main.en:2:12
+  |
+2 | const t = (s += "?");
+  |            ^^^^^^^^ `s += "?"` is still owned by `s`
+  |
+help: assign first, then copy: `s += "?"; const t = s.clone();`
+  = explain: run `enrang explain EN0621`
+
+error: aborting due to 1 previous error

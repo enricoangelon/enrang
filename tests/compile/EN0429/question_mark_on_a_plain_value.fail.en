@@ -1,0 +1,6 @@
+console.log(twice(4));
+
+private function twice(n: i64): Result<i64> {
+  const m = n?; //~ EN0429 "`?` needs a `Result` or `T | null`, found `i64`"
+  return m * 2;
+}

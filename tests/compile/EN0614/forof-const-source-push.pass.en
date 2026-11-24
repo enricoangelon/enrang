@@ -1,0 +1,6 @@
+//! row: `const q = [1]; for (const x of &q) { q.
+let q = [1];
+for (const x of &q) {
+  q.push(2);
+  break;
+}

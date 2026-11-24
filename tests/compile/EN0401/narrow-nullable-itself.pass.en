@@ -1,0 +1,14 @@
+//! covers: H18
+let q: Acc | null = new Acc();
+if (q != null) {
+  bump(&q);
+  console.log(q.n);
+}
+
+private class Acc {
+  public n: i64 = 0;
+}
+
+private function bump(a: &Acc): void {
+  a.n += 1;
+}

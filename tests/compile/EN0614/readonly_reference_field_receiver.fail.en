@@ -1,0 +1,9 @@
+public final class Sink {
+  private src: readonly &i64[];
+  public constructor(src: &i64[]) {
+    this.src = src;
+  }
+  public grow(): void {
+    this.src.push(1); //~ EN0614
+  }
+}

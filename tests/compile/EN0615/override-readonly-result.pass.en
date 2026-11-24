@@ -1,0 +1,15 @@
+private const LIMIT: i64 = 9;
+
+public class Gauge {
+  private n: i64 = 0;
+
+  public current(): readonly &i64 {
+    return &this.n;
+  }
+}
+
+public class Fixed extends Gauge {
+  public override current(): readonly &i64 {
+    return &LIMIT;
+  }
+}

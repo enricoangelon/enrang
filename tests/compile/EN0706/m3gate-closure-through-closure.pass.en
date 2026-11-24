@@ -1,0 +1,6 @@
+let a: i64[] = [1];
+const e = &a[0];
+const f = (): void => { console.log(*e); };
+const g = (): void => { f(); };
+g();
+a.push(2);

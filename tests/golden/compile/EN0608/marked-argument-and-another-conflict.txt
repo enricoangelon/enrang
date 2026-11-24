@@ -1,0 +1,80 @@
+$ enrang check tests/compile/EN0608/marked-argument-and-another-conflict.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `new Grower` can change `v`, but `data` is `const`
+ --> tests/compile/EN0608/marked-argument-and-another-conflict.fail.en:4:22
+  |
+4 | const g = new Grower(&data); //~ EN0608 "`new Grower` can change `v`, but `data` is `const`"
+  |                      ^^^^^ `new Grower` writes through it
+  |
+  = explain: run `enrang explain EN0608`
+
+error[EN0706]: `other` cannot change while `o` still points into it
+ --> tests/compile/EN0608/marked-argument-and-another-conflict.fail.en:6:1
+  |
+5 | const o = &other[0];
+  |           --------- shared borrow of `other` starts here, held by `o`
+6 | other.push(2); //~ EN0706 "`other` cannot change while `o` still points into it"
+  | ^^^^^^^^^^^^^ `push` changes `other`, so it needs exclusive access to it
+7 | console.log(*e, *o);
+  |                  - `o` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error[EN0608]: `new Grower` can change `v`, but `kept` is `const`
+  --> tests/compile/EN0608/marked-argument-and-another-conflict.fail.en:10:22
+   |
+10 | const h = new Grower(&kept); //~ EN0608 "`new Grower` can change `v`, but `kept` is `const`"
+   |                      ^^^^^ `new Grower` writes through it
+   |
+help: declare it `let kept`
+   |
+ 9 | let kept: i64[] = [1];
+   | ~~~
+   = explain: run `enrang explain EN0608`
+
+error[EN0709]: cannot move `kept` while it is borrowed
+  --> tests/compile/EN0608/marked-argument-and-another-conflict.fail.en:11:1
+   |
+10 | const h = new Grower(&kept); //~ EN0608 "`new Grower` can change `v`, but `kept` is `const`"
+   |                      ----- exclusive borrow of `kept` starts here, held by `h`
+11 | take(kept); //~ EN0709 "cannot move `kept` while it is borrowed"
+   | ^^^^^^^^^^ `kept` moves here
+12 | h.show();
+   | - the borrow is still in use here
+   |
+help: move `kept` after its last borrow, or move a copy: `kept.clone()`
+   = explain: run `enrang explain EN0709`
+
+error[EN0614]: `v` is `const`, so `push` cannot change it
+  --> tests/compile/EN0608/marked-argument-and-another-conflict.fail.en:16:1
+   |
+14 | const v: i64[] = [1];
+   |       - declared `const` here: immutable all the way down
+15 | const r = &v[0];
+16 | v.push(2); //~ EN0614 "`v` is `const`, so `push` cannot change it" //~ EN0706 "`v` cannot change while `r` still points into it"
+   | ^^^^^^^^^ `push` changes `v`
+   |
+   = from TypeScript: a TS `const` only freezes the binding. In Enrang values have no shared identity, so `const` freezes the value.
+help: make the binding mutable
+   |
+14 | let v: i64[] = [1];
+   | ~~~
+   = explain: run `enrang explain EN0614`
+
+error[EN0706]: `v` cannot change while `r` still points into it
+  --> tests/compile/EN0608/marked-argument-and-another-conflict.fail.en:16:1
+   |
+15 | const r = &v[0];
+   |           ----- shared borrow of `v` starts here, held by `r`
+16 | v.push(2); //~ EN0614 "`v` is `const`, so `push` cannot change it" //~ EN0706 "`v` cannot change while `r` still points into it"
+   | ^^^^^^^^^ `push` changes `v`, so it needs exclusive access to it
+17 | console.log(*r);
+   |              - `r` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 6 previous errors

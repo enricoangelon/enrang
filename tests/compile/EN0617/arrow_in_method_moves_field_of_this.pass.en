@@ -1,0 +1,10 @@
+public class Holder {
+  public items: string[] = [];
+  public each(): void {
+    const f = () => {
+      const all = &this.items;
+      console.log(all);
+    };
+    f();
+  }
+}

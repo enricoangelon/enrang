@@ -1,0 +1,13 @@
+$ enrang check --emit=summary main.en
+[exit 0]
+[stdout]
+module "main"
+class Copier writes_through_fields
+//   flag: writes through a reference read from its fields
+fn Copier::#ctor(_1: &Copier, _2: &Slice<u8>, _3: &Slice<u8>) -> void perms(write, read, write) sources() stores(1 -> 0 read, 2 -> 0) result none;
+//   #0: writes through it
+//   #2: writes through it
+fn Copier::peek(_1: &Copier) -> readonly &Slice<u8> perms(read) sources(0) through_read(0) result readonly(declared);
+fn Copier::step(_1: &Copier) -> void perms(write) sources() result none;
+//   #0: writes through it
+[stderr]

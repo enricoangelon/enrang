@@ -1,0 +1,12 @@
+private unsafe let name: string = "x"; //~ EN0802 "an `unsafe let` can't hold a `string`"
+private unsafe let items: i64[]; //~ EN0802 "an `unsafe let` can't hold an `i64[]`"
+private unsafe let boxed: Box<i64> | null = null; //~ EN0802 "an `unsafe let` can't hold a `Box<i64> | null`"
+private unsafe let nothing: void; //~ EN0802 "an `unsafe let` can't hold `void`"
+private unsafe let r: &i64 | null = null; //~ EN0802 "an `unsafe let` can't hold a `&i64 | null`"
+private unsafe let guard: Guard | null = null; //~ EN0802 "an `unsafe let` can't hold a `Guard | null`"
+private unsafe let pair: [i64, string] = [1, "a"]; //~ EN0802 "an `unsafe let` can't hold a `[i64, string]`"
+
+public final class Guard {
+  public n: i64 = 0;
+  public destructor() {}
+}

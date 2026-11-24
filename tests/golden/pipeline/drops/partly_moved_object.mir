@@ -1,0 +1,44 @@
+fn f() -> void perms() sources() result none {
+  phase elaborated;
+  let _1: { name: string, other: string }; // o
+  let _2: string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string temp;
+  let _6: string temp;
+  let _7: &string temp;
+  let _8: string; // s
+  let _9: void temp;
+  let _10: &string temp;
+  bb0: {
+    storage_live(_1);
+    _3 = const "a": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    _6 = const "b": string;
+    _7 = &_6 [temp-arg];
+    _5 = form to_string(move _7) -> bb2;
+  }
+  bb2: {
+    _1 = object { name: string, other: string } { name: move _2, other: move _5 };
+    storage_dead(_5);
+    drop_glue(_6);
+    storage_dead(_6);
+    storage_dead(_2);
+    drop_glue(_3);
+    storage_dead(_3);
+    storage_live(_8);
+    _8 = move _1.name;
+    _10 = &_8 [auto-borrow];
+    _9 = form log(move _10) -> bb3;
+  }
+  bb3: {
+    drop_glue(_8);
+    storage_dead(_8);
+    drop_glue(_1.other);
+    storage_dead(_1);
+    return;
+  }
+}

@@ -1,0 +1,9 @@
+let e: i64 | null = null;
+{
+  let b: i64 = 4;
+  const f = (): i64 => b;
+  e = f();
+}
+if (e != null) {
+  console.log(e);
+}

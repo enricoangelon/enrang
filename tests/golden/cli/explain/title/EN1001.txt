@@ -1,7 +1,0 @@
-$ enrang explain EN1001
-[exit 0]
-[stdout]
-EN1001: async functions
-
-No explain page yet: it arrives with milestone M1, and this is milestone M0.
-[stderr]

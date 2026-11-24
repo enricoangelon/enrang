@@ -1,0 +1,11 @@
+//! covers: H08
+public class Region {
+  private p: *u8 = 0 as *u8;
+  private n: usize = 0;
+
+  public destructor() {
+    console.log("freed");
+  }
+}
+
+public class Snapshot extends Region implements Copy {} //~ EN0418 "`Region`'s destructor runs for every `Snapshot`, so copying one would run it twice"

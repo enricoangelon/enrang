@@ -1,0 +1,9 @@
+let a = 1;
+let k = 2;
+const branch = true;
+let r = &a;
+if (branch) {
+  r = &k;
+}
+*r = 5;
+console.log(a, k);

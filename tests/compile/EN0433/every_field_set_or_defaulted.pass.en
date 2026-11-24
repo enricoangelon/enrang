@@ -1,0 +1,26 @@
+const ada = new User { name: "Ada" };
+const team = new Team { owner: ada, size: 3 };
+const counter = new Counter();
+const book: Book = { title: "Dune" };
+const none: string | null = null;
+const draft = { title: "Emma", subtitle: none };
+const kept: Book = draft;
+console.log(team.size, counter.n, counter.label, book.title, kept.title);
+
+public type Book = { title: string, subtitle?: string };
+
+public class User {
+  public name: string;
+}
+
+public class Team {
+  public owner: User;
+  public size: i64;
+}
+
+public class Counter {
+  public n: i64;
+  public label: string;
+  public on: bool;
+  public xs: i64[];
+}

@@ -1,0 +1,39 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0707/assign_while_exclusive.fail.en. Its row's codes: EN0707.
+module "tests/compile/EN0707/assign_while_exclusive.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int[]; // xs
+  let _3: &int[]; // r
+  let _4: int[] temp;
+  let _5: void temp;
+  let _6: &int[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<int>(const 1: int, const 2: int);
+    storage_live(_3);
+    _3 = &_2 [explicit];
+    _4 = intrinsic AllocArray<int>(const 3: int);
+    drop(_2) [assign];
+    _2 = move _4; //~ EN0707 "cannot change `xs` while `r` may write into it"
+    drop(_4);
+    storage_dead(_4);
+    _6 = &*_3 [reborrow];
+    _5 = "alloc/array"::Array<int>::push(move _6, const 1: int) -> bb1;
+  }
+  bb1: {
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

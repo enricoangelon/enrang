@@ -3,7 +3,7 @@ $ enrang lint
 [stdout]
 [stderr]
 error[EN1302]: `lint` is not an `enrang` command
-help: the command for this is `enrang check`, which arrives with milestone M1
+help: the command for this is `enrang check`
   = explain: run `enrang explain EN1302`
 
 error: aborting due to 1 previous error

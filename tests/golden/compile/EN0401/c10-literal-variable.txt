@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/c10-literal-variable.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `u8`, found `f64`
+ --> tests/compile/EN0401/c10-literal-variable.fail.en:2:15
+  |
+2 | const b: u8 = 1.5; //~ EN0401 "mismatched types: expected `u8`, found `f64`"
+  |               ^^^ this is `f64`
+  |          -- `u8` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

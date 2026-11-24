@@ -1,0 +1,8 @@
+const u = new User { name: "Ada" };
+let xs = [];
+console.log(xs[0].name); //~ EN0410
+xs.push(u);
+
+public class User {
+  public name: string;
+}

@@ -1,0 +1,14 @@
+let g = new Grid();
+const c = g.cell(0);
+*c = 7;
+
+public class Grid {
+  private cells: u16[4] = [0, 0, 0, 0];
+
+  public cell(i: isize): &u16 {
+    unsafe {
+      const p = &this.cells[0] as *u16;
+      return &*p.add(i);
+    }
+  }
+}

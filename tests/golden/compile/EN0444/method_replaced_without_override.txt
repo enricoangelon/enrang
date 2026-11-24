@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0444/method_replaced_without_override.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0444]: `sound` replaces `Animal.sound` without `override`
+  --> tests/compile/EN0444/method_replaced_without_override.fail.en:10:13
+   |
+10 |   protected sound: string = "woof"; //~ EN0444 "`sound` replaces `Animal.sound` without `override`"
+   |             ^^^^^ `Animal` already has a field `sound`
+   |
+help: add `override`
+   |
+10 |   protected override sound: string = "woof"; //~ EN0444 "`sound` replaces `Animal.sound` without `override`"
+   |             +++++++++
+   = explain: run `enrang explain EN0444`
+
+error[EN0444]: `speak` replaces `Animal.speak` without `override`
+  --> tests/compile/EN0444/method_replaced_without_override.fail.en:12:10
+   |
+ 4 |   public speak(): string {
+   |          ----- `Animal.speak` is declared here
+...
+12 |   public speak(): string { //~ EN0444 "`speak` replaces `Animal.speak` without `override`"
+   |          ^^^^^ `Animal.speak` has the same parameters
+   |
+help: add `override`
+   |
+12 |   public override speak(): string { //~ EN0444 "`speak` replaces `Animal.speak` without `override`"
+   |          +++++++++
+   = explain: run `enrang explain EN0444`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,7 @@
+//! row: `private const Y = [...X];`, an `unsafe 
+private const X: i64[2] = [1, 2];
+private const Y = [...X]; //~ EN0412
+private unsafe let s: i64[2] = [...X]; //~ EN0412
+private const Z: i64[2] = [0; [...X].length()]; //~ EN0412
+private const W: i64[[...X].length()] = [1, 2]; //~ EN0412
+assert([...X].length() == 2); //~ EN0412

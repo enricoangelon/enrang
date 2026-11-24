@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0610/q31-before-super.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0610]: `this` can't be used before `super(...)` runs
+  --> tests/compile/EN0610/q31-before-super.fail.en:13:21
+   |
+13 |     this.label = `${this.name} the dog`; //~ EN0610
+   |                     ^^^^^^^^^ `this` is used here, before the base part is built
+   |
+help: before `super(...)`, a constructor may only assign its own fields
+   = explain: run `enrang explain EN0610`
+
+error[EN0610]: `this` can't be used before `super(...)` runs
+  --> tests/compile/EN0610/q31-before-super.fail.en:22:18
+   |
+22 |     this.label = this.describe(); //~ EN0610
+   |                  ^^^^ `this` is used here, before the base part is built
+   |
+help: before `super(...)`, a constructor may only assign its own fields
+   = explain: run `enrang explain EN0610`
+
+error[EN0610]: `this` can't be used before `super(...)` runs
+  --> tests/compile/EN0610/q31-before-super.fail.en:31:11
+   |
+31 |     greet(this); //~ EN0610
+   |           ^^^^ `this` is used here, before the base part is built
+   |
+help: before `super(...)`, a constructor may only assign its own fields
+   = explain: run `enrang explain EN0610`
+
+error: aborting due to 3 previous errors

@@ -1,0 +1,14 @@
+//! covers: H28
+let v: i64[] = [];
+for (const x of pick(&v)) { //~ EN0616 "`pick` returns a reference that may point at a constant"
+  *x = 7;
+}
+
+private const ZEROS: i64[2] = [0, 0];
+
+public function pick(xs: &Slice<i64>): &Slice<i64> {
+  if (xs.length() == 0) {
+    return &ZEROS;
+  }
+  return xs;
+}

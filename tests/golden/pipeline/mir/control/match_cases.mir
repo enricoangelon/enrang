@@ -1,0 +1,26 @@
+@private enum Shape { Circle { r: i64 }, Square, Tri }
+
+@private fn f(_1: Shape) -> i64 {
+  let _1: Shape; // s
+  let _2: isize temp;
+  fact f0: _1 case Circle;
+  test f0 at bb2;
+  bb0: {
+    _2 = discriminant(_1);
+    switch move _2 [0: bb2, 1: bb3, 2: bb3, otherwise: bb4];
+  }
+  bb1: {
+    return;
+  }
+  bb2: {
+    _0 = const 1: i64;
+    goto bb1;
+  }
+  bb3: {
+    _0 = const 2: i64;
+    goto bb1;
+  }
+  bb4: {
+    unreachable;
+  }
+}

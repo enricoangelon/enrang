@@ -1,0 +1,14 @@
+error[EN0706]: `xs` cannot change while `fst` still points into it
+ --> main.en:3:17
+  |
+2 | const fst = xs.first();
+  |             -- shared borrow of `xs` starts here, held by `fst`
+3 | for (const x of &xs) { *x = 1; }
+  |                 ^^^ `xs` changes here
+4 | console.log(fst);
+  |             --- `fst` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

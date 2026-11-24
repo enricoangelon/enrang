@@ -1,0 +1,4 @@
+const r = &TABLE;
+r[0] = 5; //~ EN0608
+
+private const TABLE: i64[3] = [1, 2, 3];

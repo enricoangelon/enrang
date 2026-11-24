@@ -1,0 +1,11 @@
+error[EN0706]: cannot mutate `q` while iterating over it
+ --> main.en:2:31
+  |
+2 | for (const x of &q) { *x = 5; q.push(1); }
+  |                               ^^^^^^^^^ conflicting mutable access
+  |                 -- mutable borrow begins here
+  |
+  = note: structural mutations may invalidate the iterator
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

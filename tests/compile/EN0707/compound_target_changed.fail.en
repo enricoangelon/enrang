@@ -1,0 +1,4 @@
+function reset(t: &string): &string { *t = "b".toString(); return "!"; }
+let s: string = "a".toString();
+s += reset(&s); //~ EN0707 "`s` can't be borrowed for writing while the assignment to it waits"
+console.log(s);

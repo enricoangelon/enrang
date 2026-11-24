@@ -1,0 +1,5 @@
+let s = "abc".toString();
+const f = (): void => { console.log(s); };
+const g = (): void => { f(); };
+const t = s; //~ EN0715 "`s` is locked while `g`"
+g();

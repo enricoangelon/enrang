@@ -1,0 +1,5 @@
+private function outer(f: () => void): void {
+  const g = () => { f(); };
+  f(); //~ EN0718 "`f` is used twice at once"
+  g();
+}

@@ -1,0 +1,10 @@
+const a = new Animal();
+console.log(a.name, a.nick);
+const b = new Animal("Rex");
+console.log(b.name, b.nick);
+
+public class Animal {
+  public sound: string = "...";
+
+  public constructor(public name: string = "anon", public nick?: string) {}
+}

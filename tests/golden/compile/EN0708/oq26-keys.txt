@@ -1,0 +1,52 @@
+$ enrang check tests/compile/EN0708/oq26-keys.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `q` can't be read while `keep` may write into it
+  --> tests/compile/EN0708/oq26-keys.fail.en:7:19
+   |
+ 4 |   for (const x of &q) {
+   |                    - borrowed for writing here, because `keep` writes on line 10
+ 5 |     if (x > 2) { keep = x; }
+ 6 |   }
+ 7 |   for (const y of &q) { //~ EN0708
+   |                   ^^ read here
+ 8 |     console.log(y);
+ 9 |   }
+10 |   if (keep != null) { *keep = 0; }
+   |       ---- the write
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `q` before line 4 or after line 10
+   = explain: run `enrang explain EN0708`
+
+error[EN0708]: `q` can't be read while `keep` may write into it
+  --> tests/compile/EN0708/oq26-keys.fail.en:20:15
+   |
+17 |   for (const x of &q) {
+   |                    - borrowed for writing here, because `keep` writes on line 21
+18 |     if (x > 2) { keep = x; }
+19 |   }
+20 |   console.log(q[0]); //~ EN0708
+   |               ^^^^ read here
+21 |   if (keep != null) { *keep = 0; }
+   |       ---- the write
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `q` before line 17 or after line 21
+   = explain: run `enrang explain EN0708`
+
+error[EN0707]: cannot borrow `q` as exclusive twice at the same time
+  --> tests/compile/EN0708/oq26-keys.fail.en:30:21
+   |
+30 |     for (const x of &q) { //~ EN0707
+   |                     ^^ second exclusive borrow
+   |                      - first exclusive borrow, held by `keep`
+...
+35 |   if (keep != null) { *keep = 0; }
+   |       ---- `keep` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error: aborting due to 3 previous errors

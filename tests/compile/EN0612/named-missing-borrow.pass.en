@@ -1,0 +1,28 @@
+//! row: `report(&new Circle(2.0))`, `f(r, 1)` with
+report(&new Circle(2.0));
+const n: i64 = 3;
+const r = &n;
+f(r, 1);
+console.log(apply(x => x + 1, 5));
+let a = 5;
+console.log(a.checkedAdd(1));
+
+private function report(c: &Circle): void {
+  console.log(c.r);
+}
+
+private function f(x: &i64, y: i64): void {
+  console.log(*x + y);
+}
+
+private function apply(g: (x: i64) => i64, v: i64): i64 {
+  return g(v);
+}
+
+public class Circle {
+  public r: f64;
+
+  public constructor(r: f64) {
+    this.r = r;
+  }
+}

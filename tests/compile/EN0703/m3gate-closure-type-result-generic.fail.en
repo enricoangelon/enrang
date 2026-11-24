@@ -1,0 +1,6 @@
+let s = "abc".toString();
+growVia((a: &string): &string => { return a.slice(0, 1); }, &s, "zz");
+
+private function growVia<T>(f: (a: &T) => &T, x: &T, v: T): void { //~ EN0703 "a closure can't return `&T`"
+  *f(x) = v;
+}

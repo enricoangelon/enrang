@@ -1,0 +1,28 @@
+let s1: string = "abc";
+let s2: string = "xy";
+let lx = new Lexer(&s1);
+let ly = new Lexer(&s2);
+const a = lx.next();
+const b = lx.next();
+lx.swapWith(&ly);
+const c = lx.next();
+const d = ly.next();
+console.log(a ?? "-", b ?? "-", c ?? "-", d ?? "-");
+
+private class Lexer {
+  private src: &string;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    const tok = this.src.slice(0, 1);
+    this.src = this.src.slice(1, this.src.length());
+    return tok;
+  }
+
+  public swapWith(other: &Lexer): void {
+    const mine = this.src;
+    this.src = other.src;
+    other.src = mine;
+  }
+}

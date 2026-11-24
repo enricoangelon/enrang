@@ -1,0 +1,7 @@
+//! row: `h5`: `q = []; continue;` in a loop over
+//! row: `h1`-`h8`, hold slots: loans on the source
+let q = [1, 2];
+for (const x of &q) {
+  q = []; //~ EN0706 "cannot reassign `q` during iteration"
+  continue;
+}

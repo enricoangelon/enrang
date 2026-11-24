@@ -1,0 +1,41 @@
+const b = new HtmlBuilder();
+const out = b.build();
+const p = new PlainHtmlBuilder();
+const parts = p.build(); //~ EN0458 "`move` method not declared in the receiver's class"
+console.log(out, parts);
+
+public class Builder {
+  private parts: string[] = [];
+
+  public constructor() {}
+
+  public add(s: &string): void {
+    this.parts.push(s.toString());
+  }
+
+  public move build(): string[] {
+    return this.parts;
+  }
+}
+
+public class HtmlBuilder extends Builder {
+  public constructor() {
+    super();
+  }
+
+  public override move build(): string[] {
+    return super.build(); //~ EN0458 "`move` method not declared in the receiver's class"
+  }
+}
+
+public class PlainHtmlBuilder extends Builder {
+  public constructor() {
+    super();
+  }
+}
+
+public abstract class Task {
+  public move run(): string { //~ EN0459 "`move` method of an abstract class can never run"
+    return "done";
+  }
+}

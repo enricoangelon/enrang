@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/nullable_compared_with_value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `i64 | null`, found `i64`
+ --> tests/compile/EN0401/nullable_compared_with_value.fail.en:2:22
+  |
+2 | console.log(maybe == 5); //~ EN0401 "mismatched types: expected `i64 | null`, found `i64`"
+  |                      ^ this is `i64`
+  |
+help: test `maybe` first: `maybe != null && ...` narrows it to its payload
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

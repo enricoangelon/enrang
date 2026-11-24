@@ -1,0 +1,40 @@
+//! row: Under `p != null`: `for (const x of &p) { p = null; }
+public function assign(c: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) {
+      p = null; //~ EN0706
+    }
+  }
+}
+
+public function takeMethod(c: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) { //~ EN0401
+      p.take(); //~ EN0706
+    }
+  }
+}
+
+public function moved(c: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) {
+      take(p); //~ EN0709
+    }
+  }
+}
+
+public function beforeContinue(c: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) {
+      p = null; //~ EN0706
+      continue;
+    }
+  }
+}
+
+private function run(f: () => void): void { f(); }
+private function take(v: string[] | null): void { console.log(v); }

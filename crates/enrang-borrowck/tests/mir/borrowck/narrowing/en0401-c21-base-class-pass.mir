@@ -1,0 +1,82 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/c21-base-class.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/c21-base-class.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+class Animal {
+  name: string;
+}
+class Dog extends Animal { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Dog; // rex
+  let _3: *Dog temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  let _8: Box<Animal>; // pet
+  let _9: Box<Dog> temp;
+  let _10: Dog temp;
+  let _11: *Dog temp;
+  let _12: void temp;
+  let _13: &Box<Dog> temp;
+  let _14: void temp;
+  let _15: void temp;
+  let _16: &Animal temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Dog leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _2.name = const "Rex": string;
+    _6 = &_2 [explicit];
+    _7 = convert(upcast, move _6);
+    _5 = introduce(move _7) -> bb2;
+  }
+  bb2: {
+    storage_live(_8);
+    _11 = addr_of _10;
+    _12 = named_fill Dog leaving()(move _11) -> bb3;
+  }
+  bb3: {
+    _10.name = const "Fido": string;
+    _13 = &_9 [auto-borrow];
+    _14 = "alloc/box"::Box<Dog>::#ctor(move _13, move _10) -> bb4;
+  }
+  bb4: {
+    _8 = convert(upcast, move _9);
+    drop(_10);
+    storage_dead(_10);
+    drop(_9);
+    storage_dead(_9);
+    _16 = &*_8 [explicit];
+    _15 = introduce(move _16) -> bb5;
+  }
+  bb5: {
+    drop(_8);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn introduce(_1: &Animal) -> void {
+  let _1: &Animal; // a
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &(*_1).name [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

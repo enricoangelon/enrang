@@ -1,0 +1,30 @@
+$ enrang check tests/compile/EN0706/forof-first-then-loop.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `xs` cannot change while `fst` still points into it
+ --> tests/compile/EN0706/forof-first-then-loop.fail.en:4:17
+  |
+3 | const fst = xs.first();
+  |             -- shared borrow of `xs` starts here, held by `fst`
+4 | for (const x of &xs) { *x = 1; } //~ EN0706
+  |                 ^^^ `xs` changes here
+5 | console.log(fst);
+  |             --- `fst` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `ys` while iterating over it
+  --> tests/compile/EN0706/forof-first-then-loop.fail.en:11:3
+   |
+ 9 | for (const y of &ys) {
+   |                 --- immutable borrow begins here
+10 |   console.log(y);
+11 |   ys.push(1); //~ EN0706
+   |   ^^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,36 @@
+$ enrang check tests/compile/EN0614/forof-const-source-push.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `q` is `const`, so `push` cannot change it
+ --> tests/compile/EN0614/forof-const-source-push.fail.en:4:3
+  |
+2 | const q = [1];
+  |       - declared `const` here: immutable all the way down
+3 | for (const x of &q) {
+4 |   q.push(2); //~ EN0614 //~ EN0706
+  |   ^^^^^^^^^ `push` changes `q`
+  |
+  = from TypeScript: a TS `const` only freezes the binding. In Enrang values have no shared identity, so `const` freezes the value.
+help: make the binding mutable
+  |
+2 | let q = [1];
+  | ~~~
+  = explain: run `enrang explain EN0614`
+
+error[EN0706]: cannot mutate `q` while iterating over it
+ --> tests/compile/EN0614/forof-const-source-push.fail.en:4:3
+  |
+3 | for (const x of &q) {
+  |                 -- immutable borrow begins here
+4 |   q.push(2); //~ EN0614 //~ EN0706
+  |   ^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+help: collect new jobs separately, or loop over a copy
+  |
+3 | for (const x of [...q]) {
+  |                 ~~~~ +
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

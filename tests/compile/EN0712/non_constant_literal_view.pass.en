@@ -1,0 +1,4 @@
+let n: i64 = 1;
+n += 1;
+const w: &Slice<i64> = &[1, 2];
+console.log(w);

@@ -1,0 +1,7 @@
+//! covers: C18
+let sector: u8[8] = [0; 8];
+console.log(checksum(&sector)); //~ EN0401 "a fixed array can't grow"
+
+private function checksum(data: &u8[]): u32 {
+  return 0;
+}

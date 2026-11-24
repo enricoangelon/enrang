@@ -1,0 +1,60 @@
+// Drops by init state (plan d.12; A:599-602): definitely init `drop_glue`, definitely
+// uninit removed, maybe init behind a flag set at the inits and cleared at the moves.
+// Shapes: c.3 (plan lines 902-906) scope-end `drop` then `storage_dead`, a moved local
+// keeping its `drop` in Built MIR; c.7 (line 1010) a by-value argument is the moved
+// place.
+@final class User {
+  name: string;
+}
+fn make() -> User;
+fn archive(_1: User) -> void;
+
+fn sure() -> void {
+  let _1: User; // u
+  bb0: {
+    storage_live(_1);
+    _1 = make() -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn gone() -> void {
+  let _1: User; // u
+  let _2: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = make() -> bb1;
+  }
+  bb1: {
+    _2 = archive(move _1) -> bb2;
+  }
+  bb2: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+fn maybe(_1: bool) -> void {
+  let _2: User; // u
+  let _3: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = make() -> bb1;
+  }
+  bb1: {
+    switch copy _1 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _3 = archive(move _2) -> bb3;
+  }
+  bb3: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}

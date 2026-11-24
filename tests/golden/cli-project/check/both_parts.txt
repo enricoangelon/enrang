@@ -1,0 +1,31 @@
+$ enrang check main.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0101]: missing `;` after this statement
+ --> main.en:1:12
+  |
+1 | const x = 1
+  |            ^ expected `;` here
+  |
+  = from TypeScript: Enrang has no automatic semicolon insertion.
+help: add the semicolon
+  |
+1 | const x = 1;
+  |            +
+  = explain: run `enrang explain EN0101`
+
+error[EN0101]: missing `;` after this statement
+ --> main.test.en:1:12
+  |
+1 | const y = 2
+  |            ^ expected `;` here
+  |
+  = from TypeScript: Enrang has no automatic semicolon insertion.
+help: add the semicolon
+  |
+1 | const y = 2;
+  |            +
+  = explain: run `enrang explain EN0101`
+
+error: aborting due to 2 previous errors

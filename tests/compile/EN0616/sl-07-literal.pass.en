@@ -1,0 +1,15 @@
+const primes: &Slice<i64> = &[2, 3, 5, 7];
+console.log(total(primes));
+console.log(zeros());
+
+function total(xs: &Slice<i64>): i64 {
+  let sum: i64 = 0;
+  for (const x of xs) {
+    sum += *x;
+  }
+  return sum;
+}
+
+function zeros(): &Slice<i64> {
+  return &[0, 0];
+}

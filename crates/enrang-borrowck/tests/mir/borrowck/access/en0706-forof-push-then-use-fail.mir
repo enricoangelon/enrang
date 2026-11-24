@@ -1,0 +1,67 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/forof-push-then-use.fail.en. Its row's codes: EN0706.
+module "tests/compile/EN0706/forof-push-then-use.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string[]; // queue
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &string; // job
+  let _7: void temp;
+  let _8: &string[] temp;
+  let _9: void temp;
+  let _10: &string temp;
+  loop l0: path _2 preheader bb5 head bb1 bind bb2[2] binding _6;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<string>(const "a": string, const "b": string);
+    goto bb5;
+  }
+  bb1: {
+    _4 = len(_2);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &_2[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _8 = &_2 [auto-borrow]; //~ EN0706 "cannot mutate `queue` while iterating over it"
+    _7 = "alloc/array"::Array<string>::push(move _8, const "retry": string) -> bb7;
+  }
+  bb7: {
+    _10 = &*_6 [reborrow];
+    _9 = form log(move _10) -> bb8;
+  }
+  bb8: {
+    storage_dead(_6);
+    goto bb3;
+  }
+}

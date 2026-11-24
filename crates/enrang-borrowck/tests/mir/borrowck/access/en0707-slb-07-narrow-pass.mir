@@ -1,0 +1,86 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0707/slb-07-narrow.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0707/slb-07-narrow.pass";
+class Obj {
+  s: string | null;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Obj; // o
+  let _3: string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: string | null temp;
+  let _7: *Obj temp;
+  let _8: void temp;
+  let _9: &string; // r
+  let _10: &Obj temp;
+  let _11: bool temp;
+  let _12: u32 temp;
+  let _13: &string temp;
+  let _14: &string temp;
+  let _15: void temp;
+  fact f0: _2.s nonnull;
+  use f0 at bb4[0];
+  test f0 at bb4;
+  bb0: {
+    storage_live(_2);
+    _4 = const "a": string;
+    _5 = &_4 [temp-arg];
+    _3 = form to_string(move _5) -> bb1;
+  }
+  bb1: {
+    _6 = present(move _3);
+    _7 = addr_of _2;
+    _8 = named_fill Obj leaving()(move _7) -> bb2;
+  }
+  bb2: {
+    _2.s = move _6;
+    drop(_6);
+    storage_dead(_6);
+    drop(_3);
+    storage_dead(_3);
+    drop(_4);
+    storage_dead(_4);
+    storage_live(_9);
+    _10 = &_2 [explicit];
+    _9 = clear(move _10) -> bb3;
+  }
+  bb3: {
+    _12 = discriminant(_2.s);
+    _11 = ne(move _12, const 0: u32);
+    switch move _11 [0: bb5, otherwise: bb4];
+  }
+  bb4: {
+    check_tag(_2.s, Present);
+    _13 = &(_2.s as Present).0 [compound-target];
+    _14 = &*_9 [reborrow];
+    _15 = form append(move _13, move _14) -> bb6;
+  }
+  bb5: {
+    storage_dead(_9);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb6: {
+    goto bb5;
+  }
+}
+
+fn clear(_1: &Obj) -> &string {
+  let _1: &Obj; // o
+  let _2: string | null temp;
+  bb0: {
+    _2 = null;
+    drop((*_1).s) [assign];
+    (*_1).s = move _2;
+    drop(_2);
+    storage_dead(_2);
+    _0 = const "": &string;
+    return;
+  }
+}

@@ -1,0 +1,15 @@
+error[EN0603]: cannot move `this.name` out of `this`
+ --> main.en:3:37
+  |
+3 |   public getName(): string { return this.name; }
+  |                                     ^^^^^^^^^ `string` gives the caller its own value
+  |
+help: to return a reference to the same field, write `&string`
+help: to return a copy, write `this.name.clone()`
+  |
+3 |   public getName(): string { return this.name.clone(); }
+  |                                              ++++++++
+help: or mark the method `move` to give up the object
+  = explain: run `enrang explain EN0603`
+
+error: aborting due to 1 previous error

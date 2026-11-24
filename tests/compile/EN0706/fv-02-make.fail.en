@@ -1,0 +1,27 @@
+//! covers: H30
+function make(a: &Slice<u8>, b: &Slice<u8>): Two {
+  return new Two(a, b);
+}
+const t1: u8[] = [1];
+let t2: u8[] = [2, 2, 2];
+const o: u8[] = [3];
+let c = make(&t1, &t2);
+c.setA(&o);
+const tok = c.peekB();
+t2.push(9); //~ EN0706
+console.log(tok);
+
+public class Two {
+  private a: readonly &Slice<u8>;
+  private b: readonly &Slice<u8>;
+  public constructor(a: &Slice<u8>, b: &Slice<u8>) {
+    this.a = a;
+    this.b = b;
+  }
+  public setA(a: &Slice<u8>): void {
+    this.a = a;
+  }
+  public peekB(): readonly &Slice<u8> {
+    return this.b.slice(0, 1);
+  }
+}

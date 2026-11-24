@@ -1,0 +1,14 @@
+error[EN0714]: `Strict.label` returns a reference into `fallback`, but `Labeler.label` returns only into `name` or `this`
+ --> main.en:5:70
+  |
+2 |   public label(name: &string, fallback: &string): &string { return name; }
+  |          ----- declared here
+3 | }
+4 | public class Strict extends Labeler {
+5 |   public override label(name: &string, fallback: &string): &string { return fallback; }
+  |                                                                      ^^^^^^^^^^^^^^^^ returned here
+  |
+help: through a `&Labeler`, callers only expect `name` or the object
+  = explain: run `enrang explain EN0714`
+
+error: aborting due to 1 previous error

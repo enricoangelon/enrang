@@ -1,0 +1,8 @@
+// SPEC 8.4, `idt`: `os/none/idt`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+public function init(): void { unreachable(); }
+
+public function set(vector: u8, h: InterruptHandler): void { unreachable(); }
+
+public function enable(): void { unreachable(); }
+
+public function disable(): void { unreachable(); }

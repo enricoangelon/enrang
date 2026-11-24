@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0610/c4-ctorless-base-3.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0610]: `owner` is not set until `super()` runs
+  --> tests/compile/EN0610/c4-ctorless-base-3.fail.en:18:5
+   |
+18 |     this.owner = o; //~ EN0610
+   |     ^^^^^^^^^^^^^^ `owner` is inherited from `Shape`, so it can be assigned only after `super()`
+   |
+help: assign this.owner after super()
+   = explain: run `enrang explain EN0610`
+
+error: aborting due to 1 previous error

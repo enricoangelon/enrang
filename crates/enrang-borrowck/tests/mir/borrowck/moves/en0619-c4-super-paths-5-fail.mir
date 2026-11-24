@@ -1,0 +1,47 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0619/c4-super-paths-5.fail.en. Its row's codes: EN0619, EN0619.
+module "tests/compile/EN0619/c4-super-paths-5.fail";
+class Animal { }
+class Dog extends Animal { }
+
+fn Animal::#ctor(_1: &Animal) -> void {
+  let _1: &Animal; // this
+  bb0: {
+    return;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: i64) -> void {
+  let _1: &Dog; // this
+  let _2: i64; // n
+  let mut _3: i64; // i
+  let _4: bool temp;
+  let _5: void temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  let _8: i64 temp;
+  bb0: {
+    storage_live(_3);
+    _3 = const 0: i64;
+    goto bb1;
+  }
+  bb1: {
+    _4 = lt(copy _3, copy _2);
+    switch move _4 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _6 = &*_1 [reborrow];
+    _7 = convert(upcast, move _6);
+    _5 = Animal::#ctor(move _7) -> bb4; //~ EN0619 "may already have run here"
+  }
+  bb3: {
+    storage_dead(_3);
+    return; //~ EN0619 "isn't called on every path before the constructor returns"
+  }
+  bb4: {
+    _8 = copy _3;
+    _3 = checked_add(copy _8, const 1: i64);
+    goto bb1;
+  }
+}

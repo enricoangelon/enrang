@@ -1,0 +1,4 @@
+const xs = [1, 2, 3];
+for (const k in xs) { //~ EN1015 "this `for...of` source is not supported yet"
+  console.log(k);
+}

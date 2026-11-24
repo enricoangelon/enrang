@@ -1,0 +1,3 @@
+const empty = []; //~ EN0410 "cannot infer the type of `[]`"
+const nothing = null; //~ EN0410 "cannot infer the type of `null`"
+console.log(empty, nothing);

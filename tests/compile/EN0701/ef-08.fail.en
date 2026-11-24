@@ -1,0 +1,18 @@
+public enum AgeError {
+  Negative,
+}
+
+private class Lexer {
+  private src: &string;
+  public constructor(src: &string) {
+    this.src = src;
+  }
+}
+
+public function age(n: i64): Result<i64, &AgeError> { //~ EN0701 "a `Result` can't hold a `&AgeError`, because `&AgeError` is a reference"
+  return n;
+}
+
+private function lex(n: i64): Result<i64, Lexer> { //~ EN0701 "a `Result` can't hold a `Lexer`, because `Lexer` holds a reference"
+  return n;
+}

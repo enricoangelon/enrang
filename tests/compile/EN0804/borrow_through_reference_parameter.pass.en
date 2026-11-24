@@ -1,0 +1,11 @@
+//! covers: H16
+public function peek(p: &P): u32 {
+  const v = p.b;
+  return v;
+}
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32;
+}

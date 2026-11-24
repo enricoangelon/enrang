@@ -3,5 +3,5 @@ $ enrang explain EN1201
 [stdout]
 EN1201: program cannot run in the VM: `asm` reachable
 
-No explain page yet: it arrives with milestone M4, and this is milestone M0.
+No explain page yet: it arrives with milestone M4, and this is milestone M3.
 [stderr]

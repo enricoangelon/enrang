@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0402/integer_compared_with_float.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0402]: cannot compare `i64` with `f64`
+ --> tests/compile/EN0402/integer_compared_with_float.fail.en:3:13
+  |
+3 | console.log(count < limit); //~ EN0402
+  |             ^^^^^^^^^^^^^ `i64` and `f64` are different types
+  |
+help: convert it, which never fails: `(count as f64)`
+  |
+3 | console.log((count as f64) < limit); //~ EN0402
+  |             +     ++++++++
+  = explain: run `enrang explain EN0402`
+
+error: aborting due to 1 previous error

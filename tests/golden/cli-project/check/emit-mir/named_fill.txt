@@ -1,0 +1,68 @@
+$ enrang check --emit=mir main.en
+[exit 0]
+[stdout]
+@final class Solo {
+  v: i64 = default;
+  label: string = default;
+}
+
+statements (_1: string[]) -> int {
+  phase elaborated;
+  let _1: string[]; // args
+  let _2: Solo; // s
+  let _3: *Solo temp;
+  let _4: void temp;
+  let _5: Solo; // t
+  let _6: *Solo temp;
+  let _7: void temp;
+  let _8: void temp;
+  let _9: i64 temp;
+  let _10: &Solo temp;
+  let _11: i64 temp;
+  let _12: &Solo temp;
+  let _13: i64 temp;
+  let _14: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Solo leaving(v, label)(move _3) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _6 = addr_of _5;
+    _7 = named_fill Solo leaving(label)(move _6) -> bb2;
+  }
+  bb2: {
+    _5.v = const 5: i64;
+    _10 = &_2 [auto-borrow];
+    _9 = Solo::get(move _10) -> bb3;
+  }
+  bb3: {
+    _12 = &_5 [auto-borrow];
+    _11 = Solo::get(move _12) -> bb4;
+  }
+  bb4: {
+    _13 = checked_add(move _9, move _11);
+    _14 = &_13 [temp-arg];
+    _8 = form log(move _14) -> bb5;
+  }
+  bb5: {
+    storage_dead(_13);
+    drop_glue(_5);
+    storage_dead(_5);
+    drop_glue(_2);
+    storage_dead(_2);
+    drop_glue(_1);
+    return;
+  }
+}
+
+fn Solo::get(_1: &Solo) -> i64 perms(read) sources() result none {
+  phase elaborated;
+  let _1: &Solo; // this
+  bb0: {
+    _0 = copy (*_1).v;
+    return;
+  }
+}
+[stderr]

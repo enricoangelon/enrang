@@ -1,0 +1,46 @@
+// Overrides against the nearest base declaration's declared contract (plan
+// d.10, A:1356): a permission above the declared one, `move` unmatched, a
+// read-only result for a writable one, and stores compared by `read_set_only <
+// fields_only < whole` with the read bit (L:83, H36) are EN0615; a source outside
+// the declared ones (the base's plus `this`) is EN0714; storing or writing less
+// fits. `Cursor` writes through its fields and says `implements Copy`: EN0418.
+// MIR shapes: a field write through `this` (plan c.4, plan.md:913).
+class Lexer {
+  src: &string;
+}
+class Base {
+  n: i64;
+}
+fn Base::set(_1: &Base, _2: i64) -> void perms(read) sources() result none;
+fn Base::get(_1: &Base, _2: &i64) -> &i64 perms(read, read) sources(0) result writable;
+fn Base::label(_1: &Base) -> &string perms(read) sources(0) result writable;
+move fn Base::take(_1: &Base) -> i64 perms(own) sources() result none;
+fn Base::adopt(_1: &Base, _2: &Lexer) -> void perms(write, read) sources() stores(1 -> 0 fields_only) result none;
+fn Base::retarget(_1: &Base, _2: &Lexer) -> void perms(write, read) sources() stores(1 -> 0) result none;
+fn Base::skip(let _1: &Base) -> void perms(write) sources() stores(0 -> 0 read_set_only) result none;
+fn Base::bump(let _1: &Base) -> void perms(write) sources() result none;
+class Sub extends Base {
+  m: i64;
+}
+@override fn Sub::set(_1: &Sub, _2: i64) -> void {
+  bb0: {
+    (*_1).n = copy _2; //~ EN0615
+    return;
+  }
+}
+@override fn Sub::get(_1: &Sub, _2: &i64) -> &i64 perms(read, read) sources(0, 1) result writable; //~ EN0714
+@override fn Sub::label(_1: &Sub) -> &string perms(read) sources(0) result readonly(string_part); //~ EN0615
+@override fn Sub::take(_1: &Sub) -> i64 perms(read) sources() result none; //~ EN0615
+@override fn Sub::adopt(_1: &Sub, _2: &Lexer) -> void perms(write, read) sources() stores(1 -> 0) result none; //~ EN0615
+@override fn Sub::retarget(_1: &Sub, _2: &Lexer) -> void perms(write, read) sources() stores(1 -> 0 read) result none; //~ EN0615
+@override fn Sub::skip(let _1: &Sub) -> void perms(write) sources() stores(0 -> 0 fields_only) result none; //~ EN0615
+@override fn Sub::bump(_1: &Sub) -> void perms(read) sources() result none;
+class Low extends Base {
+  k: i64;
+}
+@override fn Low::adopt(_1: &Low, _2: &Lexer) -> void perms(write, read) sources() stores(1 -> 0 read_set_only) result none;
+@override fn Low::retarget(_1: &Low, _2: &Lexer) -> void perms(write, read) sources() stores(1 -> 0 fields_only) result none;
+@override fn Low::skip(let _1: &Low) -> void perms(write) sources() stores(0 -> 0 read_set_only) result none;
+@copy class Cursor writes_through_fields { //~ EN0418
+  r: &i64;
+}

@@ -1,0 +1,27 @@
+@private class Node {
+  v: i64 = default;
+}
+
+@private fn f(_1: Node | null) -> &i64 | null {
+  let _1: Node | null; // n
+  let _2: &i64 | null temp;
+  let _3: isize temp;
+  let _4: &i64 temp;
+  bb0: {
+    _3 = discriminant(_1);
+    switch move _3 [0: bb1, otherwise: bb3];
+  }
+  bb1: {
+    _0 = null;
+    goto bb2;
+  }
+  bb2: {
+    return;
+  }
+  bb3: {
+    check_tag(_1, Present);
+    _4 = &(_1 as Present).0.v [auto-borrow];
+    _0 = present(move _4);
+    goto bb2;
+  }
+}

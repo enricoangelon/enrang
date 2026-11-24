@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0712/m3gate-self-reference-temporary.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0712]: the temporary is dropped while it is still borrowed
+ --> tests/compile/EN0712/m3gate-self-reference-temporary.fail.en:2:1
+  |
+2 | new Selfie(); //~ EN0712 "the temporary is dropped while"
+  | ^^^^^^^^^^^^^ the temporary is dropped here
+  | ------------ borrow of the temporary starts here
+  |
+help: bind the receiver to a local first
+  = explain: run `enrang explain EN0712`
+
+error: aborting due to 1 previous error

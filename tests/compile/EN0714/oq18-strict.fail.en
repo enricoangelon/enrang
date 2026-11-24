@@ -1,0 +1,9 @@
+public class Labeler {
+  public label(name: &string, fallback: &string): &string { return name; }
+}
+
+public class Strict extends Labeler {
+  public override label(name: &string, fallback: &string): &string {
+    return fallback; //~ EN0714 "`Strict.label` returns a reference into `fallback`, but `Labeler.label` returns only into `name` or `this`"
+  }
+}

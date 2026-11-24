@@ -1,0 +1,1 @@
+private type Circle = { kind: "circle", radius: f64 }; //~ EN0216

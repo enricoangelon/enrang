@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0418/flag-inherited.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0418]: `Sub` writes through its reference fields, so copying it would make two writers
+  --> tests/compile/EN0418/flag-inherited.fail.en:14:20
+   |
+14 | public final class Sub extends Base implements Copy { //~ EN0418
+   |                    ^^^ declared `implements Copy` here
+   |
+help: if `Sub` only reads through them, write `readonly` before their types or before the return types that hand them out, or remove `implements Copy`
+   = explain: run `enrang explain EN0418`
+
+error: aborting due to 1 previous error

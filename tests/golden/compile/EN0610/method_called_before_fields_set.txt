@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0610/method_called_before_fields_set.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0610]: `owner` is not set
+  --> tests/compile/EN0610/method_called_before_fields_set.fail.en:11:17
+   |
+11 |     console.log(this.describe()); //~ EN0610 "`owner` is not set"
+   |                 ^^^^ `this` is used here
+   |
+help: assign this.owner before `this` is used, or give `owner` a default
+   = explain: run `enrang explain EN0610`
+
+error: aborting due to 1 previous error

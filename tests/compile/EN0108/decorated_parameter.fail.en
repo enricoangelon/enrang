@@ -1,0 +1,3 @@
+public function scale(@checked factor: i64): i64 { //~ EN0108
+  return factor * 2;
+}

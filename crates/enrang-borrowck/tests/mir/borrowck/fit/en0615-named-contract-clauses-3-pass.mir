@@ -1,0 +1,209 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/named-contract-clauses-3.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/named-contract-clauses-3.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+interface Closer { }
+class File {
+  private fd: i64 = default;
+}
+class Filler { }
+interface Sink { }
+fn Sink::put(let _1: &Self, let _2: &i64[]) -> void;
+interface TokenReader { }
+fn TokenReader::next(let _1: &Self) -> readonly &string | null;
+class Words {
+  private text: string = default;
+  private pos: isize = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Filler; // f
+  let _3: *Filler temp;
+  let _4: void temp;
+  let mut _5: i64[]; // xs
+  let _6: void temp;
+  let _7: &Filler temp;
+  let _8: &i64[] temp;
+  let mut _9: File; // file
+  let _10: *File temp;
+  let _11: void temp;
+  let _12: void temp;
+  let _13: &File temp;
+  let mut _14: Words; // w
+  let _15: *Words temp;
+  let _16: void temp;
+  let _17: void temp;
+  let _18: &Words temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Filler leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _5 = intrinsic AllocArray<i64>();
+    _7 = &_2 [explicit];
+    _8 = &_5 [explicit];
+    _6 = fill<Filler>(move _7, move _8) -> bb2;
+  }
+  bb2: {
+    storage_live(_9);
+    _10 = addr_of _9;
+    _11 = named_fill File leaving(fd)(move _10) -> bb3;
+  }
+  bb3: {
+    _13 = &_9 [explicit];
+    _12 = shut<File>(move _13) -> bb4;
+  }
+  bb4: {
+    storage_live(_14);
+    _15 = addr_of _14;
+    _16 = named_fill Words leaving(text, pos)(move _15) -> bb5;
+  }
+  bb5: {
+    _18 = &_14 [explicit];
+    _17 = read<Words>(move _18) -> bb6;
+  }
+  bb6: {
+    drop(_14);
+    storage_dead(_14);
+    storage_dead(_9);
+    drop(_5);
+    storage_dead(_5);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+move fn File::close(_1: &File) -> void {
+  let _1: &File; // this
+  bb0: {
+    check_class(*_1, move_this(close), ref);
+    return;
+  }
+}
+
+fn Filler::put(_1: &Filler, _2: &i64[]) -> void {
+  let _1: &Filler; // this
+  let _2: &i64[]; // xs
+  let _3: void temp;
+  let _4: &i64[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = "alloc/array"::Array<i64>::push(move _4, const 1: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Words::next(_1: &Words) -> &string | null {
+  let _1: &Words; // this
+  let _2: bool temp;
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: &string temp;
+  let _6: isize; // start
+  let _7: isize temp;
+  let _8: &string temp;
+  let _9: &string temp;
+  let _10: isize | null temp;
+  let _11: &string temp;
+  bb0: {
+    _3 = copy (*_1).pos;
+    _5 = &(*_1).text [auto-borrow];
+    _4 = "core/string"::string::length(move _5) -> bb3;
+  }
+  bb1: {
+    _0 = null;
+    return;
+  }
+  bb2: {
+    storage_live(_6);
+    _6 = copy (*_1).pos;
+    _8 = &(*_1).text [auto-borrow];
+    _7 = "core/string"::string::length(move _8) -> bb4;
+  }
+  bb3: {
+    _2 = ge(move _3, move _4);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb4: {
+    (*_1).pos = move _7;
+    _10 = present(copy (*_1).pos);
+    _11 = &(*_1).text [auto-borrow];
+    _9 = "core/string"::string::slice(move _11, copy _6, move _10, const 2: isize) -> bb5;
+  }
+  bb5: {
+    _0 = present(move _9);
+    storage_dead(_6);
+    return;
+  }
+}
+
+@private fn fill<T extends Sink>(_1: &T, _2: &i64[]) -> void {
+  let _1: &T; // s
+  let _2: &i64[]; // xs
+  let _3: void temp;
+  let _4: &i64[] temp;
+  let _5: &T temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _5 = &*_1 [reborrow];
+    _3 = Sink::put(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn read<T extends TokenReader>(_1: &T) -> void {
+  let _1: &T; // r
+  let _2: void temp;
+  let _3: &string | null temp;
+  let _4: &T temp;
+  let _5: &(&string | null) temp;
+  bb0: {
+    _4 = &*_1 [reborrow];
+    _3 = TokenReader::next(move _4) -> bb1;
+  }
+  bb1: {
+    _5 = &_3 [temp-arg];
+    _2 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    storage_dead(_3);
+    return;
+  }
+}
+
+@private fn shut<T extends Closer>(_1: &T) -> void {
+  let _1: &T; // c
+  let _2: void temp;
+  let _3: int temp;
+  let _4: &int temp;
+  bb0: {
+    _3 = const 1: int;
+    _4 = &_3 [temp-arg];
+    _2 = form log(move _4) -> bb1;
+  }
+  bb1: {
+    storage_dead(_3);
+    return;
+  }
+}

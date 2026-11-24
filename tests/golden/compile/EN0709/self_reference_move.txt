@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0709/self_reference_move.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0709]: cannot move `pair` while it is borrowed
+ --> tests/compile/EN0709/self_reference_move.fail.en:5:15
+  |
+4 | pair[0] = &pair[1];
+  |           -------- shared borrow of `pair` starts here
+5 | const moved = pair; //~ EN0709 "cannot move `pair` while it is borrowed"
+  |               ^^^^ `pair` moves here
+  |
+help: move `pair` after its last borrow
+  = explain: run `enrang explain EN0709`
+
+error: aborting due to 1 previous error

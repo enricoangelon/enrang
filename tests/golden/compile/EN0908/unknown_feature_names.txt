@@ -1,0 +1,37 @@
+$ enrang check tests/compile/EN0908/unknown_feature_names.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0908]: unknown feature name `avx`
+ --> tests/compile/EN0908/unknown_feature_names.fail.en:4:23
+  |
+4 |   const bad = cpu.has("avx"); //~ EN0908 "unknown feature name `avx`"
+  |                       ^^^^^ a feature name, written as a string literal
+  |
+  = explain: run `enrang explain EN0908`
+
+error[EN0908]: unknown feature name `sse4_1`
+ --> tests/compile/EN0908/unknown_feature_names.fail.en:5:24
+  |
+5 |   const typo = cpu.has("sse4_1"); //~ EN0908 "unknown feature name `sse4_1`"
+  |                        ^^^^^^^^ a feature name, written as a string literal
+  |
+  = explain: run `enrang explain EN0908`
+
+error[EN0908]: unknown feature name `SSE2`
+ --> tests/compile/EN0908/unknown_feature_names.fail.en:6:25
+  |
+6 |   const upper = cpu.has("SSE2"); //~ EN0908 "unknown feature name `SSE2`"
+  |                         ^^^^^^ a feature name, written as a string literal
+  |
+  = explain: run `enrang explain EN0908`
+
+error[EN0908]: a feature name must be a string literal
+ --> tests/compile/EN0908/unknown_feature_names.fail.en:7:18
+  |
+7 |   return cpu.has(name); //~ EN0908 "a feature name must be a string literal"
+  |                  ^^^^ a feature name, written as a string literal
+  |
+  = explain: run `enrang explain EN0908`
+
+error: aborting due to 4 previous errors

@@ -1,0 +1,4 @@
+let a: string = "".toString();
+let b: string = "".toString();
+a = b = "xx".toString(); //~ EN0621 "an assignment's value can't be kept"
+console.log(a, b);

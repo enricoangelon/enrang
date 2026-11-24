@@ -1,0 +1,9 @@
+//! row: `h1`-`h8`, hold slots: loans on the sour
+let q: i64[] = [1, 2];
+let n = 0;
+while (n < 2) {
+  for (const x of &q) { *x += 1; }
+  q.push(n);
+  n += 1;
+}
+console.log(q);

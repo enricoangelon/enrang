@@ -1,0 +1,29 @@
+console.log(AgeError.Negative);
+console.log([AgeError.Negative]);
+const r = load("-1");
+match (r) {
+  Ok => console.log(r.value),
+  Err => console.log(`${r.error}`),
+}
+const e: Result<i64> = Err(AgeError.Negative);
+match (e) {
+  Ok => console.log(e.value),
+  Err => console.log(`${e.error}`),
+}
+
+public enum AgeError {
+  NotANumber = "not a number",
+  Negative = "negative age";
+
+  public fmt(let f: &Formatter): void {
+    writeTo(f, "invalid age");
+  }
+}
+
+public function parse(s: &string): Result<i64, AgeError> {
+  return Err(AgeError.Negative);
+}
+
+public function load(s: &string): Result<i64> {
+  return parse(s)?;
+}

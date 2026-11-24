@@ -1,0 +1,54 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/mr-8.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/mr-8.pass";
+class Entity {
+  x: i64 = default;
+}
+class Player extends Entity { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Player; // p
+  let _3: *Player temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &Player temp;
+  let _7: void temp;
+  let _8: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Player leaving(x)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [auto-borrow];
+    _5 = Player::update(move _6) -> bb2;
+  }
+  bb2: {
+    _8 = &_2.x [auto-borrow];
+    _7 = form log(move _8) -> bb3;
+  }
+  bb3: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Entity::update(let _1: &Entity) -> void {
+  let _1: &Entity; // this
+  bb0: {
+    return;
+  }
+}
+
+@override fn Player::update(_1: &Player) -> void {
+  let _1: &Player; // this
+  let _2: i64 temp;
+  bb0: {
+    _2 = copy (*_1).x;
+    (*_1).x = checked_add(copy _2, const 1: i64);
+    return;
+  }
+}

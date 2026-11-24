@@ -1,0 +1,11 @@
+//! row: `a?.b.c`
+const o: Outer | null = new Outer { b: new Inner { c: 1 } };
+console.log(o?.b.c); //~ EN0303
+
+public class Outer {
+  public b: Inner | null = null;
+}
+
+public class Inner {
+  public c: i64 = 0;
+}

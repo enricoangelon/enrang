@@ -1,0 +1,9 @@
+//! covers: H39
+let v: i64[] = [1, 2];
+let t: [&i64[], i32] = [&v, 1];
+const a = t[0];
+const b = t[0]; //~ EN0708 "can't be read while `a` may write into it"
+const e = &b[0];
+a.push(3);
+a.push(4);
+console.log(*e);

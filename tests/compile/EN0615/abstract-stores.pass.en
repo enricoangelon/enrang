@@ -1,0 +1,17 @@
+public abstract class Attachable {
+  public abstract let attach(s: &string): void;
+}
+
+public class Tag extends Attachable {
+  private label: &string;
+  private n: isize = 0;
+
+  public constructor(label: &string) {
+    this.label = label;
+    super();
+  }
+
+  public override attach(s: &string): void {
+    this.n = s.length();
+  }
+}

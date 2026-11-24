@@ -1,0 +1,4 @@
+const k = [1];
+f(1, &k); //~ EN0608 "`f` can change `xs`, but"
+console.log(k);
+private function f(n: i64, xs: &i64[]): void { xs.push(n); }

@@ -1,0 +1,16 @@
+const device = new Device {};
+touch(&device);
+
+private function touch<T extends Port>(const p: &T): void {
+  unsafe {
+    p.poke();
+  }
+}
+
+public interface Port {
+  unsafe poke(): void;
+}
+
+public class Device implements Port {
+  public const unsafe poke(): void {}
+}

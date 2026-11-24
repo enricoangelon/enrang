@@ -1,0 +1,12 @@
+public class Animal {
+  public constructor(public name: string) {}
+  public tag(): string {
+    return "a".toString();
+  }
+}
+
+public class Dog extends Animal {
+  public constructor(name: string, public label: string = this.tag()) { //~ EN0610
+    super(name);
+  }
+}

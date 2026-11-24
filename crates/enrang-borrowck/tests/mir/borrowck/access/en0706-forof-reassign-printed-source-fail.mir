@@ -1,0 +1,110 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/forof-reassign-printed-source.fail.en. Its row's codes: EN0706, EN0706.
+module "tests/compile/EN0706/forof-reassign-printed-source.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int[]; // q
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &int; // x
+  let _7: void temp;
+  let _8: &int temp;
+  let _9: int[] temp;
+  let mut _10: int[]; // p
+  let _11: isize #i;
+  let _12: isize #n;
+  let _13: bool temp;
+  let _14: &int; // x
+  let _15: void temp;
+  let _16: &int temp;
+  let _17: int[] temp;
+  loop l0: path _2 preheader bb5 head bb1 bind bb2[2] binding _6;
+  loop l1: path _10 preheader bb12 head bb8 bind bb9[2] binding _14;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<int>(const 1: int, const 2: int, const 3: int);
+    goto bb5;
+  }
+  bb1: {
+    _4 = len(_2);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &_2[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    storage_live(_10);
+    _10 = intrinsic AllocArray<int>(const 1: int, const 2: int, const 3: int);
+    goto bb12;
+  }
+  bb5: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _8 = &*_6 [reborrow];
+    _7 = form log(move _8) -> bb7;
+  }
+  bb7: {
+    _9 = intrinsic AllocArray<int>();
+    drop(_2) [assign];
+    _2 = move _9; //~ EN0706 "cannot reassign `q` during iteration"
+    drop(_9);
+    storage_dead(_9);
+    storage_dead(_6);
+    goto bb3;
+  }
+  bb8: {
+    _12 = len(_10);
+    _13 = lt(copy _11, copy _12);
+    switch move _13 [0: bb11, otherwise: bb9];
+  }
+  bb9: {
+    storage_live(_14);
+    check_bounds(copy _11, copy _12);
+    _14 = &_10[_11] [for-of-element];
+    _11 = add(copy _11, const 1: isize);
+    goto bb13;
+  }
+  bb10: {
+    goto bb8;
+  }
+  bb11: {
+    drop(_10);
+    storage_dead(_10);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb12: {
+    storage_live(_11);
+    _11 = const 0: isize;
+    goto bb8;
+  }
+  bb13: {
+    _16 = &*_14 [reborrow];
+    _15 = form log(move _16) -> bb14;
+  }
+  bb14: {
+    _17 = intrinsic AllocArray<int>(const 7: int, const 8: int, const 9: int);
+    drop(_10) [assign];
+    _10 = move _17; //~ EN0706 "cannot reassign `p` during iteration"
+    drop(_17);
+    storage_dead(_17);
+    storage_dead(_14);
+    goto bb10;
+  }
+}

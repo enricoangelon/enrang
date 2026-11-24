@@ -1,0 +1,14 @@
+//! covers: H05
+let c = new Outer();
+console.log("end");
+
+private class Guard {
+  private v: readonly &i64[];
+  public constructor(v: &i64[]) { this.v = v; }
+  public destructor() { console.log(this.v); }
+}
+private class Outer {
+  private g: Guard;
+  private buf: i64[] = [1, 2, 3];
+  public constructor() { this.g = new Guard(&this.buf); }
+} //~ EN0711 "`c` is dropped while it"

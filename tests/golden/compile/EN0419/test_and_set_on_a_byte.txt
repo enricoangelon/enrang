@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0419/test_and_set_on_a_byte.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `u8` does not satisfy `AtomicBits`
+ --> tests/compile/EN0419/test_and_set_on_a_byte.fail.en:6:13
+  |
+6 | console.log(byte.testAndSet(1)); //~ EN0419 "`u8` does not satisfy `AtomicBits`"
+  |             ^^^^^^^^^^^^^^^^^^ `T` must satisfy `AtomicBits`
+  |
+  = note: `testAndSet` requires `T extends AtomicBits`
+help: use `exchange`: `bts` has no byte form, so `u8` has no `testAndSet`
+  = explain: run `enrang explain EN0419`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,69 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/const_root_loop_binding_method.fail.en. Its row's codes: EN0608.
+module "tests/compile/EN0608/const_root_loop_binding_method.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: i64[][]; // rows
+  let _3: i64[] temp;
+  let _4: i64[] temp;
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64[]; // r
+  let _9: void temp;
+  let _10: &i64[] temp;
+  loop l0: path _2 preheader bb5 head bb1 bind bb2[2] binding _8; //~ EN0608
+  bb0: {
+    storage_live(_2);
+    _3 = intrinsic AllocArray<i64>(const 1: i64);
+    _4 = intrinsic AllocArray<i64>(const 2: i64);
+    _2 = intrinsic AllocArray<i64[]>(move _3, move _4);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    goto bb5;
+  }
+  bb1: {
+    _6 = len(_2);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &_2[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _10 = &*_8 [reborrow];
+    _9 = "alloc/array"::Array<i64>::push(move _10, const 3: i64) -> bb7;
+  }
+  bb7: {
+    storage_dead(_8);
+    goto bb3;
+  }
+}

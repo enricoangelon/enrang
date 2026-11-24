@@ -1,0 +1,22 @@
+let cells: u16[4] = [0, 0, 0, 0];
+const a = cell(&cells, 0);
+*a = 7;
+let s = new Screen();
+s.pixels()[0] = 7;
+
+public function cell(xs: &u16[4], i: isize): &u16 {
+  unsafe {
+    const p = &xs[0] as *u16;
+    return &*p.add(i);
+  }
+}
+
+public class Screen {
+  private cells: u16[4] = [0, 0, 0, 0];
+
+  public pixels(): &Slice<u16> {
+    unsafe {
+      return Slice<u16>.fromRaw(&this.cells[0] as *u16, 4);
+    }
+  }
+}

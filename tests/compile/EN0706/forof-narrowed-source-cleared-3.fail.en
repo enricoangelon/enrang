@@ -1,0 +1,11 @@
+//! row: Under `p != null`: `for (const x of &p) { p = null; }
+public function inArrow(c: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) {
+      run(() => { p = null; }); //~ EN0706 "cannot reassign `p` during iteration"
+    }
+  }
+}
+
+private function run(f: () => void): void { f(); }

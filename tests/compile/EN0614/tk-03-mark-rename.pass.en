@@ -1,0 +1,29 @@
+let cube: i64[][][] = [[[1], [2]], [[3], [5]], [[4]]];
+const p = deepR(&cube);
+if (p != null) {
+  const [p0, p1] = p; const f = &p0[0];
+  console.log(*f, *p1);
+}
+
+public function deepR(rows: &Slice<i64[][]>): [&i64[], &i64[]] | null {
+  let a: &i64[] | null = null;
+  let b: &i64[] | null = null;
+  let keep: &i64[][] | null = null;
+  for (const x of rows) {
+    if (a != null && b != null) { return [a, b]; }
+    if (keep != null) {
+      const k: &i64[][] = keep;
+      a = null;
+      b = null;
+      let c = false;
+      let prev: &i64[] | null = null;
+      let n = 0;
+      for (const z of (c ? x : k)) {
+        if (n == 0) { prev = z; } else { b = prev; a = c ? z : &k[0]; break; }
+        n += 1;
+      }
+    }
+    keep = x;
+  }
+  return null;
+}

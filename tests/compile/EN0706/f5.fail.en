@@ -1,0 +1,5 @@
+//! row: `f1`-`f6`, loop bindings, among them `le
+let nums: i64[] = [1, 2];
+for (const n of &nums) {
+  nums.push(9); //~ EN0706 "cannot mutate `nums` while iterating over it"
+}

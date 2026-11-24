@@ -1,0 +1,83 @@
+@abstract class Animal<T extends Clone> writes_through_fields {
+  private name: string;
+  readonly age: i64 = default;
+  nick?: string | null = default;
+  r: readonly &i64;
+  pair: [&i64, &i64] readonly_at([1], [0, 1]);
+  protected t: T;
+}
+fn Animal<T>::#ctor(_1: &Animal<T>, _2: string) -> void;
+move fn Animal<T>::consume(_1: &Animal<T>) -> T perms(own) sources() result none;
+fn Animal<T>::get(const _1: &Animal<T>, let _2: &i64, _3: i64 = default) -> &i64 perms(read, write) sources(0, 1) through_fields(0) through_read(1) stores(1 -> 0 fields_only read_set_only read, 2 -> 0) moves(1, 0) result readonly(readonly_field Animal.r);
+static fn Animal<T>::make(_1: string) -> Animal<T>;
+@abstract fn Animal<T>::speak(_1: &Animal<T>) -> string;
+static COUNTER: u64;
+@lang("clone") interface Clone { }
+class Dog<T extends Clone> extends Animal<T> {
+  age: i64 = default override;
+  bark: bool;
+}
+@lang("failure") class Failure { }
+const LIMIT: i64 = 3;
+@repr("u8") enum Level { Low = 1, High = 2 }
+const MAYBE: i64 | null = present(4);
+@str_union enum Mode { A = "a", B = "b" }
+const ORIGIN: Point = Point { x: 0, y: -2 };
+const PAIR: [i64, bool] = tuple(1, true);
+@copy class Point {
+  x: i64;
+  y: i64;
+}
+@lang("result") enum Result<T, E> { Ok { 0: T }, Err { 0: E } }
+const VIEW: &Slice<i64> = view<i64>[1, 2];
+@local fn bump() -> void;
+fn f@["bool"](_1: bool) -> void;
+fn f@["i64"](_1: i64) -> void;
+@private fn helper() -> void;
+fn map<U extends Clone & Failure>(_1: U) -> U perms() sources() result none;
+@unsafe @naked fn raw() -> void;
+fn why0() -> readonly &i64 perms() sources() result readonly(declared);
+fn why1() -> &i64 perms() sources() result readonly(const_root);
+fn why2() -> &i64 perms() sources() result readonly(constant LIMIT);
+fn why3() -> &i64 perms() sources() result readonly(static COUNTER);
+fn why4() -> &i64 perms() sources() result readonly(readonly_result helper);
+fn why5() -> &i64 perms() sources() result readonly(string_part);
+fn why6() -> &i64 perms() sources() result readonly(raw_deref);
+fn why7() -> &i64 perms() sources() result readonly(stored 1);
+fn why8() -> &i64 perms() sources() result readonly(aliased);
+fn why9() -> &i64 perms() sources() result writable;
+
+fn uses(_1: &Dog<Failure>, _2: Level, _3: Mode, _4: Result<i64>) -> void {
+  let _5: *u64 temp;
+  let _6: fn() => void temp;
+  bb0: {
+    _5 = const static_addr(COUNTER): *u64;
+    _5 = const static_addr(LIMIT): *u64;
+    _5 = const static_addr(MAYBE): *u64;
+    _5 = const static_addr(ORIGIN): *u64;
+    _5 = const static_addr(PAIR): *u64;
+    _5 = const static_addr(VIEW): *u64;
+    _6 = const fn Animal<Failure>::#ctor: fn() => void;
+    _6 = const fn Animal<Failure>::consume: fn() => void;
+    _6 = const fn Animal<Failure>::get: fn() => void;
+    _6 = const fn Animal<Failure>::make: fn() => void;
+    _6 = const fn Animal<Failure>::speak: fn() => void;
+    _6 = const fn bump: fn() => void;
+    _6 = const fn f@["bool"]: fn() => void;
+    _6 = const fn f@["i64"]: fn() => void;
+    _6 = const fn helper: fn() => void;
+    _6 = const fn map<Point>: fn() => void;
+    _6 = const fn raw: fn() => void;
+    _6 = const fn why0: fn() => void;
+    _6 = const fn why1: fn() => void;
+    _6 = const fn why2: fn() => void;
+    _6 = const fn why3: fn() => void;
+    _6 = const fn why4: fn() => void;
+    _6 = const fn why5: fn() => void;
+    _6 = const fn why6: fn() => void;
+    _6 = const fn why7: fn() => void;
+    _6 = const fn why8: fn() => void;
+    _6 = const fn why9: fn() => void;
+    return;
+  }
+}

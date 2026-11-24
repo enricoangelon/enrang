@@ -1,0 +1,8 @@
+//! target: i386-linux
+private unsafe let big: u8[3000000000]; //~ EN0435 "`u8[3000000000]` is too large for `i386-linux`"
+private unsafe let wraps: u64[536870912]; //~ EN0435 "`u64[536870912]` is too large for `i386-linux`"
+
+public class Huge { //~ EN0435 "`Huge` is too large for `i386-linux`"
+  public a: u8[2000000000];
+  public b: u8[2000000000];
+}

@@ -1,0 +1,41 @@
+$ enrang check --target=x86_64-windows tests/compile/EN0803/named-five-as-safe-fn.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0803]: `poke` is an `unsafe function`, so it can't become a safe `fn`
+  --> tests/compile/EN0803/named-five-as-safe-fn.fail.en:16:40
+   |
+16 |   const a: fn(p: *u8, v: u8) => void = poke; //~ EN0803 "`poke` is an `unsafe function`, so it can't become a safe `fn`"
+   |                                        ^^^^ its callers must uphold what it requires
+   |
+help: convert it to an `unsafe fn(...)` type, which only `unsafe` code may call
+   = explain: run `enrang explain EN0803`
+
+error[EN0803]: `pick` has `@requires`, so it can't become a closure
+  --> tests/compile/EN0803/named-five-as-safe-fn.fail.en:17:7
+   |
+17 |   run(pick); //~ EN0803 "`pick` has `@requires`, so it can't become a closure"
+   |       ^^^^ it runs only where the CPU features it requires were checked
+   |
+help: convert it to an `unsafe fn(...)` type, which only `unsafe` code may call
+   = explain: run `enrang explain EN0803`
+
+error[EN0803]: `Beep` is a `declare function`, so it can't become a safe `fn`
+  --> tests/compile/EN0803/named-five-as-safe-fn.fail.en:18:40
+   |
+18 |   const c: fn(p: *u8, v: u8) => void = Beep; //~ EN0803 "`Beep` is a `declare function`, so it can't become a safe `fn`"
+   |                                        ^^^^ foreign code is called only from `unsafe`
+   |
+help: convert it to an `unsafe fn(...)` type of the same ABI
+   = explain: run `enrang explain EN0803`
+
+error[EN0803]: `stub` is `@naked`, so it can't become a closure
+  --> tests/compile/EN0803/named-five-as-safe-fn.fail.en:19:7
+   |
+19 |   run(stub); //~ EN0803 "`stub` is `@naked`, so it can't become a closure"
+   |       ^^^^ a naked function has no frame a safe call could rely on
+   |
+help: convert it to an `unsafe fn(...)` type, which only `unsafe` code may call
+   = explain: run `enrang explain EN0803`
+
+error: aborting due to 4 previous errors

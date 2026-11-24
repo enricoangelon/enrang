@@ -1,0 +1,26 @@
+// SPEC 8.2, `Slice<T>`: `core/slice`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `T[]` and `T[N]` reach every member through C18.
+@lang("slice") public final class Slice<T> {
+  private ptr: *T;
+  private len: usize;
+  public length(): isize;
+  public isEmpty(): bool;
+  @mustUse public const slice(a: isize, b?: isize): &Slice<T>;
+  public const splitAt(i: isize): [&Slice<T>, &Slice<T>];
+  public first(): &T | null;
+  public last(): &T | null;
+  public get(i: isize): &T | null;
+  public find(f: (x: &T) => bool): &T | null;
+  public findIndex(f: (x: &T) => bool): isize;
+  public some(f: (x: &T) => bool): bool;
+  public every(f: (x: &T) => bool): bool;
+  public forEach(f: (x: &T) => void): void;
+  public reduce<U>(init: U, f: (acc: U, x: &T) => U): U;
+  public let swap(i: isize, j: isize): void;
+  public let reverse(): void;
+  public let sort(): void where T extends Ord;
+  public let sortBy(f: (a: &T, b: &T) => i32): void;
+  public includes(x: &T): bool where T extends Eq;
+  public asPtr(): *T;
+  @intrinsic("SliceFromRaw") public static unsafe fromRaw(p: *T, n: isize): &Slice<T>;
+}

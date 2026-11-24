@@ -1,0 +1,24 @@
+//! covers: H28
+let table: i64[][] = [[1, 2, 3], [4, 5]];
+const f = new Finder(&table);
+const view = table[0].slice(0, 2);
+const hit = f.find(1);
+if (hit != null) {
+  *hit = [9]; //~ EN0616
+}
+console.log(view);
+
+public final class Finder {
+  private rows: readonly &Slice<i64[]>;
+  public constructor(rows: &Slice<i64[]>) {
+    this.rows = rows;
+  }
+  public find(first: i64): &i64[] | null {
+    for (const r of this.rows) {
+      if (r[0] == first) {
+        return r;
+      }
+    }
+    return null;
+  }
+}

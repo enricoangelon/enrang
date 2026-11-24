@@ -1,0 +1,5 @@
+let q: i64[] = [1, 2];
+function grow(): void { q.push(7); }
+for (const x of &q) {
+  grow(); //~ EN0706 "cannot mutate `q` while iterating over it"
+}

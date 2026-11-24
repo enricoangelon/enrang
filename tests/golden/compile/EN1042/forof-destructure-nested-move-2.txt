@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1042/forof-destructure-nested-move-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1042]: array destructuring is not supported yet
+ --> tests/compile/EN1042/forof-destructure-nested-move-2.fail.en:5:17
+  |
+5 |   const { list: [a, b] } = h; //~ EN1042
+  |                 ^^^^^^ the value is `i64[]`, an array
+  |
+  = note: an array's length is known only when the program runs, so a pattern can't name its elements
+help: Index the array, or return a tuple
+  = explain: run `enrang explain EN1042`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,8 @@
+let f: File;
+function show(): void { console.log(f.name); }
+f = new File("a".toString());
+show();
+
+private class File {
+  public constructor(public name: string) {}
+}

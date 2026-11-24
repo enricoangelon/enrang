@@ -1,0 +1,22 @@
+$ enrang check g10.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0710]: cannot return a reference to local `s`
+ --> g10.en:3:10
+  |
+2 |   const s = "owned" + "!";
+  |         - `s` is dropped when `longest` returns
+3 |   return &s;
+  |          ^^ this reference would point at freed memory
+  |
+  = rule: a returned reference must borrow from a parameter, and `longest` has no reference parameters.
+help: return the owned value instead
+  |
+1 | public function longest(): string {
+  |                            ~~~~~~
+3 |   return s;
+  |          ~
+  = explain: run `enrang explain EN0710`
+
+error: aborting due to 1 previous error

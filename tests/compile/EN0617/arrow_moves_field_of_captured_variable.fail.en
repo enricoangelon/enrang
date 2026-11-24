@@ -1,0 +1,13 @@
+const u = new User { name: "Ada" };
+const f = () => {
+  keep(u.name); //~ EN0617
+};
+f();
+
+public function keep(n: string): void {
+  console.log(n);
+}
+
+public class User {
+  public name: string;
+}

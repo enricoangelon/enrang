@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0615/impl-move-missing.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `File.close` and `Closer.close` must both be `move` or both not
+ --> tests/compile/EN0615/impl-move-missing.fail.en:5:30
+  |
+2 |   move close(): void;
+  |        ----- declared here
+3 | }
+4 |
+5 | public class File implements Closer { //~ EN0615
+  |                              ^^^^^^ here
+  |
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

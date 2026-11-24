@@ -1,0 +1,8 @@
+let xs: i64[] = [1, 2, 3];
+const first = &xs[0];
+console.log(*first);
+grow(&xs);
+
+private function grow(v: &i64[]): void {
+  v.push(1);
+}

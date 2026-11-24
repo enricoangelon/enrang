@@ -1,0 +1,8 @@
+let n = 0;
+const f = () => { n += 1; };
+visit(f, 1);
+visit(f, 2);
+
+private function visit(a: () => void, k: i64): void {
+  a();
+}

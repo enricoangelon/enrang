@@ -1,0 +1,3 @@
+const ready = true;
+const pick = ready? 1 : 2; //~ EN0103
+console.log(pick);

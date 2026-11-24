@@ -1,0 +1,11 @@
+let src = "abc".toString();
+let lx = new Lexer(&src);
+console.log(lx.peek());
+const moved = src;
+console.log(moved);
+
+public class Lexer {
+  private src: &string;
+  public constructor(src: &string) { this.src = src; }
+  public peek(): isize { return this.src.length(); }
+}

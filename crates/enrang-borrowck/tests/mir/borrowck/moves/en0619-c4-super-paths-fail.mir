@@ -1,0 +1,113 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0619/c4-super-paths.fail.en. Its row's codes: EN0619.
+module "tests/compile/EN0619/c4-super-paths.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Animal {
+  tricks: string[];
+  name: string;
+}
+class Dog extends Animal { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Dog; // d
+  let _3: &Dog temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &string[] temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, Dog);
+    _3 = &_2 [auto-borrow];
+    _4 = Dog::#ctor(move _3, const "Rex": string, const true: bool) -> bb1;
+  }
+  bb1: {
+    _6 = &_2.tricks [auto-borrow];
+    _5 = "alloc/array"::Array<string>::push(move _6, const "sit": string) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Animal::#ctor(_1: &Animal, _2: string) -> void {
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: string[] temp;
+  let _4: string temp;
+  bb0: {
+    switch const overridden(tricks): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    switch const overridden(name): bool [0: bb4, otherwise: bb3];
+  }
+  bb2: {
+    _3 = intrinsic AllocArray<string>();
+    field_init((*_1).tricks, move _3);
+    drop(_3);
+    storage_dead(_3);
+    goto bb1;
+  }
+  bb3: {
+    _4 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _4;
+    drop(_4);
+    storage_dead(_4);
+    drop(_2);
+    return;
+  }
+  bb4: {
+    field_init((*_1).name, const "": string);
+    goto bb3;
+  }
+}
+
+fn Animal::#dtor(_1: &Animal) -> void {
+  let _1: &Animal; // this
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &(*_1).name [auto-borrow];
+    _2 = form log(const "bye, ": &string, move _3, const "": &string) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: string, _3: bool) -> void {
+  let _1: &Dog; // this
+  let _2: string; // name
+  let _3: bool; // quick
+  let _4: bool temp;
+  let _5: void temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  bb0: {
+    _4 = copy _3;
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    drop(_2);
+    return; //~ EN0619
+  }
+  bb2: {
+    _6 = &*_1 [reborrow];
+    _7 = convert(upcast, move _6);
+    _5 = Animal::#ctor(move _7, move _2) -> bb3;
+  }
+  bb3: {
+    drop(_2);
+    return;
+  }
+}

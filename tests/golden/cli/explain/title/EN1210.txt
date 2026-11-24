@@ -3,5 +3,5 @@ $ enrang explain EN1210
 [stdout]
 EN1210: reload refused: migration impossible, with path
 
-No explain page yet: it arrives with milestone M6, and this is milestone M0.
+No explain page yet: it arrives with milestone M6, and this is milestone M3.
 [stderr]

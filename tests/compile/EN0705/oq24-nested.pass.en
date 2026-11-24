@@ -1,0 +1,25 @@
+listen((k: u8) => console.log(k));
+listenOr(null);
+listenOr((k: u8) => console.log(k));
+
+public function listen(handler?: (k: u8) => void): void {
+  if (handler != null) {
+    handler(1);
+  }
+}
+
+public function listenOr(handler: ((k: u8) => void) | null): void {
+  if (handler != null) {
+    handler(2);
+  }
+}
+
+public function each(xs: &u8[], f: (x: u8) => void): void {
+  for (const x of xs) {
+    f(*x);
+  }
+}
+
+public class Button {
+  public on: fn() => void;
+}

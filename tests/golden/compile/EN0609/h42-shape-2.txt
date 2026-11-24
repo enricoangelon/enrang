@@ -1,0 +1,42 @@
+$ enrang check tests/compile/EN0609/h42-shape-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0609]: cannot write `c`, because `x` is `readonly`
+  --> tests/compile/EN0609/h42-shape-2.fail.en:4:64
+   |
+ 4 | function run(f: (let p: &{ x: i64 }) => void, c: &C): void { f(c); } //~ EN0609 "cannot write `c`, because `x`"
+   |                                                                ^ written here
+...
+11 | public class C { public readonly x: i64 = 1; }
+   |                  --------------------------- `x` is declared `readonly` here
+   |
+   = note: a `readonly` field is set only by its class's constructor
+   = explain: run `enrang explain EN0609`
+
+error[EN0609]: cannot write `c`, because `x` is `readonly`
+  --> tests/compile/EN0609/h42-shape-2.fail.en:7:3
+   |
+ 7 | f(&c); //~ EN0609 "cannot write `c`, because `x`"
+   |   ^^ written here
+...
+11 | public class C { public readonly x: i64 = 1; }
+   |                  --------------------------- `x` is declared `readonly` here
+   |
+   = note: a `readonly` field is set only by its class's constructor
+   = explain: run `enrang explain EN0609`
+
+error[EN0609]: `setn` can write `c.x`, but `x` is `readonly`
+  --> tests/compile/EN0609/h42-shape-2.fail.en:8:6
+   |
+ 8 | setn(&c); //~ EN0609 "`setn` can write `c.x`, but"
+   |      ^^ `setn` writes through it
+ 9 | run((let p: &{ x: i64 }): void => { p.x = 5; }, &c);
+10 |
+11 | public class C { public readonly x: i64 = 1; }
+   |                  --------------------------- `x` is declared `readonly` here
+   |
+   = note: a `readonly` field is set only by its class's constructor
+   = explain: run `enrang explain EN0609`
+
+error: aborting due to 3 previous errors

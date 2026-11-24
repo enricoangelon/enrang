@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0706/forof-param-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `q` while iterating over it
+ --> tests/compile/EN0706/forof-param-source.fail.en:4:5
+  |
+3 |   for (const x of q) {
+  |                   - immutable borrow begins here
+4 |     grow(q); //~ EN0706
+  |     ^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot reassign `*q` during iteration
+  --> tests/compile/EN0706/forof-param-source.fail.en:10:5
+   |
+ 9 |   for (const x of q) {
+   |                   - `*q` is borrowed here
+10 |     *q = []; //~ EN0706
+   |     ^^^^^^^ cannot reassign while borrowed
+   |
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

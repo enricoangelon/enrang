@@ -1,0 +1,6 @@
+//! covers: H12
+import { Atomic, AtomicValue } from "core/atomic";
+
+const name = new Atomic<string>("x"); //~ EN0419
+
+public class Owner implements AtomicValue {} //~ EN0419

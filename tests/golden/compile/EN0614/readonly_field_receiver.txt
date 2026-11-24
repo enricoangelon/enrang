@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0614/readonly_field_receiver.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `this.items` is read-only here, so `push` cannot change it
+ --> tests/compile/EN0614/readonly_field_receiver.fail.en:4:5
+  |
+2 |   private readonly items: i64[] = [];
+  |   ----------------------------------- `items` is declared `readonly` here
+3 |   public add(x: i64): void {
+4 |     this.items.push(x); //~ EN0614
+  |     ^^^^^^^^^^^^^^^^^^ `push` changes `this.items`
+  |
+  = note: it comes from the `readonly` field `items`
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,14 @@
+public class Person {
+  public constructor(public name: string) {}
+}
+
+public class Pet {
+  public owner: Person;
+
+  public constructor(owner: Person, early: bool) {
+    this.owner = owner;
+    if (early) {
+      return;
+    }
+  }
+}

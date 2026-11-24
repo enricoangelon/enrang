@@ -1,0 +1,5 @@
+//! covers: C05
+const name = "Ada".toString();
+const r = &name;
+const v: string = r; //~ EN0401 "mismatched types: expected `string`, found `&string`"
+console.log(v);

@@ -1,0 +1,30 @@
+const rex = new Dog { name: "Rex" };
+const rexRef: &Animal = &rex;
+introduce(rexRef);
+introduceAny(rexRef);
+const all: Box<Speaker>[] = [new Box(new Dog { name: "Fido" }), new Box(new Robot { id: 7 })];
+for (const s of &all) { introduce(s); }
+const b: Box<Speaker> = new Box(new Dog { name: "Rex" });
+introduce(&*b);
+
+private function introduce(s: &Speaker): void { console.log(s.speak()); }
+
+private function introduceAny<T extends Speaker>(s: &T): void { console.log(s.speak()); }
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class Animal implements Speaker {
+  public name: string = "";
+  public speak(): string { return `${this.name} makes a sound`; }
+}
+
+public class Dog extends Animal {
+  public override speak(): string { return `${this.name} barks`; }
+}
+
+public final class Robot implements Speaker {
+  public id: i64 = 0;
+  public speak(): string { return "beep"; }
+}

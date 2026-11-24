@@ -1,0 +1,13 @@
+$ enrang check --target=i386-none tests/compile/EN0814/reserved_stack_freestanding.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0814]: section `.bss.stack` is reserved
+ --> tests/compile/EN0814/reserved_stack_freestanding.fail.en:2:10
+  |
+2 | @section(".bss.stack") private unsafe let stack: u8[4096]; //~ EN0814 "section `.bss.stack` is reserved"
+  |          ^^^^^^^^^^^^ the compiler's stack lives there
+  |
+  = explain: run `enrang explain EN0814`
+
+error: aborting due to 1 previous error

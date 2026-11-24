@@ -1,0 +1,4 @@
+const p = new Point {};
+console.log(p);
+
+private class Point {}

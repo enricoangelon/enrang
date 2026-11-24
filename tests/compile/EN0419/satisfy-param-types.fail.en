@@ -1,0 +1,14 @@
+const bowl = new Bowl {};
+fill(&bowl); //~ EN0419 "`Bowl` does not satisfy `Feeder`"
+
+private function fill<T extends Feeder>(f: &T): void {
+  f.feed(100);
+}
+
+public interface Feeder {
+  feed(grams: i64): void;
+}
+
+public class Bowl {
+  public feed(grams: i32): void {}
+}

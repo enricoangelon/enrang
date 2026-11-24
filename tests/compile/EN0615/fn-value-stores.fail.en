@@ -1,0 +1,27 @@
+const a = "ab".toString();
+const b = "cd".toString();
+let lx = new Lexer(&a);
+const f: fn(let lx: &Lexer, s: &string) => void = reset; //~ EN0615
+f(&lx, &b);
+
+private function reset(lx: &Lexer, s: &string): void {
+  lx.setSrc(s);
+}
+
+public class Lexer {
+  private src: &string;
+  private pos: isize = 0;
+
+  public constructor(src: &string) {
+    this.src = src;
+  }
+
+  public setSrc(s: &string): void {
+    this.src = s;
+    this.pos = 0;
+  }
+
+  public advance(n: isize): void {
+    this.pos += n;
+  }
+}

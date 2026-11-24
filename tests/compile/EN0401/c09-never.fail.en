@@ -1,0 +1,4 @@
+//! covers: C09
+const c = true;
+const x: i64 = c ? panic("a") : "s"; //~ EN0401 "mismatched types: expected `i64`"
+console.log(x);

@@ -1,0 +1,9 @@
+//! covers: H10
+public interface Closer {
+  destructor(): void; //~ EN0606
+  close(): void;
+}
+
+public function shut<T>(x: &T): void {
+  x.destructor(); //~ EN0606
+}

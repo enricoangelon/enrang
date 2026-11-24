@@ -1,0 +1,3 @@
+public function pad(width?: i64 = 3): void { //~ EN0227
+  console.log(width);
+}

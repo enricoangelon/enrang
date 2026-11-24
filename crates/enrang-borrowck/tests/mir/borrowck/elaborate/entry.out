@@ -1,0 +1,52 @@
+@final class User {
+  name: string;
+}
+fn archive(_1: User) -> void;
+fn make() -> User;
+
+fn again(_1: bool) -> void perms() sources() moves(0) result none {
+  phase elaborated;
+  let _2: User; // u
+  let _3: void temp;
+  let _4: bool flag;
+  drop_flag _4: _2;
+  bb0: {
+    _4 = const false: bool;
+    goto bb5;
+  }
+  bb1: {
+    switch copy _1 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _3 = archive(move _2) -> bb6;
+  }
+  bb3: {
+    switch copy _4 [0: bb8, otherwise: bb7];
+  }
+  bb4: {
+    return;
+  }
+  bb5: {
+    storage_live(_2);
+    _4 = const false: bool;
+    _2 = make() -> bb9;
+  }
+  bb6: {
+    _4 = const false: bool;
+    goto bb3;
+  }
+  bb7: {
+    drop_glue(_2);
+    goto bb8;
+  }
+  bb8: {
+    _4 = const false: bool;
+    storage_dead(_2);
+    _4 = const false: bool;
+    switch copy _1 [0: bb4, otherwise: bb5];
+  }
+  bb9: {
+    _4 = const true: bool;
+    goto bb1;
+  }
+}

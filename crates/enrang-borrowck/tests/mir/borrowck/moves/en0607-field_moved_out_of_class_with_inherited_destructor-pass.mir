@@ -1,0 +1,89 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0607/field_moved_out_of_class_with_inherited_destructor.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0607/field_moved_out_of_class_with_inherited_destructor.pass";
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+class Handle { }
+class LogFile extends Handle {
+  name: string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: LogFile; // f
+  let _3: &LogFile temp;
+  let _4: void temp;
+  let _5: string; // n
+  let _6: &string temp;
+  let _7: void temp;
+  let _8: &string temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, LogFile);
+    _3 = &_2 [auto-borrow];
+    _4 = LogFile::#ctor(move _3, const "a.txt": string) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _6 = &_2.name [auto-borrow];
+    _5 = "alloc/string"::#extend0::clone(move _6) -> bb2;
+  }
+  bb2: {
+    _8 = &_5 [auto-borrow];
+    _7 = form log(move _8) -> bb3;
+  }
+  bb3: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Handle::#dtor(_1: &Handle) -> void {
+  let _1: &Handle; // this
+  let _2: void temp;
+  let _3: string temp;
+  let _4: &string temp;
+  bb0: {
+    _3 = const "close": string;
+    _4 = &_3 [temp-arg];
+    _2 = form log(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}
+
+fn LogFile::#ctor(_1: &LogFile, _2: string) -> void {
+  let _1: &LogFile; // this
+  let _2: string; // name
+  let _3: string temp;
+  let _4: void temp;
+  let _5: *LogFile temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    _5 = addr_of *_1;
+    _4 = implicit_ctor Handle(move _5) -> bb3;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+  bb3: {
+    drop(_2);
+    return;
+  }
+}

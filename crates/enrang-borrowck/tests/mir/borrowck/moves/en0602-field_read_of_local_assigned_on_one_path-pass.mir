@@ -1,0 +1,54 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0602/field_read_of_local_assigned_on_one_path.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0602/field_read_of_local_assigned_on_one_path.pass";
+class User {
+  name: string;
+}
+
+fn pick(_1: bool) -> string {
+  let _1: bool; // c
+  let mut _2: User; // g
+  let _3: bool temp;
+  let _4: User temp;
+  let _5: *User temp;
+  let _6: void temp;
+  let _7: User temp;
+  let _8: *User temp;
+  let _9: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = copy _1;
+    switch move _3 [0: bb3, otherwise: bb1];
+  }
+  bb1: {
+    _5 = addr_of _4;
+    _6 = named_fill User leaving()(move _5) -> bb4;
+  }
+  bb2: {
+    _0 = move _2.name;
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+  bb3: {
+    _8 = addr_of _7;
+    _9 = named_fill User leaving()(move _8) -> bb5;
+  }
+  bb4: {
+    _4.name = const "Ada": string;
+    drop(_2) [assign];
+    _2 = move _4;
+    drop(_4);
+    storage_dead(_4);
+    goto bb2;
+  }
+  bb5: {
+    _7.name = const "Bo": string;
+    drop(_2) [assign];
+    _2 = move _7;
+    drop(_7);
+    storage_dead(_7);
+    goto bb2;
+  }
+}

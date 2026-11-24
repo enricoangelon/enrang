@@ -1,0 +1,6 @@
+let running = true;
+outer: while (running) {
+  run(() => {
+    break outer; //~ EN0111
+  });
+}

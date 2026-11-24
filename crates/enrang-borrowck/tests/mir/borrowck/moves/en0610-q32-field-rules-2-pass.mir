@@ -1,0 +1,72 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0610/q32-field-rules-2.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0610/q32-field-rules-2.pass";
+extend "alloc/string"::#extend0: string;
+@mustUse fn "alloc/string"::#extend0::toUpperCase(_1: &string) -> string;
+class Animal {
+  sound: string = default;
+}
+class Dog extends Animal {
+  sound: string = default override;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Dog; // d
+  let _3: string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  let _8: void temp;
+  let _9: void temp;
+  let _10: &string temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, Dog);
+    _4 = const "...": string;
+    _5 = &_4 [temp-arg];
+    _3 = "alloc/string"::#extend0::toUpperCase(move _5) -> bb1;
+  }
+  bb1: {
+    _2.sound = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_4);
+    storage_dead(_4);
+    _6 = &_2 [auto-borrow];
+    _7 = convert(upcast, move _6);
+    _8 = Animal::#ctor(move _7) -> bb2;
+  }
+  bb2: {
+    _10 = &_2.sound [auto-borrow];
+    _9 = form log(move _10) -> bb3;
+  }
+  bb3: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Animal::#ctor(_1: &Animal) -> void {
+  let _1: &Animal; // this
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    switch const overridden(sound): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &(*_1).sound [auto-borrow];
+    _2 = form log(const "ctor: ": &string, move _3, const "": &string) -> bb3;
+  }
+  bb2: {
+    field_init((*_1).sound, const "...": string);
+    goto bb1;
+  }
+  bb3: {
+    return;
+  }
+}

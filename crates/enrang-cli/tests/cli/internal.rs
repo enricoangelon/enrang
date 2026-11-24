@@ -14,7 +14,7 @@ pub fn register(h: &mut Harness) {
         "internal/a body that returns passes through untouched",
         || {
             assert_eq!(guarded(good), good());
-            assert_eq!(guarded(|| inproc(&["fmt"])), inproc(&["fmt"]));
+            assert_eq!(guarded(|| inproc(&["lsp"])), inproc(&["lsp"]));
         },
     );
     h.case("internal/a panic with a text is exit status 3", || {

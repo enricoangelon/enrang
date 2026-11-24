@@ -1,0 +1,10 @@
+const name = find()?.name; //~ EN0413 "`?.` on an owned value: bind it first"
+console.log(name);
+
+private function find(): User | null {
+  return new User { name: "Ada" };
+}
+
+public class User {
+  public name: string;
+}

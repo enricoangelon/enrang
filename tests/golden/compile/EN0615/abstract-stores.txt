@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0615/abstract-stores.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Tag.attach` stores `s` into `this`, but `Attachable.attach` declares no such store
+  --> tests/compile/EN0615/abstract-stores.fail.en:14:19
+   |
+ 2 |   public abstract let attach(s: &string): void;
+   |                       ------ declared here
+...
+14 |   public override attach(s: &string): void { //~ EN0615
+   |                   ^^^^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

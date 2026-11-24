@@ -17,7 +17,7 @@ Atom                                    sse2; x86-64 on 64-bit parts  planned  p
 Core 2 Duo, Core 2 Quad, Q8400          sse2, x86-64                  planned  planned  planned  planned
 Newer                                   sse2, x86-64                  planned  planned  planned  planned
 
-Nothing has been achieved: this is milestone M0, which has no compiler, and no
+Nothing has been achieved: this is milestone M3, which generates no code, and no
 chip has run any Enrang output. `no hardware` means no such chip is available to test on.
 
 C1  level-proven: encoder tags, assembler oracle, disassembly audit, single-step

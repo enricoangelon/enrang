@@ -103,6 +103,44 @@ pub fn register(h: &mut Harness) {
             });
         }
     }
+    let command_flags: &[(&str, &[&str])] = &[
+        (
+            "check",
+            &[
+                "--target",
+                "--cpu",
+                "--float",
+                "--color",
+                "--error-format",
+                "--debug-info",
+                "--multiboot",
+                "--coverage",
+                "--help",
+            ],
+        ),
+        ("fmt", &["--check", "--help"]),
+        ("init", &["--kernel", "--help"]),
+    ];
+    for (parent, flags) in command_flags {
+        let (parent, flags) = (*parent, *flags);
+        for flag in flags {
+            let flag = *flag;
+            for (what, typo) in typos(flag) {
+                let known = flags.contains(&typo.as_str());
+                if !typo.starts_with('-') || typo == "-" || typo == "-h" || known {
+                    continue;
+                }
+                h.case(format!("typo/{parent} {flag}/{what}: {typo}"), move || {
+                    let outcome = inproc(&[parent, &typo]);
+                    assert_eq!(outcome.code, 2, "{outcome:?}");
+                    let expected = format!(
+                        "error: `{typo}` is not a flag of `enrang {parent}`\nhelp: did you mean `{flag}`?\nusage: enrang {parent} "
+                    );
+                    assert!(outcome.stderr.starts_with(&expected), "{}", outcome.stderr);
+                });
+            }
+        }
+    }
     h.case(
         "typo/a deferred or alias name is not a correction target",
         || {

@@ -1,0 +1,15 @@
+$ enrang init -h
+[exit 0]
+[stdout]
+Create a project without overwriting anything; M9 adds `--kernel`.
+
+Usage: enrang init [name] [--kernel]
+
+Creates enrang.json, src/main.en, src/main.test.en with one passing test, and a
+.gitignore holding /out/, in the directory `name`, or here with no name. If any of
+them exists, nothing is written.
+
+Flags:
+  --kernel    A freestanding kernel project, from milestone M9
+  -h, --help  Print this help
+[stderr]

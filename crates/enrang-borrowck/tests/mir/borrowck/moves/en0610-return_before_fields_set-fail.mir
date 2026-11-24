@@ -1,0 +1,57 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0610/return_before_fields_set.fail.en. Its row's codes: EN0610.
+module "tests/compile/EN0610/return_before_fields_set.fail";
+class Person {
+  name: string;
+}
+class Pet {
+  owner: Person;
+}
+
+fn Person::#ctor(_1: &Person, _2: string) -> void {
+  let _1: &Person; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn Pet::#ctor(_1: &Pet, _2: Person, _3: bool) -> void {
+  let _1: &Pet; // this
+  let _2: Person; // owner
+  let _3: bool; // early
+  let _4: bool temp;
+  let _5: Person temp;
+  bb0: {
+    _4 = copy _3;
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    drop(_2);
+    return; //~ EN0610 "`owner` is not set"
+  }
+  bb2: {
+    _5 = move _2;
+    drop((*_1).owner) [assign];
+    (*_1).owner = move _5;
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    return;
+  }
+}

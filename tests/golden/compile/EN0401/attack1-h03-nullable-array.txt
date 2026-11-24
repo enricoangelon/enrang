@@ -1,0 +1,33 @@
+$ enrang check tests/compile/EN0401/attack1-h03-nullable-array.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `(i64 | null)[]`, found `i64[]`
+ --> tests/compile/EN0401/attack1-h03-nullable-array.fail.en:3:27
+  |
+3 | const n: (i64 | null)[] = xs; //~ EN0401
+  |                           ^^ this is `i64[]`
+  |          -------------- `(i64 | null)[]` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: mismatched types: expected `(i64 | null)[]`, found `i64[]`
+ --> tests/compile/EN0401/attack1-h03-nullable-array.fail.en:4:28
+  |
+4 | const m: (i64 | null)[] = [...xs]; //~ EN0401
+  |                            ^^^^^ the elements of `xs` are `i64`
+  |
+  = note: a spread keeps its elements' type; nothing wraps them in `| null`
+help: spread a converted copy: `...xs.map((x): i64 | null => x)`
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: mismatched types: expected `&(i64 | null)[]`, found `&i64[]`
+ --> tests/compile/EN0401/attack1-h03-nullable-array.fail.en:5:28
+  |
+5 | const r: &(i64 | null)[] = &xs; //~ EN0401
+  |                            ^^^ this is `&i64[]`
+  |          --------------- `&(i64 | null)[]` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 3 previous errors

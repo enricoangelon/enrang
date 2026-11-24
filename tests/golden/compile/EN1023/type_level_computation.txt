@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN1023/type_level_computation.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1023]: type-level computation is not supported yet
+ --> tests/compile/EN1023/type_level_computation.fail.en:1:8
+  |
+1 | let k: keyof Point = "x"; //~ EN1023 "type-level computation is not supported yet"
+  |        ^^^^^ computes a type
+  |
+  = note: every type is written out; the compiler does not compute one type from another.
+  = explain: run `enrang explain EN1023`
+
+error[EN1023]: type-level computation is not supported yet
+ --> tests/compile/EN1023/type_level_computation.fail.en:2:8
+  |
+2 | let m: { [K in Keys]: i64 } = n; //~ EN1023 "type-level computation is not supported yet"
+  |        ^^^^^^^^^^^^^^^^^^^^ computes a type
+  |
+  = note: every type is written out; the compiler does not compute one type from another.
+  = explain: run `enrang explain EN1023`
+
+error[EN1023]: type-level computation is not supported yet
+ --> tests/compile/EN1023/type_level_computation.fail.en:3:8
+  |
+3 | let c: T extends U ? X : Y = v; //~ EN1023 "type-level computation is not supported yet"
+  |        ^^^^^^^^^^^^^^^^^^^ computes a type
+  |
+  = note: every type is written out; the compiler does not compute one type from another.
+  = explain: run `enrang explain EN1023`
+
+error: aborting due to 3 previous errors

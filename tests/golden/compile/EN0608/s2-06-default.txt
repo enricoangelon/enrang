@@ -1,0 +1,30 @@
+$ enrang check tests/compile/EN0608/s2-06-default.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `visit` can change `xs`, but `v` is `const`
+ --> tests/compile/EN0608/s2-06-default.fail.en:2:7
+  |
+2 | visit(&v); //~ EN0608 "`visit` can change `xs`, but `v` is `const`"
+  |       ^^ `visit` writes through it
+  |
+help: declare it `let v`
+  |
+1 | let v: i64[] = [1, 2, 3, 4];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error[EN0715]: `xs` is locked while `step` will still be used
+ --> tests/compile/EN0608/s2-06-default.fail.en:5:16
+  |
+4 | private function visit(xs: &i64[], step: () => void = () => { xs.push(0); }): void {
+  |                                                               -- `step` captures `xs` here
+5 |   const head = xs.first(); //~ EN0715 "`xs` is locked while `step` will still be used"
+  |                ^^ `xs` is used here
+6 |   step();
+  |   ---- `step` is used again here
+  |
+help: use `xs` after the last use of `step`, or pass it to the closure as a parameter
+  = explain: run `enrang explain EN0715`
+
+error: aborting due to 2 previous errors

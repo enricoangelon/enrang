@@ -1,0 +1,33 @@
+let pair = new Pair();
+const f = fields(&pair);
+for (let i = 0; i < 3; i++) {
+  f[0].push(i);
+  f[1].push(i);
+}
+console.log(pair.a, pair.b);
+
+let x = new Bag();
+let y = new Bag();
+const b = both(&x, &y);
+for (let i = 0; i < 3; i++) {
+  b[0].items.push(i);
+  b[1].items.push(i);
+}
+console.log(x.items, y.items);
+
+private function fields(p: &Pair): [&i64[], &i64[]] {
+  return [&p.a, &p.b];
+}
+
+private function both(a: &Bag, b: &Bag): [&Bag, &Bag] {
+  return [a, b];
+}
+
+public class Bag {
+  public items: i64[] = [];
+}
+
+public class Pair {
+  public a: i64[] = [];
+  public b: i64[] = [];
+}

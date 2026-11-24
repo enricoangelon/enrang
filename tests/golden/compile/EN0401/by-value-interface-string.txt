@@ -1,0 +1,28 @@
+$ enrang check tests/compile/EN0401/by-value-interface-string.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: a `&string` can't become a `&Measured`, because it may be a part of a string
+ --> tests/compile/EN0401/by-value-interface-string.fail.en:2:13
+  |
+2 | console.log(keep(s.toString())); //~ EN0401
+  |             ^^^^^^^^^^^^^^^^^^ this binds `Measured` to `string`
+3 | console.log(keepRef(&s)); //~ EN0401
+4 |
+5 | private function keep(m: Measured): isize { const r: &Measured = &m; return r.length(); }
+  |                                             ------------------------ here a `&Measured` becomes a `&Measured`
+  |
+help: add `keep(m: string)`
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: a `&string` can't become a `&Measured`, because it may be a part of a string
+ --> tests/compile/EN0401/by-value-interface-string.fail.en:3:21
+  |
+3 | console.log(keepRef(&s)); //~ EN0401
+  |                     ^^ this is a `&string`, not a `&Measured`
+  |
+help: take <T extends Measured>(m: &T)
+help: or keep a copy: s.toString()
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

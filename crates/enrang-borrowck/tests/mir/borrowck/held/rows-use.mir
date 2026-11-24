@@ -1,0 +1,137 @@
+// The `Use`, `Convert`, `present` and aggregate rows of `held` (A:1075-1111).
+// Source:
+//   class Copier { private src: readonly &Slice<u8>; private dst: &Slice<u8>; private pos: isize; step() writes through dst }
+//   class Lexer implements Copy { private src: readonly &Slice<u8>; private pos: isize; }
+//   fcopy(c: &Copier): &Slice<u8> { return c.dst; }         // a reference field copied out
+//   fcopyRo(c: &Copier): &Slice<u8> { return c.src; }       // a `readonly &` one
+//   tcopy(t: [&i64, &i64]): [&i64, &i64] { const t2 = t; return t2; }
+//   ncopy(r: &i64 | null): void { const c = r; if (c != null) { *c = 1; } }
+//   lexCopy(lx: &Lexer): Lexer { return *lx; }
+//   Lexer.take(): Lexer, a `move` method: { return this; }
+//   conv(xs: &i64[]): &Slice<i64> { return xs; }
+//   wrap(r: &i64): &i64 | null { return r; }
+//   unwrap(r: &i64 | null): &i64 { return r!; }
+//   pair(a: &i64, b: &i64): [&i64, &i64] { return [a, b]; }
+// Shapes: a field read through `*_1` (plan c.4), copies of references and of a
+// tuple as one `Use(Copy)` (A:935, c.6), `convert` after the reborrow (c.6), a
+// narrowed payload after `check_tag` (c.4), `present` (c.6 WrapNullRef), a tuple
+// literal of reborrows (c.5).
+class Copier writes_through_fields {
+  src: readonly &Slice<u8>;
+  dst: &Slice<u8>;
+  pos: isize;
+}
+@copy @final class Lexer {
+  src: readonly &Slice<u8>;
+  pos: isize;
+}
+
+fn fcopy(_1: &Copier) -> &Slice<u8> {
+  bb0: {
+    _0 = copy (*_1).dst;
+    return;
+  }
+}
+fn fcopyRo(_1: &Copier) -> &Slice<u8> {
+  bb0: {
+    _0 = copy (*_1).src;
+    return;
+  }
+}
+fn tcopy(_1: [&i64, &i64]) -> [&i64, &i64] {
+  let _2: [&i64, &i64]; // t2
+  bb0: {
+    storage_live(_2);
+    _2 = copy _1;
+    _0 = copy _2;
+    storage_dead(_2);
+    return;
+  }
+}
+fn ncopy(_1: &i64 | null) -> void {
+  let _2: &i64 | null; // c
+  let _3: u32 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = copy _1;
+    _3 = discriminant(_2);
+    switch move _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    check_tag(_2, Present);
+    *(_2 as Present).0 = const 1: i64;
+    goto bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    return;
+  }
+}
+fn lexCopy(_1: &Lexer) -> Lexer {
+  bb0: {
+    _0 = copy *_1;
+    return;
+  }
+}
+move fn Lexer::take(_1: &Lexer) -> Lexer {
+  bb0: {
+    _0 = move *_1;
+    return;
+  }
+}
+fn conv(_1: &i64[]) -> &Slice<i64> {
+  let _2: &i64[] temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = convert(array_to_slice, move _2);
+    return;
+  }
+}
+fn wrap(_1: &i64) -> &i64 | null {
+  let _2: &i64 temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = present(move _2);
+    return;
+  }
+}
+fn unwrap(_1: &i64 | null) -> &i64 {
+  bb0: {
+    check_tag(_1, Present);
+    _0 = copy (_1 as Present).0;
+    return;
+  }
+}
+fn pair(_1: &i64, _2: &i64) -> [&i64, &i64] {
+  let _3: &i64 temp;
+  let _4: &i64 temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _0 = tuple(move _3, move _4);
+    return;
+  }
+}
+fn Copier::step(_1: &Copier) -> void {
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = copy (*_1).pos;
+    _3 = len((*(*_1).dst));
+    check_bounds(copy _2, copy _3);
+    (*(*_1).dst)[_2] = const 0: u8;
+    return;
+  }
+}
+// A:1109's class aggregate, which mirbuild never builds at M3 (a `new` is a
+// constructor call or a named form, plan c.10): the row is kept for completeness.
+fn agg(_1: &Slice<u8>, _2: &Slice<u8>) -> Copier {
+  let _3: &Slice<u8> temp;
+  let _4: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _0 = Copier { src: move _3, dst: move _4, pos: const 0: isize };
+    return;
+  }
+}

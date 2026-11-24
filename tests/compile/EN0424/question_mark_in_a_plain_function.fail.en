@@ -1,0 +1,10 @@
+console.log(total("12"));
+
+private function total(s: &string): i64 {
+  const n = parse(s)?; //~ EN0424 "`?` needs the function to return `Result` or `T | null`"
+  return n;
+}
+
+private function parse(s: &string): Result<i64> {
+  return 12;
+}

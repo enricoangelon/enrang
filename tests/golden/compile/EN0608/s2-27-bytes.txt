@@ -1,0 +1,30 @@
+$ enrang check tests/compile/EN0608/s2-27-bytes.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `new ByteLexer` can change `src`, but `bytes` is `const`
+ --> tests/compile/EN0608/s2-27-bytes.fail.en:2:26
+  |
+2 | const lb = new ByteLexer(&bytes); //~ EN0608
+  |                          ^^^^^^ `new ByteLexer` writes through it
+  |
+help: declare it `let bytes`
+  |
+1 | let bytes: u8[] = [1, 2, 3, 4];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error[EN0707]: cannot borrow `ly` as exclusive twice at the same time
+ --> tests/compile/EN0608/s2-27-bytes.fail.en:6:11
+  |
+5 | const a = ly.next();
+  |           -- first exclusive borrow, held by `a`
+6 | const b = ly.next(); //~ EN0707
+  |           ^^^^^^^^^ second exclusive borrow
+7 | console.log(a, b);
+  |             - `a` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 2 previous errors

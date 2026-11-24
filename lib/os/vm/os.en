@@ -1,0 +1,10 @@
+// SPEC 8.4, `os`: `os/vm/os`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+public function args(): string[] { unreachable(); }
+
+public function env(const name: &string): string | null { unreachable(); }
+
+public function exit(code: i32): never { unreachable(); }
+
+public function now(): i64 { unreachable(); }
+
+public function sleep(ms: i64): void { unreachable(); }

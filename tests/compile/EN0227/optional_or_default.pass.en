@@ -1,0 +1,7 @@
+public function pad(width: i64 = 3): void {
+  console.log(width);
+}
+
+public function trim(width?: i64): void {
+  console.log(width);
+}

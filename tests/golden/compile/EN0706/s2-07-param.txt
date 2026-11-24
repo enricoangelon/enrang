@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/s2-07-param.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `d2` cannot change while `e2` still points into it
+ --> tests/compile/EN0706/s2-07-param.fail.en:3:7
+  |
+2 | const e2 = &d2[0];
+  |            ------ shared borrow of `d2` starts here, held by `e2`
+3 | grow([&d2, 1]); //~ EN0706
+  |       ^^^ `d2` changes here
+4 | console.log(*e2);
+  |              -- `e2` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

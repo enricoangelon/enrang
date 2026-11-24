@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0616/fv-02-alias-nested.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `src` is declared `readonly &`, so it can't hold a reference from `dst`
+  --> tests/compile/EN0616/fv-02-alias-nested.fail.en:30:5
+   |
+30 |     t[0].src = p; //~ EN0616
+   |     ^^^^^^^^^^^^ stored here
+   |
+help: store a reference from a parameter, or from another `readonly &` field
+   = explain: run `enrang explain EN0616`
+
+error[EN0709]: cannot move `t` while it is borrowed
+  --> tests/compile/EN0616/fv-02-alias-nested.fail.en:31:12
+   |
+29 |     const p = t[0].dst;
+   |               -------- shared borrow of `t` starts here
+30 |     t[0].src = p; //~ EN0616
+31 |     return t; //~ EN0709
+   |            ^ `t` moves here
+   |
+help: move `t` after its last borrow
+   = explain: run `enrang explain EN0709`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,8 @@
+//! covers: C07
+let sector: u8[8] = [0; 8];
+read(0, &sector);
+const x: i64 = 5;
+const r: &i64 | null = &x;
+console.log(r);
+
+private function read(lba: u32, buf?: &Slice<u8>): void {}

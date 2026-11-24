@@ -1,0 +1,4 @@
+const n = 5;
+let r: &i64;
+r = &n;
+console.log(*r);

@@ -1,0 +1,8 @@
+let c = new Counter {};
+console.log(*c.count());
+
+public class Counter {
+  private n: isize = 0;
+
+  public count(): readonly &isize { return &this.n; }
+}

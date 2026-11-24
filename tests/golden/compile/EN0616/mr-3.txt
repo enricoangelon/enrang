@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/mr-3.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `longest` returns a string that may be a part, so it can't grow
+ --> tests/compile/EN0616/mr-3.fail.en:4:1
+  |
+4 | *r += "!"; //~ EN0616 "`longest` returns a string that may be a part, so it can't grow"
+  | ^^^^^^^^^ written here
+  |
+help: change `s` directly: `s += "!";`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

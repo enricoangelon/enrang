@@ -1,0 +1,10 @@
+public class Animal {
+  public constructor(public age: i64) {}
+}
+
+public class Dog extends Animal {
+  public constructor(age: i64) {
+    super(age);
+    super(age); //~ EN0619 "`super(age)` may already have run here"
+  }
+}

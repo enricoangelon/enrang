@@ -1,0 +1,6 @@
+//! covers: H20
+let queue = ["a", "b"];
+for (const job of &queue) {
+  console.log(job);
+  if (job == "a") { queue.push("retry"); break; }
+}

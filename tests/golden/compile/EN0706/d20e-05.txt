@@ -1,0 +1,49 @@
+$ enrang check tests/compile/EN0706/d20e-05.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `xs` cannot change while `first` still points into it
+ --> tests/compile/EN0706/d20e-05.fail.en:4:24
+  |
+2 | const first = &xs[0];
+  |               ------ shared borrow of `xs` starts here, held by `first`
+3 | {
+4 |   const p = new Pusher(&xs); //~ EN0706
+  |                        ^^^ `xs` changes here
+5 |   console.log(p.size());
+6 | }
+7 | console.log(*first);
+  |              ----- `first` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: `ys` cannot change while `head` still points into it
+  --> tests/compile/EN0706/d20e-05.fail.en:12:21
+   |
+10 | const head = &ys[0];
+   |              ------ shared borrow of `ys` starts here, held by `head`
+11 | {
+12 |   let p = new Adder(&ys); //~ EN0706
+   |                     ^^^ `ys` changes here
+13 |   p.add(2);
+14 | }
+15 | console.log(*head);
+   |              ---- `head` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0608]: `new Bumper` can change `r`, but `n` is `const`
+  --> tests/compile/EN0706/d20e-05.fail.en:19:24
+   |
+19 |   const b = new Bumper(&n); //~ EN0608
+   |                        ^^ `new Bumper` writes through it
+   |
+help: declare it `let n`
+   |
+17 | let n: i64 = 5;
+   | ~~~
+   = explain: run `enrang explain EN0608`
+
+error: aborting due to 3 previous errors

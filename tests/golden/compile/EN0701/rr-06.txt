@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0701/rr-06.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0701]: a `TokenReader` can't hold a `View`, because `View` holds a reference
+ --> tests/compile/EN0701/rr-06.fail.en:3:10
+  |
+3 | firstTwo(&v); //~ EN0701 "because `View` holds a reference"
+  |          ^^ only a value type becomes an interface value
+  |
+  = explain: run `enrang explain EN0701`
+
+error[EN0701]: `T` can't stand for a `View`, because `View` holds a reference
+ --> tests/compile/EN0701/rr-06.fail.en:4:12
+  |
+4 | firstTwoOf(&v); //~ EN0701 "because `View` holds a reference"
+  |            ^^ no generic argument can hold a reference
+  |
+  = explain: run `enrang explain EN0701`
+
+error: aborting due to 2 previous errors

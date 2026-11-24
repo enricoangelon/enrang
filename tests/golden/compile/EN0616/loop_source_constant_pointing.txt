@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0616/loop_source_constant_pointing.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `pick` returns a reference that may point at a constant
+ --> tests/compile/EN0616/loop_source_constant_pointing.fail.en:3:17
+  |
+3 | for (const x of pick(&v)) { //~ EN0616 "`pick` returns a reference that may point at a constant"
+  |                 ^^^^^^^^ written here
+  |
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

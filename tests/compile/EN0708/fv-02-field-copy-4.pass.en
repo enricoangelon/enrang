@@ -1,0 +1,22 @@
+//! covers: H33
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public static make(s: &u8[], d: &u8[]): Copier {
+    return new Copier(s, d);
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+  public absorb(o: &Copier): void {
+    this.dst = o.dst;
+    this.src = o.src;
+  }
+}

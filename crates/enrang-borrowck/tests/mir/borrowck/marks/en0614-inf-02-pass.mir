@@ -1,0 +1,158 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/inf-02.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/inf-02.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Bag {
+  items: i64[] = default;
+}
+class Holder {
+  private r: &Bag;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Bag; // a
+  let _3: *Bag temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &i64[] temp;
+  let mut _7: Bag; // start
+  let _8: *Bag temp;
+  let _9: void temp;
+  let mut _10: Holder; // h
+  let _11: &Bag temp;
+  let _12: &Holder temp;
+  let _13: void temp;
+  let _14: &Bag; // p
+  let _15: &Bag temp;
+  let _16: &Holder temp;
+  let _17: &i64; // e
+  let _18: &Holder temp;
+  let mut _19: int; // i
+  let _20: bool temp;
+  let _21: void temp;
+  let _22: isize temp;
+  let _23: isize temp;
+  let _24: &i64 temp;
+  let _25: &int temp;
+  let _26: int temp;
+  let _27: void temp;
+  let _28: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Bag leaving(items)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2.items [auto-borrow];
+    _5 = "alloc/array"::Array<i64>::push(move _6, const 1: i64) -> bb2;
+  }
+  bb2: {
+    storage_live(_7);
+    _8 = addr_of _7;
+    _9 = named_fill Bag leaving(items)(move _8) -> bb3;
+  }
+  bb3: {
+    storage_live(_10);
+    set_table(_10, Holder);
+    _11 = &_7 [explicit];
+    _12 = &_10 [auto-borrow];
+    _13 = Holder::#ctor(move _12, move _11) -> bb4;
+  }
+  bb4: {
+    storage_live(_14);
+    _15 = &_2 [explicit];
+    _16 = &_10 [auto-borrow];
+    _14 = Holder::keep(move _16, move _15) -> bb5;
+  }
+  bb5: {
+    storage_live(_17);
+    _18 = &_10 [auto-borrow];
+    _17 = Holder::first(move _18) -> bb6;
+  }
+  bb6: {
+    storage_live(_19);
+    _19 = const 0: int;
+    goto bb7;
+  }
+  bb7: {
+    _20 = lt(copy _19, const 3: int);
+    switch move _20 [0: bb10, otherwise: bb8];
+  }
+  bb8: {
+    _22 = const 0: isize;
+    _23 = len((*_14).items);
+    check_bounds(copy _22, copy _23);
+    _24 = &(*_14).items[_22] [auto-borrow];
+    _25 = &_19 [auto-borrow];
+    _21 = form log(move _24, move _25) -> bb11;
+  }
+  bb9: {
+    _26 = copy _19;
+    _19 = checked_add(copy _26, const 1: int);
+    goto bb7;
+  }
+  bb10: {
+    storage_dead(_19);
+    _28 = &*_17 [reborrow];
+    _27 = form log(move _28) -> bb12;
+  }
+  bb11: {
+    goto bb9;
+  }
+  bb12: {
+    storage_dead(_17);
+    storage_dead(_14);
+    storage_dead(_10);
+    drop(_7);
+    storage_dead(_7);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Holder::#ctor(_1: &Holder, _2: &Bag) -> void {
+  let _1: &Holder; // this
+  let _2: &Bag; // r
+  let _3: &Bag temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    return;
+  }
+}
+
+fn Holder::first(_1: &Holder) -> readonly &i64 {
+  let _1: &Holder; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len((*(*_1).r).items);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).r).items[_2] [explicit];
+    return;
+  }
+}
+
+fn Holder::keep(_1: &Holder, _2: &Bag) -> &Bag {
+  let _1: &Holder; // this
+  let _2: &Bag; // x
+  let _3: &Bag temp;
+  let _4: &Bag temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).r = move _3;
+    _4 = &*_2 [reborrow];
+    _0 = move _4;
+    return;
+  }
+}

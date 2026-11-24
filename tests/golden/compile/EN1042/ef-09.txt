@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN1042/ef-09.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1042]: array destructuring is not supported yet
+ --> tests/compile/EN1042/ef-09.fail.en:3:15
+  |
+3 | const { list: [c, d] } = h; //~ EN1042 "array destructuring is not supported yet"
+  |               ^^^^^^ the value is `i64[]`, an array
+  |
+  = note: an array's length is known only when the program runs, so a pattern can't name its elements
+help: Index the array, or return a tuple
+  = explain: run `enrang explain EN1042`
+
+error[EN0401]: mismatched types: expected `string`, found `int`
+ --> tests/compile/EN1042/ef-09.fail.en:4:21
+  |
+4 | const bad: string = 5; //~ EN0401 "mismatched types: expected `string`, found `int`"
+  |                     ^ this is `int`
+  |            ------ `string` is required by this annotation
+  |
+  = note: Enrang never converts between numbers and strings implicitly.
+help: convert it explicitly
+  |
+4 | const bad: string = 5.toString(); //~ EN0401 "mismatched types: expected `string`, found `int`"
+  |                      +++++++++++
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

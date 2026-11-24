@@ -1,0 +1,16 @@
+const s = new Square { side: 2.0 };
+console.log(s.area());
+
+public abstract class Shape {
+  public abstract area(): f64;
+}
+
+public class Square extends Shape {
+  public side: f64;
+
+  public override area(): f64 { return this.side * this.side; }
+}
+
+public abstract class Polygon extends Shape {
+  public sides: i64;
+}

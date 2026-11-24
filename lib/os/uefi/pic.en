@@ -1,0 +1,6 @@
+// SPEC 8.4, `pic`: `os/uefi/pic`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+public function mask(irq: u8): void { unreachable(); }
+
+public function unmask(irq: u8): void { unreachable(); }
+
+public function eoi(irq: u8): void { unreachable(); }

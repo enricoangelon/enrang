@@ -1,0 +1,12 @@
+let msg: string = "hi";
+function relay(f: (s: &string) => void, s: &string): void {
+  runC(f, s);
+}
+function runC(g: (let s: &string) => void, s: &string): void {
+  g(s);
+}
+relay(show, &msg);
+
+private function show(s: &string): void {
+  console.log(s.length());
+}

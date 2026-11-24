@@ -1,0 +1,3 @@
+const xs = ["a".toString(), "b".toString()];
+const s = xs[0]; //~ EN0604 "cannot move out of `xs[0]`"
+console.log(s);

@@ -1,0 +1,15 @@
+//! covers: C19
+const echo = (s: string): Result<string> => s; //~ EN0455 "`s` could be a success or an error here"
+console.log(echo("hi"));
+
+public function describe(n: i64): Result<string> {
+  let msg: string = "";
+  if (n < 0) {
+    msg = "negative";
+  }
+  return msg; //~ EN0455 "`msg` could be a success or an error here"
+}
+
+public function pick(c: bool, s: string): Result<string> {
+  return c ? s : Err("none"); //~ EN0455 "`s` could be a success or an error here"
+}

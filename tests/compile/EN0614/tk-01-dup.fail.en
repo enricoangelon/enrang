@@ -1,0 +1,27 @@
+let grid: i64[][] = [[1, 2], [3, 4]];
+const p = dup(&grid);
+if (p != null) {
+  const [a, b] = p;
+  const e = &a[0];
+  b.push(9); //~ EN0614
+  console.log(*e);
+}
+
+let grid2: i64[][] = [[1, 2], [3, 4]];
+const p2 = dup(&grid2);
+if (p2 != null) {
+  clash(p2[0], p2[1]); //~ EN0616
+}
+
+public function two(a: &i64[], b: &i64[]): [&i64[], &i64[]] { return [a, b]; }
+
+public function dup(rows: &Slice<i64[]>): [&i64[], &i64[]] | null {
+  for (const r of rows) { return two(r, r); }
+  return null;
+}
+
+public function clash(x: &i64[], y: &i64[]): void {
+  const first = &x[0];
+  *y = [9];
+  console.log(*first);
+}

@@ -1,0 +1,23 @@
+const a = "ab".toString();
+const b = "cd".toString();
+let lx = new Lexer(&a);
+const put = (let l: &Lexer, s: &string) => { l.advance(s.length()); };
+put(&lx, &b);
+
+public class Lexer {
+  private src: &string;
+  private pos: isize = 0;
+
+  public constructor(src: &string) {
+    this.src = src;
+  }
+
+  public setSrc(s: &string): void {
+    this.src = s;
+    this.pos = 0;
+  }
+
+  public advance(n: isize): void {
+    this.pos += n;
+  }
+}

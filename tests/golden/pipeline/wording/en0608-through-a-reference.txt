@@ -1,0 +1,13 @@
+error[EN0608]: cannot mutate immutable data
+ --> main.en:3:1
+  |
+3 | *w = 13;
+  | ^^^^^^^ `w` points at `k`, which is `const`
+  |
+help: declare it `let k`
+  |
+1 | let k = 12;
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

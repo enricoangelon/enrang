@@ -1,0 +1,16 @@
+const b = new User { name: "Ada", age: 36 }; //~ EN0447 "`User` has a constructor: write `new User(...)`"
+const c: User = { name: "Ada", age: 36 }; //~ EN0447
+const e = new Dog { name: "Rex" }; //~ EN0447 "`Dog` has a constructor: write `new Dog(...)`"
+console.log(b.name, c.age, e.name);
+
+public class User {
+  public constructor(public name: string, public age: i64) {}
+}
+
+public class Animal {
+  public constructor(public name: string) {}
+}
+
+public class Dog extends Animal {
+  public tricks: i64 = 0;
+}

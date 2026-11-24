@@ -1,0 +1,35 @@
+//! target: x86_64-windows
+@at(0xB8000) private unsafe let screen: u16[2000];
+
+@align(16) private unsafe let buffer: u8[64];
+
+@mustUse public function b(): i64 { return 1; }
+
+@requires("cmov") public function g(): void {}
+
+@naked public unsafe function stub(): void { asm("ret"); }
+
+@abi("sysv") public function callback(n: i32): i32 { return n; }
+
+@dll("kernel32.dll") public declare function ExitProcess(code: u32): never;
+
+@devMigrate private function migrate(old: { name: string }): Shape { return new Shape {}; }
+
+@packed public final class Header {
+  public tag: u8;
+  public size: u32;
+}
+
+@repr("u8") public enum Kind {
+  A,
+  B,
+}
+
+@was("Figure") public class Shape {
+  @mustUse public area(): f64 { return 0.0; }
+  @requires("cmov") public fast(): void {}
+}
+
+public abstract class Base {
+  public abstract perimeter(): f64;
+}

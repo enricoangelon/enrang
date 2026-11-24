@@ -1,0 +1,9 @@
+let line: string | null = null;
+let i: i64 = 0;
+while ((line = next(i++)) != null) {
+  console.log(line.length(), line.toUpperCase());
+}
+
+private function next(i: i64): string | null {
+  return i < 2 ? `line${i}` : null;
+}

@@ -1,0 +1,26 @@
+const c = true;
+relay(c ? new Dog {} : new Robot {}); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+
+private function either(c: bool, s: Speaker, o: Speaker): void {
+  relay(c ? s : o); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+}
+
+private function relay(x: Speaker): void {
+  console.log(x.speak());
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Dog implements Speaker {
+  public speak(): string {
+    return "Rex barks";
+  }
+}
+
+public final class Robot implements Speaker {
+  public speak(): string {
+    return "beep";
+  }
+}

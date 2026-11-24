@@ -1,0 +1,10 @@
+//! covers: H28
+let keep: &i64 | null = null;
+for (const x of &K) {
+  keep = x;
+}
+if (keep != null) {
+  console.log(*keep);
+}
+
+private const K: i64[2] = [1, 2];

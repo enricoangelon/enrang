@@ -1,0 +1,11 @@
+let n: i64 = 5;
+let m: i64 = 7;
+bump(&n, &m);
+console.log(n);
+
+private function bump(r: &i64, other: &i64): void {
+  *r = 6;
+  *r += 1;
+  (*r)++;
+  r = other;
+}

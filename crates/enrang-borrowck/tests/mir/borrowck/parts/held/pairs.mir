@@ -1,0 +1,81 @@
+// Stage 4's part test (plan d.8 "The part test", A:1345, S:939): parts placed
+// by the returning `Aggregate` from disjoint fields stay writable (TK-01-owned
+// fields), two borrows of one place alias (`AliasedParts`), a local defined by
+// an unwritten `Aggregate` is looked through (TK-01-local), a by-value tuple
+// parameter never written is one part (`id2`), and a call result is one part
+// when its source arguments pass the test against each other.
+// MIR shapes: a tuple literal of borrows (plan c.5, plan.md:943, 956), a call
+// with borrowed arguments (plan c.7).
+class Pair {
+  a: i64;
+  b: i64;
+}
+fn mk(_1: &i64, _2: &i64) -> [&i64, &i64] perms(read, read) sources(0, 1) result writable;
+fn two(_1: &Pair) -> [&i64, &i64] {
+  let _2: &i64 temp;
+  let _3: &i64 temp;
+  bb0: {
+    _2 = &(*_1).a [explicit];
+    _3 = &(*_1).b [explicit];
+    _0 = tuple(move _2, move _3);
+    return;
+  }
+}
+//= fn two(_1: &Pair) -> [&i64, &i64] perms(read) sources(0) result writable;
+fn same(_1: &Pair) -> [&i64, &i64] {
+  let _2: &i64 temp;
+  let _3: &i64 temp;
+  bb0: {
+    _2 = &(*_1).a [explicit];
+    _3 = &(*_1).a [explicit];
+    _0 = tuple(move _2, move _3);
+    return;
+  }
+}
+//= fn same(_1: &Pair) -> [&i64, &i64] perms(read) sources(0) result readonly(aliased);
+fn local(_1: &Pair) -> [&i64, &i64] {
+  let _2: &i64 temp;
+  let _3: &i64 temp;
+  let _4: [&i64, &i64]; // t
+  bb0: {
+    _2 = &(*_1).a [explicit];
+    _3 = &(*_1).b [explicit];
+    _4 = tuple(move _2, move _3);
+    _0 = move _4;
+    return;
+  }
+}
+//= fn local(_1: &Pair) -> [&i64, &i64] perms(read) sources(0) result writable;
+fn id2(_1: [&i64, &i64]) -> [&i64, &i64] {
+  bb0: {
+    _0 = move _1;
+    return;
+  }
+}
+//= fn id2(_1: [&i64, &i64]) -> [&i64, &i64] perms(read, read) sources(0) moves(1) result writable;
+fn viaCall(_1: &Pair) -> [&i64, &i64] {
+  let _2: &i64 temp;
+  let _3: &i64 temp;
+  bb0: {
+    _2 = &(*_1).a [explicit];
+    _3 = &(*_1).b [explicit];
+    _0 = mk(move _2, move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+//= fn viaCall(_1: &Pair) -> [&i64, &i64] perms(read) sources(0) result writable;
+fn viaCallSame(_1: &Pair) -> [&i64, &i64] {
+  let _2: &i64 temp;
+  let _3: &i64 temp;
+  bb0: {
+    _2 = &(*_1).a [explicit];
+    _3 = &(*_1).a [explicit];
+    _0 = mk(move _2, move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+//= fn viaCallSame(_1: &Pair) -> [&i64, &i64] perms(read) sources(0) result readonly(aliased);

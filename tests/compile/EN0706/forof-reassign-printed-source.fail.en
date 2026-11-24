@@ -1,0 +1,12 @@
+//! row: `let q = [1, 2, 3]; for (const x of &q) 
+let q = [1, 2, 3];
+for (const x of &q) {
+  console.log(x);
+  q = []; //~ EN0706 "cannot reassign `q` during iteration"
+}
+
+let p = [1, 2, 3];
+for (const x of &p) {
+  console.log(x);
+  p = [7, 8, 9]; //~ EN0706 "cannot reassign `p` during iteration"
+}

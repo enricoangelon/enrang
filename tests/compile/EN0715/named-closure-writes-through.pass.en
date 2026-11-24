@@ -1,0 +1,14 @@
+//! row: `both(() => { *r += 1; }, r);`
+//! row: `run(() => { *r += 1; }); run2(r);`
+let n: i64 = 1;
+const r = &n;
+run(() => { *r += 1; });
+run2(r);
+
+private function run(f: () => void): void {
+  f();
+}
+
+private function run2(x: &i64): void {
+  *x += 1;
+}

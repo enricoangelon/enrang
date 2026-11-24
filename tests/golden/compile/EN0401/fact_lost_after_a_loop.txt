@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0401/fact_lost_after_a_loop.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `&string[]`, found `&(string[] | null)`
+ --> tests/compile/EN0401/fact_lost_after_a_loop.fail.en:7:24
+  |
+7 |   const r: &string[] = &p; //~ EN0401
+  |                        ^^ this is `&(string[] | null)`
+  |            --------- `&string[]` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: mismatched types: expected `&string[]`, found `&(string[] | null)`
+  --> tests/compile/EN0401/fact_lost_after_a_loop.fail.en:18:24
+   |
+18 |   const s: &string[] = &q; //~ EN0401
+   |                        ^^ this is `&(string[] | null)`
+   |            --------- `&string[]` is required by this annotation
+   |
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

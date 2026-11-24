@@ -1,0 +1,14 @@
+const c = new Circle(new Box(2));
+console.log(c.color);
+
+public class Shape {
+  public color: string = "red";
+}
+
+public class Circle extends Shape {
+  private r: Box<i64>;
+
+  public constructor(r: Box<i64>) {
+    this.r = r;
+  } //~ EN0619 "isn't called on every path before the constructor returns"
+}

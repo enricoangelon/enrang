@@ -1,0 +1,2 @@
+let shape: { radius: f64 } | { side: f64 } = { radius: 1.0 }; //~ EN0215
+console.log(shape);

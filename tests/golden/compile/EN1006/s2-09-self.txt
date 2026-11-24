@@ -1,0 +1,44 @@
+$ enrang check tests/compile/EN1006/s2-09-self.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+ --> tests/compile/EN1006/s2-09-self.fail.en:4:11
+  |
+4 | let kept: Box<Clone> | null = null; //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  |           ^^^^^^^^^^^^^^^^^ this `Box<Clone> | null` needs its class's table
+  |
+  = note: `Clone.clone` takes or returns `Self` by value, which can't run where the class is unknown
+help: use a type parameter `T extends Clone`
+  = explain: run `enrang explain EN1006`
+
+error[EN0401]: `b` may hold another class than `a`
+ --> tests/compile/EN1006/s2-09-self.fail.en:8:19
+  |
+8 |   return a.equals(b); //~ EN0401 "`b` may hold another class than `a`"
+  |                   ^ each interface value stands for a class of its own
+  |
+help: use one type for both: same<T extends Eq>(a: &T, b: &T)
+  = explain: run `enrang explain EN0401`
+
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+  --> tests/compile/EN1006/s2-09-self.fail.en:11:47
+   |
+11 | private function first(a: &Clone, b: &Clone): &Clone { //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+   |                                               ^^^^^^ this `&Clone` needs its class's table
+   |
+   = note: `Clone.clone` takes or returns `Self` by value, which can't run where the class is unknown
+help: use a type parameter `T extends Clone`
+   = explain: run `enrang explain EN1006`
+
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+  --> tests/compile/EN1006/s2-09-self.fail.en:18:14
+   |
+18 |   private c: &Clone; //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+   |              ^^^^^^ this `&Clone` needs its class's table
+   |
+   = note: `Clone.clone` takes or returns `Self` by value, which can't run where the class is unknown
+help: use a type parameter `T extends Clone`
+   = explain: run `enrang explain EN1006`
+
+error: aborting due to 4 previous errors

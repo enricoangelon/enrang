@@ -1,0 +1,19 @@
+//! covers: H34
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public retarget(v: &u8[]): void {
+    this.src = v;
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+}
+
+public function relinkPart(t: &[&Copier, i32], s: &u8[]): void {
+  t[0].retarget(s);
+}

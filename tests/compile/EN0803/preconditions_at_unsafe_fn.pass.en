@@ -1,0 +1,16 @@
+private unsafe function poke(p: *u8, v: u8): void {}
+
+@requires("cmov") private function pick(p: *u8, v: u8): void {}
+
+@naked private unsafe function stub(p: *u8, v: u8): void { asm("ret"); }
+
+private function runUnsafe(f: unsafe fn(p: *u8, v: u8) => void): void {}
+
+public function wire(): void {
+  const a: unsafe fn(p: *u8, v: u8) => void = poke;
+  const b: unsafe fn(p: *u8, v: u8) => void = pick;
+  const d: unsafe fn(p: *u8, v: u8) => void = stub;
+  runUnsafe(poke);
+  runUnsafe(pick);
+  runUnsafe(stub);
+}

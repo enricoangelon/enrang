@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0446/abstract_method_not_implemented.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0446]: `Square` does not implement `Shape.area`
+ --> tests/compile/EN0446/abstract_method_not_implemented.fail.en:5:14
+  |
+2 |   public abstract area(): f64;
+  |                   ---- `Shape.area` is declared `abstract` here
+3 | }
+4 |
+5 | public class Square extends Shape { //~ EN0446 "`Square` does not implement `Shape.area`"
+  |              ^^^^^^ `Square` is not `abstract`
+  |
+help: implement it with `override`, or declare `Square` `abstract`
+  = explain: run `enrang explain EN0446`
+
+error: aborting due to 1 previous error

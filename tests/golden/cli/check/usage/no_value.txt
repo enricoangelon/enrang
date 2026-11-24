@@ -1,0 +1,7 @@
+$ enrang check --target
+[exit 2]
+[stdout]
+[stderr]
+error: `--target` needs a value
+help: write it as `--target=<value>`
+usage: enrang check [file] [flags]

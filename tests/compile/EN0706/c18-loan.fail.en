@@ -1,0 +1,8 @@
+let xs: i64[] = [1, 2, 3];
+console.log(view(&xs));
+
+function view(r: &i64[]): i64 {
+  const s: &Slice<i64> = r;
+  r.push(4); //~ EN0706
+  return s[0];
+}

@@ -1,0 +1,11 @@
+//! covers: H16
+public function peek(p: &P): u32 {
+  const r = &p.b; //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+  return *r;
+}
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32;
+}

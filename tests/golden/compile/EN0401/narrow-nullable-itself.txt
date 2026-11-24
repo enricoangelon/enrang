@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0401/narrow-nullable-itself.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `q` may be `null` here
+ --> tests/compile/EN0401/narrow-nullable-itself.fail.en:5:15
+  |
+4 |   clear(&q);
+  |         -- this may write through it
+5 |   console.log(q.n); //~ EN0401
+  |               ^^^ the test before this may no longer hold
+  |
+  = note: a writing reference may have changed `q`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

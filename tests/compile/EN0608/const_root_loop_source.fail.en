@@ -1,0 +1,5 @@
+//! covers: H28
+const xs: i64[] = [1, 2];
+for (const x of &xs) { //~ EN0608
+  *x = 1;
+}

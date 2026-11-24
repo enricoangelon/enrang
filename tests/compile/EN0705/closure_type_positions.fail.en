@@ -1,0 +1,12 @@
+const f: (x: i64) => i64 = (x: i64) => x; //~ EN0705 "a closure type can be written only as a parameter's type"
+console.log(f(1));
+
+public class Button {
+  public on: () => void; //~ EN0705 "a closure type can be written only as a parameter's type"
+}
+
+public function make(): (x: i64) => i64 { //~ EN0705 "a closure type can be written only as a parameter's type"
+  unreachable();
+}
+
+public function run(f: (g: (k: u8) => void) => void): void {} //~ EN0705 "a closure type can be written only as a parameter's type"

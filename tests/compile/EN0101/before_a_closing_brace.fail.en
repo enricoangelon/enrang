@@ -1,0 +1,3 @@
+public function show(n: i64): void {
+  console.log(n) //~ EN0101
+}

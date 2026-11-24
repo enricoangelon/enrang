@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0615/override-store-fields-order.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Sub.take` keeps `o` itself, but `Keeper.take` keeps only what `o`'s fields hold
+  --> tests/compile/EN0615/override-store-fields-order.fail.en:33:19
+   |
+20 |   public take(o: &Lexer): void {
+   |          ---- declared here
+...
+33 |   public override take(o: &Lexer): void { //~ EN0615
+   |                   ^^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

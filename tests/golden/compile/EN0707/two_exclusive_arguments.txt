@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0707/two_exclusive_arguments.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: cannot borrow `xs` as exclusive twice at the same time
+ --> tests/compile/EN0707/two_exclusive_arguments.fail.en:8:16
+  |
+8 | swapFirst(&xs, &xs); //~ EN0707 "cannot borrow `xs` as exclusive twice at the same time"
+  |                ^^^ second exclusive borrow
+  |           --- first exclusive borrow, still live until the call returns
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: to exchange two elements of one array, use `xs.swap(i, j)`
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 1 previous error

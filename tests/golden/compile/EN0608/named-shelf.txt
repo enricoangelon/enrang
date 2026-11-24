@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0608/named-shelf.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `rename` can change `s`, but `fixed` is `const`
+ --> tests/compile/EN0608/named-shelf.fail.en:4:8
+  |
+4 | rename(&fixed); //~ EN0608 "`rename` can change `s`, but `fixed` is `const`"
+  |        ^^^^^^ `rename` writes through it
+  |
+help: declare it `let fixed`
+  |
+2 | let fixed = new Library();
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error[EN0616]: cannot change the object returned by `book`
+  --> tests/compile/EN0608/named-shelf.fail.en:15:3
+   |
+15 |   s.book(1).title = "Dune"; //~ EN0616 "cannot change the object returned by `book`"
+   |   ^^^^^^^^^^^^^^^^^^^^^^^^ `book` returns a `readonly` reference
+   |
+help: to allow this, remove `readonly` from the return type of `book`
+   = explain: run `enrang explain EN0616`
+
+error: aborting due to 2 previous errors

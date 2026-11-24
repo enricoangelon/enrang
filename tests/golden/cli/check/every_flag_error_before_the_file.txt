@@ -1,0 +1,19 @@
+$ enrang check --debug-info=dwarf --coverage --target=bogus missing.en
+[exit 2]
+[stdout]
+[stderr]
+error[EN1034]: DWARF output is not supported yet
+  = note: debug information in the DWARF format is outside the prototype
+help: `--symbols` plus stack traces
+  = explain: run `enrang explain EN1034`
+
+error[EN1041]: this flag is not supported yet
+  = note: `--coverage` is outside the prototype
+help: Boot through `--image`; the VM counts blocks internally but reports no coverage yet
+  = explain: run `enrang explain EN1041`
+
+error[EN1303]: unknown target `bogus`
+  = note: targets are `x86_64-linux`, `x86_64-windows`, `i386-linux`, `i386-none` and `x86_64-none`
+  = explain: run `enrang explain EN1303`
+
+error: aborting due to 3 previous errors

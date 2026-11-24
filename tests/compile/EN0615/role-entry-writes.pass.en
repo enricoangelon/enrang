@@ -1,0 +1,7 @@
+//! target: i386-none
+@entry private function kmain(boot: &BootInfo): never {
+  touch(boot);
+  halt();
+}
+
+private function touch(b: &BootInfo): void {}

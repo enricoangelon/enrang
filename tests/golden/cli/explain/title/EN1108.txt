@@ -1,0 +1,7 @@
+$ enrang explain EN1108
+[exit 0]
+[stdout]
+EN1108: unknown matcher
+
+No explain page yet: it arrives with milestone M4, and this is milestone M3.
+[stderr]

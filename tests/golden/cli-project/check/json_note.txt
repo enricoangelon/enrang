@@ -1,0 +1,5 @@
+$ enrang check --error-format=json --target=i386-linux --cpu=k6 main.en
+[exit 0]
+[stdout]
+[stderr]
+{"version":1,"severity":"note","code":null,"message":"`k6` resolves to level `i586`","primary":{"text":"","span":null},"secondary":[],"entries":[],"helps":[],"explain":null}

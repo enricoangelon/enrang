@@ -1,0 +1,15 @@
+//! row: `match (move r)`, `for (const x of move r)`,
+public function f(r: &User): void {
+  const k = match (move r) { //~ EN0228 "`move` is not needed here"
+    default => 1,
+  };
+  for (const x of move r) { //~ EN0228 "`move` is not needed here"
+    console.log(x);
+  }
+  const b = move r; //~ EN0228 "`move` is not needed here"
+  console.log(k, b);
+}
+
+public class User {
+  public name: string = "Ada";
+}

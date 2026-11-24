@@ -1,0 +1,32 @@
+const generic = new Animal("Generic");
+const a: Animal = generic.into();
+introduce(&a);
+const boxed = new Box(a);
+const g = f(new Dog("Rex"));
+introduce(&g);
+const h = f(new Animal("Generic"));
+introduce(&h);
+
+private function f<T extends Animal>(x: T): Animal {
+  return x.into();
+}
+
+public function introduce(a: &Animal): void {
+  console.log(a.speak());
+}
+
+public class Animal {
+  public constructor(public name: string) {}
+
+  public speak(): string {
+    return `${this.name} makes a sound`;
+  }
+
+  public move into(): Animal {
+    return this;
+  }
+}
+
+public class Dog extends Animal {
+  private tricks: string[] = [];
+}

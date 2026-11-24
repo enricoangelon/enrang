@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0416/satisfy-protected.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0416]: `Dog` does not satisfy `Speaker`: `speak` is protected
+ --> tests/compile/EN0416/satisfy-protected.fail.en:5:29
+  |
+5 | public class Dog implements Speaker { //~ EN0416 "`Dog` does not satisfy `Speaker`: `speak` is protected"
+  |                             ^^^^^^^ required by this `implements`
+6 |   protected speak(): string {
+  |             ----- `Dog.speak` is `protected`
+  |
+  = explain: run `enrang explain EN0416`
+
+error: aborting due to 1 previous error

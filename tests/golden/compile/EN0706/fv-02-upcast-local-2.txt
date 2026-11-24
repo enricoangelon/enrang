@@ -1,0 +1,74 @@
+$ enrang check tests/compile/EN0706/fv-02-upcast-local-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `w` cannot change while `p` still points into it
+  --> tests/compile/EN0706/fv-02-upcast-local-2.fail.en:29:5
+   |
+28 |     const p = w.dst;
+   |               ----- shared borrow of `w` starts here, held by `p`
+29 |     w.retarget(p); //~ EN0706
+   |     ^ `w` changes here
+   |     ------------- `p` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `w` cannot change while a borrow of it is still used
+  --> tests/compile/EN0706/fv-02-upcast-local-2.fail.en:31:5
+   |
+28 |     const p = w.dst;
+   |               ----- shared borrow of `w` starts here
+29 |     w.retarget(p); //~ EN0706
+30 |     const a = w.peek();
+31 |     w.step(); //~ EN0706
+   |     ^^^^^^^^ `step` changes `w`, so it needs exclusive access to it
+32 |     w.step(); //~ EN0706
+   |     - the borrow is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `w` cannot change while a borrow of it is still used
+  --> tests/compile/EN0706/fv-02-upcast-local-2.fail.en:32:5
+   |
+28 |     const p = w.dst;
+   |               ----- shared borrow of `w` starts here
+...
+32 |     w.step(); //~ EN0706
+   |     ^^^^^^^^ `step` changes `w`, so it needs exclusive access to it
+33 |     w.step(); //~ EN0706
+   |     - the borrow is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `w` cannot change while a borrow of it is still used
+  --> tests/compile/EN0706/fv-02-upcast-local-2.fail.en:33:5
+   |
+28 |     const p = w.dst;
+   |               ----- shared borrow of `w` starts here
+...
+33 |     w.step(); //~ EN0706
+   |     ^^^^^^^^ `step` changes `w`, so it needs exclusive access to it
+34 |     w.step(); //~ EN0706
+   |     - the borrow is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `w` cannot change while a borrow of it is still used
+  --> tests/compile/EN0706/fv-02-upcast-local-2.fail.en:34:5
+   |
+28 |     const p = w.dst;
+   |               ----- shared borrow of `w` starts here
+...
+34 |     w.step(); //~ EN0706
+   |     ^^^^^^^^ `step` changes `w`, so it needs exclusive access to it
+35 |     console.log(a);
+   |                 - the borrow is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 5 previous errors

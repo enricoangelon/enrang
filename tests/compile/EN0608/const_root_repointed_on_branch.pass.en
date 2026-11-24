@@ -1,0 +1,12 @@
+choose(true);
+
+public function choose(c: bool): void {
+  let z = 1;
+  let k = 2;
+  let w = &z;
+  if (c) {
+    w = &k;
+  }
+  *w = 3;
+  console.log(z, k);
+}

@@ -1,0 +1,66 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0617/local_function_moves_captured_variable.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0617/local_function_moves_captured_variable.pass";
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: string; // name
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  let _6: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "Ada": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    _6 = &_2 [hidden-arg];
+    _5 = give(move _6) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private @local fn give() -> void {
+  let _1: &string arg; // name
+  let _2: void temp;
+  let _3: string temp;
+  let _4: &string temp;
+  bb0: {
+    _4 = &*_1 [auto-borrow];
+    _3 = "alloc/string"::#extend0::clone(move _4) -> bb1;
+  }
+  bb1: {
+    _2 = keep(move _3) -> bb2;
+  }
+  bb2: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}
+
+fn keep(_1: string) -> void {
+  let _1: string; // n
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}

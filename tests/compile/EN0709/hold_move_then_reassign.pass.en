@@ -1,0 +1,11 @@
+//! covers: H22
+let q: string[] = ["a", "b"];
+for (const x of &q) {
+  take(q);
+  q = [];
+  break;
+}
+
+private function take(v: string[]): void {
+  console.log(v);
+}

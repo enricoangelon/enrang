@@ -1,0 +1,3 @@
+import { AtomicValue } from "core/atomic";
+
+public class Counter implements AtomicValue {} //~ EN0419

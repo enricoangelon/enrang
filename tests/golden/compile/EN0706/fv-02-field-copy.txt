@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/fv-02-field-copy.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `q` cannot change while `p` still points into it
+  --> tests/compile/EN0706/fv-02-field-copy.fail.en:21:15
+   |
+20 |     const p = c.dst;
+   |               ----- shared borrow of `c` starts here, held by `p`
+21 |     const q = c.dst; //~ EN0706
+   |               ^^^^^ `q` changes here
+22 |     let c2 = new Copier(p, q);
+   |                         - `p` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

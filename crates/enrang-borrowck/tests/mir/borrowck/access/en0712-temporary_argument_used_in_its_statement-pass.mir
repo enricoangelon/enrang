@@ -1,0 +1,44 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0712/temporary_argument_used_in_its_statement.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0712/temporary_argument_used_in_its_statement.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: void temp;
+  let _3: &string temp;
+  let _4: string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: &string temp;
+  bb0: {
+    _5 = const "a": string;
+    _6 = &_5 [temp-arg];
+    _4 = form to_string(move _6) -> bb1;
+  }
+  bb1: {
+    _7 = &_4 [temp-arg];
+    _3 = first(move _7) -> bb2;
+  }
+  bb2: {
+    _2 = form log(move _3) -> bb3;
+  }
+  bb3: {
+    drop(_4);
+    storage_dead(_4);
+    drop(_5);
+    storage_dead(_5);
+    drop(_1);
+    return;
+  }
+}
+
+fn first(_1: &string) -> &string {
+  let _1: &string; // s
+  let _2: &string temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = move _2;
+    return;
+  }
+}

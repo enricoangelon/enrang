@@ -1,0 +1,7 @@
+const fallback = "none";
+let r: &string = &fallback;
+{
+  const s = "a" + "b";
+  r = &s;
+} //~ EN0711 "`s` is dropped while `r` still borrows it"
+console.log(r);

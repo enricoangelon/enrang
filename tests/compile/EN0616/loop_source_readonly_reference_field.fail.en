@@ -1,0 +1,12 @@
+//! covers: H28
+public final class Copier {
+  private src: readonly &Slice<u8>;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public zeroAll(): void {
+    for (const b of this.src) { //~ EN0616 "cannot write through `this.src`, because it is `readonly &`"
+      *b = 0;
+    }
+  }
+}

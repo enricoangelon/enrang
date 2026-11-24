@@ -1,0 +1,11 @@
+error[EN0709]: cannot move `q` while iterating over it
+ --> main.en:2:33
+  |
+2 | for (const x of &q) { const m = q; console.log(m); }
+  |                                 ^ `q` moves here
+  |                 -- `q` is borrowed here
+  |
+help: move `q` after the loop, or move a copy: `q.clone()`
+  = explain: run `enrang explain EN0709`
+
+error: aborting due to 1 previous error

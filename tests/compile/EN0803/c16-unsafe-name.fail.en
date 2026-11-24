@@ -1,0 +1,6 @@
+//! covers: C16
+private unsafe function poke(p: *u8, v: u8): void {}
+
+public function wire(): void {
+  const f: fn(p: *u8, v: u8) => void = poke; //~ EN0803 "`poke` is an `unsafe function`, so it can't become a safe `fn`"
+}

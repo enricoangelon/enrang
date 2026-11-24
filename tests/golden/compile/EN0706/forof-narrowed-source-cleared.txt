@@ -1,0 +1,70 @@
+$ enrang check tests/compile/EN0706/forof-narrowed-source-cleared.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot reassign `p` during iteration
+ --> tests/compile/EN0706/forof-narrowed-source-cleared.fail.en:6:7
+  |
+5 |     for (const x of &p) {
+  |                     -- `p` is borrowed here
+6 |       p = null; //~ EN0706
+  |       ^^^^^^^^ cannot reassign while borrowed
+  |
+help: iterate over `p.clone()` if reassignment is intentional
+  |
+5 |     for (const x of p.clone()) {
+  |                     ~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error[EN0401]: `p` may be `null` here
+  --> tests/compile/EN0706/forof-narrowed-source-cleared.fail.en:14:22
+   |
+14 |     for (const x of &p) { //~ EN0401
+   |                      ^ the test before this may no longer hold
+15 |       p.take(); //~ EN0706
+   |       - this may write through it
+   |
+   = note: a writing reference may have changed `p`
+   = explain: run `enrang explain EN0401`
+
+error[EN0706]: cannot mutate `p` while iterating over it
+  --> tests/compile/EN0706/forof-narrowed-source-cleared.fail.en:15:7
+   |
+14 |     for (const x of &p) { //~ EN0401
+   |                     -- immutable borrow begins here
+15 |       p.take(); //~ EN0706
+   |       ^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+help: loop over a copy
+   |
+14 |     for (const x of [...p]) { //~ EN0401
+   |                     ~~~~ +
+   = explain: run `enrang explain EN0706`
+
+error[EN0709]: cannot move `p` while iterating over it
+  --> tests/compile/EN0706/forof-narrowed-source-cleared.fail.en:24:7
+   |
+23 |     for (const x of &p) {
+   |                     -- `p` is borrowed here
+24 |       take(p); //~ EN0709
+   |       ^^^^^^^ `p` moves here
+   |
+help: move `p` after the loop, or move a copy: `p.clone()`
+   = explain: run `enrang explain EN0709`
+
+error[EN0706]: cannot reassign `p` during iteration
+  --> tests/compile/EN0706/forof-narrowed-source-cleared.fail.en:33:7
+   |
+32 |     for (const x of &p) {
+   |                     -- `p` is borrowed here
+33 |       p = null; //~ EN0706
+   |       ^^^^^^^^ cannot reassign while borrowed
+   |
+help: iterate over `p.clone()` if reassignment is intentional
+   |
+32 |     for (const x of p.clone()) {
+   |                     ~~~~~~~~~
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 5 previous errors

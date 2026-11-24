@@ -1,0 +1,10 @@
+let s: string = "a".toString();
+keep(s += "?"); //~ EN0621 "an assignment's value can't be kept"
+
+public function keep(t: string): void {
+  console.log(t);
+}
+
+public function look(t: &string): void {
+  console.log(t);
+}

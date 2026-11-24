@@ -1,0 +1,11 @@
+const ada = new User { name: "Ada", nickname: "A" }; //~ EN0434 "`User` has no field `nickname`"
+const s = Shape.Square { side: 1.0, corner: 2 }; //~ EN0434 "`Shape.Square` has no field `corner`"
+console.log(ada.name, s);
+
+public class User {
+  public name: string;
+}
+
+public enum Shape {
+  Square { side: f64 },
+}

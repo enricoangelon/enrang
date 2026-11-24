@@ -1,0 +1,9 @@
+//! row: `twice(f, f)`
+let n = 0;
+const f = () => { n += 1; };
+twice(f, f); //~ EN0718 "`f` is used twice at once"
+
+private function twice(a: () => void, b: () => void): void {
+  a();
+  b();
+}

@@ -1,0 +1,8 @@
+let n = 0;
+const f = () => { n += 1; };
+both(f, () => { console.log(1); });
+
+private function both(a: () => void, b: () => void): void {
+  a();
+  b();
+}

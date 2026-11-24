@@ -1,0 +1,4 @@
+let q = [1];
+const r = &q;
+const m = q; //~ EN0709 "cannot move `q` while it is borrowed"
+console.log(r, m);

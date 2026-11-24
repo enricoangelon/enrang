@@ -1,0 +1,17 @@
+let s: Shape = Shape.Circle { radius: 1.0 };
+match (s) {
+  Shape.Circle => {
+    console.log(s.radius);
+    flatten(&s);
+  },
+  Shape.Empty => {},
+}
+
+public enum Shape {
+  Circle { radius: f64 },
+  Empty,
+}
+
+private function flatten(s: &Shape): void {
+  *s = Shape.Empty;
+}

@@ -1,0 +1,3 @@
+let s: string = "a".toString();
+const xs = [(s += "?").clone()];
+console.log(xs);

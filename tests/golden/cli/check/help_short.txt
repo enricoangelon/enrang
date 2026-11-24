@@ -1,0 +1,20 @@
+$ enrang check -h
+[exit 0]
+[stdout]
+Check a file's syntax, types and borrows.
+
+Usage: enrang check [file] [flags]
+
+The file's `.test.en` part, as `main.test.en` is of `main.en`, is checked with it
+when it exists. With no file, `check` takes the entry of `enrang.json` in this
+directory, whose `target`, `cpu` and `float` are the defaults of the flags below.
+
+Flags:
+  --target=<target>        x86_64-linux, x86_64-windows, i386-linux, i386-none or x86_64-none
+  --cpu=<level>            A CPU level or an alias, as `enrang targets` lists them
+  --float=<strategy>       soft, sse2 or x87
+  --color=<when>           auto, always or never
+  --error-format=<format>  human or json
+  --emit=<what>            mir or summary: print the checked MIR or the contracts
+  -h, --help               Print this help
+[stderr]

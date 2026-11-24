@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/c05-read-through.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `string`, found `&string`
+ --> tests/compile/EN0401/c05-read-through.fail.en:4:19
+  |
+4 | const v: string = r; //~ EN0401 "mismatched types: expected `string`, found `&string`"
+  |                   ^ this is `&string`
+  |          ------ `string` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

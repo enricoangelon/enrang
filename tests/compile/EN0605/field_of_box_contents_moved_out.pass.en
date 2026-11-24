@@ -1,0 +1,7 @@
+const b = new Box(new User { name: "Ada" });
+const n = b.name.clone();
+console.log(n);
+
+public class User {
+  public name: string;
+}

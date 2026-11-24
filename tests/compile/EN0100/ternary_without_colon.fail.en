@@ -1,0 +1,3 @@
+const ready = true;
+const label = ready ? "go"; //~ EN0100 "expected `:` to finish the choice"
+console.log(label);

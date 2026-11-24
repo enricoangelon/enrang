@@ -1,0 +1,8 @@
+let n: i64 = 1;
+const f: fn(x: &i64) => void = bump; //~ EN0615
+f(&n);
+console.log(n);
+
+private function bump(x: &i64): void {
+  *x += 1;
+}

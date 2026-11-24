@@ -1,0 +1,6 @@
+let xs = ["a".toString(), "b".toString()];
+take(xs[1]); //~ EN0604 "cannot move out of `xs[1]`"
+
+public function take(s: string): void {
+  console.log(s);
+}

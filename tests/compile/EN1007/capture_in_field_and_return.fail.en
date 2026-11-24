@@ -1,0 +1,16 @@
+const count = 3;
+const b = new Button { on: () => console.log(count) }; //~ EN1007 "a function pointer cannot capture variables"
+const add = (x: i64) => x + count;
+const h: fn(x: i64) => i64 = add; //~ EN1007 "a function pointer cannot capture variables"
+
+private function maker(n: i64): fn() => i64 {
+  return () => n; //~ EN1007 "a function pointer cannot capture variables"
+}
+
+private function forward(g: () => void): fn() => void {
+  return g; //~ EN1007 "a function pointer cannot capture variables"
+}
+
+public final class Button {
+  public on: fn() => void;
+}

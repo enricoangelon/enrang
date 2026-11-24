@@ -1,0 +1,14 @@
+private const SINK_BYTES = sizeOf<Sink>(); //~ EN0412 "constant evaluation failed"
+
+public class Sink {
+  private out: &u8[];
+
+  public constructor(out: &u8[]) {
+    this.out = out;
+  }
+
+  public scratch(): void {
+    const buf: u8[SINK_BYTES] = [0; SINK_BYTES];
+    console.log(buf);
+  }
+}

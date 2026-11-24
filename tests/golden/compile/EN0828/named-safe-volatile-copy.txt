@@ -1,0 +1,11 @@
+$ enrang check tests/compile/EN0828/named-safe-volatile-copy.fail.en
+[exit 0]
+[stdout]
+[stderr]
+warning[EN0828]: `w` writes through the raw pointer `p`
+ --> tests/compile/EN0828/named-safe-volatile-copy.fail.en:4:5
+  |
+4 |     p.writeVolatile(v); //~ EN0828 "`w` writes through the raw pointer `p`"
+  |     ^^^^^^^^^^^^^^^^^^ `p` holds whatever address a caller passes
+  |
+help: mark it `unsafe function`, or take a reference

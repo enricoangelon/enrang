@@ -1,0 +1,58 @@
+module "src/app";
+class Base {
+  x: i64;
+}
+
+statements () -> int {
+  let mut _1: i64; // n
+  bb0: {
+    _1 = const 1: i64;
+    _0 = const 0: int;
+    return;
+  }
+}
+
+arrow#0 of statements (_1: &[&i64]) -> void {
+  let _1: &[&i64] env;
+  capture n: &i64 path;
+  bb0: {
+    return;
+  }
+}
+
+test #test0 () -> void {
+  bb0: {
+    return;
+  }
+}
+
+arrow#2 of test #test0 (_1: &[&((i64) => void)], _2: i64) -> void {
+  let _1: &[&((i64) => void)] env;
+  capture f: &((i64) => void) closure_param;
+  bb0: {
+    return;
+  }
+}
+
+fn outer(_1: i64) -> i64 {
+  let mut _1: i64; // a
+  bb0: {
+    _0 = copy _1;
+    return;
+  }
+}
+
+arrow#0 of fn outer (_1: &[&i64], _2: i64) -> i64 {
+  let _1: &[&i64] env;
+  capture a: &i64 through_ref;
+  bb0: {
+    _0 = copy _2;
+    return;
+  }
+}
+
+shim drop_glue(Base) (_1: &Base) -> void {
+  bb0: {
+    return;
+  }
+}

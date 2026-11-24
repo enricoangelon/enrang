@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0452/tuple_index_out_of_range.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0452]: `[int, int]` has no element 2
+ --> tests/compile/EN0452/tuple_index_out_of_range.fail.en:2:12
+  |
+2 |   return t[2]; //~ EN0452 "`[int, int]` has no element 2"
+  |            ^ it has 2 elements
+  |
+  = explain: run `enrang explain EN0452`
+
+error[EN0452]: a tuple index must be a constant
+ --> tests/compile/EN0452/tuple_index_out_of_range.fail.en:6:12
+  |
+6 |   return t[i]; //~ EN0452 "a tuple index must be a constant"
+  |            ^ the parts of a tuple may differ in type
+  |
+  = explain: run `enrang explain EN0452`
+
+error: aborting due to 2 previous errors

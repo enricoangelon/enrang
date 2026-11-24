@@ -1,0 +1,88 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0708/slb-02-read.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0708/slb-02-read.pass";
+extend "alloc/string"::#extend0: string;
+@mustUse fn "alloc/string"::#extend0::repeat(_1: &string, _2: isize) -> string;
+@mustUse fn "alloc/string"::#extend0::toUpperCase(_1: &string) -> string;
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: &string temp;
+  let _6: string temp;
+  let _7: isize temp;
+  let _8: &string temp;
+  let _9: string temp;
+  let _10: &string temp;
+  let _11: &string temp;
+  let _12: void temp;
+  let _13: void temp;
+  let _14: &string temp;
+  let _15: &string temp;
+  let _16: string temp;
+  let _17: &string temp;
+  let _18: &string temp;
+  let _19: void temp;
+  let _20: void temp;
+  let _21: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "ab": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    _5 = &_2 [compound-target];
+    _8 = &_2 [auto-borrow];
+    _7 = "core/string"::string::length(move _8) -> bb2;
+  }
+  bb2: {
+    _9 = const "-": string;
+    _10 = &_9 [temp-arg];
+    _6 = "alloc/string"::#extend0::repeat(move _10, move _7) -> bb3;
+  }
+  bb3: {
+    _11 = &_6 [temp-arg];
+    _12 = form append(move _5, move _11) -> bb4;
+  }
+  bb4: {
+    drop(_6);
+    storage_dead(_6);
+    drop(_9);
+    storage_dead(_9);
+    _14 = &_2 [auto-borrow];
+    _13 = form log(move _14) -> bb5;
+  }
+  bb5: {
+    _15 = &_2 [compound-target];
+    _17 = &_2 [auto-borrow];
+    _16 = "alloc/string"::#extend0::toUpperCase(move _17) -> bb6;
+  }
+  bb6: {
+    _18 = &_16 [temp-arg];
+    _19 = form append(move _15, move _18) -> bb7;
+  }
+  bb7: {
+    drop(_16);
+    storage_dead(_16);
+    _21 = &_2 [auto-borrow];
+    _20 = form log(move _21) -> bb8;
+  }
+  bb8: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

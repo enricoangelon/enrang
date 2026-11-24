@@ -1,0 +1,12 @@
+let backing: u8[6] = [0; 6];
+unsafe { paint(backing.asPtr(), backing.length()); }
+console.log(backing);
+const q = backing.asPtr();
+
+private function fill(part: &Slice<u8>, v: u8): void {
+  for (const x of part) { *x = v; }
+}
+
+private unsafe function paint(base: *u8, count: isize): void {
+  fill(Slice<u8>.fromRaw(base, count).slice(2), 7);
+}

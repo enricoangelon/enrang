@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1021/static_field.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1021]: static fields are not supported yet
+ --> tests/compile/EN1021/static_field.fail.en:2:10
+  |
+2 |   public static count: i64 = 0; //~ EN1021 "static fields are not supported yet"
+  |          ^^^^^^ a static field
+  |
+  = note: a field belongs to each object; storage shared by all of them lives at the top level.
+help: Use a top-level `const` or `unsafe let`
+  = explain: run `enrang explain EN1021`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,14 @@
+private function aim(c: &Cursor, xs: &i64[]): &i64[] {
+  c.set(&xs[0]);
+  return xs; //~ EN0708
+}
+
+public class Cursor {
+  private p: &i64;
+
+  public constructor(p: &i64) { this.p = p; }
+
+  public set(p: &i64): void { this.p = p; }
+
+  public get(): &i64 { return this.p; }
+}

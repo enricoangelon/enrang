@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0401/vi-02-inherited.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: a `&string` can't become a `&Measured`, because it may be a part of a string
+  --> tests/compile/EN0401/vi-02-inherited.fail.en:19:5
+   |
+19 |     const m: &Measured = x; //~ EN0401 "a `&string` can't become a `&Measured`, because it may be a part of a string"
+   |     ^^^^^^^^^^^^^^^^^^^^^^^ here a `&T` becomes a `&Measured`
+...
+24 | public class Keeper extends Base implements Sizer {}
+   |                                             ----- `Keeper` is used as a `Sizer` here
+   |
+   = note: `Sizer.size` lets `T` stand for `string`
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

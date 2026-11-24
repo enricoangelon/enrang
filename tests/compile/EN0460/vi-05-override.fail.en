@@ -1,0 +1,17 @@
+public class Animal {
+  public show<T>(x: &T): void {
+    console.log(x);
+  }
+}
+
+public class Dog extends Animal {
+  public override show<T>(x: &T): void { //~ EN0460 "`show` has its own type parameters, so it can't be overridden"
+    console.log(sizeOf<T>());
+  }
+}
+
+public class Puppy extends Animal {
+  public override show<T>(x: &T): void { //~ EN0460 "`show` has its own type parameters, so it can't be overridden"
+    console.log(`dog ${x}`);
+  }
+}

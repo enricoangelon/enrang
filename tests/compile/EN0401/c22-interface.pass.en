@@ -1,0 +1,26 @@
+//! covers: C22
+const d = new Dog {};
+introduce(&d);
+const pet: Box<Speaker> = new Box(new Dog {});
+introduce(&*pet);
+const s = "hello".toString();
+const m: Box<Measured> = new Box(s);
+console.log(m.length());
+
+private function introduce(s: &Speaker): void {
+  console.log(s.speak());
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public interface Measured {
+  length(): isize;
+}
+
+public class Dog implements Speaker {
+  public speak(): string {
+    return "woof";
+  }
+}

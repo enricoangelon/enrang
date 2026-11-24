@@ -1,0 +1,25 @@
+let v = [1, 2];
+const pick: fn(xs: &Slice<i64>) => &i64 = firstOf;
+*pick(&v) = 9;
+console.log(v);
+const z: fn(xs: &Slice<i64>) => readonly &i64 = firstOrZero;
+console.log(z(&v));
+const h: fn(s: &string) => &string = head;
+console.log(h(&"Ada".toString()));
+
+private const ZERO: i64 = 0;
+
+private function firstOf(xs: &Slice<i64>): &i64 {
+  return &xs[0];
+}
+
+private function firstOrZero(xs: &Slice<i64>): &i64 {
+  if (xs.isEmpty()) {
+    return &ZERO;
+  }
+  return &xs[0];
+}
+
+private function head(s: &string): &string {
+  return s.slice(0, 1);
+}

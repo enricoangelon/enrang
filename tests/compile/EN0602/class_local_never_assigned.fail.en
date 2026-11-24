@@ -1,0 +1,6 @@
+let g: User;
+console.log(g.name); //~ EN0602 "`g` is used before it has a value"
+
+public class User {
+  public name: string;
+}

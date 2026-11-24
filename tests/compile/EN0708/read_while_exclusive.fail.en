@@ -1,0 +1,4 @@
+let players: i64[] = [1];
+const q = &players;
+console.log(players.length()); //~ EN0708 "`players` can't be read while `q` may write into it"
+q.push(1);

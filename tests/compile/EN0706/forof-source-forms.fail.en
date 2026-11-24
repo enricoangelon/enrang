@@ -1,0 +1,61 @@
+//! row: The source forms: `this.view()` with `pu
+public class V {
+  public items: i64[] = [1];
+  public view(): &i64[] { return &this.items; }
+  public fill(): void {
+    for (const x of this.view()) {
+      this.items.push(1); //~ EN0706
+    }
+  }
+}
+
+public function first(q: &i64[]): &i64[] { return q; }
+
+public function viaCall(): void {
+  let q: i64[] = [1];
+  for (const x of first(&q)) {
+    q.push(1); //~ EN0706
+  }
+}
+
+public function viaCallNested(): void {
+  let q: i64[] = [1];
+  for (const x of first(&q)) {
+    *x = 1;
+    for (const y of first(&q)) { //~ EN0707
+      *y = 2;
+    }
+  }
+}
+
+public function viaCallKept(): void {
+  let q: i64[] = [1];
+  for (const x of first(&q)) {
+    *x = 1;
+    const s = first(&q); //~ EN0707
+    s[0] = 2;
+  }
+}
+
+public function ternary(c: bool): void {
+  let a: i64[] = [1];
+  let b: i64[] = [2];
+  for (const x of (c ? &a : &b)) {
+    a.push(1); //~ EN0706
+  }
+}
+
+public function bang(): void {
+  let q: i64[] = [1];
+  const r: &i64[] | null = &q;
+  for (const x of r!) {
+    q.push(1); //~ EN0706
+  }
+}
+
+public function indexed(r: isize): void {
+  let grid: i64[][] = [[1]];
+  for (const x of &grid[r]) {
+    grid.push([]); //~ EN0706
+  }
+}

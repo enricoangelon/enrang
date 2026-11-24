@@ -1,0 +1,36 @@
+// SPEC 8.4, the freestanding prelude: `os/none/prelude`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+import { MemRegion } from "./bootinfo";
+
+@lang("boot_info") public final class BootInfo {
+  private regions: usize;
+  public regionCount(): usize;
+  public region(i: usize): MemRegion;
+  public bootDrive(): u8;
+  public com1Port(): u16;
+  public crtcPort(): u16;
+  public textBase(): usize;
+  public columns(): u32;
+  public rows(): u32;
+}
+
+@lang("panic_info") public final class PanicInfo {
+  private text: usize;
+  public message(): &string;
+}
+
+@lang("interrupt_frame") public final class InterruptFrame {
+  public eip: usize;
+  public cs: usize;
+  public eflags: usize;
+}
+
+@lang("interrupt_handler") public final class InterruptHandler {
+  private addr: usize;
+}
+
+public function halt(): never { unreachable(); }
+
+// Adds every usable region of the sanitised view (SPEC 7.9).
+extend FreeListHeap {
+  public unsafe addBootRegions(const boot: &BootInfo): void;
+}

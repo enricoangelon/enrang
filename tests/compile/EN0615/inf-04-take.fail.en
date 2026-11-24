@@ -1,0 +1,41 @@
+const text = "hello world".toString();
+const base = new Lexer(&text);
+let s = new Sub2(&text, &base);
+{
+  const inner = new Lexer(text.slice(6, 11));
+  relay(&s, &inner);
+}
+console.log(s.peekLx());
+
+private function relay(b: &Base, o: &Lexer): void {
+  b.take(o);
+}
+
+public final class Lexer {
+  private src: &string;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public text(): readonly &string { return this.src; }
+}
+
+public class Base {
+  private w: &string;
+
+  public constructor(w: &string) { this.w = w; }
+
+  public take(o: &Lexer): void { this.w = o.text(); }
+}
+
+public class Sub2 extends Base {
+  private lx: &Lexer;
+
+  public constructor(w: &string, lx: &Lexer) {
+    this.lx = lx;
+    super(w);
+  }
+
+  public override take(o: &Lexer): void { this.lx = o; } //~ EN0615
+
+  public peekLx(): &string { return this.lx.text(); }
+}

@@ -1,0 +1,16 @@
+const d = new Dog {};
+console.log(d.name, d.speak());
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class Animal {
+  public name: string = "";
+}
+
+public class Dog extends Animal implements Speaker {
+  public speak(): string {
+    return "woof";
+  }
+}

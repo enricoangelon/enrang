@@ -1,0 +1,12 @@
+import { Counter, clampByte } from "./math.pass";
+
+let c = Counter.make();
+console.log(c.total(), clampByte(300));
+const p = new Probe();
+console.log(p.peek());
+
+private class Probe extends Counter {
+  public peek(): i64 {
+    return this.step;
+  }
+}

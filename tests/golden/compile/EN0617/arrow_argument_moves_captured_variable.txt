@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0617/arrow_argument_moves_captured_variable.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0617]: cannot move `name` out of the arrow's capture
+ --> tests/compile/EN0617/arrow_argument_moves_captured_variable.fail.en:3:13
+  |
+3 |   const n = name; //~ EN0617 "cannot move `name` out of the arrow's capture"
+  |             ^^^^ `name` is captured, so the arrow can't give it away
+  |
+  = note: an arrow or a local function may run more than once, so what it captures stays where it is
+help: move a copy instead: `name.clone()`
+  = explain: run `enrang explain EN0617`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,37 @@
+let sector: u8[4] = [0; 4];
+read(0, &sector);
+let b: Box<u8[]> = new Box([0, 0, 0]);
+fill(&b, 7);
+const f: i64[3] = [1, 2, 3];
+console.log(sum(&f));
+console.log(b, sector);
+
+private function read(lba: u32, buf?: &Slice<u8>): void {
+  if (buf != null) {
+    buf[0] = 1;
+  }
+}
+
+private function fill(xs: &Slice<u8>, v: u8): void {
+  let i: isize = 0;
+  while (i < xs.length()) {
+    xs[i] = v;
+    i += 1;
+  }
+}
+
+private function sum(xs: &Slice<i64>): i64 {
+  let total: i64 = 0;
+  for (const x of xs) {
+    total += *x;
+  }
+  return total;
+}
+
+private function sum(xs: &Slice<f64>): f64 {
+  let total: f64 = 0.0;
+  for (const x of xs) {
+    total += *x;
+  }
+  return total;
+}

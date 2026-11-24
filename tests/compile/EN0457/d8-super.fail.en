@@ -1,0 +1,11 @@
+public abstract class Shape {
+  public abstract area(): i64;
+}
+
+public class Sq extends Shape {
+  public side: i64;
+
+  public override area(): i64 {
+    return super.area() + this.side; //~ EN0457 "`Shape.area` is abstract, so it has no body to call"
+  }
+}

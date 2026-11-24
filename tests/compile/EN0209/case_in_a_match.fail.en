@@ -1,0 +1,6 @@
+const n = 1;
+const word = match (n) {
+  case 1: "one", //~ EN0209
+  default => "many",
+};
+console.log(word);

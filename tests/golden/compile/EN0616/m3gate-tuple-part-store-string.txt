@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/m3gate-tuple-part-store-string.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: a part of a string can't grow; copy it with `.toString()`
+ --> tests/compile/EN0616/m3gate-tuple-part-store-string.fail.en:5:1
+  |
+5 | *t[0] = "a much longer replacement".toString(); //~ EN0616 "a part of a string"
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ written here
+  |
+  = note: `slice` returns a read-only reference
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

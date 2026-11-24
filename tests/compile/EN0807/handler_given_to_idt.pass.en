@@ -1,0 +1,15 @@
+//! target: i386-none
+import { idt } from "os";
+
+@interrupt private function onTimer(frame: &InterruptFrame): void { tick(frame); }
+
+private function tick(frame: &InterruptFrame): void {}
+
+private function forward(frame: &InterruptFrame): void { tick(frame); }
+
+@entry private function kmain(boot: &BootInfo): never {
+  idt.set(32, onTimer);
+  const f = 0x1000 as *InterruptFrame;
+  unsafe { tick(&*f); }
+  halt();
+}

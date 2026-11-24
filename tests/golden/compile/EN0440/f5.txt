@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0440/f5.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0440]: `x` may have more fields than `{ name: string }`
+ --> tests/compile/EN0440/f5.fail.en:2:10
+  |
+2 |   return x; //~ EN0440 "`x` may have more fields than `{ name: string }`"
+  |          ^ `x` stands for any value with these fields
+  |
+help: build the smaller object: `{ name: x.name }`
+  = explain: run `enrang explain EN0440`
+
+error: aborting due to 1 previous error

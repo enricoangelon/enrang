@@ -1,0 +1,16 @@
+let a: i64 = 1;
+let r: &i64 = &a;
+const f = (x: &i64): void => { r = x; }; //~ EN0616 "cannot repoint captured `r` inside the arrow"
+f(&a);
+console.log(*r);
+
+public function alsoWrites(): void {
+  let c: i64 = 1;
+  let q: &i64 = &c;
+  const g = (x: &i64): void => {
+    q = x; //~ EN0616 "cannot repoint captured `q` inside the arrow"
+    *q = 5;
+  };
+  g(&c); //~ EN0708 "`c` can't be read while `q` may write into it"
+  console.log(*q);
+}

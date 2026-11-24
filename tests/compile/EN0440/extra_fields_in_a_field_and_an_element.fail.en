@@ -1,0 +1,9 @@
+const p = { name: "Ada", age: 36 };
+const card = new Card { who: p }; //~ EN0440 "`p` has a field `age` that `{ name: string }` does not have"
+const q = { name: "Bo", age: 2 };
+const list: { name: string }[] = [q]; //~ EN0440 "`q` has a field `age` that `{ name: string }` does not have"
+console.log(card.who.name, list.length());
+
+public class Card {
+  public who: { name: string };
+}

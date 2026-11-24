@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/c07-wrap-reference.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `&(i64 | null)`, found `&i64`
+ --> tests/compile/EN0401/c07-wrap-reference.fail.en:3:26
+  |
+3 | const r: &(i64 | null) = &x; //~ EN0401 "mismatched types"
+  |                          ^^ this is `&i64`
+  |          ------------- `&(i64 | null)` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

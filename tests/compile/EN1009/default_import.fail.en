@@ -1,0 +1,3 @@
+import fs from "./fs"; //~ EN1009 "this module form is not supported yet"
+
+console.log(fs);

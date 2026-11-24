@@ -1,0 +1,14 @@
+const device = new Device {};
+touch(&device);
+
+private function touch<T extends Port>(p: &T): void {
+  p.poke();
+}
+
+public interface Port {
+  poke(): void;
+}
+
+public class Device implements Port {
+  public poke(): void {}
+}

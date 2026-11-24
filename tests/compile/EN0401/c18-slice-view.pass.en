@@ -1,0 +1,21 @@
+//! covers: C18
+let sector: u8[8] = [0; 8];
+let bytes: u8[] = [1, 2, 3];
+fill(&sector, 7);
+fill(&bytes, 7);
+fill(sector.slice(4, 8), 9);
+console.log(checksum(&sector));
+
+private function fill(part: &Slice<u8>, v: u8): void {
+  for (let i = 0; i < part.length(); i++) {
+    part[i] = v;
+  }
+}
+
+private function checksum(data: &Slice<u8>): u32 {
+  let sum: u32 = 0;
+  for (const b of data) {
+    sum += b as u32;
+  }
+  return sum;
+}

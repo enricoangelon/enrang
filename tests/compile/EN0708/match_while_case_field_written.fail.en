@@ -1,0 +1,15 @@
+let s: Shape = Shape.Circle { radius: 1 };
+match (s) {
+  Shape.Circle => {
+    const r = &s.radius;
+    const big = match (s) { Shape.Circle => true, default => false }; //~ EN0708 "`s` can't be read while `r` may write into it"
+    *r = 2;
+    console.log(big);
+  },
+  default => {},
+}
+
+public enum Shape {
+  Circle { radius: i64 },
+  Empty,
+}

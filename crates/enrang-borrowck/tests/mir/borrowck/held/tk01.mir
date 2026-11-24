@@ -1,0 +1,153 @@
+// Covered and bare keys (A:1229, TESTING TK-01): the bodies of TK-01-copy-join,
+// TK-01-pick-param, TK-01-repoint, TK-01-owned-fields and TK-01-pick, which all
+// compile; the caller's EN0614/EN0616 comes from stage 4's part test (plan d.8),
+// which reads the bits checked here.
+// Source:
+//   class Pt { public xs: i64[] = []; public ys: i64[] = []; }
+//   class Node { public val: i64[] = []; public kids: Node[] = []; }
+//   class Holder { private view: &i64[]; private own: i64[] = []; private a: i64[] = []; }
+//   lanes(p: &Pt, c: bool): [&i64[], &i64[]] { const s = p; const second = c ? &p.ys : &s.xs; return [&p.xs, second]; }
+//   pick(p: &Node, c: bool): [&Node, &i64[]] { const q: &Node = c ? p : &p.kids[0]; return [q, &p.val]; }
+//   repoint(let p: &Node, c: bool): &i64[] { const k = &p.kids[0].val; p = &p.kids[0]; return k; }
+//   Holder.both(): [&i64[], &i64[]] { return [&this.own, &this.a]; }
+//   Holder.pickView(c: bool): [&i64[], &i64] { const p = c ? &this.own : this.view; return [p, &this.view[0]]; }
+// Shapes: a copy of a reference local as a reborrow moved into the binding (A:935,
+// c.6), ternaries into the destination (c.5), an index's `len`/`check_bounds`
+// guard run (c.4), a tuple literal of reborrows (c.5), a repoint (c.8), a field
+// copy through `*_1` (A:935).
+class Pt {
+  xs: i64[];
+  ys: i64[];
+}
+class Node {
+  val: i64[];
+  kids: Node[];
+}
+@final class Holder {
+  view: &i64[];
+  own: i64[];
+  a: i64[];
+}
+
+fn lanes(_1: &Pt, _2: bool) -> [&i64[], &i64[]] {
+  let _3: &Pt; // s
+  let _4: &i64[]; // second
+  let _5: &Pt temp;
+  let _6: &i64[] temp;
+  let _7: &i64[] temp;
+  bb0: {
+    storage_live(_3);
+    _5 = &*_1 [reborrow];
+    _3 = move _5;
+    storage_live(_4);
+    switch copy _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _4 = &(*_1).ys [explicit];
+    goto bb3;
+  }
+  bb2: {
+    _4 = &(*_3).xs [explicit];
+    goto bb3;
+  }
+  bb3: {
+    _6 = &(*_1).xs [explicit];
+    _7 = &*_4 [reborrow];
+    _0 = tuple(move _6, move _7);
+    storage_dead(_4);
+    storage_dead(_3);
+    return;
+  }
+}
+fn pick(_1: &Node, _2: bool) -> [&Node, &i64[]] {
+  let _3: &Node; // q
+  let _4: &Node temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: &Node temp;
+  let _8: &i64[] temp;
+  bb0: {
+    storage_live(_3);
+    switch copy _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _4 = &*_1 [reborrow];
+    _3 = move _4;
+    goto bb3;
+  }
+  bb2: {
+    _5 = const 0: isize;
+    _6 = len((*_1).kids);
+    check_bounds(copy _5, copy _6);
+    _3 = &(*_1).kids[_5] [explicit];
+    goto bb3;
+  }
+  bb3: {
+    _7 = &*_3 [reborrow];
+    _8 = &(*_1).val [explicit];
+    _0 = tuple(move _7, move _8);
+    storage_dead(_3);
+    return;
+  }
+}
+fn repoint(let _1: &Node, _2: bool) -> &i64[] {
+  let _3: &i64[]; // k
+  let _4: isize temp;
+  let _5: isize temp;
+  let _6: &Node temp;
+  let _7: &i64[] temp;
+  bb0: {
+    storage_live(_3);
+    _4 = const 0: isize;
+    _5 = len((*_1).kids);
+    check_bounds(copy _4, copy _5);
+    _3 = &(*_1).kids[_4].val [explicit];
+    _5 = len((*_1).kids);
+    check_bounds(copy _4, copy _5);
+    _6 = &(*_1).kids[_4] [explicit];
+    _1 = move _6;
+    _7 = &*_3 [reborrow];
+    _0 = move _7;
+    storage_dead(_3);
+    return;
+  }
+}
+fn Holder::both(_1: &Holder) -> [&i64[], &i64[]] {
+  let _2: &i64[] temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _2 = &(*_1).own [explicit];
+    _3 = &(*_1).a [explicit];
+    _0 = tuple(move _2, move _3);
+    return;
+  }
+}
+fn Holder::pickView(_1: &Holder, _2: bool) -> [&i64[], &i64] {
+  let _3: &i64[]; // p
+  let _4: &i64[] temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: &i64 temp;
+  bb0: {
+    storage_live(_3);
+    switch copy _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &(*_1).own [explicit];
+    goto bb3;
+  }
+  bb2: {
+    _3 = copy (*_1).view;
+    goto bb3;
+  }
+  bb3: {
+    _4 = &*_3 [reborrow];
+    _5 = const 0: isize;
+    _6 = len((*(*_1).view));
+    check_bounds(copy _5, copy _6);
+    _7 = &(*(*_1).view)[_5] [explicit];
+    _0 = tuple(move _4, move _7);
+    storage_dead(_3);
+    return;
+  }
+}

@@ -1,0 +1,5 @@
+const words = [
+  "alpha",
+  "beta, //~ EN0004
+];
+console.log(words);

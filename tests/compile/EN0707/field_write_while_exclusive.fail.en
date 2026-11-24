@@ -1,0 +1,8 @@
+let p = new Pt();
+const r = &p.x;
+p.x = 5; //~ EN0707 "cannot change `p.x` while `r` may write into it"
+*r = 3;
+
+public class Pt {
+  public x: i64 = 0;
+}

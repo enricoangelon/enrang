@@ -1,0 +1,3 @@
+public function show(x: readonly &i64): void { //~ EN0214
+  console.log(x);
+}

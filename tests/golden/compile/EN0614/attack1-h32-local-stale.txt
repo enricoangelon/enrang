@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0614/attack1-h32-local-stale.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `stale` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/attack1-h32-local-stale.fail.en:8:5
+  |
+8 |     p1.push(9); //~ EN0614
+  |     ^^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

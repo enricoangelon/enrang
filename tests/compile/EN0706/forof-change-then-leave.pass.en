@@ -1,0 +1,32 @@
+//! row: In a loop over `&q`: `q.push(1); break;`
+let q: i64[] = [1, 2];
+for (const x of &q) {
+  q.push(1); break;
+}
+for (const x of &q) {
+  q = []; break;
+}
+for (const x of &q) {
+  console.log(x);
+}
+q = [];
+for (let i = 0; i < 2; i++) {
+  q.push(1);
+}
+let xs: i64[] = [1, 2];
+for (const x of &xs) { *x = 1; }
+console.log(q, xs);
+
+private function clearAndReturn(): void {
+  let q: i64[] = [1, 2];
+  for (const x of &q) {
+    q.clear(); return;
+  }
+}
+
+private function reassignAndReturn(): void {
+  let q: i64[] = [1, 2];
+  for (const x of &q) {
+    q = []; return;
+  }
+}

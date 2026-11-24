@@ -2,4 +2,4 @@ $ enrang explain EN0704
 [exit 2]
 [stdout]
 [stderr]
-error: `EN0704` is retired: R3's rule 4 with EN0710 and EN0712 covers what it named
+error: `EN0704` is retired: R3's rule 3 with EN0710 and EN0712 covers what it named

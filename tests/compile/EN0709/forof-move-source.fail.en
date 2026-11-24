@@ -1,0 +1,13 @@
+//! row: `take(q);`, `consume(xs);` in the body o
+let q: string[] = ["a", "b"];
+for (const x of &q) {
+  take(q); //~ EN0709
+}
+
+let xs: string[] = ["a", "b"];
+for (const x of &xs) {
+  consume(xs); //~ EN0709
+}
+
+private function take(v: string[]): void { console.log(v); }
+private function consume(v: string[]): void { console.log(v); }

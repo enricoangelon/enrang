@@ -1,0 +1,7 @@
+$ enrang explain EN1101
+[exit 0]
+[stdout]
+EN1101: `expect` outside a test
+
+No explain page yet: it arrives with milestone M4, and this is milestone M3.
+[stderr]

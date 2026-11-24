@@ -1,0 +1,4 @@
+var count = 0; //~ EN0202 "`var` does not exist in Enrang"
+for (var i = 0; i < 3; i++) { //~ EN0202
+  count += i;
+}

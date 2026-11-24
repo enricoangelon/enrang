@@ -1,0 +1,57 @@
+@private fn f(_1: i64 | null) -> i64 {
+  let _1: i64 | null; // x
+  let _2: isize temp;
+  let _3: isize temp;
+  let _4: bool temp;
+  let _5: isize temp;
+  let _6: bool temp;
+  fact f0: _1 nonnull;
+  test f0 at bb7;
+  test f0 at bb10;
+  bb0: {
+    _2 = discriminant(_1);
+    switch move _2 [0: bb2, otherwise: bb5];
+  }
+  bb1: {
+    return;
+  }
+  bb2: {
+    _0 = const 10: i64;
+    goto bb1;
+  }
+  bb3: {
+    _5 = discriminant(_1);
+    switch move _5 [0: bb8, otherwise: bb9];
+  }
+  bb4: {
+    _3 = discriminant(_1);
+    switch move _3 [0: bb3, otherwise: bb6];
+  }
+  bb5: {
+    goto bb4;
+  }
+  bb6: {
+    check_tag(_1, Present);
+    _4 = eq(copy (_1 as Present).0, const 1: i64);
+    switch move _4 [0: bb3, otherwise: bb2];
+  }
+  bb7: {
+    _0 = const 20: i64;
+    goto bb1;
+  }
+  bb8: {
+    goto bb10;
+  }
+  bb9: {
+    check_tag(_1, Present);
+    _6 = eq(copy (_1 as Present).0, const 2: i64);
+    switch move _6 [0: bb8, otherwise: bb7];
+  }
+  bb10: {
+    _0 = const 30: i64;
+    goto bb1;
+  }
+  bb11: {
+    unreachable;
+  }
+}

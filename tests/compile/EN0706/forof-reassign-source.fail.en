@@ -1,0 +1,11 @@
+//! row: `xs = []` in the body of a loop over `&x
+let xs: i64[] = [1, 2];
+for (const x of &xs) {
+  xs = []; //~ EN0706 "cannot reassign `xs` during iteration"
+}
+
+let ys: i64[] = [1, 2];
+for (const y of &ys) {
+  ys = []; //~ EN0706 "cannot reassign `ys` during iteration"
+  console.log(y);
+}

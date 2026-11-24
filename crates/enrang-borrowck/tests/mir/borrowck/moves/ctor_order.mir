@@ -1,0 +1,49 @@
+// A constructor's own fields before `super(...)` (plan d.2, EN0610; A:998, SPEC 14 G24).
+// Shapes: c.10 (plan lines 1068-1093) a constructor's `this` is its first argument
+// `_1: &C` (plan i.28) and its body follows the prologue; c.7 (line 1001) `super(...)`
+// is `Fn(c)` with `this` upcast, `convert(upcast, &*_1 [reborrow])`, first.
+// EN0610 head (plan e, G24): `this.owner` is not set when `super(name)` runs.
+@final class Person {
+  n: i64;
+}
+class Animal {
+  name: string;
+}
+fn Animal::#ctor(_1: &Animal, _2: string) -> void;
+@final class Dog extends Animal {
+  owner: Person;
+}
+@final class Cat extends Animal {
+  owner: Person;
+}
+
+fn Dog::#ctor(_1: &Dog, _2: string, _3: Person) -> void {
+  let _4: void temp;
+  let _5: &Animal temp;
+  let _6: &Dog temp;
+  bb0: {
+    _6 = &*_1 [reborrow];
+    _5 = convert(upcast, move _6);
+    _4 = Animal::#ctor(move _5, move _2) -> bb1; //~ EN0610
+  }
+  bb1: {
+    (*_1).owner = move _3;
+    return;
+  }
+}
+
+// The order SPEC 4.3 asks for: no error.
+fn Cat::#ctor(_1: &Cat, _2: string, _3: Person) -> void {
+  let _4: void temp;
+  let _5: &Animal temp;
+  let _6: &Cat temp;
+  bb0: {
+    (*_1).owner = move _3;
+    _6 = &*_1 [reborrow];
+    _5 = convert(upcast, move _6);
+    _4 = Animal::#ctor(move _5, move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

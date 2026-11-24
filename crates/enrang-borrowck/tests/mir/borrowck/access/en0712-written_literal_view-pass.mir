@@ -1,0 +1,29 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0712/written_literal_view.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0712/written_literal_view.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: &Slice<i64>; // p
+  let _3: i64[4] temp;
+  let _4: &i64[4] temp;
+  let _5: &Slice<i64> temp;
+  let _6: void temp;
+  let _7: &Slice<i64> temp;
+  bb0: {
+    storage_live(_2);
+    _3 = fixed<i64>[const 2: i64, const 3: i64, const 5: i64, const 7: i64];
+    _4 = &_3 [literal-view];
+    _5 = convert(fixed_to_slice, move _4);
+    _2 = move _5;
+    storage_dead(_3);
+    _7 = &*_2 [reborrow];
+    _6 = form log(move _7) -> bb1;
+  }
+  bb1: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

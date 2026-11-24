@@ -1,0 +1,57 @@
+$ enrang check tests/compile/EN0443/q32-field-rules.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0443]: `sound` overrides nothing in `Animal`
+  --> tests/compile/EN0443/q32-field-rules.fail.en:10:19
+   |
+ 2 |   public sound: string = "...";
+   |   ----------------------------- `Animal.sound` is declared here
+...
+10 |   public override sound: i64 = 1; //~ EN0443 "`sound` overrides nothing in `Animal`"
+   |                   ^^^^^ `Animal.sound` has type `string`
+   |
+   = note: an `override` keeps the inherited field's type, `readonly` and visibility
+   = explain: run `enrang explain EN0443`
+
+error[EN0443]: `sound` overrides nothing in `Animal`
+  --> tests/compile/EN0443/q32-field-rules.fail.en:14:22
+   |
+ 2 |   public sound: string = "...";
+   |   ----------------------------- `Animal.sound` is declared here
+...
+14 |   protected override sound: string = "woof"; //~ EN0443 "`sound` overrides nothing in `Animal`"
+   |                      ^^^^^ `Animal.sound` is `public`
+   |
+   = note: an `override` keeps the inherited field's type, `readonly` and visibility
+   = explain: run `enrang explain EN0443`
+
+error[EN0444]: `sound` replaces `Animal.sound` without `override`
+  --> tests/compile/EN0443/q32-field-rules.fail.en:18:10
+   |
+18 |   public sound: string = "woof"; //~ EN0444 "`sound` replaces `Animal.sound` without `override`"
+   |          ^^^^^ `Animal` already has a field `sound`
+   |
+help: add `override`
+   |
+18 |   public override sound: string = "woof"; //~ EN0444 "`sound` replaces `Animal.sound` without `override`"
+   |          +++++++++
+   = explain: run `enrang explain EN0444`
+
+error[EN0443]: `volume` overrides nothing in `Animal`
+  --> tests/compile/EN0443/q32-field-rules.fail.en:22:19
+   |
+22 |   public override volume: i64 = 3; //~ EN0443 "`volume` overrides nothing in `Animal`"
+   |                   ^^^^^^ no class above `NoVolume` has a field `volume`
+   |
+   = explain: run `enrang explain EN0443`
+
+error[EN0443]: `sound` overrides nothing in `Secret`
+  --> tests/compile/EN0443/q32-field-rules.fail.en:30:20
+   |
+30 |   private override sound: string = "woof"; //~ EN0443 "`sound` overrides nothing in `Secret`"
+   |                    ^^^^^ `Secret.sound` is private, so `SecretDog` can't see it
+   |
+   = explain: run `enrang explain EN0443`
+
+error: aborting due to 5 previous errors

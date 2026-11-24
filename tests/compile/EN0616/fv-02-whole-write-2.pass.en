@@ -1,0 +1,32 @@
+const table: u8[3] = [7, 8, 9];
+const table2: u8[3] = [1, 2, 3];
+let out: u8[3] = [0, 0, 0];
+let out2: u8[3] = [0, 0, 0];
+let c = new Copier(&table, &out);
+const r = &c;
+*r = new Copier(&table2, &out2);
+c.step();
+c.retarget(c.peek());
+c.step();
+console.log(out, out2);
+
+public final class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize;
+  public constructor(src: &Slice<u8>, dst: &Slice<u8>) {
+    this.src = src;
+    this.dst = dst;
+  }
+  public step(): void {
+    this.dst[this.pos] = this.src[this.pos];
+    this.pos += 1;
+  }
+  public peek(): readonly &Slice<u8> {
+    return this.src.slice(this.pos, this.pos + 1);
+  }
+  public retarget(s: &Slice<u8>): void {
+    this.src = s;
+    this.pos = 0;
+  }
+}

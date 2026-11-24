@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0708/fv-02-field-copy-4.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `o` can't be read while `this` may write into it
+  --> tests/compile/EN0708/fv-02-field-copy-4.fail.en:20:5
+   |
+19 |     this.dst = o.dst;
+   |     ---------------- borrowed for writing here, because `this` writes on line 20
+20 |     this.src = o.dst; //~ EN0708
+   |     ^^^^^^^^^^^^^^^^ read here
+   |     ---- the write
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `o` before line 19 or after line 20
+   = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

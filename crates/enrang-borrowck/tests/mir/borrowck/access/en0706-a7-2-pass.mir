@@ -1,0 +1,70 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/a7-2.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/a7-2.pass";
+@final class "core/atomic"::Atomic<T extends AtomicValue> {
+  private v: T;
+}
+fn "core/atomic"::Atomic<T>::#ctor(_1: &Atomic<T>, _2: T) -> void;
+@lang("atomic_value") interface "core/atomic"::AtomicValue { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Atomic<u32>[]; // q
+  let _3: Atomic<u32> temp;
+  let _4: &Atomic<u32> temp;
+  let _5: void temp;
+  let _6: isize #i;
+  let _7: isize #n;
+  let _8: bool temp;
+  let _9: &Atomic<u32>; // x
+  let _10: void temp;
+  let _11: u32 temp;
+  let _12: &u32 temp;
+  loop l0: path _2 preheader bb6 head bb2 bind bb3[2] binding _9;
+  bb0: {
+    storage_live(_2);
+    _4 = &_3 [auto-borrow];
+    _5 = "core/atomic"::Atomic<u32>::#ctor(move _4, const 1: u32) -> bb1;
+  }
+  bb1: {
+    _2 = intrinsic AllocArray<Atomic<u32>>(move _3);
+    goto bb6;
+  }
+  bb2: {
+    _7 = len(_2);
+    _8 = lt(copy _6, copy _7);
+    switch move _8 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_9);
+    check_bounds(copy _6, copy _7);
+    _9 = &_2[_6] [for-of-element];
+    _6 = add(copy _6, const 1: isize);
+    goto bb7;
+  }
+  bb4: {
+    goto bb2;
+  }
+  bb5: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb6: {
+    storage_live(_6);
+    _6 = const 0: isize;
+    goto bb2;
+  }
+  bb7: {
+    _11 = intrinsic AtomicLoad();
+    _12 = &_11 [temp-arg];
+    _10 = form log(move _12) -> bb8;
+  }
+  bb8: {
+    storage_dead(_11);
+    storage_dead(_9);
+    goto bb4;
+  }
+}

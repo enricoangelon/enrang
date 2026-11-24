@@ -1,0 +1,11 @@
+public final class View {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  public constructor(src: &Slice<u8>, dst: &Slice<u8>) {
+    this.src = src;
+    this.dst = dst;
+  }
+  public fuse(): void {
+    this.src = this.dst.slice(0, 1);
+  }
+}

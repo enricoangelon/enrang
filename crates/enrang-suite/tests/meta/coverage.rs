@@ -6,7 +6,9 @@ use std::fs;
 use enrang_cli::{ALIASES, DEFERRED, LATER, WORKING};
 use enrang_testkit::{Harness, workspace_root};
 
-use crate::support::{Golden, files_under, golden_args, transcripts};
+use crate::support::{
+    Golden, PROJECT_TRANSCRIPTS, files_under, golden_args, goldens_in, transcripts,
+};
 
 /// Every flag the command line accepts, each with the arguments that show it. The
 /// `flags in the source` case below keeps this list complete.
@@ -20,7 +22,40 @@ const FLAGS: &[(&str, &[&str])] = &[
     ("targets --help", &["targets", "--help"]),
     ("targets -h", &["targets", "-h"]),
     ("targets --evidence", &["targets", "--evidence"]),
+    ("check --help", &["check", "--help"]),
+    ("check -h", &["check", "-h"]),
+    ("check --target", &["check", "--target=bogus", "main.en"]),
+    ("check --cpu", &["check", "--cpu=native", "main.en"]),
+    ("check --float", &["check", "--float=quad", "main.en"]),
+    ("check --color", &["check", "--color=never", "g01.en"]),
+    (
+        "check --error-format",
+        &["check", "--error-format=json", "g01.en"],
+    ),
+    (
+        "check --debug-info",
+        &["check", "--debug-info=dwarf", "main.en"],
+    ),
+    ("check --multiboot", &["check", "--multiboot", "main.en"]),
+    ("check --coverage", &["check", "--coverage", "main.en"]),
+    ("check --library", &["check", "--library", "lib.en"]),
+    ("check --emit", &["check", "--emit=mir", "main.en"]),
+    ("fmt --help", &["fmt", "--help"]),
+    ("fmt -h", &["fmt", "-h"]),
+    ("fmt --check", &["fmt", "--check"]),
+    ("init --help", &["init", "--help"]),
+    ("init -h", &["init", "-h"]),
+    ("init --kernel", &["init", "--kernel"]),
 ];
+
+/// The transcripts of `cli` and of `cli-project`. A flag or message shown in
+/// `cli-project` has a golden as much as one shown in `cli`, though those need files
+/// or standard input that only the CLI suite sets up.
+fn every_transcript() -> Vec<Golden> {
+    let mut goldens = transcripts();
+    goldens.extend(goldens_in(PROJECT_TRANSCRIPTS));
+    goldens
+}
 
 /// The golden with exactly these arguments, by name.
 fn golden_with(goldens: &[Golden], wanted: &[&str]) -> Option<String> {
@@ -182,7 +217,7 @@ pub fn register(h: &mut Harness) {
         h.case(
             format!("coverage/the flag {flag} has a golden"),
             move || {
-                assert!(golden_with(&transcripts(), args).is_some(), "{args:?}");
+                assert!(golden_with(&every_transcript(), args).is_some(), "{args:?}");
             },
         );
     }
@@ -215,7 +250,7 @@ pub fn register(h: &mut Harness) {
             &[],
             &["explain", "EN1301"],
             &["explain", "EN1302"],
-            &["explain", "EN0601"],
+            &["explain", "EN0414"],
             &["explain", "EN9999"],
             &["explain", "EN0704"],
             &["explain"],
@@ -243,7 +278,11 @@ pub fn register(h: &mut Harness) {
                 .collect();
             assert!(sources.len() >= 2, "no sources found");
             let mut corpus = String::new();
-            for dir in ["tests/golden/cli", "tests/golden/cli-inprocess"] {
+            for dir in [
+                "tests/golden/cli",
+                "tests/golden/cli-inprocess",
+                PROJECT_TRANSCRIPTS,
+            ] {
                 let golden_dir = root.join(dir);
                 for name in files_under(&golden_dir) {
                     corpus.push_str(&fs::read_to_string(golden_dir.join(name)).expect("UTF-8"));
@@ -290,11 +329,7 @@ pub fn register(h: &mut Harness) {
                 fs::read_to_string(workspace_root().join("crates/enrang-cli/src/report.rs"))
                     .expect("the source");
             let messages = messages_in_source(&source);
-            assert!(
-                messages
-                    .iter()
-                    .any(|m| m.contains("which has no compiler, so nothing was done"))
-            );
+            assert!(messages.iter().any(|m| m.contains(", so nothing was done")));
             assert!(
                 messages
                     .iter()

@@ -1,0 +1,87 @@
+$ enrang check tests/compile/EN0616/fv-02-base-flag-3.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `src` is declared `readonly &`, so it can't hold a reference from `dst`
+  --> tests/compile/EN0616/fv-02-base-flag-3.fail.en:27:5
+   |
+27 |     r.src = p; //~ EN0616
+   |     ^^^^^^^^^ stored here
+   |
+help: store a reference from a parameter, or from another `readonly &` field
+   = explain: run `enrang explain EN0616`
+
+error[EN0708]: `w` can't be read while a borrow of it may write into it
+  --> tests/compile/EN0616/fv-02-base-flag-3.fail.en:28:15
+   |
+25 |     const r = &w;
+   |               -- borrowed for writing here, because it writes on line 27
+26 |     const p = r.dst;
+27 |     r.src = p; //~ EN0616
+   |     --------- the write
+28 |     const a = w.peek(); //~ EN0708
+   |               ^ read here
+29 |     w.step(); //~ EN0707
+   |     - still used here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `w` before line 25 or after line 29
+   = explain: run `enrang explain EN0708`
+
+error[EN0707]: cannot borrow `w` as exclusive twice at the same time
+  --> tests/compile/EN0616/fv-02-base-flag-3.fail.en:29:5
+   |
+25 |     const r = &w;
+   |               -- first exclusive borrow
+...
+29 |     w.step(); //~ EN0707
+   |     ^ second exclusive borrow
+30 |     w.step(); //~ EN0707
+   |     - `the borrow` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error[EN0707]: cannot borrow `w` as exclusive twice at the same time
+  --> tests/compile/EN0616/fv-02-base-flag-3.fail.en:30:5
+   |
+25 |     const r = &w;
+   |               -- first exclusive borrow
+...
+30 |     w.step(); //~ EN0707
+   |     ^ second exclusive borrow
+31 |     w.step(); //~ EN0707
+   |     - `the borrow` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error[EN0707]: cannot borrow `w` as exclusive twice at the same time
+  --> tests/compile/EN0616/fv-02-base-flag-3.fail.en:31:5
+   |
+25 |     const r = &w;
+   |               -- first exclusive borrow
+...
+31 |     w.step(); //~ EN0707
+   |     ^ second exclusive borrow
+32 |     w.step(); //~ EN0707
+   |     - `the borrow` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error[EN0707]: cannot borrow `w` as exclusive twice at the same time
+  --> tests/compile/EN0616/fv-02-base-flag-3.fail.en:32:5
+   |
+25 |     const r = &w;
+   |               -- first exclusive borrow
+...
+32 |     w.step(); //~ EN0707
+   |     ^ second exclusive borrow
+33 |     console.log(*a);
+   |                  - `the borrow` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error: aborting due to 6 previous errors

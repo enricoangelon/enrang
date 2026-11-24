@@ -1,0 +1,9 @@
+let v: i64[] = [1, 2];
+eachLet(&v, (x: &i64) => { *x *= 2; });
+console.log(v);
+
+private function eachLet(xs: &i64[], f: (let x: &i64) => void): void {
+  for (const x of xs) {
+    f(x);
+  }
+}

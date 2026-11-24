@@ -1,0 +1,6 @@
+let a: i64[] = [1];
+const f = (): void => { a.push(1); };
+const g = (): void => { f(); };
+const e = &a[0]; //~ EN0715 "`a` is locked while `g`"
+g();
+console.log(*e);

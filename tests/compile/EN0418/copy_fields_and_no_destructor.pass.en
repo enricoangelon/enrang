@@ -1,0 +1,21 @@
+//! covers: H08
+const p = new Point3 { x: 1, y: 2, z: 3 };
+const q = p;
+console.log(p, q);
+const t = new Tag { id: 7 };
+const u = t;
+console.log(t.id, u.id);
+
+public class Point2 {
+  public x: i64;
+  public y: i64;
+}
+
+public class Point3 extends Point2 implements Copy {
+  public z: i64;
+}
+
+public class Tag implements Copy {
+  public id: i64 = 0;
+  public raw: *u8 = 0 as *u8;
+}

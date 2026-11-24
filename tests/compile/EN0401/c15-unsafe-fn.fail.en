@@ -1,0 +1,8 @@
+//! covers: C15
+const g: unsafe fn() => void = tick;
+const h: fn() => void = g; //~ EN0401 "mismatched types: expected `fn() => void`, found `unsafe fn() => void`"
+h();
+
+private function tick(): void {
+  console.log("tick");
+}

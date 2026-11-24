@@ -1,0 +1,23 @@
+const b: u8[] = [1, 2, 3];
+const r = lift(parse(&b));
+match (r) {
+  Ok => console.log(`${r.value}`),
+  Err => console.log(`${r.error}`),
+}
+console.log(show(&PacketError.Truncated { got: [1, 2, 3] }));
+
+private function show<E extends Error>(e: &E): string {
+  return `${e}`;
+}
+
+private function parse(b: &u8[]): Result<i64, PacketError> {
+  return Err(PacketError.Truncated { got: b.clone() });
+}
+
+private function lift(r: Result<i64, PacketError>): Result<i64> {
+  return r?;
+}
+
+public enum PacketError {
+  Truncated { got: u8[] },
+}

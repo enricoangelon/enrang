@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0502/bare_case.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0502]: `Circle` is a case of `Shape`: write `Shape.Circle`
+ --> tests/compile/EN0502/bare_case.fail.en:8:5
+  |
+8 |     Circle => "circle", //~ EN0502 "`Circle` is a case of `Shape`: write `Shape.Circle`"
+  |     ^^^^^^ a case is always written with its enum's name
+  |
+help: write `Shape.Circle`
+  |
+8 |     Shape.Circle => "circle", //~ EN0502 "`Circle` is a case of `Shape`: write `Shape.Circle`"
+  |     ++++++
+  = explain: run `enrang explain EN0502`
+
+error: aborting due to 1 previous error

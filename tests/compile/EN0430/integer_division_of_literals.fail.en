@@ -1,0 +1,2 @@
+const half = 7 / 2; //~ EN0430 "integer division truncates"
+console.log(half);

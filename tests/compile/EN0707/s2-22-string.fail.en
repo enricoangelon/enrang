@@ -1,0 +1,42 @@
+public function appendReset(): void {
+  let s: string = "a".toString();
+  s += reset(&s); //~ EN0707
+  console.log(s);
+}
+
+public function appendTake(): void {
+  let names: string[] = ["ab".toString()];
+  names[0] += take(&names); //~ EN0707
+  console.log(names);
+}
+
+public function appendPart(): void {
+  let s: string = "ab".toString();
+  s += s.slice(0, 1); //~ EN0708
+  console.log(s);
+}
+
+public function appendMoved(): void {
+  let s: string = "a".toString();
+  s += eat(s); //~ EN0709
+}
+
+private function reset(t: &string): &string {
+  *t = "b".toString();
+  return "!";
+}
+
+private function take(xs: &string[]): &string {
+  xs.clear();
+  xs.push("cd".toString());
+  return "!";
+}
+
+private function grown(s: &string): &string {
+  *s += "?";
+  return s;
+}
+
+private function eat(t: string): string {
+  return t + "!";
+}

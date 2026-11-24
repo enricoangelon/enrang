@@ -1,0 +1,4 @@
+namespace Geometry { //~ EN0222
+  const pi = 3.14;
+}
+console.log(1);

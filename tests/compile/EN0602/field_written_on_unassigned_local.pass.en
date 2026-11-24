@@ -1,0 +1,7 @@
+let g: User;
+g = new User { name: "" };
+g.name = "Ada";
+
+public class User {
+  public name: string;
+}

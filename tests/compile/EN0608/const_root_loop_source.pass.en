@@ -1,0 +1,5 @@
+//! covers: H28
+let xs: i64[] = [1, 2];
+for (const x of &xs) {
+  *x = 1;
+}

@@ -1,0 +1,7 @@
+$ enrang check --emit=summary main.en
+[exit 0]
+[stdout]
+module "main"
+fn first(_1: &Slice<string>, _2: &string) -> &string perms(read, read) sources(0) result writable;
+fn longest(_1: &string, _2: &string) -> &string perms(read, read) sources(0, 1) result readonly(string_part);
+[stderr]

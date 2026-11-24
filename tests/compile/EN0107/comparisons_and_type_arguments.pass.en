@@ -1,0 +1,20 @@
+const x = 5;
+const n: usize = 10;
+const a = 1;
+const b = 2;
+const c: i64 = 3;
+const d: i64 = 4;
+const inRange = 0 < x && x < 10;
+show<i64>(c);
+f(a < b, c > (d));
+const small = x as usize < n;
+const none = 0 as *Box<i32>;
+console.log(inRange, small);
+
+function show<T>(v: T): void {
+  console.log(v);
+}
+
+function f(p: bool, q: bool): void {
+  console.log(p, q);
+}

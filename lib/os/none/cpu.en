@@ -1,0 +1,7 @@
+// SPEC 8.4, `cpu`: `os/none/cpu`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// Uniprocessor only: `pushfd; cli; ...; popfd`.
+public function withoutInterrupts(f: () => void): void { unreachable(); }
+
+public unsafe function setStackLimit(addr: usize): void { unreachable(); }
+
+public unsafe function enableSse(): void { unreachable(); }

@@ -1,0 +1,12 @@
+const count: i64 = 3;
+const name: string | null = null;
+if (count > 0) {
+  console.log("some");
+}
+while (name != null) {
+  break;
+}
+const word = count != 0 ? "some" : "none";
+const empty = !(count == 0);
+const both = count > 1 && name == null;
+console.log(word, empty, both);

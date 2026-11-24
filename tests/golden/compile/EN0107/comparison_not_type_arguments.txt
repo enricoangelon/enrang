@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0107/comparison_not_type_arguments.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0107]: comparisons cannot be chained
+ --> tests/compile/EN0107/comparison_not_type_arguments.fail.en:4:7
+  |
+4 | a < b > (c); //~ EN0107
+  |       ^ this compares the result of the comparison before it
+  |
+  = note: `a < b` is a `bool`, which is not compared with `>`
+help: compare each pair, joined by `&&`
+  |
+4 | a < b && b > (c); //~ EN0107
+  |      +++++
+  = explain: run `enrang explain EN0107`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,4 @@
+import { Part } from "./missing"; //~ EN0305 "import path not found: `./missing`"
+
+const p = 1;
+console.log(p);

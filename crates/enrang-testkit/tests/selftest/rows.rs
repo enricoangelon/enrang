@@ -23,15 +23,39 @@ Prose that mentions C99 and | a pipe.
 After the table, C98 in prose.
 ";
 
+/// The row IDs the documents retired, by family, by hand. IDs are never reused,
+/// so none may come back as a row.
+const RETIRED: &[(&str, &[&str])] = &[("C", &["C01", "C02", "C03"])];
+
+fn retired(prefix: &str) -> &'static [&'static str] {
+    RETIRED
+        .iter()
+        .find(|(family, _)| *family == prefix)
+        .map_or(&[], |(_, ids)| ids)
+}
+
+/// The paragraph of SPEC 4.5 that says how coercion rows retire and which have.
+fn coercion_preface(spec: &str) -> &str {
+    let section = spec
+        .split_once("### 4.5 Coercions")
+        .expect("the coercion heading exists")
+        .1;
+    let section = section.split_once("| ID |").expect("the coercion table").0;
+    section
+        .split("\n\n")
+        .find(|paragraph| paragraph.contains("never reused"))
+        .expect("the paragraph on retired rows")
+}
+
 pub fn register(h: &mut Harness) {
     // Prefix, the rows, the first and last ID.
     let families: &[(&str, usize, &str, &str)] = &[
-        ("C", 17, "C01", "C17"),
-        ("H", 26, "H01", "H26"),
-        ("MIG-", 14, "MIG-01", "MIG-14"),
-        ("REF-", 12, "REF-01", "REF-12"),
-        ("FAIL-", 13, "FAIL-01", "FAIL-13"),
-        ("ADV-", 52, "ADV-1", "ADV-52"),
+        ("C", 19, "C04", "C22"),
+        ("H", 42, "H01", "H42"),
+        ("MIG-", 16, "MIG-01", "MIG-16"),
+        ("REF-", 14, "REF-01", "REF-14"),
+        ("FAIL-", 14, "FAIL-01", "FAIL-14"),
+        ("ADV-", 75, "ADV-1", "ADV-75"),
     ];
     for &(prefix, count, first, last) in families {
         h.case(format!("rows::real::{prefix}"), move || {
@@ -47,16 +71,35 @@ pub fn register(h: &mut Harness) {
             assert_eq!(found.first().copied(), Some(first));
             assert_eq!(found.last().copied(), Some(last));
 
-            // Numbered without a hole, in document order, each on a real table line.
+            // Numbered from 1 without a hole except where an ID retired, in
+            // document order, each on a real table line.
             let width = first.len() - prefix.len();
-            for (index, id) in found.iter().enumerate() {
-                let number = index + 1;
-                let wanted = if prefix == "ADV-" {
+            let spelled = |number: usize| {
+                if prefix == "ADV-" {
                     format!("{prefix}{number}")
                 } else {
                     format!("{prefix}{number:0width$}")
+                }
+            };
+            let retired = retired(prefix);
+            let mut number = 0;
+            for id in &found {
+                let wanted = loop {
+                    number += 1;
+                    let candidate = spelled(number);
+                    if !retired.contains(&candidate.as_str()) {
+                        break candidate;
+                    }
                 };
                 assert_eq!(*id, wanted);
+            }
+            // Every retired ID is a hole inside the numbering, not past its end.
+            for id in retired {
+                assert!(!found.contains(id), "{id} is retired and reused");
+                assert!(
+                    (1..=number).any(|n| spelled(n) == *id),
+                    "{id} is not a hole below {last}"
+                );
             }
             let lines: Vec<&str> = text.split('\n').collect();
             for row in &rows {
@@ -71,6 +114,63 @@ pub fn register(h: &mut Harness) {
     h.case("rows::real::every_family_is_checked_above", move || {
         assert_eq!(ROW_FAMILIES.len(), family_count);
     });
+    h.case("rows::real::families_retire_the_hand_written_ids", || {
+        for family in ROW_FAMILIES {
+            assert_eq!(family.retired, retired(family.prefix), "{family:?}");
+        }
+        for (prefix, _) in RETIRED {
+            assert!(ROW_FAMILIES.iter().any(|family| family.prefix == *prefix));
+        }
+    });
+    for &(prefix, ids) in RETIRED {
+        for &id in ids {
+            h.case(
+                format!("rows::real::{id}_is_retired_and_absent"),
+                move || {
+                    let family = ROW_FAMILIES
+                        .iter()
+                        .find(|family| family.prefix == prefix)
+                        .expect("TESTING 18 names the family");
+                    let text = std::fs::read_to_string(workspace_root().join(family.doc))
+                        .expect("the family's document exists");
+                    let rows = row_ids(&text, prefix).expect("the document parses");
+                    assert!(rows.iter().all(|row| row.id != id), "{id} is a row");
+                    let cell = format!("| {id} |");
+                    assert!(
+                        text.lines()
+                            .all(|line| !line.trim_start().starts_with(&cell)),
+                        "{id} starts a table line"
+                    );
+                },
+            );
+        }
+    }
+    h.case("rows::real::spec_4_5_names_every_retired_row", || {
+        let spec = read_doc("SPEC.md");
+        let preface = coercion_preface(&spec);
+        for id in retired("C") {
+            assert!(preface.contains(id), "{id} is not named: {preface}");
+        }
+        assert!(
+            preface.contains("are retired and never reused"),
+            "{preface}"
+        );
+    });
+    h.case("rows::real::testing_18_says_ids_are_never_reused", || {
+        let testing = read_doc("TESTING.md");
+        let paragraph = testing
+            .split("\n\n")
+            .find(|paragraph| paragraph.starts_with("**Document row IDs.**"))
+            .expect("TESTING 18 defines document row IDs");
+        assert!(
+            paragraph.contains("a retired ID is never reused"),
+            "{paragraph}"
+        );
+        assert!(
+            paragraph.contains("SPEC 4.5 retires C01-C03"),
+            "{paragraph}"
+        );
+    });
     h.case("rows::real::families_are_in_the_named_documents", || {
         for family in ROW_FAMILIES {
             let in_spec = family.doc == "docs/SPEC.md";
@@ -84,13 +184,18 @@ pub fn register(h: &mut Harness) {
         assert_eq!(numbered, ["ADV-"]);
     });
     h.case("rows::real::prose_mentions_add_nothing", || {
-        // SPEC line 730 and others mention these IDs in prose: only tables count.
+        // SPEC 4.5 names the retired rows in prose, and SPEC 4.8 and others
+        // mention live ones: only tables count.
         let spec = read_doc("SPEC.md");
         assert!(
             spec.lines()
                 .any(|line| line.contains("C08") && !line.starts_with('|'))
         );
-        assert_eq!(row_ids(&spec, "C").unwrap().len(), 17);
+        assert!(
+            spec.lines()
+                .any(|line| line.contains("C01") && !line.starts_with('|'))
+        );
+        assert_eq!(row_ids(&spec, "C").unwrap().len(), 19);
     });
     h.case(
         "rows::real::the_dev_runtime_covers_mention_is_not_a_row",
@@ -359,6 +464,60 @@ fn register_numbered(h: &mut Harness) {
 }
 
 fn register_families(h: &mut Harness) {
+    let c_family = || {
+        ROW_FAMILIES
+            .iter()
+            .find(|family| family.prefix == "C")
+            .expect("TESTING 18 names the family")
+    };
+    h.case("rows::family::accepts_the_hole_of_retired_ids", move || {
+        let doc = "| ID |\n|---|\n| C04 |\n| C05 |\n";
+        assert_eq!(ids(&c_family().extract(doc).unwrap()), ["C04", "C05"]);
+    });
+    // A document, the expected line, and the retired ID it reuses.
+    let reused: &[(&str, &str, usize, &str)] = &[
+        ("first", "| ID |\n|---|\n| C01 |\n| C04 |\n", 3, "C01"),
+        (
+            "after_live_rows",
+            "| ID |\n|---|\n| C04 |\n| C03 |\n",
+            4,
+            "C03",
+        ),
+        (
+            "alone",
+            "Prose.\n\n| ID | a |\n|---|---|\n| C02 | b |\n",
+            5,
+            "C02",
+        ),
+    ];
+    for &(name, doc, line, id) in reused {
+        h.case(
+            format!("rows::family::refuses_a_retired_id::{name}"),
+            move || {
+                let error = c_family().extract(doc).expect_err("it must be refused");
+                assert_eq!(error.line, line, "{error}");
+                assert_eq!(
+                    error.message,
+                    format!("row ID `{id}` is retired and never reused")
+                );
+            },
+        );
+    }
+    h.case("rows::family::a_retired_id_in_prose_is_no_row", move || {
+        let doc = "C01 is retired.\n\n| ID |\n|---|\n| C04 |\n";
+        assert_eq!(ids(&c_family().extract(doc).unwrap()), ["C04"]);
+    });
+    h.case("rows::family::retirement_is_per_family", || {
+        // `row_ids` knows no family, so it still reads a retired ID as a row.
+        let doc = "| ID |\n|---|\n| C01 |\n";
+        assert_eq!(ids(&row_ids(doc, "C").unwrap()), ["C01"]);
+        let h_family = ROW_FAMILIES
+            .iter()
+            .find(|family| family.prefix == "H")
+            .expect("TESTING 18 names the family");
+        let doc = "| ID |\n|---|\n| H01 |\n";
+        assert_eq!(ids(&h_family.extract(doc).unwrap()), ["H01"]);
+    });
     for family in ROW_FAMILIES {
         h.case(
             format!("rows::family::refuses_an_empty_result::{}", family.prefix),

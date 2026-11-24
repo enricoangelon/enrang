@@ -1,0 +1,6 @@
+const u = new User("x", 1); //~ EN0449 "`User` has no constructor, so it takes no arguments"
+console.log(u.name);
+
+public class User {
+  public name: string = "";
+}

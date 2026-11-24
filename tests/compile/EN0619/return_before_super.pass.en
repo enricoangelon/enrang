@@ -1,0 +1,12 @@
+public class Animal {
+  public constructor(public name: string) {}
+}
+
+public class Dog extends Animal {
+  public constructor(name: string, quiet: bool) {
+    if (quiet) {
+      panic("no");
+    }
+    super(name);
+  }
+}

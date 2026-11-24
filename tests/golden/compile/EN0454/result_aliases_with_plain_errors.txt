@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0454/result_aliases_with_plain_errors.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0454]: `string` is not an error type
+ --> tests/compile/EN0454/result_aliases_with_plain_errors.fail.en:1:34
+  |
+1 | public type Parsed = Result<i64, string>; //~ EN0454 "`string` is not an error type"
+  |                                  ^^^^^^ the error type of this `Result`
+  |
+help: return `Result<i64>` and write the text in `Err("...")`
+  = explain: run `enrang explain EN0454`
+
+error[EN0454]: `Plain` is not an error type
+ --> tests/compile/EN0454/result_aliases_with_plain_errors.fail.en:2:34
+  |
+2 | public type Loaded = Result<i64, Plain>; //~ EN0454 "`Plain` is not an error type"
+  |                                  ^^^^^ the error type of this `Result`
+  |
+help: an error type is an enum, `Failure`, or a class that `implements Error`
+  = explain: run `enrang explain EN0454`
+
+error: aborting due to 2 previous errors

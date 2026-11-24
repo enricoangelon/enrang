@@ -1,0 +1,36 @@
+function run(f: () => void): void {
+  f();
+}
+const table: u8[3] = [7, 8, 9];
+let out: u8[3] = [0, 0, 0];
+let c = new Copier(&table, &out);
+const a = c.peek();
+c.step();
+console.log(a);
+run(() => {
+  const b = c.peek();
+  c.step(); //~ EN0706
+  console.log(b);
+});
+console.log(out);
+
+public final class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize;
+  public constructor(src: &Slice<u8>, dst: &Slice<u8>) {
+    this.src = src;
+    this.dst = dst;
+  }
+  public step(): void {
+    this.dst[this.pos] = this.src[this.pos];
+    this.pos += 1;
+  }
+  public peek(): readonly &Slice<u8> {
+    return this.src.slice(this.pos, this.pos + 1);
+  }
+  public retarget(s: &Slice<u8>): void {
+    this.src = s;
+    this.pos = 0;
+  }
+}

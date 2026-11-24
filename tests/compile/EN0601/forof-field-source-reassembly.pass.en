@@ -1,0 +1,13 @@
+//! row: Source `&h.items`: moving `h`, a `move` 
+public class H { public items: i64[] = [1, 2]; public other: string[] = []; }
+
+private function takeH(h: H): void { console.log(h.items); }
+
+public function reassembly(): void {
+  let h = new H();
+  for (const x of &h.items) {
+    takeH(h);
+    h = new H();
+    break;
+  }
+}

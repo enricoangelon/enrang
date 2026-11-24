@@ -1,0 +1,12 @@
+import { Counter } from "./math.pass";
+
+let c = Counter.make();
+console.log(c.count); //~ EN0308 "`count` is private to `Counter`"
+c.reset(); //~ EN0308 "`reset` is private to `Counter`"
+console.log(c.step); //~ EN0308 "`step` is protected in `Counter`"
+
+private class Probe extends Counter {
+  public peek(): i64 {
+    return this.step;
+  }
+}

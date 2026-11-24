@@ -1,0 +1,18 @@
+show(checkName(""));
+console.log(fail("why"));
+
+public function checkName(name: &string): Result<string> {
+  let msg: string = "";
+  if (name.isEmpty()) { msg = "name is empty"; }
+  if (!msg.isEmpty()) { return Err(msg); }
+  return Ok(name.toUpperCase());
+}
+
+private function fail(why: &string): Result<u8> { return Err(why); }
+
+public function show(r: Result<string>): void {
+  match (r) {
+    Ok => console.log(r.value),
+    Err => console.log(`caught: ${r.error}`),
+  }
+}

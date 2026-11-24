@@ -1,0 +1,69 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0619/super_inside_an_arrow.fail.en. Its row's codes: EN0619.
+module "tests/compile/EN0619/super_inside_an_arrow.fail";
+class Animal {
+  age: i64;
+}
+class Dog extends Animal { }
+
+fn Animal::#ctor(_1: &Animal, _2: i64) -> void {
+  let _1: &Animal; // this
+  let _2: i64; // age
+  bb0: {
+    switch const overridden(age): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    (*_1).age = copy _2;
+    return;
+  }
+  bb2: {
+    field_init((*_1).age, const 0: i64);
+    goto bb1;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: i64) -> void {
+  let _1: &Dog; // this
+  let _2: i64; // age
+  let _3: void temp;
+  let _4: &Dog temp;
+  let _5: &Animal temp;
+  let _6: () => void; // f
+  let _7: &i64 temp;
+  let _8: [&i64] temp;
+  let _9: void temp;
+  bb0: {
+    _4 = &*_1 [reborrow];
+    _5 = convert(upcast, move _4);
+    _3 = Animal::#ctor(move _5, copy _2) -> bb1;
+  }
+  bb1: {
+    storage_live(_6);
+    _7 = &_2 [closure-capture];
+    _8 = env(move _7);
+    _6 = closure(arrow#0, _8);
+    _9 = closure _6() -> bb2;
+  }
+  bb2: {
+    storage_dead(_6);
+    return;
+  }
+}
+
+arrow#0 of fn Dog::#ctor (_1: &[&i64]) -> void {
+  let _1: &[&i64] env;
+  let _2: void temp;
+  let _3: &Dog temp;
+  let _4: &Dog temp;
+  let _5: &Animal temp;
+  capture age: &i64 path;
+  bb0: {
+    _4 = &*_3 [reborrow];
+    _5 = convert(upcast, move _4);
+    _2 = Animal::#ctor(move _5) -> bb1; //~ EN0619 "`super(...)` must be a statement of the constructor's own body"
+  }
+  bb1: {
+    return;
+  }
+}

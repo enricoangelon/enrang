@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0614/by_value_parameter_receiver.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `xs` is a parameter not marked `let`, so `push` cannot change it
+ --> tests/compile/EN0614/by_value_parameter_receiver.fail.en:2:3
+  |
+2 |   xs.push(1); //~ EN0614
+  |   ^^^^^^^^^^ `push` changes `xs`
+  |
+help: mark it `let xs`
+  |
+1 | public function addOne(let xs: i64[]): isize {
+  |                        ++++
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

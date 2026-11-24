@@ -1,0 +1,50 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/extends_a_class_implements_an_interface.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/extends_a_class_implements_an_interface.pass";
+class Animal {
+  name: string = default;
+}
+class Dog extends Animal { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Dog; // d
+  let _3: *Dog temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &string temp;
+  let _7: string temp;
+  let _8: &Dog temp;
+  let _9: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Dog leaving(name)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2.name [auto-borrow];
+    _8 = &_2 [auto-borrow];
+    _7 = Dog::speak(move _8) -> bb2;
+  }
+  bb2: {
+    _9 = &_7 [temp-arg];
+    _5 = form log(move _6, move _9) -> bb3;
+  }
+  bb3: {
+    drop(_7);
+    storage_dead(_7);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Dog::speak(_1: &Dog) -> string {
+  let _1: &Dog; // this
+  bb0: {
+    _0 = const "woof": string;
+    return;
+  }
+}

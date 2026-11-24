@@ -1,0 +1,8 @@
+private class ByteLexer {
+  private readonly src: readonly &Slice<u8>;
+  private pos: isize = 0;
+
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+}

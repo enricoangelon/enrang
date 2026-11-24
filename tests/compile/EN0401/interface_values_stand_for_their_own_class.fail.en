@@ -1,0 +1,12 @@
+private function same(a: &Eq, b: &Eq): bool {
+  return a.equals(b); //~ EN0401 "`b` may hold another class than `a`"
+}
+
+private function swapIn(let s: Speaker, o: Speaker): void {
+  s = o; //~ EN0401 "`o` may hold another class than `s`"
+  console.log(s.speak());
+}
+
+public interface Speaker {
+  speak(): string;
+}

@@ -1,0 +1,5 @@
+let x = 12;
+let z = 14;
+let y = &x;
+y = &z;
+console.log(*y);

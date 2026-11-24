@@ -1,0 +1,92 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0711/c4-abstract-dtor.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0711/c4-abstract-dtor.pass";
+@abstract class Shape { }
+@abstract fn Shape::area(_1: &Shape) -> i64;
+class Sq extends Shape {
+  side: i64;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Sq; // q
+  let _3: *Sq temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: string temp;
+  let _7: &Sq temp;
+  let _8: &Shape temp;
+  let _9: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Sq leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _2.side = const 2: i64;
+    _7 = &_2 [auto-borrow];
+    _8 = convert(upcast, move _7);
+    _6 = Shape::describe(move _8) -> bb2;
+  }
+  bb2: {
+    _9 = &_6 [temp-arg];
+    _5 = form log(move _9) -> bb3;
+  }
+  bb3: {
+    drop(_6);
+    storage_dead(_6);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Shape::#dtor(_1: &Shape) -> void {
+  let _1: &Shape; // this
+  let _2: void temp;
+  let _3: string temp;
+  let _4: &Shape temp;
+  let _5: &string temp;
+  bb0: {
+    _4 = &*_1 [reborrow];
+    _3 = virtual Shape::describe [copy _4](move _4) -> bb1;
+  }
+  bb1: {
+    _5 = &_3 [temp-arg];
+    _2 = form log(const "bye, ": &string, move _5, const "": &string) -> bb2;
+  }
+  bb2: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}
+
+fn Shape::describe(_1: &Shape) -> string {
+  let _1: &Shape; // this
+  let _2: i64 temp;
+  let _3: &Shape temp;
+  let _4: &i64 temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = virtual Shape::area [copy _3](move _3) -> bb1;
+  }
+  bb1: {
+    _4 = &_2 [temp-arg];
+    _0 = form template(const "area ": &string, move _4, const "": &string) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    return;
+  }
+}
+
+@override fn Sq::area(_1: &Sq) -> i64 {
+  let _1: &Sq; // this
+  bb0: {
+    _0 = checked_mul(copy (*_1).side, copy (*_1).side);
+    return;
+  }
+}

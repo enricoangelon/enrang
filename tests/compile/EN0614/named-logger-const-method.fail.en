@@ -1,0 +1,14 @@
+//! row: `private unsafe let count: i64 = 0;` and
+const l = new Logger();
+l.log("a"); //~ EN0614 "`l` is `const`, so `log` cannot change it"
+
+private unsafe let count: i64 = 0;
+
+public class Logger {
+  public log(const m: &string): void {
+    unsafe {
+      count += 1;
+    }
+    console.log(m);
+  }
+}

@@ -1,0 +1,2 @@
+const ready = true;
+const label = ready ? 1 : "no"; //~ EN0432 "the branches have different types: `int` and `string`"

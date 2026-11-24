@@ -1,0 +1,8 @@
+public class User {
+  public name: string;
+}
+
+public class Team { //~ EN0448 "`Team` needs a constructor: `owner` has no default"
+  private owner: User;
+  public size: i64;
+}

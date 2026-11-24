@@ -1,0 +1,83 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/fv-02-move.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/fv-02-move.pass";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+@final class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize;
+}
+
+fn Copier::#ctor(_1: &Copier, _2: &Slice<u8>, _3: &Slice<u8>) -> void {
+  let _1: &Copier; // this
+  let _2: &Slice<u8>; // src
+  let _3: &Slice<u8>; // dst
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  bb0: {
+    (*_1).pos = const 0: isize;
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+move fn Copier::fused(_1: &Copier, _2: &Slice<u8>) -> Copier {
+  let _1: &Copier; // this
+  let _2: &Slice<u8>; // s
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    _0 = move *_1;
+    return;
+  }
+}
+
+fn Copier::peek(_1: &Copier) -> readonly &Slice<u8> {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  let _4: isize | null temp;
+  let _5: &Slice<u8> temp;
+  bb0: {
+    _2 = copy (*_1).pos;
+    _3 = checked_add(copy (*_1).pos, const 1: isize);
+    _4 = present(move _3);
+    _5 = copy (*_1).src;
+    _0 = "core/slice"::Slice<u8>::slice(move _5, move _2, move _4, const 2: isize) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Copier::step(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  let _4: u8 temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  bb0: {
+    _2 = copy (*_1).pos;
+    _3 = copy (*_1).pos;
+    _5 = len(*(*_1).src);
+    check_bounds(copy _3, copy _5);
+    _4 = copy (*(*_1).src)[_3];
+    _6 = len(*(*_1).dst);
+    check_bounds(copy _2, copy _6);
+    (*(*_1).dst)[_2] = move _4;
+    _7 = copy (*_1).pos;
+    (*_1).pos = checked_add(copy _7, const 1: isize);
+    return;
+  }
+}

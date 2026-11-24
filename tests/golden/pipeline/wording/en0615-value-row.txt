@@ -1,0 +1,11 @@
+error[EN0615]: `w` may hold a function that writes its parameter 1, so it can't become a `fn(&i64[]) => void`
+ --> main.en:3:34
+  |
+3 | const r: fn(x: &i64[]) => void = w;
+  |                                  ^ converted here
+  |
+  = note: a function value may write only what its type's `let` marks allow
+help: declare the slot's type with the row the value needs: `fn(let &i64[]) => void`
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

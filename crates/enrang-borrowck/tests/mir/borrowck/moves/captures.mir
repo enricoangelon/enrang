@@ -1,0 +1,27 @@
+// A move out of an arrow's capture (plan d.2, EN0617; A:1295). Shapes: c.16 (plan lines
+// 1176-1188) an arrow body's `_1` is its environment, a captured path `p` is
+// `*((*_1).i)`.
+// EN0617 head (plan e): cannot move `u` out of the arrow's capture.
+@final class User {
+  name: string;
+}
+fn archive(_1: User) -> void;
+
+fn outer(_1: User) -> void {
+  bb0: {
+    drop(_1);
+    return;
+  }
+}
+
+arrow#0 of fn outer (_1: &[&User]) -> void {
+  let _1: &[&User] env;
+  capture u: &User path;
+  let _2: void temp;
+  bb0: {
+    _2 = archive(move *(*_1).0) -> bb1; //~ EN0617
+  }
+  bb1: {
+    return;
+  }
+}

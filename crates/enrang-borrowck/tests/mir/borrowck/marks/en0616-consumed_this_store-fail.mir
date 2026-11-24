@@ -1,0 +1,83 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/consumed_this_store.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/consumed_this_store.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+}
+@final class Wrapper {
+  private cp: &Copier;
+}
+
+fn Copier::#ctor(_1: &Copier, _2: &u8[], _3: &u8[]) -> void {
+  let _1: &Copier; // this
+  let _2: &u8[]; // s
+  let _3: &u8[]; // d
+  let _4: &u8[] temp;
+  let _5: &u8[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+fn Copier::retarget(_1: &Copier, _2: &u8[]) -> void {
+  let _1: &Copier; // this
+  let _2: &u8[]; // v
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn Copier::step(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: void temp;
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_1).dst;
+    _2 = "alloc/array"::Array<u8>::push(move _3, const 1: u8) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Wrapper::#ctor(_1: &Wrapper, _2: &Copier) -> void {
+  let _1: &Wrapper; // this
+  let _2: &Copier; // cp
+  let _3: &Copier temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).cp = move _3;
+    return;
+  }
+}
+
+move fn Wrapper::relink(_1: &Wrapper, _2: &u8[]) -> void {
+  let _1: &Wrapper; // this
+  let _2: &u8[]; // s
+  let _3: void temp;
+  let _4: &u8[] temp;
+  let _5: &Copier temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _5 = copy (*_1).cp;
+    _3 = Copier::retarget(move _5, move _4) -> bb1; //~ EN0616 "cannot store a reference into a value reached through consumed `this`"
+  }
+  bb1: {
+    return;
+  }
+}

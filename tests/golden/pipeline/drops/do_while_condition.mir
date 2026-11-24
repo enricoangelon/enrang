@@ -1,0 +1,59 @@
+fn demo() -> i64 perms() sources() result none {
+  phase elaborated;
+  let mut _1: i64; // n
+  let _2: i64 temp;
+  let _3: bool temp;
+  let _4: bool temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: string temp;
+  let _8: &string temp;
+  let _9: string temp;
+  let _10: &string temp;
+  bb0: {
+    storage_live(_1);
+    _1 = const 0: i64;
+    goto bb1;
+  }
+  bb1: {
+    _2 = copy _1;
+    _1 = checked_add(copy _2, const 1: i64);
+    goto bb2;
+  }
+  bb2: {
+    _5 = const "a": string;
+    _6 = &_5 [temp-arg];
+    _7 = const "b": string;
+    _8 = &_7 [temp-arg];
+    _9 = form concat(move _6, move _8) -> bb4;
+  }
+  bb3: {
+    _0 = copy _1;
+    storage_dead(_1);
+    return;
+  }
+  bb4: {
+    _10 = &_9 [temp-arg];
+    _4 = ok(move _10) -> bb5;
+  }
+  bb5: {
+    switch copy _4 [0: bb7, otherwise: bb6];
+  }
+  bb6: {
+    _3 = lt(copy _1, const 3: i64);
+    goto bb8;
+  }
+  bb7: {
+    _3 = copy _4;
+    goto bb8;
+  }
+  bb8: {
+    drop_glue(_9);
+    storage_dead(_9);
+    drop_glue(_7);
+    storage_dead(_7);
+    drop_glue(_5);
+    storage_dead(_5);
+    switch move _3 [0: bb3, otherwise: bb1];
+  }
+}

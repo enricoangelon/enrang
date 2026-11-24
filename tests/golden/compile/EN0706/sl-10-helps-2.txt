@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0706/sl-10-helps-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `list` can't change while `head` points into it
+ --> tests/compile/EN0706/sl-10-helps-2.fail.en:3:1
+  |
+2 | const head = list.slice(0, 1);
+  |              ---------------- `head` points into `list` from here
+3 | list[1] = 9; //~ EN0706
+  | ^^^^^^^^^^^ `list` changes here
+4 | console.log(head);
+  |             ---- `head` is still used here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: keep a copy: const head = [...list.slice(0, 1)];
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

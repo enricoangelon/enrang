@@ -2,7 +2,10 @@
 //!
 //! One macro invocation holds one row per line of the SPEC catalog. It generates
 //! `enum Code`, `Code::ALL` and [`ROWS`], the table the meta-tests read. Codes are
-//! never reused, so a row is never removed: EN0704 is retired and absent.
+//! never reused: a retired code leaves the table and its number is never given out
+//! again. EN0704, EN0204, EN0212, EN0217, EN0223, EN0306, EN0407, EN0431, EN0505,
+//! EN0620, EN0716, EN0719, EN0720, EN0810, EN1008, EN1016, EN1020 and EN1040 are
+//! retired and absent; `enrang explain` says why each one went.
 
 use std::fmt;
 
@@ -24,9 +27,10 @@ pub enum Milestone {
     M10,
 }
 
-/// The milestone being built. The commit closing a milestone bumps it, and
-/// meta-tests enforce only rows with `since <= CURRENT_MILESTONE`.
-pub const CURRENT_MILESTONE: Milestone = Milestone::M0;
+/// The last milestone closed. The commit closing a milestone bumps it, and
+/// meta-tests enforce only rows with `since <= CURRENT_MILESTONE`; the milestone
+/// after it is the one being built.
+pub const CURRENT_MILESTONE: Milestone = Milestone::M3;
 
 impl fmt::Display for Milestone {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -301,7 +305,7 @@ define_codes! {
     EN0102 Error phase(1) owner(syntax) since(M1) fixture(Compile) "unclosed delimiter",
     EN0103 Error phase(1) owner(syntax) since(M1) fixture(Compile) "wrong spacing around `?` or postfix `!`",
     EN0104 Error phase(1) owner(syntax) since(M1) fixture(Compile) "braces required after `if`, `else`, `while`, `for`",
-    EN0105 Error phase(1) owner(syntax) since(M1) fixture(Compile) "assignment or `++` used as an expression",
+    EN0105 Error phase(1) owner(syntax) since(M1) fixture(Compile) "assignment used as a condition or as an operand of `&&`, `||` or `!`",
     EN0106 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`??` mixed with `||` or `&&` without parentheses",
     EN0107 Error phase(1) owner(syntax) since(M1) fixture(Compile) "chained comparison",
     EN0108 Error phase(1) owner(syntax) since(M1) fixture(Compile) "decorator cannot appear here",
@@ -311,11 +315,12 @@ define_codes! {
     EN0112 Error phase(1) owner(syntax) since(M1) fixture(Compile) "unknown label",
     EN0113 Error phase(1) owner(syntax) since(M1) fixture(Compile) "duplicate label",
     EN0114 Error phase(1) owner(syntax) since(M1) fixture(Compile) "invalid assignment target",
+    EN0115 Error phase(1) owner(syntax) since(M1) fixture(Compile) "top-level statement after a class or other declaration",
+    EN0116 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`const` without a value",
 
     EN0201 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`===` or `!==`: use `==` and `!=`",
     EN0202 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`var`: use `let` or `const`",
     EN0203 Error phase(2) owner(sema) since(M2) fixture(Compile) "no truthiness: a condition must be `bool`",
-    EN0204 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`class ... extends`: no inheritance",
     EN0205 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`any`: use a generic or enum",
     EN0206 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`undefined`: use `null`",
     EN0207 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`throw`, `try`, `catch`: use `Result`, `?`, `panic`",
@@ -323,37 +328,44 @@ define_codes! {
     EN0209 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`switch`: use `match`",
     EN0210 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`unknown`: use a generic",
     EN0211 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`typeof`, `instanceof`: use an enum and `match`",
-    EN0212 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`protected`, `abstract`, `super`: no inheritance",
-    EN0213 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`using`: every binding already drops; implement `Drop`",
-    EN0214 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`readonly T` as a type: use `&T`",
+    EN0213 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`using`: every binding already drops; write a `destructor`",
+    EN0214 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`readonly T` as a type other than a returned reference or a reference field: use `&T` (also phase 2)",
     EN0215 Error phase(1) owner(syntax) since(M1) fixture(Compile) "union of object types: declare a class or enum",
-    EN0216 Error phase(1) owner(syntax) since(M1) fixture(Compile) "string-literal union: use a payload-free enum",
-    EN0217 Error phase(1) owner(syntax) since(M1) fixture(Compile) "object literal without a class name",
+    EN0216 Error phase(1) owner(syntax) since(M1) fixture(Compile) "string-literal union outside a type alias, or mixed with other types",
     EN0218 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`function` expression: use an arrow",
-    EN0219 Error phase(2) owner(sema) since(M2) fixture(Compile) "`this` outside a method",
+    EN0219 Error phase(2) owner(sema) since(M2) fixture(Compile) "`this` or `super` out of place",
     EN0220 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`interface ... extends`: list bounds with `&`",
     EN0221 Error phase(2) owner(sema) since(M2) fixture(Compile) "`new` on a non-class",
     EN0222 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`namespace`, `delete`: not in Enrang",
-    EN0223 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`x?: T` optional field: use `x: T | null = null`",
+    EN0224 Error phase(1) owner(syntax) since(M1) fixture(Compile) "return type after a bare arrow parameter",
+    EN0225 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`number`: use `f64`, or `int` for whole numbers",
+    EN0226 Error phase(1) owner(syntax) since(M1) fixture(Compile) "missing `public`, `private` or `protected`",
+    EN0227 Error phase(1) owner(syntax) since(M1) fixture(Compile) "both `?` and a default on a parameter or field",
+    EN0228 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`move` before an expression: a value moves when there is no `&`",
+    EN0229 Error phase(1) owner(syntax) since(M1) fixture(Compile) "parameter with no default after one with a default or `?`",
 
     EN0301 Error phase(2) owner(sema) since(M2) fixture(Compile) "unresolved name",
     EN0302 Error phase(2) owner(sema) since(M2) fixture(Compile) "unresolved type",
     EN0303 Error phase(2) owner(sema) since(M2) fixture(Compile) "no such member",
     EN0304 Error phase(2) owner(sema) since(M2) fixture(Compile) "import cycle",
     EN0305 Error phase(2) owner(sema) since(M2) fixture(Compile) "import path not found",
-    EN0306 Error phase(2) owner(sema) since(M2) fixture(Compile) "name is not exported",
     EN0307 Error phase(2) owner(sema) since(M2) fixture(Compile) "duplicate definition",
-    EN0308 Error phase(2) owner(sema) since(M2) fixture(Compile) "private member",
+    EN0308 Error phase(2) owner(sema) since(M2) fixture(Compile) "private or protected member",
     EN0309 Error phase(2) owner(sema) since(M2) fixture(Compile) "wrong number of type arguments",
-    EN0310 Error phase(5) owner(driver) since(M4) fixture(Cli) "no `main` on a hosted target",
+    EN0310 Error phase(5) owner(driver) since(M4) fixture(Cli) "no top-level statements or `main` on a hosted target",
+    EN0311 Error phase(2) owner(sema) since(M2) fixture(Compile) "importing a `private` item",
+    EN0312 Error phase(2) owner(sema) since(M2) fixture(Compile) "imported file has top-level statements",
+    EN0313 Error phase(2) owner(sema) since(M2) fixture(Compile) "top-level variable not visible here",
+    EN0314 Warning phase(2) owner(sema) since(M2) fixture(Compile) "`main` beside top-level statements is not the entry point",
+    EN0315 Error phase(2) owner(driver) since(M4) fixture(Cli) "module has a stale interface file and no source",
+    EN0316 Error phase(3) owner(driver) since(M4) fixture(Cli) "interface file's stored code fails the check on load",
 
     EN0401 Error phase(2) owner(sema) since(M2) fixture(Compile) "mismatched types",
     EN0402 Error phase(2) owner(sema) since(M2) fixture(Compile) "mixed numeric types",
     EN0403 Error phase(2) owner(sema) since(M2) fixture(Compile) "operator needs integer types",
     EN0404 Error phase(2) owner(sema) since(M2) fixture(Compile) "invalid `as`",
-    EN0405 Error phase(2) owner(sema) since(M2) fixture(Compile) "index must be `isize` or `usize`",
+    EN0405 Error phase(2) owner(sema) since(M2) fixture(Compile) "index must be an integer",
     EN0406 Error phase(2) owner(sema) since(M2) fixture(Compile) "union other than `T | null`",
-    EN0407 Error phase(2) owner(sema) since(M2) fixture(Compile) "single object type outside `@devMigrate`",
     EN0408 Error phase(2) owner(sema) since(M2) fixture(Compile) "recursive type needs `Box`",
     EN0409 Error phase(2) owner(sema) since(M2) fixture(Compile) "missing annotation on a parameter or field",
     EN0410 Error phase(2) owner(sema) since(M2) fixture(Compile) "cannot infer type",
@@ -363,12 +375,12 @@ define_codes! {
     EN0414 Error phase(5) owner(mono) since(M4) fixture(Compile) "monomorphisation depth above 64",
     EN0415 Error phase(2) owner(sema) since(M2) fixture(Compile) "compile-time assert failed",
     EN0416 Error phase(2) owner(sema) since(M2) fixture(Compile) "class does not satisfy `implements`",
-    EN0417 Error phase(2) owner(sema) since(M2) fixture(Compile) "field in an interface",
-    EN0418 Error phase(2) owner(sema) since(M2) fixture(Compile) "invalid `implements Copy`",
+    EN0417 Error phase(2) owner(sema) since(M2) fixture(Compile) "interface mixes fields and methods",
+    EN0418 Error phase(2) owner(sema) since(M2) fixture(Compile) "invalid `implements Copy` (also phase 3)",
     EN0419 Error phase(2) owner(sema) since(M2) fixture(Compile) "type argument does not satisfy a bound, or sealed bound implemented",
     EN0420 Error phase(2) owner(sema) since(M2) fixture(Compile) "operator not applicable to these types",
     EN0421 Error phase(2) owner(sema) since(M2) fixture(Compile) "`==` needs `Eq`",
-    EN0422 Error phase(2) owner(sema) since(M2) fixture(Compile) "assigning `T` to a `&mut T` local",
+    EN0422 Error phase(2) owner(sema) since(M2) fixture(Compile) "assigning a value to a reference variable",
     EN0423 Error phase(2) owner(sema) since(M2) fixture(Compile) "wrong argument count",
     EN0424 Error phase(2) owner(sema) since(M2) fixture(Compile) "`?` in a function that does not return `Result` or nullable",
     EN0425 Error phase(2) owner(sema) since(M2) fixture(Compile) "`?` error type differs",
@@ -377,44 +389,67 @@ define_codes! {
     EN0428 Error phase(2) owner(sema) since(M2) fixture(Compile) "not callable",
     EN0429 Error phase(2) owner(sema) since(M2) fixture(Compile) "`?` on a type other than `Result` or nullable",
     EN0430 Warning phase(2) owner(sema) since(M2) fixture(Compile) "integer division truncates",
-    EN0431 Warning phase(2) owner(sema) since(M2) fixture(Compile) "`string.length` counts bytes",
     EN0432 Error phase(2) owner(sema) since(M2) fixture(Compile) "ternary or arm types differ",
-    EN0433 Error phase(2) owner(sema) since(M2) fixture(Compile) "missing class field in a literal",
+    EN0433 Error phase(2) owner(sema) since(M2) fixture(Compile) "field with no default left unset",
     EN0434 Error phase(2) owner(sema) since(M2) fixture(Compile) "unknown field in a literal",
     EN0435 Error phase(4) owner(layout) since(M2) fixture(Compile) "type, frame or static too large for the target (also phase 5 and link)",
     EN0436 Error phase(2) owner(sema) since(M2) fixture(Compile) "invalid `main` signature",
     EN0437 Error phase(2) owner(sema) since(M2) fixture(Compile) "recursive type alias",
     EN0438 Error phase(2) owner(sema) since(M2) fixture(Compile) "spread source is not an array of cloneable elements",
+    EN0439 Error phase(2) owner(sema) since(M2) fixture(Compile) "`extend` on an anonymous object type or tuple",
+    EN0440 Error phase(2) owner(sema) since(M2) fixture(Compile) "extra fields where the declared type fixes the storage",
+    EN0441 Error phase(2) owner(sema) since(M2) fixture(Compile) "`length` read as a property: call `length()`",
+    EN0442 Error phase(2) owner(sema) since(M2) fixture(Compile) "class extends a `final` class",
+    EN0443 Error phase(2) owner(sema) since(M2) fixture(Compile) "`override` on a member that replaces nothing",
+    EN0444 Error phase(2) owner(sema) since(M2) fixture(Compile) "member replaces a base member without `override`",
+    EN0445 Error phase(2) owner(sema) since(M2) fixture(Compile) "`new` on an abstract class",
+    EN0446 Error phase(2) owner(sema) since(M2) fixture(Compile) "class does not implement an abstract method",
+    EN0447 Error phase(2) owner(sema) since(M2) fixture(Compile) "named form on a class with a constructor",
+    EN0448 Error phase(2) owner(sema) since(M2) fixture(Compile) "class needs a constructor: a field has no default",
+    EN0449 Error phase(2) owner(sema) since(M2) fixture(Compile) "arguments to `new` or `super` for a class with no constructor",
+    EN0450 Error phase(2) owner(sema) since(M2) fixture(Compile) "overloads one call cannot tell apart",
+    EN0451 Error phase(2) owner(sema) since(M2) fixture(Compile) "no overload, or more than one, matches the call",
+    EN0452 Error phase(2) owner(sema) since(M2) fixture(Compile) "tuple index out of range or not a constant",
+    EN0453 Warning phase(2) owner(sema) since(M2) fixture(Compile) "result of a must-use call is not used",
+    EN0454 Error phase(2) owner(sema) since(M2) fixture(Compile) "`Result` error argument is not an error type",
+    EN0455 Error phase(2) owner(sema) since(M2) fixture(Compile) "plain value that could be a success or an error",
+    EN0456 Error phase(2) owner(sema) since(M2) fixture(Compile) "enum `=` values mix numbers and texts",
+    EN0457 Error phase(2) owner(sema) since(M2) fixture(Compile) "`super` call to an abstract method",
+    EN0458 Error phase(2) owner(sema) since(M2) fixture(Compile) "`move` method not declared in the receiver's class",
+    EN0459 Warning phase(2) owner(sema) since(M2) fixture(Compile) "`move` method of an abstract class can never run",
+    EN0460 Error phase(2) owner(sema) since(M2) fixture(Compile) "override of a method compiled once per type, or an abstract one",
 
     EN0501 Error phase(2) owner(sema) since(M2) fixture(Compile) "non-exhaustive `match`",
-    EN0502 Error phase(2) owner(sema) since(M2) fixture(Compile) "unqualified variant in a pattern",
+    EN0502 Error phase(2) owner(sema) since(M2) fixture(Compile) "unqualified enum case in a `match` arm",
     EN0503 Warning phase(2) owner(sema) since(M2) fixture(Compile) "unreachable arm",
-    EN0504 Error phase(2) owner(sema) since(M2) fixture(Compile) "pattern does not match the scrutinee type",
-    EN0505 Error phase(2) owner(sema) since(M2) fixture(Compile) "or-pattern with bindings",
+    EN0504 Error phase(2) owner(sema) since(M2) fixture(Compile) "arm value does not match the subject's type",
     EN0506 Error phase(2) owner(sema) since(M2) fixture(Compile) "refutable pattern in a destructuring",
 
     EN0601 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "use after move",
-    EN0602 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "use before assignment",
+    EN0602 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "use before assignment of a type with no default",
     EN0603 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "move through a reference",
     EN0604 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "move out of an array element",
     EN0605 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "move out of `*box`",
-    EN0606 Error phase(2) owner(sema) since(M2) fixture(Compile) "the `drop` method called, or declared in an interface",
-    EN0607 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "partial move from a `Drop` type",
+    EN0606 Error phase(2) owner(sema) since(M2) fixture(Compile) "a `destructor` called by name, or declared in an interface",
+    EN0607 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "partial move from a class with a destructor",
     EN0608 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "mutating through `const`",
     EN0609 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "writing a `readonly` field",
     EN0610 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "`this` used before all fields are assigned",
     EN0611 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "moved in a previous loop iteration",
-    EN0612 Error phase(2) owner(sema) since(M2) fixture(Compile) "missing `&mut` at a call",
-    EN0613 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "second assignment to `const`",
-    EN0614 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "`mut` method called through `&` or on `const`",
-    EN0615 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "method writes `this` but is not `mut`",
-    EN0616 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "writing through `&T`, or rebinding a captured reference",
+    EN0612 Error phase(2) owner(sema) since(M2) fixture(Compile) "missing `&` where a reference is expected",
+    EN0613 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "assignment to a `const` or to a parameter not marked `let`",
+    EN0614 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "changing method called on a `const` value or through a read-only reference",
+    EN0615 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "body does more with its references than its declaration allows",
+    EN0616 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "writing through a read-only reference, rebinding or storing through a capture, or storing into a `readonly &` field from a field written through",
     EN0617 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "closure moves a capture",
+    EN0618 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "call reads a top-level variable before its declaration",
+    EN0619 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "`super(...)` not run exactly once on every path",
+    EN0621 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "an assignment's value can't be kept",
 
-    EN0701 Error phase(2) owner(sema) since(M2) fixture(Compile) "reference type in a field, element, payload or generic argument",
+    EN0701 Error phase(2) owner(sema) since(M2) fixture(Compile) "reference, or a class holding one, in an element, payload, generic argument or interface value, or in a non-`private` field",
     EN0702 Error phase(2) owner(sema) since(M2) fixture(Compile) "reference to a reference",
     EN0703 Error phase(2) owner(sema) since(M2) fixture(Compile) "type parameter bound to a reference",
-    EN0705 Error phase(2) owner(sema) since(M2) fixture(Compile) "closure type or arrow outside a call argument, or nested closure type",
+    EN0705 Error phase(2) owner(sema) since(M2) fixture(Compile) "closure type outside a parameter, or nested closure type",
     EN0706 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "mutated while shared-borrowed",
     EN0707 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "second exclusive borrow",
     EN0708 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "read while exclusively borrowed",
@@ -422,14 +457,12 @@ define_codes! {
     EN0710 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "returning a reference to local data",
     EN0711 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "dropped while borrowed",
     EN0712 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "temporary dropped while borrowed",
-    EN0714 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "returned reference from a parameter outside the signature's sources",
+    EN0714 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "returned reference from a parameter outside the allowed sources",
     EN0715 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "closure capture conflicts with a live borrow",
-    EN0716 Error phase(2) owner(sema) since(M2) fixture(Compile) "`from` names a non-reference",
     EN0718 Error phase(3) owner(borrowck) since(M3) fixture(Compile) "closure used re-entrantly: called, forwarded or captured twice",
-    EN0719 Warning phase(3) owner(borrowck) since(M3) fixture(Compile) "`for...of` source can change inside the loop",
 
     EN0801 Error phase(2) owner(sema) since(M2) fixture(Compile) "operation needs `unsafe`",
-    EN0802 Error phase(2) owner(sema) since(M2) fixture(Compile) "invalid type for a top-level `let`",
+    EN0802 Error phase(2) owner(sema) since(M2) fixture(Compile) "invalid type for an `unsafe let`",
     EN0803 Error phase(2) owner(sema) since(M2) fixture(Compile) "function with preconditions used as a safe `fn` or closure",
     EN0804 Error phase(4) owner(borrowck) since(M3) fixture(Compile) "reference to a misaligned packed field",
     EN0805 Error phase(2) owner(sema) since(M2) fixture(Compile) "volatile access on a type outside `VolatileValue`",
@@ -437,13 +470,12 @@ define_codes! {
     EN0807 Error phase(2) owner(sema) since(M2) fixture(Compile) "calling an interrupt handler",
     EN0808 Error phase(2) owner(sema) since(M2) fixture(Compile) "invalid interrupt signature",
     EN0809 Error phase(5) owner(driver) since(M9) fixture(Compile) "missing or invalid `@entry`",
-    EN0810 Error phase(2) owner(sema) since(M2) fixture(Compile) "`&T` cast to `*mut T`",
     EN0811 Error phase(2) owner(sema) since(M9) fixture(Compile) "second `@panicHandler`",
     EN0812 Error phase(5) owner(mono) since(M9) fixture(Compile) "missing `@panicHandler`",
     EN0813 Error phase(5) owner(link) since(M9) fixture(Compile) "`@at` overlap",
     EN0814 Error phase(2) owner(sema) since(M2) fixture(Compile) "section not allowed on this target, or reserved",
     EN0815 Error phase(2) owner(sema) since(M2) fixture(Compile) "`declare function` without `@dll`",
-    EN0816 Error phase(2) owner(sema) since(M2) fixture(Compile) "`string` or `T[]` in FFI",
+    EN0816 Error phase(2) owner(sema) since(M2) fixture(Compile) "`string`, `T[]` or a reference in FFI",
     EN0817 Error phase(2) owner(sema) since(M2) fixture(Compile) "conflicting layout attributes",
     EN0819 Error phase(2) owner(sema) since(M2) fixture(Compile) "unknown `@abi`",
     EN0820 Error phase(5) owner(mono) since(M9) fixture(Compile) "allocation with no global allocator",
@@ -451,8 +483,10 @@ define_codes! {
     EN0822 Error phase(2) owner(sema) since(M4) fixture(Compile) "allocator type lacks `GlobalAllocator`",
     EN0823 Error phase(5) owner(mono) since(M9) fixture(Compile) "`os` hosted API on a freestanding target",
     EN0824 Error phase(5) owner(mono) since(M9) fixture(Compile) "allocation reachable from an interrupt handler, panic handler or the allocator",
-    EN0825 Error phase(2) owner(sema) since(M4) fixture(Compile) "`@globalAllocator` and `unsafe let` must appear together",
+    EN0825 Error phase(2) owner(sema) since(M4) fixture(Compile) "`@globalAllocator` on something other than an `unsafe let`",
     EN0826 Error phase(2) owner(sema) since(M2) fixture(Compile) "`@packed` field must be Copy and non-generic",
+    EN0827 Error phase(2) owner(sema) since(M2) fixture(Compile) "layout decorator on a class that is not `final`, has a base, or holds a hidden pointer",
+    EN0828 Warning phase(2) owner(sema) since(M2) fixture(Compile) "function that is not `unsafe` reads or writes through a raw-pointer parameter",
 
     EN0901 Error phase(4) owner(codegen) since(M5) fixture(Compile) "instruction above the target CPU level",
     EN0902 Error phase(4) owner(codegen) since(M5) fixture(Compile) "unknown mnemonic",
@@ -476,21 +510,18 @@ define_codes! {
     EN1003 Error phase(2) owner(sema) since(M2) fixture(Compile) "threads",
     EN1004 Error phase(2) owner(sema) since(M2) fixture(Compile) "shared ownership types",
     EN1005 Error phase(1) owner(syntax) since(M1) fixture(Compile) "named lifetimes",
-    EN1006 Error phase(2) owner(sema) since(M2) fixture(Compile) "dynamic dispatch",
+    EN1006 Error phase(2) owner(sema) since(M2) fixture(Compile) "interface type by value outside a parameter",
     EN1007 Error phase(2) owner(sema) since(M2) fixture(Compile) "capturing arrow as a function pointer",
-    EN1008 Error phase(1) owner(syntax) since(M1) fixture(Compile) "match guards and range patterns",
     EN1009 Error phase(1) owner(syntax) since(M1) fixture(Compile) "unsupported module form",
-    EN1010 Error phase(1) owner(syntax) since(M1) fixture(Compile) "tuples and array destructuring",
-    EN1011 Error phase(2) owner(sema) since(M2) fixture(Compile) "slices",
+    EN1010 Error phase(1) owner(syntax) since(M1) fixture(Compile) "default in a destructuring pattern",
+    EN1011 Error phase(2) owner(sema) since(M2) fixture(Compile) "range indexing, `str`",
     EN1012 Error phase(2) owner(sema) since(M2) fixture(Compile) "`Map` and `Set`",
     EN1013 Error phase(1) owner(syntax) since(M1) fixture(Compile) "spread outside an array literal, and rest",
     EN1014 Error phase(2) owner(sema) since(M2) fixture(Compile) "unsupported generic feature",
     EN1015 Error phase(2) owner(sema) since(M2) fixture(Compile) "unsupported `for...of` source",
-    EN1016 Error phase(1) owner(syntax) since(M1) fixture(Compile) "default parameters and overloads",
     EN1017 Error phase(1) owner(syntax) since(M1) fixture(Compile) "setters",
     EN1018 Error phase(1) owner(syntax) since(M1) fixture(Compile) "operator overloading",
     EN1019 Error phase(2) owner(sema) since(M2) fixture(Compile) "character type",
-    EN1020 Error phase(0) owner(target) since(M1) fixture(Cli) "x87 float strategy",
     EN1021 Error phase(1) owner(syntax) since(M1) fixture(Compile) "static fields",
     EN1022 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`**` operator",
     EN1023 Error phase(1) owner(syntax) since(M1) fixture(Compile) "type-level computation",
@@ -510,8 +541,8 @@ define_codes! {
     EN1037 Error phase(1) owner(syntax) since(M1) fixture(Compile) "class expressions",
     EN1038 Error phase(1) owner(syntax) since(M1) fixture(Compile) "labelled blocks",
     EN1039 Error phase(1) owner(syntax) since(M1) fixture(Compile) "`as const`",
-    EN1040 Error phase(2) owner(sema) since(M2) fixture(Compile) "string-valued enums",
     EN1041 Error phase(0) owner(cli) since(M1) fixture(Cli) "`--multiboot`, `--coverage`",
+    EN1042 Error phase(2) owner(sema) since(M2) fixture(Compile) "destructuring a `T[]` or `T[N]`",
 
     EN1101 Error phase(2) owner(sema) since(M4) fixture(Compile) "`expect` outside a test",
     EN1102 Error phase(1) owner(syntax) since(M4) fixture(Compile) "non-test content in `describe`",
@@ -524,6 +555,7 @@ define_codes! {
     EN1109 Error phase(2) owner(sema) since(M4) fixture(Compile) "duplicate test ID",
     EN1110 Error phase(2) owner(sema) since(M4) fixture(Compile) "test declared inside a function",
     EN1111 Error phase(0) owner(testrun) since(M4) fixture(TestRun) "`allow` names a path outside the project root",
+    EN1112 Error phase(1) owner(syntax) since(M4) fixture(Compile) "test outside a `*.test.en` file",
 
     EN1201 Error phase(5) owner(mono) since(M4) fixture(Cli) "program cannot run in the VM: `asm` reachable",
     EN1202 Error phase(5) owner(mono) since(M4) fixture(Cli) "raw `syscall` reachable in the VM",
@@ -537,7 +569,7 @@ define_codes! {
     EN1214 Error phase(R) owner(dev) since(M6) fixture(Reload) "reload refused: raw pointer into a rewritten allocation",
     EN1215 Error phase(R) owner(dev) since(M6) fixture(Reload) "census failure",
     EN1216 Error phase(R) owner(dev) since(M6) fixture(Reload) "narrowing retype failed on a value",
-    EN1217 Error phase(R) owner(dev) since(M6) fixture(Reload) "migration hook reaches user `unsafe`, a top-level `let` or a host call",
+    EN1217 Error phase(R) owner(dev) since(M6) fixture(Reload) "migration hook reaches user `unsafe`, an `unsafe let` or a host call",
 
     EN1301 Error phase(0) owner(cli) since(M0) fixture(Cli) "deferred command",
     EN1302 Error phase(0) owner(cli) since(M0) fixture(Cli) "unknown command",
@@ -561,7 +593,7 @@ define_codes! {
 mod tests {
     use enrang_testkit::{FixtureStatus, GateRow, gate};
 
-    use super::Milestone;
+    use super::{CURRENT_MILESTONE, Milestone};
 
     /// The macro over a small registry, so that gating can be tested on rows whose
     /// milestones and fixtures are chosen rather than read from the real catalog.
@@ -569,8 +601,8 @@ mod tests {
         define_codes! {
             FAKE1 Error phase(1) owner(syntax) since(M0) fixture(Compile) "reached, passing",
             FAKE2 Warning phase(R) owner(dev) since(M0) fixture(Reload) "reached, no fixture",
-            FAKE3 Fail phase(0) owner(testrun) since(M2) fixture(TestRun) "not reached, passing",
-            FAKE4 Error phase(5) owner(mono) since(M2) fixture(Cli) "not reached, no fixture",
+            FAKE3 Fail phase(0) owner(testrun) since(M4) fixture(TestRun) "not reached, passing",
+            FAKE4 Error phase(5) owner(mono) since(M4) fixture(Cli) "not reached, no fixture",
         }
     }
 
@@ -602,8 +634,8 @@ mod tests {
         assert_eq!(Code::FAKE3.title(), "not reached, passing");
         assert_eq!(Code::FAKE2.severity(), crate::Severity::Warning);
         assert_eq!(Code::FAKE3.severity(), crate::Severity::Fail);
-        assert!(Code::FAKE1.reached(), "since M0 at M0");
-        assert!(!Code::FAKE3.reached(), "since M2 at M0");
+        assert!(Code::FAKE1.reached(), "since M0 at {CURRENT_MILESTONE}");
+        assert!(!Code::FAKE3.reached(), "since M4 at {CURRENT_MILESTONE}");
         assert_eq!(Code::FAKE2.phase().to_string(), "R");
         assert_eq!(Code::FAKE3.phase().to_string(), "0");
         assert_eq!(Code::FAKE4.owner().to_string(), "mono");
@@ -628,7 +660,9 @@ mod tests {
         for (current, gaps, stale) in [
             (Milestone::M0, vec!["FAKE2"], vec!["FAKE3"]),
             (Milestone::M1, vec!["FAKE2"], vec!["FAKE3"]),
-            (Milestone::M2, vec!["FAKE2", "FAKE4"], vec![]),
+            (Milestone::M2, vec!["FAKE2"], vec!["FAKE3"]),
+            (Milestone::M3, vec!["FAKE2"], vec!["FAKE3"]),
+            (Milestone::M4, vec!["FAKE2", "FAKE4"], vec![]),
             (Milestone::M10, vec!["FAKE2", "FAKE4"], vec![]),
         ] {
             let report = gate(&gate_rows(), &current);

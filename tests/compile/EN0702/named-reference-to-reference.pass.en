@@ -1,0 +1,11 @@
+//! row: `Box<Box<Box<i64>>>`, `let x: Box<i32>= v;`,
+//! row: `&&T`
+const b: Box<Box<Box<i64>>> = new Box(new Box(new Box(1)));
+const v = new Box(2);
+let x: Box<i32>= v;
+const pp: **u8 = 0x1000 as **u8;
+unsafe {
+  console.log(**pp);
+}
+
+public function f<T>(r: &T): void {}

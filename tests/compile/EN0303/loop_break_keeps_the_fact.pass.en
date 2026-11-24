@@ -1,0 +1,29 @@
+let p: string[] | null = ["a"];
+const c = p == null;
+if (p != null) {
+  for (const x of &p) {
+    if (c) {
+      break;
+    }
+  }
+  console.log(p.length());
+}
+if (p != null) {
+  outer: for (const a of &p) {
+    for (const x of &p) {
+      if (c) {
+        p = null;
+        break outer;
+      }
+    }
+    console.log(p.length());
+  }
+}
+if (p != null) {
+  outer: for (const a of &p) {
+    while (c) {
+      p = null;
+      break outer;
+    }
+  }
+}

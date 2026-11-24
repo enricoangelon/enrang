@@ -1,0 +1,58 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/s2-30-view.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/s2-30-view.pass";
+@final class Screen {
+  private base: *u16;
+  private n: isize = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Screen; // s
+  let _3: &Screen temp;
+  let _4: void temp;
+  let _5: &Slice<u16> temp;
+  let _6: &Screen temp;
+  let _7: isize temp;
+  let _8: isize temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &_2 [auto-borrow];
+    _4 = Screen::#ctor(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [auto-borrow];
+    _5 = Screen::pixels(move _6) -> bb2;
+  }
+  bb2: {
+    _7 = const 0: isize;
+    _8 = len(*_5);
+    check_bounds(copy _7, copy _8);
+    (*_5)[_7] = const 7: u16;
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Screen::#ctor(_1: &Screen) -> void {
+  let _1: &Screen; // this
+  let _2: *u16 temp;
+  bb0: {
+    _2 = cast(usize_to_raw, const 0: usize, *u16);
+    (*_1).base = move _2;
+    (*_1).n = const 4: isize;
+    (*_1).base = cast(usize_to_raw, const 753664: usize, *u16);
+    return;
+  }
+}
+
+fn Screen::pixels(_1: &Screen) -> &Slice<u16> {
+  let _1: &Screen; // this
+  region r0: block;
+  bb0: {
+    _0 = intrinsic SliceFromRaw<u16>(copy (*_1).base, copy (*_1).n) @ r0;
+    return @ r0;
+  }
+}

@@ -1,0 +1,27 @@
+for (const t of &TABLE) {
+  console.log(t);
+}
+
+let v: i64[] = [];
+for (const x of pick(&v)) {
+  console.log(x);
+}
+
+let st = new St();
+const r = st.view();
+for (const x of r) {
+  console.log(x);
+}
+
+private const TABLE: i64[3] = [1, 2, 3];
+private const ZEROS: i64[1] = [0];
+
+public function pick(xs: &Slice<i64>): &Slice<i64> {
+  if (xs.length() == 0) { return &ZEROS; }
+  return xs;
+}
+
+public class St {
+  private items: i64[] = [1, 2];
+  public view(): readonly &i64[] { return &this.items; }
+}

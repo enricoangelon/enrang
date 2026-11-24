@@ -1,0 +1,8 @@
+let s: string = "abc";
+let t: string = "de";
+const r = longest(&s, &t);
+*r += "!"; //~ EN0616 "`longest` returns a string that may be a part, so it can't grow"
+
+public function longest(a: &string, b: &string): &string {
+  return a.length() >= b.length() ? a : b;
+}

@@ -1,0 +1,10 @@
+const a = cells4();
+a[0] = 7; //~ EN0616 "cannot change the object returned by `cells4`"
+
+private unsafe let cells: u16[4];
+
+public function cells4(): &Slice<u16> {
+  unsafe {
+    return Slice<u16>.fromRaw(&cells[0] as *u16, 4);
+  }
+}

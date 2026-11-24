@@ -1,0 +1,6 @@
+//! row: `const r = &f; const c = [...f]; r[0] = 
+let f: i64[] = [1, 2];
+const r = &f;
+r[0] = 1;
+const c = [...f];
+console.log(c);

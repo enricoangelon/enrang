@@ -1,0 +1,23 @@
+let s = "hello".toString();
+let t = new Tally();
+f(&t, &s);
+
+private function f(z: &Sizer, v: &string): void {
+  console.log(z.size(v));
+}
+
+public interface Measured {
+  length(): isize;
+}
+
+public interface Sizer {
+  size<T extends Measured>(x: &T): isize;
+}
+
+public class Tally {
+  private n: isize;
+
+  public size<T extends Measured>(x: &T): isize {
+    return this.n + 1;
+  }
+}

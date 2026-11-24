@@ -1,0 +1,145 @@
+$ enrang check tests/compile/EN0706/forof-hold-changes.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `q` while iterating over it
+  --> tests/compile/EN0706/forof-hold-changes.fail.en:14:5
+   |
+13 |   for (const x of &q) {
+   |                   -- immutable borrow begins here
+14 |     q.push(1); //~ EN0706
+   |     ^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+help: collect new jobs separately, or loop over a copy
+   |
+13 |   for (const x of [...q]) {
+   |                   ~~~~ +
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `q` while iterating over it
+  --> tests/compile/EN0706/forof-hold-changes.fail.en:21:15
+   |
+20 |   for (const x of &q) {
+   |                   -- immutable borrow begins here
+21 |     const r = &q; r.push(1); //~ EN0706
+   |               ^^ conflicting mutable access
+   |
+help: loop over a copy
+   |
+20 |   for (const x of [...q]) {
+   |                   ~~~~ +
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `q` while iterating over it
+  --> tests/compile/EN0706/forof-hold-changes.fail.en:28:14
+   |
+27 |   for (const x of &q) {
+   |                   -- immutable borrow begins here
+28 |     if (c) { q.push(1); } //~ EN0706
+   |              ^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+help: collect new jobs separately, or loop over a copy
+   |
+27 |   for (const x of [...q]) {
+   |                   ~~~~ +
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `q[0]` while iterating over it
+  --> tests/compile/EN0706/forof-hold-changes.fail.en:35:5
+   |
+34 |   for (const x of &q) {
+   |                   -- immutable borrow begins here
+35 |     q[0] = 9; //~ EN0706
+   |     ^^^^^^^^ conflicting mutable access
+   |
+help: loop over a copy
+   |
+34 |   for (const x of [...q]) {
+   |                   ~~~~ +
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot reassign `q` during iteration
+  --> tests/compile/EN0706/forof-hold-changes.fail.en:42:5
+   |
+41 |   for (const x of &q) {
+   |                   -- `q` is borrowed here
+42 |     q = []; continue; //~ EN0706
+   |     ^^^^^^ cannot reassign while borrowed
+   |
+help: iterate over `q.clone()` if reassignment is intentional
+   |
+41 |   for (const x of q.clone()) {
+   |                   ~~~~~~~~~
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `o` while iterating over it
+  --> tests/compile/EN0706/forof-hold-changes.fail.en:49:5
+   |
+48 |   for (const x of &o.items) {
+   |                   -------- immutable borrow begins here
+49 |     o.clear(); //~ EN0706
+   |     ^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+help: loop over a copy
+   |
+48 |   for (const x of [...o.items]) {
+   |                   ~~~~       +
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `o` while iterating over it
+  --> tests/compile/EN0706/forof-hold-changes.fail.en:56:11
+   |
+55 |   for (const x of &o.items) {
+   |                   -------- immutable borrow begins here
+56 |     reset(&o); //~ EN0706
+   |           ^^ conflicting mutable access
+   |
+help: loop over a copy
+   |
+55 |   for (const x of [...o.items]) {
+   |                   ~~~~       +
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot reassign `o` during iteration
+  --> tests/compile/EN0706/forof-hold-changes.fail.en:63:5
+   |
+62 |   for (const x of &o.items) {
+   |                   -------- `o` is borrowed here
+63 |     o = make(); //~ EN0706
+   |     ^^^^^^^^^^ cannot reassign while borrowed
+   |
+help: iterate over `o.items.clone()` if reassignment is intentional
+   |
+62 |   for (const x of o.items.clone()) {
+   |                   ~~~~~~~~~~~~~~~
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `q` while iterating over it
+  --> tests/compile/EN0706/forof-hold-changes.fail.en:69:5
+   |
+68 |   for (const x of q) {
+   |                   - immutable borrow begins here
+69 |     g(q); //~ EN0706
+   |     ^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot reassign `a` during iteration
+  --> tests/compile/EN0706/forof-hold-changes.fail.en:76:5
+   |
+75 |   for (const x of &a) {
+   |                   -- `a` is borrowed here
+76 |     a = [0; 3]; //~ EN0706
+   |     ^^^^^^^^^^ cannot reassign while borrowed
+   |
+help: iterate over `a.clone()` if reassignment is intentional
+   |
+75 |   for (const x of a.clone()) {
+   |                   ~~~~~~~~~
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 10 previous errors

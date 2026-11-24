@@ -1,8 +1,9 @@
 //! Document row IDs (TESTING 18).
 //!
-//! Prose tables have no macro, so their rows carry stable IDs in the first cell.
-//! Fixtures claim them with `//! covers: MIG-07`. An uncovered ID and an orphan
-//! `covers` both fail, which [`crate::gate_covers`] decides from these lists.
+//! Prose tables have no macro, so their rows carry stable IDs in the first cell,
+//! and a retired ID is never reused. Fixtures claim the IDs with
+//! `//! covers: MIG-07`. An uncovered ID and an orphan `covers` both fail, which
+//! [`crate::gate_covers`] decides from these lists.
 
 use std::collections::BTreeSet;
 use std::fmt;
@@ -49,16 +50,29 @@ pub struct RowFamily {
     pub doc: &'static str,
     pub prefix: &'static str,
     pub form: RowForm,
+    /// IDs the document retired. They are never reused, so the family's numbers
+    /// have a hole where they were.
+    pub retired: &'static [&'static str],
 }
 
 impl RowFamily {
     /// The family's rows in `doc`. A family with no rows is an error: it would
-    /// make the coverage gate over it pass while checking nothing.
+    /// make the coverage gate over it pass while checking nothing. So is a row
+    /// that reuses a retired ID.
     pub fn extract(&self, doc: &str) -> Result<Vec<DocRow>, RowError> {
         let rows = match self.form {
             RowForm::Literal => row_ids(doc, self.prefix)?,
             RowForm::Numbered { heading } => numbered_row_ids(doc, heading, self.prefix)?,
         };
+        if let Some(row) = rows
+            .iter()
+            .find(|row| self.retired.contains(&row.id.as_str()))
+        {
+            return Err(RowError {
+                line: row.line,
+                message: format!("row ID `{}` is retired and never reused", row.id),
+            });
+        }
         if rows.is_empty() {
             return Err(RowError {
                 line: 1,
@@ -69,33 +83,39 @@ impl RowFamily {
     }
 }
 
-/// The families TESTING 18 names: `C` (SPEC 4.5), `H` (SPEC 5.8), and `MIG`,
-/// `REF`, `FAIL` and `ADV` (`DEV_RUNTIME.md` sections 7, 8, 10 and 12).
+/// The families TESTING 18 names: `C` (SPEC 4.5, which retires C01-C03), `H`
+/// (SPEC 5.8), and `MIG`, `REF`, `FAIL` and `ADV` (`DEV_RUNTIME.md` sections 7, 8,
+/// 10 and 12).
 pub const ROW_FAMILIES: [RowFamily; 6] = [
     RowFamily {
         doc: "docs/SPEC.md",
         prefix: "C",
         form: RowForm::Literal,
+        retired: &["C01", "C02", "C03"],
     },
     RowFamily {
         doc: "docs/SPEC.md",
         prefix: "H",
         form: RowForm::Literal,
+        retired: &[],
     },
     RowFamily {
         doc: "docs/DEV_RUNTIME.md",
         prefix: "MIG-",
         form: RowForm::Literal,
+        retired: &[],
     },
     RowFamily {
         doc: "docs/DEV_RUNTIME.md",
         prefix: "REF-",
         form: RowForm::Literal,
+        retired: &[],
     },
     RowFamily {
         doc: "docs/DEV_RUNTIME.md",
         prefix: "FAIL-",
         form: RowForm::Literal,
+        retired: &[],
     },
     RowFamily {
         doc: "docs/DEV_RUNTIME.md",
@@ -103,6 +123,7 @@ pub const ROW_FAMILIES: [RowFamily; 6] = [
         form: RowForm::Numbered {
             heading: "## 12. Adversarial scenarios",
         },
+        retired: &[],
     },
 ];
 

@@ -1,0 +1,13 @@
+const a0: i64[] = [0];
+const k: i64[] = [1, 2];
+let p = new Pad(&a0, &k);
+
+public final class Pad {
+  private t: [readonly &i64[], [readonly &i64[], i32]];
+  public constructor(a: &i64[], b: &i64[]) {
+    this.t = [a, [b, 1]];
+  }
+  public inner(): &[&i64[], i32] {
+    return &this.t[1];
+  }
+}

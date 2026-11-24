@@ -1,0 +1,8 @@
+//! covers: H39
+let v: i64[] = [1, 2];
+let o: &i64[] | null = &v;
+const a = o!;
+a.push(3);
+const b = o!;
+const e = &b[0];
+console.log(*e);

@@ -1,0 +1,7 @@
+//! row: `f1`-`f6`, loop bindings, among them `le
+const nums: i64[] = [1, 5, 3];
+let keep: &i64 | null = null;
+for (const n of &nums) { //~ EN0608
+  keep = n;
+}
+if (keep != null) { *keep = 0; }

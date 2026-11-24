@@ -1,0 +1,10 @@
+$ enrang check --emit=summary main.en
+[exit 0]
+[stdout]
+module "main"
+class Lexer
+fn Lexer::#ctor(_1: &Lexer, _2: &string) -> void perms(write, read) sources() stores(1 -> 0) result none;
+//   #0: writes through it
+fn Lexer::next(_1: &Lexer) -> &string | null perms(write) sources(0) through_fields(0) result readonly(readonly_result "core/string"::string::slice);
+//   #0: writes through it
+[stderr]

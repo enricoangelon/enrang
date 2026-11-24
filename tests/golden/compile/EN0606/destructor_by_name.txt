@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0606/destructor_by_name.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0606]: a destructor runs by itself: call `dispose(f)`
+ --> tests/compile/EN0606/destructor_by_name.fail.en:2:1
+  |
+2 | f.destructor(); //~ EN0606 "a destructor runs by itself: call `dispose(f)`"
+  | ^^^^^^^^^^^^^^ a destructor is never called by name
+  |
+  = note: a destructor runs once, at the end of the object's life; `dispose` ends it early
+  = explain: run `enrang explain EN0606`
+
+error[EN0606]: an interface can't declare a `destructor`
+  --> tests/compile/EN0606/destructor_by_name.fail.en:13:3
+   |
+13 |   destructor(): void; //~ EN0606 "an interface can't declare a `destructor`"
+   |   ^^^^^^^^^^ a destructor is never a member
+   |
+help: remove it: a class's own `destructor` runs by itself, and `dispose(x)` ends a value early
+   = explain: run `enrang explain EN0606`
+
+error[EN0606]: a destructor runs by itself: call `dispose(x)`
+  --> tests/compile/EN0606/destructor_by_name.fail.en:18:3
+   |
+18 |   x.destructor(); //~ EN0606 "a destructor runs by itself: call `dispose(x)`"
+   |   ^^^^^^^^^^^^^^ a destructor is never called by name
+   |
+   = note: a destructor runs once, at the end of the object's life; `dispose` ends it early
+   = explain: run `enrang explain EN0606`
+
+error: aborting due to 3 previous errors

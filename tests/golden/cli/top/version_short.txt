@@ -1,5 +1,5 @@
 $ enrang -V
 [exit 0]
 [stdout]
-enrang 0.1.0 (milestone M0, no compiler yet)
+enrang 0.1.0 (milestone M3)
 [stderr]

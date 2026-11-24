@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1039/as_const.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1039]: `as const` is not supported yet
+ --> tests/compile/EN1039/as_const.fail.en:1:25
+  |
+1 | const sizes = [1, 2, 3] as const; //~ EN1039 "`as const` is not supported yet"
+  |                         ^^^^^^^^ `as const`
+  |
+  = note: `const` already freezes the whole value, its fields and elements included.
+help: `const` is already deep
+  = explain: run `enrang explain EN1039`
+
+error: aborting due to 1 previous error

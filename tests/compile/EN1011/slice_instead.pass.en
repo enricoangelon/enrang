@@ -1,0 +1,7 @@
+const xs = [1, 2, 3, 4];
+const part = xs.slice(1, 3);
+const s = "hello";
+const sub = s.slice(0, 2);
+console.log(part, sub);
+
+public function first(x: &string): void {}

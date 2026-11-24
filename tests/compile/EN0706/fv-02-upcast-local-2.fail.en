@@ -1,0 +1,37 @@
+public class Base {
+  private src: readonly &Slice<u8>;
+  public constructor(s: &Slice<u8>) {
+    this.src = s;
+  }
+  public peek(): readonly &Slice<u8> {
+    return this.src.slice(0, 1);
+  }
+  public retarget(v: &Slice<u8>): void {
+    this.src = v;
+  }
+}
+
+public final class Sub extends Base {
+  private dst: &u8[];
+  public constructor(s: &Slice<u8>, d: &u8[]) {
+    this.dst = d;
+    super(s);
+  }
+  public static make(s: &Slice<u8>, d: &u8[]): Sub {
+    return new Sub(s, d);
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+  public static demo(s: &Slice<u8>, d: &u8[]): void {
+    let w = new Sub(s, d);
+    const p = w.dst;
+    w.retarget(p); //~ EN0706
+    const a = w.peek();
+    w.step(); //~ EN0706
+    w.step(); //~ EN0706
+    w.step(); //~ EN0706
+    w.step(); //~ EN0706
+    console.log(a);
+  }
+}

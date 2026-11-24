@@ -1,0 +1,21 @@
+$ enrang check --library tests/compile/EN0439/object_type_and_tuple_extended.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0439]: an anonymous object type or a tuple can't have methods
+ --> tests/compile/EN0439/object_type_and_tuple_extended.fail.en:3:8
+  |
+3 | extend Point { //~ EN0439 "an anonymous object type or a tuple can't have methods"
+  |        ^^^^^ no type of its own to extend
+  |
+  = explain: run `enrang explain EN0439`
+
+error[EN0439]: an anonymous object type or a tuple can't have methods
+ --> tests/compile/EN0439/object_type_and_tuple_extended.fail.en:6:8
+  |
+6 | extend [i64, i64] { //~ EN0439
+  |        ^^^^^^^^^^ no type of its own to extend
+  |
+  = explain: run `enrang explain EN0439`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN1028/network.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1028]: network APIs are not supported yet
+ --> tests/compile/EN1028/network.fail.en:1:1
+  |
+1 | fetch("http://example.com"); //~ EN1028 "network APIs are not supported yet"
+  | ^^^^^ not supported yet
+  |
+  = note: the standard library has no sockets or HTTP yet.
+  = explain: run `enrang explain EN1028`
+
+error[EN1028]: network APIs are not supported yet
+ --> tests/compile/EN1028/network.fail.en:2:16
+  |
+2 | const ws = new WebSocket("ws://example.com"); //~ EN1028 "network APIs are not supported yet"
+  |                ^^^^^^^^^ not supported yet
+  |
+  = note: the standard library has no sockets or HTTP yet.
+  = explain: run `enrang explain EN1028`
+
+error: aborting due to 2 previous errors

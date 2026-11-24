@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0613/assign_to_const_string_local.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0613]: cannot assign to `label`, because it is `const`
+ --> tests/compile/EN0613/assign_to_const_string_local.fail.en:2:1
+  |
+1 | const label = "a".toString();
+  |       ----- `label` is declared `const` here
+2 | label = "b".toString(); //~ EN0613 "cannot assign to `label`, because it is `const`"
+  | ^^^^^^^^^^^^^^^^^^^^^^ assigned here
+  |
+help: make the binding mutable
+  |
+1 | let label = "a".toString();
+  | ~~~
+  = explain: run `enrang explain EN0613`
+
+error: aborting due to 1 previous error

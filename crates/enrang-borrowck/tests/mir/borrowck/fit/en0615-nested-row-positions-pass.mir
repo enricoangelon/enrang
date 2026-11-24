@@ -1,0 +1,100 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/nested-row-positions.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/nested-row-positions.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: fn(&i64) => void; // one
+  let _3: (fn(&i64) => void)[]; // readers
+  let _4: (fn(&i64) => void)[]; // writers
+  let _5: &(fn(&i64) => void); // r
+  let _6: (fn(&i64) => void) | null; // maybe
+  let _7: (fn(&i64) => void) | null; // m2
+  let _8: { cb: fn(&i64) => void }; // o1
+  let _9: { cb: fn(&i64) => void }; // o2
+  let _10: Box<fn(&i64) => void>; // b1
+  let _11: &Box<fn(&i64) => void> temp;
+  let _12: void temp;
+  let _13: Box<fn(&i64) => void>; // b2
+  let _14: fn(fn(let &i64) => void) => void; // g
+  let _15: fn() => fn(&i64) => void; // k
+  bb0: {
+    storage_live(_2);
+    _2 = const fn show: fn(&i64) => void;
+    storage_live(_3);
+    _3 = intrinsic AllocArray<fn(&i64) => void>(const fn show: fn(&i64) => void);
+    storage_live(_4);
+    _4 = move _3;
+    storage_live(_5);
+    _5 = &_2 [explicit];
+    storage_live(_6);
+    _6 = present(const fn show: fn(&i64) => void);
+    storage_live(_7);
+    _7 = copy _6;
+    storage_live(_8);
+    _8 = object { cb: fn(&i64) => void } { cb: const fn show: fn(&i64) => void };
+    storage_live(_9);
+    _9 = copy _8;
+    storage_live(_10);
+    _11 = &_10 [auto-borrow];
+    _12 = "alloc/box"::Box<fn(&i64) => void>::#ctor(move _11, copy _2) -> bb1;
+  }
+  bb1: {
+    storage_live(_13);
+    _13 = move _10;
+    storage_live(_14);
+    _14 = const fn take: fn(fn(let &i64) => void) => void;
+    storage_live(_15);
+    _15 = const fn give: fn() => fn(&i64) => void;
+    storage_dead(_15);
+    storage_dead(_14);
+    drop(_13);
+    storage_dead(_13);
+    drop(_10);
+    storage_dead(_10);
+    storage_dead(_9);
+    storage_dead(_8);
+    storage_dead(_7);
+    storage_dead(_6);
+    storage_dead(_5);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn give() -> fn(&i64) => void {
+  bb0: {
+    _0 = const fn show: fn(&i64) => void;
+    return;
+  }
+}
+
+@private fn show(_1: &i64) -> void {
+  let _1: &i64; // x
+  let _2: void temp;
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &*_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn take(_1: fn(let &i64) => void) -> void {
+  let _1: fn(let &i64) => void; // f
+  bb0: {
+    return;
+  }
+}

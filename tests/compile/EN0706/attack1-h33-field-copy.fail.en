@@ -1,0 +1,64 @@
+//! covers: H33
+let buf3: u8[] = [1];
+let pair: [&u8[], i32] = [&buf3, 1];
+const x = &pair[0][0];
+const b2 = pair[0]; //~ EN0706
+b2.push(9);
+b2.push(9);
+b2.push(9);
+b2.push(9);
+console.log(*x);
+
+let v: i64[] = [1, 2];
+const a: &i64[] | null = &v;
+const c: &i64[] | null = a;
+if (a != null) {
+  const e = &a[0]; //~ EN0708
+  if (c != null) {
+    c.push(9);
+    c.push(9);
+    c.push(9);
+    c.push(9);
+  }
+  console.log(*e);
+}
+
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+
+  public peek(): readonly &u8 { return &this.src[0]; }
+
+  public step(): void { this.dst.push(1); }
+
+  public static demo(s: &u8[], d: &u8[]): void {
+    let c = new Copier(s, d);
+    const p = c.dst;
+    const q = c.dst; //~ EN0706
+    let c2 = new Copier(p, q);
+    const t = c2.peek();
+    c2.step();
+    c2.step();
+    c2.step();
+    c2.step();
+    console.log(*t);
+  }
+}
+
+public final class Holder {
+  private v: &u8[];
+
+  public constructor(v: &u8[]) { this.v = v; }
+
+  public dup(): void {
+    const a = &this.v[0];
+    const b = this.v; //~ EN0706
+    b.push(9);
+    console.log(*a);
+  }
+}

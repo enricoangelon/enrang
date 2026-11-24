@@ -1,0 +1,27 @@
+$ enrang check tests/compile/EN0503/unreachable_arms.fail.en
+[exit 0]
+[stdout]
+[stderr]
+warning[EN0503]: this arm is never reached
+ --> tests/compile/EN0503/unreachable_arms.fail.en:4:3
+  |
+3 |   1 => "one",
+  |   - already handled here
+4 |   1 => "uno", //~ EN0503 "this arm is never reached"
+  |   ^ every value it matches is handled above
+
+warning[EN0503]: this arm is never reached
+ --> tests/compile/EN0503/unreachable_arms.fail.en:6:3
+  |
+5 |   0..10 => "small",
+  |   ----- already handled here
+6 |   2..5 => "inner", //~ EN0503 "this arm is never reached"
+  |   ^^^^ every value it matches is handled above
+
+warning[EN0503]: this arm is never reached
+  --> tests/compile/EN0503/unreachable_arms.fail.en:11:3
+   |
+10 |   default => "any",
+   |   ------- already handled here
+11 |   7 => "seven", //~ EN0503 "this arm is never reached"
+   |   ^ every value it matches is handled above

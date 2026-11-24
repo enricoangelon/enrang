@@ -4,4 +4,4 @@ $ enrang run
 [stderr]
 error: `enrang run` arrives with milestone M4
 note: M4 runs programs in the VM with `--vm`, and M5 runs them natively
-note: this is milestone M0, which has no compiler, so nothing was done
+note: this is milestone M3, so nothing was done

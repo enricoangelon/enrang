@@ -1,0 +1,98 @@
+// `this` before every field is set (plan d.2, EN0610; A:998, A:1003). Shapes: c.10 (plan
+// lines 1068-1093) the prologue's field initialisers (`field_init` in a `switch const
+// overridden(f)` for a class that can be extended), the body's stores into `(*_1).f`, a
+// method called on `this` through `&*_1 [reborrow]`; c.7 (line 1002) a `super()` over
+// a base chain with no constructor is `implicit_ctor` with `addr_of(*_1)`.
+// EN0610 heads (plan e): `owner` is not set (help: assign this.owner after super()).
+@final class Person {
+  n: i64;
+}
+@final class Pair {
+  a: Person;
+  b: Person;
+}
+fn Pair::show(_1: &Pair) -> void;
+class Base0 {
+  owner: Person;
+}
+@final class Kid extends Base0 { }
+@final class Kid2 extends Base0 { }
+class Base {
+  a: i64 = default;
+}
+fn Base::#ctor(_1: &Base) -> void;
+class Mid extends Base {
+  a: i64 = default override;
+  b: i64;
+}
+
+// A set field read, then a method called before `b` is set, and a return before it.
+fn Pair::#ctor(_1: &Pair, _2: Person, _3: bool) -> void {
+  let _4: &Pair temp;
+  let _5: void temp;
+  let _6: i64 temp;
+  bb0: {
+    (*_1).a = move _2;
+    _6 = copy (*_1).a.n;
+    _4 = &*_1 [reborrow]; //~ EN0610
+    _5 = Pair::show(move _4) -> bb1;
+  }
+  bb1: {
+    _6 = copy (*_1).b.n; //~ EN0610
+    return; //~ EN0610
+  }
+}
+
+// `this.owner = o; super();`: an inherited field assigned before `super()`.
+fn Kid::#ctor(_1: &Kid, _2: Person) -> void {
+  let _3: *Kid temp;
+  let _4: void temp;
+  bb0: {
+    (*_1).owner = move _2; //~ EN0610
+    _3 = addr_of *_1;
+    _4 = implicit_ctor Base0(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+// `super(); this.owner = o;`: the implicit constructor leaves `owner` to it.
+fn Kid2::#ctor(_1: &Kid2, _2: Person) -> void {
+  let _3: *Kid2 temp;
+  let _4: void temp;
+  bb0: {
+    _3 = addr_of *_1;
+    _4 = implicit_ctor Base0(move _3) -> bb1;
+  }
+  bb1: {
+    (*_1).owner = move _2;
+    return;
+  }
+}
+
+// A field initialiser of a class that can be extended: `field_init` in its
+// `overridden(a)` switch initialises `a` on both edges; `b`'s type default is stored
+// before `super()`.
+fn Mid::#ctor(_1: &Mid, _2: i64) -> void {
+  let _3: void temp;
+  let _4: &Base temp;
+  let _5: &Mid temp;
+  bb0: {
+    switch const overridden(a): bool [0: bb1, otherwise: bb2];
+  }
+  bb1: {
+    field_init((*_1).a, const 5: i64);
+    goto bb2;
+  }
+  bb2: {
+    (*_1).b = const 0: i64;
+    _5 = &*_1 [reborrow];
+    _4 = convert(upcast, move _5);
+    _3 = Base::#ctor(move _4) -> bb3;
+  }
+  bb3: {
+    (*_1).b = copy _2;
+    return;
+  }
+}

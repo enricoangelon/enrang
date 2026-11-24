@@ -1,0 +1,137 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0715/named-closure-reads-first.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0715/named-closure-reads-first.pass";
+
+@private fn both(_1: () => void, _2: &string[]) -> void {
+  let _1: () => void; // f
+  let _2: &string[]; // xs
+  let _3: void temp;
+  bb0: {
+    _3 = closure _1() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn both2(_1: &string[], _2: () => void) -> void {
+  let _1: &string[]; // xs
+  let _2: () => void; // f
+  let _3: void temp;
+  bb0: {
+    _3 = closure _2() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn first(_1: &string[]) -> &string {
+  let _1: &string[]; // xs
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*_1);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*_1)[_2] [explicit];
+    return;
+  }
+}
+
+fn go(_1: &string[]) -> void {
+  let _1: &string[]; // r
+  let _2: void temp;
+  let _3: () => void temp;
+  let _4: &string[] temp;
+  let _5: [&string[]] temp;
+  let _6: &string[] temp;
+  bb0: {
+    _4 = &*_1 [closure-capture];
+    _5 = env(move _4);
+    _3 = closure(arrow#0, _5);
+    _6 = &*_1 [reborrow];
+    _2 = both(move _3, move _6) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+arrow#0 of fn go (_1: &[&string[]]) -> void {
+  let _1: &[&string[]] env;
+  let _2: &string; // e
+  let _3: &string[] temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &string temp;
+  capture r: &string[] through_ref;
+  bb0: {
+    storage_live(_2);
+    _3 = copy (*_1).0;
+    _2 = first(move _3) -> bb1;
+  }
+  bb1: {
+    _4 = touch() -> bb2;
+  }
+  bb2: {
+    _6 = &*_2 [reborrow];
+    _5 = form log(move _6) -> bb3;
+  }
+  bb3: {
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn go2(_1: &string[]) -> void {
+  let _1: &string[]; // r
+  let _2: void temp;
+  let _3: &string[] temp;
+  let _4: () => void temp;
+  let _5: &string[] temp;
+  let _6: [&string[]] temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _5 = &*_1 [closure-capture];
+    _6 = env(move _5);
+    _4 = closure(arrow#0, _6);
+    _2 = both2(move _3, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+arrow#0 of fn go2 (_1: &[&string[]]) -> void {
+  let _1: &[&string[]] env;
+  let _2: &string; // e
+  let _3: &string[] temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &string temp;
+  capture r: &string[] through_ref;
+  bb0: {
+    storage_live(_2);
+    _3 = copy (*_1).0;
+    _2 = first(move _3) -> bb1;
+  }
+  bb1: {
+    _4 = touch() -> bb2;
+  }
+  bb2: {
+    _6 = &*_2 [reborrow];
+    _5 = form log(move _6) -> bb3;
+  }
+  bb3: {
+    storage_dead(_2);
+    return;
+  }
+}
+
+@private fn touch() -> void {
+  bb0: {
+    return;
+  }
+}

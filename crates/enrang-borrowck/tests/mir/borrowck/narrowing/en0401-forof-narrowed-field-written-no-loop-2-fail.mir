@@ -1,0 +1,114 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0401/forof-narrowed-field-written-no-loop-2.fail.en. Its row's codes: EN0401, EN0401.
+module "tests/compile/EN0401/forof-narrowed-field-written-no-loop-2.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+class H {
+  items: string[] | null = default;
+  other: string[] | null = default;
+}
+
+fn viaBoth(_1: &H) -> void {
+  let _1: &H; // h
+  let _2: bool temp;
+  let _3: u32 temp;
+  let _4: &(string[] | null); // other
+  let _5: &(string[] | null); // items
+  let _6: void temp;
+  let _7: &(string[] | null) temp;
+  let _8: string[] | null temp;
+  let _9: void temp;
+  let _10: isize temp;
+  let _11: &string[] temp;
+  let _12: &isize temp;
+  fact f0: _1.*.items nonnull;
+  record f0 at bb1[3] _5 binding;
+  use f0 at bb3[5];
+  test f0 at bb1;
+  bb0: {
+    _3 = discriminant((*_1).items);
+    _2 = ne(move _3, const 0: u32);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    storage_live(_4);
+    _4 = &(*_1).other [destructure];
+    storage_live(_5);
+    _5 = &(*_1).items [destructure];
+    _7 = &*_4 [reborrow];
+    _6 = form log(move _7) -> bb3;
+  }
+  bb2: {
+    return;
+  }
+  bb3: {
+    _8 = null;
+    drop(*_5) [assign];
+    *_5 = move _8;
+    drop(_8);
+    storage_dead(_8);
+    check_tag((*_1).items, Present); //~ EN0401 "`h.items` may be `null` here"
+    _11 = &((*_1).items as Present).0 [auto-borrow];
+    _10 = "alloc/array"::Array<string>::length(move _11) -> bb4;
+  }
+  bb4: {
+    _12 = &_10 [temp-arg];
+    _9 = form log(move _12) -> bb5;
+  }
+  bb5: {
+    storage_dead(_10);
+    storage_dead(_5);
+    storage_dead(_4);
+    goto bb2;
+  }
+}
+
+fn viaDestructure(_1: &H) -> void {
+  let _1: &H; // h
+  let _2: bool temp;
+  let _3: u32 temp;
+  let _4: &(string[] | null); // items
+  let _5: string[] | null temp;
+  let _6: void temp;
+  let _7: isize temp;
+  let _8: &string[] temp;
+  let _9: &isize temp;
+  fact f0: _1.*.items nonnull;
+  record f0 at bb1[1] _4 binding;
+  use f0 at bb1[7];
+  test f0 at bb1;
+  bb0: {
+    _3 = discriminant((*_1).items);
+    _2 = ne(move _3, const 0: u32);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    storage_live(_4);
+    _4 = &(*_1).items [destructure];
+    _5 = null;
+    drop(*_4) [assign];
+    *_4 = move _5;
+    drop(_5);
+    storage_dead(_5);
+    check_tag((*_1).items, Present); //~ EN0401 "`h.items` may be `null` here"
+    _8 = &((*_1).items as Present).0 [auto-borrow];
+    _7 = "alloc/array"::Array<string>::length(move _8) -> bb3;
+  }
+  bb2: {
+    return;
+  }
+  bb3: {
+    _9 = &_7 [temp-arg];
+    _6 = form log(move _9) -> bb4;
+  }
+  bb4: {
+    storage_dead(_7);
+    storage_dead(_4);
+    goto bb2;
+  }
+}

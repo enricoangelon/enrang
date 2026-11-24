@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0419/satisfy-type-params.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `Log` does not satisfy `Dumper`
+ --> tests/compile/EN0419/satisfy-type-params.fail.en:2:8
+  |
+2 | record(&log); //~ EN0419 "`Log` does not satisfy `Dumper`"
+  |        ^^^^ `D` must satisfy `Dumper`
+3 |
+4 | private function record<D extends Dumper>(d: &D): void {
+  |                         - the bound on `D`
+  |
+  = explain: run `enrang explain EN0419`
+
+error: aborting due to 1 previous error

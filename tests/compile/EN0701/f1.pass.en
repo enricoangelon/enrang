@@ -1,0 +1,28 @@
+const text = "hello";
+const k = keep(new Echo(text.clone()));
+const b: Box<Speaker> = new Box(new Echo(text.clone()));
+const echo = new Echo(text.clone());
+introduce(&echo);
+console.log(k.speak(), b.speak());
+
+public interface Speaker {
+  speak(): string;
+}
+
+private class Echo implements Speaker {
+  private text: string;
+  public constructor(text: string) {
+    this.text = text;
+  }
+  public speak(): string {
+    return this.text.clone();
+  }
+}
+
+private function keep(s: Speaker): Box<Speaker> {
+  return new Box(s);
+}
+
+private function introduce(s: &Speaker): void {
+  console.log(s.speak());
+}

@@ -1,0 +1,25 @@
+report(new Circle(2.0)); //~ EN0612 "missing `&`: `report` takes a reference"
+const n: i64 = 5;
+const r: &i64 = n; //~ EN0612 "missing `&`: a reference is expected here"
+let a: i64[] = [1, 2];
+console.log(total(a)); //~ EN0612 "missing `&`: `total` takes a reference"
+
+public class Circle {
+  private name: string = "circle";
+  public constructor(public radius: f64) {}
+  public label(): &string {
+    return this.name; //~ EN0612 "missing `&`: `label` returns a reference"
+  }
+}
+
+public function report(c: &Circle): void {
+  console.log(c.radius);
+}
+
+public function total(xs: &Slice<i64>): i64 {
+  let sum: i64 = 0;
+  for (const x of xs) {
+    sum += *x;
+  }
+  return sum;
+}

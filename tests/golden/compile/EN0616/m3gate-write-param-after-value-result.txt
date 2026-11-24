@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/m3gate-write-param-after-value-result.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `peek`
+ --> tests/compile/EN0616/m3gate-write-param-after-value-result.fail.en:4:6
+  |
+4 | f(1, c.peek()); //~ EN0616 "cannot change the object returned"
+  |      ^^^^^^^^ `f` writes through it
+  |
+help: to allow this, remove `readonly` from the return type of `peek`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

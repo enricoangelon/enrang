@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN1019/char_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1019]: a character type is not supported yet
+ --> tests/compile/EN1019/char_type.fail.en:1:11
+  |
+1 | const ch: char = "a"; //~ EN1019 "a character type is not supported yet"
+  |           ^^^^ not supported yet
+  |
+  = note: a string is UTF-8 bytes, read by index as bytes or code points.
+help: `s.codePointAt(i)`, `s.byteAt(i)`
+  = explain: run `enrang explain EN1019`
+
+error[EN1019]: a character type is not supported yet
+ --> tests/compile/EN1019/char_type.fail.en:3:43
+  |
+3 | public function at(s: &string, i: isize): char { //~ EN1019 "a character type is not supported yet"
+  |                                           ^^^^ not supported yet
+  |
+  = note: a string is UTF-8 bytes, read by index as bytes or code points.
+help: `s.codePointAt(i)`, `s.byteAt(i)`
+  = explain: run `enrang explain EN1019`
+
+error: aborting due to 2 previous errors

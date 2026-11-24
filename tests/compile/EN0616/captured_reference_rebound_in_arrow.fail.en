@@ -1,0 +1,6 @@
+let a: i64 = 1;
+let b: i64 = 2;
+let r: &i64 = &a;
+const f = (): void => { r = &b; }; //~ EN0616 "cannot repoint captured `r` inside the arrow"
+f();
+console.log(*r);

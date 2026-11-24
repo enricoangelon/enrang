@@ -1,0 +1,66 @@
+@private enum Shape { Circle { r: i64 }, Square, Tri }
+
+@private fn f(_1: Shape | null, _2: bool) -> i64 {
+  let _1: Shape | null; // s
+  let _2: bool; // flag
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: bool temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  fact f0: _1 nonnull;
+  fact f1: _1.? case Circle;
+  fact f2: _1.? case Square;
+  test f0 at bb3;
+  test f1 at bb3;
+  test f0 at bb7;
+  test f2 at bb7;
+  test f0 at bb10;
+  bb0: {
+    _3 = discriminant(_1);
+    switch move _3 [0: bb2, otherwise: bb5];
+  }
+  bb1: {
+    return;
+  }
+  bb2: {
+    _0 = const 0: i64;
+    goto bb1;
+  }
+  bb3: {
+    _5 = copy _2;
+    switch move _5 [0: bb4, otherwise: bb6];
+  }
+  bb4: {
+    _6 = discriminant(_1);
+    switch move _6 [0: bb8, otherwise: bb9];
+  }
+  bb5: {
+    check_tag(_1, Present);
+    _4 = discriminant((_1 as Present).0);
+    switch move _4 [0: bb3, otherwise: bb4];
+  }
+  bb6: {
+    _0 = const 1: i64;
+    goto bb1;
+  }
+  bb7: {
+    _0 = const 2: i64;
+    goto bb1;
+  }
+  bb8: {
+    goto bb10;
+  }
+  bb9: {
+    check_tag(_1, Present);
+    _7 = discriminant((_1 as Present).0);
+    switch move _7 [1: bb7, otherwise: bb8];
+  }
+  bb10: {
+    _0 = const 3: i64;
+    goto bb1;
+  }
+  bb11: {
+    unreachable;
+  }
+}

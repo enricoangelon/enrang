@@ -3,12 +3,12 @@ $ enrang explain EN1301
 [stdout]
 EN1301: deferred command
 
-These commands are outside the prototype: `install`, `add`, `publish`, `doc`, `lsp`, `repl`, `bench`, `debug`, `upgrade` and `fmt`. Each is reserved, so it stops with this code and exit status 2 and does nothing to the project. A name that is no command at all gets EN1302 instead.
+These commands are outside the prototype: `install`, `add`, `publish`, `doc`, `lsp`, `repl`, `bench`, `debug` and `upgrade`. Each is reserved, so it stops with this code and exit status 2 and does nothing to the project. A name that is no command at all gets EN1302 instead.
 
 Failing:
 
-    $ enrang fmt
-    error[EN1301]: `enrang fmt` is not part of the prototype
+    $ enrang install
+    error[EN1301]: `enrang install` is not part of the prototype
       = explain: run `enrang explain EN1301`
 
     error: aborting due to 1 previous error
@@ -19,5 +19,5 @@ Fixed:
 
 From TypeScript:
 
-A TypeScript project reaches for npm and a formatter from the same terminal. Enrang has no package manager and no formatter yet: by design, dependencies are source files you import by path, and `enrang check`, from milestone M1, is the command that looks at your code.
+A TypeScript project reaches for npm from the same terminal. Enrang has no package manager: by design, dependencies are source files you import by path. From milestone M1, `enrang check` looks at your code and `enrang fmt` formats it.
 [stderr]

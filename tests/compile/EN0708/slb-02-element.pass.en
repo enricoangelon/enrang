@@ -1,0 +1,7 @@
+let names: string[] = ["x".toString(), "yz".toString()];
+names[0] += pad(names.length());
+console.log(names);
+
+private function pad(n: isize): string {
+  return "-".repeat(n);
+}

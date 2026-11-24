@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0401/m3gate-mem-replace-narrowed-case.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `op` may no longer be that case here
+ --> tests/compile/EN0401/m3gate-mem-replace-narrowed-case.fail.en:5:17
+  |
+4 |     const o = mem.replace(&op, Op.Add);
+  |                           --- this may write through it
+5 |     console.log(op.s); //~ EN0401 "`op` may no longer be"
+  |                 ^^^^ the test before this may no longer hold
+  |
+  = note: a writing reference may have changed `op`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

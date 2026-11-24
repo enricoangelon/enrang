@@ -1,0 +1,34 @@
+const tbl: u8[] = [7, 8];
+let buf: u8[] = [0];
+let w = new Sub(&tbl, &buf);
+w.retarget(w.peek());
+w.step();
+console.log(w.peek());
+console.log(buf);
+
+public class Base {
+  private src: readonly &Slice<u8>;
+  public constructor(s: &Slice<u8>) {
+    this.src = s;
+  }
+  public peek(): readonly &Slice<u8> {
+    return this.src.slice(0, 1);
+  }
+  public retarget(v: &Slice<u8>): void {
+    this.src = v;
+  }
+}
+
+public final class Sub extends Base {
+  private dst: &u8[];
+  public constructor(s: &Slice<u8>, d: &u8[]) {
+    this.dst = d;
+    super(s);
+  }
+  public static make(s: &Slice<u8>, d: &u8[]): Sub {
+    return new Sub(s, d);
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+}

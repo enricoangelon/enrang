@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN1006/f7.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+ --> tests/compile/EN1006/f7.fail.en:2:1
+  |
+2 | b.unbox(); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  | ^^^^^^^^^ this is a `Speaker` by value
+  |
+  = note: `Speaker` is an interface, so the size of `b.unbox()` isn't known
+help: `&Speaker` to refer to one, `Box<Speaker>` to own one
+  = explain: run `enrang explain EN1006`
+
+error[EN1006]: an interface type by value outside a parameter is not supported yet
+ --> tests/compile/EN1006/f7.fail.en:3:7
+  |
+3 | const v = b.unbox(); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  |       ^ `Speaker` by value in a variable
+  |
+  = note: `Speaker` is an interface, so the size of a `Speaker` in a variable isn't known
+help: `&Speaker` to refer to one, `Box<Speaker>` to own one
+  = explain: run `enrang explain EN1006`
+
+error: aborting due to 2 previous errors

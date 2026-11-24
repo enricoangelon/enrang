@@ -1,0 +1,24 @@
+$ enrang check tests/compile/EN0701/ef-08.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0701]: a `Result` can't hold a `&AgeError`, because `&AgeError` is a reference
+  --> tests/compile/EN0701/ef-08.fail.en:12:30
+   |
+12 | public function age(n: i64): Result<i64, &AgeError> { //~ EN0701 "a `Result` can't hold a `&AgeError`, because `&AgeError` is a reference"
+   |                              ^^^^^^^^^^^^^^^^^^^^^^ a reference
+   |
+   = rule: a reference lives only in locals, parameters, return values, tuple parts and `private` fields of a class that holds references.
+   = explain: run `enrang explain EN0701`
+
+error[EN0701]: a `Result` can't hold a `Lexer`, because `Lexer` holds a reference
+  --> tests/compile/EN0701/ef-08.fail.en:16:31
+   |
+16 | private function lex(n: i64): Result<i64, Lexer> { //~ EN0701 "a `Result` can't hold a `Lexer`, because `Lexer` holds a reference"
+   |                               ^^^^^^^^^^^^^^^^^^ `Lexer` borrows through its field `src`
+   |
+   = rule: a class that holds a reference lives only where a reference can: in locals, parameters, return values and fields of another such class.
+help: own the data: `private src: string;`
+   = explain: run `enrang explain EN0701`
+
+error: aborting due to 2 previous errors

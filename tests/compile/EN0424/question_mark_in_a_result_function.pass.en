@@ -1,0 +1,10 @@
+console.log(total("12"));
+
+private function total(s: &string): Result<i64> {
+  const n = parse(s)?;
+  return n + 1;
+}
+
+private function parse(s: &string): Result<i64> {
+  return 12;
+}

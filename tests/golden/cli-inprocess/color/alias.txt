@@ -1,5 +1,5 @@
 <ESC>[1;31merror[EN1302]<ESC>[0m: <ESC>[1m`tsc` is not an `enrang` command<ESC>[0m
-<ESC>[1;36mhelp<ESC>[0m: the command for this is `enrang check`, which arrives with milestone M1
+<ESC>[1;36mhelp<ESC>[0m: the command for this is `enrang check`
   <ESC>[1m= explain:<ESC>[0m run `enrang explain EN1302`
 
 <ESC>[1;31merror<ESC>[0m: aborting due to 1 previous error

@@ -1,0 +1,119 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0614/inf-01.fail.en. Its row's codes: EN0614.
+module "tests/compile/EN0614/inf-01.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Bag {
+  items: i64[] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Bag[]; // bags
+  let _3: Bag temp;
+  let _4: *Bag temp;
+  let _5: void temp;
+  let _6: void temp;
+  let _7: isize temp;
+  let _8: isize temp;
+  let _9: &i64[] temp;
+  let _10: [&Bag, &i64]; // t
+  let _11: &Bag[] temp;
+  let _12: &Slice<Bag> temp;
+  let mut _13: i64; // i
+  let _14: bool temp;
+  let _15: void temp;
+  let _16: &i64[] temp;
+  let _17: i64 temp;
+  let _18: void temp;
+  let _19: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _4 = addr_of _3;
+    _5 = named_fill Bag leaving(items)(move _4) -> bb1;
+  }
+  bb1: {
+    _2 = intrinsic AllocArray<Bag>(move _3);
+    drop(_3);
+    storage_dead(_3);
+    _7 = const 0: isize;
+    _8 = len(_2);
+    check_bounds(copy _7, copy _8);
+    _9 = &_2[_7].items [auto-borrow];
+    _6 = "alloc/array"::Array<i64>::push(move _9, const 1: i64) -> bb2;
+  }
+  bb2: {
+    storage_live(_10);
+    _11 = &_2 [explicit];
+    _12 = convert(array_to_slice, move _11);
+    _10 = two(move _12) -> bb3;
+  }
+  bb3: {
+    storage_live(_13);
+    _13 = const 0: i64;
+    goto bb4;
+  }
+  bb4: {
+    _14 = lt(copy _13, const 3: i64);
+    switch move _14 [0: bb7, otherwise: bb5];
+  }
+  bb5: {
+    _16 = &(*_10.0).items [auto-borrow];
+    _15 = "alloc/array"::Array<i64>::push(move _16, copy _13) -> bb8; //~ EN0614 "`two` returns two references that may point at the same data"
+  }
+  bb6: {
+    _17 = copy _13;
+    _13 = checked_add(copy _17, const 1: i64);
+    goto bb4;
+  }
+  bb7: {
+    storage_dead(_13);
+    _19 = copy _10.1;
+    _18 = form log(move _19) -> bb9;
+  }
+  bb8: {
+    goto bb6;
+  }
+  bb9: {
+    storage_dead(_10);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn two(_1: &Slice<Bag>) -> [&Bag, &i64] {
+  let _1: &Slice<Bag>; // list
+  let _2: isize temp;
+  let _3: isize temp;
+  let _4: &Bag temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  let _8: isize temp;
+  let _9: isize temp;
+  let _10: &i64 temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*_1);
+    check_bounds(copy _2, copy _3);
+    _4 = &(*_1)[_2] [explicit];
+    _5 = const 0: isize;
+    _6 = const 0: isize;
+    _7 = len(*_1);
+    _8 = len(*_1);
+    check_bounds(copy _5, copy _8);
+    _9 = len((*_1)[_5].items);
+    check_bounds(copy _5, copy _7);
+    check_bounds(copy _6, copy _9);
+    _10 = &(*_1)[_5].items[_6] [explicit];
+    _0 = tuple(move _4, move _10);
+    return;
+  }
+}

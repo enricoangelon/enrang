@@ -1,0 +1,8 @@
+//! covers: H07
+public function nameOf(u: &User): string {
+  return u.name; //~ EN0603 "cannot move `u.name` out of a reference"
+}
+
+public class User {
+  public name: string;
+}

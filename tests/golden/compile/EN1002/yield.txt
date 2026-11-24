@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1002/yield.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1002]: generators are not supported yet
+ --> tests/compile/EN1002/yield.fail.en:2:13
+  |
+2 |   const x = yield 1; //~ EN1002 "generators are not supported yet"
+  |             ^^^^^ yields a value
+  |
+  = note: a function runs to its end once called; nothing can suspend it halfway.
+help: Return an array, or keep state in a class
+  = explain: run `enrang explain EN1002`
+
+error: aborting due to 1 previous error

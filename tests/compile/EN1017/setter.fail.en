@@ -1,0 +1,7 @@
+public class Box2 {
+  private w: i64 = 0;
+
+  public set width(v: i64) { //~ EN1017 "setters are not supported yet"
+    this.w = v;
+  }
+}

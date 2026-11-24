@@ -1,0 +1,26 @@
+@packed public final class P1 {
+  public a: u8;
+}
+
+@repr("C") public final class Regs {
+  public inner: Animal;
+  public mid: Mid;
+}
+
+public final class Mid {
+  public a: Animal;
+}
+
+public final class Animal implements Copy {
+  public legs: u8 = 4;
+}
+
+@align(16) public final class Al {
+  public a: u8;
+}
+
+public class Base {}
+
+public final class Plain extends Base {
+  public a: u8;
+}

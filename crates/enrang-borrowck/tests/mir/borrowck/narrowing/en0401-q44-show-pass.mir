@@ -1,0 +1,54 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/q44-show.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/q44-show.pass";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: u8[4]; // sector
+  let _3: void temp;
+  let _4: &u8[4] temp;
+  let _5: void temp;
+  let _6: &Slice<u8> temp;
+  let _7: isize | null temp;
+  let _8: &u8[4] temp;
+  let _9: &Slice<u8> temp;
+  bb0: {
+    storage_live(_2);
+    _2 = repeat(const 7: u8; 4);
+    _4 = &_2 [explicit];
+    _3 = show<u8[4]>(move _4) -> bb1;
+  }
+  bb1: {
+    _7 = present(const 2: isize);
+    _8 = &_2 [auto-borrow];
+    _9 = convert(fixed_to_slice, move _8);
+    _6 = "core/slice"::Slice<u8>::slice(move _9, const 0: isize, move _7, const 2: isize) -> bb2;
+  }
+  bb2: {
+    _5 = show<Slice<u8>>(move _6) -> bb3;
+  }
+  bb3: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn show<T>(_1: &T) -> void {
+  let _1: &T; // x
+  let _2: void temp;
+  let _3: &T temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

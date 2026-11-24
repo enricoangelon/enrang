@@ -1,0 +1,18 @@
+let t: u8[] = [1, 2];
+const o: u8[] = [3, 4];
+let v = new View(&t, &o);
+const d = v.last();
+t[0] = 9; //~ EN0706
+console.log(d);
+
+public final class View {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  public constructor(src: &Slice<u8>, dst: &Slice<u8>) {
+    this.src = src;
+    this.dst = dst;
+  }
+  public last(): readonly &Slice<u8> {
+    return this.dst.slice(0, 1);
+  }
+}

@@ -1,0 +1,2 @@
+const width = 4 //~ EN0101 "missing `;` after this statement"
+console.log(width);

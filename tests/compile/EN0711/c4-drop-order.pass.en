@@ -1,0 +1,33 @@
+{
+  const x = new Dog();
+}
+
+private class Noisy {
+  public constructor(private tag: string) {
+    console.log(`make ${this.tag}`);
+  }
+
+  public destructor() {
+    console.log(`drop ${this.tag}`);
+  }
+}
+
+public class Animal {
+  private a: Noisy = new Noisy("animal field");
+
+  public constructor() {
+    console.log("Animal ctor");
+  }
+
+  public destructor() {
+    console.log("Animal dtor");
+  }
+}
+
+public class Dog extends Animal {
+  private d: Noisy = new Noisy("dog field");
+
+  public destructor() {
+    console.log("Dog dtor");
+  }
+}

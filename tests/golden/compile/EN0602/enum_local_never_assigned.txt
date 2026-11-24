@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0602/enum_local_never_assigned.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0602]: `c` is used before it has a value
+ --> tests/compile/EN0602/enum_local_never_assigned.fail.en:2:13
+  |
+1 | let c: Color;
+  |     - `c` is declared here with no value
+2 | console.log(c); //~ EN0602 "`c` is used before it has a value"
+  |             ^ a `Color` has no default value
+  |
+help: give `c` a value where it is declared, or on every path before this use
+  = explain: run `enrang explain EN0602`
+
+error: aborting due to 1 previous error

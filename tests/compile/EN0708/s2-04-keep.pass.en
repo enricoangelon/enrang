@@ -1,0 +1,24 @@
+let a: i64[] = [0];
+let v: i64[] = [1, 2];
+let h = new Holder(&a);
+const k = h.keep(&v);
+h.grow();
+console.log(k);
+
+private class Holder {
+  private r: &i64[];
+
+  public constructor(r: &i64[]) {
+    this.r = r;
+  }
+
+  public keep(x: &i64[]): &Slice<i64> {
+    return x.slice(0, 1);
+  }
+
+  public grow(): void {
+    for (let i = 0; i < 100; i += 1) {
+      this.r.push(i);
+    }
+  }
+}

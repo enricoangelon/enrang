@@ -1,0 +1,20 @@
+$ enrang check tests/compile/EN0706/s2-08-tuple-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `pair` cannot change while `f` still points into it
+ --> tests/compile/EN0706/s2-08-tuple-2.fail.en:6:3
+  |
+3 | const p2 = pair;
+  |            ---- shared borrow of `pair` starts here, held by `f`
+4 | if (pair != null && p2 != null) {
+5 |   const f = &p2[0][0];
+6 |   pair[0].push(4); //~ EN0706
+  |   ^^^^^^^ `pair` changes here
+7 |   console.log(*f);
+  |                - `f` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

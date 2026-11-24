@@ -1,0 +1,237 @@
+// `overlap` and `prefix` (A:1243-1250), closures (A:1259, SPEC 5.5) and a compound
+// target's reservation (A:1026).
+// Source:
+//   fields() { let p = new Pair { x: 1, y: 2 }; const a = &p.x; p.y = 3; console.log(*a); }  // compiles: different fields
+//   repointRef() { let a = 1; const b = 2; let r = &a; const t = &*r; r = &b; console.log(*t); }  // compiles: shallow
+//   deep() { let a = 1; let r = &a; const t = &*r; a = 5; console.log(*t); }          // EN0706: `t` holds `r`'s loan
+//   Lexer.narrow(): const t = &this.src[0]; this.src = this.src.slice(1); return t;  // compiles: Fields vs the field
+//   captured() { let count = 0; const inc = () => { count += 1; }; inc(); count = 5; inc(); }  // EN0715
+//   twice(f: (k: u8) => void) { both(f, f); }                                        // EN0718
+//   append(let s: string) { s += part(&s); }
+//   copyBorrow(s, d) { let w = new Copier { src: s, dst: d }; const t = &w.dst[0]; const p = w.dst; *t = 1; console.log(p); }
+//                                     // EN0708 at `w.dst`: the copy's loan meets `t`'s exclusive one (O7)                                              // EN0708 at `&s`
+// Shapes: a named form, `named_fill` then the fields (c.10), field borrows of a local (c.4), a reborrow through a reference local and
+// a repoint (c.6, c.8), a borrow through `*_1` and a field store (c.4, c.8), a
+// capture `&count [closure-capture]` into `env(..)` and `closure(arrow#0, ..)`
+// (c.16), closure forwards as `closure_reborrow` (c.6 C14), a compound target
+// `&s [compound-target]` then the right side, then `form append` (c.8).
+@final class Pair {
+  x: i64;
+  y: i64;
+}
+@final class Lexer {
+  src: readonly &Slice<u8>;
+}
+@final class Copier {
+  src: readonly &Slice<u8>;
+  dst: &Slice<u8>;
+}
+fn slice1(_1: &Slice<u8>) -> &Slice<u8> perms(read) sources(0) result writable;
+fn both(_1: (u8) => void, _2: (u8) => void) -> void;
+fn part(_1: &string) -> &string perms(read) sources(0) result writable;
+
+fn fields() -> void {
+  let mut _1: Pair; // p
+  let _2: &i64; // a
+  let _3: &i64 temp;
+  let _4: void temp;
+  let _5: *Pair temp;
+  bb0: {
+    storage_live(_1);
+    _5 = addr_of _1;
+    _4 = named_fill Pair leaving()(copy _5) -> bb2;
+  }
+  bb2: {
+    _1.x = const 1: i64;
+    _1.y = const 2: i64;
+    storage_live(_2);
+    _2 = &_1.x [explicit];
+    _1.y = const 3: i64;
+    _3 = &*_2 [reborrow];
+    _4 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}
+fn repointRef() -> void {
+  let _1: i64; // a
+  let _2: i64; // b
+  let mut _3: &i64; // r
+  let _4: &i64; // t
+  let _5: &i64 temp;
+  let _6: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = const 1: i64;
+    storage_live(_2);
+    _2 = const 2: i64;
+    storage_live(_3);
+    _3 = &_1 [explicit];
+    storage_live(_4);
+    _4 = &*_3 [explicit];
+    _3 = &_2 [explicit];
+    _5 = &*_4 [reborrow];
+    _6 = form log(move _5) -> bb1;
+  }
+  bb1: {
+    storage_dead(_4);
+    storage_dead(_3);
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}
+fn deep() -> void {
+  let mut _1: i64; // a
+  let _2: &i64; // r
+  let _3: &i64; // t
+  let _4: &i64 temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = const 1: i64;
+    storage_live(_2);
+    _2 = &_1 [explicit];
+    storage_live(_3);
+    _3 = &*_2 [explicit];
+    _1 = const 5: i64; //~ EN0706
+    _4 = &*_3 [reborrow];
+    _5 = form log(move _4) -> bb1;
+  }
+  bb1: {
+    storage_dead(_3);
+    storage_dead(_2);
+    storage_dead(_1);
+    return;
+  }
+}
+fn Lexer::narrow(_1: &Lexer) -> &u8 {
+  let _2: &u8; // t
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: &Slice<u8> temp;
+  let _6: &Slice<u8> temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const 0: isize;
+    _4 = len((*(*_1).src));
+    check_bounds(copy _3, copy _4);
+    _2 = &(*(*_1).src)[_3] [explicit];
+    _5 = copy (*_1).src;
+    _6 = slice1(move _5) -> bb1;
+  }
+  bb1: {
+    (*_1).src = move _6;
+    _0 = copy _2;
+    storage_dead(_2);
+    return;
+  }
+}
+fn captured() -> void {
+  let mut _1: i64; // count
+  let _2: &i64 temp;
+  let _3: [&i64] temp;
+  let _4: () => void; // inc
+  let _5: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = const 0: i64;
+    _2 = &_1 [closure-capture];
+    _3 = env(move _2);
+    storage_live(_4);
+    _4 = closure(arrow#0, _3);
+    _5 = closure _4() -> bb1;
+  }
+  bb1: {
+    _1 = const 5: i64; //~ EN0715
+    _5 = closure _4() -> bb2;
+  }
+  bb2: {
+    storage_dead(_4);
+    storage_dead(_1);
+    return;
+  }
+}
+arrow#0 of fn captured (_1: &[&i64]) -> void {
+  let _1: &[&i64] env;
+  capture count: &i64 path;
+  let _2: i64 temp;
+  bb0: {
+    _2 = copy *(*_1).0;
+    *(*_1).0 = checked_add(copy _2, const 1: i64);
+    return;
+  }
+}
+fn twice(_1: (u8) => void) -> void {
+  let _2: (u8) => void temp;
+  let _3: (u8) => void temp;
+  let _4: void temp;
+  bb0: {
+    _2 = closure_reborrow(_1);
+    _3 = closure_reborrow(_1); //~ EN0718
+    _4 = both(move _2, move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+fn append(let _1: string) -> void {
+  let _2: &string temp;
+  let _3: &string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  bb0: {
+    _2 = &_1 [compound-target];
+    _3 = &_1 [auto-borrow]; //~ EN0708
+    _4 = part(move _3) -> bb1;
+  }
+  bb1: {
+    _5 = form append(move _2, move _4) -> bb2;
+  }
+  bb2: {
+    drop(_1);
+    return;
+  }
+}
+fn copyBorrow(_1: &Slice<u8>, _2: &Slice<u8>) -> void {
+  let mut _3: Copier; // w
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  let _6: *Copier temp;
+  let _7: void temp;
+  let _8: &u8; // t
+  let _9: isize temp;
+  let _10: isize temp;
+  let _11: &Slice<u8>; // p
+  let _12: &Slice<u8> temp;
+  bb0: {
+    storage_live(_3);
+    _4 = &*_1 [reborrow];
+    _5 = &*_2 [reborrow];
+    _6 = addr_of _3;
+    _7 = named_fill Copier leaving()(copy _6) -> bb1;
+  }
+  bb1: {
+    _3.src = move _4;
+    _3.dst = move _5;
+    storage_live(_8);
+    _9 = const 0: isize;
+    _10 = len((*_3.dst));
+    check_bounds(copy _9, copy _10);
+    _8 = &(*_3.dst)[_9] [explicit];
+    storage_live(_11);
+    _11 = copy _3.dst; //~ EN0708
+    *_8 = const 1: u8;
+    _12 = &*_11 [reborrow];
+    _7 = form log(move _12) -> bb2;
+  }
+  bb2: {
+    storage_dead(_11);
+    storage_dead(_8);
+    storage_dead(_3);
+    return;
+  }
+}

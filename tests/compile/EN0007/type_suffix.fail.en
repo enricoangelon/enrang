@@ -1,0 +1,2 @@
+const mask = 255u8; //~ EN0007
+console.log(mask);

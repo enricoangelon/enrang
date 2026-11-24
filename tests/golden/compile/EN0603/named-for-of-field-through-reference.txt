@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0603/named-for-of-field-through-reference.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0603]: cannot move `this.items` out of `this`
+ --> tests/compile/EN0603/named-for-of-field-through-reference.fail.en:6:21
+  |
+6 |     for (const x of this.items) { //~ EN0603 "cannot move `this.items` out of `this`"
+  |                     ^^^^^^^^^^ `this.items` moves here
+  |
+help: to loop over the elements in place, write `&this.items`
+  |
+6 |     for (const x of &this.items) { //~ EN0603 "cannot move `this.items` out of `this`"
+  |                     +
+  = explain: run `enrang explain EN0603`
+
+error[EN0603]: cannot move `h.items` out of a reference
+  --> tests/compile/EN0603/named-for-of-field-through-reference.fail.en:13:19
+   |
+13 |   for (const x of h.items) { //~ EN0603
+   |                   ^^^^^^^ `h.items` is behind a reference
+   |
+help: to loop over the elements in place, write `&h.items`
+   |
+13 |   for (const x of &h.items) { //~ EN0603
+   |                   +
+   = explain: run `enrang explain EN0603`
+
+error: aborting due to 2 previous errors

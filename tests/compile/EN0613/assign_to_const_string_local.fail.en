@@ -1,0 +1,3 @@
+const label = "a".toString();
+label = "b".toString(); //~ EN0613 "cannot assign to `label`, because it is `const`"
+console.log(label);

@@ -1,0 +1,10 @@
+//! row: `console.log(p.b)`, `${p.b}`, `expect(p.b).toBe(1)`
+let p = new P { a: 1, b: 1 };
+console.log(p.b);
+console.log(`${p.b}`);
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32;
+}

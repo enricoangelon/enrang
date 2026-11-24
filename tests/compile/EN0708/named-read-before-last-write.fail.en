@@ -1,0 +1,5 @@
+//! row: `let x = 12; const y = &x; console.log(x);
+let x = 12;
+const y = &x;
+console.log(x); //~ EN0708 "`x` can't be read while `y` may write into it"
+*y = 13;

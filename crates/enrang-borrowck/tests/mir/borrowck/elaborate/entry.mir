@@ -1,0 +1,31 @@
+// A flag's entry value runs once even where bb0 is a branch target: its code moves
+// to a block of its own (plan d.12). Shapes: c.3 (plan lines 902-906) scope-end
+// `drop` then `storage_dead`; c.9 (line 1047ff.) a loop's back edge.
+@final class User {
+  name: string;
+}
+fn make() -> User;
+fn archive(_1: User) -> void;
+
+fn again(_1: bool) -> void {
+  let _2: User; // u
+  let _3: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = make() -> bb1;
+  }
+  bb1: {
+    switch copy _1 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _3 = archive(move _2) -> bb3;
+  }
+  bb3: {
+    drop(_2);
+    storage_dead(_2);
+    switch copy _1 [0: bb4, otherwise: bb0];
+  }
+  bb4: {
+    return;
+  }
+}

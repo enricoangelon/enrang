@@ -1,0 +1,5 @@
+save("a.txt"); //~ EN0426 "this `Result` is not used, so an error would be lost silently"
+
+private function save(path: &string): Result<void> {
+  return Ok();
+}

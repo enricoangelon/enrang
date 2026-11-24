@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/fv-02-finder-const.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `find`
+ --> tests/compile/EN0616/fv-02-finder-const.fail.en:5:3
+  |
+5 |   *h = 0; //~ EN0616
+  |   ^^^^^^ written here
+  |
+  = note: `find` returns a reference reached from the `readonly &` field `src`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

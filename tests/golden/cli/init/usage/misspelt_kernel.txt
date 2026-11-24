@@ -1,0 +1,7 @@
+$ enrang init --kernal
+[exit 2]
+[stdout]
+[stderr]
+error: `--kernal` is not a flag of `enrang init`
+help: did you mean `--kernel`?
+usage: enrang init [name] [--kernel]

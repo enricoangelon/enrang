@@ -1,0 +1,31 @@
+$ enrang init
+[exit 2]
+[stdout]
+[stderr]
+error[EN1307]: `enrang init` would overwrite `enrang.json`
+  = note: `init` never overwrites anything, so it wrote nothing
+help: give a name, and the project goes in a new directory of that name
+  = explain: run `enrang explain EN1307`
+
+error[EN1307]: `enrang init` would overwrite `src/main.en`
+  = note: `init` never overwrites anything, so it wrote nothing
+help: give a name, and the project goes in a new directory of that name
+  = explain: run `enrang explain EN1307`
+
+error[EN1307]: `enrang init` would overwrite `src/main.test.en`
+  = note: `init` never overwrites anything, so it wrote nothing
+help: give a name, and the project goes in a new directory of that name
+  = explain: run `enrang explain EN1307`
+
+error[EN1307]: `enrang init` would overwrite `.gitignore`
+  = note: `init` never overwrites anything, so it wrote nothing
+help: give a name, and the project goes in a new directory of that name
+  = explain: run `enrang explain EN1307`
+
+error: aborting due to 4 previous errors
+[file .gitignore]
+target/
+[file src/main.en]
+console.log(1);
+[file src/main.test.en]
+

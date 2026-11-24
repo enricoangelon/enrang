@@ -1,0 +1,64 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/one-part-writable.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/one-part-writable.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // xs
+  let _3: &i64 temp;
+  let _4: &i64[] temp;
+  let _5: void temp;
+  let _6: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    _4 = &_2 [explicit];
+    _3 = pick(move _4) -> bb1;
+  }
+  bb1: {
+    *_3 = const 5: i64;
+    _6 = &_2 [auto-borrow];
+    _5 = form log(move _6) -> bb2;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn pick(_1: &i64[]) -> &i64 {
+  let _1: &i64[]; // xs
+  let _2: &i64; // second
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: &i64; // first
+  let _6: isize temp;
+  let _7: isize temp;
+  let _8: void temp;
+  let _9: &i64 temp;
+  let _10: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const 1: isize;
+    _4 = len(*_1);
+    check_bounds(copy _3, copy _4);
+    _2 = &(*_1)[_3] [explicit];
+    storage_live(_5);
+    _6 = const 0: isize;
+    _7 = len(*_1);
+    check_bounds(copy _6, copy _7);
+    _5 = &(*_1)[_6] [explicit];
+    _9 = &*_2 [auto-borrow];
+    _8 = form log(move _9) -> bb1;
+  }
+  bb1: {
+    _10 = &*_5 [reborrow];
+    _0 = move _10;
+    storage_dead(_5);
+    storage_dead(_2);
+    return;
+  }
+}

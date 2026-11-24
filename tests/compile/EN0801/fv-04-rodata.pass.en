@@ -1,0 +1,5 @@
+const primes: &Slice<i64> = &[2, 3, 5, 7];
+unsafe {
+  const w = Slice<i64>.fromRaw(primes.asPtr(), 4);
+  w[0] = 1;
+}

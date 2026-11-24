@@ -1,0 +1,22 @@
+user();
+parts();
+
+private function splitAt(xs: &Slice<i64>, m: isize): [&Slice<i64>, &Slice<i64>] {
+  return [xs.slice(0, m), xs.slice(m, xs.length())];
+}
+
+private function user(): void {
+  let v: i64[] = [1, 2, 3, 4];
+  const [lo, hi] = splitAt(&v, 2);
+  lo[0] = hi[0]; //~ EN0616
+  console.log(v);
+}
+
+private function parts(): void {
+  let v: i64[] = [1, 2, 3, 4];
+  const a = v.slice(0, 2);
+  const b = v.slice(2, 4); //~ EN0707
+  a[0] = b[0];
+  b[1] = 9;
+  console.log(v);
+}

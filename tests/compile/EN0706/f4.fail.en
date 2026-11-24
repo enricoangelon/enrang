@@ -1,0 +1,8 @@
+let s: string = "abc".toString();
+const view = s.slice(0, 2);
+grow([&s, 1]); //~ EN0706
+console.log(view);
+
+private function grow(let t: [&string, i32]): void {
+  *t[0] += "!!!!!!!!";
+}

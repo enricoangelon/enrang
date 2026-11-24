@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0616/by_value_tuple_store.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot store a reference into a value reached through by-value `t`
+  --> tests/compile/EN0616/by_value_tuple_store.fail.en:18:3
+   |
+18 |   t[0].retarget(s); //~ EN0616 "cannot store a reference into a value reached through by-value `t`"
+   |   ^^^^^^^^^^^^^^^^ stored here
+   |
+   = note: a consumed value is disposed of when the function ends, so nothing stored in it reaches the caller
+help: write the field directly, or take the value by reference
+   = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

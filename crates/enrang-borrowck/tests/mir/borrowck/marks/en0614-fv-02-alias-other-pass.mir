@@ -1,0 +1,175 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/fv-02-alias-other.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/fv-02-alias-other.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: u8[]; // buf
+  let _3: u8[]; // tbl
+  let _4: u8[]; // other
+  let mut _5: Copier; // c
+  let _6: &u8[] temp;
+  let _7: &u8[] temp;
+  let _8: &u8[] temp;
+  let _9: &u8; // a
+  let _10: &Copier temp;
+  let _11: void temp;
+  let _12: &Copier temp;
+  let _13: void temp;
+  let _14: &Copier temp;
+  let _15: void temp;
+  let _16: &Copier temp;
+  let _17: void temp;
+  let _18: &Copier temp;
+  let _19: void temp;
+  let _20: &u8 temp;
+  let _21: void temp;
+  let _22: &u8[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 1: u8);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<u8>(const 0: u8);
+    storage_live(_4);
+    _4 = intrinsic AllocArray<u8>(const 5: u8);
+    storage_live(_5);
+    _6 = &_3 [explicit];
+    _7 = &_2 [explicit];
+    _8 = &_4 [explicit];
+    _5 = Copier::alias(move _6, move _7, move _8) -> bb1;
+  }
+  bb1: {
+    storage_live(_9);
+    _10 = &_5 [auto-borrow];
+    _9 = Copier::peek(move _10) -> bb2;
+  }
+  bb2: {
+    _12 = &_5 [auto-borrow];
+    _11 = Copier::step(move _12) -> bb3;
+  }
+  bb3: {
+    _14 = &_5 [auto-borrow];
+    _13 = Copier::step(move _14) -> bb4;
+  }
+  bb4: {
+    _16 = &_5 [auto-borrow];
+    _15 = Copier::step(move _16) -> bb5;
+  }
+  bb5: {
+    _18 = &_5 [auto-borrow];
+    _17 = Copier::step(move _18) -> bb6;
+  }
+  bb6: {
+    _20 = &*_9 [auto-borrow];
+    _19 = form log(move _20) -> bb7;
+  }
+  bb7: {
+    _22 = &_2 [auto-borrow];
+    _21 = form log(move _22) -> bb8;
+  }
+  bb8: {
+    storage_dead(_9);
+    storage_dead(_5);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Copier::#ctor(_1: &Copier, _2: &u8[], _3: &u8[]) -> void {
+  let _1: &Copier; // this
+  let _2: &u8[]; // s
+  let _3: &u8[]; // d
+  let _4: &u8[] temp;
+  let _5: &u8[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+static fn Copier::alias(_1: &u8[], _2: &u8[], _3: &u8[]) -> Copier {
+  let _1: &u8[]; // s
+  let _2: &u8[]; // d
+  let _3: &u8[]; // t
+  let mut _4: Copier; // w
+  let _5: &u8[] temp;
+  let _6: &u8[] temp;
+  let _7: &u8[] temp;
+  bb0: {
+    storage_live(_4);
+    _5 = &*_1 [reborrow];
+    _6 = &*_2 [reborrow];
+    _4 = Copier::make(move _5, move _6) -> bb1;
+  }
+  bb1: {
+    _7 = &*_3 [reborrow];
+    _4.src = move _7;
+    _0 = move _4;
+    storage_dead(_4);
+    return;
+  }
+}
+
+static fn Copier::make(_1: &u8[], _2: &u8[]) -> Copier {
+  let _1: &u8[]; // s
+  let _2: &u8[]; // d
+  let _3: &u8[] temp;
+  let _4: &u8[] temp;
+  let _5: &Copier temp;
+  let _6: void temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _5 = &_0 [auto-borrow];
+    _6 = Copier::#ctor(move _5, move _3, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Copier::peek(_1: &Copier) -> readonly &u8 {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).src);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).src)[_2] [explicit];
+    return;
+  }
+}
+
+fn Copier::step(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: void temp;
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_1).dst;
+    _2 = "alloc/array"::Array<u8>::push(move _3, const 1: u8) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

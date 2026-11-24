@@ -1,0 +1,20 @@
+public final class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize;
+  public constructor(src: &Slice<u8>, dst: &Slice<u8>) {
+    this.src = src;
+    this.dst = dst;
+  }
+  public step(): void {
+    this.dst[this.pos] = this.src[this.pos];
+    this.pos += 1;
+  }
+  public peek(): readonly &Slice<u8> {
+    return this.src.slice(this.pos, this.pos + 1);
+  }
+  public move fused(s: &Slice<u8>): Copier {
+    this.src = s;
+    return this;
+  }
+}

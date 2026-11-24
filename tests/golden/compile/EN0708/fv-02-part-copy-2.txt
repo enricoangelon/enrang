@@ -1,0 +1,20 @@
+$ enrang check tests/compile/EN0708/fv-02-part-copy-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `r` can't be read while `a` may write into it
+ --> tests/compile/EN0708/fv-02-part-copy-2.fail.en:5:11
+  |
+4 | const a = r;
+  |           - borrowed for writing here, because `a` writes on line 7
+5 | const b = r; //~ EN0708
+  |           ^ read here
+6 | const e = &b[0];
+7 | a.push(3);
+  | - the write
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `r` before line 4 or after line 7
+  = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

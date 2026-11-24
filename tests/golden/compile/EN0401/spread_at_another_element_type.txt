@@ -1,0 +1,43 @@
+$ enrang check tests/compile/EN0401/spread_at_another_element_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `i64[3]`, found `i64[]`
+ --> tests/compile/EN0401/spread_at_another_element_type.fail.en:4:19
+  |
+4 | const a: i64[3] = [...b]; //~ EN0401
+  |                   ^^^^^^ this is `i64[]`
+  |          ------ `i64[3]` is required by this annotation
+  |
+  = note: a spread builds a growable array, never a fixed one
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: mismatched types: expected `(i64 | null)[]`, found `i64[]`
+ --> tests/compile/EN0401/spread_at_another_element_type.fail.en:5:28
+  |
+5 | const n: (i64 | null)[] = [...xs]; //~ EN0401
+  |                            ^^^^^ the elements of `xs` are `i64`
+  |
+  = note: a spread keeps its elements' type; nothing wraps them in `| null`
+help: spread a converted copy: `...xs.map((x): i64 | null => x)`
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: mismatched types: expected `(i64 | null)[]`, found `i64[]`
+ --> tests/compile/EN0401/spread_at_another_element_type.fail.en:6:31
+  |
+6 | const m: (i64 | null)[] = [0, ...xs]; //~ EN0401
+  |                               ^^^^^ the elements of `xs` are `i64`
+  |
+  = note: a spread keeps its elements' type; nothing wraps them in `| null`
+help: spread a converted copy: `...xs.map((x): i64 | null => x)`
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: mismatched types: expected `int[]`, found `i64[]`
+ --> tests/compile/EN0401/spread_at_another_element_type.fail.en:7:21
+  |
+7 | const both = [...c, ...xs]; //~ EN0401
+  |                     ^^^^^ the elements of `xs` are `i64`
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 4 previous errors

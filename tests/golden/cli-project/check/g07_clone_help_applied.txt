@@ -1,0 +1,4 @@
+$ enrang check g07.en
+[exit 0]
+[stdout]
+[stderr]

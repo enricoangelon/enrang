@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0601/forof-owner-form-no-amp.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `queue` was used up by the loop
+ --> tests/compile/EN0601/forof-owner-form-no-amp.fail.en:4:3
+  |
+2 | let queue = ["a", "b"];
+  |     ----- `queue` owns this `string[]`, which is not Copy
+3 | for (const job of queue) {
+  |                   ----- the loop takes `queue`, because there is no `&`
+4 |   queue.push("retry"); //~ EN0601
+  |   ^^^^^ used here afterwards
+  |
+help: to keep `queue`, borrow it: `for (const job of &queue)`
+  = explain: run `enrang explain EN0601`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,4 @@
+const a = "x".toString();
+const b = a;
+console.log(b);
+console.log(a); //~ EN0601 "`a` was moved into `b`"

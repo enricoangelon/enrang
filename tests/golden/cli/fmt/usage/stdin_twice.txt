@@ -1,0 +1,6 @@
+$ enrang fmt - -
+[exit 2]
+[stdout]
+[stderr]
+error: `-` is standard input, and takes no other path
+usage: enrang fmt [paths] [--check]

@@ -1,0 +1,12 @@
+//! covers: H23
+let p = new P { a: 1, g: [[1, 2], [3, 4]] };
+const r: isize = 1;
+for (const x of &p.g[r]) { //~ EN0804 "reference to the packed field `p.g[r]`, which may be misaligned"
+  console.log(x);
+}
+
+@packed
+public final class P {
+  public a: u8;
+  public g: u32[2][2];
+}

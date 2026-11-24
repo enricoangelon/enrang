@@ -1,0 +1,9 @@
+public final class ByteLexer {
+  private readonly src: readonly &Slice<u8>;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public retarget(s: &Slice<u8>): void {
+    this.src = s; //~ EN0609 "cannot write `this.src`, because it is `readonly`"
+  }
+}

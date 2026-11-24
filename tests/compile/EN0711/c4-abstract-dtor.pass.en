@@ -1,0 +1,24 @@
+{
+  const q = new Sq { side: 2 };
+  console.log(q.describe());
+}
+
+public abstract class Shape {
+  public abstract area(): i64;
+
+  public describe(): string {
+    return `area ${this.area()}`;
+  }
+
+  public destructor() {
+    console.log(`bye, ${this.describe()}`);
+  }
+}
+
+public class Sq extends Shape {
+  public side: i64;
+
+  public override area(): i64 {
+    return this.side * this.side;
+  }
+}

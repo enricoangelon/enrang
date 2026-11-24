@@ -1,0 +1,96 @@
+// Stage 2 sources and through sets (plan d.8 stage 2, d.9; A:1279) and stage 4's
+// first causes (plan d.8 stage 4): a free function's sources are the parameters
+// whose keys reach `_0`; a token read from a reference field holds `Fields(0)`,
+// `through_fields` only while the class's flag is off, and a writable result
+// read from a field sets that flag (A:1338); one read from a `readonly &` field
+// holds `RFields(0)`, `through_read`, read-only by the field (FV-02-finder),
+// while a borrowing class value built from it stays writable (BC-08-readonly);
+// a `&string` source that is Read makes the result a possible string part.
+// MIR shapes: borrows of fields through references (plan c.4, plan.md:913-914;
+// c.5 plan.md:956), field copies through references (d.5's copy row), a named
+// form's `named_fill` then `dest.f = move _t` (plan c.10, plan.md:1070), a
+// reborrow (plan c.6, plan.md:975).
+class Pair {
+  a: i64;
+  b: i64;
+}
+fn pick(_1: &Pair, _2: &Pair, _3: bool) -> &i64 {
+  bb0: {
+    switch copy _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _0 = &(*_1).a [explicit];
+    return;
+  }
+  bb2: {
+    _0 = &(*_2).b [explicit];
+    return;
+  }
+}
+//= fn pick(_1: &Pair, _2: &Pair, _3: bool) -> &i64 perms(read, read) sources(0, 1) moves(0) result writable;
+class Lexer {
+  src: &i64;
+}
+fn Lexer::cur(_1: &Lexer) -> readonly &i64 {
+  bb0: {
+    _0 = copy (*_1).src;
+    return;
+  }
+}
+//= class Lexer
+//= fn Lexer::cur(_1: &Lexer) -> readonly &i64 perms(read) sources(0) through_fields(0) result readonly(declared);
+class Grab {
+  src: &i64;
+}
+fn Grab::cur(_1: &Grab) -> &i64 {
+  bb0: {
+    _0 = copy (*_1).src;
+    return;
+  }
+}
+//= class Grab writes_through_fields
+//= //   flag: returns a writable reference read from its fields
+//= fn Grab::cur(_1: &Grab) -> &i64 perms(read) sources(0) result writable;
+class View {
+  r: readonly &i64;
+}
+class Copier {
+  src: readonly &i64;
+  dst: &i64;
+}
+fn Copier::peek(_1: &Copier) -> &i64 {
+  bb0: {
+    _0 = copy (*_1).src;
+    return;
+  }
+}
+//= fn Copier::peek(_1: &Copier) -> &i64 perms(read) sources(0) through_read(0) result readonly(readonly_field Copier.src);
+fn Copier::view(_1: &Copier) -> View {
+  let _2: &i64 temp;
+  let _3: *View temp;
+  let _4: void temp;
+  bb0: {
+    _2 = copy (*_1).src;
+    _3 = addr_of _0;
+    _4 = named_fill View leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _0.r = move _2;
+    return;
+  }
+}
+//= fn Copier::view(_1: &Copier) -> View perms(read) sources(0) through_read(0) result writable;
+fn trim(_1: &string) -> &string {
+  bb0: {
+    _0 = &*_1 [reborrow];
+    return;
+  }
+}
+//= fn trim(_1: &string) -> &string perms(read) sources(0) result readonly(string_part);
+fn grow(let _1: &string) -> &string {
+  bb0: {
+    _0 = &*_1 [reborrow];
+    return;
+  }
+}
+//= fn grow(let _1: &string) -> &string perms(write) sources(0) result writable;

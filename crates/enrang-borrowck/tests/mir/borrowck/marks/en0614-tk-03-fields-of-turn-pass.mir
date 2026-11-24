@@ -1,0 +1,227 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/tk-03-fields-of-turn.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/tk-03-fields-of-turn.pass";
+class Pair {
+  a: i64[];
+  b: i64[];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Pair[]; // ps1
+  let _3: Pair temp;
+  let _4: i64[] temp;
+  let _5: i64[] temp;
+  let _6: *Pair temp;
+  let _7: void temp;
+  let _8: [&i64[], &i64[]] | null; // r
+  let _9: &Pair[] temp;
+  let _10: &Slice<Pair> temp;
+  let _11: bool temp;
+  let _12: u32 temp;
+  let _13: void temp;
+  let _14: &i64[] temp;
+  let _15: &i64[] temp;
+  let mut _16: [i64[], i64[]][]; // ps2
+  let _17: i64[] temp;
+  let _18: i64[] temp;
+  let _19: [i64[], i64[]] temp;
+  let _20: [&i64[], &i64[]] | null; // r2
+  let _21: &[i64[], i64[]][] temp;
+  let _22: &Slice<[i64[], i64[]]> temp;
+  let _23: bool temp;
+  let _24: u32 temp;
+  let _25: void temp;
+  let _26: &i64[] temp;
+  let _27: &i64[] temp;
+  fact f0: _8 nonnull;
+  fact f1: _20 nonnull;
+  use f0 at bb3[0];
+  use f0 at bb3[2];
+  use f1 at bb7[0];
+  use f1 at bb7[2];
+  test f0 at bb3;
+  test f1 at bb7;
+  bb0: {
+    storage_live(_2);
+    _4 = intrinsic AllocArray<i64>(const 1: i64);
+    _5 = intrinsic AllocArray<i64>(const 2: i64);
+    _6 = addr_of _3;
+    _7 = named_fill Pair leaving()(move _6) -> bb1;
+  }
+  bb1: {
+    _3.a = move _4;
+    _3.b = move _5;
+    _2 = intrinsic AllocArray<Pair>(move _3);
+    drop(_5);
+    storage_dead(_5);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_8);
+    _9 = &_2 [explicit];
+    _10 = convert(array_to_slice, move _9);
+    _8 = firstFields(move _10) -> bb2;
+  }
+  bb2: {
+    _12 = discriminant(_8);
+    _11 = ne(move _12, const 0: u32);
+    switch move _11 [0: bb4, otherwise: bb3];
+  }
+  bb3: {
+    check_tag(_8, Present);
+    _14 = &*(_8 as Present).0.0 [auto-borrow];
+    check_tag(_8, Present);
+    _15 = &*(_8 as Present).0.1 [auto-borrow];
+    _13 = form log(move _14, move _15) -> bb5;
+  }
+  bb4: {
+    storage_live(_16);
+    _17 = intrinsic AllocArray<i64>(const 1: i64);
+    _18 = intrinsic AllocArray<i64>(const 2: i64);
+    _19 = tuple(move _17, move _18);
+    _16 = intrinsic AllocArray<[i64[], i64[]]>(move _19);
+    drop(_19);
+    storage_dead(_19);
+    drop(_18);
+    storage_dead(_18);
+    drop(_17);
+    storage_dead(_17);
+    storage_live(_20);
+    _21 = &_16 [explicit];
+    _22 = convert(array_to_slice, move _21);
+    _20 = firstDestructured(move _22) -> bb6;
+  }
+  bb5: {
+    goto bb4;
+  }
+  bb6: {
+    _24 = discriminant(_20);
+    _23 = ne(move _24, const 0: u32);
+    switch move _23 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    check_tag(_20, Present);
+    _26 = &*(_20 as Present).0.0 [auto-borrow];
+    check_tag(_20, Present);
+    _27 = &*(_20 as Present).0.1 [auto-borrow];
+    _25 = form log(move _26, move _27) -> bb9;
+  }
+  bb8: {
+    storage_dead(_20);
+    drop(_16);
+    storage_dead(_16);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb9: {
+    goto bb8;
+  }
+}
+
+fn firstDestructured(_1: &Slice<[i64[], i64[]]>) -> [&i64[], &i64[]] | null {
+  let _1: &Slice<[i64[], i64[]]>; // ps
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &[i64[], i64[]] temp;
+  let _6: &i64[]; // k
+  let _7: &i64[]; // v
+  let _8: &i64[] temp;
+  let _9: &i64[] temp;
+  let _10: [&i64[], &i64[]] temp;
+  loop l0: path *_1 preheader bb5 head bb1 bind bb2[2] binding _5;
+  bb0: {
+    goto bb5;
+  }
+  bb1: {
+    _3 = len(*_1);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &(*_1)[_2] [for-of-element];
+    _2 = add(copy _2, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _0 = null;
+    return;
+  }
+  bb5: {
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    storage_live(_6);
+    _6 = &(*_5).0 [destructure];
+    storage_live(_7);
+    _7 = &(*_5).1 [destructure];
+    _8 = &*_6 [reborrow];
+    _9 = &*_7 [reborrow];
+    _10 = tuple(move _8, move _9);
+    _0 = present(move _10);
+    storage_dead(_7);
+    storage_dead(_6);
+    storage_dead(_5);
+    return;
+  }
+}
+
+fn firstFields(_1: &Slice<Pair>) -> [&i64[], &i64[]] | null {
+  let _1: &Slice<Pair>; // ps
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &Pair; // p
+  let _6: &i64[] temp;
+  let _7: &i64[] temp;
+  let _8: [&i64[], &i64[]] temp;
+  loop l0: path *_1 preheader bb5 head bb1 bind bb2[2] binding _5;
+  bb0: {
+    goto bb5;
+  }
+  bb1: {
+    _3 = len(*_1);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &(*_1)[_2] [for-of-element];
+    _2 = add(copy _2, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _0 = null;
+    return;
+  }
+  bb5: {
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _6 = &(*_5).a [explicit];
+    _7 = &(*_5).b [explicit];
+    _8 = tuple(move _6, move _7);
+    _0 = present(move _8);
+    storage_dead(_5);
+    return;
+  }
+}

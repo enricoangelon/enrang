@@ -1,0 +1,14 @@
+//! row: Source `q: &T[]`: `grow(q)` with a `grow
+public function pushes(q: &i64[]): void {
+  for (const x of q) {
+    grow(q); //~ EN0706
+  }
+}
+
+public function clears(q: &i64[]): void {
+  for (const x of q) {
+    *q = []; //~ EN0706
+  }
+}
+
+private function grow(v: &i64[]): void { v.push(1); }

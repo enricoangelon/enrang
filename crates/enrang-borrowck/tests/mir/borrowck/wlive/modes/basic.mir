@@ -1,0 +1,67 @@
+// Modes (plan d.7): a borrow is exclusive iff the slot it fills is write-live
+// right after it. N3's rule (a) (a write through it, by an intrinsic's or a
+// call's destination too), rule (c) (a reborrow into a slot written through), a
+// repoint ending write-liveness, a compound target's `Append` (Write parameter
+// 0, D19), and a borrowing class value that is never write-live itself.
+// MIR shapes: explicit borrows and reborrows (plan c.5 plan.md:956, c.6
+// plan.md:975), the compound target `_p = &place [compound-target]` then `form
+// append(move _p, ..)` (plan c.8, plan.md:1041), a named form's `named_fill`
+// over `addr_of dest` then `dest.f = move _t` (plan c.10, plan.md:1070).
+fn id(_1: i64) -> i64;
+class View {
+  r: &i64;
+}
+fn View::touch(let _1: &View) -> void;
+fn basic() -> void {
+  let mut _1: i64; // x
+  let _2: i64 temp;
+  let _3: &i64; // r
+  let _4: &i64; // s
+  let mut _5: &i64; // t
+  let mut _6: usize; // n
+  let _7: &usize; // u
+  let _8: &i64; // c
+  let mut _9: string; // w
+  let _10: &string temp;
+  let _11: void temp;
+  let mut _12: View; // v
+  let _13: *View temp;
+  let _14: &i64 temp;
+  let _15: &View temp;
+  bb0: {
+    _1 = const 0: i64;
+    _6 = const 0: usize;
+    _3 = &_1 [explicit]; // exclusive
+    *_3 = const 1: i64;
+    _4 = &_1 [explicit]; // shared
+    _2 = copy *_4;
+    _5 = &_1 [explicit]; // shared
+    _5 = &_1 [explicit]; // exclusive
+    *_5 = const 2: i64;
+    _7 = &_6 [explicit]; // exclusive
+    *_7 = intrinsic SizeOf<i64>();
+    _3 = &_1 [explicit]; // exclusive
+    *_3 = id(const 3: i64) -> bb1;
+  }
+  bb1: {
+    _8 = &_1 [explicit]; // exclusive
+    _4 = &*_8 [reborrow]; // exclusive
+    *_4 = const 4: i64;
+    _9 = const "a": string;
+    _10 = &_9 [compound-target]; // exclusive
+    _11 = form append(move _10, const "b": &string) -> bb2;
+  }
+  bb2: {
+    _13 = addr_of _12;
+    _11 = named_fill View leaving()(move _13) -> bb3;
+  }
+  bb3: {
+    _14 = &_1 [explicit]; // shared
+    _12.r = move _14;
+    _15 = &_12 [auto-borrow]; // exclusive
+    _11 = View::touch(move _15) -> bb4;
+  }
+  bb4: {
+    return;
+  }
+}

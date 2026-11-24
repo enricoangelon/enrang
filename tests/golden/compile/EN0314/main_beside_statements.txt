@@ -1,0 +1,11 @@
+$ enrang check tests/compile/EN0314/main_beside_statements.fail.en
+[exit 0]
+[stdout]
+[stderr]
+warning[EN0314]: `main` beside top-level statements is not the entry point
+ --> tests/compile/EN0314/main_beside_statements.fail.en:3:18
+  |
+3 | private function main(): void { //~ EN0314 "`main` beside top-level statements is not the entry point"
+  |                  ^^^^ the top-level statements run instead
+  |
+help: call `main()` from the statements, or move the statements into `main`

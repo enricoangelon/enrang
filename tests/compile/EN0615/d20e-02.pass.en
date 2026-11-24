@@ -1,0 +1,55 @@
+let source: string = "abc";
+let lx = new Lexer(&source);
+const tmp = "x" + "y";
+const f: fn(let lx: &Lexer, s: &string) => void = show;
+f(&lx, &tmp);
+
+private function show(lx: &Lexer, s: &string): void {
+  console.log(lx.next(), s);
+}
+
+public interface Sink {
+  let put(s: &string): void;
+}
+
+private class Keeper implements Sink {
+  private r: &string;
+  private n: isize = 0;
+
+  public constructor(r: &string) { this.r = r; }
+
+  public put(s: &string): void { this.n = s.length(); }
+}
+
+public abstract class Attachable {
+  public abstract attach(s: &string): void;
+}
+
+private class Tag extends Attachable {
+  private label: &string;
+
+  public constructor(label: &string) {
+    this.label = label;
+    super();
+  }
+
+  public override attach(s: &string): void {
+    console.log(this.label, s);
+  }
+}
+
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();
+    return this.src.slice(start, this.pos);
+  }
+
+  public setSrc(s: &string): void { this.src = s; }
+}

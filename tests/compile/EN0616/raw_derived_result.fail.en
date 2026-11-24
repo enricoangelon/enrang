@@ -1,0 +1,11 @@
+const a = cell(0);
+*a = 7; //~ EN0616
+
+private unsafe let cells: u16[4];
+
+public function cell(i: isize): &u16 {
+  unsafe {
+    const p = &cells[0] as *u16;
+    return &*p.add(i);
+  }
+}

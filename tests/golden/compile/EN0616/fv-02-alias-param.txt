@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0616/fv-02-alias-param.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `src` is declared `readonly &`, so it can't hold a reference from `dst`
+  --> tests/compile/EN0616/fv-02-alias-param.fail.en:30:5
+   |
+30 |     w.src = p; //~ EN0616 "`src` is declared `readonly &`, so it can't hold a reference from `dst`"
+   |     ^^^^^^^^^ stored here
+   |
+help: store a reference from a parameter, or from another `readonly &` field
+   = explain: run `enrang explain EN0616`
+
+error[EN0709]: cannot move `w` while it is borrowed
+  --> tests/compile/EN0616/fv-02-alias-param.fail.en:31:12
+   |
+29 |     const p = w.dst;
+   |               ----- shared borrow of `w` starts here
+30 |     w.src = p; //~ EN0616 "`src` is declared `readonly &`, so it can't hold a reference from `dst`"
+31 |     return w; //~ EN0709
+   |            ^ `w` moves here
+   |
+help: move `w` after its last borrow
+   = explain: run `enrang explain EN0709`
+
+error: aborting due to 2 previous errors

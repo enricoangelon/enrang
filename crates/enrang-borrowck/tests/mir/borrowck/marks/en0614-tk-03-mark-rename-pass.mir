@@ -1,0 +1,326 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/tk-03-mark-rename.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/tk-03-mark-rename.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[][][]; // cube
+  let _3: i64[][] temp;
+  let _4: i64[] temp;
+  let _5: i64[] temp;
+  let _6: i64[][] temp;
+  let _7: i64[] temp;
+  let _8: i64[] temp;
+  let _9: i64[][] temp;
+  let _10: i64[] temp;
+  let _11: [&i64[], &i64[]] | null; // p
+  let _12: &i64[][][] temp;
+  let _13: &Slice<i64[][]> temp;
+  let _14: bool temp;
+  let _15: u32 temp;
+  let _16: &i64[]; // p0
+  let _17: &i64[]; // p1
+  let _18: &i64; // f
+  let _19: isize temp;
+  let _20: isize temp;
+  let _21: void temp;
+  let _22: &i64 temp;
+  let _23: &i64[] temp;
+  fact f0: _11 nonnull;
+  use f0 at bb2[1];
+  use f0 at bb2[4];
+  test f0 at bb2;
+  bb0: {
+    storage_live(_2);
+    _4 = intrinsic AllocArray<i64>(const 1: i64);
+    _5 = intrinsic AllocArray<i64>(const 2: i64);
+    _3 = intrinsic AllocArray<i64[]>(move _4, move _5);
+    _7 = intrinsic AllocArray<i64>(const 3: i64);
+    _8 = intrinsic AllocArray<i64>(const 5: i64);
+    _6 = intrinsic AllocArray<i64[]>(move _7, move _8);
+    _10 = intrinsic AllocArray<i64>(const 4: i64);
+    _9 = intrinsic AllocArray<i64[]>(move _10);
+    _2 = intrinsic AllocArray<i64[][]>(move _3, move _6, move _9);
+    drop(_9);
+    storage_dead(_9);
+    drop(_10);
+    storage_dead(_10);
+    drop(_6);
+    storage_dead(_6);
+    drop(_8);
+    storage_dead(_8);
+    drop(_7);
+    storage_dead(_7);
+    drop(_3);
+    storage_dead(_3);
+    drop(_5);
+    storage_dead(_5);
+    drop(_4);
+    storage_dead(_4);
+    storage_live(_11);
+    _12 = &_2 [explicit];
+    _13 = convert(array_to_slice, move _12);
+    _11 = deepR(move _13) -> bb1;
+  }
+  bb1: {
+    _15 = discriminant(_11);
+    _14 = ne(move _15, const 0: u32);
+    switch move _14 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_16);
+    check_tag(_11, Present);
+    _16 = copy (_11 as Present).0.0;
+    storage_live(_17);
+    check_tag(_11, Present);
+    _17 = copy (_11 as Present).0.1;
+    storage_live(_18);
+    _19 = const 0: isize;
+    _20 = len(*_16);
+    check_bounds(copy _19, copy _20);
+    _18 = &(*_16)[_19] [explicit];
+    _22 = &*_18 [auto-borrow];
+    _23 = &*_17 [auto-borrow];
+    _21 = form log(move _22, move _23) -> bb4;
+  }
+  bb3: {
+    storage_dead(_11);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb4: {
+    storage_dead(_18);
+    storage_dead(_17);
+    storage_dead(_16);
+    goto bb3;
+  }
+}
+
+fn deepR(_1: &Slice<i64[][]>) -> [&i64[], &i64[]] | null {
+  let _1: &Slice<i64[][]>; // rows
+  let mut _2: &i64[] | null; // a
+  let mut _3: &i64[] | null; // b
+  let mut _4: &i64[][] | null; // keep
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64[][]; // x
+  let _9: bool temp;
+  let _10: bool temp;
+  let _11: u32 temp;
+  let _12: u32 temp;
+  let _13: &i64[] temp;
+  let _14: &i64[] temp;
+  let _15: [&i64[], &i64[]] temp;
+  let _16: bool temp;
+  let _17: u32 temp;
+  let _18: &i64[][]; // k
+  let _19: &i64[][] temp;
+  let mut _20: bool; // c
+  let mut _21: &i64[] | null; // prev
+  let mut _22: int; // n
+  let _23: &i64[][] temp;
+  let _24: bool temp;
+  let _25: &i64[][] temp;
+  let _26: &i64[][] temp;
+  let _27: &i64[][] #src;
+  let _28: isize #i;
+  let _29: isize #n;
+  let _30: bool temp;
+  let _31: &i64[]; // z
+  let _32: bool temp;
+  let _33: &i64[] temp;
+  let _34: &i64[] temp;
+  let _35: bool temp;
+  let _36: &i64[] temp;
+  let _37: isize temp;
+  let _38: isize temp;
+  let _39: int temp;
+  let _40: &i64[][] temp;
+  loop l0: path *_1 preheader bb5 head bb1 bind bb2[2] binding _8;
+  loop l1: once _27 preheader bb21 head bb14 bind bb15[2] binding _31;
+  fact f0: _2 nonnull;
+  fact f1: _3 nonnull;
+  fact f2: _4 nonnull;
+  use f0 at bb7[0];
+  use f1 at bb7[2];
+  use f2 at bb12[1];
+  test f0 at bb9;
+  test f0 at bb7;
+  test f1 at bb7;
+  test f2 at bb12;
+  bb0: {
+    storage_live(_2);
+    _2 = null;
+    storage_live(_3);
+    _3 = null;
+    storage_live(_4);
+    _4 = null;
+    goto bb5;
+  }
+  bb1: {
+    _6 = len(*_1);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_1)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _0 = null;
+    storage_dead(_4);
+    storage_dead(_3);
+    storage_dead(_2);
+    return;
+  }
+  bb5: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _11 = discriminant(_2);
+    _10 = ne(move _11, const 0: u32);
+    switch copy _10 [0: bb10, otherwise: bb9];
+  }
+  bb7: {
+    check_tag(_2, Present);
+    _13 = &*(_2 as Present).0 [reborrow];
+    check_tag(_3, Present);
+    _14 = &*(_3 as Present).0 [reborrow];
+    _15 = tuple(move _13, move _14);
+    _0 = present(move _15);
+    storage_dead(_8);
+    storage_dead(_4);
+    storage_dead(_3);
+    storage_dead(_2);
+    return;
+  }
+  bb8: {
+    _17 = discriminant(_4);
+    _16 = ne(move _17, const 0: u32);
+    switch move _16 [0: bb13, otherwise: bb12];
+  }
+  bb9: {
+    _12 = discriminant(_3);
+    _9 = ne(move _12, const 0: u32);
+    goto bb11;
+  }
+  bb10: {
+    _9 = copy _10;
+    goto bb11;
+  }
+  bb11: {
+    switch move _9 [0: bb8, otherwise: bb7];
+  }
+  bb12: {
+    storage_live(_18);
+    check_tag(_4, Present);
+    _19 = &*(_4 as Present).0 [reborrow];
+    _18 = move _19;
+    _2 = null;
+    _3 = null;
+    storage_live(_20);
+    _20 = const false: bool;
+    storage_live(_21);
+    _21 = null;
+    storage_live(_22);
+    _22 = const 0: int;
+    _24 = copy _20;
+    switch move _24 [0: bb19, otherwise: bb18];
+  }
+  bb13: {
+    _40 = &*_8 [reborrow];
+    _4 = present(move _40);
+    storage_dead(_8);
+    goto bb3;
+  }
+  bb14: {
+    _29 = len(*_27);
+    _30 = lt(copy _28, copy _29);
+    switch move _30 [0: bb17, otherwise: bb15];
+  }
+  bb15: {
+    storage_live(_31);
+    check_bounds(copy _28, copy _29);
+    _31 = &(*_27)[_28] [for-of-element];
+    _28 = add(copy _28, const 1: isize);
+    goto bb22;
+  }
+  bb16: {
+    goto bb14;
+  }
+  bb17: {
+    storage_dead(_22);
+    storage_dead(_21);
+    storage_dead(_20);
+    storage_dead(_18);
+    goto bb13;
+  }
+  bb18: {
+    _25 = &*_8 [reborrow];
+    _23 = move _25;
+    goto bb20;
+  }
+  bb19: {
+    _26 = &*_18 [reborrow];
+    _23 = move _26;
+    goto bb20;
+  }
+  bb20: {
+    _27 = move _23;
+    goto bb21;
+  }
+  bb21: {
+    storage_live(_28);
+    _28 = const 0: isize;
+    goto bb14;
+  }
+  bb22: {
+    _32 = eq(copy _22, const 0: int);
+    switch move _32 [0: bb25, otherwise: bb23];
+  }
+  bb23: {
+    _33 = &*_31 [reborrow];
+    _21 = present(move _33);
+    goto bb24;
+  }
+  bb24: {
+    _39 = copy _22;
+    _22 = checked_add(copy _39, const 1: int);
+    storage_dead(_31);
+    goto bb16;
+  }
+  bb25: {
+    _3 = copy _21;
+    _35 = copy _20;
+    switch move _35 [0: bb27, otherwise: bb26];
+  }
+  bb26: {
+    _36 = &*_31 [reborrow];
+    _34 = move _36;
+    goto bb28;
+  }
+  bb27: {
+    _37 = const 0: isize;
+    _38 = len(*_18);
+    check_bounds(copy _37, copy _38);
+    _34 = &(*_18)[_37] [explicit];
+    goto bb28;
+  }
+  bb28: {
+    _2 = present(move _34);
+    storage_dead(_31);
+    goto bb17;
+  }
+}

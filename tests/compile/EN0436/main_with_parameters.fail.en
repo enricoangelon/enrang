@@ -1,0 +1,3 @@
+public function main(args: string[]): void { //~ EN0436 "`main` takes no parameters"
+  console.log(args.length());
+}

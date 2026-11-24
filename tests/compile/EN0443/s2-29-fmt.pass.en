@@ -1,0 +1,27 @@
+const rex = new Dog("Rex");
+console.log(rex);
+const a: &Animal = &rex;
+console.log(a);
+console.log(rex.toString());
+const max = new Pup("Max");
+console.log(max);
+
+public class Animal {
+  public constructor(public name: string) {}
+
+  public fmt(let f: &Formatter): void { writeTo(f, `animal ${this.name}`); }
+}
+
+public class Dog extends Animal {
+  public tricks: i64 = 3;
+}
+
+public class Plain {
+  public constructor(public name: string) {}
+}
+
+public class Pup extends Plain {
+  public tricks: i64 = 3;
+
+  public fmt(let f: &Formatter): void { writeTo(f, `dog ${this.name}`); }
+}

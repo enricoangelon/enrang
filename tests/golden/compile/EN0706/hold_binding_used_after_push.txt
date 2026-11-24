@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/hold_binding_used_after_push.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `q` cannot change while `x` still points into it
+ --> tests/compile/EN0706/hold_binding_used_after_push.fail.en:4:3
+  |
+3 | for (const x of &q) {
+  |                  - shared borrow of `q` starts here, held by `x`
+4 |   q.push(1); //~ EN0706 "`q` cannot change while `x` still points into it"
+  |   ^^^^^^^^^ `push` changes `q`, so it needs exclusive access to it
+5 |   console.log(x);
+  |               - `x` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

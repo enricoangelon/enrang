@@ -1,0 +1,23 @@
+//! row: Under `p != null`: `for (const x of &p) { if (c) { b
+public function plainBreak(c: bool, d: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) { if (d) { break; } }
+    console.log(p.length());
+  }
+}
+
+public function returns(c: bool, d: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) { if (d) { p = null; return; } }
+    console.log(p.length());
+  }
+}
+
+public function breakOuter(c: bool, d: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    outer: for (const a of &p) { for (const x of &p) { if (d) { p = null; break outer; } } console.log(p.length()); }
+  }
+}

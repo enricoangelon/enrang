@@ -1,0 +1,23 @@
+//! target: x86_64-windows
+private unsafe function poke(p: *u8, v: u8): void {}
+
+@requires("cmov") private function pick(p: *u8, v: u8): void {}
+
+@dll("kernel32") private declare function Beep(p: *u8, v: u8): void;
+
+@naked private unsafe function stub(p: *u8, v: u8): void {
+  asm("ret");
+}
+
+private function run(f: (p: *u8, v: u8) => void): void {}
+
+public function wire(): void {
+  const a: fn(p: *u8, v: u8) => void = poke; //~ EN0803 "`poke` is an `unsafe function`, so it can't become a safe `fn`"
+  run(poke); //~ EN0803 "`poke` is an `unsafe function`, so it can't become a closure"
+  const b: fn(p: *u8, v: u8) => void = pick; //~ EN0803 "`pick` has `@requires`, so it can't become a safe `fn`"
+  run(pick); //~ EN0803 "`pick` has `@requires`, so it can't become a closure"
+  const c: fn(p: *u8, v: u8) => void = Beep; //~ EN0803 "`Beep` is a `declare function`, so it can't become a safe `fn`"
+  run(Beep); //~ EN0803 "`Beep` is a `declare function`, so it can't become a closure"
+  const d: fn(p: *u8, v: u8) => void = stub; //~ EN0803 "`stub` is `@naked`, so it can't become a safe `fn`"
+  run(stub); //~ EN0803 "`stub` is `@naked`, so it can't become a closure"
+}

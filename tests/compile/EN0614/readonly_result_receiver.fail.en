@@ -1,0 +1,9 @@
+let s = new Stack();
+s.view().push(99); //~ EN0614 "`view` returns a read-only reference, so `push` cannot change it"
+
+public class Stack {
+  private items: i64[] = [1, 2];
+  public view(): readonly &i64[] {
+    return &this.items;
+  }
+}

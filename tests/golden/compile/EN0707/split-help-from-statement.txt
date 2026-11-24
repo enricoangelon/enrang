@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN0707/split-help-from-statement.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: `s` can't be borrowed for writing while the assignment to it waits
+ --> tests/compile/EN0707/split-help-from-statement.fail.en:2:46
+  |
+2 |   let s: string = "a".toString(); s += reset(&s); console.log(s); //~ EN0707
+  |                                              ^^ exclusive borrow while the assignment waits to store
+  |                                   -------------- the assignment reserves `s` here
+  |
+help: run the right side first: `const r = reset(&s); s += r;`
+  = explain: run `enrang explain EN0707`
+
+error[EN0707]: `s` can't be borrowed for writing while the assignment to it waits
+ --> tests/compile/EN0707/split-help-from-statement.fail.en:7:14
+  |
+7 |   s += reset(&s); //~ EN0707
+  |              ^^ exclusive borrow while the assignment waits to store
+  |   -------------- the assignment reserves `s` here
+  |
+help: run the right side first: `const r = reset(&s); s += r;`
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0405/index_of_float.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0405]: an index must be an integer, found `f64`
+ --> tests/compile/EN0405/index_of_float.fail.en:3:16
+  |
+3 | console.log(xs[at]); //~ EN0405 "an index must be an integer, found `f64`"
+  |                ^^ this is `f64`
+  |
+  = explain: run `enrang explain EN0405`
+
+error[EN0405]: an index must be an integer, found `string`
+ --> tests/compile/EN0405/index_of_float.fail.en:4:16
+  |
+4 | console.log(xs["1"]); //~ EN0405 "an index must be an integer, found `string`"
+  |                ^^^ this is `string`
+  |
+  = explain: run `enrang explain EN0405`
+
+error: aborting due to 2 previous errors

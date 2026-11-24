@@ -1,0 +1,24 @@
+{
+  const d = new Dog(new Person("Ada"));
+}
+console.log("end");
+
+public class Person {
+  public constructor(public name: string) {}
+
+  public destructor() {
+    console.log(`bye ${this.name}`);
+  }
+}
+
+public class Animal {
+  protected owner: Person;
+
+  public constructor(o: Person) {
+    this.owner = o;
+  }
+}
+
+public class Dog extends Animal {
+  protected override owner: Person = new Person("nobody");
+}

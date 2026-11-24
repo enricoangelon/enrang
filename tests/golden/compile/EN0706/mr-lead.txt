@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0706/mr-lead.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `msg` cannot change while `r` still points into it
+ --> tests/compile/EN0706/mr-lead.fail.en:3:21
+  |
+2 | const r = &msg;
+  |           ---- shared borrow of `msg` starts here, held by `r`
+3 | let sink = new Sink(&msg); //~ EN0706
+  |                     ^^^^ `msg` changes here
+4 | sink.add("b");
+5 | console.log(r);
+  |             - `r` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: keep a copy instead of a reference
+  |
+2 | const r = msg.clone();
+  |           ~~~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error[EN0616]: cannot change a string literal
+ --> tests/compile/EN0706/mr-lead.fail.en:6:20
+  |
+6 | const k = new Sink("literal"); //~ EN0616
+  |                    ^^^^^^^^^ `new Sink` writes through it
+  |
+help: copy it first: `.toString()`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 2 previous errors

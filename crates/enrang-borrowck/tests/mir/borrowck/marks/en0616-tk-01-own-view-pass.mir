@@ -1,0 +1,212 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/tk-01-own-view.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/tk-01-own-view.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Holder {
+  private view: &i64[];
+  private own: i64[] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // data
+  let mut _3: Holder; // h
+  let _4: &i64[] temp;
+  let _5: &Holder temp;
+  let _6: void temp;
+  let _7: [&i64[], &i64] temp;
+  let _8: &Holder temp;
+  let _9: &i64[]; // o
+  let _10: &i64; // e
+  let _11: void temp;
+  let _12: &i64[] temp;
+  let _13: void temp;
+  let _14: &i64[] temp;
+  let _15: &i64 temp;
+  let _16: void temp;
+  let _17: &i64[] temp;
+  let mut _18: i64[]; // data2
+  let mut _19: Holder; // h2
+  let _20: &i64[] temp;
+  let _21: &Holder temp;
+  let _22: void temp;
+  let _23: [&i64[], &i64[]] temp;
+  let _24: &Holder temp;
+  let _25: &i64[]; // o2
+  let _26: &i64[]; // v2
+  let _27: void temp;
+  let _28: &i64[] temp;
+  let _29: void temp;
+  let _30: &i64[] temp;
+  let _31: void temp;
+  let _32: &i64[] temp;
+  let _33: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    storage_live(_3);
+    set_table(_3, Holder);
+    _4 = &_2 [explicit];
+    _5 = &_3 [auto-borrow];
+    _6 = Holder::#ctor(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    _8 = &_3 [auto-borrow];
+    _7 = Holder::both(move _8) -> bb2;
+  }
+  bb2: {
+    storage_live(_9);
+    _9 = copy _7.0;
+    storage_live(_10);
+    _10 = copy _7.1;
+    _12 = &*_9 [reborrow];
+    _11 = "alloc/array"::Array<i64>::push(move _12, const 3: i64) -> bb3;
+  }
+  bb3: {
+    *_10 = const 9: i64;
+    _14 = &*_9 [auto-borrow];
+    _15 = &*_10 [auto-borrow];
+    _13 = form log(move _14, move _15) -> bb4;
+  }
+  bb4: {
+    _17 = &_2 [auto-borrow];
+    _16 = form log(move _17) -> bb5;
+  }
+  bb5: {
+    storage_live(_18);
+    _18 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    storage_live(_19);
+    set_table(_19, Holder);
+    _20 = &_18 [explicit];
+    _21 = &_19 [auto-borrow];
+    _22 = Holder::#ctor(move _21, move _20) -> bb6;
+  }
+  bb6: {
+    _24 = &_19 [auto-borrow];
+    _23 = Holder::pair(move _24) -> bb7;
+  }
+  bb7: {
+    storage_live(_25);
+    _25 = copy _23.0;
+    storage_live(_26);
+    _26 = copy _23.1;
+    _28 = &*_25 [reborrow];
+    _27 = "alloc/array"::Array<i64>::push(move _28, const 3: i64) -> bb8;
+  }
+  bb8: {
+    _30 = &*_26 [reborrow];
+    _29 = "alloc/array"::Array<i64>::push(move _30, const 4: i64) -> bb9;
+  }
+  bb9: {
+    _32 = &*_25 [auto-borrow];
+    _33 = &*_26 [auto-borrow];
+    _31 = form log(move _32, move _33) -> bb10;
+  }
+  bb10: {
+    storage_dead(_26);
+    storage_dead(_25);
+    drop(_19);
+    storage_dead(_19);
+    drop(_18);
+    storage_dead(_18);
+    storage_dead(_10);
+    storage_dead(_9);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Holder::#ctor(_1: &Holder, _2: &i64[]) -> void {
+  let _1: &Holder; // this
+  let _2: &i64[]; // v
+  let _3: i64[] temp;
+  let _4: &i64[] temp;
+  bb0: {
+    switch const overridden(own): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _4 = &*_2 [reborrow];
+    (*_1).view = move _4;
+    return;
+  }
+  bb2: {
+    _3 = intrinsic AllocArray<i64>();
+    field_init((*_1).own, move _3);
+    drop(_3);
+    storage_dead(_3);
+    goto bb1;
+  }
+}
+
+fn Holder::both(_1: &Holder) -> [&i64[], &i64] {
+  let _1: &Holder; // this
+  let _2: &i64[] temp;
+  let _3: isize temp;
+  let _4: isize temp;
+  let _5: &i64 temp;
+  bb0: {
+    _2 = &(*_1).own [explicit];
+    _3 = const 0: isize;
+    _4 = len(*(*_1).view);
+    check_bounds(copy _3, copy _4);
+    _5 = &(*(*_1).view)[_3] [explicit];
+    _0 = tuple(move _2, move _5);
+    return;
+  }
+}
+
+fn Holder::pair(_1: &Holder) -> [&i64[], &i64[]] {
+  let _1: &Holder; // this
+  let _2: &i64[] temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _2 = &(*_1).own [explicit];
+    _3 = copy (*_1).view;
+    _0 = tuple(move _2, move _3);
+    return;
+  }
+}
+
+fn Holder::pick(_1: &Holder, _2: bool) -> [&i64[], &i64] {
+  let _1: &Holder; // this
+  let _2: bool; // c
+  let _3: &i64[]; // p
+  let _4: bool temp;
+  let _5: &i64[] temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  let _8: &i64 temp;
+  bb0: {
+    storage_live(_3);
+    _4 = copy _2;
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &(*_1).own [explicit];
+    goto bb3;
+  }
+  bb2: {
+    _3 = copy (*_1).view;
+    goto bb3;
+  }
+  bb3: {
+    _5 = &*_3 [reborrow];
+    _6 = const 0: isize;
+    _7 = len(*(*_1).view);
+    check_bounds(copy _6, copy _7);
+    _8 = &(*(*_1).view)[_6] [explicit];
+    _0 = tuple(move _5, move _8);
+    storage_dead(_3);
+    return;
+  }
+}

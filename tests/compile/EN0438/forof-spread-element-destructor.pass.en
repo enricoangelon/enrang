@@ -1,0 +1,8 @@
+//! row: Elements: a class with a destructor and 
+public class Handle {
+  public n: i64 = 0;
+  public destructor() { console.log("close"); }
+  public clone(): Handle { return new Handle { n: this.n }; }
+}
+
+public function handles(xs: &Handle[]): Handle[] { return [...xs]; }

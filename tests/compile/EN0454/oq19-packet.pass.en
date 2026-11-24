@@ -1,0 +1,61 @@
+report(packet());
+report(disk());
+report(written());
+
+private function report(r: Result<u8>): void {
+  match (r) {
+    Ok => console.log(`${r.value}`),
+    Err => console.log(`${r.error}`),
+  }
+}
+
+private function packet(): Result<u8> {
+  const v = readPacket()?;
+  return v;
+}
+
+private function disk(): Result<u8> {
+  const v = readDisk()?;
+  return v;
+}
+
+private function written(): Result<u8> {
+  const v = readWritten()?;
+  return v;
+}
+
+private function readPacket(): Result<u8, PacketError> {
+  return Err(PacketError.BadHeader { header: new Header { len: 3, flags: 0 } });
+}
+
+private function readDisk(): Result<u8, DiskError> {
+  return Err(DiskError.BadSector { lba: 42 });
+}
+
+private function readWritten(): Result<u8, WrittenError> {
+  return Err(WrittenError.BadHeader { header: new WrittenHeader { len: 3, flags: 0 } });
+}
+
+public class Header {
+  public len: u16;
+  public flags: u8;
+}
+
+public class WrittenHeader {
+  public len: u16;
+  public flags: u8;
+
+  public fmt(let f: &Formatter): void { writeTo(f, `len ${this.len}`); }
+}
+
+public enum PacketError {
+  BadHeader { header: Header },
+}
+
+public enum WrittenError {
+  BadHeader { header: WrittenHeader },
+}
+
+public enum DiskError {
+  BadSector { lba: u64 },
+}

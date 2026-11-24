@@ -1,0 +1,17 @@
+function run(h: Holder): void {
+  for (const x of &h.items) {
+    take(h.other);
+    h.other = [];
+    console.log(x);
+  }
+}
+run(new Holder { items: [1], other: ["a"] });
+
+public class Holder {
+  public items: i64[];
+  public other: string[];
+}
+
+public function take(xs: string[]): void {
+  console.log(xs);
+}

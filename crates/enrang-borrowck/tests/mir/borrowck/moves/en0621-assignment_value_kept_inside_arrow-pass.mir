@@ -1,0 +1,63 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0621/assignment_value_kept_inside_arrow.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0621/assignment_value_kept_inside_arrow.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: () => void; // f
+  let _6: &string temp;
+  let _7: [&string] temp;
+  let _8: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "a": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = &_2 [closure-capture];
+    _7 = env(move _6);
+    _5 = closure(arrow#0, _7);
+    _8 = closure _5() -> bb2;
+  }
+  bb2: {
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+arrow#0 of statements (_1: &[&string]) -> void {
+  let _1: &[&string] env;
+  let _2: void temp;
+  let _3: &string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: void temp;
+  let _7: &string temp;
+  capture s: &string path;
+  bb0: {
+    _3 = &*(*_1).0 [compound-target];
+    _4 = const "?": string;
+    _5 = &_4 [temp-arg];
+    _6 = form append(move _3, move _5) -> bb1;
+  }
+  bb1: {
+    _7 = &*(*_1).0 [auto-borrow];
+    _2 = form log(move _7) -> bb2;
+  }
+  bb2: {
+    drop(_4);
+    storage_dead(_4);
+    return;
+  }
+}

@@ -1,0 +1,22 @@
+const one: fn(x: &i64) => void = show;
+const readers: (fn(x: &i64) => void)[] = [show];
+const writers: (fn(x: &i64) => void)[] = readers;
+const r: &(fn(x: &i64) => void) = &one;
+const maybe: (fn(x: &i64) => void) | null = show;
+const m2: (fn(x: &i64) => void) | null = maybe;
+const o1: { cb: fn(x: &i64) => void } = { cb: show };
+const o2: { cb: fn(x: &i64) => void } = o1;
+const b1: Box<fn(x: &i64) => void> = new Box(one);
+const b2: Box<fn(x: &i64) => void> = b1;
+const g: fn(f: fn(let x: &i64) => void) => void = take;
+const k: fn() => fn(x: &i64) => void = give;
+
+private function show(x: &i64): void {
+  console.log(*x);
+}
+
+private function take(f: fn(let x: &i64) => void): void {}
+
+private function give(): fn(x: &i64) => void {
+  return show;
+}

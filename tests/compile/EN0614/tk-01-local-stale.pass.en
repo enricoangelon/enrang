@@ -1,0 +1,27 @@
+//! covers: H32
+let grid: i64[][] = [[1], [2]];
+const p = stale(&grid);
+if (p != null) {
+  const [p0, p1] = p;
+  if (p0 != null) {
+    const e = &p0[0];
+    console.log(*e, *p1);
+  }
+}
+
+public function stale(xs: &Slice<i64[]>): [&i64[] | null, &i64[]] | null {
+  let keep2: &i64[] | null = null;
+  let n = 0;
+  while (n < 2) {
+    const t: [&i64[] | null, i32] = [keep2, 0];
+    keep2 = null;
+    let keep: &i64[] | null = null;
+    for (const x of xs) {
+      if (n == 1) { return [t[0], x]; }
+      if (keep != null) { keep2 = keep; break; }
+      keep = x;
+    }
+    n += 1;
+  }
+  return null;
+}

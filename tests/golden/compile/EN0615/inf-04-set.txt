@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0615/inf-04-set.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Sub.set` keeps `s` in the `readonly &` field `r`, but `Base.set` keeps it in another field
+  --> tests/compile/EN0615/inf-04-set.fail.en:31:19
+   |
+20 |   public set(s: &Slice<u8>): void { this.w = s; }
+   |          --- declared here
+...
+31 |   public override set(s: &Slice<u8>): void { this.r = s; } //~ EN0615
+   |                   ^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

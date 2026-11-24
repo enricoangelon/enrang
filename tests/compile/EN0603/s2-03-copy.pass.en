@@ -1,0 +1,38 @@
+const rex = new Dog { legs: 4 };
+const generic = new Animal { legs: 2 };
+viaDog(&rex, true);
+viaExact(&generic, false);
+
+public class Animal implements Copy {
+  public legs: i64;
+}
+
+public class Dog extends Animal {}
+
+private function keep(r: &Animal | null): Box<Animal> | null {
+  const p: Animal | null = r;
+  if (p != null) {
+    return new Box(p);
+  }
+  return null;
+}
+
+private function viaDog(ra: &Animal, c: bool): void {
+  console.log(keep(ra));
+  const q: Animal = *ra;
+  const pet: Box<Animal> = new Box(new Dog { legs: 4 });
+  const q2: Animal = *pet;
+  const other = new Animal { legs: 3 };
+  const q3: Animal = c ? *ra : other;
+  console.log(q.legs, q2.legs, q3.legs);
+}
+
+private function viaExact(ra: &Animal, c: bool): void {
+  console.log(keep(ra));
+  const q: Animal = *ra;
+  const pet: Box<Animal> = new Box(new Animal { legs: 2 });
+  const q2: Animal = *pet;
+  const other = new Animal { legs: 3 };
+  const q3: Animal = c ? *ra : other;
+  console.log(q.legs, q2.legs, q3.legs);
+}

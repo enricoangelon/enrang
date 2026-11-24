@@ -1,0 +1,21 @@
+let data: i64[] = [1, 2, 3];
+const e = &data[0];
+let c = new Cur(&data); //~ EN0706
+c.peek().push(4);
+console.log(*e);
+
+public final class Cur {
+  private xs: &i64[];
+  public constructor(xs: &i64[]) {
+    this.xs = xs;
+  }
+  public peek(): &i64[] {
+    return Cur.pick(this, this.xs, 1);
+  }
+  private static pick(c: &Cur, v: &i64[], n: isize): &i64[] {
+    if (n > 0) {
+      console.log(c.peek().length());
+    }
+    return v;
+  }
+}

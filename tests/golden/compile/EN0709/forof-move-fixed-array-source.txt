@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0709/forof-move-fixed-array-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0709]: cannot move `arr` while iterating over it
+ --> tests/compile/EN0709/forof-move-fixed-array-source.fail.en:4:62
+  |
+4 | public function f(arr: D[3]): void { for (const d of &arr) { consume(arr); } } //~ EN0709
+  |                                                              ^^^^^^^^^^^^ `arr` moves here
+  |                                                      ---- `arr` is borrowed here
+  |
+help: move `arr` after the loop, or move a copy: `arr.clone()`
+  = explain: run `enrang explain EN0709`
+
+error[EN0709]: cannot move `arr` while iterating over it
+ --> tests/compile/EN0709/forof-move-fixed-array-source.fail.en:8:5
+  |
+7 |   for (const d of &arr) {
+  |                   ---- `arr` is borrowed here
+8 |     consume(arr); //~ EN0709
+  |     ^^^^^^^^^^^^ `arr` moves here
+  |
+help: move `arr` after the loop, or move a copy: `arr.clone()`
+  = explain: run `enrang explain EN0709`
+
+error: aborting due to 2 previous errors

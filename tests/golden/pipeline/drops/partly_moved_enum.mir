@@ -1,0 +1,65 @@
+fn f(_1: Shape, _2: bool) -> void perms() sources() moves(1, 0) result none {
+  phase elaborated;
+  let _1: Shape; // s
+  let _2: bool; // c
+  let _3: void temp;
+  let _4: isize temp;
+  let _5: bool temp;
+  let _6: void temp;
+  let _7: string temp;
+  let _8: bool flag;
+  let _9: u32 temp;
+  drop_flag _8: (_1 as Circle).label;
+  fact f0: _1 case Circle;
+  fact f1: _1 case Empty;
+  use f0 at bb5[0];
+  test f0 at bb2;
+  test f1 at bb3;
+  bb0: {
+    _8 = const true: bool;
+    _4 = discriminant(_1);
+    switch move _4 [0: bb2, 1: bb3, otherwise: bb4];
+  }
+  bb1: {
+    _9 = discriminant(_1);
+    switch move _9 [0: bb9, otherwise: bb8];
+  }
+  bb2: {
+    _5 = copy _2;
+    switch move _5 [0: bb6, otherwise: bb5];
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    unreachable;
+  }
+  bb5: {
+    check_tag(_1, Circle);
+    _7 = move (_1 as Circle).label;
+    _8 = const false: bool;
+    _6 = take(move _7) -> bb7;
+  }
+  bb6: {
+    goto bb1;
+  }
+  bb7: {
+    storage_dead(_7);
+    goto bb6;
+  }
+  bb8: {
+    _8 = const false: bool;
+    return;
+  }
+  bb9: {
+    drop_glue((_1 as Circle).tag);
+    switch copy _8 [0: bb11, otherwise: bb10];
+  }
+  bb10: {
+    drop_glue((_1 as Circle).label);
+    goto bb11;
+  }
+  bb11: {
+    goto bb8;
+  }
+}

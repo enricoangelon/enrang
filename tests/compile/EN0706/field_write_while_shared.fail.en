@@ -1,0 +1,9 @@
+let p = new Pt();
+const r = &p.x;
+p.x = 5; //~ EN0706 "`p.x` cannot change while `r` still points into it"
+console.log(*r);
+
+public class Pt {
+  public x: i64 = 0;
+  public y: i64 = 0;
+}

@@ -1,0 +1,36 @@
+module "core/int";
+extend #extend0<I extends Clone>: I[];
+fn #extend0<I>::first(_1: &I[]) -> I where I extends Greet;
+@lang("clone") interface Clone { }
+interface Greet { }
+class Holder<T> {
+  v: T;
+}
+fn Holder<T>::both<implicit Greet, implicit Greet>(_1: &Holder<T>, _2: Greet, _3: &Greet, _4: &Greet | null) -> void;
+fn Holder<T>::copied(_1: &Holder<T>) -> T where T extends Clone & Greet;
+fn Holder<T>::meet<U, implicit Greet>(_1: &Holder<T>, _2: U, _3: Greet) -> void;
+fn Holder<T>::odd<implicit Greet>(_1: &Holder<T>, _2: { x: i64 }, _3: Greet) -> void;
+fn Holder<T>::pair<implicit { x: i64 }>(_1: &Holder<T>, _2: &{ x: i64 }) -> void;
+
+fn uses(_1: &Holder<i64>, _2: &i64[]) -> void {
+  let _3: void temp;
+  let _4: i64 temp;
+  let _5: fn() => void temp;
+  bb0: {
+    _4 = Holder<i64>::copied(copy _1) -> bb1;
+  }
+  bb1: {
+    _3 = Holder<i64>::meet<bool, i64>(copy _1, const true: bool, const 1: i64) -> bb2;
+  }
+  bb2: {
+    _4 = #extend0<i64>::first(copy _2) -> bb3;
+  }
+  bb3: {
+    _3 = Holder<i64>::pair<i64>(copy _1, copy _1) -> bb4;
+  }
+  bb4: {
+    _5 = const fn Holder<i64>::both<i64, i64>: fn() => void;
+    _5 = const fn Holder<i64>::odd<i64>: fn() => void;
+    return;
+  }
+}

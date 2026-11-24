@@ -1,0 +1,8 @@
+let q: i64[] = [1];
+const r = &q;
+take(q); //~ EN0709 "cannot move `q` while it is borrowed"
+r.push(2);
+
+private function take(v: i64[]): void {
+  console.log(v);
+}

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/captured_store.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot store a reference into captured `lx`
+ --> tests/compile/EN0616/captured_store.fail.en:5:3
+  |
+5 |   lx.setSrc(w); //~ EN0616 "cannot store a reference into captured `lx`"
+  |   ^^^^^^^^^^^^ stored here
+  |
+  = note: what an arrow captures lives outside it, so a reference stored there could outlive what it points at
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

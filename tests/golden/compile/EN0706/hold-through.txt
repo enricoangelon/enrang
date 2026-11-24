@@ -1,0 +1,34 @@
+$ enrang check tests/compile/EN0706/hold-through.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot reassign `r` during iteration
+ --> tests/compile/EN0706/hold-through.fail.en:3:3
+  |
+2 | for (const x of &r.items) {
+  |                 -------- `r` is borrowed here
+3 |   r = &t; //~ EN0706
+  |   ^^^^^^ cannot reassign while borrowed
+  |
+help: iterate over `r.items.clone()` if reassignment is intentional
+  |
+2 | for (const x of r.items.clone()) {
+  |                 ~~~~~~~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `r2.items` while iterating over it
+ --> tests/compile/EN0706/hold-through.fail.en:8:3
+  |
+7 | for (const x of &r2.items) {
+  |                 --------- immutable borrow begins here
+8 |   r2.items.push(1); //~ EN0706
+  |   ^^^^^^^^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+help: collect new jobs separately, or loop over a copy
+  |
+7 | for (const x of [...r2.items]) {
+  |                 ~~~~        +
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,20 @@
+$ enrang check g24.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0610]: `this.owner` is not set when `super(name)` runs
+  --> g24.en:13:5
+   |
+13 |     super(name);
+   |     ^^^^^^^^^^^ `Animal`'s constructor runs here, before `this.owner` is set
+14 |     this.owner = owner;
+   |     ------------------- `this.owner` is set only here
+   |
+   = from TypeScript: TypeScript requires `super(...)` before any use of `this` (TS17009). Enrang sets a subclass's own fields first, so a base constructor that calls an override finds them set.
+help: set `this.owner` before `super(name)`, because `Animal`'s constructor may call `Dog`'s methods
+   |
+13 ~     this.owner = owner;
+14 ~     super(name);
+   = explain: run `enrang explain EN0610`
+
+error: aborting due to 1 previous error

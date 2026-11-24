@@ -1,0 +1,41 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/s2-12-wrap.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/s2-12-wrap.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // t
+  let _3: [&string, int]; // w
+  let _4: &string temp;
+  let _5: void temp;
+  let _6: &string temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "ab": string;
+    storage_live(_3);
+    _4 = &_2 [explicit];
+    _3 = wrap(move _4) -> bb1;
+  }
+  bb1: {
+    _6 = &*_3.0 [auto-borrow];
+    _5 = form log(move _6) -> bb2;
+  }
+  bb2: {
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn wrap(_1: &string) -> [&string, int] {
+  let _1: &string; // s
+  let _2: &string temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = tuple(move _2, const 1: int);
+    return;
+  }
+}

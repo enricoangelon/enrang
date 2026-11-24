@@ -1,0 +1,2 @@
+const xs = [....5]; //~ EN0006
+console.log(xs);

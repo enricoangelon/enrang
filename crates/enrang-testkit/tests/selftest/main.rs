@@ -8,6 +8,7 @@
 
 #![forbid(unsafe_code)]
 
+mod anchors;
 mod children;
 mod doc_cases;
 mod gating;
@@ -38,5 +39,6 @@ fn main() -> ExitCode {
     doc_cases::register(&mut h);
     rows::register(&mut h);
     gating::register(&mut h);
+    anchors::register(&mut h);
     h.run()
 }

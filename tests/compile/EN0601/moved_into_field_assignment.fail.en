@@ -1,0 +1,8 @@
+let u = new User { name: "a" };
+const name = "Ada".toString();
+u.name = name;
+console.log(name); //~ EN0601
+
+public class User {
+  public name: string;
+}

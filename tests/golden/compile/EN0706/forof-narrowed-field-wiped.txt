@@ -1,0 +1,108 @@
+$ enrang check tests/compile/EN0706/forof-narrowed-field-wiped.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `this.items` may be `null` here
+ --> tests/compile/EN0706/forof-narrowed-field-wiped.fail.en:7:24
+  |
+7 |       for (const s of &this.items) { //~ EN0401
+  |                        ^^^^^^^^^^ the test before this may no longer hold
+8 |         wipe(this); //~ EN0706
+  |              ---- this may write through it
+  |
+  = note: a writing reference may have changed `this.items`
+  = explain: run `enrang explain EN0401`
+
+error[EN0706]: cannot mutate `this` while iterating over it
+ --> tests/compile/EN0706/forof-narrowed-field-wiped.fail.en:8:9
+  |
+7 |       for (const s of &this.items) { //~ EN0401
+  |                       ----------- immutable borrow begins here
+8 |         wipe(this); //~ EN0706
+  |         ^^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+help: loop over a copy
+  |
+7 |       for (const s of [...this.items]) { //~ EN0401
+  |                       ~~~~          +
+  = explain: run `enrang explain EN0706`
+
+error[EN0401]: `h.items` may be `null` here
+  --> tests/compile/EN0706/forof-narrowed-field-wiped.fail.en:18:22
+   |
+18 |     for (const s of &h.items) { //~ EN0401
+   |                      ^^^^^^^ the test before this may no longer hold
+19 |       wipe(h); //~ EN0706
+   |            - this may write through it
+   |
+   = note: a writing reference may have changed `h.items`
+   = explain: run `enrang explain EN0401`
+
+error[EN0706]: cannot mutate `h` while iterating over it
+  --> tests/compile/EN0706/forof-narrowed-field-wiped.fail.en:19:7
+   |
+18 |     for (const s of &h.items) { //~ EN0401
+   |                     -------- immutable borrow begins here
+19 |       wipe(h); //~ EN0706
+   |       ^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+help: loop over a copy
+   |
+18 |     for (const s of [...h.items]) { //~ EN0401
+   |                     ~~~~       +
+   = explain: run `enrang explain EN0706`
+
+error[EN0401]: `h.items` may be `null` here
+  --> tests/compile/EN0706/forof-narrowed-field-wiped.fail.en:26:22
+   |
+26 |     for (const s of &h.items) { //~ EN0401
+   |                      ^^^^^^^ the test before this may no longer hold
+27 |       f(h); //~ EN0706
+   |         - this may write through it
+   |
+   = note: a writing reference may have changed `h.items`
+   = explain: run `enrang explain EN0401`
+
+error[EN0706]: cannot mutate `*h` while iterating over it
+  --> tests/compile/EN0706/forof-narrowed-field-wiped.fail.en:27:9
+   |
+26 |     for (const s of &h.items) { //~ EN0401
+   |                     -------- immutable borrow begins here
+27 |       f(h); //~ EN0706
+   |         ^ conflicting mutable access
+   |
+help: loop over a copy
+   |
+26 |     for (const s of [...h.items]) { //~ EN0401
+   |                     ~~~~       +
+   = explain: run `enrang explain EN0706`
+
+error[EN0401]: `h.items` may be `null` here
+  --> tests/compile/EN0706/forof-narrowed-field-wiped.fail.en:34:22
+   |
+34 |     for (const s of &h.items) { //~ EN0401
+   |                      ^^^^^^^ the test before this may no longer hold
+35 |       h?.wipe(); //~ EN0706
+   |       - this may write through it
+   |
+   = note: a writing reference may have changed `h.items`
+   = explain: run `enrang explain EN0401`
+
+error[EN0706]: cannot mutate `h` while iterating over it
+  --> tests/compile/EN0706/forof-narrowed-field-wiped.fail.en:35:7
+   |
+34 |     for (const s of &h.items) { //~ EN0401
+   |                     -------- immutable borrow begins here
+35 |       h?.wipe(); //~ EN0706
+   |       ^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+help: loop over a copy
+   |
+34 |     for (const s of [...h.items]) { //~ EN0401
+   |                     ~~~~       +
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 8 previous errors

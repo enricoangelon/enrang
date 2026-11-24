@@ -1,0 +1,30 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0714/oq18-strict.fail.en. Its row's codes: EN0714.
+module "tests/compile/EN0714/oq18-strict.fail";
+class Labeler { }
+class Strict extends Labeler { }
+
+fn Labeler::label(_1: &Labeler, _2: &string, _3: &string) -> &string {
+  let _1: &Labeler; // this
+  let _2: &string; // name
+  let _3: &string; // fallback
+  let _4: &string temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _0 = move _4;
+    return;
+  }
+}
+
+@override fn Strict::label(_1: &Strict, _2: &string, _3: &string) -> &string {
+  let _1: &Strict; // this
+  let _2: &string; // name
+  let _3: &string; // fallback
+  let _4: &string temp;
+  bb0: {
+    _4 = &*_3 [reborrow];
+    _0 = move _4;
+    return; //~ EN0714
+  }
+}

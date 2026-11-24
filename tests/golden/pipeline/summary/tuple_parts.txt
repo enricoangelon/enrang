@@ -1,0 +1,3 @@
+module "main"
+fn same(_1: &i64[]) -> [&i64[], &i64[]] perms(read) sources(0) result readonly(aliased);
+fn two(_1: &i64[], _2: &i64[]) -> [&i64[], &i64[]] perms(read, read) sources(0, 1) result writable;

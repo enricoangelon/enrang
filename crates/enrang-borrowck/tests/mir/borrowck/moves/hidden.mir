@@ -1,0 +1,25 @@
+// A local function called above a top-level variable it reads (plan d.2, EN0618;
+// A:1001). Shapes: c.17 (plan lines 1189-1197) the statements body's locals are its
+// top-level variables, and a call of a local function passes `&v [hidden-arg]` after
+// the declared arguments.
+// EN0618 head (plan e): `inc` uses `count` before `count` is declared.
+@local fn inc(_1: &i64) -> void;
+
+statements () -> void {
+  let mut _1: i64; // count
+  let _2: &i64 temp;
+  let _3: void temp;
+  bb0: {
+    _2 = &_1 [hidden-arg]; //~ EN0618
+    _3 = inc(move _2) -> bb1;
+  }
+  bb1: {
+    storage_live(_1);
+    _1 = const 0: i64;
+    _2 = &_1 [hidden-arg];
+    _3 = inc(move _2) -> bb2;
+  }
+  bb2: {
+    return;
+  }
+}

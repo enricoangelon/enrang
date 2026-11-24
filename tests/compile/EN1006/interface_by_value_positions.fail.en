@@ -1,0 +1,43 @@
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Dog implements Speaker {
+  public name: string = "Rex";
+  public speak(): string {
+    return "woof";
+  }
+}
+
+public class Zoo {
+  public star: Speaker | null = null; //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+}
+
+public function all(): Speaker[] { //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  return [];
+}
+
+public function one(d: Dog): Speaker { //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  return d;
+}
+
+public function local(d: Dog): void {
+  const s: Speaker = d; //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+}
+
+public function relay(x: Speaker): void {
+  console.log(x.speak());
+}
+
+public function take(f: fn(x: Speaker) => void): void {}
+
+public function each(f: (x: Speaker) => void): void {}
+
+public function wire(): void {
+  take(relay); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  each(relay); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+}
+
+public function load(): Result<i64, Error> { //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+  return panic("not yet");
+}

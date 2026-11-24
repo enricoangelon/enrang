@@ -1,0 +1,14 @@
+public class Labeler {
+  public label(name: &string, fallback: &string, quiet: bool): &string {
+    return name;
+  }
+}
+
+public class Strict extends Labeler {
+  public override label(name: &string, fallback: &string, quiet: bool): &string {
+    if (quiet) {
+      return name;
+    }
+    return name;
+  }
+}

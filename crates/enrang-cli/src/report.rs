@@ -1,6 +1,11 @@
 //! What a run has to say about a name it cannot act on.
 
-use enrang_diag::{CURRENT_MILESTONE, Code, Diagnostic, Help, RenderOpts, did_you_mean, shown};
+use std::io;
+use std::path::Path;
+
+use enrang_diag::{
+    CURRENT_MILESTONE, Code, Diagnostic, Help, Milestone, RenderOpts, did_you_mean, shown,
+};
 use enrang_driver::Session;
 
 use crate::commands::{
@@ -12,14 +17,56 @@ use crate::outcome::{EXIT_USAGE, Outcome};
 /// A malformed use of a command that does exist. SPEC 13.2 has no code for one at
 /// this milestone, so it reports with no code rather than under an unrelated one.
 pub(crate) fn complaint(message: &str, help: Option<&str>, usage: Option<&str>) -> Outcome {
+    noted_complaint(message, help, None, usage)
+}
+
+/// A [`complaint`] with a note, its lines in the order SPEC 13.1 names them.
+pub(crate) fn noted_complaint(
+    message: &str,
+    help: Option<&str>,
+    note: Option<&str>,
+    usage: Option<&str>,
+) -> Outcome {
     let mut text = format!("error: {message}\n");
     if let Some(help) = help {
         text.push_str(&format!("help: {help}\n"));
+    }
+    if let Some(note) = note {
+        text.push_str(&format!("note: {note}\n"));
     }
     if let Some(usage) = usage {
         text.push_str(&format!("usage: {usage}\n"));
     }
     Outcome::fail(text, EXIT_USAGE)
+}
+
+/// EN1305 for a path that names nothing.
+pub(crate) fn not_found(path: &Path) -> Diagnostic {
+    Diagnostic::spanless(
+        Code::EN1305,
+        format!("file not found: `{}`", path.to_string_lossy()),
+    )
+}
+
+/// EN1305 for a path that cannot be read as a file, with the reason.
+pub(crate) fn unreadable(path: &Path, error: &io::Error) -> Diagnostic {
+    if error.kind() == io::ErrorKind::NotFound {
+        return not_found(path);
+    }
+    Diagnostic::spanless(
+        Code::EN1305,
+        format!("cannot read `{}`: {}", path.to_string_lossy(), error.kind()),
+    )
+}
+
+/// The report of a file that could not be written, which fails the run as lost
+/// output does (SPEC 13.2).
+pub(crate) fn write_failure(path: &Path, error: &io::Error) -> String {
+    format!(
+        "error: cannot write to {}: {}\n",
+        shown(&path.to_string_lossy()),
+        error.kind()
+    )
 }
 
 /// Whichever diagnostic `name` deserves, given that no working command has it.
@@ -46,9 +93,14 @@ pub(crate) fn not_a_working_command(name: &str, color: bool) -> Outcome {
 /// commands SPEC 13.2 and 16 put outside the prototype, and EN1302 for a name that is
 /// no command.
 fn later_milestone(command: &LaterCommand) -> Outcome {
+    later_feature(command.name, command.since, command.delivers)
+}
+
+/// What arrives with a later milestone, as `enrang <what>` names it: a command, or a
+/// flag of a working one, such as `init --kernel`.
+pub(crate) fn later_feature(what: &str, since: Milestone, delivers: &str) -> Outcome {
     let text = format!(
-        "error: `enrang {}` arrives with milestone {}\nnote: {}\nnote: this is milestone {CURRENT_MILESTONE}, which has no compiler, so nothing was done\n",
-        command.name, command.since, command.delivers,
+        "error: `enrang {what}` arrives with milestone {since}\nnote: {delivers}\nnote: this is milestone {CURRENT_MILESTONE}, so nothing was done\n",
     );
     Outcome::fail(text, EXIT_USAGE)
 }

@@ -1,0 +1,7 @@
+let t: string = "ab";
+const w = wrap(&t);
+console.log(*w[0]);
+
+private function wrap(s: &string): [&string, i32] {
+  return [s, 1];
+}

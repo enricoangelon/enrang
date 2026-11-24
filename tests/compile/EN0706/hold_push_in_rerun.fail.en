@@ -1,0 +1,11 @@
+//! covers: H20
+let q: i64[] = [1, 2];
+let n = 0;
+while (n < 2) {
+  for (const x of &q) {
+    *x += 1;
+    q.push(n); //~ EN0706 "cannot mutate `q` while iterating over it"
+  }
+  n += 1;
+}
+console.log(q);

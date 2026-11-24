@@ -1,0 +1,24 @@
+first();
+second();
+const e = DiskError.BadSector { lba: 42 };
+console.log(e);
+
+private function first(): void {
+  const h = new Header { len: 3, flags: 0 };
+  console.log(h);
+}
+
+private function second(): void {
+  const h = new Header { len: 3, flags: 0 };
+  console.log(h);
+}
+
+public class Header {
+  public len: u16;
+  public flags: u8;
+}
+
+public enum DiskError {
+  BadSector { lba: u64 },
+  Timeout,
+}

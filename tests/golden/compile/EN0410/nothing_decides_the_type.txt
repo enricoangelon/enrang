@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0410/nothing_decides_the_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0410]: cannot infer the type of `[]`
+ --> tests/compile/EN0410/nothing_decides_the_type.fail.en:1:15
+  |
+1 | const empty = []; //~ EN0410 "cannot infer the type of `[]`"
+  |               ^^ nothing here decides its type
+  |
+help: add a type annotation
+  = explain: run `enrang explain EN0410`
+
+error[EN0410]: cannot infer the type of `null`
+ --> tests/compile/EN0410/nothing_decides_the_type.fail.en:2:17
+  |
+2 | const nothing = null; //~ EN0410 "cannot infer the type of `null`"
+  |                 ^^^^ nothing here decides its type
+  |
+help: add a type annotation
+  = explain: run `enrang explain EN0410`
+
+error: aborting due to 2 previous errors

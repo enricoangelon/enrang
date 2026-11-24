@@ -1,0 +1,7 @@
+public type Book = { title: string, subtitle?: string };
+
+public function shelve(): void {
+  const draft = { title: "Dune" };
+  const book: Book = draft; //~ EN0433 "missing `subtitle`"
+  console.log(book.title);
+}

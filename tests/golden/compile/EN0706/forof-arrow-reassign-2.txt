@@ -1,0 +1,33 @@
+$ enrang check tests/compile/EN0706/forof-arrow-reassign-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot reassign `xs` during iteration
+ --> tests/compile/EN0706/forof-arrow-reassign-2.fail.en:5:17
+  |
+4 |   for (const x of &xs) {
+  |                   --- `xs` is borrowed here
+5 |     run(() => { xs = []; }); //~ EN0706 "cannot reassign `xs` during iteration"
+  |                 ^^ cannot reassign while borrowed
+  |
+help: iterate over `xs.clone()` if reassignment is intentional
+  |
+4 |   for (const x of xs.clone()) {
+  |                   ~~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot reassign `xs` during iteration
+  --> tests/compile/EN0706/forof-arrow-reassign-2.fail.en:12:17
+   |
+11 |   for (const x of &xs) {
+   |                   --- `xs` is borrowed here
+12 |     run(() => { xs = []; }); //~ EN0706 "cannot reassign `xs` during iteration"
+   |                 ^^ cannot reassign while borrowed
+   |
+help: iterate over `xs.clone()` if reassignment is intentional
+   |
+11 |   for (const x of xs.clone()) {
+   |                   ~~~~~~~~~~
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

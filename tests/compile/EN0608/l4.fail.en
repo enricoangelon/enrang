@@ -1,0 +1,6 @@
+//! row: `l1`-`l10`, local functions, among them `let
+const count = 0;
+function inc(): void {
+  count += 1; //~ EN0608 "because `count` is `const`"
+}
+inc();

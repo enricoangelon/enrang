@@ -1,0 +1,4 @@
+$ enrang fmt --check src
+[exit 0]
+[stdout]
+[stderr]

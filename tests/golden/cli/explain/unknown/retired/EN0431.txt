@@ -1,0 +1,5 @@
+$ enrang explain EN0431
+[exit 2]
+[stdout]
+[stderr]
+error: `EN0431` is retired: `length()` is a method now; a bare `.length` is EN0441

@@ -1,0 +1,19 @@
+let k = new Clicks();
+tick(&k);
+
+private function tick<T extends Counter>(c: &T): void {
+  console.log(c.get());
+}
+
+public interface Counter {
+  let get(): i64;
+}
+
+public class Clicks {
+  private n: i64 = 0;
+
+  public get(): i64 {
+    this.n += 1;
+    return this.n;
+  }
+}

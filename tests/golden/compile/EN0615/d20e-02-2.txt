@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0615/d20e-02-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `attach` changes the object, but `Attachable` declares that it doesn't
+  --> tests/compile/EN0615/d20e-02-2.fail.en:14:5
+   |
+ 2 |   public abstract attach(s: &string): void;
+   |                   ------ declared here without `let`
+...
+14 |     this.label = s; //~ EN0615 "`attach` changes the object, but `Attachable` declares that it doesn't"
+   |     ^^^^^^^^^^^^^^ this write needs exclusive access to `this`
+   |
+help: if implementations may change the object, write `let attach(s: &string): void;` in `Attachable`
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

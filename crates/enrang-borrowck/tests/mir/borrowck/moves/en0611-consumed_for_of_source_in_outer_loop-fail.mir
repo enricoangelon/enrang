@@ -1,0 +1,79 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0611/consumed_for_of_source_in_outer_loop.fail.en. Its row's codes: EN0611.
+module "tests/compile/EN0611/consumed_for_of_source_in_outer_loop.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string[]; // q
+  let mut _3: int; // n
+  let _4: bool temp;
+  let _5: int temp;
+  let _6: string[] #iter;
+  let _7: isize #i;
+  let _8: isize #n;
+  let _9: bool temp;
+  let _10: string; // x
+  let _11: void temp;
+  let _12: &string temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<string>(const "a": string, const "b": string);
+    storage_live(_3);
+    _3 = const 0: int;
+    goto bb1;
+  }
+  bb1: {
+    _4 = lt(copy _3, const 2: int);
+    switch move _4 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _5 = copy _3;
+    _3 = checked_add(copy _5, const 1: int);
+    _6 = move _2; //~ EN0611 "`q` was moved in an earlier turn"
+    goto bb8;
+  }
+  bb3: {
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb4: {
+    _8 = len(_6);
+    _9 = lt(copy _7, copy _8);
+    switch move _9 [0: bb7, otherwise: bb5];
+  }
+  bb5: {
+    storage_live(_10);
+    check_bounds(copy _7, copy _8);
+    _10 = move _6[_7];
+    _7 = add(copy _7, const 1: isize);
+    goto bb9;
+  }
+  bb6: {
+    goto bb4;
+  }
+  bb7: {
+    drop(_6);
+    storage_dead(_6);
+    goto bb1;
+  }
+  bb8: {
+    storage_live(_7);
+    _7 = const 0: isize;
+    goto bb4;
+  }
+  bb9: {
+    _12 = &_10 [auto-borrow];
+    _11 = form log(move _12) -> bb10;
+  }
+  bb10: {
+    drop(_10);
+    storage_dead(_10);
+    drop(_6);
+    storage_dead(_6);
+    goto bb1;
+  }
+}

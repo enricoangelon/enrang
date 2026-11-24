@@ -1,0 +1,23 @@
+public function next(): Result<Token, Token> {
+  return Token.End; //~ EN0455 "`Token.End` could be a success or an error here"
+}
+
+public function read(): Result<string> {
+  return "file missing"; //~ EN0455 "could be a success or an error here"
+}
+
+public function age(): Result<i64, AgeError> {
+  return Err(DiskError.Timeout); //~ EN0401
+}
+
+public enum Token {
+  End,
+}
+
+public enum AgeError {
+  NotANumber = "not a number",
+}
+
+public enum DiskError {
+  Timeout,
+}

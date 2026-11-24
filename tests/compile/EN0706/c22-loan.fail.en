@@ -1,0 +1,20 @@
+let b = new Bag();
+const m: &Measured = &b;
+b.add(1); //~ EN0706
+console.log(m.length());
+
+public interface Measured {
+  length(): isize;
+}
+
+public class Bag {
+  private v: i64[] = [];
+
+  public add(x: i64): void {
+    this.v.push(x);
+  }
+
+  public length(): isize {
+    return this.v.length();
+  }
+}

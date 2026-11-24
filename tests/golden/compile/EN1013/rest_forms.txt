@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN1013/rest_forms.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+ --> tests/compile/EN1013/rest_forms.fail.en:5:12
+  |
+5 | const { x, ...more } = p; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  |            ^^^ only an array literal's element may spread
+  |
+  = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+  = explain: run `enrang explain EN1013`
+
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+ --> tests/compile/EN1013/rest_forms.fail.en:6:9
+  |
+6 | [first, ...others] = xs; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  |         ^^^ only an array literal's element may spread
+  |
+  = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+  = explain: run `enrang explain EN1013`
+
+error[EN1013]: rest, and spread outside an array literal, are not supported yet
+ --> tests/compile/EN1013/rest_forms.fail.en:7:14
+  |
+7 | const [head, ...tail] = xs; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  |              ^^^ only an array literal's element may spread
+  |
+  = note: `...` copies the elements of an array into a new array literal, and does nothing else
+help: Pass an array; `[...a]` copies one
+  = explain: run `enrang explain EN1013`
+
+error: aborting due to 3 previous errors

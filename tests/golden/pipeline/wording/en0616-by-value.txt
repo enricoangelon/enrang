@@ -1,0 +1,11 @@
+error[EN0616]: cannot store a reference into a value reached through by-value `w`
+ --> main.en:4:156
+  |
+4 | public final class Wrapper { private cp: Copier; public constructor(cp: Copier) { this.cp = cp; } public static relinkBy(let w: Wrapper, s: &u8[]): void { w.cp.retarget(s); } }
+  |                                                                                                                                                            ^^^^^^^^^^^^^^^^ stored here
+  |
+  = note: a consumed value is disposed of when the function ends, so nothing stored in it reaches the caller
+help: write the field directly, or take the value by reference
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

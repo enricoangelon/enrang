@@ -1,6 +1,7 @@
 //! What follows a command that cannot run changes nothing, and it never acts.
 
 use enrang_cli::{ALIASES, DEFERRED, LATER, WORKING};
+use enrang_diag::CURRENT_MILESTONE;
 use enrang_testkit::{Harness, TempDir};
 
 use crate::support::{enrang_in, inproc, strings};
@@ -107,15 +108,15 @@ pub fn register(h: &mut Harness) {
                     format!("error: `enrang {name}` arrives with milestone {since}")
                 );
                 assert!(
-                    outcome.stderr.ends_with(
-                        "note: this is milestone M0, which has no compiler, so nothing was done\n"
-                    ),
+                    outcome.stderr.ends_with(&format!(
+                        "note: this is milestone {CURRENT_MILESTONE}, so nothing was done\n"
+                    )),
                     "{}",
                     outcome.stderr
                 );
             },
         );
-        // SPEC 13.2 and 16 give EN1301 to ten other commands, and the page it would
+        // SPEC 13.2 and 16 give EN1301 to nine other commands, and the page it would
         // point to says nothing of these.
         h.case(format!("later/{name} reports no code"), move || {
             let stderr = inproc(&[name]).stderr;
@@ -131,6 +132,27 @@ pub fn register(h: &mut Harness) {
         });
     }
     h.case(
+        "working/the commands and milestones are those of ARCHITECTURE 11, by hand",
+        || {
+            let expected: &[(&str, &str)] = &[
+                ("check", "M1"),
+                ("fmt", "M1"),
+                ("explain", "M0"),
+                ("init", "M1"),
+                ("targets", "M0"),
+            ];
+            let found: Vec<(&str, String)> = WORKING
+                .iter()
+                .map(|command| (command.name, command.since.to_string()))
+                .collect();
+            let wanted: Vec<(&str, String)> = expected
+                .iter()
+                .map(|(name, since)| (*name, (*since).to_owned()))
+                .collect();
+            assert_eq!(found, wanted);
+        },
+    );
+    h.case(
         "later/the milestones are those of ARCHITECTURE 11, by hand",
         || {
             let expected: &[(&str, &str)] = &[
@@ -138,8 +160,6 @@ pub fn register(h: &mut Harness) {
                 ("run", "M4"),
                 ("dev", "M6"),
                 ("test", "M4"),
-                ("check", "M1"),
-                ("init", "M1"),
             ];
             assert_eq!(LATER.len(), expected.len());
             for ((name, milestone), command) in expected.iter().zip(LATER) {
@@ -162,27 +182,20 @@ pub fn register(h: &mut Harness) {
         });
     }
     h.case(
-        "deferred/exactly the ten commands of SPEC 16, by hand",
+        "deferred/exactly the nine commands of SPEC 16, by hand",
         || {
             assert_eq!(
                 DEFERRED,
                 [
                     "install", "add", "publish", "doc", "lsp", "repl", "bench", "debug", "upgrade",
-                    "fmt"
                 ]
             );
         },
     );
 
     let alias_helps: &[(&str, &str)] = &[
-        (
-            "tsc",
-            "the command for this is `enrang check`, which arrives with milestone M1",
-        ),
-        (
-            "lint",
-            "the command for this is `enrang check`, which arrives with milestone M1",
-        ),
+        ("tsc", "the command for this is `enrang check`"),
+        ("lint", "the command for this is `enrang check`"),
         (
             "compile",
             "the command for this is `enrang build`, which arrives with milestone M5",
@@ -236,8 +249,43 @@ pub fn register(h: &mut Harness) {
         names.sort_unstable();
         names.dedup();
         assert_eq!(names.len(), total);
-        assert_eq!(total, 2 + 6 + 10 + 4);
+        assert_eq!(total, 5 + 4 + 9 + 4);
     });
+    let usage_errors: &[&[&str]] = &[
+        &["check", "--bogus"],
+        &["check", "a.en", "b.en"],
+        &["check", "--target"],
+        &["check", "--cpu=i386", "--cpu=i386"],
+        &["check", "--help", "main.en"],
+        &["fmt", "--bogus", "main.en"],
+        &["fmt", "-", "main.en"],
+        &["fmt", "--check", "--check", "main.en"],
+        &["init", "a", "b"],
+        &["init", ""],
+        &["init", "--bogus"],
+        &["init", "hello", "--kernel"],
+        &["init", "--kernel"],
+    ];
+    for args in usage_errors {
+        let args = *args;
+        h.case(
+            format!("arguments/{args:?} is a usage message that touches nothing"),
+            move || {
+                let directory = TempDir::new("usage");
+                let main = directory.write("main.en", "const   x=1;\n");
+                let ran = enrang_in(directory.path(), &strings(args));
+                assert_eq!(ran.code, 2, "{ran:?}");
+                assert_eq!(ran.stdout, "");
+                assert!(ran.stderr.starts_with("error: "), "{}", ran.stderr);
+                assert!(!ran.stderr.contains("error["), "{}", ran.stderr);
+                assert_eq!(directory_entries(&directory), ["main.en"]);
+                assert_eq!(
+                    std::fs::read_to_string(main).expect("kept"),
+                    "const   x=1;\n"
+                );
+            },
+        );
+    }
     h.case("names/commands are case sensitive", || {
         for name in ["BUILD", "Explain", "TARGETS", "FMT", "TSC"] {
             let outcome = inproc(&[name]);

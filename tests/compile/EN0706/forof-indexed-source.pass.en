@@ -1,0 +1,8 @@
+//! row: `for (const x of &grid[r]) { grid.push([
+public function f(r: isize): void {
+  let grid: i64[][] = [[1], [2]];
+  for (const x of &grid[r]) {
+    grid.push([]);
+    break;
+  }
+}

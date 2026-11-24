@@ -1,0 +1,6 @@
+console.log(new Pair().b);
+
+private class Pair {
+  public a: i64 = 1;
+  public b: i64 = this.a + 1; //~ EN0610 "`this` can't be used in a field initialiser"
+}

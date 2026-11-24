@@ -1,0 +1,21 @@
+let sector: u8[4] = [7, 7, 7, 7];
+const h = new Hex {};
+dumpWith(&h, sector.slice(0, 2));
+
+private function dumpWith(d: &Dumper, v: &Slice<u8>): void {
+  d.dump(v); //~ EN0401 "`T` can't stand for the view `Slice<u8>`"
+}
+
+public interface Dumper {
+  dump<T>(x: &T): void;
+}
+
+public final class Hex implements Dumper {
+  public dump<T>(x: &T): void {
+    const n = sizeOf<T>();
+    unsafe {
+      const bytes = Slice<u8>.fromRaw(x as *T as *u8, n as isize);
+      console.log(n, bytes);
+    }
+  }
+}

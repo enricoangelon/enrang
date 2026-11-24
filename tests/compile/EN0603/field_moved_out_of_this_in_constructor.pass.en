@@ -1,0 +1,11 @@
+public class User {
+  public name: string;
+  public constructor(name: string) {
+    this.name = name;
+    shout(this.name.clone());
+  }
+}
+
+public function shout(s: string): void {
+  console.log(s.toUpperCase());
+}

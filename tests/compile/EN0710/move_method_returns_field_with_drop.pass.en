@@ -1,0 +1,14 @@
+const e = new Envelope { inside: new Letter { text: "hi" } };
+const l = e.open();
+console.log(l.text);
+
+public class Letter {
+  public text: string = "";
+}
+
+public class Envelope {
+  public inside: Letter = new Letter();
+  public move open(): Letter {
+    return this.inside;
+  }
+}

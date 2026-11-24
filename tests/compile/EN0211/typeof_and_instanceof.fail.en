@@ -1,0 +1,7 @@
+public function kind(value: &Shape): string {
+  const t = typeof value; //~ EN0211
+  if (value instanceof Circle) { //~ EN0211
+    return "circle";
+  }
+  return t;
+}

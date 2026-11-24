@@ -1,0 +1,31 @@
+const table: u8[2] = [7, 8];
+let h = new Holder(&table);
+{
+  const tmp = new Base(&table);
+  const b: &Base = &h;
+  b.adopt(&tmp);
+}
+h.show();
+
+public class Base {
+  private src: &Slice<u8>;
+
+  public constructor(src: &Slice<u8>) { this.src = src; }
+
+  public peek(): readonly &u8 { return &this.src[0]; }
+
+  public adopt(o: &Base): void { this.src = o.src; }
+}
+
+public class Holder extends Base {
+  private other: &Base | null = null;
+
+  public constructor(src: &Slice<u8>) { super(src); }
+
+  public override adopt(o: &Base): void { console.log(o.peek()); }
+
+  public show(): void {
+    const o = this.other;
+    if (o != null) { console.log(o.peek()); }
+  }
+}

@@ -1,0 +1,20 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0603/destructuring_a_dereferenced_reference.fail.en. Its row's codes: EN0603.
+module "tests/compile/EN0603/destructuring_a_dereferenced_reference.fail";
+class User {
+  name: string;
+}
+
+fn nameOf(_1: &User) -> string {
+  let _1: &User; // u
+  let _2: string; // name
+  bb0: {
+    storage_live(_2);
+    _2 = move (*_1).name; //~ EN0603 "cannot move `u.name` out of a reference"
+    _0 = move _2;
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}

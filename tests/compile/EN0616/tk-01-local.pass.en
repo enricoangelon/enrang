@@ -1,0 +1,6 @@
+let pr = new Pair { a: 0, b: 0 };
+const r = both(&pr); *r[0] = 1; *r[1] = 2;
+
+public class Pair { public a: i64; public b: i64; }
+
+private function both(p: &Pair): [&i64, &i64] { const t: [&i64, &i64] = [&p.a, &p.b]; return t; }

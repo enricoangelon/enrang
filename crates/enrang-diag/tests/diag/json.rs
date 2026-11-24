@@ -156,7 +156,7 @@ fn spans(h: &mut Harness) {
             assert_eq!(object.get("code").str(), "EN0101");
             let span = object.get("primary").get("span");
             assert_eq!(span.get("file").str(), "g01.en");
-            assert_eq!((span.get("line").int(), span.get("col").int()), (2, 14));
+            assert_eq!((span.get("line").int(), span.get("col").int()), (1, 12));
             let edit = &object.get("helps").arr()[0].get("edits").arr()[0];
             assert_eq!(edit.get("replacement").str(), ";");
             assert_eq!(edit.get("lo").int(), edit.get("hi").int());

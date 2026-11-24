@@ -1,0 +1,25 @@
+public enum Shape {
+  Circle { radius: f64 },
+  Empty,
+}
+
+public function name(s: Shape | null): string {
+  return match (s) { //~ EN0501 "`match` doesn't handle `null`"
+    Shape.Circle => "circle",
+    Shape.Empty => "empty",
+  };
+}
+
+public function size(s: &Shape): string {
+  return match (s) { //~ EN0501 "`match` doesn't handle every `Shape.Circle`"
+    Shape.Circle if s.radius > 10.0 => "big circle",
+    Shape.Empty => "empty",
+  };
+}
+
+public function word(n: i64): string {
+  return match (n) { //~ EN0501 "`match` doesn't handle every `i64`"
+    0 => "zero",
+    1 => "one",
+  };
+}

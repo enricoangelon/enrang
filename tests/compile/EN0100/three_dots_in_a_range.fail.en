@@ -1,0 +1,5 @@
+const a = 1;
+const b = 4;
+for (const i of a...b) { //~ EN0100
+  console.log(i);
+}

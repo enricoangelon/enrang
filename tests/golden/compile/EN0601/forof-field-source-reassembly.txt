@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0601/forof-field-source-reassembly.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `h` was moved into `takeH`
+  --> tests/compile/EN0601/forof-field-source-reassembly.fail.en:10:5
+   |
+ 7 |   let h = new H();
+   |       - `h` owns this `H`, which is not Copy because it has a `i64[]` field
+ 8 |   for (const x of &h.items) {
+ 9 |     takeH(h);
+   |           - `h` moves here, because `takeH` takes `H`, not `&H`
+10 |     h.items = []; //~ EN0601
+   |     ^ used here, after the move
+   |
+   = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `h` hands it over.
+help: if `takeH` only needs to look at it, change the parameter to `h: &H`
+   |
+ 4 | private function takeH(h: &H): void { console.log(h.items); }
+   |                           +
+ 9 |     takeH(&h);
+   |           +
+help: to keep your own, pass a copy: `takeH(h.clone())`
+   |
+ 9 |     takeH(h.clone());
+   |            ++++++++
+   = explain: run `enrang explain EN0601`
+
+error: aborting due to 1 previous error

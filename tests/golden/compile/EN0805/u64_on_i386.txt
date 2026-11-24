@@ -1,0 +1,32 @@
+$ enrang check --target=i386-linux tests/compile/EN0805/u64_on_i386.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0805]: `u64` can't be accessed volatile on `i386-linux`
+ --> tests/compile/EN0805/u64_on_i386.fail.en:3:3
+  |
+3 |   p.writeVolatile(1); //~ EN0805 "`u64` can't be accessed volatile on `i386-linux`"
+  |   ^^^^^^^^^^^^^^^^^^ `u64` is not a `VolatileValue`
+  |
+  = note: volatile access takes `u8 u16 u32 i8 i16 i32 usize isize bool` and raw pointers, and `u64 i64` on `x86_64-*`
+  = explain: run `enrang explain EN0805`
+
+error[EN0805]: `u64` can't be accessed volatile on `i386-linux`
+ --> tests/compile/EN0805/u64_on_i386.fail.en:4:10
+  |
+4 |   return p.readVolatile(); //~ EN0805 "`u64` can't be accessed volatile on `i386-linux`"
+  |          ^^^^^^^^^^^^^^^^ `u64` is not a `VolatileValue`
+  |
+  = note: volatile access takes `u8 u16 u32 i8 i16 i32 usize isize bool` and raw pointers, and `u64 i64` on `x86_64-*`
+  = explain: run `enrang explain EN0805`
+
+error[EN0805]: `i64` can't be accessed volatile on `i386-linux`
+ --> tests/compile/EN0805/u64_on_i386.fail.en:8:3
+  |
+8 |   p.writeVolatile(-1); //~ EN0805 "`i64` can't be accessed volatile on `i386-linux`"
+  |   ^^^^^^^^^^^^^^^^^^^ `i64` is not a `VolatileValue`
+  |
+  = note: volatile access takes `u8 u16 u32 i8 i16 i32 usize isize bool` and raw pointers, and `u64 i64` on `x86_64-*`
+  = explain: run `enrang explain EN0805`
+
+error: aborting due to 3 previous errors

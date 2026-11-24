@@ -1,0 +1,12 @@
+public enum Shape {
+  Circle { radius: f64 },
+  Square { side: f64 },
+  Empty,
+}
+
+public function area(s: &Shape): f64 {
+  return match (s) { //~ EN0501 "`match` doesn't handle `Shape.Empty`"
+    Shape.Circle => 3.14 * s.radius * s.radius,
+    Shape.Square => s.side * s.side,
+  };
+}

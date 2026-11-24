@@ -1,0 +1,117 @@
+$ enrang check --emit=mir main.en
+[exit 0]
+[stdout]
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+class Animal {
+  name: string;
+  legs: i64 = default;
+}
+class Dog extends Animal {
+  tricks: string[] = default;
+}
+
+statements (_1: string[]) -> int {
+  phase elaborated;
+  let _1: string[]; // args
+  let _2: Dog; // d
+  let _3: &Dog temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: string temp;
+  let _7: &Dog temp;
+  let _8: &Animal temp;
+  let _9: &string temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, Dog);
+    _3 = &_2 [auto-borrow];
+    _4 = Dog::#ctor(move _3, const "Rex": string) -> bb1;
+  }
+  bb1: {
+    _7 = &_2 [auto-borrow];
+    _8 = convert(upcast, move _7);
+    _6 = Animal::describe(move _8) -> bb2;
+  }
+  bb2: {
+    _9 = &_6 [temp-arg];
+    _5 = form log(move _9) -> bb3;
+  }
+  bb3: {
+    drop_glue(_6);
+    storage_dead(_6);
+    drop_glue(_2);
+    storage_dead(_2);
+    drop_glue(_1);
+    return;
+  }
+}
+
+fn Animal::#ctor(_1: &Animal, _2: string) -> void perms(write) sources() moves(1) result none {
+  phase elaborated;
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    switch const overridden(legs): bool [0: bb4, otherwise: bb3];
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+  bb3: {
+    _3 = move _2;
+    drop_glue((*_1).name);
+    (*_1).name = move _3;
+    storage_dead(_3);
+    return;
+  }
+  bb4: {
+    field_init((*_1).legs, const 4: i64);
+    goto bb3;
+  }
+}
+
+fn Animal::describe(_1: &Animal) -> string perms(read) sources() result none {
+  phase elaborated;
+  let _1: &Animal; // this
+  let _2: &string temp;
+  bb0: {
+    _2 = &(*_1).name [auto-borrow];
+    _0 = "alloc/string"::#extend0::clone(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: string) -> void perms(write) sources() moves(1) result none {
+  phase elaborated;
+  let _1: &Dog; // this
+  let _2: string; // name
+  let _3: string[] temp;
+  let _4: void temp;
+  let _5: &Dog temp;
+  let _6: &Animal temp;
+  bb0: {
+    switch const overridden(tricks): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _5 = &*_1 [reborrow];
+    _6 = convert(upcast, move _5);
+    _4 = Animal::#ctor(move _6, move _2) -> bb3;
+  }
+  bb2: {
+    _3 = intrinsic AllocArray<string>();
+    field_init((*_1).tricks, move _3);
+    storage_dead(_3);
+    goto bb1;
+  }
+  bb3: {
+    return;
+  }
+}
+[stderr]

@@ -1,0 +1,23 @@
+public enum Shape {
+  Circle,
+  Empty,
+}
+
+public enum Color {
+  Red,
+  Green,
+}
+
+public function name(c: Color): string {
+  return match (c) {
+    Shape.Circle => "circle", //~ EN0504 "`Shape.Circle` can't match a `Color`"
+    default => "other",
+  };
+}
+
+public function word(n: i64): string {
+  return match (n) {
+    "one" => "one", //~ EN0504 "can't match an `i64`"
+    default => "other",
+  };
+}

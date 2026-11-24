@@ -1,0 +1,11 @@
+$ enrang check --emit=summary main.en
+[exit 0]
+[stdout]
+module "main"
+class Wrapper
+fn Wrapper::#ctor(_1: &Wrapper, _2: &u8[]) -> void perms(write, read) sources() stores(1 -> 0) result none;
+//   #0: writes through it
+fn Wrapper::peek(_1: &Wrapper) -> u8 perms(read) sources() result none;
+fn Wrapper::retarget(_1: &Wrapper, _2: &u8[]) -> void perms(write, read) sources() stores(1 -> 0) result none;
+//   #0: writes through it
+[stderr]

@@ -1,0 +1,7 @@
+//! row: `[...b]` with `b: Box<T[]>`, `[...5]`, `
+const b: Box<i64[]> = new Box([1, 2]);
+const o: i64[] | null = null;
+const c1 = [...b]; //~ EN0438
+const c2 = [...5]; //~ EN0438
+const c3 = [..."abc"]; //~ EN0438
+const c4 = [...o]; //~ EN0438

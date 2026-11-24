@@ -1,0 +1,8 @@
+const p = { x: 1, y: 2 };
+const xs = [1, 2, 3];
+let first = 0;
+let others: i64[] = [];
+const { x, ...more } = p; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+[first, ...others] = xs; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+const [head, ...tail] = xs; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+console.log(x, more, head, tail);

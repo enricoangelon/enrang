@@ -1,0 +1,16 @@
+//! row: `run(() => { xs = []; })` in a loop over
+public function readThenWrite(): void {
+  let xs: i64[] = [1, 2];
+  for (const x of &xs) {
+    run(() => { console.log(x); xs = []; }); //~ EN0706
+  }
+}
+
+public function writeThenRead(): void {
+  let xs: i64[] = [1, 2];
+  for (const x of &xs) {
+    run(() => { xs = []; console.log(x); }); //~ EN0706
+  }
+}
+
+private function run(f: () => void): void { f(); }

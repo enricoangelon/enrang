@@ -1,0 +1,18 @@
+const n: i64 = 1;
+const xs: (&i64)[] = [&n]; //~ EN0701 "an array can't hold a `&i64`, because `&i64` is a reference"
+const b: Box<&i64> | null = null; //~ EN0701 "a `Box` can't hold a `&i64`"
+console.log(xs, b);
+
+public enum Slot {
+  Full { r: &i64 }, //~ EN0701 "an enum case can't hold a `&i64`"
+  Empty,
+}
+
+public class Holder {
+  public r: &i64; //~ EN0701 "`r` holds a reference, so it must be `private`"
+  public constructor(r: &i64) {
+    this.r = r;
+  }
+}
+
+public function show(p: &{ r: &i64 }): void {} //~ EN0701 "an object type can't hold a `&i64`"

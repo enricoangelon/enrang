@@ -1,0 +1,31 @@
+$ enrang check tests/compile/EN0458/c4-move-inherited.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0458]: `move` method not declared in the receiver's class
+ --> tests/compile/EN0458/c4-move-inherited.fail.en:4:15
+  |
+4 | const parts = p.build(); //~ EN0458 "`move` method not declared in the receiver's class"
+  |               ^^^^^^^^^ `PlainHtmlBuilder` inherits `build` from `Builder`
+  |
+help: override `build` in `PlainHtmlBuilder`
+  = explain: run `enrang explain EN0458`
+
+error[EN0458]: `move` method not declared in the receiver's class
+  --> tests/compile/EN0458/c4-move-inherited.fail.en:27:12
+   |
+27 |     return super.build(); //~ EN0458 "`move` method not declared in the receiver's class"
+   |            ^^^^^^^^^^^^^ `build` is a `move` method of `Builder`
+   |
+help: move the state out with a helper the base shares, `protected takeParts(): string[] { return mem.replace(&this.parts, []); }`
+   = explain: run `enrang explain EN0458`
+
+warning[EN0459]: `move` method of an abstract class can never run
+  --> tests/compile/EN0458/c4-move-inherited.fail.en:38:15
+   |
+38 |   public move run(): string { //~ EN0459 "`move` method of an abstract class can never run"
+   |               ^^^ no object is ever exactly a `Task`
+   |
+help: declare it `abstract`
+
+error: aborting due to 2 previous errors; 1 warning emitted

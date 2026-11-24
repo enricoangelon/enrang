@@ -1,0 +1,5 @@
+public enum Status {
+  Ok = 200,
+  Missing = "not found", //~ EN0456 "`Status` mixes number and text values"
+  Teapot = 418,
+}

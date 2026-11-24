@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0610/return_before_fields_set.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0610]: `owner` is not set
+  --> tests/compile/EN0610/return_before_fields_set.fail.en:10:7
+   |
+10 |       return; //~ EN0610 "`owner` is not set"
+   |       ^^^^^^^ the constructor returns here
+   |
+help: assign this.owner before `this` is used, or give `owner` a default
+   = explain: run `enrang explain EN0610`
+
+error: aborting due to 1 previous error

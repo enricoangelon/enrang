@@ -1,0 +1,8 @@
+let n = 0;
+const f = () => { n += 1; };
+run(() => { console.log(1); }, f);
+
+private function run(a: () => void, b: () => void): void {
+  a();
+  b();
+}

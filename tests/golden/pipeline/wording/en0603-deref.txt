@@ -1,0 +1,13 @@
+error[EN0603]: cannot move `*r` out of a reference
+  --> main.en:10:13
+   |
+10 |   const c = *r;
+   |             ^^ `*r` is behind a reference
+   |
+help: to take a copy, write `r.clone()`
+   |
+10 |   const c = r.clone();
+   |             ~~~~~~~~~
+   = explain: run `enrang explain EN0603`
+
+error: aborting due to 1 previous error

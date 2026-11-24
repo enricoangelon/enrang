@@ -1,0 +1,17 @@
+public function maybe(c: bool): void {
+  let s: string = "abc";
+  const g = new Guard(&s);
+  if (c) {
+    dispose(g);
+  }
+  s = "def"; //~ EN0706 "`s` cannot change while `g` still points into it"
+  console.log(s);
+}
+
+private class Guard {
+  private r: &string;
+
+  public constructor(r: &string) { this.r = r; }
+
+  public destructor() { console.log(`drop ${this.r}`); }
+}

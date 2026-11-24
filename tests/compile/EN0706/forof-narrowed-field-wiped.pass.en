@@ -1,0 +1,16 @@
+//! row: `public class H { public items: string[]
+public class H {
+  public items: string[] | null = null;
+  public wipe(): void { this.items = null; }
+}
+
+private function wipe(h: &H): void { h.items = null; }
+
+public function direct(h: &H): void {
+  if (h.items != null) {
+    for (const s of &h.items) {
+      console.log(s);
+    }
+    wipe(h);
+  }
+}

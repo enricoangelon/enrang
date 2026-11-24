@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0105/assignment_as_operand.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0105]: assignment used as an operand of `&&`
+ --> tests/compile/EN0105/assignment_as_operand.fail.en:3:22
+  |
+3 | const ok = ready && (count = 3); //~ EN0105
+  |                      ^^^^^^^^^ this assigns; it does not compare
+  |
+help: compare with `==`
+  |
+3 | const ok = ready && (count == 3); //~ EN0105
+  |                            ~~
+  = explain: run `enrang explain EN0105`
+
+error: aborting due to 1 previous error

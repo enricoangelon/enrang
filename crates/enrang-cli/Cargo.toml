@@ -19,6 +19,7 @@ enrang-target = { path = "../enrang-target" }
 enrang-driver = { path = "../enrang-driver" }
 
 [dev-dependencies]
+enrang-syntax = { path = "../enrang-syntax" }
 enrang-testkit = { path = "../enrang-testkit" }
 
 [[test]]

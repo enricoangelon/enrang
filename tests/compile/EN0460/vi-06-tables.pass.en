@@ -1,0 +1,41 @@
+const r = new Robot {};
+const p = new Parrot {};
+const pet: Box<Animal> = new Box(new Dog {});
+console.log(pet.hear(&r), pet.hear(&p));
+const f: fn(s: &Speaker) => string = describe;
+console.log(f(&r));
+const rex = new Dog {};
+greet(&rex);
+
+private function describe(s: &Speaker): string { return s.speak(); }
+
+private function greet(p: &Animal): void {
+  const n: i64 = 42;
+  const s = "hi";
+  p.show(&n);
+  p.show(&s);
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class Animal {
+  public hear(s: &Speaker): string { return `animal hears ${s.speak()}`; }
+
+  public show<T>(x: &T): void { console.log("Animal.show:", x); }
+}
+
+public class Dog extends Animal {
+  public override hear(s: &Speaker): string { return `dog hears ${s.speak()}`; }
+}
+
+public final class Robot {
+  public speak(): string { return "beep"; }
+}
+
+public final class Parrot {
+  public word: string = "hello";
+
+  public speak(): string { return this.word.clone(); }
+}

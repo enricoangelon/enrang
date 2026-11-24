@@ -1,0 +1,7 @@
+const d = new D("a".toString());
+dispose(d.name); //~ EN0607 "cannot move `d.name` out of `d`, because `D` has a destructor"
+
+private class D {
+  public constructor(public name: string) {}
+  public destructor() { console.log(`drop ${this.name}`); }
+}

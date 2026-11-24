@@ -1,0 +1,5 @@
+//! row: `l1`-`l10`, local functions, among them `let
+function report(): void {
+  console.log(count); //~ EN0313 "`count` is a top-level variable, which `report` can't see"
+}
+let count = 0;

@@ -1,0 +1,26 @@
+class Named {
+  tag: Tag;
+}
+@final class Tag {
+  s: string;
+}
+
+fn Named::#ctor(_1: &Named, _2: Tag) -> void perms(write) sources() moves(1) result none {
+  phase elaborated;
+  let _3: bool flag;
+  drop_flag _3: _1.0;
+  bb0: {
+    _3 = const overridden(tag): bool;
+    switch copy _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    drop_glue((*_1).tag);
+    goto bb2;
+  }
+  bb2: {
+    _3 = const false: bool;
+    (*_1).tag = move _2;
+    _3 = const true: bool;
+    return;
+  }
+}

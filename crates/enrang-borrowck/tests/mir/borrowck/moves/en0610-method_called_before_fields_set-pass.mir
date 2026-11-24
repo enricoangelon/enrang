@@ -1,0 +1,91 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0610/method_called_before_fields_set.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0610/method_called_before_fields_set.pass";
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+class Person {
+  name: string;
+}
+class Pet {
+  owner: Person;
+  name: string;
+}
+
+fn Person::#ctor(_1: &Person, _2: string) -> void {
+  let _1: &Person; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn Pet::#ctor(_1: &Pet, _2: string, _3: Person) -> void {
+  let _1: &Pet; // this
+  let _2: string; // name
+  let _3: Person; // owner
+  let _4: string temp;
+  let _5: Person temp;
+  let _6: void temp;
+  let _7: string temp;
+  let _8: &Pet temp;
+  let _9: &string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _4 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _4;
+    drop(_4);
+    storage_dead(_4);
+    _5 = move _3;
+    drop((*_1).owner) [assign];
+    (*_1).owner = move _5;
+    drop(_5);
+    storage_dead(_5);
+    _8 = &*_1 [reborrow];
+    _7 = virtual Pet::describe [copy _8](move _8) -> bb3;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+  bb3: {
+    _9 = &_7 [temp-arg];
+    _6 = form log(move _9) -> bb4;
+  }
+  bb4: {
+    drop(_7);
+    storage_dead(_7);
+    drop(_3);
+    drop(_2);
+    return;
+  }
+}
+
+fn Pet::describe(_1: &Pet) -> string {
+  let _1: &Pet; // this
+  let _2: &string temp;
+  bb0: {
+    _2 = &(*_1).name [auto-borrow];
+    _0 = "alloc/string"::#extend0::clone(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

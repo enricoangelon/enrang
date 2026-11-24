@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0506/refutable.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0506]: this pattern can't destructure a `User | null`: test it first
+ --> tests/compile/EN0506/refutable.fail.en:2:7
+  |
+2 | const { name } = maybe; //~ EN0506 "this pattern can't destructure a `User | null`"
+  |       ^^^^^^^^ it may be `null`
+  |
+  = explain: run `enrang explain EN0506`
+
+error[EN0506]: this pattern can't destructure a `Shape`: match it first
+ --> tests/compile/EN0506/refutable.fail.en:4:7
+  |
+4 | const { radius } = s; //~ EN0506 "this pattern can't destructure a `Shape`"
+  |       ^^^^^^^^^^ it may hold another case
+  |
+  = explain: run `enrang explain EN0506`
+
+error[EN0506]: this pattern can't destructure a `Result<User>`: match it first
+ --> tests/compile/EN0506/refutable.fail.en:6:7
+  |
+6 | const { value } = r; //~ EN0506 "this pattern can't destructure a `Result<User>`"
+  |       ^^^^^^^^^ it may hold another case
+  |
+  = explain: run `enrang explain EN0506`
+
+error: aborting due to 3 previous errors

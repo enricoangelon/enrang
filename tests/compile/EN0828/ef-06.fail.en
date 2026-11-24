@@ -1,0 +1,12 @@
+private function bufSink(ctx: *u8, bytes: *u8, n: usize): void {
+  unsafe {
+    const b = *bytes; //~ EN0828 "`bufSink` reads through the raw pointer `bytes`"
+    ctx.write(b); //~ EN0828 "`bufSink` writes through the raw pointer `ctx`"
+  }
+}
+
+public function make(ctx: *u8): void {
+  unsafe {
+    const f = Formatter.fromFn(bufSink, ctx);
+  }
+}

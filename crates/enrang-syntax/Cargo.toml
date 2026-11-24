@@ -1,0 +1,17 @@
+[package]
+name = "enrang-syntax"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[dependencies]
+enrang-base = { path = "../enrang-base" }
+enrang-diag = { path = "../enrang-diag" }
+
+[dev-dependencies]
+enrang-testkit = { path = "../enrang-testkit" }
+
+[[test]]
+name = "syntax"
+path = "tests/syntax/main.rs"
+harness = false

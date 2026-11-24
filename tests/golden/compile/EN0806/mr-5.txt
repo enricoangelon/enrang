@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0806/mr-5.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0806]: `@devMigrate` can't be used on a function that uses top-level variables
+ --> tests/compile/EN0806/mr-5.fail.en:4:1
+  |
+4 | @devMigrate function migratePlayer(old: { name: string, hp: i32 }): Player { //~ EN0806 "`@devMigrate` can't be used on a function that uses top-level variables"
+  | ^^^^^^^^^^^ the compiler, a runtime or foreign code calls it, and nothing supplies its hidden arguments
+  |                      ------------- `migratePlayer` uses `log`, a top-level variable
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: `@panicHandler` can't be used on a function that uses top-level variables
+ --> tests/compile/EN0806/mr-5.fail.en:9:1
+  |
+9 | @panicHandler function onPanic(): never { //~ EN0806 "`@panicHandler` can't be used on a function that uses top-level variables"
+  | ^^^^^^^^^^^^^ the compiler, a runtime or foreign code calls it, and nothing supplies its hidden arguments
+  |                        ------- `onPanic` uses `log`, a top-level variable
+  |
+  = explain: run `enrang explain EN0806`
+
+error: aborting due to 2 previous errors

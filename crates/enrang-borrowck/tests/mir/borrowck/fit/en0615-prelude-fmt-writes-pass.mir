@@ -1,0 +1,49 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/prelude-fmt-writes.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/prelude-fmt-writes.pass";
+@lang("formatter") @final class "core/fmt"::Formatter {
+  private sink: unsafe fn(*u8, *u8, usize) => void;
+  private ctx: *u8;
+}
+fn "core/fmt"::Formatter::write(let _1: &Formatter, const _2: &string) -> void;
+class Tally {
+  private n: i64 = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Tally; // a
+  let _3: *Tally temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &Tally temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Tally leaving(n)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [auto-borrow];
+    _5 = form log(const "": &string, move _6, const "": &string) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Tally::fmt(_1: &Tally, _2: &Formatter) -> void {
+  let _1: &Tally; // this
+  let _2: &Formatter; // f
+  let _3: void temp;
+  let _4: &Formatter temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = "core/fmt"::Formatter::write(move _4, const "t": &string) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0432/match_arms_of_two_types.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0432]: the branches have different types: `bool` and `string`
+ --> tests/compile/EN0432/match_arms_of_two_types.fail.en:2:47
+  |
+2 |   const y = match (x) { 1 => true, default => "many" }; //~ EN0432 "`bool` and `string`"
+  |                                               ^^^^^^ this is `string`
+  |
+help: annotate the expected type, or make every branch give one type
+  = explain: run `enrang explain EN0432`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,27 @@
+let a: i64[] = [0];
+let v: i64[] = [1, 2];
+let c = new Cursor(&a);
+const k = aim(&c, &v);
+c.grow();
+console.log(k);
+
+function aim(c: &Cursor, xs: &i64[]): &Slice<i64> {
+  c.grow();
+  return xs.slice(0, 1);
+}
+
+private class Cursor {
+  private xs: &i64[];
+
+  public constructor(xs: &i64[]) {
+    this.xs = xs;
+  }
+
+  public set(xs: &i64[]): void {
+    this.xs = xs;
+  }
+
+  public grow(): void {
+    this.xs.push(1);
+  }
+}

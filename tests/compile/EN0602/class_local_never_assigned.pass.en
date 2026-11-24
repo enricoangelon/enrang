@@ -1,0 +1,7 @@
+let g: User;
+g = new User { name: "Ada" };
+console.log(g.name);
+
+public class User {
+  public name: string;
+}

@@ -1,0 +1,11 @@
+const words = ["a", "bbb", "cc"];
+const other = "xy".toString();
+let longest = &words[0];
+for (const w of &words) {
+  if (w.length() > longest.length()) {
+    longest = w;
+  }
+}
+console.log(longest);
+longest = &other;
+console.log(longest);

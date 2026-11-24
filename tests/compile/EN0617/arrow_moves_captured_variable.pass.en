@@ -1,0 +1,9 @@
+const name = "Ada".toString();
+const f = () => {
+  keep(name.clone());
+};
+f();
+
+public function keep(n: string): void {
+  console.log(n);
+}

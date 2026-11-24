@@ -1,0 +1,74 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/narrow-case-fact.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/narrow-case-fact.pass";
+@private class Holder {
+  shape: Shape = default;
+  label: string = default;
+}
+enum Shape { Circle { radius: f64 }, Empty }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Holder; // h
+  let _3: *Holder temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: isize temp;
+  let _7: void temp;
+  let _8: &Holder temp;
+  let _9: void temp;
+  let _10: &f64 temp;
+  fact f0: _2.shape case Circle;
+  fact f1: _2.shape case Empty;
+  record f0 at bb3[0] _8 call_arg;
+  use f0 at bb6[0];
+  test f0 at bb3;
+  test f1 at bb4;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Holder leaving(shape, label)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = discriminant(_2.shape);
+    switch move _6 [0: bb3, 1: bb4, otherwise: bb5];
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb3: {
+    _8 = &_2 [explicit];
+    _7 = flatten(move _8) -> bb6;
+  }
+  bb4: {
+    goto bb2;
+  }
+  bb5: {
+    unreachable;
+  }
+  bb6: {
+    check_tag(_2.shape, Circle);
+    _10 = &(_2.shape as Circle).radius [auto-borrow];
+    _9 = form log(move _10) -> bb7;
+  }
+  bb7: {
+    goto bb2;
+  }
+}
+
+@private fn flatten(_1: &Holder) -> void {
+  let _1: &Holder; // h
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &(*_1).label [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

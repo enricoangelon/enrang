@@ -1,0 +1,16 @@
+let k = [new Trace("a")];
+const c = new Copier(&k);
+const r = &k[0];
+f(1, c.peek());
+console.log(r.name);
+
+private function f(n: i64, xs: &Trace[]): void { console.log(xs); }
+private class Copier {
+  private src: readonly &Trace[];
+  public constructor(s: &Trace[]) { this.src = s; }
+  public peek(): readonly &Trace[] { return this.src; }
+}
+private class Trace {
+  public constructor(public name: string) {}
+  public destructor() { console.log(`[${this.name}] done`); }
+}

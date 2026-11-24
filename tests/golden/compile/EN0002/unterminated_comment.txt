@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0002/unterminated_comment.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0002]: unterminated block comment
+ --> tests/compile/EN0002/unterminated_comment.fail.en:2:1
+  |
+2 | /* the rest of the file is this comment //~ EN0002
+  | ^^ this comment has no closing `*/`
+  |
+help: close it with `*/`
+  = explain: run `enrang explain EN0002`
+
+error: aborting due to 1 previous error

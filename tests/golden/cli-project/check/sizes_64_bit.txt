@@ -1,0 +1,45 @@
+$ enrang check --target=x86_64-linux sizes.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0415]: compile-time assert failed: a string is three words
+ --> sizes.en:1:8
+  |
+1 | assert(sizeOf<string>() == 12, "a string is three words");
+  |        ^^^^^^^^^^^^^^^^^^^^^^ this is `false`
+  |
+  = explain: run `enrang explain EN0415`
+
+error[EN0415]: compile-time assert failed: an array is three words
+ --> sizes.en:2:8
+  |
+2 | assert(sizeOf<i64[]>() == 12, "an array is three words");
+  |        ^^^^^^^^^^^^^^^^^^^^^ this is `false`
+  |
+  = explain: run `enrang explain EN0415`
+
+error[EN0415]: compile-time assert failed: a nullable i64 has a tag
+ --> sizes.en:3:8
+  |
+3 | assert(sizeOf<i64 | null>() == 12, "a nullable i64 has a tag");
+  |        ^^^^^^^^^^^^^^^^^^^^^^^^^^ this is `false`
+  |
+  = explain: run `enrang explain EN0415`
+
+error[EN0415]: compile-time assert failed: Player
+ --> sizes.en:4:8
+  |
+4 | assert(sizeOf<Player>() == 20, "Player");
+  |        ^^^^^^^^^^^^^^^^^^^^^^ this is `false`
+  |
+  = explain: run `enrang explain EN0415`
+
+error[EN0415]: compile-time assert failed: Token
+ --> sizes.en:5:8
+  |
+5 | assert(sizeOf<Token>() == 16, "Token");
+  |        ^^^^^^^^^^^^^^^^^^^^^ this is `false`
+  |
+  = explain: run `enrang explain EN0415`
+
+error: aborting due to 5 previous errors

@@ -1,0 +1,2 @@
+private const A: i64 = B + 1; //~ EN0412 "constant cycle: `A` uses `B`, which uses `A`"
+private const B: i64 = A + 1;

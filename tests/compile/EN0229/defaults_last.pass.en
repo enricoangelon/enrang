@@ -1,0 +1,3 @@
+public function span(end: i64, start: i64 = 0): i64 {
+  return end - start;
+}

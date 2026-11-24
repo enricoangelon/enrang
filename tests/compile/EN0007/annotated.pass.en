@@ -1,0 +1,4 @@
+const mask: u8 = 255;
+const also = 255 as u8;
+const hex = 0xFF;
+console.log(mask, also, hex);

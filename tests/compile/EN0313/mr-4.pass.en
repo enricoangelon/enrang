@@ -1,0 +1,21 @@
+let q: i64[] = [];
+function grow(): void {
+  for (let i: i64 = 0; i < 100; i++) {
+    q.push(i);
+  }
+}
+function relay(): void {
+  grow();
+}
+function hello(): void {
+  console.log("hello");
+}
+const f: fn() => void = hello;
+relay();
+f();
+
+public class Worker {
+  public run(): void {
+    hello();
+  }
+}

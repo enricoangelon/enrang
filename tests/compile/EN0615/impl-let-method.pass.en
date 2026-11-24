@@ -1,0 +1,8 @@
+public interface Counter {
+  inc(): void;
+}
+
+public class Clicks implements Counter {
+  private n: i64 = 0;
+  public inc(): void {}
+}

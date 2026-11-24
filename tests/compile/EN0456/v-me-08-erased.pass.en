@@ -1,0 +1,26 @@
+const all: Box<Labeled>[] = [new Box(Mood.Happy), new Box(new Robot { id: 7 })];
+console.log(all);
+const m = Mood.Happy;
+const pair: [&Labeled, i64] = [&m, 1];
+console.log(pair);
+
+public interface Labeled {
+  label(): string;
+}
+
+public enum Mood {
+  Happy = "happy",
+  Sad = "sad";
+
+  public label(): string {
+    return "mood";
+  }
+}
+
+public final class Robot {
+  public id: i64;
+
+  public label(): string {
+    return "robot";
+  }
+}

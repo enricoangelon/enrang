@@ -1,0 +1,8 @@
+let c: Color;
+c = Color.Green;
+console.log(c);
+
+public enum Color {
+  Red,
+  Green,
+}

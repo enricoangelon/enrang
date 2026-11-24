@@ -52,7 +52,7 @@ fn visible(text: &str) -> String {
     text.replace('\x1b', "<ESC>")
 }
 
-fn without_escapes(text: &str) -> String {
+pub(crate) fn without_escapes(text: &str) -> String {
     let mut out = String::new();
     let mut rest = text;
     while let Some(start) = rest.find('\x1b') {
@@ -89,7 +89,12 @@ pub fn register(h: &mut Harness) {
         (&[], 2),
         (&["explain"], 2),
         (&["targets", "x"], 2),
-        (&["fmt"], 2),
+        (&["lsp"], 2),
+        (&["fmt", "--help"], 0),
+        (&["check", "--help"], 0),
+        (&["init", "--help"], 0),
+        (&["check", "--bogus"], 2),
+        (&["init", "--kernel"], 2),
         (&["tsc"], 2),
         (&["build"], 2),
         (&["frobnicate"], 2),
@@ -110,7 +115,7 @@ pub fn register(h: &mut Harness) {
     }
 
     h.case("streams/a pipe gets no colour", || {
-        let ran = enrang(&strings(&["fmt"]));
+        let ran = enrang(&strings(&["lsp"]));
         assert!(!ran.stderr.contains('\x1b'), "{:?}", ran.stderr);
     });
     let environments: &[(&str, &str)] = &[
@@ -130,7 +135,7 @@ pub fn register(h: &mut Harness) {
             move || {
                 for args in [
                     &["--help"][..],
-                    &["fmt"],
+                    &["lsp"],
                     &["explain", "EN0601"],
                     &["targets"],
                 ] {
@@ -161,7 +166,7 @@ pub fn register(h: &mut Harness) {
     });
 
     h.case("colour/stripping the escapes gives the plain text", || {
-        for args in [&["fmt"][..], &["tsc"], &["frobnicate"]] {
+        for args in [&["lsp"][..], &["tsc"], &["frobnicate"]] {
             let args = strings(args);
             let painted = run(&args, true);
             let plain = run(&args, false);
@@ -187,7 +192,7 @@ pub fn register(h: &mut Harness) {
         }
     });
     for (file, args) in [
-        ("color/deferred.txt", &["fmt"][..]),
+        ("color/deferred.txt", &["lsp"][..]),
         ("color/alias.txt", &["tsc"]),
         ("color/unknown.txt", &["buidl"]),
     ] {
@@ -447,7 +452,7 @@ fn terminal_cases(h: &mut Harness) {
         global_ledger().record("script", CASES, "cannot give a command a pseudo-terminal");
         return;
     };
-    let plain = run(&strings(&["fmt"]), false).stderr;
+    let plain = run(&strings(&["lsp"]), false).stderr;
     let environments: [(&str, &str); 3] = [
         ("with stderr on a terminal", ""),
         ("whatever NO_COLOR says", "NO_COLOR=1 "),
@@ -458,7 +463,7 @@ fn terminal_cases(h: &mut Harness) {
         h.case(
             format!("terminal/a diagnostic is painted {name}"),
             move || {
-                let ran = on_terminal(&script, &format!("{prefix}'{BIN}' fmt >/dev/null"));
+                let ran = on_terminal(&script, &format!("{prefix}'{BIN}' lsp >/dev/null"));
                 assert_eq!(ran.code, 2, "{ran:?}");
                 assert!(ran.stdout.contains('\x1b'), "{ran:?}");
                 assert_eq!(without_escapes(&ran.stdout), plain);
@@ -470,7 +475,7 @@ fn terminal_cases(h: &mut Harness) {
         h.case("terminal/stdout on a terminal paints nothing", move || {
             let directory = TempDir::new("terminal");
             let file = directory.join("stderr");
-            let line = format!("'{BIN}' fmt 2>'{}'", file.display());
+            let line = format!("'{BIN}' lsp 2>'{}'", file.display());
             let ran = on_terminal(&script, &line);
             assert_eq!(ran.code, 2, "{ran:?}");
             let written = std::fs::read_to_string(file).expect("the redirection wrote it");
@@ -480,7 +485,7 @@ fn terminal_cases(h: &mut Harness) {
     h.case(
         "terminal/a diagnostic is painted with both streams on a terminal",
         move || {
-            let ran = on_terminal(&script, &format!("'{BIN}' fmt"));
+            let ran = on_terminal(&script, &format!("'{BIN}' lsp"));
             assert_eq!(ran.code, 2, "{ran:?}");
             assert!(ran.stdout.contains('\x1b'), "{ran:?}");
         },

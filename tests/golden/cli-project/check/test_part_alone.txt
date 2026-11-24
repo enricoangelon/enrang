@@ -1,0 +1,4 @@
+$ enrang check main.test.en
+[exit 0]
+[stdout]
+[stderr]

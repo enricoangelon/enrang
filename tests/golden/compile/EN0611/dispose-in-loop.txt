@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0611/dispose-in-loop.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0611]: `s` was moved in an earlier turn
+ --> tests/compile/EN0611/dispose-in-loop.fail.en:3:11
+  |
+3 |   dispose(s); //~ EN0611
+  |           ^ moved here, in an earlier turn
+  |
+help: borrow it instead (`&s`), or move a copy each turn: `s.clone()`
+  = explain: run `enrang explain EN0611`
+
+error: aborting due to 1 previous error

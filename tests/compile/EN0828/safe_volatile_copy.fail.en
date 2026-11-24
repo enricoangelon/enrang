@@ -1,0 +1,11 @@
+public function w<T extends ptr.VolatileValue>(p: *T, v: T): void {
+  unsafe {
+    p.writeVolatile(v); //~ EN0828 "`w` writes through the raw pointer `p`"
+  }
+}
+
+public function at(base: *u16, i: isize): u16 {
+  unsafe {
+    return base.add(i).readVolatile(); //~ EN0828 "`at` reads through the raw pointer `base`"
+  }
+}

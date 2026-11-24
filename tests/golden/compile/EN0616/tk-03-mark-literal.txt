@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/tk-03-mark-literal.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `grab`
+ --> tests/compile/EN0616/tk-03-mark-literal.fail.en:4:3
+  |
+4 |   rows[1] = []; //~ EN0616
+  |   ^^^^^^^^^^^^ written here
+  |
+  = note: `grab` returns two references that may point at the same data
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

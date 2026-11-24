@@ -128,8 +128,8 @@ const STACK_FREESTANDING: StackPolicy = StackPolicy {
 };
 
 /// What `__stack_limit` keeps free on a freestanding target: 2 KB under `soft`,
-/// 3 KB under `sse2`, where an interrupt stub saves 512 bytes of `fxsave` state
-/// (ARCHITECTURE 7.5, 7.15).
+/// 3 KB under `sse2` and `x87`, where an interrupt stub saves 512 bytes of `fxsave`
+/// state or 108 bytes of `fnsave` state (ARCHITECTURE 7.5, 7.15).
 pub(crate) fn limit_reserve(float: FloatStrategy) -> u32 {
     match float {
         FloatStrategy::Soft => 2 * 1024,

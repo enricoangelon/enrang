@@ -1,0 +1,2 @@
+const mode = 0755; //~ EN0005
+console.log(mode);

@@ -1,0 +1,15 @@
+//! covers: C04
+let bytes = new Box([1 as u8, 2, 3]);
+fill(&bytes, 7);
+const n = new Box(5 as i64);
+show(&n);
+
+private function fill(part: &Slice<u8>, v: u8): void {
+  for (let i = 0; i < part.length(); i++) {
+    part[i] = v;
+  }
+}
+
+private function show(x: &i64): void {
+  console.log(x);
+}

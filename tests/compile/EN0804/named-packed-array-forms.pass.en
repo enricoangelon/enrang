@@ -1,0 +1,20 @@
+//! row: `@packed public final class P { public a:
+let p = new P { a: 1, b: [1, 2, 3, 4], g: [[1, 2], [3, 4]] };
+for (const x of &p.b) {
+  console.log(x);
+}
+const r: isize = 1;
+for (const x of &p.g[r]) {
+  console.log(x);
+}
+const e = &p.b[1];
+console.log(*e);
+const c = [...p.b];
+console.log(c);
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u8[4];
+  public g: u8[2][2];
+}

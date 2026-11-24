@@ -1,0 +1,43 @@
+// `kill` (A:1208, A:1222): SPEC 5.3's cursor pattern compiles, since repointing the
+// cursor removes every loan on its old pointee, its own new loan included.
+// Source:
+//   last(head: &Node): &Node { let cur = head; while (cur.kids.length() > 0) { cur = &cur.kids[0]; } return cur; }
+// Shapes: a copy of a reference parameter as a reborrow moved into the binding
+// (A:935), a `while` head (c.9), `len` and `check_bounds` before an index (c.4),
+// a repoint (c.8), `return cur` as a reborrow moved into `_0` (c.9).
+class Node {
+  val: i64;
+  kids: Node[];
+}
+
+fn last(_1: &Node) -> &Node {
+  let mut _2: &Node; // cur
+  let _3: &Node temp;
+  let _4: isize temp;
+  let _5: bool temp;
+  let _6: isize temp;
+  let _7: &Node temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = move _3;
+    goto bb1;
+  }
+  bb1: {
+    _4 = len((*_2).kids);
+    _5 = gt(copy _4, const 0: isize);
+    switch move _5 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _6 = const 0: isize;
+    check_bounds(copy _6, copy _4);
+    _2 = &(*_2).kids[_6] [explicit];
+    goto bb1;
+  }
+  bb3: {
+    _7 = &*_2 [reborrow];
+    _0 = move _7;
+    storage_dead(_2);
+    return;
+  }
+}

@@ -1,0 +1,18 @@
+public function used(): void {
+  let s: string = "a".toString();
+  console.log(s += "!");
+  console.log(s);
+  console.log((s += "?"));
+}
+
+public function copyChain(): void {
+  let x: i64 = 1;
+  let y: i64 = 2;
+  x = y = 0;
+  console.log(x, y);
+}
+
+public function printed(): void {
+  let s = "ab".toString();
+  console.log(s += "!");
+}

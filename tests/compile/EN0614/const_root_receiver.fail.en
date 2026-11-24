@@ -1,0 +1,2 @@
+const xs: i64[] = [];
+xs.push(1); //~ EN0614 "`xs` is `const`, so `push` cannot change it"

@@ -1,0 +1,20 @@
+let bag = new Bag();
+bag.items.push(5);
+const e = &bag.items[0];
+g(&bag, 1); //~ EN0706
+console.log(e);
+
+private function f(a: &Bag, n: i64): &Bag {
+  if (n == 0) { return a; }
+  return g(a, n - 1);
+}
+
+private function g(b: &Bag, n: i64): &Bag {
+  const r = f(b, n);
+  r.items.push(1);
+  return b;
+}
+
+public class Bag {
+  public items: i64[] = [];
+}

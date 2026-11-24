@@ -1,0 +1,4 @@
+public function outer(): i64 {
+  const inner = (): i64 => 1;
+  return inner();
+}

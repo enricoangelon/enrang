@@ -1,0 +1,7 @@
+const u = new User();
+const v = new User { name: "Ada" };
+console.log(u.name, v.name);
+
+public class User {
+  public name: string = "";
+}

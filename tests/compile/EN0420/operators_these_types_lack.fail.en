@@ -1,0 +1,7 @@
+const a = "apple";
+const b = "banana";
+console.log(a < b); //~ EN0420 "`<` can't compare `string`s"
+const flags: u8 = 6;
+console.log(flags & 2 == 2); //~ EN0420
+const yes = true;
+console.log(yes + 1); //~ EN0420

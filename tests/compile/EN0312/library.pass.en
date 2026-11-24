@@ -1,0 +1,5 @@
+public function greet(name: &string): string {
+  return `Hello, ${name}!`;
+}
+
+private unsafe let count: i64 = 0;

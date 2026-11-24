@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0708/shared_borrow_while_exclusive.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `xs` can't be read while `w` may write into it
+ --> tests/compile/EN0708/shared_borrow_while_exclusive.fail.en:3:6
+  |
+2 | const w = &xs;
+  |           --- borrowed for writing here, because `w` writes on line 4
+3 | show(&xs); //~ EN0708 "`xs` can't be read while `w` may write into it"
+  |      ^^^ read here
+4 | w.push(2);
+  | - the write
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `xs` before line 2 or after line 4
+  = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

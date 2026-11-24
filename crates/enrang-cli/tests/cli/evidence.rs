@@ -1,6 +1,7 @@
 //! `targets --evidence` must never claim evidence that does not exist (TESTING 21).
 
 use enrang_cli::{CLASSES, FAMILIES};
+use enrang_diag::CURRENT_MILESTONE;
 use enrang_target::CpuLevel;
 use enrang_testkit::Harness;
 
@@ -87,9 +88,9 @@ pub fn register(h: &mut Harness) {
     h.case("evidence/the output says nothing has been achieved", || {
         let text = inproc(&["targets", "--evidence"]).stdout;
         assert!(
-            text.contains(
-                "Nothing has been achieved: this is milestone M0, which has no compiler, and no\nchip has run any Enrang output. `no hardware` means no such chip is available to test on.\n"
-            ),
+            text.contains(&format!(
+                "Nothing has been achieved: this is milestone {CURRENT_MILESTONE}, which generates no code, and no\nchip has run any Enrang output. `no hardware` means no such chip is available to test on.\n"
+            )),
             "{text}"
         );
     });

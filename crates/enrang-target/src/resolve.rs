@@ -31,8 +31,8 @@ const NATIVE_TARGETS: &[&str] = &[
     "x86_64-none",
 ];
 
-/// What `--float=` takes. `x87` is known and refused (EN1020), so it is no value.
-const FLOATS: &[&str] = &["soft", "sse2"];
+/// What `--float=` takes (ARCHITECTURE 11).
+const FLOATS: &[&str] = &["soft", "sse2", "x87"];
 const FORMATS: &[&str] = &["elf", "pe", "flat", "efi"];
 const IMAGES: &[&str] = &["floppy", "hdd"];
 const TRACES: &[&str] = &["full", "fn", "none"];
@@ -286,42 +286,50 @@ fn resolve_float(
     alias: Option<&CpuAlias>,
 ) -> Result<FloatStrategy, Diagnostic> {
     let Some(float) = float else {
-        // The row's default, but for what ARCHITECTURE 2.7 says of `--cpu=sse2`.
-        return Ok(if spec.arch == Arch::I386 && spec.cpu == CpuLevel::Sse2 {
-            FloatStrategy::Sse2
-        } else {
-            spec.float
-        });
+        return Ok(default_float(spec));
     };
     match float {
-        "soft" if spec.arch == Arch::X86_64 => Err(soft_on_x86_64(spec)),
+        "soft" | "x87" if spec.arch == Arch::X86_64 => Err(only_sse2_on_x86_64(float, spec)),
+        "sse2" | "x87" if spec.arch == Arch::Mir => Err(not_in_the_vm(float, spec)),
         "soft" => Ok(FloatStrategy::Soft),
-        "x87" => Err(
-            Diagnostic::spanless(Code::EN1020, "the x87 float strategy is not supported yet")
-                .note("x87 is deferred: it may not ship until it passes the bit vectors `soft` and `sse2` pass")
-                .with_help(Help::text(
-                    "`--float=soft` works at every level of `i386-*` and is bit-identical",
-                )),
-        ),
-        "sse2" if spec.arch == Arch::Mir => Err(Diagnostic::spanless(
-            Code::EN0911,
-            format!("`--float=sse2` does not apply to target `{}`", spec.name),
-        )
-        .note("the VM runs floats on the host, or under `--float=soft` through the soft-float library")),
+        "x87" => Ok(FloatStrategy::X87),
         "sse2" if spec.allowed.contains(Feature::Sse2) => Ok(FloatStrategy::Sse2),
         "sse2" => Err(float_needs_level(spec, alias)),
         other => Err(unknown_value("--float", other, "a float strategy", FLOATS)),
     }
 }
 
-/// SSE2 is part of the x86-64 baseline, so a software path there would be a fourth
-/// lowering with no chip that needs it (SPEC 9.3).
-fn soft_on_x86_64(spec: &TargetSpec) -> Diagnostic {
+/// The row's default, except that on `i386-*` the level picks it (SPEC 9.3 and 10,
+/// ARCHITECTURE 2.7): `soft` at `i386` and `i486`, whose chips may have no FPU,
+/// `x87` at `i586` and `i686`, and `sse2` at `sse2`.
+fn default_float(spec: &TargetSpec) -> FloatStrategy {
+    if spec.arch != Arch::I386 {
+        return spec.float;
+    }
+    match spec.cpu {
+        CpuLevel::I586 | CpuLevel::I686 => FloatStrategy::X87,
+        CpuLevel::Sse2 => FloatStrategy::Sse2,
+        _ => spec.float,
+    }
+}
+
+/// SSE2 is part of the x86-64 baseline, so a software or x87 path there would be
+/// another lowering with no chip that needs it (SPEC 9.3).
+fn only_sse2_on_x86_64(float: &str, spec: &TargetSpec) -> Diagnostic {
     Diagnostic::spanless(
         Code::EN0911,
-        format!("`--float=soft` does not apply to target `{}`", spec.name),
+        format!("`--float={float}` does not apply to target `{}`", spec.name),
     )
     .note("every x86-64 CPU has SSE2, so `sse2` is the only float strategy on `x86_64-*`")
+}
+
+/// The VM's only float modes are the host's floats and `soft` (DEV_RUNTIME 2).
+fn not_in_the_vm(float: &str, spec: &TargetSpec) -> Diagnostic {
+    Diagnostic::spanless(
+        Code::EN0911,
+        format!("`--float={float}` does not apply to target `{}`", spec.name),
+    )
+    .note("the VM runs floats on the host, or under `--float=soft` through the soft-float library")
 }
 
 fn float_needs_level(spec: &TargetSpec, alias: Option<&CpuAlias>) -> Diagnostic {

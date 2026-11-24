@@ -1,0 +1,16 @@
+let busy = true;
+const xs = [1, 2];
+if (busy) {
+  console.log("busy");
+} else {
+  console.log("idle");
+}
+while (busy) {
+  busy = false;
+}
+for (const x of xs) {
+  console.log(x);
+}
+do {
+  busy = false;
+} while (busy);

@@ -1,0 +1,8 @@
+public function wrap<T>(x: Box<T>): void {}
+
+public function item<T>(xs: &T[]): isize { return xs.length(); }
+
+public class Holder<T> {
+  public v: T | null = null;
+  public all: Holder<T>[] = [];
+}

@@ -1,0 +1,8 @@
+public type Forest = Tree[];
+
+public class Tree {
+  public kids: Forest;
+}
+
+public type Name = string;
+public type Names = Name[];

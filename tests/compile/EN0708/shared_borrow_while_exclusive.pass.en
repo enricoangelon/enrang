@@ -1,0 +1,8 @@
+let xs: i64[] = [1];
+const w = &xs;
+w.push(2);
+show(&xs);
+
+private function show(v: &i64[]): void {
+  console.log(v);
+}

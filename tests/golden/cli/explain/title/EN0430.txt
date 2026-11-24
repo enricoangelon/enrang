@@ -1,7 +1,0 @@
-$ enrang explain EN0430
-[exit 0]
-[stdout]
-EN0430: integer division truncates
-
-No explain page yet: it arrives with milestone M2, and this is milestone M0.
-[stderr]

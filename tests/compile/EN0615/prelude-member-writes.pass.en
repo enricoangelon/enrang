@@ -1,0 +1,25 @@
+public class Point implements Eq {
+  private reads: i64 = 0;
+  public x: i64 = 0;
+
+  public equals(other: &Point): bool {
+    return this.x == other.x;
+  }
+}
+
+public class Tally implements Clone {
+  private copies: i64 = 0;
+
+  public clone(): Tally {
+    return new Tally();
+  }
+}
+
+public class Rank implements Ord {
+  private asked: i64 = 0;
+  public level: i32 = 0;
+
+  public compare(other: &Rank): i32 {
+    return this.level - other.level;
+  }
+}

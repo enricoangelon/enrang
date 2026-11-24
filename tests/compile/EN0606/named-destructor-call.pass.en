@@ -1,0 +1,19 @@
+//! row: `f.destructor()`, including on a generic
+let f = new File(3);
+dispose(f);
+
+public class File {
+  private fd: i64;
+  public constructor(fd: i64) {
+    this.fd = fd;
+  }
+  public destructor() {}
+}
+
+public interface Closer {
+  close(): void;
+}
+
+public function finish<T>(x: T): void {
+  dispose(x);
+}

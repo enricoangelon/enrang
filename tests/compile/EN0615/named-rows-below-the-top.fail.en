@@ -1,0 +1,33 @@
+//! row: A reading function where `(let x: &i64) =>
+public class Holder<T> {
+  public v: T;
+}
+
+public function underRef(r: &fn(x: &i64) => void): void {
+  const w: &fn(let x: &i64) => void = r; //~ EN0615 "`r` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected"
+}
+
+public function underArray(readers: (fn(x: &i64) => void)[]): void {
+  const writers: (fn(let x: &i64) => void)[] = readers; //~ EN0615 "`readers` holds a `fn(&i64) => void` where a `fn(let &i64) => void` is expected"
+}
+
+public function underNull(o: (fn(x: &i64) => void) | null): void {
+  const w: (fn(let x: &i64) => void) | null = o; //~ EN0615 "`o` holds a `fn(&i64) => void`"
+}
+
+public function underField(r: fn(x: &i64) => void): void {
+  const o: { f: fn(x: &i64) => void } = { f: r };
+  const w: { f: fn(let x: &i64) => void } = o; //~ EN0615 "`o` holds a `fn(&i64) => void`"
+}
+
+public function underGeneric(b: Holder<fn(x: &i64) => void>): void {
+  const w: Holder<fn(let x: &i64) => void> = b; //~ EN0615 "`b` holds a `fn(&i64) => void`"
+}
+
+public function underParameter(h: fn(g: fn(x: &i64) => void) => void): void {
+  const w: fn(g: fn(let x: &i64) => void) => void = h; //~ EN0615 "`h` holds a `fn(&i64) => void`"
+}
+
+public function underResult(h: fn() => fn(x: &i64) => void): void {
+  const w: fn() => fn(let x: &i64) => void = h; //~ EN0615 "`h` holds a `fn(&i64) => void`"
+}

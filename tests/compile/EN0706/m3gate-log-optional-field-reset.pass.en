@@ -1,0 +1,5 @@
+let o: O | null = new O();
+console.log(o?.name);
+console.log(reset(&o));
+function reset(x: &(O | null)): i64 { *x = null; return 0; }
+public class O { public name: string = "abc".toString(); }

@@ -1,6 +1,7 @@
 //! `--help` tells the truth about what works.
 
 use enrang_cli::{ALIASES, DEFERRED, LATER, WORKING};
+use enrang_diag::CURRENT_MILESTONE;
 use enrang_testkit::Harness;
 
 use crate::support::inproc;
@@ -22,13 +23,15 @@ fn section(start: &str) -> Vec<String> {
 
 pub fn register(h: &mut Harness) {
     h.case(
-        "help/says there is no compiler before anything else",
+        "help/says what cannot be done yet before anything else",
         || {
             let text = help();
-            let no_compiler = text.find("no compiler").expect("it says so");
+            let cannot = text
+                .find("it cannot yet\ncompile or run a program")
+                .expect("it says so");
             let commands = text.find("Commands that work").expect("it lists them");
-            assert!(no_compiler < commands);
-            assert!(text.contains("it cannot\ncompile, check or run a program"));
+            assert!(cannot < commands);
+            assert!(text.contains("it checks syntax and formats code"));
         },
     );
     h.case(
@@ -80,7 +83,7 @@ pub fn register(h: &mut Harness) {
     h.case("help/the exit statuses are those of SPEC 13.2", || {
         assert!(
             help().contains(
-                "Exit status: 0 success, 1 compile errors, failed tests or lost output, 2 usage,\n3 internal compiler error.\n"
+                "Exit status: 0 success, 1 compile errors, failed tests, lost output or a file that\n`fmt --check` would change, 2 usage, 3 internal compiler error.\n"
             )
         );
     });
@@ -96,8 +99,14 @@ pub fn register(h: &mut Harness) {
             &["-h"],
             &["--version"],
             &["-V"],
+            &["check", "--help"],
+            &["check", "-h"],
+            &["fmt", "--help"],
+            &["fmt", "-h"],
             &["explain", "--help"],
             &["explain", "-h"],
+            &["init", "--help"],
+            &["init", "-h"],
             &["targets", "--help"],
             &["targets", "-h"],
             &["targets", "--evidence"],
@@ -114,13 +123,43 @@ pub fn register(h: &mut Harness) {
         assert_eq!(inproc(&["--version"]), inproc(&["-V"]));
         assert_eq!(inproc(&["explain", "--help"]), inproc(&["explain", "-h"]));
         assert_eq!(inproc(&["targets", "--help"]), inproc(&["targets", "-h"]));
+        assert_eq!(inproc(&["check", "--help"]), inproc(&["check", "-h"]));
+        assert_eq!(inproc(&["fmt", "--help"]), inproc(&["fmt", "-h"]));
+        assert_eq!(inproc(&["init", "--help"]), inproc(&["init", "-h"]));
     });
+    h.case(
+        "help/a working command's help opens with its summary",
+        || {
+            for command in WORKING {
+                let outcome = inproc(&[command.name, "--help"]);
+                let first = outcome.stdout.lines().next().expect("a line");
+                assert_eq!(first, format!("{}.", command.summary));
+                assert!(
+                    outcome
+                        .stdout
+                        .contains(&format!("Usage: enrang {}", command.name)),
+                    "{}",
+                    outcome.stdout
+                );
+            }
+        },
+    );
+    h.case(
+        "help/no line of a command's help is over 100 columns",
+        || {
+            for command in WORKING {
+                for line in inproc(&[command.name, "--help"]).stdout.lines() {
+                    assert!(line.chars().count() <= 100, "{line}");
+                }
+            }
+        },
+    );
     h.case("help/the version is the workspace's, one line", || {
         let outcome = inproc(&["--version"]);
         assert_eq!(
             outcome.stdout,
             format!(
-                "enrang {} (milestone M0, no compiler yet)\n",
+                "enrang {} (milestone {CURRENT_MILESTONE})\n",
                 env!("CARGO_PKG_VERSION")
             )
         );

@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1025/regular_expression.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1025]: regular expressions are not supported yet
+ --> tests/compile/EN1025/regular_expression.fail.en:2:26
+  |
+2 | const words = text.split(/ +/); //~ EN1025 "regular expressions are not supported yet"
+  |                          ^^^^ a regular expression
+  |
+  = note: the standard library has no regular-expression engine yet.
+help: `indexOf`, `split`
+  = explain: run `enrang explain EN1025`
+
+error: aborting due to 1 previous error

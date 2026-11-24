@@ -1,0 +1,48 @@
+// The definition check at each `Return` (plan d.9, A:1287): a loan on a local, or
+// on a temporary (A:1298, T:1109 `Q41-written`), is EN0710 at its borrow (G10),
+// `Param(0)` of an Own `this`
+// EN0710 (`posRef`, S:929), and a key outside the sources an override's base
+// fixes (its base's plus `this`) EN0714 at the `return` (S:931).
+// MIR shapes: explicit and temporary borrows (plan c.5, plan.md:956), a field
+// borrow through `this` (plan c.4, plan.md:913), a reborrowed parameter (plan
+// c.6, plan.md:975), a `move` method's `move_this` check (A:943, plan c.4).
+fn local() -> &i64 {
+  let _1: i64; // s
+  bb0: {
+    _1 = const 1: i64;
+    _0 = &_1 [explicit]; //~ EN0710
+    return;
+  }
+}
+fn temp() -> &i64 {
+  let _1: i64 temp;
+  bb0: {
+    _1 = const 1: i64;
+    _0 = &_1 [temp-arg]; //~ EN0710
+    return;
+  }
+}
+class Lexer {
+  src: &string;
+  pos: i64;
+}
+move fn Lexer::posRef(_1: &Lexer) -> &i64 {
+  bb0: {
+    check_class(*_1, move_this(posRef), ref);
+    _0 = &(*_1).pos [explicit];
+    return; //~ EN0710
+  }
+}
+class Labeler {
+  name: string;
+}
+fn Labeler::label(_1: &Labeler, _2: &string) -> &string perms(read, read) sources(0) result writable;
+class Strict extends Labeler {
+  k: i64;
+}
+@override fn Strict::label(_1: &Strict, _2: &string) -> &string {
+  bb0: {
+    _0 = &*_2 [reborrow];
+    return; //~ EN0714
+  }
+}

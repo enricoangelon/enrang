@@ -1,0 +1,11 @@
+public abstract class Task {
+  public move run(): string { //~ EN0459 "`move` method of an abstract class can never run"
+    return "done";
+  }
+}
+
+public class Build extends Task {
+  public override move run(): string {
+    return "built";
+  }
+}

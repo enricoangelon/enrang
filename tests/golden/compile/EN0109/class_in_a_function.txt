@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0109/class_in_a_function.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0109]: a declaration cannot go inside a block
+ --> tests/compile/EN0109/class_in_a_function.fail.en:2:3
+  |
+2 |   class Point {} //~ EN0109
+  |   ^^^^^ declarations go at the top level of a file
+  |
+help: move it to the top level
+  = explain: run `enrang explain EN0109`
+
+error: aborting due to 1 previous error

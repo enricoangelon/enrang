@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/tk-03-field-join.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `pair`
+ --> tests/compile/EN0616/tk-03-field-join.fail.en:5:3
+  |
+5 |   top.kids = []; //~ EN0616
+  |   ^^^^^^^^^^^^^ written here
+  |
+  = note: `pair` returns two references that may point at the same data
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

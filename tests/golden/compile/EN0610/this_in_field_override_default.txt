@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0610/this_in_field_override_default.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0610]: `this` can't be used in a field initialiser
+ --> tests/compile/EN0610/this_in_field_override_default.fail.en:7:38
+  |
+7 |   protected override sound: string = this.name.clone(); //~ EN0610 "`this` can't be used in a field initialiser"
+  |                                      ^^^^ the object is not built yet here
+  |
+  = note: field initialisers run while the object is built, before the constructor's body, so they can't read the object
+help: set the field in the constructor instead
+  = explain: run `enrang explain EN0610`
+
+error: aborting due to 1 previous error

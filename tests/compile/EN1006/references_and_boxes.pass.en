@@ -1,0 +1,30 @@
+const d = new Dog {};
+relay(new Dog {});
+relay(new Robot {});
+introduce(&d);
+const zoo = new Zoo { star: new Box(new Robot {}) };
+const all: Box<Speaker>[] = [new Box(new Dog {}), new Box(new Robot {})];
+const loud: &Speaker = &d;
+const f: fn(s: &Speaker) => void = introduce;
+
+private function relay(x: Speaker): void { console.log(x.speak()); }
+
+private function introduce(s: &Speaker): void { console.log(s.speak()); }
+
+private function load(): Result<i64> { return Ok(1); }
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Dog implements Speaker {
+  public speak(): string { return "woof"; }
+}
+
+public final class Robot implements Speaker {
+  public speak(): string { return "beep"; }
+}
+
+public final class Zoo {
+  public star: Box<Speaker> | null = null;
+}

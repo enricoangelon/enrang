@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/view_by_value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `Slice<u8>` is a view, so it exists only behind `&`
+ --> tests/compile/EN0401/view_by_value.fail.en:2:16
+  |
+2 |   public body: Slice<u8>; //~ EN0401 "`Slice<u8>` is a view, so it exists only behind `&`"
+  |                ^^^^^^^^^ a view by value
+  |
+help: write `&Slice<u8>`, or `u8[]` for an array of its own
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

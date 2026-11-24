@@ -1,0 +1,54 @@
+$ enrang check tests/compile/EN0806/library_only_forms.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0806]: `@lang` is a library-only form
+ --> tests/compile/EN0806/library_only_forms.fail.en:1:1
+  |
+1 | @lang("string") public final class Text {} //~ EN0806 "`@lang` is a library-only form"
+  | ^^^^^^^^^^^^^^^ only `core`, `alloc` and `os` may use it
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: `@intrinsic` is a library-only form
+ --> tests/compile/EN0806/library_only_forms.fail.en:3:1
+  |
+3 | @intrinsic("MemCopy") public declare function copy(d: *u8, s: *u8, n: usize): void; //~ EN0806 "`@intrinsic` is a library-only form"
+  | ^^^^^^^^^^^^^^^^^^^^^ only `core`, `alloc` and `os` may use it
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: `@hostCall` is a library-only form
+ --> tests/compile/EN0806/library_only_forms.fail.en:5:1
+  |
+5 | @hostCall("fs.open") public declare function open(p: *u8): i32; //~ EN0806 "`@hostCall` is a library-only form"
+  | ^^^^^^^^^^^^^^^^^^^^ only `core`, `alloc` and `os` may use it
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: `@owner` is a library-only form
+ --> tests/compile/EN0806/library_only_forms.fail.en:7:1
+  |
+7 | @owner public final class Owned {} //~ EN0806 "`@owner` is a library-only form"
+  | ^^^^^^ only `core`, `alloc` and `os` may use it
+  |
+  = explain: run `enrang explain EN0806`
+
+error[EN0806]: a method without a body is a library-only form
+  --> tests/compile/EN0806/library_only_forms.fail.en:10:10
+   |
+10 |   public perimeter(): f64; //~ EN0806 "a method without a body is a library-only form"
+   |          ^^^^^^^^^ write its body, or make it `abstract`
+   |
+   = explain: run `enrang explain EN0806`
+
+error[EN0806]: `extend` is a library-only form
+  --> tests/compile/EN0806/library_only_forms.fail.en:13:1
+   |
+13 | extend Shape { //~ EN0806 "`extend` is a library-only form"
+   | ^^^^^^^^^^^^ only `core`, `alloc` and `os` may extend a type
+   |
+help: make it a class
+   = explain: run `enrang explain EN0806`
+
+error: aborting due to 6 previous errors

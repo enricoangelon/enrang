@@ -1,0 +1,7 @@
+$ enrang check --emit=
+[exit 2]
+[stdout]
+[stderr]
+error: `--emit` needs a value
+help: write it as `--emit=<value>`
+usage: enrang check [file] [flags]

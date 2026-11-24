@@ -1,0 +1,146 @@
+// The read-set check at a call and through a reference (A:1186-1190, A:1217;
+// TESTING FV-02-skip, FV-02-nested-ref, round 3's issue 7).
+// Source:
+//   class Copier { private src: readonly &Slice<u8>; private dst: &Slice<u8>; private pos: isize; step() writes through dst;
+//     skip() { this.src = this.src.slice(1, ...); }      // stores (0, 0) read_set_only: no check at the caller
+//     skip2(), declared to store (0, 0) with the read bit alone }
+//   useSkip(s, d) { let c = Copier.make(s, d); c.skip(); c.skip2(); }                  // EN0616 at `c.skip2()`
+//   nestedRef(s, d) { let o = new Outer { inner: new Copier { src: s, dst: d, pos: 0 } };
+//                     const r = &o.inner; const p = r.dst; r.src = p; }                // EN0616: `Copier`'s flag, all of held(o)
+//   payload(s, d) { let n: Copier | null = new Copier { src: s, dst: d, pos: 0 };
+//                   if (n != null) { const r = &n; const p = r.dst; r.src = p; } }     // EN0616: n's payload counts as n, wfields(n)
+// Shapes: a static method's call into the binding (c.7), receivers' auto-borrows
+// (c.6), named forms (c.10), a field borrow of a local and of a narrowed payload
+// after `check_tag` (c.4), a field copy through `*r` (A:935), a field write
+// through `*r` (c.8), `present` (c.6).
+@final class Copier writes_through_fields {
+  src: readonly &Slice<u8>;
+  dst: &Slice<u8>;
+  pos: isize;
+}
+class Outer {
+  inner: Copier;
+}
+static fn Copier::make(_1: &Slice<u8>, _2: &Slice<u8>) -> Copier perms(read, write) sources(0, 1) result none;
+fn Copier::skip(_1: &Copier) -> void perms(write) sources() stores(0 -> 0 read_set_only read) result none;
+fn Copier::skip2(_1: &Copier) -> void perms(write) sources() stores(0 -> 0 read) result none;
+
+fn useSkip(_1: &Slice<u8>, _2: &Slice<u8>) -> void {
+  let mut _3: Copier; // c
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  let _6: &Copier temp;
+  let _7: void temp;
+  bb0: {
+    storage_live(_3);
+    _4 = &*_1 [reborrow];
+    _5 = &*_2 [reborrow];
+    _3 = Copier::make(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    _6 = &_3 [auto-borrow];
+    _7 = Copier::skip(move _6) -> bb2;
+  }
+  bb2: {
+    _6 = &_3 [auto-borrow];
+    _7 = Copier::skip2(move _6) -> bb3; //~ EN0616
+  }
+  bb3: {
+    storage_dead(_3);
+    return;
+  }
+}
+fn nestedRef(_1: &Slice<u8>, _2: &Slice<u8>) -> void {
+  let mut _3: Outer; // o
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  let mut _6: Copier temp;
+  let _7: &Copier; // r
+  let _8: &Slice<u8>; // p
+  let _9: &Slice<u8> temp;
+  let _10: *Copier temp;
+  let _11: *Outer temp;
+  let _12: void temp;
+  bb0: {
+    storage_live(_3);
+    _4 = &*_1 [reborrow];
+    _5 = &*_2 [reborrow];
+    _10 = addr_of _6;
+    _12 = named_fill Copier leaving()(copy _10) -> bb1;
+  }
+  bb1: {
+    _6.src = move _4;
+    _6.dst = move _5;
+    _6.pos = const 0: isize;
+    _11 = addr_of _3;
+    _12 = named_fill Outer leaving()(copy _11) -> bb2;
+  }
+  bb2: {
+    _3.inner = move _6;
+    storage_live(_7);
+    _7 = &_3.inner [explicit];
+    storage_live(_8);
+    _8 = copy (*_7).dst;
+    _9 = &*_8 [reborrow];
+    (*_7).src = move _9; //~ EN0616
+    storage_dead(_8);
+    storage_dead(_7);
+    storage_dead(_3);
+    return;
+  }
+}
+fn payload(_1: &Slice<u8>, _2: &Slice<u8>) -> void {
+  let mut _3: Copier | null; // n
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  let mut _6: Copier temp;
+  let _7: &Copier; // r
+  let _8: &Slice<u8>; // p
+  let _9: &Slice<u8> temp;
+  let _10: *Copier temp;
+  let _11: void temp;
+  let _12: u32 temp;
+  bb0: {
+    storage_live(_3);
+    _4 = &*_1 [reborrow];
+    _5 = &*_2 [reborrow];
+    _10 = addr_of _6;
+    _11 = named_fill Copier leaving()(copy _10) -> bb1;
+  }
+  bb1: {
+    _6.src = move _4;
+    _6.dst = move _5;
+    _6.pos = const 0: isize;
+    _3 = present(move _6);
+    _12 = discriminant(_3);
+    switch move _12 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_7);
+    check_tag(_3, Present);
+    _7 = &(_3 as Present).0 [explicit];
+    storage_live(_8);
+    _8 = copy (*_7).dst;
+    _9 = &*_8 [reborrow];
+    (*_7).src = move _9; //~ EN0616
+    storage_dead(_8);
+    storage_dead(_7);
+    goto bb3;
+  }
+  bb3: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}
+fn Copier::step(_1: &Copier) -> void {
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = copy (*_1).pos;
+    _3 = len((*(*_1).dst));
+    check_bounds(copy _2, copy _3);
+    (*(*_1).dst)[_2] = const 0: u8;
+    return;
+  }
+}

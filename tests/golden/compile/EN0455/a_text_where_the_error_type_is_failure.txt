@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0455/a_text_where_the_error_type_is_failure.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0455]: `"file missing"` could be a success or an error here
+ --> tests/compile/EN0455/a_text_where_the_error_type_is_failure.fail.en:3:12
+  |
+3 |     return "file missing"; //~ EN0455 "could be a success or an error here"
+  |            ^^^^^^^^^^^^^^ `Err` would take this as it is
+  |
+help: write `Ok("file missing")` or `Err("file missing")`
+  = explain: run `enrang explain EN0455`
+
+error[EN0455]: ``read ${path}`` could be a success or an error here
+ --> tests/compile/EN0455/a_text_where_the_error_type_is_failure.fail.en:5:10
+  |
+5 |   return `read ${path}`; //~ EN0455 "could be a success or an error here"
+  |          ^^^^^^^^^^^^^^ `Err` would take this as it is
+  |
+help: write `Ok(`read ${path}`)` or `Err(`read ${path}`)`
+  = explain: run `enrang explain EN0455`
+
+error: aborting due to 2 previous errors

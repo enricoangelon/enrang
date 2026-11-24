@@ -1,16 +1,16 @@
 === EN1301
 --- rule
-These commands are outside the prototype: `install`, `add`, `publish`, `doc`, `lsp`, `repl`, `bench`, `debug`, `upgrade` and `fmt`. Each is reserved, so it stops with this code and exit status 2 and does nothing to the project. A name that is no command at all gets EN1302 instead.
+These commands are outside the prototype: `install`, `add`, `publish`, `doc`, `lsp`, `repl`, `bench`, `debug` and `upgrade`. Each is reserved, so it stops with this code and exit status 2 and does nothing to the project. A name that is no command at all gets EN1302 instead.
 --- failing
-$ enrang fmt
-error[EN1301]: `enrang fmt` is not part of the prototype
+$ enrang install
+error[EN1301]: `enrang install` is not part of the prototype
   = explain: run `enrang explain EN1301`
 
 error: aborting due to 1 previous error
 --- fixed
 $ enrang --help
 --- typescript
-A TypeScript project reaches for npm and a formatter from the same terminal. Enrang has no package manager and no formatter yet: by design, dependencies are source files you import by path, and `enrang check`, from milestone M1, is the command that looks at your code.
+A TypeScript project reaches for npm from the same terminal. Enrang has no package manager: by design, dependencies are source files you import by path. From milestone M1, `enrang check` looks at your code and `enrang fmt` formats it.
 === EN1302
 --- rule
 `enrang` has no command by this name. `enrang --help` lists the commands and the milestone each one arrives with. A name close to one of them gets a did-you-mean, and four names from other toolchains are pointed at their counterpart: `tsc` and `lint` at `check`, `compile` at `build`, `start` at `run`. The command stops with exit status 2.
@@ -25,3 +25,68 @@ error: aborting due to 1 previous error
 $ enrang targets
 --- typescript
 `tsc` and a linter are one command here, `enrang check`, from milestone M1, and there is no separate emit step to switch off. `npm start` becomes `enrang run`, from milestone M4.
+=== EN1303
+--- rule
+`--target` names one of the targets Enrang builds for: `x86_64-linux`, `x86_64-windows`, `i386-linux`, `i386-none` and `x86_64-none`. Any other name is EN1303, with a did-you-mean when one is close. A target names an architecture and an operating system, or `none` for a kernel; the CPU level is the separate flag `--cpu`, so a 32-bit build for a P6 is `--target=i386-linux --cpu=i686`. `enrang targets` lists the targets, their levels and the chip names.
+--- failing
+$ enrang check --target=i686-linux
+error[EN1303]: unknown target `i686-linux`
+  = note: targets are `x86_64-linux`, `x86_64-windows`, `i386-linux`, `i386-none` and `x86_64-none`
+help: did you mean `i386-linux`?
+  = explain: run `enrang explain EN1303`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang check --target=i386-linux --cpu=i686
+=== EN1304
+--- rule
+A flag's value is not one it takes, or two flags do not fit together or with the target: an unknown `--float`, `--format`, `--image` or `--trace` value, an output format the target cannot write, `--image` with `--format`, an image on a hosted target, a `--base` or `--stack-size` the target does not take, a `--base` that overlaps the boot stages of an image, or `enrang run` on a freestanding target, which names the QEMU command to use instead. The note lists the values the flag takes, and a close one gets a did-you-mean.
+--- failing
+$ enrang check --float=sse
+error[EN1304]: `--float=sse` is not a float strategy
+  = note: the values of `--float` are `soft`, `sse2` and `x87`
+help: did you mean `--float=sse2`?
+  = explain: run `enrang explain EN1304`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang check --float=sse2
+=== EN1305
+--- rule
+`enrang check` and `enrang fmt` read the files they are given, and each path must exist. A path that names nothing is EN1305, and the command checks or formats nothing. Paths are relative to the current directory. With no path, `check` reads the file that the `entry` of `enrang.json` names, so a directory with no `enrang.json` needs a path, or `enrang init` to create a project.
+--- failing
+$ enrang check src/mian.en
+error[EN1305]: file not found: `src/mian.en`
+  = explain: run `enrang explain EN1305`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang check src/main.en
+=== EN1307
+--- rule
+`enrang init` never overwrites anything. It creates `enrang.json`, `src/main.en`, `src/main.test.en` and `.gitignore`, and if any of them already exists, or a directory it needs is a file, each one is EN1307 and nothing is written. With no name, the project goes in the current directory; with a name, `enrang init hello` puts it in a new directory `hello`.
+--- failing
+$ enrang init
+error[EN1307]: `enrang init` would overwrite `enrang.json`
+  = note: `init` never overwrites anything, so it wrote nothing
+help: give a name, and the project goes in a new directory of that name
+  = explain: run `enrang explain EN1307`
+
+error[EN1307]: `enrang init` would overwrite `src/main.en`
+  = note: `init` never overwrites anything, so it wrote nothing
+help: give a name, and the project goes in a new directory of that name
+  = explain: run `enrang explain EN1307`
+
+error[EN1307]: `enrang init` would overwrite `src/main.test.en`
+  = note: `init` never overwrites anything, so it wrote nothing
+help: give a name, and the project goes in a new directory of that name
+  = explain: run `enrang explain EN1307`
+
+error[EN1307]: `enrang init` would overwrite `.gitignore`
+  = note: `init` never overwrites anything, so it wrote nothing
+help: give a name, and the project goes in a new directory of that name
+  = explain: run `enrang explain EN1307`
+
+error: aborting due to 4 previous errors
+--- fixed
+$ enrang init hello

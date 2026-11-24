@@ -1,0 +1,9 @@
+const source = "let x = 1;";
+let lx = new Lexer(&source);
+let all: Lexer[] = [lx]; //~ EN0701 "an array can't hold a `Lexer`, because `Lexer` holds a reference"
+
+private class Lexer {
+  private src: &string;
+  private pos: isize = 0;
+  public constructor(src: &string) { this.src = src; }
+}

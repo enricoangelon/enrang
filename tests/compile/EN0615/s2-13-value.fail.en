@@ -1,0 +1,17 @@
+let msg: string = "hi";
+function run(f: fn(let s: &string) => void, s: &string): void {
+  f(s);
+}
+run(choose(false), &msg); //~ EN0615 "`choose(false)` may hold a function that takes `s` as a part, so it can't become a `fn(let s: &string) => void`"
+
+private function choose(loud: bool): fn(s: &string) => void {
+  return loud ? quote : show;
+}
+
+private function show(s: &string): void {
+  console.log(s.length());
+}
+
+private function quote(s: &string): void {
+  console.log(`"${s}"`);
+}

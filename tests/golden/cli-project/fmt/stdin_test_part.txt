@@ -1,0 +1,9 @@
+$ enrang fmt
+[stdin]
+test("one",() => {
+  expect(1).toBe(1);
+});
+[exit 0]
+[stdout]
+test("one", () => { expect(1).toBe(1); });
+[stderr]

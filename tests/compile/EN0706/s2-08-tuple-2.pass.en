@@ -1,0 +1,8 @@
+let data: i64[] = [1, 2, 3];
+let pair: [&i64[], i32] | null = [&data, 1];
+const p2 = pair;
+if (pair != null && p2 != null) {
+  const f = &p2[0][0];
+  console.log(*f);
+  pair[0].push(4);
+}

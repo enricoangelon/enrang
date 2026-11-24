@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN0708/wd-1.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `data` can't be read while `c` may write into it
+ --> tests/compile/EN0708/wd-1.fail.en:5:14
+  |
+4 | c.setXs(&data);
+  | -------------- the write
+  |         ----- borrowed for writing here, because `c` writes on line 4
+5 | const part = data[0].slice(0, 1); //~ EN0708
+  |              ^^^^^^^ read here
+6 | const t = c.next()!;
+  |           - still used here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `data` before line 4 or after line 6
+  = explain: run `enrang explain EN0708`
+
+error[EN0708]: `data2` can't be read while `c2` may write into it
+  --> tests/compile/EN0708/wd-1.fail.en:12:15
+   |
+11 | let c2 = new Cursor(&data2);
+   |          ------------------ the write
+   |                     ------ borrowed for writing here, because `c2` writes on line 11
+12 | const part2 = data2[0].slice(0, 1); //~ EN0708
+   |               ^^^^^^^^ read here
+13 | const t2 = c2.next()!;
+   |            -- still used here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `data2` before line 11 or after line 13
+   = explain: run `enrang explain EN0708`
+
+error: aborting due to 2 previous errors

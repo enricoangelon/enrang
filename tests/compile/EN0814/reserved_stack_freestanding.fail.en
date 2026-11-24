@@ -1,0 +1,6 @@
+//! target: i386-none
+@section(".bss.stack") private unsafe let stack: u8[4096]; //~ EN0814 "section `.bss.stack` is reserved"
+
+@entry private function kmain(boot: &BootInfo): never {
+  halt();
+}

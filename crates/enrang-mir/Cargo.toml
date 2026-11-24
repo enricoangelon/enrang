@@ -1,0 +1,20 @@
+[package]
+name = "enrang-mir"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+test = false
+
+[dependencies]
+enrang-base = { path = "../enrang-base" }
+enrang-hir = { path = "../enrang-hir" }
+
+[dev-dependencies]
+enrang-testkit = { path = "../enrang-testkit" }
+
+[[test]]
+name = "mir"
+path = "tests/mir/main.rs"
+harness = false

@@ -1,0 +1,6 @@
+let xs: i64[] = [1, 2];
+*slot(&xs) += val(&xs); //~ EN0708 "`xs` can't be read while a borrow of it may write into it"
+console.log(xs);
+
+private function slot(v: &i64[]): &i64 { return &v[0]; }
+private function val(v: &i64[]): i64 { return v[1]; }

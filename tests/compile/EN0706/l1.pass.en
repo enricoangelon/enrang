@@ -1,0 +1,8 @@
+//! row: `l1`-`l10`, local functions, among them `let
+let count = 0;
+function inc(): void {
+  count += 1;
+}
+inc();
+console.log(count);
+inc();

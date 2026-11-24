@@ -1,0 +1,20 @@
+let v = [new Trace("a")];
+{
+  const o = new Outer(new Guard(&v));
+}
+const r = &v[0];
+console.log(r.name);
+
+private class Trace {
+  public constructor(public name: string) {}
+  public destructor() { console.log(`[${this.name}] done`); }
+}
+private class Guard {
+  private v: &Trace[];
+  public constructor(v: &Trace[]) { this.v = v; }
+  public destructor() { this.v.clear(); }
+}
+private class Outer {
+  private g: Guard | null;
+  public constructor(g: Guard) { this.g = g; }
+}

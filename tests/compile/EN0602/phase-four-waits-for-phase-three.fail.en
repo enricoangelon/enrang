@@ -1,0 +1,10 @@
+let f: File;
+console.log(f.name); //~ EN0602
+const h = new H { a: 1, len: 2 };
+show(&h.len);
+
+private class File {
+  public constructor(public name: string) {}
+}
+@packed private final class H { public a: u8; public len: u32; }
+private function show(n: &u32): void { console.log(*n); }

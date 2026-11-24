@@ -1,0 +1,6 @@
+//! covers: H03
+const xs: i64[] = [4, 5];
+const n: (i64 | null)[] = [4, 5];
+const m: (i64 | null)[] = [...xs.map((x): i64 | null => x)];
+const r: &i64[] = &xs;
+console.log(n, m, r);

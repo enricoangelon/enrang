@@ -1,0 +1,11 @@
+let s = new S(); let t = new S(); let r = &s;
+for (const x of &r.items) {
+  r = &t; //~ EN0706
+}
+
+let s2 = new S(); let r2 = &s2;
+for (const x of &r2.items) {
+  r2.items.push(1); //~ EN0706
+}
+
+public class S { public items: i64[] = [1, 2]; public count: i64 = 0; }

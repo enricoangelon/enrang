@@ -1,0 +1,27 @@
+let p = new Pair { first: "a", second: "b" };
+take(p);
+p = new Pair { first: "c", second: "d" };
+let f = new File { first: "a", fd: 3 };
+close(f);
+f = new File { first: "c", fd: 4 };
+
+public class Pair {
+  public first: string;
+  public second: string;
+}
+
+public class File {
+  public first: string;
+  public fd: i64;
+  public destructor() {
+    console.log("close", this.fd);
+  }
+}
+
+public function take(p: Pair): void {
+  console.log(p.first);
+}
+
+public function close(f: File): void {
+  console.log(f.first);
+}

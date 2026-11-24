@@ -1,0 +1,5 @@
+let x = 12;
+let z = 14;
+const y = &x;
+y = &z; //~ EN0613 "cannot assign to `y`, because it is `const`"
+console.log(*y);

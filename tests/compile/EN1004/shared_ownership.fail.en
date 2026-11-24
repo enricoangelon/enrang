@@ -1,0 +1,5 @@
+let r: Rc<i64> | null = null; //~ EN1004 "shared ownership types are not supported yet"
+let a: Arc<string> | null = null; //~ EN1004 "shared ownership types are not supported yet"
+let c: Cell<i64> | null = null; //~ EN1004 "shared ownership types are not supported yet"
+let rc: RefCell<i64> | null = null; //~ EN1004 "shared ownership types are not supported yet"
+const n = new Rc(5); //~ EN1004 "shared ownership types are not supported yet"

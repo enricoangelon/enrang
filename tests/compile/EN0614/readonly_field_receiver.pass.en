@@ -1,0 +1,6 @@
+public class Bag {
+  private items: i64[] = [];
+  public add(x: i64): void {
+    this.items.push(x);
+  }
+}

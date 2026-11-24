@@ -1,0 +1,10 @@
+//! covers: C14
+forward((x: i64) => console.log(x));
+
+private function runText(f: (s: &string) => void): void {
+  f("a");
+}
+
+private function forward(g: (x: i64) => void): void {
+  runText(g); //~ EN0401 "mismatched types"
+}

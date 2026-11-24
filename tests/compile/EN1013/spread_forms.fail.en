@@ -1,0 +1,14 @@
+const a = [1, 2];
+const p = { x: 1, y: 2 };
+const xs = [1, 2];
+const i = 0;
+f(...a); //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+new C(...a); //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+console.log(...a); //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+const g = (...rest) => 1; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+const o = { ...p }; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+const q = new Point { ...p }; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+const y = xs[...i]; //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+for (const x of ...a) { //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+  console.log(x);
+}

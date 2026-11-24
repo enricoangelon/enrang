@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0401/m3gate-mem-replace-narrowed-null.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `o.s` may be `null` here
+ --> tests/compile/EN0401/m3gate-mem-replace-narrowed-null.fail.en:5:15
+  |
+4 |   const x = mem.replace(&o, new O());
+  |                         -- this may write through it
+5 |   console.log(o.s.length()); //~ EN0401 "`o.s` may be `null` here"
+  |               ^^^ the test before this may no longer hold
+  |
+  = note: a writing reference may have changed `o.s`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,15 @@
+error[EN0613]: cannot assign to `x`, because it is `const`
+ --> main.en:2:1
+  |
+1 | const x = 1;
+  |       - `x` is declared `const` here
+2 | x = 2;
+  | ^^^^^ assigned here
+  |
+help: make the binding mutable
+  |
+1 | let x = 1;
+  | ~~~
+  = explain: run `enrang explain EN0613`
+
+error: aborting due to 1 previous error

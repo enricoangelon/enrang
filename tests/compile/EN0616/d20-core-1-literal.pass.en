@@ -1,0 +1,23 @@
+let base: string = "x";
+let a = new Appender(&base);
+let hi: string = "hi";
+a.setS(&hi);
+let t: string = "ok".toString();
+a.setS(&t);
+a.add();
+
+public class Appender {
+  private s: &string;
+
+  public constructor(s: &string) {
+    this.s = s;
+  }
+
+  public setS(s: &string): void {
+    this.s = s;
+  }
+
+  public add(): void {
+    *this.s += "!";
+  }
+}

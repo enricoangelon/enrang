@@ -1,0 +1,9 @@
+//! row: `x` live across `take(q)`
+let q: string[] = ["a", "b"];
+for (const x of &q) {
+  take(q); //~ EN0709
+  console.log(x);
+  break;
+}
+
+private function take(v: string[]): void { console.log(v); }

@@ -1,0 +1,268 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0708/wd-1.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0708/wd-1.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::get(_1: &Array<T>, _2: isize) -> &T | null;
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+class Cursor {
+  private xs: &string[];
+  private i: isize = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string[]; // none
+  let mut _3: string[]; // data
+  let _4: string temp;
+  let _5: string temp;
+  let _6: &string temp;
+  let _7: string temp;
+  let _8: string temp;
+  let _9: &string temp;
+  let mut _10: Cursor; // c
+  let _11: &string[] temp;
+  let _12: &Cursor temp;
+  let _13: void temp;
+  let _14: void temp;
+  let _15: &string[] temp;
+  let _16: &Cursor temp;
+  let _17: &string; // t
+  let _18: &string | null temp;
+  let _19: &Cursor temp;
+  let _20: string temp;
+  let _21: &string temp;
+  let _22: string temp;
+  let _23: &string temp;
+  let _24: string temp;
+  let _25: &string; // part
+  let _26: isize temp;
+  let _27: isize | null temp;
+  let _28: isize temp;
+  let _29: &string temp;
+  let _30: void temp;
+  let _31: &string temp;
+  let mut _32: string[]; // data2
+  let _33: string temp;
+  let _34: string temp;
+  let _35: &string temp;
+  let _36: string temp;
+  let _37: string temp;
+  let _38: &string temp;
+  let mut _39: Cursor; // c2
+  let _40: &string[] temp;
+  let _41: &Cursor temp;
+  let _42: void temp;
+  let _43: &string; // t2
+  let _44: &string | null temp;
+  let _45: &Cursor temp;
+  let _46: string temp;
+  let _47: &string temp;
+  let _48: string temp;
+  let _49: &string temp;
+  let _50: string temp;
+  let _51: &string; // part2
+  let _52: isize temp;
+  let _53: isize | null temp;
+  let _54: isize temp;
+  let _55: &string temp;
+  let _56: void temp;
+  let _57: &string temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<string>();
+    storage_live(_3);
+    _5 = const "ab": string;
+    _6 = &_5 [temp-arg];
+    _4 = form to_string(move _6) -> bb1;
+  }
+  bb1: {
+    _8 = const "cd": string;
+    _9 = &_8 [temp-arg];
+    _7 = form to_string(move _9) -> bb2;
+  }
+  bb2: {
+    _3 = intrinsic AllocArray<string>(move _4, move _7);
+    drop(_7);
+    storage_dead(_7);
+    drop(_8);
+    storage_dead(_8);
+    drop(_4);
+    storage_dead(_4);
+    drop(_5);
+    storage_dead(_5);
+    storage_live(_10);
+    set_table(_10, Cursor);
+    _11 = &_2 [explicit];
+    _12 = &_10 [auto-borrow];
+    _13 = Cursor::#ctor(move _12, move _11) -> bb3;
+  }
+  bb3: {
+    _15 = &_3 [explicit];
+    _16 = &_10 [auto-borrow];
+    _14 = Cursor::setXs(move _16, move _15) -> bb4;
+  }
+  bb4: {
+    storage_live(_17);
+    _19 = &_10 [auto-borrow];
+    _18 = Cursor::next(move _19) -> bb5;
+  }
+  bb5: {
+    check_tag(_18, Present);
+    _17 = copy (_18 as Present).0;
+    _20 = const "x": string;
+    _21 = &_20 [temp-arg];
+    _22 = const "y": string;
+    _23 = &_22 [temp-arg];
+    _24 = form concat(move _21, move _23) -> bb6;
+  }
+  bb6: {
+    drop(*_17) [assign];
+    *_17 = move _24;
+    drop(_24);
+    storage_dead(_24);
+    drop(_22);
+    storage_dead(_22);
+    drop(_20);
+    storage_dead(_20);
+    storage_live(_25);
+    _26 = const 0: isize;
+    _27 = present(const 1: isize);
+    _28 = len(_3);
+    check_bounds(copy _26, copy _28);
+    _29 = &_3[_26] [auto-borrow];
+    _25 = "core/string"::string::slice(move _29, const 0: isize, move _27, const 2: isize) -> bb7;
+  }
+  bb7: {
+    _31 = &*_25 [reborrow];
+    _30 = form log(move _31) -> bb8;
+  }
+  bb8: {
+    storage_live(_32);
+    _34 = const "ab": string;
+    _35 = &_34 [temp-arg];
+    _33 = form to_string(move _35) -> bb9;
+  }
+  bb9: {
+    _37 = const "cd": string;
+    _38 = &_37 [temp-arg];
+    _36 = form to_string(move _38) -> bb10;
+  }
+  bb10: {
+    _32 = intrinsic AllocArray<string>(move _33, move _36);
+    drop(_36);
+    storage_dead(_36);
+    drop(_37);
+    storage_dead(_37);
+    drop(_33);
+    storage_dead(_33);
+    drop(_34);
+    storage_dead(_34);
+    storage_live(_39);
+    set_table(_39, Cursor);
+    _40 = &_32 [explicit];
+    _41 = &_39 [auto-borrow];
+    _42 = Cursor::#ctor(move _41, move _40) -> bb11;
+  }
+  bb11: {
+    storage_live(_43);
+    _45 = &_39 [auto-borrow];
+    _44 = Cursor::next(move _45) -> bb12;
+  }
+  bb12: {
+    check_tag(_44, Present);
+    _43 = copy (_44 as Present).0;
+    _46 = const "x": string;
+    _47 = &_46 [temp-arg];
+    _48 = const "y": string;
+    _49 = &_48 [temp-arg];
+    _50 = form concat(move _47, move _49) -> bb13;
+  }
+  bb13: {
+    drop(*_43) [assign];
+    *_43 = move _50;
+    drop(_50);
+    storage_dead(_50);
+    drop(_48);
+    storage_dead(_48);
+    drop(_46);
+    storage_dead(_46);
+    storage_live(_51);
+    _52 = const 0: isize;
+    _53 = present(const 1: isize);
+    _54 = len(_32);
+    check_bounds(copy _52, copy _54);
+    _55 = &_32[_52] [auto-borrow];
+    _51 = "core/string"::string::slice(move _55, const 0: isize, move _53, const 2: isize) -> bb14;
+  }
+  bb14: {
+    _57 = &*_51 [reborrow];
+    _56 = form log(move _57) -> bb15;
+  }
+  bb15: {
+    storage_dead(_51);
+    storage_dead(_43);
+    storage_dead(_39);
+    drop(_32);
+    storage_dead(_32);
+    storage_dead(_25);
+    storage_dead(_17);
+    storage_dead(_10);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Cursor::#ctor(_1: &Cursor, _2: &string[]) -> void {
+  let _1: &Cursor; // this
+  let _2: &string[]; // xs
+  let _3: &string[] temp;
+  bb0: {
+    switch const overridden(i): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &*_2 [reborrow];
+    (*_1).xs = move _3;
+    return;
+  }
+  bb2: {
+    field_init((*_1).i, const 0: isize);
+    goto bb1;
+  }
+}
+
+fn Cursor::next(_1: &Cursor) -> &string | null {
+  let _1: &Cursor; // this
+  let _2: &string[] temp;
+  bb0: {
+    _2 = copy (*_1).xs;
+    _0 = "alloc/array"::Array<string>::get(move _2, copy (*_1).i) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Cursor::setXs(_1: &Cursor, _2: &string[]) -> void {
+  let _1: &Cursor; // this
+  let _2: &string[]; // xs
+  let _3: &string[] temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).xs = move _3;
+    return;
+  }
+}

@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0207/try_catch.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0207]: `try` does not exist in Enrang
+ --> tests/compile/EN0207/try_catch.fail.en:2:3
+  |
+2 |   try { //~ EN0207 "`try` does not exist in Enrang"
+  |   ^^^ errors are values in Enrang
+  |
+  = from TypeScript: Enrang has no exceptions: a function that can fail returns `Result<T, E>`, `?` passes its error to the caller, and `panic` stops the program on a bug.
+help: call the function, and pass its error up with `?` or `match` on its `Result`
+  = explain: run `enrang explain EN0207`
+
+error: aborting due to 1 previous error

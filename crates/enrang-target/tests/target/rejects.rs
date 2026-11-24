@@ -5,8 +5,8 @@ use enrang_target::{CpuLevel, FloatStrategy, TargetOpts, resolve};
 use enrang_testkit::Harness;
 
 use crate::support::{
-    I386_TARGETS, NATIVE_TARGETS, TARGETS, VM_TARGETS, X86_64_TARGETS, cpu, err, float, notes, ok,
-    opts_with, render, says, section, spec, table,
+    I386_TARGETS, NATIVE_TARGETS, TARGETS, VM_TARGETS, X86_64_TARGETS, cpu, default_float, err,
+    float, notes, ok, opts_with, render, says, section, spec, table,
 };
 
 /// A row of SPEC 16: the normative message and help of a deferred feature.
@@ -38,9 +38,9 @@ fn registry(h: &mut Harness) {
         Code::EN0909,
         Code::EN0911,
         Code::EN0912,
-        Code::EN1020,
         Code::EN1031,
         Code::EN1303,
+        Code::EN1304,
     ] {
         h.case(
             format!("reject/{code} is target's, on the command line"),
@@ -51,6 +51,12 @@ fn registry(h: &mut Harness) {
             },
         );
     }
+    // EN1020 refused `--float=x87` until the strategy was accepted (SPEC 13.2).
+    // Codes are never reused, so the name stays unknown.
+    h.case("reject/EN1020 is retired: no code of that name", || {
+        assert_eq!(Code::from_name("EN1020"), None);
+        assert!(Code::ALL.iter().all(|code| code.name() != "EN1020"));
+    });
 }
 
 fn unknown_targets(h: &mut Harness) {
@@ -301,26 +307,51 @@ fn levels_that_do_not_apply(h: &mut Harness) {
 }
 
 fn floats(h: &mut Harness) {
-    let (message, help) = deferred("EN1020");
-    for target in TARGETS {
-        let (message, help) = (message.clone(), help.clone());
-        h.case(format!("reject/EN1020/{target}"), move || {
-            let diag = err(target, &float("x87"));
-            assert_eq!(diag.code, Code::EN1020);
-            assert_eq!(diag.message, message);
-            assert_eq!(diag.helps.len(), 1);
-            assert_eq!(diag.helps[0].message, help);
-            assert_eq!(notes(&diag).len(), 1, "one note with the reason");
-        });
-    }
-    for rung in ["i386", "i486", "i586", "i686", "sse2"] {
-        for target in I386_TARGETS {
-            let opts = opts_with(Some(rung), Some("x87"));
-            h.case(format!("reject/EN1020/{rung} on {target}"), move || {
-                assert_eq!(err(target, &opts).code, Code::EN1020);
-            });
+    // `--float=x87` is legal on every `i386-*` row (floats.rs) and EN0911 elsewhere.
+    for target in X86_64_TARGETS {
+        for (name, opts) in [
+            ("no --cpu", float("x87")),
+            ("x86-64", opts_with(Some("x86-64"), Some("x87"))),
+            ("core2", opts_with(Some("core2"), Some("x87"))),
+        ] {
+            h.case(
+                format!("reject/EN0911/--float=x87 at {name} on {target}"),
+                move || {
+                    let diag = err(target, &opts);
+                    assert_eq!(diag.code, Code::EN0911);
+                    assert_eq!(
+                        diag.message,
+                        format!("`--float=x87` does not apply to target `{target}`")
+                    );
+                    assert_eq!(
+                        notes(&diag),
+                        ["every x86-64 CPU has SSE2, so `sse2` is the only float strategy on `x86_64-*`"]
+                    );
+                    assert!(diag.helps.is_empty(), "{:?}", diag.helps);
+                },
+            );
         }
     }
+    for target in VM_TARGETS {
+        h.case(
+            format!("reject/EN0911/--float=x87 on {target}"),
+            move || {
+                let diag = err(target, &float("x87"));
+                assert_eq!(diag.code, Code::EN0911);
+                assert_eq!(
+                    diag.message,
+                    format!("`--float=x87` does not apply to target `{target}`")
+                );
+                says(&diag, &[target, "--float=soft", "on the host"]);
+            },
+        );
+    }
+    h.case(
+        "reject/EN1031 still beats --float=x87 on i386-windows",
+        || {
+            assert_eq!(err("i386-windows", &float("x87")).code, Code::EN1031);
+        },
+    );
     for rung in ["i386", "i486", "i586", "i686"] {
         for target in I386_TARGETS {
             h.case(format!("reject/EN0911/{rung} on {target}"), move || {
@@ -389,11 +420,14 @@ fn floats(h: &mut Harness) {
         ("SOFT", Some("soft")),
         ("sof", Some("soft")),
         ("sse", Some("sse2")),
-        // `x87` is refused whatever the target, so no suggestion leads to it.
-        ("x86", None),
-        ("x8", None),
-        ("x88", None),
-        ("X87", None),
+        // `x87` is a value now, so the near misses lead to it.
+        ("x86", Some("x87")),
+        ("x8", Some("x87")),
+        ("x88", Some("x87")),
+        ("X87", Some("x87")),
+        ("387", Some("x87")),
+        ("i387", None),
+        ("fpu", None),
     ];
     for (name, suggestion) in bad {
         for target in TARGETS {
@@ -408,7 +442,7 @@ fn floats(h: &mut Harness) {
                     );
                     assert_eq!(
                         notes(&diag),
-                        ["the values of `--float` are `soft` and `sse2`"]
+                        ["the values of `--float` are `soft`, `sse2` and `x87`"]
                     );
                     match suggestion {
                         Some(found) => {
@@ -513,7 +547,7 @@ fn precedence(h: &mut Harness) {
         ),
         (
             "cpu beats float",
-            "i386-linux",
+            "x86_64-linux",
             cpu_and_float,
             Code::EN0909,
             "native",
@@ -530,13 +564,23 @@ fn precedence(h: &mut Harness) {
         ),
         (
             "float beats format",
-            "i386-linux",
+            "x86_64-linux",
             TargetOpts {
                 format: Some("coff".to_owned()),
                 ..bad("float", "x87")
             },
-            Code::EN1020,
+            Code::EN0911,
             "x87",
+        ),
+        (
+            "the VM names --float before --format",
+            "vm64",
+            TargetOpts {
+                format: Some("elf".to_owned()),
+                ..bad("float", "x87")
+            },
+            Code::EN0911,
+            "--float=x87",
         ),
         (
             "EN0911 beats format",
@@ -613,8 +657,14 @@ fn precedence(h: &mut Harness) {
         "reject/an error beats the note it would have printed",
         || {
             // The result is an error alone, so the alias is told inside it.
-            let opts = opts_with(Some("k6"), Some("x87"));
-            assert_eq!(err("i386-linux", &opts).code, Code::EN1020);
+            let opts = opts_with(Some("k6"), Some("sse2"));
+            let diag = err("i386-linux", &opts);
+            assert_eq!(diag.code, Code::EN0911);
+            assert_eq!(notes(&diag), ["`k6` resolves to level `i586`"]);
+            // Where the float is legal, the same alias prints its note.
+            let (_, printed) = ok("i386-linux", &opts_with(Some("k6"), Some("x87")));
+            assert_eq!(printed.len(), 1);
+            assert!(render(&printed).contains("`k6` resolves to level `i586`"));
         },
     );
     for target in NATIVE_TARGETS {
@@ -627,6 +677,8 @@ fn precedence(h: &mut Harness) {
                     built.float,
                     FloatStrategy::Soft | FloatStrategy::Sse2
                 ));
+                // The default level is the floor, below the levels that default to x87.
+                assert_eq!(built.float, default_float(built.arch, built.cpu));
             },
         );
     }
@@ -693,14 +745,23 @@ fn rendered(h: &mut Harness) {
             ],
         ),
         (
-            "x87",
+            "x87 on x86-64",
             "x86_64-linux",
             float("x87"),
             &[
-                "error[EN1020]: the x87 float strategy is not supported yet",
-                "  = note: x87 is deferred: it may not ship until it passes the bit vectors `soft` and `sse2` pass",
-                "help: `--float=soft` works at every level of `i386-*` and is bit-identical",
-                "  = explain: run `enrang explain EN1020`",
+                "error[EN0911]: `--float=x87` does not apply to target `x86_64-linux`",
+                "  = note: every x86-64 CPU has SSE2, so `sse2` is the only float strategy on `x86_64-*`",
+                "  = explain: run `enrang explain EN0911`",
+            ],
+        ),
+        (
+            "x87 in the VM",
+            "vm32",
+            float("x87"),
+            &[
+                "error[EN0911]: `--float=x87` does not apply to target `vm32`",
+                "  = note: the VM runs floats on the host, or under `--float=soft` through the soft-float library",
+                "  = explain: run `enrang explain EN0911`",
             ],
         ),
         (

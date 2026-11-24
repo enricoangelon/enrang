@@ -1,0 +1,2 @@
+public type Tree = Forest[]; //~ EN0437 "type alias `Tree` refers to itself"
+public type Forest = Tree | null;

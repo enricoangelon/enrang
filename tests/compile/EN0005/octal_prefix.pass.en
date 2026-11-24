@@ -1,0 +1,4 @@
+const mode = 0o755;
+const none = 0;
+const half = 0.5;
+console.log(mode, none, half);

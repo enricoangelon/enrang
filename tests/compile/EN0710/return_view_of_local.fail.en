@@ -1,0 +1,4 @@
+public function head(): &Slice<i64> {
+  const xs: i64[] = [1, 2, 3];
+  return xs.slice(0, 2); //~ EN0710 "cannot return a reference to local `xs`"
+}

@@ -1,0 +1,13 @@
+const l = new Logger();
+l.log("a");
+
+private unsafe let count: i64 = 0;
+
+public class Logger {
+  public const log(const m: &string): void {
+    unsafe {
+      count += 1;
+    }
+    console.log(m);
+  }
+}

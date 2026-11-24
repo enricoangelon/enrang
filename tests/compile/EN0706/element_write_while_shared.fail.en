@@ -1,0 +1,4 @@
+let xs: i64[] = [1, 2];
+const r = &xs[0];
+xs[1] = 5; //~ EN0706 "`xs[1]` cannot change while `r` still points into it"
+console.log(*r);

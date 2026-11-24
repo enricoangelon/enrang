@@ -1,0 +1,32 @@
+const pet: Box<Animal> = new Box(new Dog("Rex"));
+const s: Box<Speaker> = pet;
+const all: Box<Speaker>[] = [s, new Box(new Robot {})];
+for (const x of &all) {
+  console.log(x.speak());
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class Animal implements Speaker {
+  public constructor(public name: string) {}
+
+  public speak(): string {
+    return `${this.name} makes a sound`;
+  }
+}
+
+public class Dog extends Animal {
+  private tricks: string[] = [];
+
+  public override speak(): string {
+    return `${this.name} barks, ${this.tricks.length()} tricks`;
+  }
+}
+
+public final class Robot implements Speaker {
+  public speak(): string {
+    return "beep";
+  }
+}

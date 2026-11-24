@@ -1,0 +1,81 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/hold_narrowed_clear.fail.en. Its row's codes: EN0706.
+module "tests/compile/EN0706/hold_narrowed_clear.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[] | null; // p
+  let _3: i64[] temp;
+  let _4: bool temp;
+  let _5: u32 temp;
+  let _6: isize #i;
+  let _7: isize #n;
+  let _8: bool temp;
+  let _9: &i64; // x
+  let _10: void temp;
+  let _11: &i64 temp;
+  let _12: i64[] | null temp;
+  loop l0: path (_2 as Present).0 preheader bb7 head bb3 bind bb4[3] binding _9;
+  fact f0: _2 nonnull;
+  use f0 at bb3[0];
+  use f0 at bb4[2];
+  test f0 at bb1;
+  bb0: {
+    storage_live(_2);
+    _3 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    _2 = present(move _3);
+    drop(_3);
+    storage_dead(_3);
+    _5 = discriminant(_2);
+    _4 = ne(move _5, const 0: u32);
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    goto bb7;
+  }
+  bb2: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb3: {
+    check_tag(_2, Present);
+    _7 = len((_2 as Present).0);
+    _8 = lt(copy _6, copy _7);
+    switch move _8 [0: bb6, otherwise: bb4];
+  }
+  bb4: {
+    storage_live(_9);
+    check_bounds(copy _6, copy _7);
+    check_tag(_2, Present);
+    _9 = &(_2 as Present).0[_6] [for-of-element];
+    _6 = add(copy _6, const 1: isize);
+    goto bb8;
+  }
+  bb5: {
+    goto bb3;
+  }
+  bb6: {
+    goto bb2;
+  }
+  bb7: {
+    storage_live(_6);
+    _6 = const 0: isize;
+    goto bb3;
+  }
+  bb8: {
+    _11 = &*_9 [reborrow];
+    _10 = form log(move _11) -> bb9;
+  }
+  bb9: {
+    _12 = null;
+    drop(_2) [assign];
+    _2 = move _12; //~ EN0706 "cannot reassign `p` during iteration"
+    drop(_12);
+    storage_dead(_12);
+    storage_dead(_9);
+    goto bb5;
+  }
+}

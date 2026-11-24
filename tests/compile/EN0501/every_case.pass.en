@@ -1,0 +1,42 @@
+const d: Direction = "left";
+console.log(turn(d), word(1));
+
+public type Direction = "left" | "right";
+
+public enum Shape {
+  Circle { radius: f64 },
+  Square { side: f64 },
+  Empty,
+}
+
+public function area(s: &Shape): f64 {
+  return match (s) {
+    Shape.Circle => 3.14 * s.radius * s.radius,
+    Shape.Square => s.side * s.side,
+    Shape.Empty => 0.0,
+  };
+}
+
+public function name(s: Shape | null): string {
+  return match (s) {
+    null => "nothing",
+    Shape.Circle if s.radius > 10.0 => "big circle",
+    Shape.Circle => "circle",
+    default => "other",
+  };
+}
+
+public function turn(d: Direction): string {
+  return match (d) {
+    "left" => "port",
+    "right" => "starboard",
+  };
+}
+
+public function word(n: i64): string {
+  return match (n) {
+    0 => "zero",
+    1 => "one",
+    default => "many",
+  };
+}

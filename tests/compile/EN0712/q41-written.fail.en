@@ -1,0 +1,13 @@
+const p: &Slice<i64> = &[2, 3, 5, 7]; //~ EN0712
+p[0] = 1;
+console.log(p);
+show(3);
+
+private function pair(n: i64): &Slice<i64> {
+  return &[n, n]; //~ EN0710
+}
+
+private function show(n: i64): void {
+  const w: &Slice<i64> = &[n, 2]; //~ EN0712
+  console.log(w);
+}

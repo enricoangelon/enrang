@@ -1,0 +1,18 @@
+let q: i64[] = [1, 2];
+let n = 0;
+while (n < 2) {
+  for (const x of &q) { *x += 1; }
+  q.push(n);
+  n += 1;
+}
+console.log(q);
+
+let r: i64[] = [0, 2];
+let m = 0;
+while (m < 2) {
+  for (const x of &r) {
+    if (*x == 0) { r.push(1); break; }
+  }
+  m += 1;
+}
+console.log(r);

@@ -1,0 +1,4 @@
+//! row: The source forms: `this.view()` with `pu
+public function viaRef(q: &i64[]): void {
+  for (const x of q) { q[0] = 1; } //~ EN0706 "cannot mutate `q[0]` while iterating over it"
+}

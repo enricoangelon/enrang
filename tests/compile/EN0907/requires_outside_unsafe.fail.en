@@ -1,0 +1,25 @@
+import { cpu } from "core";
+
+@requires("cmov") private function max(a: i32, b: i32): i32 {
+  return a > b ? a : b;
+}
+
+@requires("sse2", "popcnt") private function fast(): void {}
+
+public function pick(a: i32, b: i32): i32 {
+  if (cpu.has("cmov")) {
+    return max(a, b); //~ EN0907 "calling `max` needs `unsafe`, because it requires `cmov`"
+  }
+  fast(); //~ EN0907 "calling `fast` needs `unsafe`, because it requires `sse2`, `popcnt`"
+  return a;
+}
+
+public class Calc {
+  @requires("popcnt") public count(n: u32): u32 {
+    return n;
+  }
+}
+
+public function use(c: &Calc): u32 {
+  return c.count(3); //~ EN0907 "calling `count` needs `unsafe`, because it requires `popcnt`"
+}

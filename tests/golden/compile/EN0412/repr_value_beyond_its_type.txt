@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0412/repr_value_beyond_its_type.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0412]: constant evaluation failed: `256` does not fit `u8`
+ --> tests/compile/EN0412/repr_value_beyond_its_type.fail.en:5:10
+  |
+5 |   Wide = 256, //~ EN0412
+  |          ^^^ `Opcode` is `@repr("u8")`, which holds 0 to 255
+  |
+  = explain: run `enrang explain EN0412`
+
+error: aborting due to 1 previous error

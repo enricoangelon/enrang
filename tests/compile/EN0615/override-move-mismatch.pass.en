@@ -1,0 +1,9 @@
+public class Conn {
+  private fd: i64 = 3;
+
+  public close(): void {}
+}
+
+public class Tls extends Conn {
+  public override close(): void {}
+}

@@ -1,0 +1,4 @@
+public class Point {
+  public x: i64 = 0;
+}
+console.log(1); //~ EN0115

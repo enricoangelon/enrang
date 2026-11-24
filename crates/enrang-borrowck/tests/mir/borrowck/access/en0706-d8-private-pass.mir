@@ -1,0 +1,86 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/d8-private.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/d8-private.pass";
+class Counter {
+  private n: i64 = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Counter; // c
+  let _3: *Counter temp;
+  let _4: void temp;
+  let _5: string; // word
+  let _6: void temp;
+  let _7: &string temp;
+  let _8: &Counter temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Counter leaving(n)(move _3) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _5 = const "hi": string;
+    _7 = &_5 [explicit];
+    _8 = &_2 [auto-borrow];
+    _6 = Counter::run(move _8, move _7) -> bb2;
+  }
+  bb2: {
+    drop(_5);
+    storage_dead(_5);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn Counter::helper(_1: &Counter, _2: &string) -> &string {
+  let _1: &Counter; // this
+  let _2: &string; // a
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    _0 = move _3;
+    return;
+  }
+}
+
+fn Counter::reset(_1: &Counter) -> void {
+  let _1: &Counter; // this
+  bb0: {
+    (*_1).n = const 0: i64;
+    return;
+  }
+}
+
+fn Counter::run(_1: &Counter, _2: &string) -> void {
+  let _1: &Counter; // this
+  let _2: &string; // x
+  let _3: &string; // h
+  let _4: &string temp;
+  let _5: &Counter temp;
+  let _6: void temp;
+  let _7: &Counter temp;
+  let _8: void temp;
+  let _9: &string temp;
+  bb0: {
+    storage_live(_3);
+    _4 = &*_2 [reborrow];
+    _5 = &*_1 [reborrow];
+    _3 = Counter::helper(move _5, move _4) -> bb1;
+  }
+  bb1: {
+    _7 = &*_1 [reborrow];
+    _6 = virtual Counter::reset [copy _7](move _7) -> bb2;
+  }
+  bb2: {
+    _9 = &*_3 [reborrow];
+    _8 = form log(move _9) -> bb3;
+  }
+  bb3: {
+    storage_dead(_3);
+    return;
+  }
+}

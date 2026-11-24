@@ -72,7 +72,7 @@ pub(crate) fn text() -> String {
         "Support evidence per CPU family. A class is printed only once it is reached.
 
 {table}
-Nothing has been achieved: this is milestone {CURRENT_MILESTONE}, which has no compiler, and no
+Nothing has been achieved: this is milestone {CURRENT_MILESTONE}, which generates no code, and no
 chip has run any Enrang output. `{NO_HARDWARE}` means no such chip is available to test on.
 
 C1  level-proven: encoder tags, assembler oracle, disassembly audit, single-step

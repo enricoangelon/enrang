@@ -1,0 +1,7 @@
+public interface Port {
+  poke(): void;
+}
+
+public class Device implements Port { //~ EN0416 "`Device` does not satisfy `Port`: `poke` is `unsafe`"
+  public unsafe poke(): void {}
+}

@@ -404,11 +404,31 @@ fn other_fields(h: &mut Harness) {
         let rows: Vec<&str> = ROWS.iter().map(|row| row.target).collect();
         assert_eq!(rows, TARGETS);
     });
-    h.case("row/no target ever gets the x87 strategy", || {
+    h.case("row/no row's own default is the x87 strategy", || {
+        // Each row's default `--cpu` sits below the levels that default to x87.
         for target in TARGETS {
             assert_ne!(default_spec(target).float, FloatStrategy::X87);
         }
     });
+    h.case(
+        "row/x87 is the default at i586 and i686 on i386-* only",
+        || {
+            for target in TARGETS {
+                let built = default_spec(target);
+                for rung in CpuLevel::for_arch(built.arch) {
+                    let float = spec(target, &crate::support::cpu(rung.name())).float;
+                    assert_eq!(
+                        float,
+                        crate::support::default_float(built.arch, *rung),
+                        "{target} at {}",
+                        rung.name()
+                    );
+                    let x87 = matches!(rung, CpuLevel::I586 | CpuLevel::I686);
+                    assert_eq!(float == FloatStrategy::X87, x87, "{target}");
+                }
+            }
+        },
+    );
     h.case("row/the freestanding stack is ARCHITECTURE 9.6's", || {
         let text = section("ARCHITECTURE.md", "### 9.6 BIOS images");
         assert!(text.contains("default stack 16 KB in `.bss.stack`"));
@@ -591,7 +611,23 @@ fn test_cells(h: &mut Harness) {
             "From",
         ],
     );
-    assert_eq!(cells.rows.len(), 16, "the matrix's cells");
+    assert_eq!(cells.rows.len(), 18, "the matrix's cells");
+    // The cells that ask for `soft` where their level defaults to another strategy,
+    // so their float is not what the level gives with no flag (SPEC 10.1, TESTING 12).
+    const NOT_THE_DEFAULT: [&str; 4] = ["vm32-soft", "l32-i586", "l32-i686", "l32-sse2s"];
+    let names: Vec<String> = cells
+        .rows
+        .iter()
+        .map(|row| unquoted(&row[0]).to_owned())
+        .collect();
+    h.case(
+        "cell/the cells that set their float are in the matrix",
+        move || {
+            for cell in NOT_THE_DEFAULT {
+                assert!(names.iter().any(|name| name == cell), "{cell}");
+            }
+        },
+    );
     for row in cells.rows {
         let cell = unquoted(&row[0]).to_owned();
         let target_cell = row[1].clone();
@@ -617,7 +653,7 @@ fn test_cells(h: &mut Harness) {
             if !level_cell.is_empty() {
                 opts.cpu = Some(level_cell.clone());
             }
-            if float_cell == "soft" || float_cell == "sse2" {
+            if float_cell != "host" {
                 opts.float = Some(float_cell.clone());
             }
             let built = spec(&target, &opts);
@@ -626,10 +662,19 @@ fn test_cells(h: &mut Harness) {
                 assert_eq!(built.cpu.name(), level_cell);
             }
             // Dropping the float flag must give the same default, except for the
-            // one cell that asks for `soft` above the floor.
+            // cells that ask for `soft` where the level defaults to something else.
             opts.float = None;
             let by_default = spec(&target, &opts).float.name();
-            if cell != "vm32-soft" && cell != "l32-sse2s" {
+            if NOT_THE_DEFAULT.contains(&cell.as_str()) {
+                assert_ne!(
+                    by_default, float_cell,
+                    "the cell's float is set, not the default"
+                );
+                assert_eq!(
+                    float_cell, "soft",
+                    "a cell only ever overrides the default with `soft`"
+                );
+            } else {
                 assert_eq!(by_default, float_cell, "the cell's float is the default");
             }
         });

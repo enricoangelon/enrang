@@ -1,0 +1,7 @@
+let f: File;
+function show(): void { console.log(f.name); }
+show(); //~ EN0602
+
+private class File {
+  public constructor(public name: string) {}
+}

@@ -5,6 +5,11 @@
 //! milestone and has no passing fixture is a gap. A row that has not, yet claims a
 //! passing fixture, has a stale `since`. Both fail.
 //!
+//! The milestone being built, the one after the current, lands its work before the
+//! commit that closes it bumps the constant. [`gate_building`] lets that milestone's
+//! rows pass early: they are listed as early, not stale, and a row two milestones
+//! ahead is still stale. [`gate`] allows nothing early.
+//!
 //! Rows are plain data and the milestone type is the caller's, so this does not
 //! depend on `enrang-diag`.
 
@@ -12,13 +17,25 @@ use std::collections::BTreeSet;
 use std::fmt;
 use std::fmt::Debug;
 
-/// What a row's fixture is doing today.
-#[derive(Copy, Clone, Eq, PartialEq, Debug)]
+/// What a row's fixture is doing today. The order is from worst to best.
+#[derive(Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Debug)]
 pub enum FixtureStatus {
     Missing,
     /// It exists but does not pass.
     Failing,
     Passing,
+}
+
+impl FixtureStatus {
+    /// The status of a row that either piece of evidence proves: the better one.
+    pub fn best(self, other: FixtureStatus) -> FixtureStatus {
+        self.max(other)
+    }
+
+    /// The status of a row that needs both pieces of evidence: the worse one.
+    pub fn worst(self, other: FixtureStatus) -> FixtureStatus {
+        self.min(other)
+    }
 }
 
 /// One row of a registry or document.
@@ -47,6 +64,9 @@ pub struct GateReport {
     pub enforced: usize,
     /// Rows with `since > current`, which must not claim a passing fixture yet.
     pub deferred: usize,
+    /// Deferred rows of the milestone being built that already pass. They fail
+    /// nothing; the commit closing that milestone turns them into enforced rows.
+    pub early: Vec<GateFinding>,
     /// Enforced rows without a passing fixture.
     pub gaps: Vec<GateFinding>,
     /// Deferred rows that claim a passing fixture.
@@ -104,6 +124,25 @@ impl fmt::Display for GateReport {
 
 /// Checks rows against the current milestone. Findings keep the rows' order.
 pub fn gate<M: Ord + Debug>(rows: &[GateRow<'_, M>], current: &M) -> GateReport {
+    gate_with(rows, current, None)
+}
+
+/// [`gate`], with `building` the milestone after `current`: a deferred row of that
+/// milestone that passes is early, not stale. When `building` is not after
+/// `current`, no row is deferred and early at once, so this is [`gate`].
+pub fn gate_building<M: Ord + Debug>(
+    rows: &[GateRow<'_, M>],
+    current: &M,
+    building: &M,
+) -> GateReport {
+    gate_with(rows, current, Some(building))
+}
+
+fn gate_with<M: Ord + Debug>(
+    rows: &[GateRow<'_, M>],
+    current: &M,
+    building: Option<&M>,
+) -> GateReport {
     let mut report = GateReport {
         current: format!("{current:?}"),
         ..GateReport::default()
@@ -127,7 +166,11 @@ pub fn gate<M: Ord + Debug>(rows: &[GateRow<'_, M>], current: &M) -> GateReport 
         } else {
             report.deferred += 1;
             if row.fixture == FixtureStatus::Passing {
-                report.stale.push(finding());
+                if building == Some(&row.since) {
+                    report.early.push(finding());
+                } else {
+                    report.stale.push(finding());
+                }
             }
         }
     }

@@ -1,0 +1,3 @@
+public function itemAt(xs: &string[], i: isize): string {
+  return xs[i]; //~ EN0604 "cannot move out of `xs[i]`"
+}

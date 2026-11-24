@@ -1,0 +1,27 @@
+public class Counter {
+  private count: i64 = 0;
+  protected step: i64 = 1;
+  public static make(): Counter {
+    return new Counter();
+  }
+  private reset(): void {
+    this.count = 0;
+  }
+  public total(): i64 {
+    return this.count;
+  }
+}
+
+private function clamp(x: i64, lo: i64, hi: i64): i64 {
+  if (x < lo) {
+    return lo;
+  }
+  if (x > hi) {
+    return hi;
+  }
+  return x;
+}
+
+public function clampByte(x: i64): i64 {
+  return clamp(x, 0, 255);
+}

@@ -1,0 +1,14 @@
+const lab = new Labeler {};
+const title = "Dune";
+console.log(tag(&lab, &title));
+
+public class Labeler {
+  protected secret: i64 = 0;
+  public label(name: &string, fallback: &string): &string {
+    return name;
+  }
+}
+
+public function tag<T extends Labeler>(x: &T, n: &string): &string {
+  return x.label(n, "none");
+}

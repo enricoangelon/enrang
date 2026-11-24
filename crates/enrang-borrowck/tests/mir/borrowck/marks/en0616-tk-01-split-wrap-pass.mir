@@ -1,0 +1,125 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/tk-01-split-wrap.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/tk-01-split-wrap.pass";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::splitAt(const _1: &Slice<T>, _2: isize) -> [&Slice<T>, &Slice<T>];
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // v
+  let _3: [&Slice<i64>, &Slice<i64>] temp;
+  let _4: &i64[] temp;
+  let _5: &Slice<i64> temp;
+  let _6: &Slice<i64>; // lo
+  let _7: &Slice<i64>; // hi
+  let _8: isize temp;
+  let _9: isize temp;
+  let _10: i64 temp;
+  let _11: isize temp;
+  let _12: isize temp;
+  let _13: isize temp;
+  let _14: isize temp;
+  let _15: void temp;
+  let _16: &i64[] temp;
+  let _17: [&Slice<i64>, &Slice<i64>] temp;
+  let _18: &i64[] temp;
+  let _19: &Slice<i64> temp;
+  let _20: &Slice<i64>; // l2
+  let _21: &Slice<i64>; // h2
+  let _22: isize temp;
+  let _23: isize temp;
+  let _24: isize temp;
+  let _25: isize temp;
+  let _26: void temp;
+  let _27: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64, const 4: i64);
+    _4 = &_2 [explicit];
+    _5 = convert(array_to_slice, move _4);
+    _3 = halves(move _5) -> bb1;
+  }
+  bb1: {
+    storage_live(_6);
+    _6 = copy _3.0;
+    storage_live(_7);
+    _7 = copy _3.1;
+    _8 = const 0: isize;
+    _9 = const 0: isize;
+    _11 = len(*_7);
+    check_bounds(copy _9, copy _11);
+    _10 = copy (*_7)[_9];
+    _12 = len(*_6);
+    check_bounds(copy _8, copy _12);
+    (*_6)[_8] = move _10;
+    _13 = const 1: isize;
+    _14 = len(*_7);
+    check_bounds(copy _13, copy _14);
+    (*_7)[_13] = const 9: i64;
+    _16 = &_2 [auto-borrow];
+    _15 = form log(move _16) -> bb2;
+  }
+  bb2: {
+    _18 = &_2 [explicit];
+    _19 = convert(array_to_slice, move _18);
+    _17 = kept(move _19) -> bb3;
+  }
+  bb3: {
+    storage_live(_20);
+    _20 = copy _17.0;
+    storage_live(_21);
+    _21 = copy _17.1;
+    _22 = const 0: isize;
+    _23 = len(*_20);
+    check_bounds(copy _22, copy _23);
+    (*_20)[_22] = const 7: i64;
+    _24 = const 0: isize;
+    _25 = len(*_21);
+    check_bounds(copy _24, copy _25);
+    (*_21)[_24] = const 8: i64;
+    _27 = &_2 [auto-borrow];
+    _26 = form log(move _27) -> bb4;
+  }
+  bb4: {
+    storage_dead(_21);
+    storage_dead(_20);
+    storage_dead(_7);
+    storage_dead(_6);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn halves(_1: &Slice<i64>) -> [&Slice<i64>, &Slice<i64>] {
+  let _1: &Slice<i64>; // v
+  let _2: &Slice<i64> temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = "core/slice"::Slice<i64>::splitAt(move _2, const 2: isize) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn kept(_1: &Slice<i64>) -> [&Slice<i64>, &Slice<i64>] {
+  let _1: &Slice<i64>; // xs
+  let _2: [&Slice<i64>, &Slice<i64>]; // p
+  let _3: &Slice<i64> temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = "core/slice"::Slice<i64>::splitAt(move _3, const 1: isize) -> bb1;
+  }
+  bb1: {
+    _0 = copy _2;
+    storage_dead(_2);
+    return;
+  }
+}

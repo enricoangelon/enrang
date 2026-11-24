@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0610/this_read_before_super.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0610]: `this` can't be used before `super(...)` runs
+  --> tests/compile/EN0610/this_read_before_super.fail.en:12:18
+   |
+12 |     this.label = this.describe(); //~ EN0610
+   |                  ^^^^ `this` is used here, before the base part is built
+   |
+help: before `super(...)`, a constructor may only assign its own fields
+   = explain: run `enrang explain EN0610`
+
+error: aborting due to 1 previous error

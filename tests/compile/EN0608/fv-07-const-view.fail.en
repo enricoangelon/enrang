@@ -1,0 +1,4 @@
+import { PRIMES, total } from "./fv-07-const-view-2.pass";
+
+console.log(total(PRIMES));
+PRIMES[0] = 1; //~ EN0608

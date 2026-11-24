@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/m3gate-write-param-after-value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `f` can change `xs`, but `k` is `const`
+ --> tests/compile/EN0608/m3gate-write-param-after-value.fail.en:2:6
+  |
+2 | f(1, &k); //~ EN0608 "`f` can change `xs`, but"
+  |      ^^ `f` writes through it
+  |
+help: declare it `let k`
+  |
+1 | let k = [1];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

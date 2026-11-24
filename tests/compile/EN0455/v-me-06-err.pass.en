@@ -1,0 +1,11 @@
+const u = new User("");
+console.log(u.check());
+
+public class User {
+  public constructor(private name: string) {}
+
+  public check(): Result<isize> {
+    if (this.name.isEmpty()) { return Err(&this.name); }
+    return this.name.length();
+  }
+}

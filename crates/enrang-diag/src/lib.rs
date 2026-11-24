@@ -27,5 +27,5 @@ pub use diagnostic::{Applicability, Diagnostic, Edit, Entry, EntryKind, Help, La
 pub use explain::{ExplainPage, explain};
 pub use fix::{FixConflict, apply_fixes};
 pub use json::{JSON_VERSION, render_json};
-pub use suggest::did_you_mean;
+pub use suggest::{did_you_mean, did_you_mean_ordered};
 pub use text::{RenderOpts, render_text, shown};

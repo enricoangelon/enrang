@@ -1,0 +1,22 @@
+const all: Box<Speaker>[] = [new Box(new Dog {}), new Box(new Robot {})];
+for (const s of &all) {
+  introduce(s);
+}
+const rex = new Dog {};
+introduce(&rex);
+
+private function introduce(s: &Speaker): void {
+  console.log(s.speak());
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class Dog implements Speaker {
+  public speak(): string { return "woof"; }
+}
+
+public class Robot implements Speaker {
+  public speak(): string { return "beep"; }
+}

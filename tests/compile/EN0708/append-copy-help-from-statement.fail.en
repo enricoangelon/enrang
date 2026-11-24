@@ -1,0 +1,2 @@
+let s = "ab".toString();
+s += s.slice(0, 1); console.log(s); //~ EN0708

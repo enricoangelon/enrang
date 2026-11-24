@@ -1,0 +1,7 @@
+//! row: `const { name, pos: { x } } = ada;` then
+public class H { public list: i64[] = []; }
+
+public function f(h: H): void {
+  const { list: [a, b] } = h; //~ EN1042
+  console.log(a, b);
+}

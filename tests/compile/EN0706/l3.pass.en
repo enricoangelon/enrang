@@ -1,0 +1,9 @@
+//! row: `l1`-`l10`, local functions, among them `let
+let q = [1, 2];
+function reset(): void {
+  q.push(0);
+}
+for (const x of &q) {
+  console.log(x);
+}
+reset();

@@ -1,0 +1,3 @@
+public function skip(): void {
+  continue; //~ EN0111
+}

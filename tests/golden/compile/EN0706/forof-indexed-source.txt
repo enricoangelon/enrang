@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0706/forof-indexed-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `grid` while iterating over it
+ --> tests/compile/EN0706/forof-indexed-source.fail.en:5:5
+  |
+4 |   for (const x of &grid[r]) {
+  |                   -------- immutable borrow begins here
+5 |     grid.push([]); //~ EN0706
+  |     ^^^^^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

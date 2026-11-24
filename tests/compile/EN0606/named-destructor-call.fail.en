@@ -1,0 +1,20 @@
+//! row: `f.destructor()`, including on a generic
+let f = new File(3);
+f.destructor(); //~ EN0606 "a destructor runs by itself: call `dispose(f)`"
+
+public class File {
+  private fd: i64;
+  public constructor(fd: i64) {
+    this.fd = fd;
+  }
+  public destructor() {}
+}
+
+public interface Closer {
+  destructor(): void; //~ EN0606 "an interface can't declare a `destructor`"
+  close(): void;
+}
+
+public function finish<T>(x: &T): void {
+  x.destructor(); //~ EN0606 "a destructor runs by itself: call `dispose(x)`"
+}

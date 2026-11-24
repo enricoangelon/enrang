@@ -1,0 +1,22 @@
+//! covers: H18
+let h = new Holder();
+if (h.item != null) {
+  h.drop();
+  console.log(h.item.n); //~ EN0401
+}
+
+private class Item {
+  public n: i64 = 1;
+}
+
+private class Holder {
+  public item: Item | null = new Item();
+
+  public drop(): void {
+    this.item = null;
+  }
+
+  public count(): i64 {
+    return this.item == null ? 0 : 1;
+  }
+}

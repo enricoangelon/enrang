@@ -1,0 +1,142 @@
+=== EN0501
+--- rule
+A `match` handles every value of its subject. On an enum each case needs an arm, and on a nullable enum `null` does too, unless a `default` arm catches the rest; a number or a string always needs `default`, while a string-literal union needs none once every value is listed. An arm with a guard, `if` and a condition, does not count as handling its case. A value left unhandled is EN0501: the message names one, and the help adds an arm for it.
+--- failing
+const light = Light.Red;
+const wait = match (light) {
+  Light.Red => 30,
+  Light.Green => 25,
+};
+console.log(wait);
+
+private enum Light {
+  Red,
+  Yellow,
+  Green,
+}
+--- fixed
+const light = Light.Red;
+const wait = match (light) {
+  Light.Red => 30,
+  Light.Yellow => 5,
+  Light.Green => 25,
+};
+console.log(wait);
+
+private enum Light {
+  Red,
+  Yellow,
+  Green,
+}
+--- typescript
+TypeScript checks a `switch` over a union only if the code adds a `never` check by hand, and a value with no `case` is skipped in silence. Enrang checks every `match`, so a case added to an enum shows each place that must handle it.
+=== EN0502
+--- rule
+An enum case in a `match` arm is always written with its enum's name, `Light.Red`, never as a bare `Red`. An arm binds no names, so a bare identifier that names a case of the subject's enum is EN0502, and the fix-it adds the enum's name.
+--- failing
+const light = Light.Red;
+const wait = match (light) {
+  Red => 30,
+  Light.Yellow => 5,
+  Light.Green => 25,
+};
+console.log(wait);
+
+private enum Light {
+  Red,
+  Yellow,
+  Green,
+}
+--- fixed
+const light = Light.Red;
+const wait = match (light) {
+  Light.Red => 30,
+  Light.Yellow => 5,
+  Light.Green => 25,
+};
+console.log(wait);
+
+private enum Light {
+  Red,
+  Yellow,
+  Green,
+}
+--- typescript
+A TypeScript enum member is always written `Light.Red`, and Enrang keeps that in arms. In Rust a bare name in a pattern may bind a variable that matches every value; an Enrang arm binds nothing, so a bare case name is an error instead.
+=== EN0503
+--- rule
+Arms are tried from top to bottom, and the first that matches runs. An arm whose every value an earlier arm already handles, or that comes after `default`, never runs: warning EN0503. Remove it, or move it above the arm that handles its values.
+--- failing
+const code = 404;
+const text = match (code) {
+  200 => "ok",
+  default => "error",
+  404 => "not found",
+};
+console.log(text);
+--- fixed
+const code = 404;
+const text = match (code) {
+  200 => "ok",
+  404 => "not found",
+  default => "error",
+};
+console.log(text);
+--- typescript
+In a JavaScript `switch`, `default` may stand anywhere and still runs only when no `case` matches. A `match` tries its arms in order, as PHP's does, so nothing after `default` is ever reached.
+=== EN0504
+--- rule
+An arm value must have the type of the subject: a case of the subject's enum, a literal or range of its number type, a string for a `string` subject, `null` for a nullable one, `Ok` and `Err` for a `Result`. A value of another type could never equal the subject, and it is EN0504.
+--- failing
+const code = 404;
+const text = match (code) {
+  200 => "ok",
+  "404" => "not found",
+  default => "error",
+};
+console.log(text);
+--- fixed
+const code = 404;
+const text = match (code) {
+  200 => "ok",
+  404 => "not found",
+  default => "error",
+};
+console.log(text);
+--- typescript
+TypeScript reports such a `case` as TS2678, since `===` between a number and a string is never true. Enrang reports it for every arm, enum cases included.
+=== EN0506
+--- rule
+A destructuring declaration takes its value apart unconditionally, so the value must always have that shape. A nullable `T | null`, an enum and a `Result` may not, and destructuring one is EN0506. Test it first: inside `if (x != null)` the value is narrowed to `T`, and a `match` narrows an enum or a `Result` in each arm.
+--- failing
+const found = find("ada");
+const { name, age } = found;
+console.log(name, age);
+
+private function find(name: &string): Person | null {
+  if (name == "ada") { return new Person { name: "Ada", age: 36 }; }
+  return null;
+}
+
+private class Person {
+  public name: string;
+  public age: i64;
+}
+--- fixed
+const found = find("ada");
+if (found != null) {
+  const { name, age } = found;
+  console.log(name, age);
+}
+
+private function find(name: &string): Person | null {
+  if (name == "ada") { return new Person { name: "Ada", age: 36 }; }
+  return null;
+}
+
+private class Person {
+  public name: string;
+  public age: i64;
+}
+--- typescript
+JavaScript throws a `TypeError` when it destructures `null`, and TypeScript reports the possibility under `strictNullChecks`. Enrang asks for the test before the destructuring, and the test narrows the value.

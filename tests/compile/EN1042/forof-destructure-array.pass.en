@@ -1,0 +1,7 @@
+//! row: `[a, r] = xs` and `const [a, r] = xs` wi
+public function f(xs: i64[], t: [i64, i64]): void {
+  const a = xs[0];
+  const r = xs[1];
+  const [b, s] = t;
+  console.log(a, r, b, s);
+}

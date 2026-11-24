@@ -1,0 +1,44 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/oq12-count.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/oq12-count.pass";
+class Counter {
+  private n: isize = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Counter; // c
+  let _3: *Counter temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &isize temp;
+  let _7: &Counter temp;
+  let _8: &isize temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Counter leaving(n)(move _3) -> bb1;
+  }
+  bb1: {
+    _7 = &_2 [auto-borrow];
+    _6 = Counter::count(move _7) -> bb2;
+  }
+  bb2: {
+    _8 = &*_6 [auto-borrow];
+    _5 = form log(move _8) -> bb3;
+  }
+  bb3: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Counter::count(_1: &Counter) -> readonly &isize {
+  let _1: &Counter; // this
+  bb0: {
+    _0 = &(*_1).n [explicit];
+    return;
+  }
+}

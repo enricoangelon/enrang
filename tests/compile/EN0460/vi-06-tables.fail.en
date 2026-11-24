@@ -1,0 +1,29 @@
+public class Animal {
+  public show<T>(x: &T): void {
+    console.log("Animal.show:", x);
+  }
+}
+
+public class Dog extends Animal {
+  public override show<T>(x: &T): void { //~ EN0460 "`show` has its own type parameters, so it can't be overridden"
+    console.log("Dog.show:", x);
+  }
+}
+
+public class Puppy extends Animal {
+  public show<T>(x: &T): void { //~ EN0460 "`show` has its own type parameters, so it can't be overridden"
+    console.log("Puppy.show:", x);
+  }
+}
+
+public abstract class Shape {
+  public abstract show<T>(x: &T): void; //~ EN0460 "`show` has its own type parameters, so it can't be overridden"
+}
+
+public interface Dumper {
+  dump<T>(x: &T): void;
+}
+
+public function keep(d: Box<Dumper>): void { //~ EN1006
+  console.log(1);
+}

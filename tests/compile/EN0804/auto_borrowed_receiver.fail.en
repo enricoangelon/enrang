@@ -1,0 +1,10 @@
+//! covers: H16
+let p = new P { a: 1, b: 2 };
+const c = p.b.checkedAdd(1); //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+console.log(c);
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32;
+}

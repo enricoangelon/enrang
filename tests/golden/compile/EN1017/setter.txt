@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1017/setter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1017]: setters are not supported yet
+ --> tests/compile/EN1017/setter.fail.en:4:10
+  |
+4 |   public set width(v: i64) { //~ EN1017 "setters are not supported yet"
+  |          ^^^^^^^^^ a setter
+  |
+  = note: assigning a field never runs code.
+help: Write a method
+  = explain: run `enrang explain EN1017`
+
+error: aborting due to 1 previous error

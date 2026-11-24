@@ -1,0 +1,49 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/method_not_const.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/method_not_const.pass";
+class Logger { }
+@private static count: i64;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Logger; // l
+  let _3: *Logger temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &Logger temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Logger leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [auto-borrow];
+    _5 = Logger::log(move _6, const "a": &string) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Logger::log(const _1: &Logger, const _2: &string) -> void {
+  let _1: &Logger; // this
+  let _2: &string; // m
+  let _3: *i64 temp;
+  let _4: i64 temp;
+  let _5: void temp;
+  let _6: &string temp;
+  region r0: block;
+  bb0: {
+    _3 = const static_addr(count): *i64 @ r0;
+    _4 = copy *_3 @ r0;
+    *_3 = checked_add(copy _4, const 1: i64) @ r0;
+    _6 = &*_2 [reborrow];
+    _5 = form log(move _6) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

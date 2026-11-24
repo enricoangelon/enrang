@@ -1,0 +1,38 @@
+$ enrang check tests/compile/EN0601/object-literal-evaluates-as-written.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `s` was moved into `consume`
+ --> tests/compile/EN0601/object-literal-evaluates-as-written.fail.en:2:31
+  |
+1 | const s = "hello".repeat(2);
+  |       - `s` owns this `string`, which is not Copy
+2 | const o = { b: consume(s), a: s.length() }; //~ EN0601
+  |                               ^ used here, after the move
+  |                        - `s` moves here, because `consume` takes `string`, not `&string`
+  |
+  = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `s` hands it over.
+help: if `consume` only needs to look at it, change the parameter to `v: &string`
+  |
+2 | const o = { b: consume(&s), a: s.length() }; //~ EN0601
+  |                        +
+9 | private function consume(v: &string): isize { return v.length(); }
+  |                             +
+help: to keep your own, pass a copy: `consume(s.clone())`
+  |
+2 | const o = { b: consume(s.clone()), a: s.length() }; //~ EN0601
+  |                         ++++++++
+  = explain: run `enrang explain EN0601`
+
+error[EN0601]: `t` was moved
+ --> tests/compile/EN0601/object-literal-evaluates-as-written.fail.en:5:41
+  |
+4 | const t = "ab".toString();
+  |       - `t` owns this `string`, which is not Copy
+5 | const r = Shape.Named { label: t, size: t.length() as i64 }; //~ EN0601
+  |                                         ^ used here, after the move
+  |                                - `t` moves here
+  |
+  = explain: run `enrang explain EN0601`
+
+error: aborting due to 2 previous errors

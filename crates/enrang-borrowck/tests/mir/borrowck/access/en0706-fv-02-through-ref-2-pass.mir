@@ -1,0 +1,72 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/fv-02-through-ref-2.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/fv-02-through-ref-2.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: u8[]; // buf
+  let mut _3: [&u8[], int]; // t
+  let _4: &u8[] temp;
+  let _5: &[&u8[], int]; // r
+  let _6: [&u8[], int]; // t2
+  let _7: void temp;
+  let _8: isize temp;
+  let _9: isize temp;
+  let _10: &u8 temp;
+  let _11: void temp;
+  let _12: &u8[] temp;
+  let _13: void temp;
+  let _14: &u8[] temp;
+  let _15: void temp;
+  let _16: &u8[] temp;
+  let _17: void temp;
+  let _18: &u8[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 1: u8);
+    storage_live(_3);
+    _4 = &_2 [explicit];
+    _3 = tuple(move _4, const 1: int);
+    storage_live(_5);
+    _5 = &_3 [explicit];
+    storage_live(_6);
+    _6 = copy *_5;
+    _8 = const 0: isize;
+    _9 = len(*_6.0);
+    check_bounds(copy _8, copy _9);
+    _10 = &(*_6.0)[_8] [auto-borrow];
+    _7 = form log(move _10) -> bb1;
+  }
+  bb1: {
+    _12 = copy _3.0;
+    _11 = "alloc/array"::Array<u8>::push(move _12, const 9: u8) -> bb2;
+  }
+  bb2: {
+    _14 = copy _3.0;
+    _13 = "alloc/array"::Array<u8>::push(move _14, const 9: u8) -> bb3;
+  }
+  bb3: {
+    _16 = copy _3.0;
+    _15 = "alloc/array"::Array<u8>::push(move _16, const 9: u8) -> bb4;
+  }
+  bb4: {
+    _18 = copy _3.0;
+    _17 = "alloc/array"::Array<u8>::push(move _18, const 9: u8) -> bb5;
+  }
+  bb5: {
+    storage_dead(_6);
+    storage_dead(_5);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

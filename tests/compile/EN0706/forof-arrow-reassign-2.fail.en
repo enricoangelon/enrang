@@ -1,0 +1,17 @@
+//! row: `run(() => { xs = []; })` in a loop over
+public function dead(): void {
+  let xs: i64[] = [1, 2];
+  for (const x of &xs) {
+    run(() => { xs = []; }); //~ EN0706 "cannot reassign `xs` during iteration"
+  }
+}
+
+public function live(): void {
+  let xs: i64[] = [1, 2];
+  for (const x of &xs) {
+    run(() => { xs = []; }); //~ EN0706 "cannot reassign `xs` during iteration"
+    console.log(x);
+  }
+}
+
+private function run(f: () => void): void { f(); }

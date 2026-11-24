@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0406/union_of_two_types.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0406]: union other than `T | null`
+ --> tests/compile/EN0406/union_of_two_types.fail.en:3:26
+  |
+3 | private function show(x: i64 | string): void { //~ EN0406 "union other than `T | null`"
+  |                          ^^^^^^^^^^^^ only `T | null` is a union
+  |
+  = explain: run `enrang explain EN0406`
+
+error: aborting due to 1 previous error

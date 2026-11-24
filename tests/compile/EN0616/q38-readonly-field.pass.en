@@ -1,0 +1,22 @@
+private class ByteLexer {
+  private src: readonly &Slice<u8>;
+  private pos: isize = 0;
+
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+
+  public poke(): void {
+    console.log(this.src[0]);
+  }
+
+  public wipe(): void {
+    show(this.src, 0);
+  }
+}
+
+private function show(xs: &Slice<u8>, v: u8): void {
+  for (let i = 0; i < xs.length(); i += 1) {
+    console.log(xs[i] == v);
+  }
+}

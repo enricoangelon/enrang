@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0455/v-me-06-err.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0455]: `this.name` could be a success or an error here
+ --> tests/compile/EN0455/v-me-06-err.fail.en:5:12
+  |
+5 |     return this.name; //~ EN0455 "`this.name` could be a success or an error here"
+  |            ^^^^^^^^^ `Err` would take this as it is
+  |
+help: write `Ok(this.name.clone())` or `Err(&this.name)`
+  = explain: run `enrang explain EN0455`
+
+error: aborting due to 1 previous error

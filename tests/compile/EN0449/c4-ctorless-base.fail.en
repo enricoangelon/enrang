@@ -1,0 +1,21 @@
+console.log(new Circle(2, new Person("Ada")).describe());
+
+public class Person {
+  public constructor(public name: string) {}
+}
+
+public class Shape {
+  protected color: string = "red";
+  public owner: Person;
+
+  public describe(): string {
+    return `${this.color} shape of ${this.owner.name}`;
+  }
+}
+
+public class Circle extends Shape {
+  public constructor(public r: i64, o: Person) {
+    super(1); //~ EN0449 "`Shape` has no constructor, so it takes no arguments"
+    this.owner = o;
+  }
+}

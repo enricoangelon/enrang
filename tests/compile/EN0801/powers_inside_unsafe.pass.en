@@ -1,0 +1,30 @@
+@at(0xB8000) private unsafe let screen: u16[2000];
+
+private unsafe let count: i64 = 0;
+
+private unsafe function poke(p: *u8, v: u8): void { *p = v; }
+
+private unsafe function noop(): void {}
+
+public function bump(f: unsafe fn() => void): u8 {
+  const p = 0x1000 as *u8;
+  let v: u8 = 0;
+  unsafe {
+    v = *p;
+    p.write(3);
+    poke(p, 7);
+    asm("nop");
+    count = count + 1;
+    screen[0] = 0x0741;
+    mem.set(p, 0, 4);
+    f();
+  }
+  const g: unsafe fn() => void = noop;
+  const q = p.add(1);
+  return v;
+}
+
+public unsafe function inside(p: *u8): u8 {
+  poke(p, 1);
+  return *p;
+}

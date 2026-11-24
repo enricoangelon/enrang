@@ -1,0 +1,24 @@
+const s0: i64[] = [5];
+let k: i64[] = [1, 2, 3];
+let w: i64[] = [0];
+let p = new Pad(&s0, &k, &w);
+const e = p.first();
+k.push(4); //~ EN0707
+console.log(*e);
+
+public class Pad {
+  private src: readonly &i64[];
+  private t: [readonly &i64[], i32];
+  private w: &i64[];
+  public constructor(s: &i64[], k: &i64[], w: &i64[]) {
+    this.src = s;
+    this.t = [k, 1];
+    this.w = w;
+  }
+  public first(): readonly &i64 {
+    return &this.t[0][0];
+  }
+  public poke(): void {
+    this.w.push(1);
+  }
+}

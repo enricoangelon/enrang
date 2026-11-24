@@ -1,0 +1,2 @@
+let q: i64[] = [1, 5, 3, 7]; let o: i64[] = [0]; let r = &q; let keep: &i64 | null = null; for (const x of r) { if (*x > 2) { keep = x; r = &o; break; } } if (keep != null) { *keep = 0; } console.log(r); console.log(q);
+let q2: i64[] = [1, 5, 3, 7]; let o2: i64[] = [0]; let r2 = &q2; for (const x of r2) { if (*x > 2) { *x = 0; r2 = &o2; break; } } console.log(r2); console.log(q2);

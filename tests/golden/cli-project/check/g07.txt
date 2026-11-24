@@ -1,0 +1,28 @@
+$ enrang check g07.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `u` was moved into `archive`
+ --> g07.en:5:13
+  |
+3 | const u = new User("Ada");
+  |       - `u` owns this `User`, which is not Copy because it has a `string` field
+4 | archive(u);
+  |         - `u` moves here, because `archive` takes `User`, not `&User`
+5 | console.log(u.name);
+  |             ^ used here, after the move
+  |
+  = from TypeScript: both names would share one object. In Enrang a value has one owner, so passing `u` hands it over.
+help: if `archive` only needs to look at it, change the parameter to `u: &User`
+  |
+1 | function archive(u: &User): void { console.log(u.name); }
+  |                     +
+4 | archive(&u);
+  |         +
+help: to keep your own, pass a copy: `archive(u.clone())`
+  |
+4 | archive(u.clone());
+  |          ++++++++
+  = explain: run `enrang explain EN0601`
+
+error: aborting due to 1 previous error

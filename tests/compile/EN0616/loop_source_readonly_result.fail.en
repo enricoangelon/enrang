@@ -1,0 +1,13 @@
+//! covers: H28
+let st = new Stack();
+const r = st.view();
+for (const x of r) { //~ EN0616 "cannot change the object returned by `view`"
+  *x = 0;
+}
+
+public class Stack {
+  private items: i64[] = [1, 2];
+  public view(): readonly &i64[] {
+    return &this.items;
+  }
+}

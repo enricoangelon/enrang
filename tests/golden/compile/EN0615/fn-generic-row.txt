@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0615/fn-generic-row.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `head` returns a read-only reference, but `fn(a: &T) => &T` declares a writable one
+ --> tests/compile/EN0615/fn-generic-row.fail.en:2:1
+  |
+2 | growVia(head, &s, "zz"); //~ EN0615
+  | ^^^^^^^^^^^^^^^^^^^^^^^ converted here
+  |
+help: if callers only read it, write `readonly` before the type's result: `fn(a: &T) => readonly &T`
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

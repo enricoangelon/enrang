@@ -1,0 +1,12 @@
+error[EN0615]: `Sub.apply` takes `f` as a `fn(&i64[]) => void`, but `Base.apply` declares a `fn(let &i64[]) => void`
+ --> main.en:4:49
+  |
+3 | public class Base { public apply(f: fn(let x: &i64[]) => void): void { let v: i64[] = [1]; f(&v); } }
+  |                            ----- the declaration it stands for
+4 | public class Sub extends Base { public override apply(f: fn(x: &i64[]) => void): void { let v: i64[] = [1, 2, 3]; const e = &v[0]; f(&v); console.log(*e); } }
+  |                                                 ^^^^^ declared here
+  |
+  = note: a function type's row nested inside a signature must be equal to the one it stands for, since callers through either may pass or return any function the row allows
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

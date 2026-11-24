@@ -1,0 +1,97 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/fv-02-main.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/fv-02-main.pass";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+@final class View {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: u8[]; // t
+  let _3: u8[]; // o
+  let mut _4: View; // v
+  let _5: &u8[] temp;
+  let _6: &Slice<u8> temp;
+  let _7: &u8[] temp;
+  let _8: &Slice<u8> temp;
+  let _9: &View temp;
+  let _10: void temp;
+  let _11: &Slice<u8>; // d
+  let _12: &View temp;
+  let _13: void temp;
+  let _14: &Slice<u8> temp;
+  let _15: isize temp;
+  let _16: isize temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 1: u8, const 2: u8);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<u8>(const 3: u8, const 4: u8);
+    storage_live(_4);
+    _5 = &_2 [explicit];
+    _6 = convert(array_to_slice, move _5);
+    _7 = &_3 [explicit];
+    _8 = convert(array_to_slice, move _7);
+    _9 = &_4 [auto-borrow];
+    _10 = View::#ctor(move _9, move _6, move _8) -> bb1;
+  }
+  bb1: {
+    storage_live(_11);
+    _12 = &_4 [auto-borrow];
+    _11 = View::last(move _12) -> bb2;
+  }
+  bb2: {
+    _14 = &*_11 [reborrow];
+    _13 = form log(move _14) -> bb3;
+  }
+  bb3: {
+    _15 = const 0: isize;
+    _16 = len(_2);
+    check_bounds(copy _15, copy _16);
+    _2[_15] = const 9: u8;
+    storage_dead(_11);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn View::#ctor(_1: &View, _2: &Slice<u8>, _3: &Slice<u8>) -> void {
+  let _1: &View; // this
+  let _2: &Slice<u8>; // src
+  let _3: &Slice<u8>; // dst
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+fn View::last(_1: &View) -> readonly &Slice<u8> {
+  let _1: &View; // this
+  let _2: isize | null temp;
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _2 = present(const 1: isize);
+    _3 = copy (*_1).dst;
+    _0 = "core/slice"::Slice<u8>::slice(move _3, const 0: isize, move _2, const 2: isize) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

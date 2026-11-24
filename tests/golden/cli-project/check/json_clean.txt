@@ -1,0 +1,4 @@
+$ enrang check --error-format=json main.en
+[exit 0]
+[stdout]
+[stderr]

@@ -1,0 +1,15 @@
+//! row: Under `o != null`: `for (const x of o.ki
+public class O {
+  public items: i64[] = [1];
+  public kids(): &i64[] { return &this.items; }
+}
+
+public function f(c: bool): void {
+  let o: O | null = c ? new O() : null;
+  if (o != null) {
+    for (const x of o.kids()) {
+      console.log(x);
+    }
+    o = null;
+  }
+}

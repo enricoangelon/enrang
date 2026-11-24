@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0110/import_after_a_declaration.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0110]: `import` after a declaration
+ --> tests/compile/EN0110/import_after_a_declaration.fail.en:2:1
+  |
+1 | public class Point {}
+  | --------------------- the first declaration is here
+2 | import { max } from "./math"; //~ EN0110
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ imports go before every statement and declaration
+  |
+help: move the import to the top of the file
+  = explain: run `enrang explain EN0110`
+
+error: aborting due to 1 previous error

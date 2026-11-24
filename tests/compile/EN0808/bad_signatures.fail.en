@@ -1,0 +1,16 @@
+//! target: i386-none
+@interrupt private function byValue(frame: InterruptFrame): void {} //~ EN0808 "invalid interrupt signature"
+
+@interrupt private function returnsInt(frame: &InterruptFrame): i32 { //~ EN0808 "invalid interrupt signature"
+  return 0;
+}
+
+@interrupt private function noFrame(): void {} //~ EN0808 "invalid interrupt signature"
+
+@interrupt private function codeWithoutFlag(frame: &InterruptFrame, code: usize): void {} //~ EN0808 "invalid interrupt signature"
+
+@interrupt({ errorCode: true }) private function flagWithoutCode(frame: &InterruptFrame): void {} //~ EN0808 "invalid interrupt signature"
+
+@interrupt({ errorCode: true }) private function narrowCode(frame: &InterruptFrame, code: u32): void {} //~ EN0808 "invalid interrupt signature"
+
+@interrupt private function extra(frame: &InterruptFrame, code: usize, x: u8): void {} //~ EN0808 "invalid interrupt signature"

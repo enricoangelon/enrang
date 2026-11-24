@@ -1,0 +1,5 @@
+$ enrang explain EN1016
+[exit 2]
+[stdout]
+[stderr]
+error: `EN1016` is retired: default parameters and overloads are supported now

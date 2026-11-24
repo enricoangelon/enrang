@@ -1,0 +1,37 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0603/this_moved_out_in_method.fail.en. Its row's codes: EN0603.
+module "tests/compile/EN0603/this_moved_out_in_method.fail";
+class User {
+  name: string;
+}
+
+fn User::#ctor(_1: &User, _2: string) -> void {
+  let _1: &User; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn User::me(_1: &User) -> User {
+  let _1: &User; // this
+  bb0: {
+    _0 = move *_1; //~ EN0603
+    return;
+  }
+}

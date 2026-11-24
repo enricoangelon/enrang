@@ -1,0 +1,2 @@
+private const X: i64[3] = [1, 2, 3];
+private const Y = [...X]; //~ EN0412 "constant evaluation failed: `...` is not constant"

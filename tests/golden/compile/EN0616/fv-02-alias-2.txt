@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0616/fv-02-alias-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `w.src` is `readonly &`, so it can't take a reference that another field writes through
+  --> tests/compile/EN0616/fv-02-alias-2.fail.en:31:5
+   |
+31 |     w.src = q; //~ EN0616
+   |     ^^^^^^^^^ stored here
+   |
+help: store a reference from a parameter, or from another `readonly &` field
+   = explain: run `enrang explain EN0616`
+
+error[EN0709]: cannot move `w` while it is borrowed
+  --> tests/compile/EN0616/fv-02-alias-2.fail.en:32:12
+   |
+30 |     const q = w.src;
+   |               ----- shared borrow of `w` starts here
+31 |     w.src = q; //~ EN0616
+32 |     return w; //~ EN0709
+   |            ^ `w` moves here
+   |
+help: move `w` after its last borrow
+   = explain: run `enrang explain EN0709`
+
+error: aborting due to 2 previous errors

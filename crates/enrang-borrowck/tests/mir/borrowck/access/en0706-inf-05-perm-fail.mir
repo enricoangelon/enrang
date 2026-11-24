@@ -1,0 +1,109 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/inf-05-perm.fail.en. Its row's codes: EN0706.
+module "tests/compile/EN0706/inf-05-perm.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Bag {
+  items: i64[] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Bag; // bag
+  let _3: *Bag temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &i64[] temp;
+  let _7: &i64; // e
+  let _8: isize temp;
+  let _9: isize temp;
+  let _10: &Bag temp;
+  let _11: &Bag temp;
+  let _12: void temp;
+  let _13: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Bag leaving(items)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2.items [auto-borrow];
+    _5 = "alloc/array"::Array<i64>::push(move _6, const 5: i64) -> bb2;
+  }
+  bb2: {
+    storage_live(_7);
+    _8 = const 0: isize;
+    _9 = len(_2.items);
+    check_bounds(copy _8, copy _9);
+    _7 = &_2.items[_8] [explicit];
+    _11 = &_2 [explicit]; //~ EN0706
+    _10 = g(move _11, const 1: i64) -> bb3;
+  }
+  bb3: {
+    _13 = &*_7 [reborrow];
+    _12 = form log(move _13) -> bb4;
+  }
+  bb4: {
+    storage_dead(_7);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn f(_1: &Bag, _2: i64) -> &Bag {
+  let _1: &Bag; // a
+  let _2: i64; // n
+  let _3: bool temp;
+  let _4: &Bag temp;
+  let _5: &Bag temp;
+  let _6: i64 temp;
+  bb0: {
+    _3 = eq(copy _2, const 0: i64);
+    switch move _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _4 = &*_1 [reborrow];
+    _0 = move _4;
+    return;
+  }
+  bb2: {
+    _5 = &*_1 [reborrow];
+    _6 = checked_sub(copy _2, const 1: i64);
+    _0 = g(move _5, move _6) -> bb3;
+  }
+  bb3: {
+    return;
+  }
+}
+
+@private fn g(_1: &Bag, _2: i64) -> &Bag {
+  let _1: &Bag; // b
+  let _2: i64; // n
+  let _3: &Bag; // r
+  let _4: &Bag temp;
+  let _5: void temp;
+  let _6: &i64[] temp;
+  let _7: &Bag temp;
+  bb0: {
+    storage_live(_3);
+    _4 = &*_1 [reborrow];
+    _3 = f(move _4, copy _2) -> bb1;
+  }
+  bb1: {
+    _6 = &(*_3).items [auto-borrow];
+    _5 = "alloc/array"::Array<i64>::push(move _6, const 1: i64) -> bb2;
+  }
+  bb2: {
+    _7 = &*_1 [reborrow];
+    _0 = move _7;
+    storage_dead(_3);
+    return;
+  }
+}

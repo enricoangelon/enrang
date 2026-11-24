@@ -1,0 +1,11 @@
+const p = new Point { x: 1, y: 2 };
+console.log(p.x, p.y);
+console.log(p.length());
+
+public class Point {
+  public x: i64;
+  public y: i64;
+  public length(): i64 {
+    return this.x + this.y;
+  }
+}

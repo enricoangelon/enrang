@@ -1,0 +1,7 @@
+public interface Feeder {
+  feed(grams: i64): void;
+}
+
+public class Bowl implements Feeder { //~ EN0416 "`Bowl` does not satisfy `Feeder`: `feed` has another signature"
+  public feed(grams: i32): void {}
+}

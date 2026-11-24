@@ -1,0 +1,57 @@
+// SPEC 8.2, the integers (4.6, 9.2): `core/int`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `i64.MAX`, `i32.MIN` and the like are constants the compiler reads through the type's name (SPEC 3.1).
+// A sealed interface (SPEC 4.4): its implementers are the compiler's table.
+@lang("int") public interface __Int {}
+
+@lang("overflowing") public final class Overflowing<T> {
+  public value: T;
+  public overflowed: bool;
+}
+
+extend<I extends __Int> I {
+  @mustUse public wrap<U extends __Int>(): U;
+  @mustUse public wrappingAdd(o: I): I;
+  @mustUse public wrappingSub(o: I): I;
+  @mustUse public wrappingMul(o: I): I;
+  @mustUse public wrappingNeg(): I;
+  @mustUse public wrappingShl(n: u32): I;
+  @mustUse public wrappingShr(n: u32): I;
+  @mustUse public checkedAdd(o: I): I | null;
+  @mustUse public checkedSub(o: I): I | null;
+  @mustUse public checkedMul(o: I): I | null;
+  @mustUse public checkedNeg(): I | null;
+  @mustUse public checkedShl(n: u32): I | null;
+  @mustUse public checkedShr(n: u32): I | null;
+  @mustUse public saturatingAdd(o: I): I;
+  @mustUse public saturatingSub(o: I): I;
+  @mustUse public saturatingMul(o: I): I;
+  @mustUse public saturatingNeg(): I;
+  @mustUse public saturatingShl(n: u32): I;
+  @mustUse public saturatingShr(n: u32): I;
+  @mustUse public overflowingAdd(o: I): Overflowing<I>;
+  @mustUse public overflowingSub(o: I): Overflowing<I>;
+  @mustUse public overflowingMul(o: I): Overflowing<I>;
+  @mustUse public overflowingNeg(): Overflowing<I>;
+  @mustUse public overflowingShl(n: u32): Overflowing<I>;
+  @mustUse public overflowingShr(n: u32): Overflowing<I>;
+  public min(o: I): I;
+  public max(o: I): I;
+  public abs(): I;
+  public pow(e: u32): I;
+  public isPowerOfTwo(): bool;
+  public leadingZeros(): u32;
+  public trailingZeros(): u32;
+  public countOnes(): u32;
+  public rotateLeft(n: u32): I;
+  public rotateRight(n: u32): I;
+  public swapBytes(): I;
+  public toBits(): I;
+  public equals(other: &I): bool;
+  public compare(other: &I): i32;
+  public fmt(let f: &Formatter): void;
+}
+
+extend bool {
+  public equals(other: &bool): bool;
+  public fmt(let f: &Formatter): void;
+}

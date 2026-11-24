@@ -1,0 +1,2 @@
+let both: Named & Sized = item; //~ EN1024 "intersection types are not supported yet"
+console.log(both);

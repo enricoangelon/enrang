@@ -1,0 +1,16 @@
+let data: i64[] = [1, 2, 3];
+const p = new Pad(&data);
+const e = p.firstRef();
+const z = &e[0];
+data = [9]; //~ EN0706
+console.log(*z, data);
+
+public final class Pad {
+  private t: [readonly &i64[], i32];
+  public constructor(a: &i64[]) {
+    this.t = [a, 0];
+  }
+  public firstRef(): readonly &i64[] {
+    return this.t[0];
+  }
+}

@@ -1,0 +1,9 @@
+public interface Sink {
+  put(let xs: &i64[]): void;
+}
+
+public class Filler implements Sink {
+  public put(xs: &i64[]): void {
+    xs.push(1);
+  }
+}

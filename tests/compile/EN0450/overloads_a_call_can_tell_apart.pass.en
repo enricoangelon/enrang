@@ -1,0 +1,9 @@
+console.log(describe(42), describe("hi"), pad("a"), pad("a", 4));
+
+public function describe(n: int): string { return `number ${n}`; }
+
+public function describe(s: &string): string { return `text ${s}`; }
+
+public function pad(s: &string): string { return s.toString(); }
+
+public function pad(s: &string, width: i64): string { return s.toString(); }

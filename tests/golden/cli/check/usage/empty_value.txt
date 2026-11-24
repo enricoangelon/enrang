@@ -1,0 +1,7 @@
+$ enrang check --cpu= main.en
+[exit 2]
+[stdout]
+[stderr]
+error: `--cpu` needs a value
+help: write it as `--cpu=<value>`
+usage: enrang check [file] [flags]

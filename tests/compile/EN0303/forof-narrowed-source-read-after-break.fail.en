@@ -1,0 +1,17 @@
+//! row: Under `p != null`, with `p: string[] \| null`: `f
+public function read(c: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) { p = null; break; }
+    console.log(p.length()); //~ EN0303
+  }
+}
+
+public function borrowed(c: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    for (const x of &p) { p = null; break; }
+    const r: &string[] = &p; //~ EN0401
+    console.log(r);
+  }
+}

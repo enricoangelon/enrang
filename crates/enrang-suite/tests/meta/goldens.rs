@@ -190,10 +190,10 @@ pub fn register(h: &mut Harness) {
         },
     );
     h.case(
-        "owners/the command line's two directories are found",
+        "owners/the command line's three directories are found",
         || {
             let registered = registered_directories(&workspace_root());
-            for name in ["cli", "cli-inprocess", "testkit"] {
+            for name in ["cli", "cli-inprocess", "cli-project", "testkit"] {
                 assert!(
                     registered.contains(&name.to_owned()),
                     "{name} in {registered:?}"
@@ -234,7 +234,11 @@ pub fn register(h: &mut Harness) {
     h.case(
         "content/no command line golden varies with the machine",
         || {
-            for dir in [TRANSCRIPTS, "tests/golden/cli-inprocess"] {
+            for dir in [
+                TRANSCRIPTS,
+                "tests/golden/cli-inprocess",
+                "tests/golden/cli-project",
+            ] {
                 let root = workspace_root().join(dir);
                 for name in files_under(&root) {
                     let text = fs::read_to_string(root.join(&name)).expect("UTF-8");

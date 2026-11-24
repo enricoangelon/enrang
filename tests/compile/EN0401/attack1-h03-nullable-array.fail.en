@@ -1,0 +1,6 @@
+//! covers: H03
+const xs: i64[] = [4, 5];
+const n: (i64 | null)[] = xs; //~ EN0401
+const m: (i64 | null)[] = [...xs]; //~ EN0401
+const r: &(i64 | null)[] = &xs; //~ EN0401
+console.log(n, m, r);

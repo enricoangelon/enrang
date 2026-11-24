@@ -1,0 +1,6 @@
+//! row: `const r = &queue; for (const job of r) 
+let queue = ["a", "b"];
+const r = &queue;
+for (const job of r) {
+  queue.push("x"); //~ EN0706
+}

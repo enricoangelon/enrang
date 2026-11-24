@@ -1,0 +1,60 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0619/super_on_one_branch_only.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0619/super_on_one_branch_only.pass";
+class Animal {
+  age: i64;
+}
+class Dog extends Animal { }
+
+fn Animal::#ctor(_1: &Animal, _2: i64) -> void {
+  let _1: &Animal; // this
+  let _2: i64; // age
+  bb0: {
+    switch const overridden(age): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    (*_1).age = copy _2;
+    return;
+  }
+  bb2: {
+    field_init((*_1).age, const 0: i64);
+    goto bb1;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: i64, _3: bool) -> void {
+  let _1: &Dog; // this
+  let _2: i64; // age
+  let _3: bool; // quick
+  let _4: bool temp;
+  let _5: void temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  let _8: void temp;
+  let _9: &Dog temp;
+  let _10: &Animal temp;
+  bb0: {
+    _4 = copy _3;
+    switch move _4 [0: bb3, otherwise: bb1];
+  }
+  bb1: {
+    _6 = &*_1 [reborrow];
+    _7 = convert(upcast, move _6);
+    _5 = Animal::#ctor(move _7, copy _2) -> bb4;
+  }
+  bb2: {
+    return;
+  }
+  bb3: {
+    _9 = &*_1 [reborrow];
+    _10 = convert(upcast, move _9);
+    _8 = Animal::#ctor(move _10, const 0: i64) -> bb5;
+  }
+  bb4: {
+    goto bb2;
+  }
+  bb5: {
+    goto bb2;
+  }
+}

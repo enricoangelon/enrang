@@ -1,0 +1,10 @@
+error[EN0706]: cannot reassign `r` during iteration
+ --> main.en:1:75
+  |
+1 | let a: i64[] = [1]; let b2: i64[] = [2]; let r = &a; for (const x of r) { r = &b2; }
+  |                                                                           ^^^^^^^ cannot reassign while borrowed
+  |                                                                      - `r` is borrowed here
+  |
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

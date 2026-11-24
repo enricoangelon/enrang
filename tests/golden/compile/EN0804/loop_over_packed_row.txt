@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0804/loop_over_packed_row.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0804]: reference to the packed field `p.g[r]`, which may be misaligned
+ --> tests/compile/EN0804/loop_over_packed_row.fail.en:4:17
+  |
+4 | for (const x of &p.g[r]) { //~ EN0804 "reference to the packed field `p.g[r]`, which may be misaligned"
+  |                 ^^^^^^^ a `@packed` class aligns its fields to 1 byte
+  |
+help: copy the field into a local first: `const v = p.g[r];`
+  = explain: run `enrang explain EN0804`
+
+error: aborting due to 1 previous error

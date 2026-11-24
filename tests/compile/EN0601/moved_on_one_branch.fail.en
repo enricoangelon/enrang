@@ -1,0 +1,14 @@
+public function show(u: User, quick: bool): void {
+  if (quick) {
+    archive(u);
+  }
+  console.log(u.name); //~ EN0601 "`u` was moved into `archive`"
+}
+
+public function archive(u: User): void {
+  console.log(u.name);
+}
+
+public class User {
+  public name: string;
+}

@@ -1,0 +1,14 @@
+//! row: A function that writes its parameter, as
+let n: i64 = 1;
+apply(bump); //~ EN0615
+const f: fn(x: &i64) => void = bump; //~ EN0615
+f(&n);
+
+private function bump(x: &i64): void {
+  *x += 1;
+}
+
+private function apply(g: (x: &i64) => void): void {
+  let k: i64 = 0;
+  g(&k);
+}

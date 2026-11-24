@@ -1,0 +1,41 @@
+$ enrang check tests/compile/EN0308/q37-private.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0308]: `count` is private to `Counter`
+ --> tests/compile/EN0308/q37-private.fail.en:4:15
+  |
+4 | console.log(c.count); //~ EN0308 "`count` is private to `Counter`"
+  |               ^^^^^ only the body of `Counter` can use it
+ --> tests/compile/EN0308/math.pass.en:2:3
+  |
+2 |   private count: i64 = 0;
+  |   ----------------------- `count` is declared here
+  |
+  = explain: run `enrang explain EN0308`
+
+error[EN0308]: `reset` is private to `Counter`
+ --> tests/compile/EN0308/q37-private.fail.en:5:3
+  |
+5 | c.reset(); //~ EN0308 "`reset` is private to `Counter`"
+  |   ^^^^^ only the body of `Counter` can use it
+ --> tests/compile/EN0308/math.pass.en:7:11
+  |
+7 |   private reset(): void {
+  |           ----- `reset` is declared here
+  |
+  = explain: run `enrang explain EN0308`
+
+error[EN0308]: `step` is protected in `Counter`
+ --> tests/compile/EN0308/q37-private.fail.en:6:15
+  |
+6 | console.log(c.step); //~ EN0308 "`step` is protected in `Counter`"
+  |               ^^^^ only `Counter` and its subclasses can use it
+ --> tests/compile/EN0308/math.pass.en:3:3
+  |
+3 |   protected step: i64 = 1;
+  |   ------------------------ `step` is declared here
+  |
+  = explain: run `enrang explain EN0308`
+
+error: aborting due to 3 previous errors

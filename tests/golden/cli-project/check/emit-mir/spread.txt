@@ -1,0 +1,117 @@
+$ enrang check --emit=mir main.en
+[exit 0]
+[stdout]
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_extend_cloned") fn "alloc/array"::Array<T>::extendCloned(let _1: &Array<T>, _2: &Slice<T>) -> void where T extends Clone;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("clone") interface "core/prelude"::Clone { }
+
+statements (_1: string[]) -> int {
+  phase elaborated;
+  let _1: string[]; // args
+  let _2: string[]; // a
+  let _3: string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: string temp;
+  let _7: string temp;
+  let _8: &string temp;
+  let _9: string[]; // b
+  let _10: string temp;
+  let _11: string temp;
+  let _12: &string temp;
+  let _13: string[]; // all
+  let _14: string[] temp;
+  let _15: &string[] temp;
+  let _16: &Slice<string> temp;
+  let _17: &string[] temp;
+  let _18: void temp;
+  let _19: string temp;
+  let _20: string temp;
+  let _21: &string temp;
+  let _22: &string[] temp;
+  let _23: void temp;
+  let _24: &string[] temp;
+  let _25: &Slice<string> temp;
+  let _26: &string[] temp;
+  let _27: void temp;
+  let _28: void temp;
+  let _29: &string[] temp;
+  let _30: &string[] temp;
+  bb0: {
+    storage_live(_2);
+    _4 = const "x": string;
+    _5 = &_4 [temp-arg];
+    _3 = form to_string(move _5) -> bb1;
+  }
+  bb1: {
+    _7 = const "y": string;
+    _8 = &_7 [temp-arg];
+    _6 = form to_string(move _8) -> bb2;
+  }
+  bb2: {
+    _2 = intrinsic AllocArray<string>(move _3, move _6);
+    storage_dead(_6);
+    drop_glue(_7);
+    storage_dead(_7);
+    storage_dead(_3);
+    drop_glue(_4);
+    storage_dead(_4);
+    storage_live(_9);
+    _11 = const "z": string;
+    _12 = &_11 [temp-arg];
+    _10 = form to_string(move _12) -> bb3;
+  }
+  bb3: {
+    _9 = intrinsic AllocArray<string>(move _10);
+    storage_dead(_10);
+    drop_glue(_11);
+    storage_dead(_11);
+    storage_live(_13);
+    _14 = intrinsic AllocArray<string>();
+    _15 = &_2 [auto-borrow];
+    _16 = convert(array_to_slice, move _15);
+    _17 = &_14 [auto-borrow];
+    _18 = "alloc/array"::Array<string>::extendCloned(move _17, move _16) -> bb4;
+  }
+  bb4: {
+    _20 = const "-": string;
+    _21 = &_20 [temp-arg];
+    _19 = form to_string(move _21) -> bb5;
+  }
+  bb5: {
+    _22 = &_14 [auto-borrow];
+    _23 = "alloc/array"::Array<string>::push(move _22, move _19) -> bb6;
+  }
+  bb6: {
+    _24 = &_9 [auto-borrow];
+    _25 = convert(array_to_slice, move _24);
+    _26 = &_14 [auto-borrow];
+    _27 = "alloc/array"::Array<string>::extendCloned(move _26, move _25) -> bb7;
+  }
+  bb7: {
+    _13 = move _14;
+    storage_dead(_19);
+    drop_glue(_20);
+    storage_dead(_20);
+    storage_dead(_14);
+    _29 = &_13 [auto-borrow];
+    _30 = &_2 [auto-borrow];
+    _28 = form log(move _29, move _30) -> bb8;
+  }
+  bb8: {
+    drop_glue(_13);
+    storage_dead(_13);
+    drop_glue(_9);
+    storage_dead(_9);
+    drop_glue(_2);
+    storage_dead(_2);
+    drop_glue(_1);
+    return;
+  }
+}
+[stderr]

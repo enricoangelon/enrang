@@ -1,0 +1,13 @@
+$ enrang check --target=x86_64-linux tests/compile/EN0435/a_frame_too_large.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0435]: the stack frame of `f` is too large for `x86_64-linux`
+ --> tests/compile/EN0435/a_frame_too_large.fail.en:3:9
+  |
+3 |   const big: u8[3000000000] = [0; 3000000000]; //~ EN0435 "the stack frame of `f` is too large for `x86_64-linux`"
+  |         ^^^ `big` takes it past 2147483647 bytes
+  |
+  = explain: run `enrang explain EN0435`
+
+error: aborting due to 1 previous error

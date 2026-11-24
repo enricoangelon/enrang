@@ -1,0 +1,15 @@
+public interface Maker { make(): readonly Two; }
+
+public class Two {
+  private a: &i64;
+  private b: &i64;
+  public constructor(a: &i64, b: &i64) { this.a = a; this.b = b; }
+}
+
+public class Cell implements Maker {
+  public n: i64 = 0;
+  public make(): readonly Two { return new Two(&this.n, &this.n); }
+}
+
+public final class Plain { public n: i64 = 0; }
+public function f(): Plain { return new Plain {}; }

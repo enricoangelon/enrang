@@ -1,0 +1,13 @@
+$ enrang check --library lib.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0439]: an anonymous object type or a tuple can't have methods
+ --> lib.en:2:8
+  |
+2 | extend Point {
+  |        ^^^^^ no type of its own to extend
+  |
+  = explain: run `enrang explain EN0439`
+
+error: aborting due to 1 previous error

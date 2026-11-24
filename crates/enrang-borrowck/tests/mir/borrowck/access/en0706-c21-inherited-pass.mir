@@ -1,0 +1,118 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/c21-inherited.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/c21-inherited.pass";
+class Animal {
+  name: string;
+}
+class Dog extends Animal { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Dog; // rex
+  let _3: string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  let _8: void temp;
+  let _9: string; // tag
+  let _10: &string temp;
+  let _11: &Dog temp;
+  let _12: &Animal temp;
+  let _13: void temp;
+  let _14: &Dog temp;
+  let _15: &Animal temp;
+  let _16: void temp;
+  let _17: &string temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, Dog);
+    _4 = const "Rex": string;
+    _5 = &_4 [temp-arg];
+    _3 = form to_string(move _5) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [auto-borrow];
+    _7 = convert(upcast, move _6);
+    _8 = Animal::#ctor(move _7, move _3) -> bb2;
+  }
+  bb2: {
+    drop(_3);
+    storage_dead(_3);
+    drop(_4);
+    storage_dead(_4);
+    storage_live(_9);
+    _11 = &_2 [auto-borrow];
+    _12 = convert(upcast, move _11);
+    _10 = Animal::label(move _12) -> bb3;
+  }
+  bb3: {
+    _9 = form to_string(move _10) -> bb4;
+  }
+  bb4: {
+    _14 = &_2 [auto-borrow];
+    _15 = convert(upcast, move _14);
+    _13 = Animal::rename(move _15, const "Max": &string) -> bb5;
+  }
+  bb5: {
+    _17 = &_9 [auto-borrow];
+    _16 = form log(move _17) -> bb6;
+  }
+  bb6: {
+    drop(_9);
+    storage_dead(_9);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Animal::#ctor(_1: &Animal, _2: string) -> void {
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn Animal::label(_1: &Animal) -> &string {
+  let _1: &Animal; // this
+  bb0: {
+    _0 = &(*_1).name [explicit];
+    return;
+  }
+}
+
+fn Animal::rename(_1: &Animal, _2: &string) -> void {
+  let _1: &Animal; // this
+  let _2: &string; // n
+  let _3: string temp;
+  let _4: &string temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _3 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}

@@ -1,0 +1,41 @@
+//! covers: H38
+public class Base {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+  public static firstOf(o: &Sub): readonly &u8 {
+    return &o.dst[0];
+  }
+  public adopt(o: &Sub): void {
+    this.src = o.dst;
+  }
+  public static demo(): void {
+    let buf: u8[] = [1];
+    const tbl: u8[] = [0];
+    let w = new Sub(&tbl, &buf);
+    const r = &w;
+    const p = r.dst;
+    r.src = p; //~ EN0616
+    const a = w.peek(); //~ EN0708
+    w.step(); //~ EN0707
+    w.step(); //~ EN0707
+    w.step(); //~ EN0707
+    w.step(); //~ EN0707
+    console.log(*a);
+  }
+}
+
+public final class Sub extends Base {
+  public constructor(s: &u8[], d: &u8[]) {
+    super(s, d);
+  }
+}

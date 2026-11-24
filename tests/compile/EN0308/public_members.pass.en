@@ -1,0 +1,22 @@
+let c = new Counter();
+console.log(c.total());
+const p = new Probe();
+console.log(p.peek());
+
+public class Counter {
+  private count: i64 = 0;
+  protected step: i64 = 1;
+  private reset(): void {
+    this.count = 0;
+  }
+  public total(): i64 {
+    this.reset();
+    return this.count + this.step;
+  }
+}
+
+private class Probe extends Counter {
+  public peek(): i64 {
+    return this.step;
+  }
+}

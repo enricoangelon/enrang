@@ -1,0 +1,33 @@
+$ enrang check tests/compile/EN0706/forof-reassign-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot reassign `xs` during iteration
+ --> tests/compile/EN0706/forof-reassign-source.fail.en:4:3
+  |
+3 | for (const x of &xs) {
+  |                 --- `xs` is borrowed here
+4 |   xs = []; //~ EN0706 "cannot reassign `xs` during iteration"
+  |   ^^^^^^^ cannot reassign while borrowed
+  |
+help: iterate over `xs.clone()` if reassignment is intentional
+  |
+3 | for (const x of xs.clone()) {
+  |                 ~~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot reassign `ys` during iteration
+ --> tests/compile/EN0706/forof-reassign-source.fail.en:9:3
+  |
+8 | for (const y of &ys) {
+  |                 --- `ys` is borrowed here
+9 |   ys = []; //~ EN0706 "cannot reassign `ys` during iteration"
+  |   ^^^^^^^ cannot reassign while borrowed
+  |
+help: iterate over `ys.clone()` if reassignment is intentional
+  |
+8 | for (const y of ys.clone()) {
+  |                 ~~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

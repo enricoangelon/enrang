@@ -1,0 +1,29 @@
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[] | null;
+  public constructor(s: &u8[]) {
+    this.src = s;
+  }
+  public static make(s: &u8[], d: &u8[]): Copier {
+    let c = new Copier(s);
+    c.dst = d;
+    return c;
+  }
+  public reset(u: Copier): void {
+    *this = u;
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst!.push(1);
+  }
+  public static demo(): void {
+    let buf: u8[] = [1];
+    const tbl: u8[] = [0];
+    let c = new Copier(&tbl);
+    c.reset(Copier.make(&tbl, &buf));
+    const p = c.dst!;
+    console.log(*c.peek());
+  }
+}

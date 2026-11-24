@@ -1,0 +1,10 @@
+let n: i64 = 1;
+growVia(head, &n, 5);
+
+private function growVia<T>(f: fn(a: &T) => &T, x: &T, v: T): void {
+  *f(x) = v;
+}
+
+private function head(s: &i64): &i64 {
+  return s;
+}

@@ -1,0 +1,6 @@
+//! row: `h1`-`h8`, hold slots: loans on the sour
+let q: i64[] = [1, 2];
+for (const x of &q) {
+  q = []; //~ EN0706 "cannot reassign `q` during iteration"
+  continue;
+}

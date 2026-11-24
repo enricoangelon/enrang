@@ -1,0 +1,21 @@
+let data: i64[] = [1, 2];
+let h = new Holder(&data);
+const e = h.first();
+console.log(*e);
+h.reset();
+
+public class Holder {
+  private v: &i64[];
+
+  public constructor(v: &i64[]) {
+    this.v = v;
+  }
+
+  public first(): &i64 {
+    return &this.v[0];
+  }
+
+  public reset(): void {
+    *this.v = [9, 9];
+  }
+}

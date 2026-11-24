@@ -1,0 +1,7 @@
+//! row: Under `p != null`: `outer: for (const a 
+public function f(c: bool, d: bool): void {
+  let p: string[] | null = c ? ["a"] : null;
+  if (p != null) {
+    outer: for (const a of &p) { while (d) { p = null; break outer; } }
+  }
+}

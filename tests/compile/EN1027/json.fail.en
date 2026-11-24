@@ -1,0 +1,2 @@
+const j = JSON.stringify(1); //~ EN1027 "`JSON` is not supported yet"
+const v = JSON.parse("[1]"); //~ EN1027 "`JSON` is not supported yet"

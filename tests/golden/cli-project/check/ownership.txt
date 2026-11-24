@@ -1,0 +1,4 @@
+$ enrang check ownership.en
+[exit 0]
+[stdout]
+[stderr]

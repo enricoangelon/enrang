@@ -1,0 +1,1 @@
+private type Size = "small" | i64; //~ EN0216

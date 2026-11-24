@@ -1,0 +1,10 @@
+const s: string = "hello".toString();
+console.log(keep(s.toString())); //~ EN0401
+console.log(keepRef(&s)); //~ EN0401
+
+private function keep(m: Measured): isize { const r: &Measured = &m; return r.length(); }
+private function keepRef(m: &Measured): isize { return m.length(); }
+
+public interface Measured {
+  length(): isize;
+}

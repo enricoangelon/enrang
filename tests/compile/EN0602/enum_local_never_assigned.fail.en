@@ -1,0 +1,7 @@
+let c: Color;
+console.log(c); //~ EN0602 "`c` is used before it has a value"
+
+public enum Color {
+  Red,
+  Green,
+}

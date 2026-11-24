@@ -24,7 +24,20 @@ use crate::codes::Code;
 
 /// Each family and its text. A code's page goes in the file of its family, which
 /// is the code without its last two digits.
-const FAMILIES: &[(&str, &str)] = &[("EN13", include_str!("../explain/EN13.txt"))];
+const FAMILIES: &[(&str, &str)] = &[
+    ("EN00", include_str!("../explain/EN00.txt")),
+    ("EN01", include_str!("../explain/EN01.txt")),
+    ("EN02", include_str!("../explain/EN02.txt")),
+    ("EN03", include_str!("../explain/EN03.txt")),
+    ("EN04", include_str!("../explain/EN04.txt")),
+    ("EN05", include_str!("../explain/EN05.txt")),
+    ("EN06", include_str!("../explain/EN06.txt")),
+    ("EN07", include_str!("../explain/EN07.txt")),
+    ("EN08", include_str!("../explain/EN08.txt")),
+    ("EN09", include_str!("../explain/EN09.txt")),
+    ("EN10", include_str!("../explain/EN10.txt")),
+    ("EN13", include_str!("../explain/EN13.txt")),
+];
 
 /// What `enrang explain <code>` prints for a code whose page has arrived.
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]

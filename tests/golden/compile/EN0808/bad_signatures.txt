@@ -1,0 +1,61 @@
+$ enrang check --target=i386-none tests/compile/EN0808/bad_signatures.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0808]: invalid interrupt signature
+ --> tests/compile/EN0808/bad_signatures.fail.en:2:29
+  |
+2 | @interrupt private function byValue(frame: InterruptFrame): void {} //~ EN0808 "invalid interrupt signature"
+  |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ an interrupt handler takes `(frame: &InterruptFrame)` and returns `void` or `never`
+  |
+  = explain: run `enrang explain EN0808`
+
+error[EN0808]: invalid interrupt signature
+ --> tests/compile/EN0808/bad_signatures.fail.en:4:29
+  |
+4 | @interrupt private function returnsInt(frame: &InterruptFrame): i32 { //~ EN0808 "invalid interrupt signature"
+  |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ an interrupt handler takes `(frame: &InterruptFrame)` and returns `void` or `never`
+  |
+  = explain: run `enrang explain EN0808`
+
+error[EN0808]: invalid interrupt signature
+ --> tests/compile/EN0808/bad_signatures.fail.en:8:29
+  |
+8 | @interrupt private function noFrame(): void {} //~ EN0808 "invalid interrupt signature"
+  |                             ^^^^^^^^^^^^^^^ an interrupt handler takes `(frame: &InterruptFrame)` and returns `void` or `never`
+  |
+  = explain: run `enrang explain EN0808`
+
+error[EN0808]: invalid interrupt signature
+  --> tests/compile/EN0808/bad_signatures.fail.en:10:29
+   |
+10 | @interrupt private function codeWithoutFlag(frame: &InterruptFrame, code: usize): void {} //~ EN0808 "invalid interrupt signature"
+   |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ an interrupt handler takes `(frame: &InterruptFrame)` and returns `void` or `never`
+   |
+   = explain: run `enrang explain EN0808`
+
+error[EN0808]: invalid interrupt signature
+  --> tests/compile/EN0808/bad_signatures.fail.en:12:50
+   |
+12 | @interrupt({ errorCode: true }) private function flagWithoutCode(frame: &InterruptFrame): void {} //~ EN0808 "invalid interrupt signature"
+   |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ an interrupt handler takes `(frame: &InterruptFrame, code: usize)` and returns `void` or `never`
+   |
+   = explain: run `enrang explain EN0808`
+
+error[EN0808]: invalid interrupt signature
+  --> tests/compile/EN0808/bad_signatures.fail.en:14:50
+   |
+14 | @interrupt({ errorCode: true }) private function narrowCode(frame: &InterruptFrame, code: u32): void {} //~ EN0808 "invalid interrupt signature"
+   |                                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ an interrupt handler takes `(frame: &InterruptFrame, code: usize)` and returns `void` or `never`
+   |
+   = explain: run `enrang explain EN0808`
+
+error[EN0808]: invalid interrupt signature
+  --> tests/compile/EN0808/bad_signatures.fail.en:16:29
+   |
+16 | @interrupt private function extra(frame: &InterruptFrame, code: usize, x: u8): void {} //~ EN0808 "invalid interrupt signature"
+   |                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ an interrupt handler takes `(frame: &InterruptFrame)` and returns `void` or `never`
+   |
+   = explain: run `enrang explain EN0808`
+
+error: aborting due to 7 previous errors

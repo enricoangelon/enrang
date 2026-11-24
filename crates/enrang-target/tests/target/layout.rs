@@ -57,10 +57,13 @@ fn row_of(table: &Table, ty: &str) -> (String, String) {
 
 pub fn register(h: &mut Harness) {
     table_rows(h);
+    two_word_forms(h);
     aligned_by_field(h);
     atomic64(h);
     frames(h);
     worked_sizes(h);
+    method_table(h);
+    sorted_fields(h);
     eval_cases(h);
 }
 
@@ -81,9 +84,7 @@ fn table_rows(h: &mut Harness) {
         ("isize", |l| (l.ptr_bytes, l.ptr_bytes)),
         ("usize", |l| (l.ptr_bytes, l.ptr_bytes)),
         ("&T", |l| (l.ptr_bytes, l.ptr_bytes)),
-        ("&mut T", |l| (l.ptr_bytes, l.ptr_bytes)),
         ("*T", |l| (l.ptr_bytes, l.ptr_bytes)),
-        ("*mut T", |l| (l.ptr_bytes, l.ptr_bytes)),
         ("fn(...)", |l| (l.ptr_bytes, l.ptr_bytes)),
         ("Box<T>", |l| (l.ptr_bytes, l.ptr_bytes)),
         ("closure parameter", |l| (2 * l.ptr_bytes, l.ptr_bytes)),
@@ -120,6 +121,59 @@ fn table_rows(h: &mut Harness) {
                 assert_eq!(align, eval(&want_align, p), "align against `{want_align}`");
             });
         }
+    }
+}
+
+/// The forms of the `&T` and `Box<T>` row that are `2P`: a reference has no `mut`
+/// spelling, so its type, or for a `&string` its inferred permission, picks one
+/// word or two (SPEC 11).
+fn two_word_forms(h: &mut Harness) {
+    h.case(
+        "spec11/the size table has one reference and one pointer row",
+        || {
+            let table = sizes();
+            let names: Vec<&str> = table
+                .rows
+                .iter()
+                .flat_map(|row| row[0].split(", "))
+                .collect();
+            for gone in ["`&mut T`", "`*mut T`"] {
+                assert!(!names.contains(&gone), "{gone} is back in {names:?}");
+            }
+            assert!(
+                names.contains(&"`&T`") && names.contains(&"`*T`"),
+                "{names:?}"
+            );
+        },
+    );
+    h.case("spec11/four forms of `&T` and `Box<T>` are 2P", || {
+        let text = spec_11();
+        for rule in [
+            "Four forms of the `&T` and `Box<T>` row are `2P` instead, each described below: a `&string` that only reads, a `&Slice<T>`, `Box<I>` for an interface `I`, and an `&I` taken from one.",
+            "A `&string` that only reads is a pointer and a length, size `2P`",
+            "**`&Slice<T>`**: a pointer to the first element and a length in elements, size `2P`",
+            "A `&T[]` is always one pointer to the whole array",
+            "`Box<I>` for an interface `I` is `2P`, align `P`",
+            "An `&I` taken from a `Box<I>` is the same two words",
+            "an `&I` whose class is known is one pointer",
+            "`&T | null` is `2P` on the stack when `&T` is one word",
+            "`&I | null` is `2P` too, with address 0 as `null`, the one exception to the tagged layout",
+            "the address in `&I | null` for an interface `I`, the one exception",
+        ] {
+            assert!(text.contains(rule), "the rule has changed: {rule}");
+        }
+    });
+    for target in TARGETS {
+        h.case(format!("spec11/{target}/the 2P forms"), move || {
+            let layout = default_spec(target).layout;
+            let p = u64::from(layout.ptr_bytes);
+            let word = Part { size: p, align: p };
+            // A pointer and a length, or a pointer and a method-table pointer.
+            let pair = class(&[word, word], false);
+            assert_eq!((pair.size, pair.align), (2 * p, p));
+            // `&T | null` with a one-word `&T`: no niche, so a tag beside it.
+            assert_eq!(tagged(&[word]).size, 2 * p);
+        });
     }
 }
 
@@ -260,6 +314,43 @@ fn tagged(variants: &[Part]) -> Part {
     }
 }
 
+/// SPEC 11's rule for anonymous object types and tuples: fields sorted by alignment,
+/// largest first, ties broken by name in byte order, then placed like a class.
+/// Returns each field's offset, by name, and the whole.
+fn anonymous(fields: &[(&str, Part)]) -> (Vec<(String, u64)>, Part) {
+    let mut sorted = fields.to_vec();
+    sorted.sort_by(|(a_name, a), (b_name, b)| {
+        b.align
+            .cmp(&a.align)
+            .then_with(|| a_name.as_bytes().cmp(b_name.as_bytes()))
+    });
+    let mut offset = 0;
+    let mut align = 1;
+    let mut offsets = Vec::new();
+    for (name, field) in sorted {
+        offset = align_up(offset, field.align);
+        offsets.push((name.to_owned(), offset));
+        offset += field.size;
+        align = align.max(field.align);
+    }
+    let whole = Part {
+        size: align_up(offset, align),
+        align,
+    };
+    (offsets, whole)
+}
+
+fn offset_of(offsets: &[(String, u64)], name: &str) -> u64 {
+    offsets
+        .iter()
+        .find(|(field, _)| field == name)
+        .unwrap_or_else(|| panic!("no field `{name}`"))
+        .1
+}
+
+const BOOL: Part = Part { size: 1, align: 1 };
+const I32: Part = Part { size: 4, align: 4 };
+
 /// The size SPEC 11's rules give a type of the worked table, using only `layout`.
 fn worked_size(ty: &str, layout: DataLayout) -> u64 {
     let p = u64::from(layout.ptr_bytes);
@@ -268,29 +359,39 @@ fn worked_size(ty: &str, layout: DataLayout) -> u64 {
         size: 8,
         align: u64::from(layout.i64_align),
     };
-    let i32_part = Part { size: 4, align: 4 };
+    let i32_part = I32;
     let u16_part = Part { size: 2, align: 2 };
     let string = class(&[word, word, word], false);
     match ty {
         "`string`" | "`i64[]`" => string.size,
         "`i64 | null`" => tagged(&[i64_part]).size,
-        "`class Player { name: string; score: i64; }`" => class(&[string, i64_part], false).size,
+        // `final` with no base: no method-table pointer.
+        PLAYER => class(&[string, i64_part], false).size,
         "same with `level: i32` added" => class(&[string, i64_part, i32_part], false).size,
-        "`enum Token { Num(i64), Add, Bad { text: string } }`" => {
+        "`public enum Token { Num { value: i64 }, Add, Bad { text: string } }`" => {
+            // Each case's fields laid out as a `final` class.
             let num = class(&[i64_part], false);
             let bad = class(&[string], false);
             tagged(&[num, bad]).size
         }
-        "`@packed class GdtPointer { limit: u16; base: u32; }`" => {
+        "`@packed public final class GdtPointer { public limit: u16; public base: u32; }`" => {
             class(&[u16_part, i32_part], true).size
+        }
+        "`{ found: bool, index: i32, last: bool }`" => {
+            anonymous(&[("found", BOOL), ("index", i32_part), ("last", BOOL)])
+                .1
+                .size
         }
         other => panic!("a type the suite cannot lay out: `{other}`"),
     }
 }
 
+/// The worked table's class, as SPEC 11 writes it.
+const PLAYER: &str = "`public final class Player { public name: string; public score: i64; }`";
+
 fn worked_sizes(h: &mut Harness) {
     let table = worked();
-    assert_eq!(table.rows.len(), 7, "SPEC 11's worked sizes");
+    assert_eq!(table.rows.len(), 8, "SPEC 11's worked sizes");
     for row in table.rows {
         for (target, column) in [
             ("i386-linux", 1),
@@ -318,11 +419,159 @@ fn worked_sizes(h: &mut Harness) {
                 f64_align: 8,
                 ..default_spec("i386-linux").layout
             };
-            let ty = "`class Player { name: string; score: i64; }`";
-            assert_eq!(worked_size(ty, default_spec("i386-linux").layout), 20);
-            assert_ne!(worked_size(ty, wrong), 20);
+            assert_eq!(worked_size(PLAYER, default_spec("i386-linux").layout), 20);
+            assert_ne!(worked_size(PLAYER, wrong), 20);
         },
     );
+}
+
+/// A class that can be extended carries a hidden method-table pointer of `P` bytes
+/// at offset 0; a `final` class with no base carries none (SPEC 11).
+fn method_table(h: &mut Harness) {
+    h.case("spec11/the method-table pointer is stated", || {
+        let text = spec_11();
+        for rule in [
+            "A class that can be extended also carries a hidden method-table pointer of `P` bytes (4 on `i386-*`, 8 on `x86_64-*`), placed like a first field, at offset 0",
+            "A `final` class with no base carries none",
+        ] {
+            assert!(text.contains(rule), "the rule has changed: {rule}");
+        }
+    });
+    for (target, p) in [
+        ("i386-linux", 4),
+        ("i386-none", 4),
+        ("vm32", 4),
+        ("x86_64-linux", 8),
+        ("x86_64-windows", 8),
+        ("x86_64-none", 8),
+        ("vm64", 8),
+    ] {
+        h.case(
+            format!("worked/{target}/an extendable Player carries the pointer"),
+            move || {
+                let layout = default_spec(target).layout;
+                assert_eq!(layout.ptr_bytes, p, "the pointer is `P` bytes");
+                let word = Part {
+                    size: u64::from(p),
+                    align: u64::from(p),
+                };
+                let string = class(&[word, word, word], false);
+                let i64_part = Part {
+                    size: 8,
+                    align: u64::from(layout.i64_align),
+                };
+                let open = class(&[word, string, i64_part], false);
+                let closed = worked_size(PLAYER, layout);
+                // The pointer and nothing else: 4 more on 32 bits, 8 more on 64.
+                assert_eq!(open.size, closed + u64::from(p), "{target}");
+            },
+        );
+    }
+    subclass_layout(h);
+}
+
+/// A subclass places its own fields from its base's whole size, padding included,
+/// and never reuses the base's tail padding (SPEC 11).
+fn subclass_layout(h: &mut Harness) {
+    h.case("spec11/a subclass never reuses its base's tail padding", || {
+        let text = spec_11();
+        for rule in [
+            "places its own fields after them in declaration order, starting at the base's size",
+            "A subclass never reuses its base's tail padding: with `public class A { public a: i64; public b: u8; }` and `public class D extends A { public c: u8; }` on `x86_64`, `A` has its table pointer at 0, `a` at 8 and `b` at 16, size 24, and `D` places `c` at 24, size 32; on `i386`, `A` is size 16, and `D` places `c` at 16, size 20.",
+        ] {
+            assert!(text.contains(rule), "the rule has changed: {rule}");
+        }
+    });
+    // SPEC's numbers: `A`'s size, then `c`'s offset and `D`'s size.
+    for (target, a_size, c_at, d_size) in [
+        ("i386-linux", 16, 16, 20),
+        ("i386-none", 16, 16, 20),
+        ("vm32", 16, 16, 20),
+        ("x86_64-linux", 24, 24, 32),
+        ("x86_64-windows", 24, 24, 32),
+        ("x86_64-none", 24, 24, 32),
+        ("vm64", 24, 24, 32),
+    ] {
+        h.case(
+            format!("worked/{target}/D starts after A's tail padding"),
+            move || {
+                let layout = default_spec(target).layout;
+                let p = u64::from(layout.ptr_bytes);
+                let word = Part { size: p, align: p };
+                let i64_part = Part {
+                    size: 8,
+                    align: u64::from(layout.i64_align),
+                };
+                let u8_part = Part { size: 1, align: 1 };
+                // `A` can be extended, so its table pointer comes first.
+                let a = class(&[word, i64_part, u8_part], false);
+                assert_eq!(a.size, a_size, "A");
+                let c = align_up(a.size, u8_part.align);
+                let d = Part {
+                    size: align_up(c + u8_part.size, a.align),
+                    align: a.align,
+                };
+                assert_eq!((c, d.size), (c_at, d_size), "D");
+                // The negative control: reusing the padding would keep `D` at
+                // `A`'s size.
+                let reused = class(&[word, i64_part, u8_part, u8_part], false);
+                assert_eq!(reused.size, a_size);
+                assert_ne!(reused.size, d.size);
+            },
+        );
+    }
+}
+
+/// Anonymous object types and tuples sort their fields (SPEC 11).
+fn sorted_fields(h: &mut Harness) {
+    h.case("spec11/anonymous objects and tuples are stated", || {
+        let text = spec_11();
+        for rule in [
+            "fields are sorted by alignment, largest first, ties broken by field name in byte order",
+            "`{ found: bool, index: i32, last: bool }` places `index` at 0, `found` at 4 and `last` at 5, size 8 on both `P == 4` and `P == 8`",
+            "the order can differ between targets, because `i64` aligns to 4 when `P == 4` and to 8 when `P == 8`",
+            "`[bool, i32, bool]` is size 8, with element 1 at offset 0",
+        ] {
+            assert!(text.contains(rule), "the rule has changed: {rule}");
+        }
+    });
+    h.case("spec11/the anonymous object's offsets", || {
+        let (offsets, whole) = anonymous(&[("found", BOOL), ("index", I32), ("last", BOOL)]);
+        assert_eq!(offset_of(&offsets, "index"), 0);
+        assert_eq!(offset_of(&offsets, "found"), 4);
+        assert_eq!(offset_of(&offsets, "last"), 5);
+        assert_eq!((whole.size, whole.align), (8, 4));
+        // Declaration order would pad twice: the sort is what makes it 8.
+        assert_eq!(class(&[BOOL, I32, BOOL], false).size, 12);
+    });
+    h.case("spec11/the tuple names its elements by position", || {
+        let (offsets, whole) = anonymous(&[("0", BOOL), ("1", I32), ("2", BOOL)]);
+        assert_eq!(offset_of(&offsets, "1"), 0);
+        assert_eq!(offset_of(&offsets, "0"), 4);
+        assert_eq!(offset_of(&offsets, "2"), 5);
+        assert_eq!(whole.size, 8);
+    });
+    for target in TARGETS {
+        h.case(
+            format!("spec11/{target}/the order follows i64's alignment"),
+            move || {
+                // `{ a: i32, b: i64 }`: a tie at 4 when `P == 4`, so the name decides;
+                // `b` first when `P == 8`.
+                let layout = default_spec(target).layout;
+                let i64_part = Part {
+                    size: 8,
+                    align: u64::from(layout.i64_align),
+                };
+                let (offsets, whole) = anonymous(&[("a", I32), ("b", i64_part)]);
+                let (a, b) = (offset_of(&offsets, "a"), offset_of(&offsets, "b"));
+                if layout.ptr_bytes == 4 {
+                    assert_eq!((a, b, whole.size), (0, 4, 12));
+                } else {
+                    assert_eq!((a, b, whole.size), (8, 0, 16));
+                }
+            },
+        );
+    }
 }
 
 fn eval_cases(h: &mut Harness) {

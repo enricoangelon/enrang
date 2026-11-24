@@ -1,0 +1,5 @@
+//! row: `for (const x of b)` with `b: Box<T[]>`
+let b: Box<i64[]> = new Box([1, 2]);
+for (const x of &*b) {
+  console.log(x);
+}

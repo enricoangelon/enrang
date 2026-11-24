@@ -1,0 +1,31 @@
+let buf: u8[] = [1];
+const tbl: u8[] = [0];
+let r = Copier.nested(&tbl, &buf);
+const a = r[0].peek();
+r[0].step();
+r[0].step();
+r[0].step();
+r[0].step();
+console.log(*a);
+
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public static make(s: &u8[], d: &u8[]): Copier {
+    return new Copier(s, d);
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+  public static nested(s: &u8[], d: &u8[]): [Copier, i32] {
+    let t: [Copier, i32] = [Copier.make(s, d), 0];
+    return t;
+  }
+}

@@ -1,0 +1,6 @@
+$ enrang check a.en b.en
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang check` takes one file
+usage: enrang check [file] [flags]

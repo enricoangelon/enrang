@@ -1,0 +1,9 @@
+const f = describe; //~ EN0410
+
+private function describe(n: int): string {
+  return `number ${n}`;
+}
+
+private function describe(s: &string): string {
+  return `text ${s}`;
+}

@@ -1,0 +1,12 @@
+const ada = new User { name: "Ada" };
+const p = { name: "Bo", age: 1 };
+greet(&{ name: "Bo" });
+greet(&p);
+greet(&ada);
+console.log(ada.name);
+
+public function greet(x: &{ name: string }): void { console.log(`hi ${x.name}`); }
+
+public class User {
+  public name: string;
+}

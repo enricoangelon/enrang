@@ -1,0 +1,5 @@
+public function f(a: &i64[]): void {
+  const e = &a[0];
+  a.push(1); //~ EN0706 "cannot change while `e` still points into it"
+  console.log(*e);
+}

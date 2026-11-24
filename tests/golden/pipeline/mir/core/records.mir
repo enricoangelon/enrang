@@ -1,0 +1,120 @@
+class Holder {
+  v: i64 | null = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int; // count
+  let mut _3: Holder; // h
+  let _4: *Holder temp;
+  let _5: void temp;
+  let _6: bool temp;
+  let _7: u32 temp;
+  let _8: void temp;
+  let _9: &Holder temp;
+  let _10: &Holder; // r
+  let _11: void temp;
+  let _12: &Holder temp;
+  let _13: void temp;
+  let _14: &int temp;
+  let _15: &Holder temp;
+  let _16: void temp;
+  let _17: i64 temp;
+  let _18: i64 temp;
+  let _19: &i64 temp;
+  fact f0: _3.v nonnull;
+  record f0 at bb2[0] _9 call_arg;
+  record f0 at bb4[1] _10 binding;
+  record f0 at bb4[2] _12 receiver;
+  record f0 at bb5[1] _15 hidden_arg;
+  use f0 at bb6[0];
+  test f0 at bb2;
+  bb0: {
+    storage_live(_2);
+    _2 = const 0: int;
+    storage_live(_3);
+    _4 = addr_of _3;
+    _5 = named_fill Holder leaving(v)(move _4) -> bb1;
+  }
+  bb1: {
+    _7 = discriminant(_3.v);
+    _6 = ne(move _7, const 0: u32);
+    switch move _6 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _9 = &_3 [explicit];
+    _8 = peek(move _9) -> bb4;
+  }
+  bb3: {
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb4: {
+    storage_live(_10);
+    _10 = &_3 [explicit];
+    _12 = &_3 [auto-borrow];
+    _11 = Holder::show(move _12) -> bb5;
+  }
+  bb5: {
+    _14 = &_2 [hidden-arg];
+    _15 = &_3 [hidden-arg];
+    _13 = bump(move _14, move _15) -> bb6;
+  }
+  bb6: {
+    check_tag(_3.v, Present);
+    _17 = copy (_3.v as Present).0;
+    _18 = checked_add(move _17, const 1: i64);
+    _19 = &_18 [temp-arg];
+    _16 = form log(move _19) -> bb7;
+  }
+  bb7: {
+    storage_dead(_18);
+    storage_dead(_10);
+    goto bb3;
+  }
+}
+
+fn Holder::show(_1: &Holder) -> void {
+  let _1: &Holder; // this
+  let _2: void temp;
+  let _3: &(i64 | null) temp;
+  bb0: {
+    _3 = &(*_1).v [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private @local fn bump() -> void {
+  let _1: &int arg; // count
+  let _2: &Holder arg; // h
+  let _3: int temp;
+  let _4: void temp;
+  let _5: &Holder temp;
+  bb0: {
+    _3 = copy *_1;
+    *_1 = checked_add(copy _3, const 1: int);
+    _5 = &*_2 [auto-borrow];
+    _4 = form log(move _5) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn peek(_1: &Holder) -> void {
+  let _1: &Holder; // h
+  let _2: void temp;
+  let _3: &(i64 | null) temp;
+  bb0: {
+    _3 = &(*_1).v [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

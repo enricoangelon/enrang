@@ -1,0 +1,205 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0804/named-packed-borrow-origins.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0804/named-packed-borrow-origins.pass";
+extend "core/int"::#extend0<I extends __Int>: I;
+@mustUse fn "core/int"::#extend0<I>::checkedAdd(_1: &I, _2: I) -> I | null;
+@lang("int") interface "core/int"::__Int { }
+@final class P {
+  a: u8;
+  b: u32;
+  g: u32[2][2];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: P; // p
+  let _3: u32[2] temp;
+  let _4: u32[2] temp;
+  let _5: u32[2][2] temp;
+  let _6: *P temp;
+  let _7: void temp;
+  let _8: u32; // e
+  let _9: void temp;
+  let _10: &u32 temp;
+  let _11: u32 | null; // c
+  let _12: u32 temp;
+  let _13: &u32 temp;
+  let _14: void temp;
+  let _15: &(u32 | null) temp;
+  let _16: &P; // rp
+  let _17: u32; // q
+  let _18: void temp;
+  let _19: &u32 temp;
+  let _20: u8; // a
+  let _21: u32; // b
+  let _22: void temp;
+  let _23: &u8 temp;
+  let _24: &u32 temp;
+  let _25: u32[2][2] #src;
+  let _26: isize #i;
+  let _27: isize #n;
+  let _28: bool temp;
+  let _29: u32[2]; // x
+  let _30: void temp;
+  let _31: &u32[2] temp;
+  let _32: isize; // r
+  let _33: u32[2] #src;
+  let _34: isize temp;
+  let _35: isize temp;
+  let _36: isize #i;
+  let _37: isize #n;
+  let _38: bool temp;
+  let _39: u32; // y
+  let _40: void temp;
+  let _41: &u32 temp;
+  let _42: u32; // t
+  let _43: void temp;
+  let _44: &u32 temp;
+  bb0: {
+    storage_live(_2);
+    _3 = fixed<u32>[const 1: u32, const 2: u32];
+    _4 = fixed<u32>[const 3: u32, const 4: u32];
+    _5 = fixed<u32[2]>[move _3, move _4];
+    _6 = addr_of _2;
+    _7 = named_fill P leaving()(move _6) -> bb1;
+  }
+  bb1: {
+    _2.a = const 1: u8;
+    _2.b = const 2: u32;
+    _2.g = move _5;
+    storage_live(_8);
+    _8 = copy _2.b;
+    _10 = &_8 [auto-borrow];
+    _9 = form log(move _10) -> bb2;
+  }
+  bb2: {
+    storage_live(_11);
+    _12 = checked_add(copy _2.b, const 0: u32);
+    _13 = &_12 [temp-arg];
+    _11 = "core/int"::#extend0<u32>::checkedAdd(move _13, const 1: u32) -> bb3;
+  }
+  bb3: {
+    storage_dead(_12);
+    _15 = &_11 [auto-borrow];
+    _14 = form log(move _15) -> bb4;
+  }
+  bb4: {
+    storage_live(_16);
+    _16 = &_2 [explicit];
+    storage_live(_17);
+    _17 = copy (*_16).b;
+    _19 = &_17 [auto-borrow];
+    _18 = form log(move _19) -> bb5;
+  }
+  bb5: {
+    storage_live(_20);
+    _20 = copy _2.a;
+    storage_live(_21);
+    _21 = copy _2.b;
+    _23 = &_20 [auto-borrow];
+    _24 = &_21 [auto-borrow];
+    _22 = form log(move _23, move _24) -> bb6;
+  }
+  bb6: {
+    _25 = copy _2.g;
+    goto bb11;
+  }
+  bb7: {
+    _27 = len(_25);
+    _28 = lt(copy _26, copy _27);
+    switch move _28 [0: bb10, otherwise: bb8];
+  }
+  bb8: {
+    storage_live(_29);
+    check_bounds(copy _26, copy _27);
+    _29 = copy _25[_26];
+    _26 = add(copy _26, const 1: isize);
+    goto bb12;
+  }
+  bb9: {
+    goto bb7;
+  }
+  bb10: {
+    storage_live(_32);
+    _32 = const 1: isize;
+    _34 = copy _32;
+    _35 = len(_2.g);
+    check_bounds(copy _34, copy _35);
+    _33 = copy _2.g[_34];
+    goto bb18;
+  }
+  bb11: {
+    storage_live(_26);
+    _26 = const 0: isize;
+    goto bb7;
+  }
+  bb12: {
+    _31 = &_29 [auto-borrow];
+    _30 = form log(move _31) -> bb13;
+  }
+  bb13: {
+    storage_dead(_29);
+    goto bb9;
+  }
+  bb14: {
+    _37 = len(_33);
+    _38 = lt(copy _36, copy _37);
+    switch move _38 [0: bb17, otherwise: bb15];
+  }
+  bb15: {
+    storage_live(_39);
+    check_bounds(copy _36, copy _37);
+    _39 = copy _33[_36];
+    _36 = add(copy _36, const 1: isize);
+    goto bb19;
+  }
+  bb16: {
+    goto bb14;
+  }
+  bb17: {
+    storage_live(_42);
+    _42 = copy _2.b;
+    _44 = &_42 [explicit];
+    _43 = show(move _44) -> bb21;
+  }
+  bb18: {
+    storage_live(_36);
+    _36 = const 0: isize;
+    goto bb14;
+  }
+  bb19: {
+    _41 = &_39 [auto-borrow];
+    _40 = form log(move _41) -> bb20;
+  }
+  bb20: {
+    storage_dead(_39);
+    goto bb16;
+  }
+  bb21: {
+    storage_dead(_42);
+    storage_dead(_32);
+    storage_dead(_21);
+    storage_dead(_20);
+    storage_dead(_17);
+    storage_dead(_16);
+    storage_dead(_11);
+    storage_dead(_8);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn show(_1: &u32) -> void {
+  let _1: &u32; // x
+  let _2: void temp;
+  let _3: &u32 temp;
+  bb0: {
+    _3 = &*_1 [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

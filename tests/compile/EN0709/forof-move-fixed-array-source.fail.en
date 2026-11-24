@@ -1,0 +1,13 @@
+//! row: `public function f(arr: D[3]): void { fo
+public class D { public n: i64 = 0; }
+
+public function f(arr: D[3]): void { for (const d of &arr) { consume(arr); } } //~ EN0709
+
+public function g(arr: D[3]): void {
+  for (const d of &arr) {
+    consume(arr); //~ EN0709
+    console.log(d.n);
+  }
+}
+
+private function consume(a: D[3]): void { console.log(a[0].n); }

@@ -1,0 +1,15 @@
+const p: Point = new Point { x: 1, y: 2 };
+console.log(p);
+
+public class Point {
+  public x: i64;
+  public y: i64;
+}
+
+public interface Shape {
+  area(): f64;
+}
+
+public function area(s: &Shape): f64 {
+  return s.area();
+}

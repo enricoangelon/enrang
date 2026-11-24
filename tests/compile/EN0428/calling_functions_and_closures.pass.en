@@ -1,0 +1,12 @@
+const count = 3;
+const f: fn(n: i64) => i64 = double;
+console.log(f(count), double(count));
+apply((n: i64) => console.log(n));
+
+private function double(n: i64): i64 {
+  return n * 2;
+}
+
+private function apply(g: (n: i64) => void): void {
+  g(1);
+}

@@ -1,0 +1,11 @@
+let e: i64 | null = null;
+{
+  let b: i64 = 5;
+  e = pick(() => b);
+}
+if (e != null) {
+  console.log(e);
+}
+function pick(f: () => i64): i64 {
+  return f();
+}

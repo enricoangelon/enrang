@@ -47,6 +47,6 @@ atom        sse2       x86-64, 64-bit models only
 core2       sse2       x86-64
 q8400       sse2       x86-64
 
-These are design tables. This is milestone M0, which has no compiler, so nothing
-can be built for any target yet.
+These are design tables. This is milestone M3, and `enrang build` arrives with milestone M5,
+so nothing can be built for any target yet.
 [stderr]

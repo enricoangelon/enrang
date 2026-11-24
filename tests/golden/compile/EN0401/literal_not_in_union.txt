@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0401/literal_not_in_union.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `"lft"` is not a `Direction`
+ --> tests/compile/EN0401/literal_not_in_union.fail.en:2:6
+  |
+2 | turn("lft"); //~ EN0401 "is not a `Direction`"
+  |      ^^^^^ not one of `Direction`'s values
+  |
+help: did you mean `"left"`?
+  |
+2 | turn("left"); //~ EN0401 "is not a `Direction`"
+  |      ~~~~~~
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

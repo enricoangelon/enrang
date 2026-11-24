@@ -1,0 +1,14 @@
+let o = new Obj { s: "a".toString() };
+const r = clear(&o);
+if (o.s != null) {
+  o.s += r;
+}
+
+public class Obj {
+  public s: string | null;
+}
+
+public function clear(o: &Obj): &string {
+  o.s = null;
+  return "";
+}

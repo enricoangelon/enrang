@@ -1,0 +1,5 @@
+let s = "a".toString();
+for (let i = 0; i < 2; i++) {
+  dispose(s);
+  s = "b".toString();
+}

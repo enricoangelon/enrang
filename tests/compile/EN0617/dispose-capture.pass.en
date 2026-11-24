@@ -1,0 +1,5 @@
+const s = "a".toString();
+run(() => { console.log(s); });
+dispose(s);
+
+private function run(f: () => void): void { f(); }

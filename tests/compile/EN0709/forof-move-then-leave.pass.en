@@ -1,0 +1,14 @@
+//! row: `take(q); break;`; `take(q); return;`; `
+let q: string[] = ["a", "b"];
+for (const x of &q) {
+  take(q); break;
+}
+
+private function take(v: string[]): void { console.log(v); }
+
+private function leave(): void {
+  let q: string[] = ["a", "b"];
+  for (const x of &q) {
+    take(q); return;
+  }
+}

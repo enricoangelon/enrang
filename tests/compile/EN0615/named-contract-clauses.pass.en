@@ -1,0 +1,52 @@
+//! row: Contracts, one per clause: an implementation
+public interface Closer {
+  move close(): void;
+}
+
+public interface Opener {
+  open(): void;
+}
+
+public interface TokenReader {
+  let next(): readonly &string | null;
+}
+
+public interface Sink {
+  put(s: &string): void;
+}
+
+public class File implements Closer {
+  private fd: i64 = 3;
+  public move close(): void {}
+}
+
+public class Door implements Opener {
+  private n: i64 = 3;
+  public open(): void {}
+}
+
+public class Words implements TokenReader {
+  private text: string = "let x = 42";
+  private pos: isize = 0;
+
+  public next(): &string | null {
+    if (this.pos >= this.text.length()) {
+      return null;
+    }
+    const start = this.pos;
+    this.pos = this.text.length();
+    return this.text.slice(start, this.pos);
+  }
+}
+
+public class Keeper implements Sink {
+  private r: &string;
+
+  public constructor(r: &string) {
+    this.r = r;
+  }
+
+  public put(s: &string): void {
+    console.log(s, this.r);
+  }
+}

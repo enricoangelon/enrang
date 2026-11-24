@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0100/spread_into_repeat_and_range.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0100]: expected `,` or `]`, found `;`
+ --> tests/compile/EN0100/spread_into_repeat_and_range.fail.en:3:16
+  |
+3 | const r = [...a; 3]; //~ EN0100
+  |                ^ expected `,` or `]`
+  |
+  = explain: run `enrang explain EN0100`
+
+error[EN0100]: expected `,` or `]`, found `..`
+ --> tests/compile/EN0100/spread_into_repeat_and_range.fail.en:4:16
+  |
+4 | const s = [...0..n]; //~ EN0100
+  |                ^^ expected `,` or `]`
+  |
+  = explain: run `enrang explain EN0100`
+
+error: aborting due to 2 previous errors

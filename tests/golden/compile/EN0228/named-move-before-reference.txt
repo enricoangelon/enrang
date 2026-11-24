@@ -1,0 +1,41 @@
+$ enrang check tests/compile/EN0228/named-move-before-reference.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0228]: `move` is not needed here
+ --> tests/compile/EN0228/named-move-before-reference.fail.en:3:20
+  |
+3 |   const k = match (move r) { //~ EN0228 "`move` is not needed here"
+  |                    ^^^^ a value moves wherever there is no `&`
+  |
+help: remove `move`
+  |
+3 |   const k = match (r) { //~ EN0228 "`move` is not needed here"
+  |                    ~
+  = explain: run `enrang explain EN0228`
+
+error[EN0228]: `move` is not needed here
+ --> tests/compile/EN0228/named-move-before-reference.fail.en:6:19
+  |
+6 |   for (const x of move r) { //~ EN0228 "`move` is not needed here"
+  |                   ^^^^ a value moves wherever there is no `&`
+  |
+help: remove `move`
+  |
+6 |   for (const x of r) { //~ EN0228 "`move` is not needed here"
+  |                   ~
+  = explain: run `enrang explain EN0228`
+
+error[EN0228]: `move` is not needed here
+ --> tests/compile/EN0228/named-move-before-reference.fail.en:9:13
+  |
+9 |   const b = move r; //~ EN0228 "`move` is not needed here"
+  |             ^^^^ a value moves wherever there is no `&`
+  |
+help: remove `move`
+  |
+9 |   const b = r; //~ EN0228 "`move` is not needed here"
+  |             ~
+  = explain: run `enrang explain EN0228`
+
+error: aborting due to 3 previous errors

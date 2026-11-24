@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0309/type_arguments.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0309]: `Box` takes 1 type argument, but 2 were given
+ --> tests/compile/EN0309/type_arguments.fail.en:1:14
+  |
+1 | const b: Box<i64, i64> = new Box(1); //~ EN0309 "`Box` takes 1 type argument, but 2 were given"
+  |              ^^^^^^^^ expected 1 type argument
+  |
+  = explain: run `enrang explain EN0309`
+
+error[EN0309]: `Pair` takes 2 type arguments, but 1 was given
+ --> tests/compile/EN0309/type_arguments.fail.en:2:15
+  |
+2 | const p: Pair<i64> | null = null; //~ EN0309 "`Pair` takes 2 type arguments, but 1 was given"
+  |               ^^^ expected 2 type arguments
+  |
+  = explain: run `enrang explain EN0309`
+
+error[EN0309]: `pair` takes 2 type arguments, but 1 was given
+ --> tests/compile/EN0309/type_arguments.fail.en:3:16
+  |
+3 | const q = pair<i64>(1, 2); //~ EN0309 "`pair` takes 2 type arguments, but 1 was given"
+  |                ^^^ expected 2 type arguments
+  |
+  = explain: run `enrang explain EN0309`
+
+error: aborting due to 3 previous errors

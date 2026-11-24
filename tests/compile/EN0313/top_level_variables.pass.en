@@ -1,0 +1,17 @@
+let count = 0;
+function inc(): void {
+  count += 1;
+}
+inc();
+console.log(count);
+inc();
+const t = new Tally();
+t.show(LIMIT);
+
+private const LIMIT: i64 = 10;
+
+public class Tally {
+  public show(n: i64): void {
+    console.log(n, LIMIT);
+  }
+}

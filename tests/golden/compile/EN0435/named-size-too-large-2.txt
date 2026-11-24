@@ -1,0 +1,21 @@
+$ enrang check --target=x86_64-linux tests/compile/EN0435/named-size-too-large-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0435]: the stack frame of `f` is too large for `x86_64-linux`
+ --> tests/compile/EN0435/named-size-too-large-2.fail.en:4:7
+  |
+4 |   let big: A<A<u64>>; //~ EN0435 "the stack frame of `f` is too large for `x86_64-linux`"
+  |       ^^^ `big` takes it past 2147483647 bytes
+  |
+  = explain: run `enrang explain EN0435`
+
+error[EN0435]: the stack frame of `g` is too large for `x86_64-linux`
+ --> tests/compile/EN0435/named-size-too-large-2.fail.en:8:9
+  |
+8 |   const huge: u8[3000000000] = [0; 3000000000]; //~ EN0435 "the stack frame of `g` is too large for `x86_64-linux`"
+  |         ^^^^ `huge` takes it past 2147483647 bytes
+  |
+  = explain: run `enrang explain EN0435`
+
+error: aborting due to 2 previous errors

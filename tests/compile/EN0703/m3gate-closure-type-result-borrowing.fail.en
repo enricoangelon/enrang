@@ -1,0 +1,6 @@
+let a: i64[] = [1];
+const w = mk((): W => new W(&a[0]));
+a.push(2);
+console.log(w.get());
+function mk(f: () => W): W { return f(); } //~ EN0703 "a closure can't return `W`,"
+public class W { private r: &i64; public constructor(r: &i64) { this.r = r; } public get(): i64 { return *this.r; } }

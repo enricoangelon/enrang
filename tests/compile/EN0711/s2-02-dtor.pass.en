@@ -1,0 +1,24 @@
+{
+  const d = new Dog("Rex", new Box(new Toy("ball")));
+}
+
+public class Toy {
+  public constructor(public name: string) {}
+}
+
+public class Animal {
+  public constructor(public name: string) {}
+
+  public destructor() {
+    console.log(this);
+  }
+}
+
+public class Dog extends Animal {
+  private toy: Box<Toy>;
+
+  public constructor(name: string, toy: Box<Toy>) {
+    this.toy = toy;
+    super(name);
+  }
+}

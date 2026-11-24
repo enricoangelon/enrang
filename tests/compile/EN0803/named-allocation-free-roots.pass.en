@@ -1,0 +1,25 @@
+//! target: i386-none
+//! row: `@interrupt` that allocates, `@panicHandler`
+import { Atomic } from "core/atomic";
+import { idt } from "os";
+
+private unsafe let ticks: Atomic<u32>;
+
+@interrupt private function onTimer(frame: &InterruptFrame): void {
+  unsafe {
+    ticks.store(1);
+  }
+}
+
+@entry private function kmain(boot: &BootInfo): never {
+  const h: InterruptHandler = onTimer;
+  idt.set(32, h);
+  halt();
+}
+
+@panicHandler private function onPanic(info: &PanicInfo): never {
+  unsafe {
+    ticks.store(2);
+  }
+  halt();
+}

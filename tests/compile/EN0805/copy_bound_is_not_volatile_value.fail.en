@@ -1,0 +1,8 @@
+//! target: x86_64-linux
+public unsafe function w<T extends Copy>(p: *T, v: T): void {
+  p.writeVolatile(v); //~ EN0805 "`T` can't be accessed volatile on `x86_64-linux`"
+}
+
+public unsafe function r<T>(p: *T): T {
+  return p.readVolatile(); //~ EN0805 "`T` can't be accessed volatile on `x86_64-linux`"
+}

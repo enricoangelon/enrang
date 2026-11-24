@@ -1,0 +1,12 @@
+// SPEC 8.2, `Formatter` (4.4): `core/fmt`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `writeTo(f, t)` is a compiler form (SPEC 6).
+@lang("formatter") public final class Formatter {
+  private sink: unsafe fn(ctx: *u8, bytes: *u8, n: usize) => void;
+  private ctx: *u8;
+  public let write(const s: &string): void;
+  public let writeByte(b: u8): void;
+  public static unsafe fromFn(
+    sink: unsafe fn(ctx: *u8, bytes: *u8, n: usize) => void,
+    ctx: *u8,
+  ): Formatter;
+}

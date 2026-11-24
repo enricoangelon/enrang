@@ -1,0 +1,14 @@
+const d = new Dog { name: "Rex" };
+const e = new Dog { name: "Fido" };
+look(&d);
+console.log(same(&d, &e));
+
+private function look(x: &Clone): void {}
+
+private function same<T extends Eq>(a: &T, b: &T): bool { return a.equals(b); }
+
+public final class Dog implements Eq, Clone {
+  public name: string;
+  public equals(other: &Dog): bool { return this.name == other.name; }
+  public clone(): Dog { return new Dog { name: this.name.clone() }; }
+}

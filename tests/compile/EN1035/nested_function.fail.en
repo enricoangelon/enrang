@@ -1,0 +1,6 @@
+public function outer(): i64 {
+  function inner(): i64 { //~ EN1035 "nested functions are not supported yet"
+    return 1;
+  }
+  return inner();
+}

@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0438/forof-spread-generic.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0438]: `...` clones each element, and `T` has no `Clone` bound
+ --> tests/compile/EN0438/forof-spread-generic.fail.en:2:51
+  |
+2 | public function plain<T>(xs: &T[]): T[] { return [...xs]; } //~ EN0438
+  |                                                   ^^^^^ each element of `xs` would be cloned here
+  |                       - `T` is declared here
+  |
+  = from TypeScript: JS spread copies references to the same objects. In Enrang a value has one owner, so `...` copies the elements too.
+help: require `Clone`
+  |
+2 | public function plain<T extends Clone>(xs: &T[]): T[] { return [...xs]; } //~ EN0438
+  |                        ++++++++++++++
+  = explain: run `enrang explain EN0438`
+
+error: aborting due to 1 previous error

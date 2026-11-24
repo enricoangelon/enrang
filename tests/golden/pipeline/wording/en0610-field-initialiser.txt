@@ -1,0 +1,11 @@
+error[EN0610]: `this` can't be used in a field initialiser
+ --> main.en:3:19
+  |
+3 |   public b: i64 = this.a;
+  |                   ^^^^ the object is not built yet here
+  |
+  = note: field initialisers run while the object is built, before the constructor's body, so they can't read the object
+help: set the field in the constructor instead
+  = explain: run `enrang explain EN0610`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0827/f14.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0827]: a `@repr("C")` class can't hold `Animal` inline
+ --> tests/compile/EN0827/f14.fail.en:2:17
+  |
+2 |   public inner: Animal; //~ EN0827 "class can't hold `Animal` inline"
+  |                 ^^^^^^ `Animal` carries a hidden method-table pointer
+  |
+  = explain: run `enrang explain EN0827`
+
+error[EN0827]: a `@repr("C")` class can't hold `Animal` inline
+ --> tests/compile/EN0827/f14.fail.en:6:15
+  |
+6 |   public mid: Mid; //~ EN0827 "can't hold `Animal` inline"
+  |               ^^^ `Animal` carries a hidden method-table pointer
+  |
+  = explain: run `enrang explain EN0827`
+
+error: aborting due to 2 previous errors

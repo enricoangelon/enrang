@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/fv-02-copier-7.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `b` cannot change while `c` still points into it
+ --> tests/compile/EN0706/fv-02-copier-7.fail.en:8:1
+  |
+7 | c.alias(&b);
+  |         -- shared borrow of `b` starts here, held by `c`
+8 | b.step(); //~ EN0706
+  | ^^^^^^^^ `step` changes `b`, so it needs exclusive access to it
+9 | console.log(c.peek());
+  |             - `c` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

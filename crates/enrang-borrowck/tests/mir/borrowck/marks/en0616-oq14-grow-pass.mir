@@ -1,0 +1,107 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/oq14-grow.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/oq14-grow.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: &string temp;
+  let _4: &string temp;
+  let _5: &string temp;
+  let _6: string temp;
+  let _7: &string temp;
+  let _8: void temp;
+  let _9: void temp;
+  let _10: &string temp;
+  let mut _11: string; // s2
+  let mut _12: string; // r
+  let _13: &string temp;
+  let _14: isize | null temp;
+  let _15: &string temp;
+  let _16: &string temp;
+  let _17: string temp;
+  let _18: &string temp;
+  let _19: void temp;
+  let _20: void temp;
+  let _21: &string temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "abc": string;
+    _4 = &_2 [explicit];
+    _3 = grown(move _4) -> bb1;
+  }
+  bb1: {
+    _5 = &*_3 [compound-target];
+    _6 = const "!": string;
+    _7 = &_6 [temp-arg];
+    _8 = form append(move _5, move _7) -> bb2;
+  }
+  bb2: {
+    drop(_6);
+    storage_dead(_6);
+    _10 = &_2 [auto-borrow];
+    _9 = form log(move _10) -> bb3;
+  }
+  bb3: {
+    storage_live(_11);
+    _11 = const "abc": string;
+    storage_live(_12);
+    _14 = present(const 2: isize);
+    _15 = &_11 [auto-borrow];
+    _13 = "core/string"::string::slice(move _15, const 0: isize, move _14, const 2: isize) -> bb4;
+  }
+  bb4: {
+    _12 = form to_string(move _13) -> bb5;
+  }
+  bb5: {
+    _16 = &_12 [compound-target];
+    _17 = const "!": string;
+    _18 = &_17 [temp-arg];
+    _19 = form append(move _16, move _18) -> bb6;
+  }
+  bb6: {
+    drop(_17);
+    storage_dead(_17);
+    _21 = &_12 [auto-borrow];
+    _20 = form log(move _21) -> bb7;
+  }
+  bb7: {
+    drop(_12);
+    storage_dead(_12);
+    drop(_11);
+    storage_dead(_11);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn grown(_1: &string) -> &string {
+  let _1: &string; // s
+  let _2: &string temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  let _6: &string temp;
+  bb0: {
+    _2 = &*_1 [compound-target];
+    _3 = const "?": string;
+    _4 = &_3 [temp-arg];
+    _5 = form append(move _2, move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    _6 = &*_1 [reborrow];
+    _0 = move _6;
+    return;
+  }
+}

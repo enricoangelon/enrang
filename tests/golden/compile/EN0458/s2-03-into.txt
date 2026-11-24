@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0458/s2-03-into.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0458]: `move` method not declared in the receiver's class
+ --> tests/compile/EN0458/s2-03-into.fail.en:2:19
+  |
+2 | const a: Animal = rex.into(); //~ EN0458 "`move` method not declared in the receiver's class"
+  |                   ^^^^^^^^^^ `Dog` inherits `into` from `Animal`
+  |
+help: override `into` in `Dog`
+  = explain: run `enrang explain EN0458`
+
+error[EN0458]: `move` method not declared in the receiver's class
+ --> tests/compile/EN0458/s2-03-into.fail.en:6:11
+  |
+6 | const n = max.takeName(); //~ EN0458 "`move` method not declared in the receiver's class"
+  |           ^^^^^^^^^^^^^^ `LoudDog` inherits `takeName` from `Animal`
+  |
+help: override `takeName` in `LoudDog`
+  = explain: run `enrang explain EN0458`
+
+error: aborting due to 2 previous errors

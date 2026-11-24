@@ -1,0 +1,2 @@
+const limit: i64; //~ EN0116
+console.log(1);

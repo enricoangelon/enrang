@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0305/name_not_found.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0305]: `Widget` is neither an item nor a module of `./parts.pass`
+ --> tests/compile/EN0305/name_not_found.fail.en:1:16
+  |
+1 | import { Part, Widget } from "./parts.pass"; //~ EN0305 "`Widget` is neither an item nor a module of `./parts.pass`"
+  |                ^^^^^^ not found
+  |
+  = explain: run `enrang explain EN0305`
+
+error[EN0305]: `vga` is neither an item nor a module of `os`
+ --> tests/compile/EN0305/name_not_found.fail.en:2:10
+  |
+2 | import { vga } from "os"; //~ EN0305 "`vga` is neither an item nor a module of `os`"
+  |          ^^^ not found
+  |
+  = explain: run `enrang explain EN0305`
+
+error: aborting due to 2 previous errors

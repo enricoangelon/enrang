@@ -1,0 +1,4 @@
+module "main"
+fn Animal::label(_1: &Animal) -> &string perms(read) sources() result readonly(string_part);
+@override fn Dog::label(_1: &Dog) -> &string perms(read) sources(0) result writable;
+fn show(_1: &Animal) -> void perms(read) sources() result none;

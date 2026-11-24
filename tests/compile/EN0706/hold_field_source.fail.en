@@ -1,0 +1,10 @@
+let h = new Holder();
+for (const x of &h.items) {
+  h.count += 1;
+  h.items.push(1); //~ EN0706 "cannot mutate `h.items` while iterating over it"
+}
+
+public class Holder {
+  public items: i64[] = [1];
+  public count: i64 = 0;
+}

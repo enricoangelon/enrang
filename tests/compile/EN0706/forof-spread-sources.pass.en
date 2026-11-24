@@ -1,0 +1,14 @@
+//! row: `const f: i32[3] = [1, 2, 3]; const c = 
+//! covers: H26
+const f: i32[3] = [1, 2, 3];
+const c = [...f];
+const d = [...&f];
+let q: i64[] = [1];
+const e = [...&q];
+const k: i64[] = [2];
+const m = [...&k];
+const r: &i64[] = &q;
+const n = [...r];
+console.log(c, d, e, m, n, r);
+
+public function g(a: &i32[3]): i32[] { return [...a]; }

@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN0313/mr-4.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0803]: `relay` uses top-level variables, so it can't become an `fn`
+  --> tests/compile/EN0313/mr-4.fail.en:10:25
+   |
+10 | const f: fn() => void = relay; //~ EN0803 "`relay` uses top-level variables, so it can't become an `fn`"
+   |                         ^^^^^ it takes `q` as a hidden argument
+   |
+help: pass it where a closure parameter is expected, which may use them
+   = explain: run `enrang explain EN0803`
+
+error[EN0313]: `grow` uses top-level variables, so only the top-level statements can call it
+  --> tests/compile/EN0313/mr-4.fail.en:15:5
+   |
+ 2 | function grow(): void {
+   |          ---- `grow` uses `q`, a top-level variable
+...
+15 |     grow(); //~ EN0313 "`grow` uses top-level variables, so only the top-level statements can call it"
+   |     ^^^^ used here, outside the top-level statements
+   |
+   = explain: run `enrang explain EN0313`
+
+error: aborting due to 2 previous errors

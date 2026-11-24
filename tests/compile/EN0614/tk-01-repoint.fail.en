@@ -1,0 +1,8 @@
+//! covers: H31
+let root = new Node(); let kid = new Node(); kid.val.push(1); kid.kids.push(new Node()); root.kids.push(kid); const [u, w] = repoint(&root, false); const e = &u[0];
+w.push(2); w.push(3); w.push(4); w.push(5); //~ EN0614
+console.log(*e);
+
+public class Node { public val: i64[] = []; public kids: Node[] = []; }
+
+public function repoint(let p: &Node, c: bool): [&i64[], &i64[]] { const k = &p.kids[0].val; p = &p.kids[0]; const second = c ? &p.kids[0].val : k; return [&p.val, second]; }

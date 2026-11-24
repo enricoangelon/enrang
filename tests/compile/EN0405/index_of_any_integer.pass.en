@@ -1,0 +1,7 @@
+const xs = [10, 20, 30];
+const small: u8 = 1;
+const wide: i64 = 2;
+console.log(xs[small], xs[wide], xs[0]);
+for (let i = xs.length() - 1; i >= 0; i--) {
+  console.log(xs[i]);
+}

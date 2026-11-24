@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0226/export.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0226]: `export` does not exist in Enrang
+ --> tests/compile/EN0226/export.fail.en:1:1
+  |
+1 | export function area(r: f64): f64 { //~ EN0226
+  | ^^^^^^ use `public` here
+  |
+  = from TypeScript: a top-level declaration states `public` to be importable, or `private` to stay in its module.
+help: replace `export` with `public`
+  |
+1 | public function area(r: f64): f64 { //~ EN0226
+  | ~~~~~~
+  = explain: run `enrang explain EN0226`
+
+error: aborting due to 1 previous error

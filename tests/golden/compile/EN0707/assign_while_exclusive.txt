@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0707/assign_while_exclusive.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: cannot change `xs` while `r` may write into it
+ --> tests/compile/EN0707/assign_while_exclusive.fail.en:3:1
+  |
+2 | const r = &xs;
+  |           --- first exclusive borrow, held by `r`
+3 | xs = [3]; //~ EN0707 "cannot change `xs` while `r` may write into it"
+  | ^^^^^^^^ `xs` changes here
+4 | r.push(1);
+  | - `r` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0707`
+
+error: aborting due to 1 previous error

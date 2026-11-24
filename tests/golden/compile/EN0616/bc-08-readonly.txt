@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0616/bc-08-readonly.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot write through `this.src`, because it is `readonly &`
+  --> tests/compile/EN0616/bc-08-readonly.fail.en:27:23
+   |
+10 |   private src: readonly &Slice<u8>;
+   |   --------------------------------- `src` is declared `readonly &` here
+...
+27 |     return new Cursor(this.src.slice(this.pos, this.src.length())); //~ EN0616 "src"
+   |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `slice` hands out a writable reference to it
+   |
+   = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

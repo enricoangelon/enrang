@@ -1,0 +1,55 @@
+$ enrang check tests/compile/EN1042/array_patterns.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1042]: array destructuring is not supported yet
+ --> tests/compile/EN1042/array_patterns.fail.en:3:7
+  |
+3 | const [a, r] = xs; //~ EN1042 "array destructuring is not supported yet"
+  |       ^^^^^^ the value is `i64[]`, an array
+  |
+  = note: an array's length is known only when the program runs, so a pattern can't name its elements
+help: Index the array, or return a tuple
+  = explain: run `enrang explain EN1042`
+
+error[EN1042]: array destructuring is not supported yet
+ --> tests/compile/EN1042/array_patterns.fail.en:4:7
+  |
+4 | const [f0, f1] = fixed; //~ EN1042 "array destructuring is not supported yet"
+  |       ^^^^^^^^ the value is `i64[2]`, an array
+  |
+  = note: only a tuple is destructured by position; a fixed array's elements are read by index
+help: Index the array, or return a tuple
+  = explain: run `enrang explain EN1042`
+
+error[EN1042]: array destructuring is not supported yet
+ --> tests/compile/EN1042/array_patterns.fail.en:7:1
+  |
+7 | [c, d] = xs; //~ EN1042 "array destructuring is not supported yet"
+  | ^^^^^^ the value is `i64[]`, an array
+  |
+  = note: an array's length is known only when the program runs, so a pattern can't name its elements
+help: Index the array, or return a tuple
+  = explain: run `enrang explain EN1042`
+
+error[EN1042]: array destructuring is not supported yet
+ --> tests/compile/EN1042/array_patterns.fail.en:8:1
+  |
+8 | [c, d] = fixed; //~ EN1042 "array destructuring is not supported yet"
+  | ^^^^^^ the value is `i64[2]`, an array
+  |
+  = note: only a tuple is destructured by position; a fixed array's elements are read by index
+help: Index the array, or return a tuple
+  = explain: run `enrang explain EN1042`
+
+error[EN1042]: array destructuring is not supported yet
+  --> tests/compile/EN1042/array_patterns.fail.en:10:8
+   |
+10 | const [[n1], n2] = nested; //~ EN1042 "array destructuring is not supported yet"
+   |        ^^^^ the value is `i64[]`, an array
+   |
+   = note: an array's length is known only when the program runs, so a pattern can't name its elements
+help: Index the array, or return a tuple
+   = explain: run `enrang explain EN1042`
+
+error: aborting due to 5 previous errors

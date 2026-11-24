@@ -1,0 +1,25 @@
+//! row: `take(p); p.first = c;` for a plain class
+public function plain(c: string): void {
+  let p = new Node { first: "a" };
+  take(p);
+  p.first = c; //~ EN0601 "`p` was moved into `take`"
+}
+
+public function owning(c: string): void {
+  let p = new Res { first: "a" };
+  drop(p);
+  p.first = c; //~ EN0601 "`p` was moved into `drop`"
+}
+
+private function take(p: Node): void {}
+
+private function drop(p: Res): void {}
+
+public class Node {
+  public first: string;
+}
+
+public class Res {
+  public first: string;
+  public destructor() {}
+}

@@ -1,0 +1,88 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0607/class_with_destructor_destructured.fail.en. Its row's codes: EN0607.
+module "tests/compile/EN0607/class_with_destructor_destructured.fail";
+class File {
+  name: string;
+  private fd: i64;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: File; // f
+  let _3: &File temp;
+  let _4: void temp;
+  let _5: string; // name
+  let _6: void temp;
+  let _7: &string temp;
+  bb0: {
+    storage_live(_2);
+    set_table(_2, File);
+    _3 = &_2 [auto-borrow];
+    _4 = File::#ctor(move _3, const "a.txt": string, const 3: i64) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _5 = move _2.name; //~ EN0607 "cannot move `f.name` out of `f`, because `File` has a destructor"
+    _7 = &_5 [auto-borrow];
+    _6 = form log(move _7) -> bb2;
+  }
+  bb2: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn File::#ctor(_1: &File, _2: string, _3: i64) -> void {
+  let _1: &File; // this
+  let _2: string; // name
+  let _3: i64; // fd
+  let _4: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    switch const overridden(fd): bool [0: bb4, otherwise: bb3];
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+  bb3: {
+    _4 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _4;
+    drop(_4);
+    storage_dead(_4);
+    (*_1).fd = copy _3;
+    drop(_2);
+    return;
+  }
+  bb4: {
+    field_init((*_1).fd, const 0: i64);
+    goto bb3;
+  }
+}
+
+fn File::#dtor(_1: &File) -> void {
+  let _1: &File; // this
+  let _2: void temp;
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: &i64 temp;
+  bb0: {
+    _3 = const "close": string;
+    _4 = &_3 [temp-arg];
+    _5 = &(*_1).fd [auto-borrow];
+    _2 = form log(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+}

@@ -1,0 +1,12 @@
+let f: File;
+f = new File("a".toString());
+console.log(f.name);
+const h = new H { a: 1, len: 2 };
+const n = h.len;
+show(&n);
+
+private class File {
+  public constructor(public name: string) {}
+}
+@packed private final class H { public a: u8; public len: u32; }
+private function show(n: &u32): void { console.log(*n); }

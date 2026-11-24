@@ -1,0 +1,8 @@
+//! row: Nested, outer element used after an inne
+let xs: i64[] = [1, 2];
+for (const a of &xs) {
+  for (const b of &xs) {
+    xs.push(1); //~ EN0706
+  }
+  console.log(a);
+}

@@ -1,0 +1,93 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/s2-06-default.fail.en. Its row's codes: EN0608, EN0715.
+module "tests/compile/EN0608/s2-06-default.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::first(_1: &Slice<T>) -> &T | null;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: i64[]; // v
+  let _3: void temp;
+  let _4: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64, const 4: i64);
+    _4 = &_2 [explicit]; //~ EN0608
+    _3 = visit(move _4, const 1: isize) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn visit(_1: &i64[], _2: () => void = default) -> void {
+  let _1: &i64[]; // xs
+  let _2: () => void; // step
+  let _3: isize arg; // #supplied
+  let _4: bool temp;
+  let _5: () => void temp;
+  let _6: &i64[] temp;
+  let _7: [&i64[]] temp;
+  let _8: &i64 | null; // head
+  let _9: &i64[] temp;
+  let _10: &Slice<i64> temp;
+  let _11: void temp;
+  let _12: void temp;
+  let _13: &(&i64 | null) temp;
+  defaults _3;
+  bb0: {
+    _4 = lt(copy _3, const 2: isize);
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _6 = &*_1 [closure-capture];
+    _7 = env(move _6);
+    _5 = closure(arrow#0, _7);
+    _2 = move _5;
+    goto bb2;
+  }
+  bb2: {
+    storage_live(_8);
+    _9 = &*_1 [reborrow]; //~ EN0715 "`xs` is locked while `step` will still be used"
+    _10 = convert(array_to_slice, move _9);
+    _8 = "core/slice"::Slice<i64>::first(move _10) -> bb3;
+  }
+  bb3: {
+    _11 = closure _2() -> bb4;
+  }
+  bb4: {
+    _13 = &_8 [auto-borrow];
+    _12 = form log(move _13) -> bb5;
+  }
+  bb5: {
+    storage_dead(_8);
+    return;
+  }
+}
+
+arrow#0 of fn visit (_1: &[&i64[]]) -> void {
+  let _1: &[&i64[]] env;
+  let _2: void temp;
+  let _3: &i64[] temp;
+  capture xs: &i64[] through_ref;
+  bb0: {
+    _3 = copy (*_1).0;
+    _2 = "alloc/array"::Array<i64>::push(move _3, const 0: i64) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

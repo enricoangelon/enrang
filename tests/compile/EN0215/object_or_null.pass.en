@@ -1,0 +1,2 @@
+let shape: { radius: f64 } | null = { radius: 1.0 };
+console.log(shape);

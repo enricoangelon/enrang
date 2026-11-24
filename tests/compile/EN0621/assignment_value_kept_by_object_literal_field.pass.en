@@ -1,0 +1,7 @@
+let s: string = "a".toString();
+const u = new User { name: (s = "b".toString()).clone() };
+console.log(u.name);
+
+public class User {
+  public name: string;
+}

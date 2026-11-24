@@ -1,0 +1,27 @@
+$ enrang check tests/compile/EN0303/forof-narrowed-source-read-after-break-outer.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0303]: `string[] | null` has no member `length`
+ --> tests/compile/EN0303/forof-narrowed-source-read-after-break-outer.fail.en:6:19
+  |
+6 |     console.log(p.length()); //~ EN0303
+  |                   ^^^^^^ this value may be `null`
+  |
+help: use `?.length`, which reads it only when the value is not `null`
+  |
+6 |     console.log(p?.length()); //~ EN0303
+  |                  +
+help: or narrow it first: `if (p != null) { ... }`
+  = explain: run `enrang explain EN0303`
+
+error[EN0401]: mismatched types: expected `&string[]`, found `&(string[] | null)`
+  --> tests/compile/EN0303/forof-narrowed-source-read-after-break-outer.fail.en:14:26
+   |
+14 |     const r: &string[] = &p; //~ EN0401
+   |                          ^^ this is `&(string[] | null)`
+   |              --------- `&string[]` is required by this annotation
+   |
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

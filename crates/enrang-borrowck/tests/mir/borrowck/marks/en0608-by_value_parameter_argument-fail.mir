@@ -1,0 +1,31 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0608/by_value_parameter_argument.fail.en. Its row's codes: EN0608.
+module "tests/compile/EN0608/by_value_parameter_argument.fail";
+class Point {
+  x: i64 = default;
+}
+
+fn bump(_1: &i64) -> void {
+  let _1: &i64; // x
+  let _2: i64 temp;
+  bb0: {
+    _2 = copy *_1;
+    *_1 = checked_add(copy _2, const 1: i64);
+    return;
+  }
+}
+
+fn reset(_1: Point) -> i64 {
+  let _1: Point; // p
+  let _2: void temp;
+  let _3: &i64 temp;
+  bb0: {
+    _3 = &_1.x [explicit]; //~ EN0608
+    _2 = bump(move _3) -> bb1;
+  }
+  bb1: {
+    _0 = copy _1.x;
+    return;
+  }
+}

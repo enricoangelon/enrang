@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0710/d20-core-3-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0710]: cannot return a reference to local `tmp`
+ --> tests/compile/EN0710/d20-core-3-2.fail.en:4:10
+  |
+2 |   const tmp = "xy" + "z";
+  |         --- `tmp` is dropped when `make` returns
+3 |   const p = new Parser(new Lexer(&tmp));
+  |                                  ---- `tmp` is borrowed here
+4 |   return p.intoLexer(); //~ EN0710 "cannot return a reference to local `tmp`"
+  |          ^^^^^^^^^^^^^ the returned value still points into `tmp`
+  |
+  = rule: a returned reference must borrow from a parameter, and `make` has no reference parameters.
+  = explain: run `enrang explain EN0710`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,17 @@
+//! target: i386-none
+//! row: `unsafe`, `@requires`, `declare`, `@naked`,
+//! row: The same five at `unsafe fn(...)`, or `InterruptHandler`
+import { idt } from "os";
+
+@interrupt private function onTimer(frame: &InterruptFrame): void {}
+
+@entry private function kmain(boot: &BootInfo): never {
+  const h: InterruptHandler = onTimer;
+  idt.set(32, h);
+  idt.set(33, onTimer);
+  halt();
+}
+
+@panicHandler private function onPanic(info: &PanicInfo): never {
+  halt();
+}

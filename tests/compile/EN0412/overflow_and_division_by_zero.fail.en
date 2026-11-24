@@ -1,0 +1,2 @@
+private const SIZE: u8 = 200 + 100; //~ EN0412 "constant evaluation failed: `200 + 100` overflows `u8`"
+private const RATE: i32 = 10 / 0; //~ EN0412 "constant evaluation failed: `10 / 0` divides by zero"

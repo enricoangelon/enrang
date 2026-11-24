@@ -1,0 +1,68 @@
+fn f(_1: Result<string, Shape>, _2: bool) -> void perms() sources() moves(1, 0) result none {
+  phase elaborated;
+  let _1: Result<string, Shape>; // r
+  let _2: bool; // c
+  let _3: void temp;
+  let _4: isize temp;
+  let _5: bool temp;
+  let _6: void temp;
+  let _7: string temp;
+  let _8: bool flag;
+  let _9: u32 temp;
+  drop_flag _8: (_1 as Ok).value;
+  fact f0: _1 case Ok;
+  fact f1: _1 case Err;
+  use f0 at bb5[0];
+  test f0 at bb2;
+  test f1 at bb3;
+  bb0: {
+    _8 = const true: bool;
+    _4 = discriminant(_1);
+    switch move _4 [0: bb2, 1: bb3, otherwise: bb4];
+  }
+  bb1: {
+    _9 = discriminant(_1);
+    switch move _9 [0: bb9, 1: bb10, otherwise: bb8];
+  }
+  bb2: {
+    _5 = copy _2;
+    switch move _5 [0: bb6, otherwise: bb5];
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    unreachable;
+  }
+  bb5: {
+    check_tag(_1, Ok);
+    _7 = move (_1 as Ok).value;
+    _8 = const false: bool;
+    _6 = take(move _7) -> bb7;
+  }
+  bb6: {
+    goto bb1;
+  }
+  bb7: {
+    storage_dead(_7);
+    goto bb6;
+  }
+  bb8: {
+    _8 = const false: bool;
+    return;
+  }
+  bb9: {
+    switch copy _8 [0: bb12, otherwise: bb11];
+  }
+  bb10: {
+    drop_glue((_1 as Err).error);
+    goto bb8;
+  }
+  bb11: {
+    drop_glue((_1 as Ok).value);
+    goto bb12;
+  }
+  bb12: {
+    goto bb8;
+  }
+}

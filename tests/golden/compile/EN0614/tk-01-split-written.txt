@@ -1,0 +1,37 @@
+$ enrang check tests/compile/EN0614/tk-01-split-written.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `same` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-01-split-written.fail.en:3:1
+  |
+3 | v.push(2); v.push(3); v.push(4); v.push(5); //~ EN0614
+  | ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0614]: `same` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-01-split-written.fail.en:3:12
+  |
+3 | v.push(2); v.push(3); v.push(4); v.push(5); //~ EN0614
+  |            ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0614]: `same` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-01-split-written.fail.en:3:23
+  |
+3 | v.push(2); v.push(3); v.push(4); v.push(5); //~ EN0614
+  |                       ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0614]: `same` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-01-split-written.fail.en:3:34
+  |
+3 | v.push(2); v.push(3); v.push(4); v.push(5); //~ EN0614
+  |                                  ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 4 previous errors

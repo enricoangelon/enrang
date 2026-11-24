@@ -1,0 +1,16 @@
+error[EN0615]: `put` changes `xs`, but `Sink` declares that it doesn't
+ --> main.en:6:34
+  |
+2 |   put(xs: &i64[]): void;
+  |   --- declared here without `let`
+...
+6 |   public put(xs: &i64[]): void { xs.push(1); }
+  |                                  ^^^^^^^^^^ this write needs exclusive access to `xs`
+  |
+help: if implementations may change it, write `put(let xs: &i64[]): void;` in `Sink`
+  |
+2 |   put(let xs: &i64[]): void;
+  |       ++++
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

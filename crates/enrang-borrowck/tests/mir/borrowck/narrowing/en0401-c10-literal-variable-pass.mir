@@ -1,0 +1,34 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/c10-literal-variable.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/c10-literal-variable.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: u8; // b
+  let _3: f32; // f
+  let _4: u64; // big
+  let _5: void temp;
+  let _6: &u8 temp;
+  let _7: &f32 temp;
+  let _8: &u64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 200: u8;
+    storage_live(_3);
+    _3 = const 1.5: f32;
+    storage_live(_4);
+    _4 = const 18446744073709551615: u64;
+    _6 = &_2 [auto-borrow];
+    _7 = &_3 [auto-borrow];
+    _8 = &_4 [auto-borrow];
+    _5 = form log(move _6, move _7, move _8) -> bb1;
+  }
+  bb1: {
+    storage_dead(_4);
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

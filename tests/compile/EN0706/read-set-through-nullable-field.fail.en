@@ -1,0 +1,29 @@
+let table: i64[] = [7];
+let data: i64[] = [1, 2, 3];
+let s = new Sub();
+s.seed(&table);
+const b: &Base = &s;
+b.put(&data);
+const a = s.first();
+table = [9, 9]; //~ EN0706 "`table` cannot change while `a` still points into it"
+console.log(*a);
+
+public class Base {
+  private keep: &i64[] | null = null;
+
+  public constructor() {}
+
+  public put(x: &i64[]): void { this.keep = x; }
+}
+
+public class Sub extends Base {
+  private seen: readonly &i64[] | null = null;
+
+  public constructor() { super(); }
+
+  public override put(x: &i64[]): void { console.log(x.length()); }
+
+  public seed(x: &i64[]): void { this.seen = x; }
+
+  public first(): readonly &i64 { return &this.seen![0]; }
+}

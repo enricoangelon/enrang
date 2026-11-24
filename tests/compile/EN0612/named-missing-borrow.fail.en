@@ -1,0 +1,14 @@
+//! row: `report(&new Circle(2.0))`, `f(r, 1)` with
+report(new Circle(2.0)); //~ EN0612 "missing `&`: `report` takes a reference"
+
+private function report(c: &Circle): void {
+  console.log(c.r);
+}
+
+public class Circle {
+  public r: f64;
+
+  public constructor(r: f64) {
+    this.r = r;
+  }
+}

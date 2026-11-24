@@ -1,0 +1,28 @@
+const t1: u8[] = [1];
+let b1: u8[] = [2];
+const t2: u8[] = [3];
+let b2: u8[] = [4];
+let c = new Copier(&t1, &b1);
+const r = &c;
+*r = new Copier(&t2, &b2);
+r.step();
+console.log(*r.peek());
+console.log(b1, b2);
+
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public static make(s: &u8[], d: &u8[]): Copier {
+    return new Copier(s, d);
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+}

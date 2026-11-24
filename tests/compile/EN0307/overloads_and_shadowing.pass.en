@@ -1,0 +1,17 @@
+console.log(describe(42), describe("hi"), scale(3));
+
+private function describe(n: i64): string {
+  return `number ${n}`;
+}
+
+private function describe(s: &string): string {
+  return `text ${s}`;
+}
+
+private function scale(x: i64): i64 {
+  if (x > 2) {
+    const x = 10;
+    return x;
+  }
+  return x;
+}

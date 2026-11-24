@@ -1,0 +1,7 @@
+let v: i64[] = [10, 20, 30, 40, 50];
+console.log(v.slice(3, 1));
+console.log(v.slice(-2));
+console.log(v.slice(1, -1));
+console.log(v.slice(2, 99));
+console.log("hello".slice(-3));
+console.log(v.slice(isize.MIN, isize.MAX));

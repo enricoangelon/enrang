@@ -1,0 +1,1 @@
+const f: fn(d: *u8, v: u8, n: usize) => void = mem.set; //~ EN0803 "is a `declare function`, so it can't become a safe `fn`"

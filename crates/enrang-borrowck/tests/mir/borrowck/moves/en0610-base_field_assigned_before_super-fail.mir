@@ -1,0 +1,68 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0610/base_field_assigned_before_super.fail.en. Its row's codes: EN0610.
+module "tests/compile/EN0610/base_field_assigned_before_super.fail";
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+class Animal {
+  name: string;
+}
+class Dog extends Animal {
+  label: string = default;
+}
+
+fn Animal::#ctor(_1: &Animal, _2: string) -> void {
+  let _1: &Animal; // this
+  let _2: string; // name
+  let _3: string temp;
+  bb0: {
+    switch const overridden(name): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = move _2;
+    drop((*_1).name) [assign];
+    (*_1).name = move _3;
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    return;
+  }
+  bb2: {
+    field_init((*_1).name, const "": string);
+    goto bb1;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: string) -> void {
+  let _1: &Dog; // this
+  let _2: string; // name
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  bb0: {
+    switch const overridden(label): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _4 = &_2 [auto-borrow];
+    _3 = "alloc/string"::#extend0::clone(move _4) -> bb3;
+  }
+  bb2: {
+    field_init((*_1).label, const "": string);
+    goto bb1;
+  }
+  bb3: {
+    drop((*_1).name) [assign];
+    (*_1).name = move _3; //~ EN0610
+    drop(_3);
+    storage_dead(_3);
+    _6 = &*_1 [reborrow];
+    _7 = convert(upcast, move _6);
+    _5 = Animal::#ctor(move _7, move _2) -> bb4;
+  }
+  bb4: {
+    drop(_2);
+    return;
+  }
+}

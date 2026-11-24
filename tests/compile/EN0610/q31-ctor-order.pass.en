@@ -1,0 +1,42 @@
+{
+  const d = new Dog("Rex");
+  console.log(`live: ${d.describe()}`);
+}
+{
+  const p = new Puppy("Rex", 3);
+}
+
+public class Animal {
+  public constructor(public name: string) {
+    console.log(`ctor: ${this.describe()}`);
+  }
+
+  public describe(): string {
+    return `${this.name} makes a sound`;
+  }
+
+  public destructor() {
+    console.log(`dtor: ${this.describe()}`);
+  }
+}
+
+public class Dog extends Animal {
+  protected tricks: string[] = ["sit", "roll"];
+
+  public override describe(): string {
+    return `${this.name} knows ${this.tricks[0]}`;
+  }
+}
+
+public class Puppy extends Dog {
+  private months: i64;
+
+  public constructor(name: string, months: i64) {
+    this.months = months;
+    super(name);
+  }
+
+  public override describe(): string {
+    return `${this.name}, ${this.months} months, knows ${this.tricks[0]}`;
+  }
+}

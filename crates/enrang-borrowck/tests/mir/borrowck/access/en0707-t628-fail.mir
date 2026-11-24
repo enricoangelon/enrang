@@ -1,0 +1,79 @@
+// row: `.mir`: `(*(x as Present).0).f` and `*((*_env).i)` with overlapping exclusive reborrows
+// TESTING T:628 (A:1030-1031): an arrow's capture `x: &Node | null`, narrowed, is
+// reached as `(*(*(*_1).0 as Present).0).f`, so both normal forms apply at once:
+// the arrow's root `_env` with `Capture(0)`, and the narrowed reference's
+// `as Present` and deref, which drop. Two exclusive reborrows of that place, the
+// first still used, meet: EN0707.
+// Source:
+//   public class Node { public f: i64[] = []; }
+//   public function f(x: &Node | null): void {
+//     run(() => { if (x != null) { const a = &x.f; const b = &x.f; put(a, 1); put(b, 2); } });
+//   }
+//   private function run(g: () => void): void { g(); }
+//   private function put(v: &i64[], n: i64): void { v.push(n); }
+class Node {
+  f: i64[];
+}
+fn put(_1: &i64[], _2: i64) -> void perms(write) sources() result none;
+fn run(_1: () => void) -> void perms(read) sources() result none;
+
+fn f(_1: &Node | null) -> void {
+  let _1: &Node | null; // x
+  let _2: void temp;
+  let _3: () => void temp;
+  let _4: &(&Node | null) temp;
+  let _5: [&(&Node | null)] temp;
+  bb0: {
+    _4 = &_1 [closure-capture];
+    _5 = env(move _4);
+    _3 = closure(arrow#0, _5);
+    _2 = run(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+arrow#0 of fn f (_1: &[&(&Node | null)]) -> void {
+  let _1: &[&(&Node | null)] env;
+  let _2: bool temp;
+  let _3: u32 temp;
+  let _4: &i64[]; // a
+  let _5: void temp;
+  let _6: &i64[] temp;
+  let _7: &i64[]; // b
+  let _8: void temp;
+  let _9: &i64[] temp;
+  capture x: &(&Node | null) path;
+  fact f0: _1.*.0.* nonnull;
+  use f0 at bb1[1];
+  use f0 at bb1[3];
+  test f0 at bb1;
+  bb0: {
+    _3 = discriminant(*(*_1).0);
+    _2 = ne(move _3, const 0: u32);
+    switch move _2 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    storage_live(_4);
+    check_tag(*(*_1).0, Present);
+    _4 = &(*(*(*_1).0 as Present).0).f [explicit];
+    storage_live(_7);
+    check_tag(*(*_1).0, Present);
+    _7 = &(*(*(*_1).0 as Present).0).f [explicit]; //~ EN0707
+    _6 = &*_4 [reborrow];
+    _5 = put(move _6, const 1: i64) -> bb3;
+  }
+  bb2: {
+    return;
+  }
+  bb3: {
+    _9 = &*_7 [reborrow];
+    _8 = put(move _9, const 2: i64) -> bb4;
+  }
+  bb4: {
+    storage_dead(_7);
+    storage_dead(_4);
+    goto bb2;
+  }
+}

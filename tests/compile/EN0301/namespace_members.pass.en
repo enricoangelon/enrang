@@ -1,0 +1,4 @@
+import * as parts from "./parts.pass";
+
+const p = new parts.Part { id: 1 };
+console.log(parts.describe(&p));

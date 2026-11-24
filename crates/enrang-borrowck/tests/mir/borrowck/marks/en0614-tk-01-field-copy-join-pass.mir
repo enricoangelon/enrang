@@ -1,0 +1,154 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/tk-01-field-copy-join.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/tk-01-field-copy-join.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Holder2 {
+  private view: &Slice<Q>;
+}
+class Q {
+  a: i64[] = default;
+  b: i64[] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Q[]; // qs
+  let _3: Q temp;
+  let _4: *Q temp;
+  let _5: void temp;
+  let _6: void temp;
+  let _7: isize temp;
+  let _8: isize temp;
+  let _9: &i64[] temp;
+  let mut _10: Holder2; // h
+  let _11: &Q[] temp;
+  let _12: &Slice<Q> temp;
+  let _13: &Holder2 temp;
+  let _14: void temp;
+  let _15: [&i64[], &i64[]] temp;
+  let _16: &Holder2 temp;
+  let _17: &i64[]; // u
+  let _18: &i64[]; // w
+  let _19: &i64; // e
+  let _20: isize temp;
+  let _21: isize temp;
+  let _22: void temp;
+  let _23: &i64 temp;
+  let _24: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _4 = addr_of _3;
+    _5 = named_fill Q leaving(a, b)(move _4) -> bb1;
+  }
+  bb1: {
+    _2 = intrinsic AllocArray<Q>(move _3);
+    drop(_3);
+    storage_dead(_3);
+    _7 = const 0: isize;
+    _8 = len(_2);
+    check_bounds(copy _7, copy _8);
+    _9 = &_2[_7].a [auto-borrow];
+    _6 = "alloc/array"::Array<i64>::push(move _9, const 1: i64) -> bb2;
+  }
+  bb2: {
+    storage_live(_10);
+    set_table(_10, Holder2);
+    _11 = &_2 [explicit];
+    _12 = convert(array_to_slice, move _11);
+    _13 = &_10 [auto-borrow];
+    _14 = Holder2::#ctor(move _13, move _12) -> bb3;
+  }
+  bb3: {
+    _16 = &_10 [auto-borrow];
+    _15 = Holder2::pair(move _16, const false: bool) -> bb4;
+  }
+  bb4: {
+    storage_live(_17);
+    _17 = copy _15.0;
+    storage_live(_18);
+    _18 = copy _15.1;
+    storage_live(_19);
+    _20 = const 0: isize;
+    _21 = len(*_17);
+    check_bounds(copy _20, copy _21);
+    _19 = &(*_17)[_20] [explicit];
+    _23 = &*_19 [auto-borrow];
+    _24 = &*_18 [auto-borrow];
+    _22 = form log(move _23, move _24) -> bb5;
+  }
+  bb5: {
+    storage_dead(_19);
+    storage_dead(_18);
+    storage_dead(_17);
+    storage_dead(_10);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Holder2::#ctor(_1: &Holder2, _2: &Slice<Q>) -> void {
+  let _1: &Holder2; // this
+  let _2: &Slice<Q>; // v
+  let _3: &Slice<Q> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).view = move _3;
+    return;
+  }
+}
+
+fn Holder2::pair(_1: &Holder2, _2: bool) -> [&i64[], &i64[]] {
+  let _1: &Holder2; // this
+  let _2: bool; // c
+  let _3: &Slice<Q>; // v
+  let _4: &i64[]; // second
+  let _5: bool temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  let _8: isize temp;
+  let _9: isize temp;
+  let _10: isize temp;
+  let _11: isize temp;
+  let _12: &i64[] temp;
+  let _13: &i64[] temp;
+  bb0: {
+    storage_live(_3);
+    _3 = copy (*_1).view;
+    storage_live(_4);
+    _5 = copy _2;
+    switch move _5 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _6 = const 0: isize;
+    _7 = len(*(*_1).view);
+    check_bounds(copy _6, copy _7);
+    _4 = &(*(*_1).view)[_6].b [explicit];
+    goto bb3;
+  }
+  bb2: {
+    _8 = const 0: isize;
+    _9 = len(*_3);
+    check_bounds(copy _8, copy _9);
+    _4 = &(*_3)[_8].a [explicit];
+    goto bb3;
+  }
+  bb3: {
+    _10 = const 0: isize;
+    _11 = len(*(*_1).view);
+    check_bounds(copy _10, copy _11);
+    _12 = &(*(*_1).view)[_10].a [explicit];
+    _13 = &*_4 [reborrow];
+    _0 = tuple(move _12, move _13);
+    storage_dead(_4);
+    storage_dead(_3);
+    return;
+  }
+}

@@ -1,0 +1,5 @@
+$ enrang explain EN0407
+[exit 2]
+[stdout]
+[stderr]
+error: `EN0407` is retired: object types are valid everywhere now

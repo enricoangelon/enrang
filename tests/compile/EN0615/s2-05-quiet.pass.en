@@ -1,0 +1,19 @@
+let k = new Quiet();
+speak(&k);
+
+public class Sink {
+  public put(let s: &string): void {
+    *s += "!";
+  }
+}
+
+public class Quiet extends Sink {
+  public override put(s: &string): void {
+    console.log(s.length());
+  }
+}
+
+private function speak(q: &Quiet): void {
+  let msg: string = "hi";
+  q.put(&msg);
+}

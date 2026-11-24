@@ -9,6 +9,19 @@ use std::collections::BTreeMap;
 /// on the order of `candidates`. An empty name has nothing to correct and an empty
 /// candidate is nothing to suggest.
 pub fn did_you_mean<'a>(name: &str, candidates: &[&'a str]) -> Option<&'a str> {
+    closest(name, candidates, true)
+}
+
+/// [`did_you_mean`], except that a tie goes to the candidate that comes first in
+/// `candidates`, for callers whose order ranks them (the locals in scope before
+/// the items of a module).
+pub fn did_you_mean_ordered<'a>(name: &str, candidates: &[&'a str]) -> Option<&'a str> {
+    closest(name, candidates, false)
+}
+
+/// The closest candidate within the limit; a tie goes to the alphabetically first
+/// when `by_name`, else to the first in `candidates`.
+fn closest<'a>(name: &str, candidates: &[&'a str], by_name: bool) -> Option<&'a str> {
     let wanted: Vec<char> = name.chars().collect();
     if wanted.is_empty() {
         return None;
@@ -21,7 +34,12 @@ pub fn did_you_mean<'a>(name: &str, candidates: &[&'a str]) -> Option<&'a str> {
             continue;
         }
         let distance = damerau_levenshtein(&wanted, &chars);
-        if distance <= limit && best.is_none_or(|known| (distance, candidate) < known) {
+        let better = match best {
+            None => true,
+            Some(known) if by_name => (distance, candidate) < known,
+            Some((known, _)) => distance < known,
+        };
+        if distance <= limit && better {
             best = Some((distance, candidate));
         }
     }

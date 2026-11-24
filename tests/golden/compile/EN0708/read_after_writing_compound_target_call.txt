@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0708/read_after_writing_compound_target_call.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `xs` can't be read while a borrow of it may write into it
+ --> tests/compile/EN0708/read_after_writing_compound_target_call.fail.en:2:19
+  |
+2 | *slot(&xs) += val(&xs); //~ EN0708 "`xs` can't be read while a borrow of it may write into it"
+  |                   ^^^ read here
+  | ---------------------- the write
+  |       --- borrowed for writing here, because it writes on line 2
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `xs` into a local before this statement
+  = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,26 @@
+let rex = new Dog("Rex");
+show(&rex);
+shout(&rex);
+console.log(rex.name);
+
+public class Animal {
+  public constructor(public name: string) {}
+
+  public label(): &string {
+    return "animal";
+  }
+}
+
+public class Dog extends Animal {
+  public override label(): &string {
+    return &this.name;
+  }
+}
+
+private function show(a: &Animal): void {
+  console.log(a.label());
+}
+
+private function shout(d: &Dog): void {
+  *d.label() += "!";
+}

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0619/c4-super-paths-6.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0619]: `super(...)` must be a statement of the constructor's own body
+  --> tests/compile/EN0619/c4-super-paths-6.fail.en:13:21
+   |
+13 |     const f = () => super(name); //~ EN0619 "`super(...)` must be a statement of the constructor's own body"
+   |                     ^^^^^^^^^^^ not in a constructor's own body
+   |
+   = note: `super(...)` runs only in a constructor of a class with a base, never in an arrow or a local function
+   = explain: run `enrang explain EN0619`
+
+error: aborting due to 1 previous error

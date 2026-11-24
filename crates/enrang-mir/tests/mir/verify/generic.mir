@@ -1,0 +1,6 @@
+fn id<T>(_1: T) -> T {
+  bb0: {
+    _0 = move _1;
+    return;
+  }
+}

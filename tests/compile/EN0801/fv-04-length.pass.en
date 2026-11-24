@@ -1,0 +1,9 @@
+const buf: u8[] = [1, 2];
+unsafe {
+  console.log(peek(buf.asPtr(), -1));
+}
+
+private unsafe function peek(p: *u8, n: isize): u8 {
+  const s = Slice<u8>.fromRaw(p, n);
+  return s[3];
+}

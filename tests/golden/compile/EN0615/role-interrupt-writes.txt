@@ -1,0 +1,14 @@
+$ enrang check --target=i386-none tests/compile/EN0615/role-interrupt-writes.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `onTimer` writes a parameter that it may only read
+ --> tests/compile/EN0615/role-interrupt-writes.fail.en:3:3
+  |
+3 |   frame.eip = 0; //~ EN0615
+  |   ^^^^^^^^^^^^^ this write needs exclusive access
+  |
+  = note: the parameters of `@entry`, `@panicHandler`, `@interrupt` and `test.each` are read-only
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

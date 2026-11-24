@@ -1,0 +1,46 @@
+class Animal {
+  name: i64;
+}
+fn Animal::speak(_1: &Animal) -> void;
+class Dog extends Animal {
+  bark: bool;
+}
+@final class Leaf {
+  v: i64;
+}
+fn Leaf::get(_1: &Leaf) -> void;
+
+fn ok(_1: &i64[], _2: isize, _3: i64 | null, _4: &Dog, _5: *u8, _6: &Animal, _7: &Leaf) -> i64 {
+  let _8: isize temp;
+  let _9: i64 temp;
+  let _10: &Animal temp;
+  let _11: void temp;
+  let _12: u8 temp;
+  let _13: &Slice<i64> temp;
+  let _14: Animal temp;
+  let _15: f64 temp;
+  let _16: [i64 | null, i64] | null temp;
+  let _17: Box<Dog> temp;
+  region r0: block;
+  bb0: {
+    _8 = len(*_1);
+    check_bounds(copy _2, copy _8);
+    _9 = copy (*_1)[_2];
+    check_tag(_3, Present);
+    _9 = copy (_3 as Present).0;
+    _15 = div(copy _15, const 2.0: f64);
+    check_tag(_16, Present);
+    check_tag((_16 as Present).0.0, Present);
+    _9 = copy ((_16 as Present).0.0 as Present).0;
+    _10 = convert(upcast, copy _4);
+    _13 = convert(array_to_slice, copy _1);
+    _12 = intrinsic VolatileRead(copy _5) @ r0;
+    check_class(*_6, copy_out, ref);
+    _14 = copy *_6;
+    _11 = virtual Animal::speak [copy _6](copy _6) -> bb1;
+  }
+  bb1: {
+    _0 = copy _9;
+    return;
+  }
+}

@@ -1,0 +1,5 @@
+//! covers: C05
+const n: i64 = 5;
+const r = &n;
+const v: i64 = r;
+console.log(v);

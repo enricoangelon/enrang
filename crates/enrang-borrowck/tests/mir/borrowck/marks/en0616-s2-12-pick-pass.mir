@@ -1,0 +1,116 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/s2-12-pick.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/s2-12-pick.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let mut _3: string; // t
+  let _4: void temp;
+  let _5: &string temp;
+  let _6: &string temp;
+  let _7: &string temp;
+  let _8: void temp;
+  let _9: &string temp;
+  let _10: &string temp;
+  let _11: isize | null temp;
+  let _12: &string temp;
+  let _13: &string temp;
+  let _14: isize | null temp;
+  let _15: &string temp;
+  let _16: &string temp;
+  let _17: &string temp;
+  let _18: &string temp;
+  let _19: &string temp;
+  let _20: string temp;
+  let _21: &string temp;
+  let _22: void temp;
+  let _23: void temp;
+  let _24: &string temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "abc": string;
+    storage_live(_3);
+    _3 = const "de": string;
+    _6 = &_2 [explicit];
+    _7 = &_3 [explicit];
+    _5 = pick<string>(move _6, move _7, const true: bool) -> bb1;
+  }
+  bb1: {
+    _4 = form log(move _5) -> bb2;
+  }
+  bb2: {
+    _11 = present(const 1: isize);
+    _12 = &_2 [auto-borrow];
+    _10 = "core/string"::string::slice(move _12, const 0: isize, move _11, const 2: isize) -> bb3;
+  }
+  bb3: {
+    _14 = present(const 1: isize);
+    _15 = &_3 [auto-borrow];
+    _13 = "core/string"::string::slice(move _15, const 0: isize, move _14, const 2: isize) -> bb4;
+  }
+  bb4: {
+    _9 = pick<string>(move _10, move _13, const false: bool) -> bb5;
+  }
+  bb5: {
+    _8 = form log(move _9) -> bb6;
+  }
+  bb6: {
+    _17 = &_2 [explicit];
+    _18 = &_3 [explicit];
+    _16 = pick<string>(move _17, move _18, const true: bool) -> bb7;
+  }
+  bb7: {
+    _19 = &*_16 [compound-target];
+    _20 = const "!": string;
+    _21 = &_20 [temp-arg];
+    _22 = form append(move _19, move _21) -> bb8;
+  }
+  bb8: {
+    drop(_20);
+    storage_dead(_20);
+    _24 = &_2 [auto-borrow];
+    _23 = form log(move _24) -> bb9;
+  }
+  bb9: {
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn pick<T>(_1: &T, _2: &T, _3: bool) -> &T {
+  let _1: &T; // a
+  let _2: &T; // b
+  let _3: bool; // first
+  let _4: bool temp;
+  let _5: &T temp;
+  let _6: &T temp;
+  bb0: {
+    _4 = copy _3;
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _5 = &*_1 [reborrow];
+    _0 = move _5;
+    goto bb3;
+  }
+  bb2: {
+    _6 = &*_2 [reborrow];
+    _0 = move _6;
+    goto bb3;
+  }
+  bb3: {
+    return;
+  }
+}

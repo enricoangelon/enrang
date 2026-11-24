@@ -2,35 +2,66 @@
 //!
 //! [`run`] is the whole command line as a function from arguments to an [`Outcome`],
 //! so a test can drive it in-process, and [`main`] connects it to a real process.
-//! Arguments are parsed by hand and nothing here reads the environment, a clock or
-//! a file, so equal arguments print equal bytes.
+//! [`run_in`] is the same with the two things a run reads besides its arguments made
+//! explicit: the directory relative paths are read from, and standard input. Arguments
+//! are parsed by hand, and nothing here reads the environment or a clock, so equal
+//! arguments and equal files print equal bytes.
 //!
-//! No compiler exists at this milestone. `explain` and `targets` work; every other
-//! name reports what it is and does nothing.
+//! `check`, `fmt`, `init`, `explain` and `targets` work; every other name reports
+//! what it is and does nothing.
 
 #![forbid(unsafe_code)]
 
+mod check;
 mod commands;
 mod evidence;
 mod explain;
+mod flags;
+mod fmt;
 mod help;
+mod init;
+mod manifest;
 mod outcome;
 mod report;
 mod table;
 mod targets;
 
 use std::env;
-use std::io::{self, IsTerminal};
+use std::io::{self, IsTerminal, Read};
 use std::panic::{self, AssertUnwindSafe};
+use std::path::Path;
 use std::process::ExitCode;
 
 pub use commands::{ALIASES, Alias, DEFERRED, LATER, LaterCommand, WORKING, Working};
 pub use evidence::{CLASSES, FAMILIES, Family};
 pub use outcome::{EXIT_FAILURE, EXIT_INTERNAL, EXIT_SUCCESS, EXIT_USAGE, Outcome};
 
-/// Runs the command line. `color` paints diagnostics, and it is for the caller to
-/// decide: the rule of SPEC 13.1 depends on what stderr is.
+/// What a run reads besides its arguments.
+pub struct Env<'a> {
+    /// The directory relative paths are read from and written to: the working
+    /// directory of a process.
+    pub dir: &'a Path,
+    /// What `fmt` formats when it is given `-` or no path.
+    pub stdin: &'a mut dyn Read,
+}
+
+/// Runs the command line in the working directory, with the process's standard
+/// input. `color` paints diagnostics, and it is for the caller to decide: the rule
+/// of SPEC 13.1 depends on what stderr is.
 pub fn run(args: &[String], color: bool) -> Outcome {
+    let mut stdin = io::stdin();
+    run_in(
+        args,
+        color,
+        &mut Env {
+            dir: Path::new("."),
+            stdin: &mut stdin,
+        },
+    )
+}
+
+/// Runs the command line in `env`, as [`run`] does in the process's own.
+pub fn run_in(args: &[String], color: bool, env: &mut Env<'_>) -> Outcome {
     let Some((first, rest)) = args.split_first() else {
         return report::complaint(
             "no command given",
@@ -41,7 +72,10 @@ pub fn run(args: &[String], color: bool) -> Outcome {
     match first.as_str() {
         "--help" | "-h" => global_flag(first, rest, help::text),
         "--version" | "-V" => global_flag(first, rest, help::version),
+        "check" => check::command(rest, color, env),
         "explain" => explain::command(rest),
+        "fmt" => fmt::command(rest, color, env),
+        "init" => init::command(rest, color, env),
         "targets" => targets::command(rest),
         name => report::not_a_working_command(name, color),
     }

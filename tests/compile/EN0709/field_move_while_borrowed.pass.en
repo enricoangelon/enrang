@@ -1,0 +1,10 @@
+let p = new Person { name: "Ada", age: 36 };
+const r = &p.name;
+console.log(r);
+const n = p.name;
+console.log(n);
+
+public class Person {
+  public name: string = "";
+  public age: i64 = 0;
+}

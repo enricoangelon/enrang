@@ -1,0 +1,5 @@
+let n = 12;
+const r = &n;
+const m = n; //~ EN0708 "`n` can't be read while `r` may write into it"
+*r = 13;
+console.log(m);

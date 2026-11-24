@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0601/moved_into_binding.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0601]: `a` was moved into `b`
+ --> tests/compile/EN0601/moved_into_binding.fail.en:4:13
+  |
+1 | const a = "x".toString();
+  |       - `a` owns this `string`, which is not Copy
+2 | const b = a;
+  |           - `a` moves here
+3 | console.log(b);
+4 | console.log(a); //~ EN0601 "`a` was moved into `b`"
+  |             ^ used here, after the move
+  |
+  = explain: run `enrang explain EN0601`
+
+error: aborting due to 1 previous error

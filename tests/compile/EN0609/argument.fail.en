@@ -1,0 +1,10 @@
+public class Counter {
+  private readonly n: i64 = 0;
+  public bumpIt(): void {
+    bump(&this.n); //~ EN0609
+  }
+}
+
+public function bump(x: &i64): void {
+  *x += 1;
+}

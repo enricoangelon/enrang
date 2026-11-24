@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0707/ltk-4.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0707]: cannot mutate `xs` while iterating over it
+ --> tests/compile/EN0707/ltk-4.fail.en:3:21
+  |
+2 |   for (const a of xs) {
+  |                   -- mutable borrow begins here
+3 |     for (const b of xs) { //~ EN0707
+  |                     ^^ conflicting mutable access
+  |
+  = explain: run `enrang explain EN0707`
+
+error[EN0708]: `xs` can't be read while a borrow of it may write into it
+  --> tests/compile/EN0707/ltk-4.fail.en:12:21
+   |
+11 |   for (const a of xs) {
+   |                   -- borrowed for writing here
+12 |     for (const b of xs) { //~ EN0708
+   |                     ^^ read here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0708`
+
+error: aborting due to 2 previous errors

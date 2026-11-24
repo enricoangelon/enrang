@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0613/assign_to_by_value_class_parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0613]: cannot assign to parameter `u`
+ --> tests/compile/EN0613/assign_to_by_value_class_parameter.fail.en:2:3
+  |
+2 |   u = new User { name: "Bo" }; //~ EN0613 "cannot assign to parameter `u`"
+  |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^ assigned here
+  |
+help: mark it `let u`
+  |
+1 | public function rename(let u: User): User {
+  |                        ++++
+help: take `u: &User` and write `*u`
+  = explain: run `enrang explain EN0613`
+
+error: aborting due to 1 previous error

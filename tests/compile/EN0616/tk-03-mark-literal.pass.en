@@ -1,0 +1,7 @@
+let grid: i64[][] = [[1, 2], [3, 4]]; const g = grab(&grid);
+if (g != null) {
+  const [rows, row] = g; const e2 = &row[0];
+  console.log(*e2, rows.length());
+}
+
+public function grab(xs: &Slice<i64[]>): [&Slice<i64[]>, &i64[]] | null { const whole = xs; const r = xs; let t: [&Slice<i64[]>, &i64[]] | null = null; for (const x of r) { if (t != null) { return [t[0], x]; } t = [whole, x]; } return null; }

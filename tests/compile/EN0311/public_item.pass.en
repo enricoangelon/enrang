@@ -1,0 +1,5 @@
+import { User, greet } from "./user.pass";
+import * as u from "./user.pass";
+
+const a: u.User = new User { name: "Ada" };
+console.log(greet(&a), u.greet(&a));

@@ -1,0 +1,16 @@
+let last: string = "none".toString();
+const fail = (): Result<i64> => Err(last); //~ EN0617
+console.log(fail());
+
+public class User {
+  public constructor(private name: string) {}
+
+  public check(): Result<isize> {
+    if (this.name.isEmpty()) { return Err(this.name); } //~ EN0603
+    return this.name.length();
+  }
+}
+
+public function firstErr(names: &Slice<string>): Result<i64> {
+  return Err(names[0]); //~ EN0604
+}

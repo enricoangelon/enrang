@@ -1,0 +1,19 @@
+console.log(turn(1), age(2));
+
+private function turn(n: i64): Result<i64, Direction> {
+  if (n > 0) {
+    return Err("left");
+  }
+  return Err("up"); //~ EN0401
+}
+
+private function age(n: i64): Result<i64, AgeError> {
+  return Err("no"); //~ EN0401
+}
+
+private type Direction = "left" | "right";
+
+public enum AgeError {
+  NotANumber = "not a number",
+  Negative = "negative age",
+}

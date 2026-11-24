@@ -1,0 +1,77 @@
+=== EN0907
+--- rule
+`@requires("feature", ...)` lets a function's body use instructions that the target's CPU level lacks, such as `cmov` at `--cpu=i586`. On a CPU without the feature such an instruction faults, so calling the function needs `unsafe`, which states that the feature has been checked, usually with `cpu.has`; a call outside `unsafe` is EN0907. At a `--cpu` level that has the feature, `cpu.has` folds to `true`, and the call still needs `unsafe`.
+--- failing
+import { cpu } from "core";
+
+@requires("cmov")
+public function fastMax(a: i32, b: i32): i32 { return a > b ? a : b; }
+
+public function max(a: i32, b: i32): i32 {
+  if (cpu.has("cmov")) { return fastMax(a, b); }
+  return a > b ? a : b;
+}
+--- fixed
+import { cpu } from "core";
+
+@requires("cmov")
+public function fastMax(a: i32, b: i32): i32 { return a > b ? a : b; }
+
+public function max(a: i32, b: i32): i32 {
+  if (cpu.has("cmov")) {
+    unsafe { return fastMax(a, b); }
+  }
+  return a > b ? a : b;
+}
+=== EN0908
+--- rule
+`cpu.has("feature")` tells whether the CPU that runs the program has a feature, and its argument is a string literal that is checked when compiling. The names are `fpu`, `cpuid`, `bswap`, `cmpxchg`, `xadd`, `cmpxchg8b`, `rdtsc`, `msr`, `cr4`, `cmov`, `fcomi`, `mmx`, `3dnow`, `sse`, `sse2`, `sse3`, `ssse3`, `sse4.1`, `sse4.2`, `popcnt`, `fxsave`, `nopl`, `pae`, `nx`, `lm` and `invlpg`. Any other name, or an argument that is not a string literal, is EN0908.
+--- failing
+import { cpu } from "core";
+
+const fast = cpu.has("sse42");
+console.log(fast);
+--- fixed
+import { cpu } from "core";
+
+const fast = cpu.has("sse4.2");
+console.log(fast);
+=== EN0909
+--- rule
+`--cpu` names the oldest CPU the output must run on: a level, `i386`, `i486`, `i586`, `i686`, `sse2` or `x86-64`, or the name of a chip, such as `pentium`, `k6-2` or `core2`, which resolves to a level and prints a note saying which. A name that is neither is EN0909, with a did-you-mean when one is close. `--cpu=native` is EN0909 too: the host is never the target, so output runs on the chips it was built for and not only on the machine that built it. `enrang targets` lists every level and chip name.
+--- failing
+$ enrang check --cpu=native
+error[EN0909]: `--cpu=native` is rejected
+  = note: the host is never the target: output runs on the chips it was built for, not on the machine building it
+help: name a level or a chip; `enrang targets` lists them
+  = explain: run `enrang explain EN0909`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang check --cpu=x86-64
+=== EN0911
+--- rule
+`--float` picks how floating-point arithmetic is compiled: `soft`, in integer code, which works on every CPU, `x87`, on the FPU, or `sse2`. The strategy must exist at the CPU level and on the target. `--float=sse2` needs level `sse2`, so a build at a lower level must raise its level or use `soft`, which gives bit-identical results. On `x86_64-*` targets every CPU has SSE2, so `sse2` is the only strategy there, and in the VM floats run on the host or as `soft`. Any other combination is EN0911.
+--- failing
+$ enrang check --target=i386-linux --float=sse2
+error[EN0911]: `--float=sse2` needs level `sse2`, and this build is at level `i386`
+help: build for it: `--cpu=sse2`
+help: or `--float=soft`, which works at every level and is bit-identical
+  = explain: run `enrang explain EN0911`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang check --target=i386-linux --cpu=sse2 --float=sse2
+=== EN0912
+--- rule
+A CPU level belongs to targets of its width. `x86-64` is the only level on `x86_64-*` targets, and the 32-bit levels, `i386` to `sse2`, belong to `i386-*` targets, because `x86-64` assumes long mode. A level or chip name on a target it does not apply to is EN0912, as is a chip with no long mode, such as `pentium-m`, on a 64-bit target, and any `--cpu` for the VM, which has no CPU level. For 32-bit output, change the target as well as the level.
+--- failing
+$ enrang check --target=x86_64-linux --cpu=i686
+error[EN0912]: level `i686` does not apply to target `x86_64-linux`
+  = note: level `x86-64` is the only level on `x86_64-*`
+help: `--cpu=x86-64`; `--target=i386-linux` builds 32-bit output
+  = explain: run `enrang explain EN0912`
+
+error: aborting due to 1 previous error
+--- fixed
+$ enrang check --target=i386-linux --cpu=i686

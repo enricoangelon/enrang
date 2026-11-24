@@ -1,0 +1,143 @@
+class Cell {
+  v: i64;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64; // total
+  let _3: string[]; // words
+  let _4: &string; // first
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: void temp;
+  let _8: &i64 temp;
+  let _9: void temp;
+  let _10: &i64 temp;
+  let _11: &string temp;
+  let _12: void temp;
+  let _13: i64 temp;
+  let _14: &i64 temp;
+  let _15: i64 temp;
+  let _16: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 0: i64;
+    storage_live(_3);
+    _3 = intrinsic AllocArray<string>(const "a": string, const "b": string);
+    storage_live(_4);
+    _5 = const 0: isize;
+    _6 = len(_3);
+    check_bounds(copy _5, copy _6);
+    _4 = &_3[_5] [explicit];
+    _8 = &_2 [hidden-arg];
+    _7 = add(const 2: i64, move _8) -> bb1;
+  }
+  bb1: {
+    _10 = &_2 [hidden-arg];
+    _11 = &*_4 [hidden-arg];
+    _9 = show(move _10, move _11) -> bb2;
+  }
+  bb2: {
+    _13 = scale(const 3: i64, const 1: isize) -> bb3;
+  }
+  bb3: {
+    _14 = &_13 [temp-arg];
+    _15 = scale(const 3: i64, const 4: i64, const 2: isize) -> bb4;
+  }
+  bb4: {
+    _16 = &_15 [temp-arg];
+    _12 = form log(move _14, move _16) -> bb5;
+  }
+  bb5: {
+    storage_dead(_15);
+    storage_dead(_13);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Cell::#ctor(_1: &Cell, _2: i64) -> void {
+  let _1: &Cell; // this
+  let _2: i64; // v
+  bb0: {
+    switch const overridden(v): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    (*_1).v = copy _2;
+    return;
+  }
+  bb2: {
+    field_init((*_1).v, const 0: i64);
+    goto bb1;
+  }
+}
+
+fn Cell::get(_1: &Cell) -> i64 {
+  let _1: &Cell; // this
+  bb0: {
+    _0 = copy (*_1).v;
+    return;
+  }
+}
+
+@private @local fn add(_1: i64) -> void {
+  let _1: i64; // n
+  let _2: &i64 arg; // total
+  let _3: i64 temp;
+  bb0: {
+    _3 = copy *_2;
+    *_2 = checked_add(copy _3, copy _1);
+    return;
+  }
+}
+
+@unsafe fn peek(_1: *u8) -> u8 {
+  let _1: *u8; // p
+  let _2: *u8 temp;
+  region r0: whole;
+  bb0: {
+    _2 = copy _1 @ r0;
+    _0 = copy *_2 @ r0;
+    return @ r0;
+  }
+}
+
+fn scale(_1: i64, _2: i64 = default) -> i64 {
+  let _1: i64; // x
+  let _2: i64; // by
+  let _3: isize arg; // #supplied
+  let _4: bool temp;
+  defaults _3;
+  bb0: {
+    _4 = lt(copy _3, const 2: isize);
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _2 = const 2: i64;
+    goto bb2;
+  }
+  bb2: {
+    _0 = checked_mul(copy _1, copy _2);
+    return;
+  }
+}
+
+@private @local fn show() -> void {
+  let _1: &i64 arg; // total
+  let _2: &string arg; // first
+  let _3: void temp;
+  let _4: &string temp;
+  let _5: &i64 temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    _5 = &*_1 [auto-borrow];
+    _3 = form log(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

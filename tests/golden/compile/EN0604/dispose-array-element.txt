@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0604/dispose-array-element.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0604]: cannot move out of `xs[0]`
+ --> tests/compile/EN0604/dispose-array-element.fail.en:2:9
+  |
+2 | dispose(xs[0]); //~ EN0604
+  |         ^^^^^ an element of an array can't be moved out
+  |
+help: borrow it: `&xs[0]`
+help: or copy it: `xs[0].clone()`
+help: or take it out of the array: `xs.remove(0)`
+  = explain: run `enrang explain EN0604`
+
+error: aborting due to 1 previous error

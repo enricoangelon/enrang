@@ -1,0 +1,27 @@
+let z: i64 = 0;
+let cur = new Cursor(&z);
+let data: i64[] = [1, 2];
+const r = aim(&cur, &data);
+console.log(r.length());
+console.log(cur.get());
+
+let cur2 = new Cursor(&z);
+let data2: i64[] = [1, 2];
+const r2 = aim(&cur2, &data2);
+console.log(cur2.get());
+data2.push(4);
+
+private function aim(c: &Cursor, xs: &i64[]): &i64[] {
+  c.set(&xs[0]);
+  return xs;
+}
+
+public class Cursor {
+  private p: &i64;
+
+  public constructor(p: &i64) { this.p = p; }
+
+  public set(p: &i64): void { this.p = p; }
+
+  public get(): readonly &i64 { return this.p; }
+}

@@ -1,0 +1,27 @@
+// Rule (e) (plan d.7): a reference stored into a borrowing value whose class
+// writes through its fields is write-live, but not into a field declared
+// `readonly &`, nor into a class whose flag is off; one stored into a borrowing
+// tuple behind a reference always is.
+// MIR shapes: field stores through references `(*_1).f = move _t` (plan c.4,
+// plan.md:913-914; c.8, plan.md:1027).
+class Holder writes_through_fields {
+  r: &i64;
+  ro: readonly &i64;
+}
+class Plain {
+  r: &i64;
+}
+fn stores(_1: &Holder, _2: &Plain, _3: &[&i64, i64], _4: &i64) -> void {
+  let _5: &i64 temp;
+  bb0: {
+    _5 = &*_4 [reborrow]; // exclusive
+    (*_1).r = move _5;
+    _5 = &*_4 [reborrow]; // shared
+    (*_1).ro = move _5;
+    _5 = &*_4 [reborrow]; // shared
+    (*_2).r = move _5;
+    _5 = &*_4 [reborrow]; // exclusive
+    (*_3).0 = move _5;
+    return;
+  }
+}

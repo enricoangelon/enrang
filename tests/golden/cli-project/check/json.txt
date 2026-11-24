@@ -1,0 +1,5 @@
+$ enrang check --error-format=json g01.en
+[exit 1]
+[stdout]
+[stderr]
+{"version":1,"severity":"error","code":"EN0101","message":"missing `;` after this statement","primary":{"text":"expected `;` here","span":{"file":"g01.en","lo":11,"hi":11,"line":1,"col":12,"end_line":1,"end_col":12}},"secondary":[],"entries":[{"kind":"from TypeScript","text":"Enrang has no automatic semicolon insertion."}],"helps":[{"message":"add the semicolon","applicability":"machine-applicable","edits":[{"file":"g01.en","lo":11,"hi":11,"replacement":";"}],"commands":[]}],"explain":"enrang explain EN0101"}

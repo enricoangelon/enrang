@@ -1,0 +1,123 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/fv-02-finder.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/fv-02-finder.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[][]; // table
+  let _3: i64[] temp;
+  let _4: i64[] temp;
+  let _5: &i64[] | null; // hit
+  let _6: &i64[][] temp;
+  let _7: &Slice<i64[]> temp;
+  let _8: bool temp;
+  let _9: u32 temp;
+  let _10: i64[] temp;
+  let _11: void temp;
+  let _12: &i64[][] temp;
+  fact f0: _5 nonnull;
+  use f0 at bb2[1];
+  use f0 at bb2[3];
+  test f0 at bb2;
+  bb0: {
+    storage_live(_2);
+    _3 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    _4 = intrinsic AllocArray<i64>(const 4: i64, const 5: i64);
+    _2 = intrinsic AllocArray<i64[]>(move _3, move _4);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = &_2 [explicit];
+    _7 = convert(array_to_slice, move _6);
+    _5 = find(move _7, const 1: i64) -> bb1;
+  }
+  bb1: {
+    _9 = discriminant(_5);
+    _8 = ne(move _9, const 0: u32);
+    switch move _8 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    _10 = intrinsic AllocArray<i64>(const 9: i64);
+    check_tag(_5, Present);
+    drop(*(_5 as Present).0) [assign];
+    check_tag(_5, Present);
+    *(_5 as Present).0 = move _10;
+    drop(_10);
+    storage_dead(_10);
+    goto bb3;
+  }
+  bb3: {
+    _12 = &_2 [auto-borrow];
+    _11 = form log(move _12) -> bb4;
+  }
+  bb4: {
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn find(_1: &Slice<i64[]>, _2: i64) -> &i64[] | null {
+  let _1: &Slice<i64[]>; // rows
+  let _2: i64; // first
+  let _3: isize #i;
+  let _4: isize #n;
+  let _5: bool temp;
+  let _6: &i64[]; // r
+  let _7: bool temp;
+  let _8: isize temp;
+  let _9: i64 temp;
+  let _10: isize temp;
+  let _11: &i64[] temp;
+  loop l0: path *_1 preheader bb5 head bb1 bind bb2[2] binding _6;
+  bb0: {
+    goto bb5;
+  }
+  bb1: {
+    _4 = len(*_1);
+    _5 = lt(copy _3, copy _4);
+    switch move _5 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_6);
+    check_bounds(copy _3, copy _4);
+    _6 = &(*_1)[_3] [for-of-element];
+    _3 = add(copy _3, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _0 = null;
+    return;
+  }
+  bb5: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _8 = const 0: isize;
+    _10 = len(*_6);
+    check_bounds(copy _8, copy _10);
+    _9 = copy (*_6)[_8];
+    _7 = eq(move _9, copy _2);
+    switch move _7 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    _11 = &*_6 [reborrow];
+    _0 = present(move _11);
+    storage_dead(_6);
+    return;
+  }
+  bb8: {
+    storage_dead(_6);
+    goto bb3;
+  }
+}

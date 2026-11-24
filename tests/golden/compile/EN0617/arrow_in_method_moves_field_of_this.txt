@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0617/arrow_in_method_moves_field_of_this.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0617]: cannot move `this.items` out of the arrow's capture
+ --> tests/compile/EN0617/arrow_in_method_moves_field_of_this.fail.en:5:19
+  |
+5 |       const all = this.items; //~ EN0617
+  |                   ^^^^^^^^^^ `this.items` is captured, so the arrow can't give it away
+  |
+  = note: an arrow or a local function may run more than once, so what it captures stays where it is
+help: move a copy instead: `this.items.clone()`
+  = explain: run `enrang explain EN0617`
+
+error: aborting due to 1 previous error

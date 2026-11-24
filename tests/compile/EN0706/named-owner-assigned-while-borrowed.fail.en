@@ -1,0 +1,5 @@
+//! row: `let x = 12; const y = &x;`, then `x = 13;`
+let x = 12;
+const y = &x;
+x = 13; //~ EN0706 "`x` cannot change while `y` still points into it"
+console.log(*y);

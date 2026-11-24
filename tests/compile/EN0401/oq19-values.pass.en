@@ -1,0 +1,35 @@
+console.log(new Box(5));
+const u = new User { name: "Ada", age: 36 };
+console.log(u);
+const s = new Slot { v: null };
+console.log(s);
+const t: [i64, i64] = [1, 5];
+console.log(t);
+const q = new Square { color: "red", side: 2 };
+const r: &Shape = &q;
+console.log(q);
+console.log(r);
+const p = &u;
+console.log(`${p}`);
+console.log(label(&u));
+
+private function label<T>(x: &T): string {
+  return `${x}`;
+}
+
+public class User {
+  public name: string;
+  public age: i64;
+}
+
+public class Slot {
+  public v: i64 | null;
+}
+
+public class Shape {
+  public color: string;
+}
+
+public class Square extends Shape {
+  public side: i64;
+}

@@ -1,0 +1,17 @@
+const count = 3;
+const xs = [1, 2, 3];
+xs.forEach(x => console.log(x + count));
+const add = (x: i64) => x + count;
+console.log(apply(add, 4));
+const b = new Button { on: () => console.log("clicked") };
+run(() => console.log(count));
+
+private function apply(f: (x: i64) => i64, v: i64): i64 { return f(v); }
+
+private function run(g: () => void): void { g(); }
+
+private function maker(): fn() => i64 { return () => 5; }
+
+public final class Button {
+  public on: fn() => void;
+}

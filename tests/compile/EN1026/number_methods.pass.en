@@ -1,0 +1,7 @@
+const x = 2.0;
+const root = x.sqrt();
+const pi = f64.PI;
+const a = 3;
+const b = 4;
+const big = a.max(b);
+console.log(root, pi, big);

@@ -1,0 +1,7 @@
+let v: i64[] = [1];
+function grow(): void { v.push(2); }
+function two(): i64 { return 2; }
+const f = two;
+grow();
+const e = &v[0];
+console.log(*e, f());

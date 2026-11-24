@@ -1,0 +1,56 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0715/repoint_while_captured.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0715/repoint_while_captured.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int; // x
+  let mut _3: int; // y
+  let mut _4: &int; // r
+  let _5: () => void; // f
+  let _6: &int temp;
+  let _7: [&int] temp;
+  let _8: void temp;
+  let _9: void temp;
+  let _10: &int temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 1: int;
+    storage_live(_3);
+    _3 = const 2: int;
+    storage_live(_4);
+    _4 = &_2 [explicit];
+    storage_live(_5);
+    _6 = &*_4 [closure-capture];
+    _7 = env(move _6);
+    _5 = closure(arrow#0, _7);
+    _8 = closure _5() -> bb1;
+  }
+  bb1: {
+    _4 = &_3 [explicit];
+    _10 = &*_4 [reborrow];
+    _9 = form log(move _10) -> bb2;
+  }
+  bb2: {
+    storage_dead(_5);
+    storage_dead(_4);
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+arrow#0 of statements (_1: &[&int]) -> void {
+  let _1: &[&int] env;
+  let _2: &int temp;
+  capture r: &int through_ref;
+  bb0: {
+    _2 = copy (*_1).0;
+    _0 = form log(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

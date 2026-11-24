@@ -1,0 +1,21 @@
+const d = new Dog {};
+greet(&d);
+greet(null);
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Dog implements Speaker {
+  public speak(): string {
+    return "woof";
+  }
+}
+
+public function greet(s: &Speaker | null): void {
+  if (s != null) {
+    console.log(s.speak());
+  } else {
+    console.log("nobody");
+  }
+}

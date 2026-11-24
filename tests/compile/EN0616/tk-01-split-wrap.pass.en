@@ -1,0 +1,7 @@
+let v: i64[] = [1, 2, 3, 4];
+const [lo, hi] = halves(&v); lo[0] = hi[0]; hi[1] = 9; console.log(v);
+const [l2, h2] = kept(&v); l2[0] = 7; h2[0] = 8; console.log(v);
+
+public function halves(v: &Slice<i64>): [&Slice<i64>, &Slice<i64>] { return v.splitAt(2); }
+
+public function kept(xs: &Slice<i64>): [&Slice<i64>, &Slice<i64>] { const p = xs.splitAt(1); return p; }

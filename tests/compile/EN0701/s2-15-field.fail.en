@@ -1,0 +1,13 @@
+let data: i64[] = [1, 2, 3];
+let p = new Pad(&data);
+console.log(*p.first());
+
+private class Pad {
+  public t: [&i64[], i32]; //~ EN0701 "`t` holds a reference, so it must be `private`"
+  public constructor(v: &i64[]) {
+    this.t = [v, 0];
+  }
+  public first(): readonly &i64 {
+    return &this.t[0][0];
+  }
+}

@@ -1,0 +1,8 @@
+const v: i64[] = [1, 2, 3, 4];
+visit(&v); //~ EN0608 "`visit` can change `xs`, but `v` is `const`"
+
+private function visit(xs: &i64[], step: () => void = () => { xs.push(0); }): void {
+  const head = xs.first(); //~ EN0715 "`xs` is locked while `step` will still be used"
+  step();
+  console.log(head);
+}

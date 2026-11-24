@@ -1,0 +1,9 @@
+let p = new Pt();
+const r = &p.x;
+console.log(p.y);
+*r = 1;
+
+public class Pt {
+  public x: i64 = 0;
+  public y: i64 = 0;
+}

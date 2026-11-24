@@ -1,0 +1,2 @@
+fetch("http://example.com"); //~ EN1028 "network APIs are not supported yet"
+const ws = new WebSocket("ws://example.com"); //~ EN1028 "network APIs are not supported yet"

@@ -1,0 +1,256 @@
+=== EN0301
+--- rule
+A name must be declared before it is used: as a local of an enclosing block, a parameter, an item of the module, an imported name or a name of the prelude. A name found in none of these is EN0301. When a declared name is close in spelling, the label points at its declaration and the help offers it as a fix-it.
+--- failing
+const total = 10;
+console.log(totl);
+--- fixed
+const total = 10;
+console.log(total);
+--- typescript
+TypeScript reports the same mistake as TS2304, `Cannot find name`. Names that a JavaScript runtime provides, such as `window` and `process`, do not exist in Enrang, so they are EN0301 too.
+=== EN0302
+--- rule
+A type name must name a type in scope: a primitive, a class, enum, interface or alias of the module, an imported one, a type parameter, or one of the prelude's, such as `string`, `Box` or `Result`. Any other name in a type is EN0302, and when a declared type is close in spelling the help offers it as a fix-it. Names that TypeScript programs reach for and Enrang leaves out, such as `number` or `Map`, have codes of their own that say what to write instead.
+--- failing
+const p: Pont = new Point { x: 1, y: 2 };
+console.log(p.x);
+
+private class Point {
+  public x: i64 = 0;
+  public y: i64 = 0;
+}
+--- fixed
+const p: Point = new Point { x: 1, y: 2 };
+console.log(p.x);
+
+private class Point {
+  public x: i64 = 0;
+  public y: i64 = 0;
+}
+--- typescript
+TypeScript reports this as TS2304 or TS2552. Its types vanish at run time, while Enrang's decide each value's layout, so every type must be known by name.
+=== EN0303
+--- rule
+Member lookup strips one `&` and looks on the type: its own members, those it inherits from its base classes, and its `extend` members; on a `Box<T>` it then looks on `T`. A name found nowhere is EN0303, with a fix-it when a member is close in spelling. A nullable `T | null` that is not narrowed has only the members of nullable values, such as `isNull()`, so reading a member of `T` through it is EN0303 too: use `?.`, which the fix-it inserts, or test the value first, as `if (p != null)` does, which narrows it to `T` inside the branch.
+--- failing
+const p = find("ada");
+console.log(p.name);
+
+private function find(name: &string): Person | null {
+  if (name == "ada") { return new Person { name: "Ada" }; }
+  return null;
+}
+
+private class Person {
+  public name: string;
+}
+--- fixed
+const p = find("ada");
+if (p != null) { console.log(p.name); }
+
+private function find(name: &string): Person | null {
+  if (name == "ada") { return new Person { name: "Ada" }; }
+  return null;
+}
+
+private class Person {
+  public name: string;
+}
+--- typescript
+TypeScript reports a misspelled member as TS2339, and a read through a value that may be `null` as TS18047 under `strictNullChecks`. Enrang always checks nullability, and narrows on `!= null` tests as TypeScript does.
+=== EN0304
+--- rule
+Imports must not form a cycle: when `a.en` imports `b.en`, nothing that `b.en` imports, directly or through other modules, may import `a.en`. Re-exports (`public import`) count, and the imports of a `.test.en` part do not, since a test part sits above its module. Each module is checked after the modules it imports, which a cycle makes impossible. The error is at the import that closes the cycle. Move what both modules need into a third module that both can import.
+--- failing
+// file: main.en
+import { area } from "./shapes";
+
+public function main(): void { console.log(area(3)); }
+
+public function square(n: i64): i64 { return n * n; }
+
+// file: shapes.en
+import { square } from "./main";
+
+public function area(side: i64): i64 { return square(side); }
+--- fixed
+// file: main.en
+import { area } from "./shapes";
+
+public function main(): void { console.log(area(3)); }
+
+// file: shapes.en
+import { square } from "./math";
+
+public function area(side: i64): i64 { return square(side); }
+
+// file: math.en
+public function square(n: i64): i64 { return n * n; }
+--- typescript
+Node and TypeScript allow circular imports, and a module may then read another's bindings before they are initialised. Enrang checks each module after the modules it imports, so, as in Go, imports form no cycle.
+=== EN0305
+--- rule
+An import path names a file relative to the importing file, written without `.en` (`./drivers/vga`), a folder, or a library module: `core`, `alloc` and `os`, and their children such as `os/fs`. A path that names none of these is EN0305. So is `import { x } from "p"` when `x` is neither a `public` item of `p`, nor one it re-exports, nor a child module of `p`.
+--- failing
+import { readFile } from "fs";
+
+const text = readFile("notes.txt");
+match (text) {
+  Ok => console.log(text.value),
+  Err => console.log("cannot read notes.txt"),
+}
+--- fixed
+import { readFile } from "os/fs";
+
+const text = readFile("notes.txt");
+match (text) {
+  Ok => console.log(text.value),
+  Err => console.log("cannot read notes.txt"),
+}
+--- typescript
+TypeScript resolves bare paths through `node_modules` and Node's built-in modules, such as `fs` and `path`. Enrang has no package lookup: a path is a file of the program or a library module, and the file functions live in `os/fs`.
+=== EN0307
+--- rule
+A name is declared once in each scope. A second declaration of the same name in one scope is EN0307: two items of a module, two members of a class, two locals of one block, a local of a function's outermost block named as one of its parameters, an import of a name that is already bound, or a second `destructor`. The label points at the first one. Functions and methods that share a name but take different parameters are overloads, not duplicates, and a nested block may declare a name of its outer block again, hiding the outer one inside it.
+--- failing
+const limit = 10;
+const limit = 20;
+console.log(limit);
+--- fixed
+const limit = 10;
+const doubled = limit * 2;
+console.log(doubled);
+--- typescript
+TypeScript reports the same thing as TS2451, `Cannot redeclare block-scoped variable`, and lets a nested block hide an outer name as Enrang does. Rust lets a `let` hide an earlier one in the same block; Enrang does not, so one name has one meaning in a block.
+=== EN0308
+--- rule
+Every class member states its visibility. A `private` member, field or method, is visible only inside the body of its class: a subclass, another module and the module's own `.test.en` part each get EN0308 for it. A `protected` member is visible in its class and in the classes that extend it, directly or through others. Reach a private field through a `public` method of the class, or make the member `public`.
+--- failing
+const account = new Account(100);
+console.log(account.balance);
+
+private class Account {
+  public constructor(private balance: i64) {}
+
+  public total(): i64 { return this.balance; }
+}
+--- fixed
+const account = new Account(100);
+console.log(account.total());
+
+private class Account {
+  public constructor(private balance: i64) {}
+
+  public total(): i64 { return this.balance; }
+}
+--- typescript
+This is TypeScript's rule, TS2341 for `private` and TS2445 for `protected`. Enrang checks it on every use, an imported module's code included, and a test part reaches a class's `private` members no more than any other code.
+=== EN0309
+--- rule
+A generic type is written with as many type arguments as it has type parameters: `Pair<A, B>` takes two. The one exception is `Result<T>`, which stands for `Result<T, Failure>`. A generic call gives its type arguments all or none: `f<i32>(x)` names every type parameter of `f`, and with none they are inferred from the arguments. Too many or too few is EN0309.
+--- failing
+const p: Pair<string> = new Pair { first: "Ada", second: 36 };
+console.log(p.first);
+
+private class Pair<A, B> {
+  public first: A;
+  public second: B;
+}
+--- fixed
+const p: Pair<string, i64> = new Pair { first: "Ada", second: 36 };
+console.log(p.first);
+
+private class Pair<A, B> {
+  public first: A;
+  public second: B;
+}
+--- typescript
+TypeScript reports this as TS2314, unless the missing parameters have defaults. Enrang type parameters have no defaults, so each one is written, or each one is inferred.
+=== EN0311
+--- rule
+`import { x } from "p"` binds only a `public` item of `p`, or one that `p` re-exports. Importing a `private` item is EN0311, and so is naming one through a namespace, as `u.Helper` does after `import * as u from "./user";`. A `private` item belongs to its module and its `.test.en` part; make it `public` if other modules need it.
+--- failing
+// file: main.en
+import { Helper } from "./user";
+
+const h = new Helper { name: "Ada" };
+console.log(h.name);
+
+// file: user.en
+private class Helper {
+  public name: string;
+}
+--- fixed
+// file: main.en
+import { Helper } from "./user";
+
+const h = new Helper { name: "Ada" };
+console.log(h.name);
+
+// file: user.en
+public class Helper {
+  public name: string;
+}
+--- typescript
+In TypeScript a declaration without `export` is invisible to other modules, and importing it reports a missing export. Every Enrang top-level declaration states `public` or `private`, so the error says that the item exists and is private.
+=== EN0312
+--- rule
+Only the file being built may have top-level statements: they are the program. A file that another imports holds only declarations, so importing a file with statements is EN0312, a plain top-level `let` included, since it is a local of those statements; the help offers `unsafe let` for static storage. Importing a folder that holds such a file is EN0312 too. Move the statements into the file being built, or into a function that it calls.
+--- failing
+// file: main.en
+import { greet } from "./util";
+
+console.log(greet("Ada"));
+
+// file: util.en
+console.log("util loaded");
+
+public function greet(name: &string): string { return `Hello, ${name}!`; }
+--- fixed
+// file: main.en
+import { greet } from "./util";
+
+console.log(greet("Ada"));
+
+// file: util.en
+public function greet(name: &string): string { return `Hello, ${name}!`; }
+--- typescript
+An ES module runs its top-level code the first time something imports it, so an import can have side effects and import order can matter. Enrang runs only the statements of the file being built, so importing a module never runs code.
+=== EN0313
+--- rule
+A top-level variable, a `let` or `const` among a program's statements, is a local of those statements. The statements after it and the local functions declared below it see it; a class body never does, and a method that uses one is EN0313. A local function that uses top-level variables takes them as hidden arguments, which only the statements and other local functions can pass, so calling it from a method or any other function is EN0313 too. Pass the value as a parameter, or declare a compile-time constant, as `private const LIMIT: i64 = 10;`, which every body sees.
+--- failing
+let count = 0;
+const c = new Counter {};
+c.bump();
+console.log(count);
+
+private class Counter {
+  public bump(): void { count += 1; }
+}
+--- fixed
+let count = 0;
+const c = new Counter {};
+c.bump(&count);
+console.log(count);
+
+private class Counter {
+  public bump(count: &i64): void { *count += 1; }
+}
+--- typescript
+A TypeScript module's top-level variables are visible to every function and class in the module. Enrang's top-level statements are the body of the program, as in C#, and their variables are its locals, so a class method, which any code may call, cannot reach them.
+=== EN0314
+--- rule
+A file with top-level statements runs them as its program, and a `function main` beside them is not the entry point: it runs only if the statements call it. That is warning EN0314. Call `main()` from the statements, or move the statements into `main`, which is the entry point of a file that has none.
+--- failing
+console.log("starting");
+
+public function main(): void { console.log("running"); }
+--- fixed
+public function main(): void {
+  console.log("starting");
+  console.log("running");
+}
+--- typescript
+TypeScript has no entry function: a module's top-level code is the program. Enrang takes either form, top-level statements or a `main`, so a file holding both is likely a mistake.

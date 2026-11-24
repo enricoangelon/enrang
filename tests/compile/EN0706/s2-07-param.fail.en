@@ -1,0 +1,9 @@
+let d2: i64[] = [1, 2, 3];
+const e2 = &d2[0];
+grow([&d2, 1]); //~ EN0706
+console.log(*e2);
+
+private function grow(let p: [&i64[], i32]): void {
+  const t = &p;
+  t[0].push(4);
+}

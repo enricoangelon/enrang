@@ -1,0 +1,8 @@
+public function parse(s: string): Result<i64> {
+  return Ok(s.length());
+}
+
+public function twice(s: string): Result<i64> {
+  const n = parse(s) ?; //~ EN0103
+  return Ok(n * 2);
+}

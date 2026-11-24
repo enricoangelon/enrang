@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/const_root_field_write.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `p.x`, because `p` is `const`
+ --> tests/compile/EN0608/const_root_field_write.fail.en:2:1
+  |
+2 | p.x = 1; //~ EN0608
+  | ^^^^^^^ written here
+  |
+help: declare it `let p`
+  |
+1 | let p = new Point();
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

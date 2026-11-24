@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0706/forof-kept-binding-then-push.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `queue` while iterating over it
+ --> tests/compile/EN0706/forof-kept-binding-then-push.fail.en:6:3
+  |
+4 | for (const job of &queue) {
+  |                   ------ immutable borrow begins here
+5 |   saved = job;
+6 |   queue.push("s"); //~ EN0706
+  |   ^^^^^^^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `q` while iterating over it
+  --> tests/compile/EN0706/forof-kept-binding-then-push.fail.en:14:3
+   |
+12 | for (const x of &q) {
+   |                 -- immutable borrow begins here
+13 |   best = x;
+14 |   q.push(1); //~ EN0706
+   |   ^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,16 @@
+public class Animal {
+  public constructor(public name: string) {}
+
+  public describe(): string {
+    return `${this.name} makes a sound`;
+  }
+}
+
+public class Dog extends Animal {
+  private label: string;
+
+  public constructor(name: string) {
+    super(name);
+    this.label = "dog";
+  }
+}

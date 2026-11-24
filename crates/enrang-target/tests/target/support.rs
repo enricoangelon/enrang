@@ -8,7 +8,9 @@ use std::sync::OnceLock;
 
 use enrang_base::SourceMap;
 use enrang_diag::{Diagnostic, EntryKind, RenderOpts, render_text};
-use enrang_target::{Arch, CpuLevel, Feature, FeatureSet, TargetOpts, TargetSpec, resolve};
+use enrang_target::{
+    Arch, CpuLevel, Feature, FeatureSet, FloatStrategy, TargetOpts, TargetSpec, resolve,
+};
 use enrang_testkit::workspace_root;
 
 pub const I386_TARGETS: [&str; 2] = ["i386-linux", "i386-none"];
@@ -256,6 +258,38 @@ pub fn arch_of(target: &str) -> Arch {
         assert!(target.starts_with("vm"), "`{target}` is in no family");
         Arch::Mir
     }
+}
+
+/// The float strategy a build gets with no `--float` (SPEC 9.3 and 10.1, ARCHITECTURE
+/// 2.7): on `i386-*`, `soft` at `i386` and `i486`, `x87` at `i586` and `i686`, `sse2`
+/// at `sse2`; `sse2` on `x86_64-*`; the host's floats in the VM.
+pub fn default_float(arch: Arch, level: CpuLevel) -> FloatStrategy {
+    match (arch, level) {
+        (Arch::Mir, _) => FloatStrategy::Host,
+        (_, CpuLevel::I386 | CpuLevel::I486) => FloatStrategy::Soft,
+        (_, CpuLevel::I586 | CpuLevel::I686) => FloatStrategy::X87,
+        (_, CpuLevel::Sse2 | CpuLevel::X86_64) => FloatStrategy::Sse2,
+    }
+}
+
+/// SPEC 10.1's sentence naming the default float of each level, as `(strategy,
+/// levels)` pairs in its order.
+pub fn spec_default_floats() -> Vec<(String, Vec<String>)> {
+    let text = section("SPEC.md", "### 10.1 The option");
+    let lead = "The default float strategy follows the level (section 9.3): ";
+    let (_, rest) = text
+        .split_once(lead)
+        .unwrap_or_else(|| panic!("SPEC 10.1 no longer says `{lead}`"));
+    let (list, _) = rest.split_once('.').expect("the sentence ends");
+    list.split(", ")
+        .map(|clause| {
+            let (strategy, levels) = clause
+                .split_once(" at ")
+                .unwrap_or_else(|| panic!("`{clause}` is not `strategy at levels`"));
+            let levels = backticked(levels).into_iter().map(str::to_owned).collect();
+            (strategy.trim_matches('`').to_owned(), levels)
+        })
+        .collect()
 }
 
 pub fn opts_with(cpu: Option<&str>, float: Option<&str>) -> TargetOpts {

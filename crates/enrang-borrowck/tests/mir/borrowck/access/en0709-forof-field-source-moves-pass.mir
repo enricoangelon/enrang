@@ -1,0 +1,147 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0709/forof-field-source-moves.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0709/forof-field-source-moves.pass";
+class H {
+  items: i64[] = default;
+  other: string[] = default;
+}
+
+move fn H::finish(_1: &H) -> void {
+  let _1: &H; // this
+  let _2: void temp;
+  let _3: &string[] temp;
+  bb0: {
+    check_class(*_1, move_this(finish), ref);
+    _3 = &(*_1).other [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(*_1);
+    return;
+  }
+}
+
+fn moveMethod() -> void {
+  let mut _1: H; // h
+  let _2: *H temp;
+  let _3: void temp;
+  let _4: isize #i;
+  let _5: isize #n;
+  let _6: bool temp;
+  let _7: &i64; // x
+  let _8: void temp;
+  loop l0: path _1.items preheader bb6 head bb2 bind bb3[2] binding _7;
+  bb0: {
+    storage_live(_1);
+    _2 = addr_of _1;
+    _3 = named_fill H leaving(items, other)(move _2) -> bb1;
+  }
+  bb1: {
+    goto bb6;
+  }
+  bb2: {
+    _5 = len(_1.items);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &_1.items[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb7;
+  }
+  bb4: {
+    goto bb2;
+  }
+  bb5: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+  bb6: {
+    storage_live(_4);
+    _4 = const 0: isize;
+    goto bb2;
+  }
+  bb7: {
+    _8 = H::finish(move _1) -> bb8;
+  }
+  bb8: {
+    storage_dead(_7);
+    goto bb5;
+  }
+}
+
+fn movingOwner() -> void {
+  let mut _1: H; // h
+  let _2: *H temp;
+  let _3: void temp;
+  let _4: isize #i;
+  let _5: isize #n;
+  let _6: bool temp;
+  let _7: &i64; // x
+  let _8: void temp;
+  let _9: &i64 temp;
+  let _10: void temp;
+  loop l0: path _1.items preheader bb6 head bb2 bind bb3[2] binding _7;
+  bb0: {
+    storage_live(_1);
+    _2 = addr_of _1;
+    _3 = named_fill H leaving(items, other)(move _2) -> bb1;
+  }
+  bb1: {
+    goto bb6;
+  }
+  bb2: {
+    _5 = len(_1.items);
+    _6 = lt(copy _4, copy _5);
+    switch move _6 [0: bb5, otherwise: bb3];
+  }
+  bb3: {
+    storage_live(_7);
+    check_bounds(copy _4, copy _5);
+    _7 = &_1.items[_4] [for-of-element];
+    _4 = add(copy _4, const 1: isize);
+    goto bb7;
+  }
+  bb4: {
+    goto bb2;
+  }
+  bb5: {
+    _10 = takeH(move _1) -> bb9;
+  }
+  bb6: {
+    storage_live(_4);
+    _4 = const 0: isize;
+    goto bb2;
+  }
+  bb7: {
+    _9 = &*_7 [reborrow];
+    _8 = form log(move _9) -> bb8;
+  }
+  bb8: {
+    storage_dead(_7);
+    goto bb4;
+  }
+  bb9: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+@private fn takeH(_1: H) -> void {
+  let _1: H; // h
+  let _2: void temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _3 = &_1.items [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}

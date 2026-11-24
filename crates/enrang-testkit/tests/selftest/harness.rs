@@ -141,6 +141,15 @@ fn register_verdicts(h: &mut Harness) {
             );
         });
     }
+    h.case("harness::names_are_the_cases_in_registration_order", || {
+        let mut harness = Harness::new("names");
+        assert_eq!(harness.names().count(), 0);
+        for name in ["b", "a", "c::d"] {
+            harness.case(name, || ());
+        }
+        assert_eq!(harness.names().collect::<Vec<_>>(), ["b", "a", "c::d"]);
+        assert_eq!(harness.names().count(), harness.len());
+    });
     h.case("harness::exit_code_follows_the_verdict", || {
         let (good, _) = run_harness(|h| h.case("a", || ()), &options());
         let (bad, _) = run_harness(|h| h.case("a", || -> () { panic!("no") }), &options());

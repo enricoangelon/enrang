@@ -1,0 +1,18 @@
+const rex = new Dog {};
+console.log(rex.speak());
+
+public class Animal {
+  protected sound: string = "...";
+
+  public speak(): string { return "..."; }
+
+  private secret(): i64 { return 1; }
+}
+
+public class Dog extends Animal {
+  protected override sound: string = "woof";
+
+  public override speak(): string { return this.sound.clone(); }
+
+  public secret(): i64 { return 2; }
+}

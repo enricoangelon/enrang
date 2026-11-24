@@ -1,0 +1,8 @@
+let xs: i64[] = [1, 2];
+const r = &xs;
+grow(&xs); //~ EN0707 "cannot borrow `xs` as exclusive twice at the same time"
+r.push(1);
+
+private function grow(v: &i64[]): void {
+  v.push(1);
+}

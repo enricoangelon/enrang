@@ -1,0 +1,13 @@
+//! row: `const fst = xs.first();` used after `fo
+let xs: i64[] = [1, 2];
+for (const x of &xs) { *x = 1; }
+const fst = xs.first();
+console.log(fst);
+
+let ys: i64[] = [1, 2];
+const f2 = ys.first();
+for (const y of &ys) {
+  console.log(y);
+}
+console.log(f2);
+ys.push(1);

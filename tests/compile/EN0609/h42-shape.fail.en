@@ -1,0 +1,15 @@
+//! covers: H42
+function setx(p: &{ x: i64 }): void { p.x = 5; }
+function sety(p: &HasY): void { p.y = 5; }
+function setz(let p: { z: i64 }): void { p.z = 5; console.log(p.z); }
+let c = new C();
+setx(&c); //~ EN0609 "`setx` can write `c.x`, but `x` is `readonly`"
+sety(&c); //~ EN0609 "`sety` can write `c.y`, but `y` is `readonly`"
+setz(c); //~ EN0609 "`setz` can write `c.z`, but `z` is `readonly`"
+
+public interface HasY { y: i64; }
+public class C implements HasY {
+  public readonly x: i64 = 1;
+  public readonly y: i64 = 2;
+  public readonly z: i64 = 3;
+}

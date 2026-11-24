@@ -1,0 +1,41 @@
+$ enrang check tests/compile/EN0907/requires_outside_unsafe.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0907]: calling `max` needs `unsafe`, because it requires `cmov`
+  --> tests/compile/EN0907/requires_outside_unsafe.fail.en:11:12
+   |
+11 |     return max(a, b); //~ EN0907 "calling `max` needs `unsafe`, because it requires `cmov`"
+   |            ^^^^^^^^^ the CPU this runs on may lack what it requires
+   |
+help: state that you have met its conditions
+   |
+11 |     unsafe { return max(a, b); } //~ EN0907 "calling `max` needs `unsafe`, because it requires `cmov`"
+   |     +++++++++                 ++
+   = explain: run `enrang explain EN0907`
+
+error[EN0907]: calling `fast` needs `unsafe`, because it requires `sse2`, `popcnt`
+  --> tests/compile/EN0907/requires_outside_unsafe.fail.en:13:3
+   |
+13 |   fast(); //~ EN0907 "calling `fast` needs `unsafe`, because it requires `sse2`, `popcnt`"
+   |   ^^^^^^ the CPU this runs on may lack what it requires
+   |
+help: state that you have met its conditions
+   |
+13 |   unsafe { fast(); } //~ EN0907 "calling `fast` needs `unsafe`, because it requires `sse2`, `popcnt`"
+   |   +++++++++       ++
+   = explain: run `enrang explain EN0907`
+
+error[EN0907]: calling `count` needs `unsafe`, because it requires `popcnt`
+  --> tests/compile/EN0907/requires_outside_unsafe.fail.en:24:10
+   |
+24 |   return c.count(3); //~ EN0907 "calling `count` needs `unsafe`, because it requires `popcnt`"
+   |          ^^^^^^^^^^ the CPU this runs on may lack what it requires
+   |
+help: state that you have met its conditions
+   |
+24 |   unsafe { return c.count(3); } //~ EN0907 "calling `count` needs `unsafe`, because it requires `popcnt`"
+   |   +++++++++                  ++
+   = explain: run `enrang explain EN0907`
+
+error: aborting due to 3 previous errors

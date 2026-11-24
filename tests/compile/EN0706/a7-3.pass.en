@@ -1,0 +1,9 @@
+let q: i64[] = [1];
+const get: fn(xs: &i64[]) => i64 = first;
+for (const x of &q) {
+  console.log(get(&q));
+}
+
+function first(xs: &i64[]): i64 {
+  return xs[0];
+}

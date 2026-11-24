@@ -1,0 +1,17 @@
+let msg: string = "hi";
+function run(f: fn(let s: &string) => void, s: &string): void {
+  f(s);
+}
+run(choose(false), &msg);
+
+private function choose(loud: bool): fn(let s: &string) => void {
+  return loud ? quote : show;
+}
+
+private function show(s: &string): void {
+  console.log(s.length());
+}
+
+private function quote(s: &string): void {
+  console.log(`"${s}"`);
+}

@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0706/fv-02-through-ref-6.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `lx` can't change while `t` points into it
+  --> tests/compile/EN0706/fv-02-through-ref-6.fail.en:25:5
+   |
+24 |     const t = r.src.slice(0, 1);
+   |               ----------------- `t` points into `lx` from here
+25 |     lx.setSrc(&other); //~ EN0706
+   |     ^^^^^^^^^^^^^^^^^ `lx` changes here
+26 |     console.log(t);
+   |                 - `t` is still used here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: keep a copy: const t = r.src.slice(0, 1).toString();
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

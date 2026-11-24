@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0401/c13-string-literal.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `&Slice<u8>`, found `string`
+ --> tests/compile/EN0401/c13-string-literal.fail.en:3:7
+  |
+3 | count("Ada"); //~ EN0401 "mismatched types: expected `&Slice<u8>`, found `string`"
+  |       ^^^^^ this is `string`
+4 |
+5 | private function count(bytes: &Slice<u8>): isize {
+  |                        ----------------- `&Slice<u8>` is required by this parameter
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

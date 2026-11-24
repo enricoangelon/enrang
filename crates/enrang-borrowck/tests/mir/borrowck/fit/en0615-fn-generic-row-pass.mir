@@ -1,0 +1,56 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/fn-generic-row.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/fn-generic-row.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64; // n
+  let _3: void temp;
+  let _4: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 1: i64;
+    _4 = &_2 [explicit];
+    _3 = growVia<i64>(const fn head: fn(&i64) => &i64, move _4, const 5: i64) -> bb1;
+  }
+  bb1: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn growVia<T>(_1: fn(&T) => &T, _2: &T, _3: T) -> void {
+  let _1: fn(&T) => &T; // f
+  let _2: &T; // x
+  let _3: T; // v
+  let _4: &T temp;
+  let _5: &T temp;
+  let _6: T temp;
+  bb0: {
+    _5 = &*_2 [reborrow];
+    _4 = fnptr(copy _1)(move _5) -> bb1;
+  }
+  bb1: {
+    _6 = move _3;
+    check_class(*_4, assign, ref);
+    drop(*_4) [assign];
+    check_class(*_4, assign, ref);
+    *_4 = move _6;
+    drop(_6);
+    storage_dead(_6);
+    drop(_3);
+    return;
+  }
+}
+
+@private fn head(_1: &i64) -> &i64 {
+  let _1: &i64; // s
+  let _2: &i64 temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = move _2;
+    return;
+  }
+}

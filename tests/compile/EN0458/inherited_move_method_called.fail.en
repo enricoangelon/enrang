@@ -1,0 +1,19 @@
+const max = new LoudDog("Max");
+const n = max.takeName(); //~ EN0458 "`move` method not declared in the receiver's class"
+console.log(n);
+
+public class Animal {
+  public constructor(public name: string) {}
+
+  public move takeName(): string {
+    return this.name;
+  }
+}
+
+public class LoudDog extends Animal {
+  private tricks: string[] = [];
+
+  public destructor() {
+    console.log("bye");
+  }
+}

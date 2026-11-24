@@ -1,0 +1,19 @@
+//! covers: H31
+let pt = new Pt();
+pt.xs.push(1);
+pt.xs.push(2);
+const [u, v] = lanes(&pt, false);
+const e = &u[0];
+v.push(3); //~ EN0614
+console.log(*e);
+
+public class Pt {
+  public xs: i64[] = [];
+  public ys: i64[] = [];
+}
+
+public function lanes(p: &Pt, c: bool): [&i64[], &i64[]] {
+  const s = p;
+  const second = c ? &p.ys : &s.xs;
+  return [&p.xs, second];
+}

@@ -1,0 +1,8 @@
+// SPEC 8.3, `Box<T>`: `alloc/box`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `T` alone may be an interface (SPEC 4.1).
+@lang("box") public final class Box<T> {
+  private p: *T;
+  public constructor(v: T) {}
+  public move unbox(): T;
+  public clone(): Box<T> where T extends Clone;
+}

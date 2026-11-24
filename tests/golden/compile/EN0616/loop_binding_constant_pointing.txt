@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0616/loop_binding_constant_pointing.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `firstOf` returns a reference that may point at a constant
+ --> tests/compile/EN0616/loop_binding_constant_pointing.fail.en:2:1
+  |
+2 | *firstOf() = 1; //~ EN0616 "`firstOf` returns a reference that may point at a constant"
+  | ^^^^^^^^^^^^^^ written here
+  |
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

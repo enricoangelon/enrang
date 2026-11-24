@@ -1,0 +1,29 @@
+//! covers: H30
+const tbl: u8[] = [0];
+let buf: u8[] = [1];
+const other: u8[] = [5];
+Copier.peekAlias(&tbl, &buf, &other);
+
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public static make(s: &u8[], d: &u8[]): Copier {
+    return new Copier(s, d);
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+  public static peekAlias(s: &u8[], d: &u8[], t: &u8[]): void {
+    let w = Copier.make(s, d);
+    const p = t;
+    w.src = p;
+    console.log(*w.peek());
+  }
+}

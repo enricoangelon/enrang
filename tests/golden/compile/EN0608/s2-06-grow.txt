@@ -1,0 +1,30 @@
+$ enrang check tests/compile/EN0608/s2-06-grow.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `f` can change `xs`, but `c` is `const`
+ --> tests/compile/EN0608/s2-06-grow.fail.en:2:3
+  |
+2 | f(&c); //~ EN0608
+  |   ^^ `f` writes through it
+  |
+help: declare it `let c`
+  |
+1 | let c: i64[] = [1];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error[EN0706]: `w` cannot change while `e` still points into it
+ --> tests/compile/EN0608/s2-06-grow.fail.en:5:3
+  |
+4 | const e = &w[0];
+  |           ----- shared borrow of `w` starts here, held by `e`
+5 | f(&w); //~ EN0706
+  |   ^^ `w` changes here
+6 | console.log(*e);
+  |              - `e` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

@@ -1,0 +1,7 @@
+$ enrang explain EN0315
+[exit 0]
+[stdout]
+EN0315: module has a stale interface file and no source
+
+No explain page yet: it arrives with milestone M4, and this is milestone M3.
+[stderr]

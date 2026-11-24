@@ -1,0 +1,33 @@
+//! covers: H34
+const tbl: u8[] = [0];
+let buf: u8[] = [1];
+const other: u8[] = [5];
+let c = Copier.rebuild(new Copier(&tbl, &buf), &other);
+c.step();
+console.log(*c.peek());
+console.log(buf);
+
+public final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public static make(s: &u8[], d: &u8[]): Copier {
+    return new Copier(s, d);
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+  public retarget(v: &u8[]): void {
+    this.src = v;
+  }
+  public static rebuild(w: Copier, s: &u8[]): Copier {
+    let c = new Copier(s, w.dst);
+    return c;
+  }
+}

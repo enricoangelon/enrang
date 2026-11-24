@@ -1,0 +1,10 @@
+//! covers: H31
+let root = new Node(); root.kids.push(new Node()); root.kids.push(new Node()); root.kids[1].val.push(5); let w = new Walker(&root); const p = w.pair(false);
+if (p != null) {
+  const [top, kid] = p; const e3 = &kid.val[0];
+  console.log(*e3, top.kids.length());
+}
+
+public class Node { public val: i64[] = []; public kids: Node[] = []; }
+
+public class Walker { private cur: &Node; public constructor(n: &Node) { this.cur = n; } public pair(c: bool): [&Node, &Node] | null { let a: &Node = this.cur; let n = 0; for (const x of this.cur.kids.slice(0)) { if (n == 1) { return [a, x]; } if (c) { a = x; } n += 1; } return null; } }

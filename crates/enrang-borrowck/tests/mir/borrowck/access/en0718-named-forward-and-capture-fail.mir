@@ -1,0 +1,77 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0718/named-forward-and-capture.fail.en. Its row's codes: EN0718.
+module "tests/compile/EN0718/named-forward-and-capture.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int; // n
+  let _3: () => void; // f
+  let _4: &int temp;
+  let _5: [&int] temp;
+  let _6: void temp;
+  let _7: () => void temp;
+  let _8: () => void temp;
+  let _9: &(() => void) temp;
+  let _10: [&(() => void)] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 0: int;
+    storage_live(_3);
+    _4 = &_2 [closure-capture];
+    _5 = env(move _4);
+    _3 = closure(arrow#0, _5);
+    _7 = closure_reborrow(_3);
+    _9 = &_3 [closure-capture]; //~ EN0718 "`f` is used twice at once"
+    _10 = env(move _9);
+    _8 = closure(arrow#1, _10);
+    _6 = both(move _7, move _8) -> bb1;
+  }
+  bb1: {
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+arrow#0 of statements (_1: &[&int]) -> void {
+  let _1: &[&int] env;
+  let _2: int temp;
+  capture n: &int path;
+  bb0: {
+    _2 = copy *(*_1).0;
+    *(*_1).0 = checked_add(copy _2, const 1: int);
+    return;
+  }
+}
+
+arrow#1 of statements (_1: &[&(() => void)]) -> void {
+  let _1: &[&(() => void)] env;
+  let _2: void temp;
+  let _3: () => void temp;
+  capture f: &(() => void) path;
+  bb0: {
+    _3 = closure_reborrow(*(*_1).0);
+    _2 = closure _3() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn both(_1: () => void, _2: () => void) -> void {
+  let _1: () => void; // a
+  let _2: () => void; // b
+  let _3: void temp;
+  let _4: void temp;
+  bb0: {
+    _3 = closure _1() -> bb1;
+  }
+  bb1: {
+    _4 = closure _2() -> bb2;
+  }
+  bb2: {
+    return;
+  }
+}

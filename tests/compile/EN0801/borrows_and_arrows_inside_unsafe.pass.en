@@ -1,0 +1,12 @@
+private unsafe let count: i64 = 0;
+
+public unsafe function peek(p: *i64): i64 {
+  const r = &*p;
+  const c = &count;
+  return *r + *c;
+}
+
+public function show(): void {
+  const xs = [1, 2];
+  unsafe { xs.forEach(x => console.log(count)); }
+}

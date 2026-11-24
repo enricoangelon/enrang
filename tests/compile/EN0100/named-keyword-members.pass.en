@@ -1,0 +1,27 @@
+//! row: `node.type`, `new Point { type: 1 }`, `public
+const node = new Node { type: 1 };
+console.log(node.type);
+const p = new Point { type: 1 };
+console.log(p.type);
+const s = Stack<i64>.empty();
+const xs = i64[].withCapacity(8);
+
+public class Node {
+  public type: i64 = 0;
+}
+
+public class Point {
+  public type: i64 = 0;
+}
+
+public class Token {
+  public type: string;
+}
+
+public class Stack<T> {
+  private items: T[] = [];
+
+  public static empty(): Stack<T> {
+    return new Stack<T> {};
+  }
+}

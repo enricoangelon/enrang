@@ -1,0 +1,55 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/l7.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/l7.pass";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: int; // count
+  let _3: &int; // r
+  let _4: void temp;
+  let _5: &int temp;
+  let _6: void temp;
+  let _7: &int temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 0: int;
+    storage_live(_3);
+    _3 = &_2 [explicit];
+    _5 = &*_3 [reborrow];
+    _4 = form log(move _5) -> bb1;
+  }
+  bb1: {
+    _7 = &_2 [hidden-arg];
+    _6 = relay(move _7) -> bb2;
+  }
+  bb2: {
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private @local fn inc() -> void {
+  let _1: &int arg; // count
+  let _2: int temp;
+  bb0: {
+    _2 = copy *_1;
+    *_1 = checked_add(copy _2, const 1: int);
+    return;
+  }
+}
+
+@private @local fn relay() -> void {
+  let _1: &int arg; // count
+  let _2: void temp;
+  let _3: &int temp;
+  bb0: {
+    _3 = &*_1 [hidden-arg];
+    _2 = inc(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

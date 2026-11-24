@@ -1,0 +1,5 @@
+const a = "a".toString();
+const r = first(&a);
+console.log(r);
+
+public function first(s: &string): &string { return s; }

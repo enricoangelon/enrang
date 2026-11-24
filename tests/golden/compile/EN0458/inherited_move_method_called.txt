@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0458/inherited_move_method_called.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0458]: `move` method not declared in the receiver's class
+ --> tests/compile/EN0458/inherited_move_method_called.fail.en:2:11
+  |
+2 | const n = max.takeName(); //~ EN0458 "`move` method not declared in the receiver's class"
+  |           ^^^^^^^^^^^^^^ `LoudDog` inherits `takeName` from `Animal`
+  |
+help: override `takeName` in `LoudDog`
+  = explain: run `enrang explain EN0458`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,8 @@
+//! covers: H31
+let n1 = new Node(); n1.val.push(1); n1.kids.push(new Node()); const [all, v] = pick(&n1, true); const e1 = &v[0];
+all.val = []; //~ EN0616
+console.log(*e1);
+
+public class Node { public val: i64[] = []; public kids: Node[] = []; }
+
+public function pick(p: &Node, c: bool): [&Node, &i64[]] { const q: &Node = c ? p : &p.kids[0]; return [q, &p.val]; }

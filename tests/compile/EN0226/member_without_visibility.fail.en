@@ -1,0 +1,6 @@
+public class Point {
+  public x: i64 = 0;
+  norm(): i64 { //~ EN0226
+    return this.x;
+  }
+}

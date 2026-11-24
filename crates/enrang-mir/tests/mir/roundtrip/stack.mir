@@ -1,0 +1,30 @@
+@lang("failure") class Failure { }
+@lang("result") enum Result<T, E> { Ok { 0: T }, Err { 0: E } }
+class Stack<T> {
+  items: T[];
+}
+fn Stack<T>::pop(let _1: &Stack<T>) -> T | null perms(write) sources() result none;
+
+fn pop2(_1: &Stack<i64>) -> Result<i64> {
+  let _2: i64 | null; // v
+  let _3: &Stack<i64> temp;
+  let _4: u32 temp;
+  let _5: i64 temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = Stack<i64>::pop(move _3) -> bb1;
+  }
+  bb1: {
+    _4 = discriminant(_2);
+    switch move _4 [0: bb2, otherwise: bb3];
+  }
+  bb2: {
+    unreachable;
+  }
+  bb3: {
+    check_tag(_2, Present);
+    _5 = copy (_2 as Present).0;
+    _0 = Result<i64>::Ok { 0: move _5 };
+    return;
+  }
+}

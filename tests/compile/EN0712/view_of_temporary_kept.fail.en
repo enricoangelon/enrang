@@ -1,0 +1,2 @@
+const v = ("a" + "b").slice(0, 1); //~ EN0712 "the temporary is dropped while `v` still borrows it"
+console.log(v);

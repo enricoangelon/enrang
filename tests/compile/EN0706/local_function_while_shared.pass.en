@@ -1,0 +1,5 @@
+let count = 0;
+function inc(): void { count += 1; }
+inc();
+const r = &count;
+console.log(r);

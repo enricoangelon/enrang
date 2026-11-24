@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0453/unused_result_of_trim.fail.en
+[exit 0]
+[stdout]
+[stderr]
+warning[EN0453]: the result of `trim` is not used
+ --> tests/compile/EN0453/unused_result_of_trim.fail.en:2:1
+  |
+2 | name.trim(); //~ EN0453 "the result of `trim` is not used"
+  | ^^^^^^^^^^^ `trim` returns a new string and leaves `name` as it was
+  |
+help: keep it
+  |
+2 | name = name.trim(); //~ EN0453 "the result of `trim` is not used"
+  | +++++++

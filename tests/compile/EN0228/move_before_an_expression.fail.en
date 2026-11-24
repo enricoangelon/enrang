@@ -1,0 +1,4 @@
+let queue: string[] = [];
+const task = "build";
+queue.push(move task); //~ EN0228
+const copy = move queue; //~ EN0228

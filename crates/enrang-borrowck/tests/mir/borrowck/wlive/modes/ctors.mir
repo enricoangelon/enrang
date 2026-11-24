@@ -1,0 +1,69 @@
+// Construction (plan d.7 rules (b), (c)): a `new` evaluates its values, then the
+// destination's auto-borrow, and passes `this` first (plan c.10, plan.md:1070;
+// plan i.28), so a constructor that stores into a class writing through its
+// fields makes both borrows exclusive, one whose parameter is Read leaves the
+// value's shared; `super(...)` passes the reborrowed `this` through
+// `convert(upcast, ..)` first (plan c.7, plan.md:1001), and `Convert` passes
+// write-liveness back to the reborrow (rule (c)).
+// MIR shapes: `set_table(dest, D)`, values, `_r = &dest [auto-borrow]`,
+// `D::#ctor(move _r, ..)` (plan c.10; verify/newobj.mir); `_t = &*_1 [reborrow]`,
+// `convert(upcast, move _t)`, `Base::#ctor(..)` (plan c.7; verify/ctor.mir).
+class Grower writes_through_fields {
+  v: &i64;
+}
+fn Grower::#ctor(_1: &Grower, _2: &i64) -> void perms(write, write) sources() stores(1 -> 0) result none;
+class Reader {
+  v: &i64;
+}
+fn Reader::#ctor(_1: &Reader, _2: &i64) -> void perms(write, read) sources() stores(1 -> 0) result none;
+fn build(_1: &i64) -> Grower {
+  let _2: &i64 temp;
+  let _3: &Grower temp;
+  let _4: void temp;
+  bb0: {
+    set_table(_0, Grower);
+    _2 = &*_1 [reborrow]; // exclusive
+    _3 = &_0 [auto-borrow]; // exclusive
+    _4 = Grower::#ctor(move _3, move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+fn read(_1: &i64) -> Reader {
+  let _2: &i64 temp;
+  let _3: &Reader temp;
+  let _4: void temp;
+  bb0: {
+    set_table(_0, Reader);
+    _2 = &*_1 [reborrow]; // shared
+    _3 = &_0 [auto-borrow]; // exclusive
+    _4 = Reader::#ctor(move _3, move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+class Base {
+  r: &i64;
+}
+fn Base::#ctor(_1: &Base, _2: &i64) -> void perms(write, write) sources() stores(1 -> 0) result none;
+class Mid extends Base {
+  k: i64;
+}
+fn Mid::#ctor(_1: &Mid, _2: &i64) -> void {
+  let _3: void temp;
+  let _4: &Base temp;
+  let _5: &Mid temp;
+  let _6: &i64 temp;
+  bb0: {
+    _6 = &*_2 [reborrow]; // exclusive
+    _5 = &*_1 [reborrow]; // exclusive
+    _4 = convert(upcast, move _5);
+    _3 = Base::#ctor(move _4, move _6) -> bb1;
+  }
+  bb1: {
+    (*_1).k = const 0: i64;
+    return;
+  }
+}

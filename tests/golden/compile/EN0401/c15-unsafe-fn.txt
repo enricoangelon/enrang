@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/c15-unsafe-fn.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `fn() => void`, found `unsafe fn() => void`
+ --> tests/compile/EN0401/c15-unsafe-fn.fail.en:3:25
+  |
+3 | const h: fn() => void = g; //~ EN0401 "mismatched types: expected `fn() => void`, found `unsafe fn() => void`"
+  |                         ^ this is `unsafe fn() => void`
+  |          ------------ `fn() => void` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0615/fn-value-readonly-result.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `firstOrZero` returns a read-only reference, but `fn(xs: &Slice<i64>) => &i64` declares a writable one
+ --> tests/compile/EN0615/fn-value-readonly-result.fail.en:2:40
+  |
+2 | const z: fn(xs: &Slice<i64>) => &i64 = firstOrZero; //~ EN0615
+  |                                        ^^^^^^^^^^^ converted here
+  |
+help: if callers only read it, write `readonly` before the type's result: `fn(xs: &Slice<i64>) => readonly &i64`
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

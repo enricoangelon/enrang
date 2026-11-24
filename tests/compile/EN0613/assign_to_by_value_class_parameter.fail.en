@@ -1,0 +1,8 @@
+public function rename(u: User): User {
+  u = new User { name: "Bo" }; //~ EN0613 "cannot assign to parameter `u`"
+  return u;
+}
+
+public class User {
+  public name: string;
+}

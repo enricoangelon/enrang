@@ -7,8 +7,7 @@
 
 use std::sync::OnceLock;
 
-use enrang_base::Span;
-use enrang_diag::{Code, Diagnostic, Edit, Help, Severity, apply_fixes};
+use enrang_diag::{Code, Diagnostic, Edit, Help, Milestone, Severity, apply_fixes};
 use enrang_testkit::{Case, Harness, extract_cases, headings_without_cases};
 
 use crate::support::{Src, doc, same, strip_ansi};
@@ -39,7 +38,7 @@ fn source(id: &str) -> Src {
 pub type Builder = fn(&Src) -> Vec<Diagnostic>;
 
 /// Every builder. `register` fails the suite if this and the document disagree.
-pub const BUILDERS: [(&str, Builder); 23] = [
+pub const BUILDERS: [(&str, Builder); 24] = [
     ("G01", g01),
     ("G02", g02),
     ("G03", g03),
@@ -63,11 +62,13 @@ pub const BUILDERS: [(&str, Builder); 23] = [
     ("G21", g21),
     ("G22", g22),
     ("G23", g23),
+    ("G24", g24),
 ];
 
 /// The samples of SPEC 15 whose stderr is a diagnostic. The renderer owes them the
-/// same bytes, and a meta-test below finds any it has no builder for.
-pub const SAMPLE_BUILDERS: [(&str, Builder); 1] = [("S11", s11)];
+/// same bytes, and a meta-test below finds any it has no builder for. None has one
+/// now: S11's loop warning went with EN0719.
+pub const SAMPLE_BUILDERS: [(&str, Builder); 0] = [];
 
 /// Every case with a diagnostic to render.
 fn all_builders() -> impl Iterator<Item = (&'static str, Builder)> {
@@ -79,13 +80,13 @@ fn g01(s: &Src) -> Vec<Diagnostic> {
         Diagnostic::new(
             Code::EN0101,
             "missing `;` after this statement",
-            s.eol(2),
+            s.eol(1),
             "expected `;` here",
         )
         .from_typescript("Enrang has no automatic semicolon insertion.")
         .with_help(Help::machine(
             "add the semicolon",
-            vec![Edit::insert(s.line_end(2), ";")],
+            vec![Edit::insert(s.line_end(1), ";")],
         )),
     ]
 }
@@ -134,9 +135,9 @@ fn g04(s: &Src) -> Vec<Diagnostic> {
             "every value has one known type",
         )
         .with_help(Help::suggest(
-            "accept every type with a generic",
+            "accept every value type with a generic",
             vec![
-                Edit::insert(s.find("show").hi, "<T extends Display>"),
+                Edit::insert(s.find("show").hi, "<T>"),
                 Edit::replace(s.find("any"), "&T"),
             ],
         )),
@@ -203,153 +204,56 @@ fn g06(s: &Src) -> Vec<Diagnostic> {
 }
 
 fn g07(s: &Src) -> Vec<Diagnostic> {
+    let moved = s.on_line(4, "u");
     vec![
         Diagnostic::new(
             Code::EN0601,
-            "`u` is used after it was moved",
-            s.on_line(12, "u"),
+            "`u` was moved into `archive`",
+            s.on_line(5, "u"),
             "used here, after the move",
         )
         .with_secondary(
-            s.on_line(10, "u"),
+            s.on_line(3, "u"),
             "`u` owns this `User`, which is not Copy because it has a `string` field",
         )
         .with_secondary(
-            s.nth_on_line(11, "u", 0),
-            "moved here: `archive` takes `u: User` by value",
+            moved,
+            "`u` moves here, because `archive` takes `User`, not `&User`",
         )
         .from_typescript(
             "both names would share one object. In Enrang a value has one owner, so passing `u` hands it over.",
         )
         .with_help(Help::suggest(
-            "`archive` only reads `u`, so borrow it instead",
-            vec![Edit::insert(s.on_line(5, "User").lo, "&")],
+            "if `archive` only needs to look at it, change the parameter to `u: &User`",
+            vec![
+                Edit::insert(s.on_line(1, "User").lo, "&"),
+                Edit::insert(moved.lo, "&"),
+            ],
         ))
         .with_help(Help::suggest(
-            "or pass a copy",
-            vec![Edit::insert(s.on_line(11, "u").hi, ".clone()")],
+            "to keep your own, pass a copy: `archive(u.clone())`",
+            vec![Edit::insert(moved.hi, ".clone()")],
         )),
     ]
 }
 
 fn g08(s: &Src) -> Vec<Diagnostic> {
+    let source = s.on_line(2, "&queue");
     vec![
         Diagnostic::new(
             Code::EN0706,
-            "`queue` cannot change while `job` still points into it",
+            "cannot mutate `queue` while iterating over it",
             s.find("queue.push(\"retry\")"),
-            "`push` is a `mut` method, so it needs exclusive access to `queue`",
+            "conflicting mutable access",
         )
-        .with_secondary(
-            s.on_line(3, "job"),
-            "`job` points into `queue` for this turn",
-        )
-        .with_secondary(s.on_line(7, "job"), "`job` is used again here")
-        .why(
-            "`push` may move the array to a bigger block of memory, leaving `job` pointing at freed memory.",
-        )
-        .rule("a value has many shared borrows or one exclusive borrow, never both.")
-        .with_help(spread_help(s.on_line(3, "queue")))
+        .with_secondary(source, "immutable borrow begins here")
+        .note("structural mutations may invalidate the iterator")
         .with_help(Help::suggest(
-            "or keep a clone of `job` from before the change",
+            "collect new jobs separately, or loop over a copy",
             vec![
-                Edit::insert(s.line_start(4), "    const saved = job.clone();\n"),
-                Edit::replace(s.on_line(7, "job"), "saved"),
+                Edit::replace(s.on_line(2, "&"), "[..."),
+                Edit::insert(source.hi, "]"),
             ],
-        )),
-    ]
-}
-
-/// The edit that turns a `for...of` over a path into one over a copy (SPEC 4.13).
-fn spread_help(source: Span) -> Help {
-    Help::suggest(
-        "to loop over the items as they are now, iterate over a copy",
-        vec![
-            Edit::insert(source.lo, "[..."),
-            Edit::insert(source.hi, "]"),
-        ],
-    )
-}
-
-/// The warning of a loop that can change its own source (SPEC 5.6), with `access`
-/// the first statement that counts.
-fn en0719(name: &str, source: Span, access: Span) -> Diagnostic {
-    Diagnostic::new(
-        Code::EN0719,
-        format!("`{name}` can change inside this loop, so the loop may never stop"),
-        source,
-        "read again at the start of every turn",
-    )
-    .with_secondary(
-        access,
-        format!("`push` is a `mut` method, so it can change `{name}`"),
-    )
-    .note(
-        "a `for...of` loop over a path sees changes to its source: added items get turns and removed items do not.",
-    )
-}
-
-fn g21(s: &Src) -> Vec<Diagnostic> {
-    let source = s.on_line(3, "queue");
-    vec![
-        en0719("queue", source, s.find("queue.push(\"retry\")"))
-            .with_help(spread_help(source))
-            .with_help(Help::text(
-                "or, to keep the new items and lose this warning, use an index loop: `for (let i = 0; i < queue.length; i++)`",
-            )),
-    ]
-}
-
-fn g22(s: &Src) -> Vec<Diagnostic> {
-    vec![
-        Diagnostic::new(
-            Code::EN0438,
-            "`...` clones each element, and `T` has no `Clone` bound",
-            s.find("...xs"),
-            "each element of `xs` would be cloned here",
-        )
-        .with_secondary(s.on_line(1, "T"), "`T` is declared here")
-        .from_typescript(
-            "JS spread copies references to the same objects. In Enrang a value has one owner, so `...` copies the elements too.",
-        )
-        .with_help(Help::machine(
-            "require `Clone`",
-            vec![Edit::insert(s.on_line(1, "T").hi, " extends Clone")],
-        )),
-    ]
-}
-
-fn g23(s: &Src) -> Vec<Diagnostic> {
-    let source = s.on_line(3, "queue");
-    vec![
-        en0719("queue", source, s.find("queue.push(\"retry\")"))
-            .with_help(spread_help(source))
-            .with_help(Help::text(
-                "or, to keep the new items and lose this warning, use an index loop: `for (let i = 0; i < queue.length; i++)`",
-            )),
-        Diagnostic::new(
-            Code::EN0706,
-            "`queue` cannot change while `first` still points into it",
-            s.find("queue.clear()"),
-            "`clear` is a `mut` method, so it needs exclusive access to `queue`",
-        )
-        .with_secondary(
-            s.find("&queue[0]"),
-            "shared borrow of `queue` starts here, held by `first`",
-        )
-        .with_secondary(s.on_line(10, "first"), "`first` is used again here")
-        .rule("a value has many shared borrows or one exclusive borrow, never both.")
-        .with_help(Help::suggest(
-            "keep a copy instead of a reference",
-            vec![Edit::replace(s.find("&queue[0]"), "queue[0].clone()")],
-        )),
-    ]
-}
-
-fn s11(s: &Src) -> Vec<Diagnostic> {
-    vec![
-        en0719("work", s.on_line(22, "work"), s.find("work.push(v - 1)")).with_help(Help::text(
-            "to keep the new items and lose this warning, use an index loop: `for (let i = 0; i < work.length; i++)`",
         )),
     ]
 }
@@ -359,11 +263,11 @@ fn g09(s: &Src) -> Vec<Diagnostic> {
         Diagnostic::new(
             Code::EN0707,
             "cannot borrow `xs` as exclusive twice at the same time",
-            s.nth_on_line(9, "&mut xs", 1),
+            s.nth_on_line(8, "&xs", 1),
             "second exclusive borrow",
         )
         .with_secondary(
-            s.nth_on_line(9, "&mut xs", 0),
+            s.nth_on_line(8, "&xs", 0),
             "first exclusive borrow, still live until the call returns",
         )
         .rule("a value has many shared borrows or one exclusive borrow, never both.")
@@ -401,18 +305,18 @@ fn g11(s: &Src) -> Vec<Diagnostic> {
         Diagnostic::new(
             Code::EN0711,
             "`s` is dropped while `r` still borrows it",
-            s.on_line(7, "}"),
+            s.on_line(6, "}"),
             "`s` is dropped here",
         )
         .with_secondary(
-            s.nth_on_line(5, "s", 1),
+            s.nth_on_line(4, "s", 1),
             "`s` lives until the end of this block",
         )
         .with_secondary(
-            s.on_line(6, "&s"),
+            s.on_line(5, "&s"),
             "shared borrow of `s` starts here, held by `r`",
         )
-        .with_secondary(s.on_line(8, "r"), "the borrow is still in use here")
+        .with_secondary(s.on_line(7, "r"), "the borrow is still in use here")
         .with_help(Help::text(
             "declare `s` outside the block so it lives as long as `r`",
         )),
@@ -423,13 +327,13 @@ fn g12(s: &Src) -> Vec<Diagnostic> {
     vec![
         Diagnostic::new(
             Code::EN0501,
-            "this `match` does not handle every `Shape`",
+            "`match` doesn't handle `Shape.Empty`",
             s.nth_on_line(8, "s", 0),
             "missing `Shape.Empty`",
         )
         .with_secondary(s.on_line(4, "Empty"), "`Shape.Empty` is declared here")
         .with_help(Help::suggest(
-            "add the missing arm",
+            "add `Shape.Empty => ...`, or a `default` arm",
             vec![Edit::insert(
                 s.line_start(11),
                 "    Shape.Empty => panic(\"unhandled\"),\n",
@@ -445,7 +349,7 @@ fn g13(s: &Src) -> Vec<Diagnostic> {
             Code::EN0801,
             "writing through a raw pointer needs `unsafe`",
             s.find("VGA.writeVolatile(0x0741)"),
-            "`writeVolatile` dereferences `VGA`, a `*mut u16`",
+            "`writeVolatile` dereferences `VGA`, a `*u16`",
         )
         .rule(
             "`unsafe` grants exactly five powers; this one is \"dereference a raw pointer\". Nothing checks the address for you.",
@@ -472,7 +376,7 @@ fn g14(s: &Src) -> Vec<Diagnostic> {
             "register an allocator and give it memory with `heap.addBootRegions(boot)` in `kmain`",
             vec![Edit::insert(
                 s.line_start(1),
-                "@globalAllocator unsafe let heap: FreeListHeap;\n",
+                "@globalAllocator private unsafe let heap: FreeListHeap;\n",
             )],
         ))
         .with_help(Help::text(
@@ -508,10 +412,10 @@ fn g16(s: &Src) -> Vec<Diagnostic> {
             Code::EN0614,
             "`xs` is `const`, so `push` cannot change it",
             s.find("xs.push(1)"),
-            "`push` is a `mut` method",
+            "`push` changes `xs`",
         )
         .with_secondary(
-            s.on_line(2, "xs"),
+            s.on_line(1, "xs"),
             "declared `const` here: immutable all the way down",
         )
         .from_typescript(
@@ -519,40 +423,43 @@ fn g16(s: &Src) -> Vec<Diagnostic> {
         )
         .with_help(Help::machine(
             "make the binding mutable",
-            vec![Edit::replace(s.on_line(2, "const"), "let")],
+            vec![Edit::replace(s.on_line(1, "const"), "let")],
         )),
     ]
 }
 
 fn g17(s: &Src) -> Vec<Diagnostic> {
+    let argument = s.on_line(4, "a");
     vec![
         Diagnostic::new(
             Code::EN0612,
-            "`bump` changes its argument, so the call must say `&mut`",
-            s.on_line(7, "a"),
-            "expected `&mut i64[]`, found `i64[]`",
+            "missing `&`: `bump` takes a reference",
+            argument,
+            "expected `&i64[]`, found `i64[]`",
         )
         .note(
-            "shared borrows are implicit because they cannot change anything; mutation is always visible at the call.",
+            "a reference is only ever made by writing `&`; with no `&`, a value is moved or copied.",
         )
         .with_help(Help::machine(
-            "lend it exclusively",
-            vec![Edit::insert(s.on_line(7, "a").lo, "&mut ")],
+            "write `&a`",
+            vec![Edit::insert(argument.lo, "&")],
         )),
     ]
 }
 
 fn g18(s: &Src) -> Vec<Diagnostic> {
+    let declared = s.on_line(2, "inc");
     vec![
         Diagnostic::new(
             Code::EN0615,
-            "`inc` changes `this` but is not marked `mut`",
+            "`inc` changes the object, but `Counter` declares that it doesn't",
             s.find("this.n += 1"),
             "this write needs exclusive access to `this`",
         )
-        .with_help(Help::machine(
-            "mark the method `mut`",
-            vec![Edit::insert(s.find("inc").lo, "mut ")],
+        .with_secondary(declared, "declared here without `let`")
+        .with_help(Help::suggest(
+            "if implementations may change the object, write `let inc(): void;` in `Counter`",
+            vec![Edit::insert(declared.lo, "let ")],
         )),
     ]
 }
@@ -561,17 +468,14 @@ fn g19(s: &Src) -> Vec<Diagnostic> {
     vec![
         Diagnostic::new(
             Code::EN0701,
-            "a class field cannot hold a reference",
-            s.find("&string"),
-            "references live only in locals, parameters and return values",
+            "an array can't hold a `Lexer`, because `Lexer` holds a reference",
+            s.find("Lexer[]"),
+            "`Lexer` borrows through its field `src`",
         )
-        .with_help(Help::suggest(
-            "own the data",
-            vec![Edit::replace(s.find("&string"), "string")],
-        ))
-        .with_help(Help::text(
-            "or keep only `pos` in the class and pass `src: &string` to each method",
-        )),
+        .rule(
+            "a class that holds a reference lives only where a reference can: in locals, parameters, return values and fields of another such class.",
+        )
+        .with_help(Help::text("own the data: `private src: string;`")),
     ]
 }
 
@@ -581,12 +485,105 @@ fn g20(s: &Src) -> Vec<Diagnostic> {
             Code::EN0426,
             "this `Result` is not used, so an error would be lost silently",
             s.find("save(\"a\")"),
-            "returns `Result<void, string>`",
+            "returns `Result<void>`",
         )
         .from_typescript("a thrown exception cannot be ignored by accident, and neither can this.")
         .with_help(Help::machine(
             "discard it deliberately",
             vec![Edit::insert(s.find("save(\"a\")").lo, "void ")],
+        )),
+    ]
+}
+
+fn g21(s: &Src) -> Vec<Diagnostic> {
+    let source = s.on_line(2, "&q");
+    vec![
+        Diagnostic::new(
+            Code::EN0706,
+            "cannot reassign `q` during iteration",
+            s.on_line(4, "q = []"),
+            "cannot reassign while borrowed",
+        )
+        .with_secondary(source, "`q` is borrowed here")
+        .with_help(Help::suggest(
+            "iterate over `q.clone()` if reassignment is intentional",
+            vec![Edit::replace(source, "q.clone()")],
+        )),
+    ]
+}
+
+fn g22(s: &Src) -> Vec<Diagnostic> {
+    vec![
+        Diagnostic::new(
+            Code::EN0438,
+            "`...` clones each element, and `T` has no `Clone` bound",
+            s.find("...xs"),
+            "each element of `xs` would be cloned here",
+        )
+        .with_secondary(s.on_line(1, "T"), "`T` is declared here")
+        .from_typescript(
+            "JS spread copies references to the same objects. In Enrang a value has one owner, so `...` copies the elements too.",
+        )
+        .with_help(Help::machine(
+            "require `Clone`",
+            vec![Edit::insert(s.on_line(1, "T").hi, " extends Clone")],
+        )),
+    ]
+}
+
+fn g23(s: &Src) -> Vec<Diagnostic> {
+    let call = s.find("name.trim()");
+    vec![
+        Diagnostic::new(
+            Code::EN0453,
+            "the result of `trim` is not used",
+            call,
+            "`trim` returns a new string and leaves `name` as it was",
+        )
+        .with_help(Help::machine(
+            "keep it",
+            vec![Edit::insert(call.lo, "name = ")],
+        )),
+        Diagnostic::new(
+            Code::EN0706,
+            "`queue` cannot change while `first` still points into it",
+            s.find("queue.clear()"),
+            "`clear` changes `queue`, so it needs exclusive access to it",
+        )
+        .with_secondary(
+            s.find("&queue[0]"),
+            "shared borrow of `queue` starts here, held by `first`",
+        )
+        .with_secondary(s.on_line(8, "first"), "`first` is used again here")
+        .rule("a value has many shared borrows or one exclusive borrow, never both.")
+        .with_help(Help::suggest(
+            "keep a copy instead of a reference",
+            vec![Edit::replace(s.find("&queue[0]"), "queue[0].clone()")],
+        )),
+    ]
+}
+
+fn g24(s: &Src) -> Vec<Diagnostic> {
+    let call = s.find("super(name)");
+    let set = s.find("this.owner = owner;");
+    let both = s.span(
+        s.text.find("super(name);").expect("the call"),
+        s.text.find("this.owner = owner;").expect("the assignment") + "this.owner = owner;".len(),
+    );
+    vec![
+        Diagnostic::new(
+            Code::EN0610,
+            "`this.owner` is not set when `super(name)` runs",
+            call,
+            "`Animal`'s constructor runs here, before `this.owner` is set",
+        )
+        .with_secondary(set, "`this.owner` is set only here")
+        .from_typescript(
+            "TypeScript requires `super(...)` before any use of `this` (TS17009). Enrang sets a subclass's own fields first, so a base constructor that calls an override finds them set.",
+        )
+        .with_help(Help::machine(
+            "set `this.owner` before `super(name)`, because `Animal`'s constructor may call `Dog`'s methods",
+            vec![Edit::replace(both, "this.owner = owner;\n    super(name);")],
         )),
     ]
 }
@@ -667,6 +664,73 @@ fn snippet_text(line: &str) -> Option<&str> {
     Some(chars.as_str().strip_prefix(' ').unwrap_or(""))
 }
 
+/// The G cases `text` names, with a range such as `G07-G11` expanded.
+fn g_ids(text: &str) -> Vec<String> {
+    let number = |token: &str| -> Option<u32> {
+        let digits = token.strip_prefix('G')?;
+        let all_digits = digits.len() == 2 && digits.bytes().all(|b| b.is_ascii_digit());
+        all_digits.then(|| digits.parse().expect("two digits"))
+    };
+    let mut found = Vec::new();
+    for token in text.split(|c: char| !(c.is_ascii_alphanumeric() || c == '-')) {
+        if let Some(n) = number(token) {
+            found.push(format!("G{n:02}"));
+        } else if let Some((first, last)) = token.split_once('-')
+            && let (Some(first), Some(last)) = (number(first), number(last))
+        {
+            assert!(first < last, "`{token}` is no range");
+            found.extend((first..=last).map(|n| format!("G{n:02}")));
+        }
+    }
+    found
+}
+
+/// Each G case a row of TESTING 23 promises byte-exact, with the row's milestone.
+/// TESTING 18 takes a case's milestone from this table.
+fn byte_exact_milestones() -> Vec<(String, Milestone)> {
+    let section = doc("TESTING.md")
+        .split_once("## 23. Definition of done per milestone")
+        .expect("TESTING has section 23")
+        .1;
+    let section = section.split("\n## ").next().expect("the section");
+    let mut named = Vec::new();
+    for line in section.lines() {
+        let Some(rest) = line.strip_prefix("| **") else {
+            continue;
+        };
+        let written = rest.split("**").next().expect("a milestone");
+        let milestone = MILESTONES
+            .into_iter()
+            .find(|milestone| milestone.to_string() == written)
+            .unwrap_or_else(|| panic!("`{written}` is no milestone"));
+        // Only a clause that promises the bytes: M0's "hand-built G01 shape" does not.
+        for clause in line.split([';', '|']) {
+            if clause.trim_end().ends_with("byte-exact") {
+                named.extend(g_ids(clause).into_iter().map(|id| (id, milestone)));
+            }
+        }
+    }
+    assert!(
+        !named.is_empty(),
+        "TESTING 23 promises no G case byte-exact"
+    );
+    named
+}
+
+const MILESTONES: [Milestone; 11] = [
+    Milestone::M0,
+    Milestone::M1,
+    Milestone::M2,
+    Milestone::M3,
+    Milestone::M4,
+    Milestone::M5,
+    Milestone::M6,
+    Milestone::M7,
+    Milestone::M8,
+    Milestone::M9,
+    Milestone::M10,
+];
+
 fn register_meta(h: &mut Harness) {
     h.case("golden/every G heading has a marker", || {
         let missing = headings_without_cases(doc("SPEC.md")).expect("the document scans");
@@ -697,6 +761,45 @@ fn register_meta(h: &mut Harness) {
                 .collect();
             let built: Vec<&str> = all_builders().map(|(id, _)| id).collect();
             assert_eq!(with_diagnostics, built);
+        },
+    );
+    h.case("golden/the G reader expands ranges", || {
+        assert_eq!(
+            g_ids("G07-G11, G16 byte-exact"),
+            ["G07", "G08", "G09", "G10", "G11", "G16"]
+        );
+        assert_eq!(g_ids("G01-G04 byte-exact"), ["G01", "G02", "G03", "G04"]);
+        assert_eq!(g_ids("G15 byte-exact; GenExpr, G2, G123"), ["G15"]);
+    });
+    h.case(
+        "golden/TESTING 23 names each G case once, no earlier than its codes",
+        || {
+            let named = byte_exact_milestones();
+            for (id, _) in BUILDERS {
+                let rows: Vec<Milestone> = named
+                    .iter()
+                    .filter(|(named, _)| named == id)
+                    .map(|(_, milestone)| *milestone)
+                    .collect();
+                assert_eq!(rows.len(), 1, "{id} is byte-exact at {rows:?}");
+                let (_, diags) = built(id);
+                for diag in &diags {
+                    assert!(
+                        diag.code.since() <= rows[0],
+                        "{id} is byte-exact at {}, before {} fires at {}",
+                        rows[0],
+                        diag.code,
+                        diag.code.since()
+                    );
+                }
+            }
+            for (id, milestone) in &named {
+                let known = BUILDERS.iter().any(|(case, _)| case == id);
+                assert!(
+                    known,
+                    "TESTING 23 names {id} at {milestone}, a case SPEC 14 lacks"
+                );
+            }
         },
     );
     h.case("golden/the comparison can fail", || {

@@ -1,0 +1,12 @@
+// SPEC 8.4, `fs`: `os/windows/fs`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+public enum IoError {
+  NotFound,
+  PermissionDenied,
+  Other { code: i32 },
+}
+
+public function readFile(const p: &string): Result<string, IoError> { unreachable(); }
+
+public function writeFile(const p: &string, const s: &string): Result<void, IoError> {
+  unreachable();
+}

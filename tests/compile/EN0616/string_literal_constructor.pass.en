@@ -1,0 +1,12 @@
+let lit: string = "literal";
+const k = new Sink(&lit);
+
+public class Sink {
+  private out: &string;
+  public constructor(o: &string) {
+    this.out = o;
+  }
+  public grow(): void {
+    *this.out += "!";
+  }
+}

@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0455/s2-33-err.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0455]: `msg` could be a success or an error here
+ --> tests/compile/EN0455/s2-33-err.fail.en:9:12
+  |
+9 |     return msg; //~ EN0455 "`msg` could be a success or an error here"
+  |            ^^^ `Err` would take this as it is
+  |
+help: write `Ok(msg)` or `Err(msg)`
+  = explain: run `enrang explain EN0455`
+
+error[EN0455]: `name.toUpperCase()` could be a success or an error here
+  --> tests/compile/EN0455/s2-33-err.fail.en:22:10
+   |
+22 |   return name.toUpperCase(); //~ EN0455 "could be a success or an error here"
+   |          ^^^^^^^^^^^^^^^^^^ `Err` would take this as it is
+   |
+help: write `Ok(name.toUpperCase())` or `Err(name.toUpperCase())`
+   = explain: run `enrang explain EN0455`
+
+error: aborting due to 2 previous errors

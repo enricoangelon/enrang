@@ -1,0 +1,4 @@
+public function longest(): &string {
+  const s = "owned" + "!";
+  return &s; //~ EN0710 "cannot return a reference to local `s`"
+}

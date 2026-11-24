@@ -1,0 +1,19 @@
+const ada: string = "Ada";
+const grace: string = "Grace";
+const pick: fn(a: &string, b: &string) => &string = first;
+console.log(pick(&ada, &grace));
+let n = 5;
+const s = new Slot { f: show };
+s.f(&n);
+
+private function first(a: &string, b: &string): &string {
+  return a;
+}
+
+private function show(x: &i64): void {
+  console.log(x);
+}
+
+public class Slot {
+  public f: fn(let x: &i64) => void;
+}

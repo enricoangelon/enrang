@@ -1,0 +1,6 @@
+const data: u8[] = [1, 2];
+fill(&data); //~ EN0608 "`fill` can change `buf`, but `data` is `const`"
+
+function fill(let buf: &Slice<u8>): void {
+  console.log(buf.length());
+}

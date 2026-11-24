@@ -1,0 +1,7 @@
+let a: i64[] = [1];
+let w: W | null = new W(&a[0]);
+const r = &w;
+console.log(r);
+grow(&a);
+function grow(x: &i64[]): i64 { x.push(1); x.push(2); x.push(3); return 0; }
+public class W { private r: &i64; public constructor(r: &i64) { this.r = r; } public get(): i64 { return *this.r; } }

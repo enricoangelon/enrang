@@ -1,0 +1,18 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0604/element_moved_out_through_reference.fail.en. Its row's codes: EN0604.
+module "tests/compile/EN0604/element_moved_out_through_reference.fail";
+
+fn itemAt(_1: &string[], _2: isize) -> string {
+  let _1: &string[]; // xs
+  let _2: isize; // i
+  let _3: isize temp;
+  let _4: isize temp;
+  bb0: {
+    _3 = copy _2;
+    _4 = len(*_1);
+    check_bounds(copy _3, copy _4);
+    _0 = move (*_1)[_3]; //~ EN0604 "cannot move out of `xs[i]`"
+    return;
+  }
+}

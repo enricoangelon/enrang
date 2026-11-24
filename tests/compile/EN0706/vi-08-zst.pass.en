@@ -1,0 +1,15 @@
+let units: Silent[] = [];
+units.push(new Silent {});
+const r: &Speaker | null = &units[0];
+console.log(r == null);
+console.log(r!.speak());
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Silent implements Speaker {
+  public speak(): string {
+    return "...";
+  }
+}

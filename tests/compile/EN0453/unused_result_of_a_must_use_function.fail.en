@@ -1,0 +1,11 @@
+const data: u8[] = [1, 2, 3];
+checksum(&data); //~ EN0453 "the result of `checksum` is not used"
+
+@mustUse
+public function checksum(data: &Slice<u8>): u32 {
+  let sum: u32 = 0;
+  for (const b of data) {
+    sum = sum + (b as u32);
+  }
+  return sum;
+}

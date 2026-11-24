@@ -1,0 +1,4 @@
+const s = "héllo";
+const cp = s.codePointAt(1);
+const by = s.byteAt(0);
+console.log(cp, by);

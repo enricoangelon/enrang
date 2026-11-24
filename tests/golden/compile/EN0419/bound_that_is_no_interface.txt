@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0419/bound_that_is_no_interface.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `i64` can't be a bound
+ --> tests/compile/EN0419/bound_that_is_no_interface.fail.en:1:33
+  |
+1 | private function show<T extends i64>(x: &T): void {} //~ EN0419 "`i64` can't be a bound"
+  |                                 ^^^ a bound names an interface or a class
+  |
+  = explain: run `enrang explain EN0419`
+
+error: aborting due to 1 previous error

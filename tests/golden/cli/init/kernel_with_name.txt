@@ -1,0 +1,7 @@
+$ enrang init hello --kernel
+[exit 2]
+[stdout]
+[stderr]
+error: `enrang init --kernel` arrives with milestone M9
+note: M9 creates a project for a freestanding kernel
+note: this is milestone M3, so nothing was done

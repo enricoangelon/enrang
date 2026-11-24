@@ -1,0 +1,5 @@
+import { Part } from "./parts.pass";
+import { Part } from "./parts.pass"; //~ EN0307 "`Part` is defined twice"
+
+const p = new Part { id: 1 };
+console.log(p);

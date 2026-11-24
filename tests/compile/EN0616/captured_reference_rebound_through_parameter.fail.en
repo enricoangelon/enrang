@@ -1,0 +1,12 @@
+let a: i64 = 1;
+let r: &i64 = &a;
+const xs: i64[] = [1, 2];
+xs.forEach((x: &i64) => { r = x; }); //~ EN0616 "cannot repoint captured `r` inside the arrow"
+apply((x: &i64): void => { r = x; }); //~ EN0616 "cannot repoint captured `r` inside the arrow"
+const f = (x: &i64): void => { r = x; }; //~ EN0616 "cannot repoint captured `r` inside the arrow"
+console.log(*r);
+
+private function apply(g: (x: &i64) => void): void {
+  let k: i64 = 0;
+  g(&k);
+}

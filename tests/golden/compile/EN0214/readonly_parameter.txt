@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0214/readonly_parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0214]: `readonly` is not part of a type here
+ --> tests/compile/EN0214/readonly_parameter.fail.en:1:25
+  |
+1 | public function show(x: readonly &i64): void { //~ EN0214
+  |                         ^^^^^^^^ only a reference field's type or a return type takes `readonly`
+  |
+  = note: a reference is written `&T`, and what the function does through it is inferred from its body
+help: remove `readonly`
+  |
+1 | public function show(x: &i64): void { //~ EN0214
+  |                         ~
+  = explain: run `enrang explain EN0214`
+
+error: aborting due to 1 previous error

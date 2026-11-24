@@ -1,0 +1,29 @@
+//! target: x86_64-windows
+@dll("kernel32.dll") public declare function ExitProcess(code: u32): never;
+
+@dll("kernel32.dll") public declare function Mixed(
+  a: i8,
+  b: u64,
+  c: f64,
+  d: bool,
+  e: usize,
+  p: *u8,
+  q: *u8 | null,
+  k: Kind,
+  f: fn(n: i32) => i32,
+  g: (fn(n: i32) => i32) | null,
+  h: @abi("win64") unsafe fn(p: *u8) => void,
+): *u16;
+
+public type EfiPrint = @abi("win64") unsafe fn(self: *u8, s: *u16) => usize;
+
+public type SysCb = @abi("sysv") fn(n: i32) => void;
+
+@abi("win64") public function exported(n: i32): i32 { return n; }
+
+@abi("sysv") public function exported2(p: *u8): void {}
+
+public enum Kind {
+  A,
+  B,
+}

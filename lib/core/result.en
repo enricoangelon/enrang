@@ -1,0 +1,16 @@
+// SPEC 8.2, `Result` (4.3, 6): `core/result`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `Result<T>` is `Result<T, Failure>` by the compiler's rule on this item (SPEC 4.3).
+@lang("result") public enum Result<T, E extends Error> {
+  Ok { value: T },
+  Err { error: E },
+}
+
+@lang("failure") public final class Failure {
+  private text: string;
+  public fmt(let f: &Formatter): void;
+}
+
+@lang("ok") public function Ok<T, E>(value: T): Result<T, E> { return Result.Ok { value: value }; }
+
+// `Ok()` means `Ok(void)` (SPEC 6).
+public function Ok<E>(): Result<void, E> { unreachable(); }

@@ -1,0 +1,4 @@
+//! covers: C07
+const x: i64 = 5;
+const r: &(i64 | null) = &x; //~ EN0401 "mismatched types"
+console.log(r);

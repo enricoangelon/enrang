@@ -1,0 +1,1 @@
+public function* count(): void {} //~ EN1002 "generators are not supported yet"

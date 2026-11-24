@@ -1,0 +1,173 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/inf-04-read-bit.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/inf-04-read-bit.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::length(_1: &Slice<T>) -> isize;
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+class Base {
+  private dst: &Slice<u8>;
+}
+class Sub extends Base {
+  private extra: readonly &Slice<u8>;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: u8[]; // k
+  let mut _3: u8[]; // x
+  let mut _4: Sub; // s
+  let _5: &u8[] temp;
+  let _6: &Slice<u8> temp;
+  let _7: &u8[] temp;
+  let _8: &Slice<u8> temp;
+  let _9: &Sub temp;
+  let _10: void temp;
+  let _11: &Base; // r
+  let _12: &Sub temp;
+  let _13: void temp;
+  let _14: &u8[] temp;
+  let _15: &Slice<u8> temp;
+  let _16: &Base temp;
+  let _17: &Slice<u8>; // tok
+  let _18: &Sub temp;
+  let _19: void temp;
+  let _20: &u8[] temp;
+  let _21: void temp;
+  let _22: &Slice<u8> temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 0: u8);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<u8>(const 1: u8, const 2: u8, const 3: u8);
+    storage_live(_4);
+    set_table(_4, Sub);
+    _5 = &_2 [explicit];
+    _6 = convert(array_to_slice, move _5);
+    _7 = &_2 [explicit];
+    _8 = convert(array_to_slice, move _7);
+    _9 = &_4 [auto-borrow];
+    _10 = Sub::#ctor(move _9, move _6, move _8) -> bb1;
+  }
+  bb1: {
+    storage_live(_11);
+    _12 = &_4 [explicit];
+    _11 = convert(upcast, move _12);
+    _14 = &_3 [explicit];
+    _15 = convert(array_to_slice, move _14);
+    _16 = &*_11 [reborrow];
+    _13 = virtual Base::retarget [copy _16](move _16, move _15) -> bb2;
+  }
+  bb2: {
+    storage_live(_17);
+    _18 = &_4 [auto-borrow];
+    _17 = Sub::peek(move _18) -> bb3;
+  }
+  bb3: {
+    _20 = &_3 [auto-borrow];
+    _19 = "alloc/array"::Array<u8>::push(move _20, const 4: u8) -> bb4;
+  }
+  bb4: {
+    _22 = &*_17 [reborrow];
+    _21 = form log(move _22) -> bb5;
+  }
+  bb5: {
+    storage_dead(_17);
+    storage_dead(_11);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Base::#ctor(_1: &Base, _2: &Slice<u8>) -> void {
+  let _1: &Base; // this
+  let _2: &Slice<u8>; // d
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).dst = move _3;
+    return;
+  }
+}
+
+fn Base::retarget(_1: &Base, _2: &Slice<u8>) -> void {
+  let _1: &Base; // this
+  let _2: &Slice<u8>; // v
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).dst = move _3;
+    return;
+  }
+}
+
+fn Sub::#ctor(_1: &Sub, _2: &Slice<u8>, _3: &Slice<u8>) -> void {
+  let _1: &Sub; // this
+  let _2: &Slice<u8>; // d
+  let _3: &Slice<u8>; // e
+  let _4: &Slice<u8> temp;
+  let _5: void temp;
+  let _6: &Slice<u8> temp;
+  let _7: &Sub temp;
+  let _8: &Base temp;
+  bb0: {
+    _4 = &*_3 [reborrow];
+    (*_1).extra = move _4;
+    _6 = &*_2 [reborrow];
+    _7 = &*_1 [reborrow];
+    _8 = convert(upcast, move _7);
+    _5 = Base::#ctor(move _8, move _6) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Sub::peek(_1: &Sub) -> readonly &Slice<u8> {
+  let _1: &Sub; // this
+  let _2: isize | null temp;
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _2 = present(const 1: isize);
+    _3 = copy (*_1).extra;
+    _0 = "core/slice"::Slice<u8>::slice(move _3, const 0: isize, move _2, const 2: isize) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@override fn Sub::retarget(_1: &Sub, _2: &Slice<u8>) -> void {
+  let _1: &Sub; // this
+  let _2: &Slice<u8>; // v
+  let _3: void temp;
+  let _4: isize temp;
+  let _5: &Slice<u8> temp;
+  let _6: &isize temp;
+  bb0: {
+    _5 = &*_2 [reborrow];
+    _4 = "core/slice"::Slice<u8>::length(move _5) -> bb1;
+  }
+  bb1: {
+    _6 = &_4 [temp-arg];
+    _3 = form log(move _6) -> bb2;
+  }
+  bb2: {
+    storage_dead(_4);
+    return;
+  }
+}

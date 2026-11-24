@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0615/impl-let-method.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `inc` changes the object, but `Counter` declares that it doesn't
+ --> tests/compile/EN0615/impl-let-method.fail.en:5:32
+  |
+2 |   inc(): void;
+  |   --- declared here without `let`
+3 | }
+4 |
+5 | public class Clicks implements Counter { //~ EN0615 "`inc` changes the object, but `Counter` declares that it doesn't"
+  |                                ^^^^^^^ `inc` is marked `let` in `Clicks`
+  |
+help: if implementations may change the object, write `let inc(): void;` in `Counter`
+  |
+2 |   let inc(): void;
+  |   ++++
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

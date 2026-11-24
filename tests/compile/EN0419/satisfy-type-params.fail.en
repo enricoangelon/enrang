@@ -1,0 +1,14 @@
+const log = new Log {};
+record(&log); //~ EN0419 "`Log` does not satisfy `Dumper`"
+
+private function record<D extends Dumper>(d: &D): void {
+  d.dump(&5);
+}
+
+public interface Dumper {
+  dump<T>(x: &T): void;
+}
+
+public class Log {
+  public dump(x: &i64): void {}
+}

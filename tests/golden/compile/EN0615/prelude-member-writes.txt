@@ -1,0 +1,44 @@
+$ enrang check tests/compile/EN0615/prelude-member-writes.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `equals` changes the object, but `Eq` declares that it doesn't
+  --> tests/compile/EN0615/prelude-member-writes.fail.en:6:5
+   |
+ 6 |     this.reads += 1; //~ EN0615 "`equals` changes the object, but `Eq` declares that it doesn't"
+   |     ^^^^^^^^^^^^^^^ this write needs exclusive access to `this`
+  --> lib/core/prelude.en:15:3
+   |
+15 |   equals(other: &Self): bool;
+   |   ------ declared here without `let`
+   |
+help: an implementation of `Eq.equals` may only read the object
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `clone` changes the object, but `Clone` declares that it doesn't
+  --> tests/compile/EN0615/prelude-member-writes.fail.en:15:5
+   |
+15 |     this.copies += 1; //~ EN0615 "`clone` changes the object, but `Clone` declares that it doesn't"
+   |     ^^^^^^^^^^^^^^^^ this write needs exclusive access to `this`
+  --> lib/core/prelude.en:11:3
+   |
+11 |   clone(): Self;
+   |   ----- declared here without `let`
+   |
+help: an implementation of `Clone.clone` may only read the object
+   = explain: run `enrang explain EN0615`
+
+error[EN0615]: `compare` changes the object, but `Ord` declares that it doesn't
+  --> tests/compile/EN0615/prelude-member-writes.fail.en:25:5
+   |
+25 |     this.asked += 1; //~ EN0615 "`compare` changes the object, but `Ord` declares that it doesn't"
+   |     ^^^^^^^^^^^^^^^ this write needs exclusive access to `this`
+  --> lib/core/prelude.en:19:3
+   |
+19 |   compare(other: &Self): i32;
+   |   ------- declared here without `let`
+   |
+help: an implementation of `Ord.compare` may only read the object
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 3 previous errors

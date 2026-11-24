@@ -1,0 +1,9 @@
+//! target: i386-linux
+public unsafe function big(p: *u64): u64 {
+  p.writeVolatile(1); //~ EN0805 "`u64` can't be accessed volatile on `i386-linux`"
+  return p.readVolatile(); //~ EN0805 "`u64` can't be accessed volatile on `i386-linux`"
+}
+
+public unsafe function signed(p: *i64): void {
+  p.writeVolatile(-1); //~ EN0805 "`i64` can't be accessed volatile on `i386-linux`"
+}

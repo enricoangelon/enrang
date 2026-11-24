@@ -1,0 +1,4 @@
+//! covers: C06
+const ys: i64[] = [1, 2];
+const xs: (i64 | null)[] = ys; //~ EN0401 "mismatched types: expected `(i64 | null)[]`, found `i64[]`"
+console.log(xs);

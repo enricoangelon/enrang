@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0609/constructor_reference.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0609]: cannot write `r[0]`, because `cells` is `readonly`
+ --> tests/compile/EN0609/constructor_reference.fail.en:6:5
+  |
+2 |   private readonly cells: i64[];
+  |   ------------------------------ `cells` is declared `readonly` here
+...
+6 |     r[0] = 9; //~ EN0609
+  |     ^^^^^^^^ written here
+  |
+  = note: a `readonly` field is set only by its class's constructor
+  = explain: run `enrang explain EN0609`
+
+error: aborting due to 1 previous error

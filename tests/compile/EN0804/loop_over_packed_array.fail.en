@@ -1,0 +1,11 @@
+//! covers: H23
+let p = new P { a: 1, b: [1, 2, 3, 4] };
+for (const x of &p.b) { //~ EN0804 "reference to the packed field `p.b`, which may be misaligned"
+  console.log(x);
+}
+
+@packed
+public final class P {
+  public a: u8;
+  public b: u32[4];
+}

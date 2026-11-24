@@ -1,0 +1,110 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/tk-01-copy-join.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/tk-01-copy-join.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Pt {
+  xs: i64[] = default;
+  ys: i64[] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Pt; // pt
+  let _3: *Pt temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &i64[] temp;
+  let _7: void temp;
+  let _8: &i64[] temp;
+  let _9: [&i64[], &i64[]] temp;
+  let _10: &Pt temp;
+  let _11: &i64[]; // u
+  let _12: &i64[]; // v
+  let _13: &i64; // e
+  let _14: isize temp;
+  let _15: isize temp;
+  let _16: void temp;
+  let _17: &i64 temp;
+  let _18: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Pt leaving(xs, ys)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2.xs [auto-borrow];
+    _5 = "alloc/array"::Array<i64>::push(move _6, const 1: i64) -> bb2;
+  }
+  bb2: {
+    _8 = &_2.xs [auto-borrow];
+    _7 = "alloc/array"::Array<i64>::push(move _8, const 2: i64) -> bb3;
+  }
+  bb3: {
+    _10 = &_2 [explicit];
+    _9 = lanes(move _10, const false: bool) -> bb4;
+  }
+  bb4: {
+    storage_live(_11);
+    _11 = copy _9.0;
+    storage_live(_12);
+    _12 = copy _9.1;
+    storage_live(_13);
+    _14 = const 0: isize;
+    _15 = len(*_11);
+    check_bounds(copy _14, copy _15);
+    _13 = &(*_11)[_14] [explicit];
+    _17 = &*_13 [auto-borrow];
+    _18 = &*_12 [auto-borrow];
+    _16 = form log(move _17, move _18) -> bb5;
+  }
+  bb5: {
+    storage_dead(_13);
+    storage_dead(_12);
+    storage_dead(_11);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn lanes(_1: &Pt, _2: bool) -> [&i64[], &i64[]] {
+  let _1: &Pt; // p
+  let _2: bool; // c
+  let _3: &Pt; // s
+  let _4: &Pt temp;
+  let _5: &i64[]; // second
+  let _6: bool temp;
+  let _7: &i64[] temp;
+  let _8: &i64[] temp;
+  bb0: {
+    storage_live(_3);
+    _4 = &*_1 [reborrow];
+    _3 = move _4;
+    storage_live(_5);
+    _6 = copy _2;
+    switch move _6 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _5 = &(*_1).ys [explicit];
+    goto bb3;
+  }
+  bb2: {
+    _5 = &(*_3).xs [explicit];
+    goto bb3;
+  }
+  bb3: {
+    _7 = &(*_1).xs [explicit];
+    _8 = &*_5 [reborrow];
+    _0 = tuple(move _7, move _8);
+    storage_dead(_5);
+    storage_dead(_3);
+    return;
+  }
+}

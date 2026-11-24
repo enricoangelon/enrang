@@ -1,0 +1,22 @@
+// SPEC 8.3, the allocator: `alloc/heap`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+@lang("global_allocator") public interface GlobalAllocator {
+  let unsafe alloc(size: usize, align: usize): *u8;
+  let unsafe dealloc(p: *u8, size: usize, align: usize): void;
+}
+
+// An implementation writes no `let` (SPEC 4.4): its body's contract is checked against the interface's.
+public final class FreeListHeap implements GlobalAllocator {
+  private first: usize;
+  public unsafe alloc(size: usize, align: usize): *u8;
+  public unsafe dealloc(p: *u8, size: usize, align: usize): void;
+  public unsafe addRegion(start: usize, bytes: usize): void;
+}
+
+// The runtime's allocation entry points, which the compiler's array and box code calls (ARCHITECTURE 10).
+@lang("rt_alloc") public unsafe function __rt_alloc(size: usize, align: usize): *u8 {
+  unreachable();
+}
+
+@lang("rt_dealloc") public unsafe function __rt_dealloc(p: *u8, size: usize, align: usize): void {
+  unreachable();
+}

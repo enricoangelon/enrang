@@ -1,0 +1,16 @@
+//! row: Source `&h.items`: moving `h`, a `move` 
+public class HD {
+  public items: i64[] = [1, 2];
+  public other: string[] = [];
+  public destructor() { console.log("drop"); }
+}
+
+private function take(v: string[]): void { console.log(v); }
+
+public function prefixDestructor(): void {
+  let h = new HD();
+  for (const x of &h.items) {
+    take(h.other.clone());
+    h.other = [];
+  }
+}

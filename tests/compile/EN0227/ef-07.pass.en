@@ -1,0 +1,17 @@
+onKey(66, k => console.log(k));
+console.log(widthOr(null));
+const o = new Opts {};
+console.log(o.width ?? 8);
+
+private function onKey(key: u8, handler?: (k: u8) => void): void {
+  if (handler != null) { handler(key); }
+}
+
+private function widthOr(width?: i64 | null): i64 {
+  const w: i64 = width ?? 8;
+  return w;
+}
+
+public class Opts {
+  public width?: i64 | null;
+}

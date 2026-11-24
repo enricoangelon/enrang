@@ -1,0 +1,27 @@
+const table: u8[2] = [7, 8];
+let s = new Sub(&table, &table);
+const b: &Base = &s;
+b.set(&table);
+s.set(&table);
+console.log(s.first());
+
+public class Base {
+  private src: readonly &Slice<u8>;
+
+  public constructor(src: &Slice<u8>) { this.src = src; }
+
+  public set(v: &Slice<u8>): void { this.src = v; }
+
+  public first(): readonly &u8 { return &this.src[0]; }
+}
+
+public class Sub extends Base {
+  private w: &Slice<u8>;
+
+  public constructor(src: &Slice<u8>, w: &Slice<u8>) {
+    this.w = w;
+    super(src);
+  }
+
+  public override set(v: &Slice<u8>): void { this.w = v; }
+}

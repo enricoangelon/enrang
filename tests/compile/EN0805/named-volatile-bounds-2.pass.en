@@ -1,0 +1,5 @@
+//! target: i386-linux
+//! row: `public unsafe function w<T extends Copy>(p:
+public unsafe function small(p: *u32): void {
+  p.writeVolatile(1);
+}

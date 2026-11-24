@@ -1,0 +1,16 @@
+//! row: `a ?? b ?? c`, `a?.b?.c`
+//! row: `a?.b.c`
+const a: i64 | null = null;
+const b: i64 | null = null;
+const c: i64 = 3;
+console.log(a ?? b ?? c);
+const o: Outer | null = new Outer { b: new Inner { c: 1 } };
+console.log(o?.b?.c);
+
+public class Outer {
+  public b: Inner | null = null;
+}
+
+public class Inner {
+  public c: i64 = 0;
+}

@@ -1,0 +1,3 @@
+public function first(xs: &'a i64[]): &'a i64 { //~ EN1005 "named lifetimes are not supported yet"
+  return &xs[0];
+}

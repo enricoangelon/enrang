@@ -1,0 +1,13 @@
+error[EN0608]: `new Wrap` can change `r`, but `xs` is `const`
+ --> main.en:2:20
+  |
+2 | const w = new Wrap(&xs);
+  |                    ^^^ `new Wrap` writes through it
+  |
+help: declare it `let xs`
+  |
+1 | let xs: i64[] = [1, 2];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

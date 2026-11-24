@@ -1,0 +1,14 @@
+const rex = new Dog {};
+introduce(&rex);
+
+public function introduce(a: &Animal): void { console.log(a.speak()); }
+
+public class Animal {
+  public speak(): string { return "..."; }
+}
+
+public class Dog extends Animal {
+  public override speak(): string { return "woof"; }
+
+  public speak(loud: bool): string { return "WOOF"; }
+}

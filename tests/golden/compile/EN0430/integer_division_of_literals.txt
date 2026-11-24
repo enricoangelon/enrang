@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0430/integer_division_of_literals.fail.en
+[exit 0]
+[stdout]
+[stderr]
+warning[EN0430]: integer division truncates
+ --> tests/compile/EN0430/integer_division_of_literals.fail.en:1:14
+  |
+1 | const half = 7 / 2; //~ EN0430 "integer division truncates"
+  |              ^^^^^ both sides are integers, so the result is an integer
+  |
+  = from TypeScript: TypeScript would give `3.5` for `7 / 2`; here it is `3`.
+help: for a fraction, divide floats: `7.0 / 2.0`
+  |
+1 | const half = 7.0 / 2.0; //~ EN0430 "integer division truncates"
+  |               ++    ++

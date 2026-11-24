@@ -1,0 +1,29 @@
+const quiet = new SecretDog {};
+const m = new Dog("meow");
+console.log(m.sound);
+const e = new Pup {};
+console.log(e.sound);
+
+public class Secret {
+  private sound: string = "...";
+}
+
+public class SecretDog extends Secret {
+  private sound: string = "woof";
+}
+
+public class Animal {
+  public constructor(public sound: string) {}
+}
+
+public class Dog extends Animal {
+  public override sound: string = "woof";
+}
+
+public class Plain {
+  public sound: string = "...";
+}
+
+public class Pup extends Plain {
+  public override sound: string = "woof";
+}

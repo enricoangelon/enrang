@@ -1,0 +1,8 @@
+let p = new Pt();
+const r = &p.x;
+*r = 3;
+p.x = 5;
+
+public class Pt {
+  public x: i64 = 0;
+}

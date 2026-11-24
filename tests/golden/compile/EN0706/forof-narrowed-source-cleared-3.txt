@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0706/forof-narrowed-source-cleared-3.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot reassign `p` during iteration
+ --> tests/compile/EN0706/forof-narrowed-source-cleared-3.fail.en:6:19
+  |
+5 |     for (const x of &p) {
+  |                     -- `p` is borrowed here
+6 |       run(() => { p = null; }); //~ EN0706 "cannot reassign `p` during iteration"
+  |                   ^ cannot reassign while borrowed
+  |
+help: iterate over `p.clone()` if reassignment is intentional
+  |
+5 |     for (const x of p.clone()) {
+  |                     ~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,8 @@
+let q = ["a", "b"];
+for (let i = 0; i < 2; i++) {
+  take(q.clone());
+}
+
+public function take(xs: string[]): void {
+  console.log(xs);
+}

@@ -1,0 +1,4 @@
+const x: u32 = 64;
+const y = x >> 2;
+let b: Box<Box<Box<i64>>> | null = null;
+console.log(y, b);

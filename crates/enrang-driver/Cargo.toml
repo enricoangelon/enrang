@@ -9,8 +9,25 @@ test = false
 
 [dependencies]
 enrang-base = { path = "../enrang-base" }
+enrang-rtlib = { path = "../enrang-rtlib" }
 enrang-diag = { path = "../enrang-diag" }
+enrang-target = { path = "../enrang-target" }
+enrang-syntax = { path = "../enrang-syntax" }
+enrang-hir = { path = "../enrang-hir" }
+enrang-layout = { path = "../enrang-layout" }
+enrang-sema = { path = "../enrang-sema" }
+enrang-mir = { path = "../enrang-mir" }
+enrang-mirbuild = { path = "../enrang-mirbuild" }
+enrang-borrowck = { path = "../enrang-borrowck" }
+
+[dev-dependencies]
+enrang-testkit = { path = "../enrang-testkit" }
 
 [[test]]
 name = "session"
 path = "tests/session.rs"
+
+[[test]]
+name = "pipeline"
+path = "tests/pipeline/main.rs"
+harness = false

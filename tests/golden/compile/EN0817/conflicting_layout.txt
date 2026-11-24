@@ -1,0 +1,50 @@
+$ enrang check tests/compile/EN0817/conflicting_layout.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0817]: conflicting layout attributes
+ --> tests/compile/EN0817/conflicting_layout.fail.en:1:9
+  |
+1 | @packed @align(4) public final class A { //~ EN0817 "conflicting layout attributes"
+  |         ^^^^^^^^^ `@align(4)` conflicts with `@packed`
+  | ------- `@packed` is here
+  |
+  = explain: run `enrang explain EN0817`
+
+error[EN0817]: conflicting layout attributes
+ --> tests/compile/EN0817/conflicting_layout.fail.en:5:9
+  |
+5 | @packed @repr("C") public final class B { //~ EN0817 "conflicting layout attributes"
+  |         ^^^^^^^^^^ `@repr("C")` conflicts with `@packed`
+  | ------- `@packed` is here
+  |
+  = explain: run `enrang explain EN0817`
+
+error[EN0817]: conflicting layout attributes
+ --> tests/compile/EN0817/conflicting_layout.fail.en:9:11
+  |
+9 | @align(8) @align(16) public final class D { //~ EN0817 "conflicting layout attributes"
+  |           ^^^^^^^^^^ `@align(16)` conflicts with `@align(8)`
+  | --------- `@align(8)` is here
+  |
+  = explain: run `enrang explain EN0817`
+
+error[EN0817]: conflicting layout attributes
+  --> tests/compile/EN0817/conflicting_layout.fail.en:13:9
+   |
+13 | @packed @packed public final class E { //~ EN0817 "conflicting layout attributes"
+   |         ^^^^^^^ `@packed` conflicts with `@packed`
+   | ------- `@packed` is here
+   |
+   = explain: run `enrang explain EN0817`
+
+error[EN0817]: conflicting layout attributes
+  --> tests/compile/EN0817/conflicting_layout.fail.en:17:13
+   |
+17 | @repr("u8") @repr("u16") public enum K { //~ EN0817 "conflicting layout attributes"
+   |             ^^^^^^^^^^^^ `@repr("u16")` conflicts with `@repr("u8")`
+   | ----------- `@repr("u8")` is here
+   |
+   = explain: run `enrang explain EN0817`
+
+error: aborting due to 5 previous errors

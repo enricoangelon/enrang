@@ -1,0 +1,8 @@
+const tail = new Node { value: 2 };
+const head = new Node { value: 1, next: new Box(tail) };
+console.log(head.value);
+
+public class Node {
+  public value: i64 = 0;
+  public next: Box<Node> | null = null;
+}

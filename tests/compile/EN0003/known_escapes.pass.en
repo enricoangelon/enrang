@@ -1,0 +1,4 @@
+const path = "C:\\data";
+const accent = "caf\u{e9}";
+const lines = "one\ntwo\tthree";
+console.log(path, accent, lines);

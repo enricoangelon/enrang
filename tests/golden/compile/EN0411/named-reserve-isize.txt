@@ -1,0 +1,13 @@
+$ enrang check --target=i386-linux tests/compile/EN0411/named-reserve-isize.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0411]: `0x80000000` doesn't fit `isize`
+ --> tests/compile/EN0411/named-reserve-isize.fail.en:4:11
+  |
+4 | b.reserve(0x80000000); //~ EN0411
+  |           ^^^^^^^^^^ `isize` holds -2147483648 to 2147483647
+  |
+  = explain: run `enrang explain EN0411`
+
+error: aborting due to 1 previous error

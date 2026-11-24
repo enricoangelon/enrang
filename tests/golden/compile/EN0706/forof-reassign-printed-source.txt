@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN0706/forof-reassign-printed-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot reassign `q` during iteration
+ --> tests/compile/EN0706/forof-reassign-printed-source.fail.en:5:3
+  |
+3 | for (const x of &q) {
+  |                 -- `q` is borrowed here
+4 |   console.log(x);
+5 |   q = []; //~ EN0706 "cannot reassign `q` during iteration"
+  |   ^^^^^^ cannot reassign while borrowed
+  |
+help: iterate over `q.clone()` if reassignment is intentional
+  |
+3 | for (const x of q.clone()) {
+  |                 ~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot reassign `p` during iteration
+  --> tests/compile/EN0706/forof-reassign-printed-source.fail.en:11:3
+   |
+ 9 | for (const x of &p) {
+   |                 -- `p` is borrowed here
+10 |   console.log(x);
+11 |   p = [7, 8, 9]; //~ EN0706 "cannot reassign `p` during iteration"
+   |   ^^^^^^^^^^^^^ cannot reassign while borrowed
+   |
+help: iterate over `p.clone()` if reassignment is intentional
+   |
+ 9 | for (const x of p.clone()) {
+   |                 ~~~~~~~~~
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

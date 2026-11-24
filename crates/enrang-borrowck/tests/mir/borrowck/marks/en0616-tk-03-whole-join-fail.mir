@@ -1,0 +1,169 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/tk-03-whole-join.fail.en. Its row's codes: EN0616.
+module "tests/compile/EN0616/tk-03-whole-join.fail";
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[][]; // grid
+  let _3: i64[] temp;
+  let _4: i64[] temp;
+  let _5: [&Slice<i64[]>, &i64[]] | null; // g
+  let _6: &i64[][] temp;
+  let _7: &Slice<i64[]> temp;
+  let _8: bool temp;
+  let _9: u32 temp;
+  let _10: &Slice<i64[]>; // rows
+  let _11: &i64[]; // row
+  let _12: &i64; // e2
+  let _13: isize temp;
+  let _14: isize temp;
+  let _15: isize temp;
+  let _16: i64[] temp;
+  let _17: isize temp;
+  let _18: isize temp;
+  let _19: void temp;
+  let _20: &i64 temp;
+  fact f0: _5 nonnull;
+  use f0 at bb2[1];
+  use f0 at bb2[4];
+  test f0 at bb2;
+  bb0: {
+    storage_live(_2);
+    _3 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    _4 = intrinsic AllocArray<i64>(const 3: i64, const 4: i64);
+    _2 = intrinsic AllocArray<i64[]>(move _3, move _4);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = &_2 [explicit];
+    _7 = convert(array_to_slice, move _6);
+    _5 = grab(move _7) -> bb1;
+  }
+  bb1: {
+    _9 = discriminant(_5);
+    _8 = ne(move _9, const 0: u32);
+    switch move _8 [0: bb3, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_10);
+    check_tag(_5, Present);
+    _10 = copy (_5 as Present).0.0;
+    storage_live(_11);
+    check_tag(_5, Present);
+    _11 = copy (_5 as Present).0.1;
+    storage_live(_12);
+    _13 = const 0: isize;
+    _14 = len(*_11);
+    check_bounds(copy _13, copy _14);
+    _12 = &(*_11)[_13] [explicit];
+    _15 = const 1: isize;
+    _16 = intrinsic AllocArray<i64>();
+    _17 = len(*_10);
+    check_bounds(copy _15, copy _17);
+    drop((*_10)[_15]) [assign];
+    _18 = len(*_10);
+    check_bounds(copy _15, copy _18);
+    (*_10)[_15] = move _16; //~ EN0616
+    drop(_16);
+    storage_dead(_16);
+    _20 = &*_12 [auto-borrow];
+    _19 = form log(move _20) -> bb4;
+  }
+  bb3: {
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb4: {
+    storage_dead(_12);
+    storage_dead(_11);
+    storage_dead(_10);
+    goto bb3;
+  }
+}
+
+fn grab(_1: &Slice<i64[]>) -> [&Slice<i64[]>, &i64[]] | null {
+  let _1: &Slice<i64[]>; // xs
+  let _2: &Slice<i64[]>; // whole
+  let _3: &Slice<i64[]> temp;
+  let mut _4: [&Slice<i64[]>, &i64[]] | null; // t
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64[]; // x
+  let _9: bool temp;
+  let _10: u32 temp;
+  let _11: &Slice<i64[]> temp;
+  let _12: &i64[] temp;
+  let _13: [&Slice<i64[]>, &i64[]] temp;
+  let _14: &Slice<i64[]> temp;
+  let _15: &i64[] temp;
+  let _16: [&Slice<i64[]>, &i64[]] temp;
+  loop l0: path *_1 preheader bb5 head bb1 bind bb2[2] binding _8;
+  fact f0: _4 nonnull;
+  use f0 at bb7[0];
+  test f0 at bb7;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = move _3;
+    storage_live(_4);
+    _4 = null;
+    goto bb5;
+  }
+  bb1: {
+    _6 = len(*_1);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_1)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _0 = null;
+    storage_dead(_4);
+    storage_dead(_2);
+    return;
+  }
+  bb5: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _10 = discriminant(_4);
+    _9 = ne(move _10, const 0: u32);
+    switch move _9 [0: bb8, otherwise: bb7];
+  }
+  bb7: {
+    check_tag(_4, Present);
+    _11 = copy (_4 as Present).0.0;
+    _12 = &*_8 [reborrow];
+    _13 = tuple(move _11, move _12);
+    _0 = present(move _13);
+    storage_dead(_8);
+    storage_dead(_4);
+    storage_dead(_2);
+    return;
+  }
+  bb8: {
+    _14 = &*_2 [reborrow];
+    _15 = &*_8 [reborrow];
+    _16 = tuple(move _14, move _15);
+    _4 = present(move _16);
+    storage_dead(_8);
+    goto bb3;
+  }
+}

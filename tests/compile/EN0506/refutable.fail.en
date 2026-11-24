@@ -1,0 +1,17 @@
+const maybe: User | null = null;
+const { name } = maybe; //~ EN0506 "this pattern can't destructure a `User | null`"
+const s = Shape.Circle { radius: 1.0 };
+const { radius } = s; //~ EN0506 "this pattern can't destructure a `Shape`"
+const r: Result<User> = Ok(new User { name: "Ada", age: 36 });
+const { value } = r; //~ EN0506 "this pattern can't destructure a `Result<User>`"
+console.log(name, radius, value);
+
+public class User {
+  public name: string;
+  public age: i64;
+}
+
+public enum Shape {
+  Circle { radius: f64 },
+  Empty,
+}

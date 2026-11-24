@@ -1,0 +1,11 @@
+let n: i64 = 1;
+outer((x: &i64) => { *x += 1; }, &n);
+console.log(n);
+
+private function outer(f: (let x: &i64) => void, n: &i64): void {
+  inner(f, n);
+}
+
+private function inner(g: (let x: &i64) => void, n: &i64): void {
+  g(n);
+}

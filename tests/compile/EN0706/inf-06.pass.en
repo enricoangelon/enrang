@@ -1,0 +1,18 @@
+let sector: u8[8] = [0; 8];
+fill(sector.slice(4, 8), 7);
+console.log(sector);
+
+const data: i64[] = [1, 2, 3];
+console.log(data.slice(0, 2).length());
+console.log(data.last());
+
+let list: i64[] = [1, 2, 3];
+const head = list.slice(0, 2);
+console.log(head);
+list.push(4);
+
+private function fill(part: &Slice<u8>, v: u8): void {
+  for (let i = 0; i < part.length(); i++) {
+    part[i] = v;
+  }
+}

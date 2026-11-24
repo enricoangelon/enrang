@@ -1,0 +1,30 @@
+$ enrang check tests/compile/EN0608/bc-09.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `new Writer` can change `buf`, but `c` is `const`
+ --> tests/compile/EN0608/bc-09.fail.en:2:23
+  |
+2 | const w0 = new Writer(&c); //~ EN0608
+  |                       ^^ `new Writer` writes through it
+  |
+help: declare it `let c`
+  |
+1 | let c: u8[4] = [0; 4];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error[EN0706]: `w` cannot change while `p` still points into it
+ --> tests/compile/EN0608/bc-09.fail.en:6:1
+  |
+5 | const p = w.peek();
+  |           - shared borrow of `w` starts here, held by `p`
+6 | w.put(1); //~ EN0706
+  | ^^^^^^^^ `put` changes `w`, so it needs exclusive access to it
+7 | console.log(*p);
+  |              - `p` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

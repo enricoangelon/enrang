@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0609/argument.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0609]: cannot write `this.n`, because it is `readonly`
+ --> tests/compile/EN0609/argument.fail.en:4:10
+  |
+2 |   private readonly n: i64 = 0;
+  |   ---------------------------- `n` is declared `readonly` here
+3 |   public bumpIt(): void {
+4 |     bump(&this.n); //~ EN0609
+  |          ^^^^^^^ `bump` writes through it
+  |
+  = note: a `readonly` field is set only by its class's constructor
+  = explain: run `enrang explain EN0609`
+
+error: aborting due to 1 previous error

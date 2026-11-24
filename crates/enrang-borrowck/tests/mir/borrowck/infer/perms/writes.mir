@@ -1,0 +1,128 @@
+// Stage 3 permissions (plan d.8 stage 3, A:1344): Write iff write-live at entry
+// by N3 (plan d.7), `let` always, Read otherwise.
+// MIR shapes: field writes and copies through references (plan c.4,
+// plan.md:913-914), reborrows of reference locals (plan c.6, plan.md:975), a
+// receiver's reborrow passed first (plan c.7, plan.md:1010), a repointed
+// reference local (plan c.8, plan.md:1027), an `unsafe` block region (plan c.9).
+class Counter {
+  n: i64;
+}
+fn Counter::bump(let _1: &Counter) -> void;
+fn Counter::view(_1: &Counter) -> &i64 sources(0) result writable;
+
+// (a) a field write through the parameter.
+fn set(_1: &Counter, _2: i64) -> void {
+  bb0: {
+    (*_1).n = copy _2;
+    return;
+  }
+}
+//= fn set(_1: &Counter, _2: i64) -> void perms(write) sources() moves(0) result none;
+//= //   #0: writes through it
+
+// Only a read.
+fn get(_1: &Counter) -> i64 {
+  bb0: {
+    _0 = copy (*_1).n;
+    return;
+  }
+}
+//= fn get(_1: &Counter) -> i64 perms(read) sources() result none;
+
+// (b) the receiver of a `let` method.
+fn tick(_1: &Counter) -> void {
+  let _2: &Counter temp;
+  let _3: void temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _3 = Counter::bump(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+//= fn tick(_1: &Counter) -> void perms(write) sources() result none;
+//= //   #0: passes it to `Counter.bump`
+
+// (d) a source whose result is written through, and one whose result is read.
+fn poke(_1: &Counter) -> void {
+  let _2: &Counter temp;
+  let _3: &i64 temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _3 = Counter::view(move _2) -> bb1;
+  }
+  bb1: {
+    *_3 = const 0: i64;
+    return;
+  }
+}
+//= fn poke(_1: &Counter) -> void perms(write) sources() result none;
+//= //   #0: writes through it
+fn peek(_1: &Counter) -> i64 {
+  let _2: &Counter temp;
+  let _3: &i64 temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _3 = Counter::view(move _2) -> bb1;
+  }
+  bb1: {
+    _0 = copy *_3;
+    return;
+  }
+}
+//= fn peek(_1: &Counter) -> i64 perms(read) sources() result none;
+
+// (c) a copy into a local written through; repointed first, it writes nothing
+// of the parameter.
+fn alias(_1: &i64) -> void {
+  let _2: &i64; // r
+  bb0: {
+    _2 = &*_1 [reborrow];
+    *_2 = const 1: i64;
+    return;
+  }
+}
+//= fn alias(_1: &i64) -> void perms(write) sources() result none;
+fn repoint(_1: &i64) -> void {
+  let mut _2: &i64; // r
+  let mut _3: i64; // z
+  bb0: {
+    _3 = const 0: i64;
+    _2 = &*_1 [reborrow];
+    _2 = &_3 [explicit];
+    *_2 = const 1: i64;
+    return;
+  }
+}
+//= fn repoint(_1: &i64) -> void perms(read) sources() result none;
+
+// `let` writes even where the body only reads.
+fn keep(let _1: &i64) -> i64 {
+  bb0: {
+    _0 = copy *_1;
+    return;
+  }
+}
+//= fn keep(let _1: &i64) -> i64 perms(write) sources() result none;
+//= //   #0: is declared writable
+
+// A by-value borrowing tuple: one permission per reference part (A:1350).
+fn grow(_1: [&i64, &i64]) -> void {
+  bb0: {
+    *_1.0 = const 4: i64;
+    return;
+  }
+}
+//= fn grow(_1: [&i64, &i64]) -> void perms(write, read) sources() moves(0) result none;
+
+// N12: a body with an `unsafe` region starts every reference Write, and `const`
+// lowers one to Read.
+fn raw(_1: &i64, const _2: &i64) -> void {
+  region r0: block;
+  bb0: {
+    nop @ r0;
+    return;
+  }
+}
+//= fn raw(_1: &i64, const _2: &i64) -> void perms(write, read) sources() result none;

@@ -1,0 +1,4 @@
+const first = "ÿ"; //~ EN0001
+const second = "ok";
+const third = "Ã("; //~ EN0001
+console.log(first, second, third);

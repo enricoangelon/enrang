@@ -1,0 +1,7 @@
+let total = 1;
+let count = 0;
+inc();
+console.log(total, count);
+function inc(): void {
+  count += total;
+}

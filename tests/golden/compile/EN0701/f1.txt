@@ -1,0 +1,30 @@
+$ enrang check tests/compile/EN0701/f1.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0701]: a `Speaker` can't hold an `Echo`, because `Echo` holds a reference
+ --> tests/compile/EN0701/f1.fail.en:2:16
+  |
+2 | const k = keep(new Echo(&text)); //~ EN0701 "a `Speaker` can't hold an `Echo`, because `Echo` holds a reference"
+  |                ^^^^^^^^^^^^^^^ only a value type becomes an interface value
+  |
+  = explain: run `enrang explain EN0701`
+
+error[EN0701]: a `Speaker` can't hold an `Echo`, because `Echo` holds a reference
+ --> tests/compile/EN0701/f1.fail.en:3:33
+  |
+3 | const b: Box<Speaker> = new Box(new Echo(&text)); //~ EN0701 "a `Speaker` can't hold an `Echo`, because `Echo` holds a reference"
+  |                                 ^^^^^^^^^^^^^^^ `Echo` holds a reference
+  |
+  = note: an interface declares no loans and no stores, so only a value type becomes one
+  = explain: run `enrang explain EN0701`
+
+error[EN0701]: a `Speaker` can't hold an `Echo`, because `Echo` holds a reference
+ --> tests/compile/EN0701/f1.fail.en:5:11
+  |
+5 | introduce(&echo); //~ EN0701 "a `Speaker` can't hold an `Echo`, because `Echo` holds a reference"
+  |           ^^^^^ only a value type becomes an interface value
+  |
+  = explain: run `enrang explain EN0701`
+
+error: aborting due to 3 previous errors

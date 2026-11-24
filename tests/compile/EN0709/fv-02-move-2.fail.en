@@ -1,0 +1,26 @@
+const table: u8[3] = [7, 8, 9];
+let out: u8[3] = [0, 0, 0];
+let c = new Copier(&table, &out).skipped();
+c.step();
+console.log(out);
+
+public final class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize;
+  public constructor(src: &Slice<u8>, dst: &Slice<u8>) {
+    this.src = src;
+    this.dst = dst;
+  }
+  public step(): void {
+    this.dst[this.pos] = this.src[0];
+    this.pos += 1;
+  }
+  public skip(): void {
+    this.src = this.src.slice(1, this.src.length());
+  }
+  public move skipped(): Copier {
+    this.src = this.src.slice(1, this.src.length());
+    return this; //~ EN0709
+  }
+}

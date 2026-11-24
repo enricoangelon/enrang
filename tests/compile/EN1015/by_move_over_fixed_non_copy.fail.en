@@ -1,0 +1,8 @@
+const a: D[3] = [new D {}, new D {}, new D {}];
+for (const x of a) { //~ EN1015 "this `for...of` source is not supported yet"
+  console.log(x.n);
+}
+
+public final class D {
+  public n: string = "d";
+}

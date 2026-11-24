@@ -1,0 +1,4 @@
+const big = 3_000_000_000; //~ EN0411 "`3_000_000_000` doesn't fit `int`"
+const byte: u8 = 256; //~ EN0411 "`256` doesn't fit `u8`"
+const small = 300 as u8; //~ EN0411 "`300` doesn't fit `u8`"
+console.log(big, byte, small);

@@ -1,0 +1,11 @@
+const l = new Logger();
+l.log(GREETING);
+
+private const GREETING: &string = "hi";
+private unsafe let count: i64 = 0;
+
+public class Logger {
+  public log(m: &string): void {
+    console.log(m);
+  }
+}

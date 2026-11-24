@@ -1,0 +1,20 @@
+const dog = new Dog {};
+console.log(greet(&dog));
+
+private function greet<T extends Speaker>(x: &T): string {
+  return x.speak();
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class Dog implements Speaker {
+  public speak(): string {
+    return this.sound();
+  }
+
+  private sound(): string {
+    return "woof";
+  }
+}

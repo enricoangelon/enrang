@@ -1,0 +1,170 @@
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+fn "alloc/box"::Box<T>::clone(_1: &Box<T>) -> Box<T> where T extends Clone;
+move fn "alloc/box"::Box<T>::unbox(_1: &Box<T>) -> T;
+@lang("clone") interface "core/prelude"::Clone { }
+class Animal {
+  n: i64 = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Box<Animal>; // b
+  let _3: Animal temp;
+  let _4: *Animal temp;
+  let _5: void temp;
+  let _6: &Box<Animal> temp;
+  let _7: void temp;
+  let _8: &Box<Animal>; // r
+  let _9: Box<Animal>; // c
+  let _10: &Box<Animal> temp;
+  let _11: Animal; // a
+  let _12: i64 | null; // x
+  let _13: bool temp;
+  let _14: bool temp;
+  let _15: u32 temp;
+  let _16: i64 temp;
+  let _17: void temp;
+  let _18: &i64 temp;
+  let _19: void temp;
+  let _20: i64 temp;
+  let _21: &i64 temp;
+  let _22: isize temp;
+  let _23: &string[] temp;
+  let _24: &isize temp;
+  fact f0: _12 nonnull;
+  use f0 at bb7[0];
+  use f0 at bb5[0];
+  test f0 at bb7;
+  test f0 at bb5;
+  bb0: {
+    storage_live(_2);
+    _4 = addr_of _3;
+    _5 = named_fill Animal leaving(n)(move _4) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [auto-borrow];
+    _7 = "alloc/box"::Box<Animal>::#ctor(move _6, move _3) -> bb2;
+  }
+  bb2: {
+    storage_live(_8);
+    _8 = &_2 [explicit];
+    storage_live(_9);
+    _10 = &*_8 [reborrow];
+    check_class(**_8, clone, box);
+    _9 = "alloc/box"::Box<Animal>::clone(move _10) -> bb3;
+  }
+  bb3: {
+    storage_live(_11);
+    check_class(*_2, unbox, box);
+    _11 = "alloc/box"::Box<Animal>::unbox(move _2) -> bb4;
+  }
+  bb4: {
+    storage_live(_12);
+    _12 = present(const 3: i64);
+    _15 = discriminant(_12);
+    _14 = ne(move _15, const 0: u32);
+    switch copy _14 [0: bb8, otherwise: bb7];
+  }
+  bb5: {
+    check_tag(_12, Present);
+    _18 = &(_12 as Present).0 [auto-borrow];
+    _17 = form log(move _18) -> bb10;
+  }
+  bb6: {
+    _20 = make(const 0: isize) -> bb11;
+  }
+  bb7: {
+    check_tag(_12, Present);
+    _16 = copy (_12 as Present).0;
+    _13 = gt(move _16, const 2: i64);
+    goto bb9;
+  }
+  bb8: {
+    _13 = copy _14;
+    goto bb9;
+  }
+  bb9: {
+    switch move _13 [0: bb6, otherwise: bb5];
+  }
+  bb10: {
+    goto bb6;
+  }
+  bb11: {
+    _21 = &_20 [temp-arg];
+    _23 = &_1 [auto-borrow];
+    _22 = "alloc/array"::Array<string>::length(move _23) -> bb12;
+  }
+  bb12: {
+    _24 = &_22 [temp-arg];
+    _19 = form log(move _21, move _24) -> bb13;
+  }
+  bb13: {
+    storage_dead(_22);
+    storage_dead(_20);
+    storage_dead(_12);
+    storage_dead(_11);
+    drop(_9);
+    storage_dead(_9);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Animal::clone(_1: &Animal) -> Animal {
+  let _1: &Animal; // this
+  let _2: *Animal temp;
+  let _3: void temp;
+  bb0: {
+    _2 = addr_of _0;
+    _3 = named_fill Animal leaving(n)(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn make(_1: Animal = default) -> i64 {
+  let _1: Animal; // c
+  let _2: isize arg; // #supplied
+  let _3: bool temp;
+  let _4: Animal temp;
+  let _5: *Animal temp;
+  let _6: void temp;
+  let _7: Animal; // d
+  let _8: &Animal temp;
+  defaults _2;
+  bb0: {
+    _3 = lt(copy _2, const 1: isize);
+    switch move _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _5 = addr_of _4;
+    _6 = named_fill Animal leaving(n)(move _5) -> bb3;
+  }
+  bb2: {
+    storage_live(_7);
+    _8 = &_1 [auto-borrow];
+    _7 = Animal::clone(move _8) -> bb4;
+  }
+  bb3: {
+    _1 = move _4;
+    goto bb2;
+  }
+  bb4: {
+    _0 = copy _7.n;
+    storage_dead(_7);
+    return;
+  }
+}

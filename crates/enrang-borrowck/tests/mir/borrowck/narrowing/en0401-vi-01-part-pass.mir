@@ -1,0 +1,106 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/vi-01-part.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/vi-01-part.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+@mustUse fn "core/string"::string::slice(_1: &string, _2: isize, _3: isize | null = default) -> readonly &string;
+interface Measured { }
+fn Measured::length(_1: &Self) -> isize;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: void temp;
+  let _6: isize temp;
+  let _7: &string temp;
+  let _8: &string temp;
+  let _9: isize | null temp;
+  let _10: &string temp;
+  let _11: &isize temp;
+  let _12: Box<Measured>; // b
+  let _13: string temp;
+  let _14: string temp;
+  let _15: &string temp;
+  let _16: &Box<Measured> temp;
+  let _17: void temp;
+  let _18: void temp;
+  let _19: isize temp;
+  let _20: &Measured temp;
+  let _21: &isize temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "hello": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    _9 = present(const 3: isize);
+    _10 = &_2 [auto-borrow];
+    _8 = "core/string"::string::slice(move _10, const 1: isize, move _9, const 2: isize) -> bb2;
+  }
+  bb2: {
+    _7 = keepT<string>(move _8) -> bb3;
+  }
+  bb3: {
+    _6 = "core/string"::string::length(move _7) -> bb4;
+  }
+  bb4: {
+    _11 = &_6 [temp-arg];
+    _5 = form log(move _11) -> bb5;
+  }
+  bb5: {
+    storage_dead(_6);
+    storage_live(_12);
+    _14 = const "hello": string;
+    _15 = &_14 [temp-arg];
+    _13 = form to_string(move _15) -> bb6;
+  }
+  bb6: {
+    _16 = &_12 [auto-borrow];
+    _17 = "alloc/box"::Box<Measured>::#ctor(move _16, move _13) -> bb7;
+  }
+  bb7: {
+    drop(_13);
+    storage_dead(_13);
+    drop(_14);
+    storage_dead(_14);
+    _20 = &*_12 [auto-borrow];
+    _19 = virtual Measured::length [copy _20](move _20) -> bb8;
+  }
+  bb8: {
+    _21 = &_19 [temp-arg];
+    _18 = form log(move _21) -> bb9;
+  }
+  bb9: {
+    storage_dead(_19);
+    drop(_12);
+    storage_dead(_12);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn keepT<T extends Measured>(_1: &T) -> &T {
+  let _1: &T; // m
+  let _2: &T temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = move _2;
+    return;
+  }
+}

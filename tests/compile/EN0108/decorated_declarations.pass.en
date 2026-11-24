@@ -1,0 +1,10 @@
+@packed
+public final class Header {
+  public tag: u8 = 0;
+  public size: u32 = 0;
+}
+
+@mustUse
+public function scale(factor: i64): i64 {
+  return factor * 2;
+}

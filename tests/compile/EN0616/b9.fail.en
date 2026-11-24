@@ -1,0 +1,14 @@
+let t = new Thermo();
+t.cool();
+
+public class Thermo {
+  private kelvin: i64 = 300;
+
+  public cool(): void {
+    *this.peekInner() = 299; //~ EN0616 "cannot change the object returned by `peekInner`"
+  }
+
+  private peekInner(): readonly &i64 {
+    return &this.kelvin;
+  }
+}

@@ -1,0 +1,63 @@
+//! row: Satisfaction, one per clause: `unsafe` method,
+const device = new Device {};
+touch(&device);
+const dog = new Dog {};
+console.log(greet(&dog));
+const cat = new Cat {};
+console.log(greet(&cat));
+const ticks = new Ticks {};
+console.log(total(&ticks));
+const boxed = new Box(new Parrot {});
+console.log(greet(&*boxed));
+
+private function touch<T extends Port>(p: &T): void {
+  p.poke();
+}
+
+private function greet<T extends Speaker>(x: &T): string {
+  return x.speak();
+}
+
+private function total<T extends Counter>(c: &T): i64 {
+  return c.count();
+}
+
+public interface Port {
+  poke(): void;
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public interface Counter {
+  count(): i64;
+}
+
+public class Device {
+  public poke(): void {}
+}
+
+public class Dog {
+  public speak(): string {
+    return "woof";
+  }
+}
+
+public class Cat {
+  public speak(): string {
+    return "meow";
+  }
+}
+
+public class Ticks {
+  public count(): i64 {
+    return 1;
+  }
+}
+
+public class Parrot implements Speaker {
+  public speak(): string {
+    return "hello";
+  }
+}

@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0702/reference_to_a_reference.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0702]: a reference can't point to a reference
+ --> tests/compile/EN0702/reference_to_a_reference.fail.en:1:22
+  |
+1 | public function f(x: &&i64): void {} //~ EN0702 "a reference can't point to a reference"
+  |                      ^^^^^ this points to `&i64`
+  |
+  = explain: run `enrang explain EN0702`
+
+error[EN0702]: a reference can't point to a reference
+ --> tests/compile/EN0702/reference_to_a_reference.fail.en:3:22
+  |
+3 | public function g(x: &(&i64 | null)): void {} //~ EN0702 "a reference can't point to a reference"
+  |                      ^^^^^^^^^^^^^^ this points to `&i64 | null`
+  |
+  = explain: run `enrang explain EN0702`
+
+error: aborting due to 2 previous errors

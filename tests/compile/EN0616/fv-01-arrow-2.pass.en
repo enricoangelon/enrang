@@ -1,0 +1,10 @@
+private class ByteLexer {
+  private src: readonly &Slice<u8>;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public poke(): void {
+    const f = () => { console.log(this.src[0]); };
+    f();
+  }
+}

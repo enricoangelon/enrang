@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0401/mixed_array_literal.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `int`, found `string`
+ --> tests/compile/EN0401/mixed_array_literal.fail.en:1:19
+  |
+1 | const mixed = [1, "a"]; //~ EN0401 "mismatched types: expected `int`, found `string`"
+  |                   ^^^ this is `string`
+  |               -------- the elements of this array are `int`
+  |
+help: for values of different types, annotate a tuple type, as in `const x: [int, string] = [1, "a"];`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

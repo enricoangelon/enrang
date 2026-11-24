@@ -1,0 +1,7 @@
+//! row: `f1`-`f6`, loop bindings, among them `le
+const items = [new Item(), new Item()];
+for (const item of &items) { //~ EN0608
+  item.count += 1;
+}
+
+public class Item { public count: i64 = 0; }

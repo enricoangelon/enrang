@@ -1,0 +1,37 @@
+let t = new Table { entries: [] };
+const e = getOrInsert(&t, 1);
+e.hits += 1;
+console.log(getOrInsert(&t, 1).hits);
+
+// SPEC 5.3: NLL problem case #3, which Enrang accepts and rustc rejects
+// (TESTING 13; corpus row NLL-3, twin corpus/twins/NLL-3.rs).
+public function getOrInsert(m: &Table, k: i64): &Entry {
+  const hit = m.find(k);  // NLL problem case #3
+  if (hit != null) { return hit; }
+  m.insert(k);
+  return m.last();
+}
+
+public class Entry {
+  public key: i64;
+  public hits: i64;
+}
+
+public class Table {
+  public entries: Entry[];
+
+  public find(k: i64): &Entry | null {
+    for (const e of &this.entries) {
+      if (e.key == k) { return e; }
+    }
+    return null;
+  }
+
+  public insert(k: i64): void {
+    this.entries.push(new Entry { key: k, hits: 0 });
+  }
+
+  public last(): &Entry {
+    return &this.entries[this.entries.length() - 1];
+  }
+}

@@ -21,12 +21,14 @@
 //! The rest of the kit: seeded generators and the `ENRANG_SEED` and
 //! `ENRANG_SCALE` knobs ([`Rng`], [`seed`], [`scaled`]), a shrinker ([`shrink()`]),
 //! goldens and bless ([`golden()`]), tool lookup and skip accounting ([`tool`],
-//! [`skip()`]), the document extractors ([`extract_cases`], [`row_ids`]) and
-//! milestone gating ([`gate`]). Oracle wrappers, the x86 decoder, `x86sim` and the
+//! [`skip()`]), the document extractors ([`extract_cases`], [`fenced_blocks`],
+//! [`row_ids`]), compile-test anchors ([`anchors()`], [`reported()`], [`compare`])
+//! and milestone gating ([`gate`]). Oracle wrappers, the x86 decoder, `x86sim` and the
 //! ptrace stepper arrive with the milestones that need them.
 
 #![forbid(unsafe_code)]
 
+mod anchors;
 mod diff;
 mod doc_cases;
 mod gating;
@@ -39,12 +41,18 @@ mod shrink;
 mod skip;
 mod temp;
 
+pub use anchors::{
+    Anchor, AnchorError, FixtureHeader, Mismatch, Reported, anchors, compare, fixture_header,
+    fixture_target, reported,
+};
 pub use diff::line_diff;
 pub use doc_cases::{
-    Case, CaseFile, Expected, ExtractError, ExtractErrors, StreamSource, extract_cases,
-    headings_without_cases,
+    Case, CaseFile, Expected, ExtractError, ExtractErrors, FencedBlock, StreamSource,
+    extract_cases, fenced_blocks, headings_without_cases,
 };
-pub use gating::{FixtureStatus, GateFinding, GateReport, GateRow, gate, gate_covers};
+pub use gating::{
+    FixtureStatus, GateFinding, GateReport, GateRow, gate, gate_building, gate_covers,
+};
 pub use golden::{
     BlessMode, GoldenDiff, GoldenFailure, GoldenStore, default_store, golden, golden_in,
     workspace_root,

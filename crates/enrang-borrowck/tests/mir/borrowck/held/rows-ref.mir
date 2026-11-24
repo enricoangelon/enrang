@@ -1,0 +1,104 @@
+// The `Ref` rows of `held` (A:1051-1072, plan d.5) and the slots (A:1036).
+// Source (each body a function of its own):
+//   class Copier { private src: readonly &Slice<u8>; private dst: &Slice<u8>; private pos: isize; }
+//   own(c: &Copier, n: isize, w: Copier, h: &Copier | null): &isize { return &c.pos; }
+//   rd(c: &Copier, i: isize): &u8 { return &c.src[i]; }      // through a `readonly &` field
+//   wr(c: &Copier, i: isize): &u8 { return &c.dst[i]; }      // through another field
+//   whole(c: &Copier): &Copier { return c; }                 // a reborrow of `*c`
+//   loc(s: &Slice<u8>, d: &Slice<u8>, i: isize): u8 { let w = new Copier { src: s, dst: d, pos: 0 }; const r = &w; return w.src[i] + r.dst[i]; }
+//   step(this): writes through `dst`, so `Copier`'s flag is set.
+// Shapes: field borrows through `*_1` and through a reference field (plan c.4),
+// receivers' and copies' reborrows `&*r [reborrow]` (c.6), a named form as
+// `named_fill` on `addr_of(dest)` then each field written (c.10), a field write
+// through `this` (c.8).
+class Copier writes_through_fields {
+  src: readonly &Slice<u8>;
+  dst: &Slice<u8>;
+  pos: isize;
+}
+
+fn own(_1: &Copier, _2: isize, _3: Copier, _4: &Copier | null) -> &isize {
+  bb0: {
+    _0 = &(*_1).pos [explicit];
+    return;
+  }
+}
+fn rd(_1: &Copier, _2: isize) -> &u8 {
+  let _3: isize temp;
+  bb0: {
+    _3 = len((*(*_1).src));
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).src)[_2] [explicit];
+    return;
+  }
+}
+fn wr(_1: &Copier, _2: isize) -> &u8 {
+  let _3: isize temp;
+  bb0: {
+    _3 = len((*(*_1).dst));
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).dst)[_2] [explicit];
+    return;
+  }
+}
+fn whole(_1: &Copier) -> &Copier {
+  let _2: &Copier temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = move _2;
+    return;
+  }
+}
+fn loc(_1: &Slice<u8>, _2: &Slice<u8>, _3: isize) -> u8 {
+  let mut _4: Copier; // w
+  let _5: &Copier; // r
+  let _6: &Slice<u8> temp;
+  let _7: &Slice<u8> temp;
+  let _8: isize temp;
+  let _9: u8 temp;
+  let _10: u8 temp;
+  let _11: &u8 temp;
+  let _12: *Copier temp;
+  let _13: void temp;
+  bb0: {
+    storage_live(_4);
+    _6 = &*_1 [reborrow];
+    _7 = &*_2 [reborrow];
+    _12 = addr_of _4;
+    _13 = named_fill Copier leaving()(copy _12) -> bb1;
+  }
+  bb1: {
+    _4.src = move _6;
+    _4.dst = move _7;
+    _4.pos = const 0: isize;
+    storage_live(_5);
+    _5 = &_4 [explicit];
+    _8 = len((*_4.src));
+    check_bounds(copy _3, copy _8);
+    _11 = &(*_4.src)[_3] [explicit];
+    _9 = copy *_11;
+    _8 = len((*(*_5).dst));
+    check_bounds(copy _3, copy _8);
+    _10 = copy (*(*_5).dst)[_3];
+    _0 = checked_add(copy _9, copy _10);
+    storage_dead(_5);
+    storage_dead(_4);
+    return;
+  }
+}
+fn Copier::step(_1: &Copier) -> void {
+  let _2: isize temp;
+  let _3: isize temp;
+  let _4: u8 temp;
+  bb0: {
+    _2 = copy (*_1).pos;
+    _3 = len((*(*_1).src));
+    check_bounds(copy _2, copy _3);
+    _4 = copy (*(*_1).src)[_2];
+    _3 = len((*(*_1).dst));
+    check_bounds(copy _2, copy _3);
+    (*(*_1).dst)[_2] = copy _4;
+    (*_1).pos = checked_add(copy _2, const 1: isize);
+    return;
+  }
+}

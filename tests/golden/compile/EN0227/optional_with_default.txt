@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0227/optional_with_default.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0227]: a parameter with `?` cannot also have a default
+ --> tests/compile/EN0227/optional_with_default.fail.en:1:33
+  |
+1 | public function pad(width?: i64 = 3): void { //~ EN0227
+  |                                 ^ this default
+  |                          - `?` already gives it the default `null`
+  |
+help: remove the `?`
+  |
+1 | public function pad(width: i64 = 3): void { //~ EN0227
+  |                          ~
+  = explain: run `enrang explain EN0227`
+
+error: aborting due to 1 previous error

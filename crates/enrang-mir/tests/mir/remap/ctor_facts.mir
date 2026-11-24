@@ -1,0 +1,45 @@
+class P {
+  x: i64 = default;
+  y: i64 = default;
+  n: i64 | null;
+}
+
+fn P::#ctor(_1: &P) -> void {
+  fact f0: _1.*.n nonnull;
+  bb0: {
+    switch const overridden(y): bool [0: bb1, otherwise: bb2];
+  }
+  bb1: {
+    field_init((*_1).y, const 1: i64);
+    goto bb2;
+  }
+  bb2: {
+    return;
+  }
+}
+// --- new
+class P {
+  y: i64 = default;
+  n: i64 | null;
+  x: i64 = default;
+}
+// --- expected
+class P {
+  y: i64 = default;
+  n: i64 | null;
+  x: i64 = default;
+}
+
+fn P::#ctor(_1: &P) -> void {
+  fact f0: _1.*.n nonnull;
+  bb0: {
+    switch const overridden(y): bool [0: bb1, otherwise: bb2];
+  }
+  bb1: {
+    field_init((*_1).y, const 1: i64);
+    goto bb2;
+  }
+  bb2: {
+    return;
+  }
+}

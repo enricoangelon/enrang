@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0401/v-me-09-arrow.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `Result<_>`, found `isize`
+ --> tests/compile/EN0401/v-me-09-arrow.fail.en:5:10
+  |
+3 |     return Err("empty");
+  |            ------------ the arrow's result type comes from here
+4 |   }
+5 |   return s.length(); //~ EN0401
+  |          ^^^^^^^^^^ this is `isize`
+  |
+help: annotate the result, `(s: &string): Result<isize> => ...`, or write `Ok(s.length())`
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: mismatched types: expected `string`, found `Result<_>`
+  --> tests/compile/EN0401/v-me-09-arrow.fail.en:11:10
+   |
+ 9 |     return s.trim().toString();
+   |            ------------------- the arrow's result type comes from here
+10 |   }
+11 |   return Err("empty"); //~ EN0401
+   |          ^^^^^^^^^^^^ this is `Result<_>`
+   |
+help: annotate the result, `(s: &string): Result<string> => ...`, or write `Ok(s.trim().toString())`
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

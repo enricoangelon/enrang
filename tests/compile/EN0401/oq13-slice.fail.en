@@ -1,0 +1,13 @@
+let sector: u8[8] = [0; 8];
+let list: u8[] = [1, 2, 3];
+addOne(&sector); //~ EN0401 "a fixed array can't grow"
+addOne(list.slice(0, 2)); //~ EN0401 "a part of an array can't grow"
+sector.slice(0, 4).push(1); //~ EN0303
+
+private function addOne(xs: &u8[]): void {
+  xs.push(1);
+}
+
+public class Packet {
+  public s: Slice<u8>; //~ EN0401 "`Slice<u8>` is a view, so it exists only behind `&`"
+}

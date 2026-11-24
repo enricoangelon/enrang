@@ -1,0 +1,2 @@
+//! row: `public function f<'a>(x: &'a string)`
+public function f<'a>(x: &'a string): void {} //~ EN1005 "named lifetimes are not supported yet"

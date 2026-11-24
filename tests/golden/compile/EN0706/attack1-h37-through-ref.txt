@@ -1,0 +1,127 @@
+$ enrang check tests/compile/EN0706/attack1-h37-through-ref.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `t` cannot change while `e` still points into it
+  --> tests/compile/EN0706/attack1-h37-through-ref.fail.en:6:1
+   |
+ 4 | const r = &t;
+   |           -- shared borrow of `t` starts here, held by `e`
+ 5 | const e = &r[0][0];
+ 6 | t[0].push(9); //~ EN0706
+   | ^^^^ `t` changes here
+...
+10 | console.log(*e);
+   |              - `e` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `t` cannot change while `e` still points into it
+  --> tests/compile/EN0706/attack1-h37-through-ref.fail.en:7:1
+   |
+ 4 | const r = &t;
+   |           -- shared borrow of `t` starts here, held by `e`
+ 5 | const e = &r[0][0];
+ 6 | t[0].push(9); //~ EN0706
+ 7 | t[0].push(9); //~ EN0706
+   | ^^^^ `t` changes here
+ 8 | t[0].push(9); //~ EN0706
+ 9 | t[0].push(9); //~ EN0706
+10 | console.log(*e);
+   |              - `e` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `t` cannot change while `e` still points into it
+  --> tests/compile/EN0706/attack1-h37-through-ref.fail.en:8:1
+   |
+ 4 | const r = &t;
+   |           -- shared borrow of `t` starts here, held by `e`
+...
+ 8 | t[0].push(9); //~ EN0706
+   | ^^^^ `t` changes here
+ 9 | t[0].push(9); //~ EN0706
+10 | console.log(*e);
+   |              - `e` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `t` cannot change while `e` still points into it
+  --> tests/compile/EN0706/attack1-h37-through-ref.fail.en:9:1
+   |
+ 4 | const r = &t;
+   |           -- shared borrow of `t` starts here, held by `e`
+...
+ 9 | t[0].push(9); //~ EN0706
+   | ^^^^ `t` changes here
+10 | console.log(*e);
+   |              - `e` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `c` cannot change while `d0` still points into it
+  --> tests/compile/EN0706/attack1-h37-through-ref.fail.en:31:5
+   |
+29 |     const rc = &c;
+   |                -- shared borrow of `c` starts here, held by `d0`
+30 |     const d0 = &rc.dst[0];
+31 |     c.step(); //~ EN0706
+   |     ^^^^^^^^ `step` changes `c`, so it needs exclusive access to it
+...
+35 |     console.log(*d0);
+   |                  -- `d0` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `c` cannot change while `d0` still points into it
+  --> tests/compile/EN0706/attack1-h37-through-ref.fail.en:32:5
+   |
+29 |     const rc = &c;
+   |                -- shared borrow of `c` starts here, held by `d0`
+30 |     const d0 = &rc.dst[0];
+31 |     c.step(); //~ EN0706
+32 |     c.step(); //~ EN0706
+   |     ^^^^^^^^ `step` changes `c`, so it needs exclusive access to it
+33 |     c.step(); //~ EN0706
+34 |     c.step(); //~ EN0706
+35 |     console.log(*d0);
+   |                  -- `d0` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `c` cannot change while `d0` still points into it
+  --> tests/compile/EN0706/attack1-h37-through-ref.fail.en:33:5
+   |
+29 |     const rc = &c;
+   |                -- shared borrow of `c` starts here, held by `d0`
+...
+33 |     c.step(); //~ EN0706
+   |     ^^^^^^^^ `step` changes `c`, so it needs exclusive access to it
+34 |     c.step(); //~ EN0706
+35 |     console.log(*d0);
+   |                  -- `d0` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error[EN0706]: `c` cannot change while `d0` still points into it
+  --> tests/compile/EN0706/attack1-h37-through-ref.fail.en:34:5
+   |
+29 |     const rc = &c;
+   |                -- shared borrow of `c` starts here, held by `d0`
+...
+34 |     c.step(); //~ EN0706
+   |     ^^^^^^^^ `step` changes `c`, so it needs exclusive access to it
+35 |     console.log(*d0);
+   |                  -- `d0` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 8 previous errors

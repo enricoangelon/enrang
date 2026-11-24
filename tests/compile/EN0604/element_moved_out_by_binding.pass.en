@@ -1,0 +1,3 @@
+const xs = ["a".toString(), "b".toString()];
+const s = xs[0].clone();
+console.log(s);

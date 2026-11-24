@@ -1,0 +1,5 @@
+//! row: `private const Y = [...X];`, an `unsafe 
+private const X: i64[2] = [1, 2];
+private const Y: i64[2] = X;
+
+public function f(): i64[] { return [...X]; }

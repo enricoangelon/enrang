@@ -1,0 +1,45 @@
+enum Shape { Circle { r: i64 }, Square { side: i64, tag: u8 } }
+
+fn area(_1: Shape, _2: u8) -> i64 {
+  let _3: u32 temp;
+  let _4: Shape temp;
+  bb0: {
+    _3 = discriminant(_1);
+    _4 = Shape::Square { side: const 1: i64, tag: copy _2 };
+    switch move _3 [0: bb1, 1: bb2];
+  }
+  bb1: {
+    check_tag(_1, Circle);
+    _0 = copy (_1 as Circle).r;
+    return;
+  }
+  bb2: {
+    check_tag(_1, Square);
+    _0 = copy (_1 as Square).side;
+    return;
+  }
+}
+// --- new
+enum Shape { Square { tag: u8, side: i64 }, Circle { r: i64 } }
+// --- expected
+enum Shape { Square { tag: u8, side: i64 }, Circle { r: i64 } }
+
+fn area(_1: Shape, _2: u8) -> i64 {
+  let _3: u32 temp;
+  let _4: Shape temp;
+  bb0: {
+    _3 = discriminant(_1);
+    _4 = Shape::Square { tag: copy _2, side: const 1: i64 };
+    switch move _3 [1: bb1, 0: bb2];
+  }
+  bb1: {
+    check_tag(_1, Circle);
+    _0 = copy (_1 as Circle).r;
+    return;
+  }
+  bb2: {
+    check_tag(_1, Square);
+    _0 = copy (_1 as Square).side;
+    return;
+  }
+}

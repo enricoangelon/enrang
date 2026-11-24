@@ -1,0 +1,40 @@
+run();
+
+public function run(): void {
+  const rex = new Dog("Rex");
+  describe(&rex);
+  const arr: i64[3] = [1, 2, 3];
+  total(&arr);
+  let sector: u8[4] = [7; 4];
+  show(sector.slice(0, 2));
+  show(&sector);
+  measure(sector.slice(0, 2));
+  measure(&sector);
+  console.log(describe(5));
+}
+
+public function describe(a: &Animal): void { console.log(`describe(Animal): ${a.name}`); }
+
+public function describe<T extends Animal>(a: &T): void { console.log(`describe<T>: ${a.name}`); }
+
+public function describe(n: int): string { return `int ${n}`; }
+
+public function describe(n: i64): string { return `i64 ${n}`; }
+
+public function total(xs: &Slice<i64>): void { console.log("total(Slice)"); }
+
+public function total<T>(x: &T): void { console.log("total<T>"); }
+
+public function show<T>(x: &T): void { console.log("any:", x); }
+
+public function show<T>(x: &Slice<T>): void { console.log("view:", x); }
+
+public function measure<T>(x: &T): void { console.log("any:", x, sizeOf<T>()); }
+
+public function measure<T>(x: &Slice<T>): void { console.log("view:", x); }
+
+public class Animal {
+  public constructor(public name: string) {}
+}
+
+public class Dog extends Animal {}

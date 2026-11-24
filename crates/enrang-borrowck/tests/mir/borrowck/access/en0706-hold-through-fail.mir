@@ -1,0 +1,131 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/hold-through.fail.en. Its row's codes: EN0706, EN0706.
+module "tests/compile/EN0706/hold-through.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class S {
+  items: i64[] = default;
+  count: i64 = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: S; // s
+  let _3: *S temp;
+  let _4: void temp;
+  let mut _5: S; // t
+  let _6: *S temp;
+  let _7: void temp;
+  let mut _8: &S; // r
+  let _9: isize #i;
+  let _10: isize #n;
+  let _11: bool temp;
+  let _12: &i64; // x
+  let mut _13: S; // s2
+  let _14: *S temp;
+  let _15: void temp;
+  let mut _16: &S; // r2
+  let _17: isize #i;
+  let _18: isize #n;
+  let _19: bool temp;
+  let _20: &i64; // x
+  let _21: void temp;
+  let _22: &i64[] temp;
+  loop l0: path (*_8).items preheader bb7 head bb3 bind bb4[2] binding _12;
+  loop l1: path (*_16).items preheader bb14 head bb10 bind bb11[2] binding _20;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill S leaving(items, count)(move _3) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _6 = addr_of _5;
+    _7 = named_fill S leaving(items, count)(move _6) -> bb2;
+  }
+  bb2: {
+    storage_live(_8);
+    _8 = &_2 [explicit];
+    goto bb7;
+  }
+  bb3: {
+    _10 = len((*_8).items);
+    _11 = lt(copy _9, copy _10);
+    switch move _11 [0: bb6, otherwise: bb4];
+  }
+  bb4: {
+    storage_live(_12);
+    check_bounds(copy _9, copy _10);
+    _12 = &(*_8).items[_9] [for-of-element];
+    _9 = add(copy _9, const 1: isize);
+    goto bb8;
+  }
+  bb5: {
+    goto bb3;
+  }
+  bb6: {
+    storage_live(_13);
+    _14 = addr_of _13;
+    _15 = named_fill S leaving(items, count)(move _14) -> bb9;
+  }
+  bb7: {
+    storage_live(_9);
+    _9 = const 0: isize;
+    goto bb3;
+  }
+  bb8: {
+    _8 = &_5 [explicit]; //~ EN0706
+    storage_dead(_12);
+    goto bb5;
+  }
+  bb9: {
+    storage_live(_16);
+    _16 = &_13 [explicit];
+    goto bb14;
+  }
+  bb10: {
+    _18 = len((*_16).items);
+    _19 = lt(copy _17, copy _18);
+    switch move _19 [0: bb13, otherwise: bb11];
+  }
+  bb11: {
+    storage_live(_20);
+    check_bounds(copy _17, copy _18);
+    _20 = &(*_16).items[_17] [for-of-element];
+    _17 = add(copy _17, const 1: isize);
+    goto bb15;
+  }
+  bb12: {
+    goto bb10;
+  }
+  bb13: {
+    storage_dead(_16);
+    drop(_13);
+    storage_dead(_13);
+    storage_dead(_8);
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb14: {
+    storage_live(_17);
+    _17 = const 0: isize;
+    goto bb10;
+  }
+  bb15: {
+    _22 = &(*_16).items [auto-borrow]; //~ EN0706
+    _21 = "alloc/array"::Array<i64>::push(move _22, const 1: i64) -> bb16;
+  }
+  bb16: {
+    storage_dead(_20);
+    goto bb12;
+  }
+}

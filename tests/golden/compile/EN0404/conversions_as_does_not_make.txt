@@ -1,0 +1,39 @@
+$ enrang check tests/compile/EN0404/conversions_as_does_not_make.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0404]: `int` can't be converted to `Color` with `as`
+ --> tests/compile/EN0404/conversions_as_does_not_make.fail.en:2:15
+  |
+2 | const color = n as Color; //~ EN0404 "`int` can't be converted to `Color` with `as`"
+  |               ^^^^^^^^^^ this is `int`
+  |
+  = explain: run `enrang explain EN0404`
+
+error[EN0404]: `int` can't be converted to `bool` with `as`
+ --> tests/compile/EN0404/conversions_as_does_not_make.fail.en:3:14
+  |
+3 | const flag = n as bool; //~ EN0404 "`int` can't be converted to `bool` with `as`"
+  |              ^^^^^^^^^ this is `int`
+  |
+help: compare it instead: `n != 0`
+  = explain: run `enrang explain EN0404`
+
+error[EN0404]: `Dir` can't be converted to `int` with `as`
+ --> tests/compile/EN0404/conversions_as_does_not_make.fail.en:4:14
+  |
+4 | const code = Dir.Up as i32; //~ EN0404 "`Dir` can't be converted to `int` with `as`"
+  |              ^^^^^^^^^^^^^ this is `Dir`
+  |
+help: an enum with text values has no number
+  = explain: run `enrang explain EN0404`
+
+error[EN0404]: `string` can't be converted to `int` with `as`
+ --> tests/compile/EN0404/conversions_as_does_not_make.fail.en:5:14
+  |
+5 | const text = "7" as i32; //~ EN0404 "`string` can't be converted to `int` with `as`"
+  |              ^^^^^^^^^^ this is `string`
+  |
+  = explain: run `enrang explain EN0404`
+
+error: aborting due to 4 previous errors

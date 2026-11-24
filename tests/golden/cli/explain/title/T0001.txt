@@ -3,5 +3,5 @@ $ enrang explain T0001
 [stdout]
 T0001: value matcher found different values
 
-No explain page yet: it arrives with milestone M4, and this is milestone M0.
+No explain page yet: it arrives with milestone M4, and this is milestone M3.
 [stderr]

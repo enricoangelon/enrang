@@ -1,0 +1,11 @@
+//! covers: H28
+let k = K;
+let keep: &i64 | null = null;
+for (const x of &k) {
+  keep = x;
+}
+if (keep != null) {
+  *keep = 0;
+}
+
+private const K: i64[2] = [1, 2];

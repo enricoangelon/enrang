@@ -1,0 +1,7 @@
+public class Account {
+  private cents: i64 = 0;
+
+  public get balance(): i64 { //~ EN0100 "getters do not exist in Enrang"
+    return this.cents;
+  }
+}

@@ -1,0 +1,7 @@
+public function read(xs: &Slice<i64>): void {
+  for (const a of xs) {
+    for (const b of xs) {
+      console.log(*a, *b);
+    }
+  }
+}

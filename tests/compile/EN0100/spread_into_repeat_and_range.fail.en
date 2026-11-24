@@ -1,0 +1,5 @@
+const a = [1, 2];
+const n = 3;
+const r = [...a; 3]; //~ EN0100
+const s = [...0..n]; //~ EN0100
+console.log(r, s);

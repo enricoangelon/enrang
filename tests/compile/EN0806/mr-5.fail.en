@@ -1,0 +1,17 @@
+let log: string[] = [];
+log.push("start");
+
+@devMigrate function migratePlayer(old: { name: string, hp: i32 }): Player { //~ EN0806 "`@devMigrate` can't be used on a function that uses top-level variables"
+  log.push("migrated");
+  return new Player { name: old.name, hp: old.hp };
+}
+
+@panicHandler function onPanic(): never { //~ EN0806 "`@panicHandler` can't be used on a function that uses top-level variables"
+  log.push("panic");
+  while (true) {}
+}
+
+public final class Player {
+  public name: string;
+  public hp: i32;
+}

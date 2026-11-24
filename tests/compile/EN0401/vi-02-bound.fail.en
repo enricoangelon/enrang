@@ -1,0 +1,35 @@
+let s = "hello".toString();
+const k = new Keeper();
+g(&k, s.slice(1, 3));
+const l = new ListedKeeper();
+f(&l, s.slice(1, 3));
+
+private function g<Z extends Sizer>(z: &Z, v: &string): void {
+  console.log(z.size(v));
+}
+
+private function f(z: &Sizer, v: &string): void {
+  console.log(z.size(v));
+}
+
+public interface Measured {
+  length(): isize;
+}
+
+public interface Sizer {
+  size<T extends Measured>(x: &T): isize;
+}
+
+public class Keeper {
+  public size<T extends Measured>(x: &T): isize {
+    const m: &Measured = x; //~ EN0401 "a `&string` can't become a `&Measured`, because it may be a part of a string"
+    return m.length();
+  }
+}
+
+public class ListedKeeper implements Sizer {
+  public size<T extends Measured>(x: &T): isize {
+    const m: &Measured = x; //~ EN0401 "a `&string` can't become a `&Measured`, because it may be a part of a string"
+    return m.length();
+  }
+}

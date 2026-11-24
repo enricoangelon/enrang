@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0615/closure-forward-writes.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `f` may hold a function that writes `x`, so it can't become a `(x: &i64) => void`
+ --> tests/compile/EN0615/closure-forward-writes.fail.en:6:9
+  |
+6 |   inner(f, n); //~ EN0615
+  |         ^ converted here
+  |
+  = note: a function value may write only what its type's `let` marks allow
+help: declare the slot's type with the row the value needs: `(let x: &i64) => void`
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

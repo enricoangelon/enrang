@@ -1,0 +1,57 @@
+//! row: Contracts, one per clause: an implementation
+let f = new Filler();
+let xs: i64[] = [];
+fill(&f, &xs);
+let file = new File();
+shut(&file);
+let w = new Words();
+read(&w);
+
+private function fill<T extends Sink>(s: &T, xs: &i64[]): void {
+  s.put(xs);
+}
+
+private function shut<T extends Closer>(c: &T): void {
+  console.log(1);
+}
+
+private function read<T extends TokenReader>(r: &T): void {
+  console.log(r.next());
+}
+
+public interface Sink {
+  let put(let xs: &i64[]): void;
+}
+
+public interface Closer {
+  move close(): void;
+}
+
+public interface TokenReader {
+  let next(): readonly &string | null;
+}
+
+public class Filler {
+  public put(xs: &i64[]): void {
+    xs.push(1);
+  }
+}
+
+public class File {
+  private fd: i64 = 3;
+  public move close(): void {}
+}
+
+public class Words {
+  private text: string = "let x = 42";
+  private pos: isize = 0;
+
+  public next(): &string | null {
+    if (this.pos >= this.text.length()) {
+      return null;
+    }
+    const start = this.pos;
+    this.pos = this.text.length();
+    return this.text.slice(start, this.pos);
+  }
+}

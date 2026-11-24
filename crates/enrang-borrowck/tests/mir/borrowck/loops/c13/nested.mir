@@ -1,0 +1,67 @@
+// Another loop's hold reports by mode (A:1259): over `xs: &Slice<i64>`,
+//   for (const a of xs) { for (const b of xs) { *b = 1; } *a = 2; }
+// is one EN0707 at the inner source: its hold, `Len` and `Ref` meet the outer
+// loop's exclusive hold, which the hold exception (EN0706 whatever the mode)
+// leaves to them since they are a loop's own hold, head and bind.
+// Run by `loops.rs` with c.13's spans (see one-report.mir).
+fn nestedLoops(_1: &Slice<i64>) -> void {
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &i64; // a
+  let _6: isize #i;
+  let _7: isize #n;
+  let _8: bool temp;
+  let _9: &i64; // b
+  loop l0: path *_1 preheader bb0 head bb1 bind bb2[2] binding _5;
+  loop l1: path *_1 preheader bb3 head bb4 bind bb5[2] binding _9; //~ EN0707
+  bb0: {
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb1: {
+    _3 = len(*_1);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb8, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &(*_1)[_2] [for-of-element];
+    _2 = add(copy _2, const 1: isize);
+    goto bb3;
+  }
+  bb3: {
+    storage_live(_6);
+    _6 = const 0: isize;
+    goto bb4;
+  }
+  bb4: {
+    _7 = len(*_1);
+    _8 = lt(copy _6, copy _7);
+    switch move _8 [0: bb7, otherwise: bb5];
+  }
+  bb5: {
+    storage_live(_9);
+    check_bounds(copy _6, copy _7);
+    _9 = &(*_1)[_6] [for-of-element];
+    _6 = add(copy _6, const 1: isize);
+    goto bb6;
+  }
+  bb6: {
+    *_9 = const 1: i64;
+    storage_dead(_9);
+    goto bb4;
+  }
+  bb7: {
+    storage_dead(_6);
+    *_5 = const 2: i64;
+    storage_dead(_5);
+    goto bb1;
+  }
+  bb8: {
+    storage_dead(_2);
+    return;
+  }
+}

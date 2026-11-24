@@ -1,0 +1,18 @@
+//! row: `saved = job; queue.push(s); use(saved);
+let queue = ["a", "b"];
+let saved: &string | null = null;
+for (const job of &queue) {
+  saved = job;
+  use(saved);
+}
+queue.push("s");
+
+let q: i64[] = [3, 1];
+let best: &i64 | null = null;
+for (const x of &q) {
+  best = x;
+  console.log(best);
+}
+q.push(1);
+
+private function use(s: &string | null): void { console.log(s); }

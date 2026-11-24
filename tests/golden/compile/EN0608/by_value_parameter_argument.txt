@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/by_value_parameter_argument.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `bump` can change `x`, but `p` is a parameter not marked `let`
+ --> tests/compile/EN0608/by_value_parameter_argument.fail.en:6:8
+  |
+6 |   bump(&p.x); //~ EN0608
+  |        ^^^^ `bump` writes through it
+  |
+help: mark it `let p`
+  |
+5 | public function reset(let p: Point): i64 {
+  |                       ++++
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

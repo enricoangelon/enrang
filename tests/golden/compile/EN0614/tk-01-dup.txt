@@ -1,0 +1,22 @@
+$ enrang check tests/compile/EN0614/tk-01-dup.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `dup` returns two references that may point at the same data, so `push` cannot change it
+ --> tests/compile/EN0614/tk-01-dup.fail.en:6:3
+  |
+6 |   b.push(9); //~ EN0614
+  |   ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0616]: cannot change the object returned by `dup`
+  --> tests/compile/EN0614/tk-01-dup.fail.en:13:16
+   |
+13 |   clash(p2[0], p2[1]); //~ EN0616
+   |                ^^^^^ `clash` writes through it
+   |
+   = note: `dup` returns two references that may point at the same data
+   = explain: run `enrang explain EN0616`
+
+error: aborting due to 2 previous errors

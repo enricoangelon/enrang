@@ -53,6 +53,14 @@ impl DiagCtx {
         self.failed
     }
 
+    /// Whether a diagnostic with `code` at the primary `span` was emitted, taken or
+    /// not, so that a later step can leave alone a place an earlier one reported: the
+    /// lexer skips a U+FFFD where the driver reported EN0001. Always `false` for a
+    /// dummy span, which is no place.
+    pub fn reported(&self, code: Code, span: Span) -> bool {
+        !span.is_dummy() && self.seen.contains(&(code, span, String::new()))
+    }
+
     /// Ends a phase: `Err` when this phase, since the last call, reported an
     /// error. Warnings and notes alone let the compile continue.
     pub fn finish_phase(&mut self) -> Result<(), Aborted> {

@@ -1,0 +1,14 @@
+const ada = new Person { name: "Ada", pos: new Pos { x: 1, label: "home" } };
+const { name, pos: { x } } = &ada;
+console.log(name, x);
+console.log(ada.name);
+
+public class Pos {
+  public x: i64;
+  public label: string;
+}
+
+public class Person {
+  public name: string;
+  public pos: Pos;
+}

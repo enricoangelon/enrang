@@ -1,0 +1,41 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/d20e-02-2.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/d20e-02-2.pass";
+@abstract class Attachable { }
+@private class Tag extends Attachable {
+  private label: &string;
+}
+
+fn Tag::#ctor(_1: &Tag, _2: &string) -> void {
+  let _1: &Tag; // this
+  let _2: &string; // label
+  let _3: &string temp;
+  let _4: void temp;
+  let _5: *Tag temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).label = move _3;
+    _5 = addr_of *_1;
+    _4 = implicit_ctor Attachable(move _5) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@override fn Tag::attach(_1: &Tag, _2: &string) -> void {
+  let _1: &Tag; // this
+  let _2: &string; // s
+  let _3: void temp;
+  let _4: &string temp;
+  let _5: &string temp;
+  bb0: {
+    _4 = copy (*_1).label;
+    _5 = &*_2 [reborrow];
+    _3 = form log(move _4, move _5) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

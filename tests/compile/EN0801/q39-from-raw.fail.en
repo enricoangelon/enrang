@@ -1,0 +1,3 @@
+public function view(p: *u8): void {
+  const v = Slice<u8>.fromRaw(p, 4); //~ EN0801 "calling `fromRaw` needs `unsafe`"
+}

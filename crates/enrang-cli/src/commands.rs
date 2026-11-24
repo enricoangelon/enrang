@@ -9,22 +9,49 @@ pub struct Working {
     /// As `--help` and ARCHITECTURE 11 write it, without the leading `enrang`.
     pub usage: &'static str,
     pub summary: &'static str,
+    /// The milestone that delivers it. One above the current milestone is the one
+    /// being built, whose commands work before the commit that closes it.
+    pub since: Milestone,
 }
+
+pub(crate) const CHECK: Working = Working {
+    name: "check",
+    usage: "check [file]",
+    summary: "Check a file's syntax, types and borrows",
+    since: Milestone::M1,
+};
+
+pub(crate) const FMT: Working = Working {
+    name: "fmt",
+    usage: "fmt [paths] [--check]",
+    summary: "Format files in the canonical style, or report those that would change",
+    since: Milestone::M1,
+};
 
 pub(crate) const EXPLAIN: Working = Working {
     name: "explain",
     usage: "explain <code>",
     summary: "Print the page of a diagnostic code, or its title until the page arrives",
+    since: Milestone::M0,
+};
+
+pub(crate) const INIT: Working = Working {
+    name: "init",
+    usage: "init [name] [--kernel]",
+    summary: "Create a project without overwriting anything; M9 adds `--kernel`",
+    since: Milestone::M1,
 };
 
 pub(crate) const TARGETS: Working = Working {
     name: "targets",
     usage: "targets [--evidence]",
     summary: "List targets, CPU levels and aliases; --evidence prints the support table",
+    since: Milestone::M0,
 };
 
-/// Every command that works, in the order `--help` shows them.
-pub const WORKING: &[Working] = &[EXPLAIN, TARGETS];
+/// Every command that works, in the order of the table in ARCHITECTURE 11, which
+/// is the order `--help` shows them in.
+pub const WORKING: &[Working] = &[CHECK, FMT, EXPLAIN, INIT, TARGETS];
 
 /// A command a later milestone delivers.
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -64,23 +91,11 @@ pub const LATER: &[LaterCommand] = &[
         since: Milestone::M4,
         delivers: "M4 runs tests in the VM, and M5 runs them natively",
     },
-    LaterCommand {
-        name: "check",
-        usage: "check [file]",
-        since: Milestone::M1,
-        delivers: "M1 checks syntax, M2 adds types and M3 adds borrows",
-    },
-    LaterCommand {
-        name: "init",
-        usage: "init [name] [--kernel]",
-        since: Milestone::M1,
-        delivers: "M1 creates a project, and M9 adds `--kernel`",
-    },
 ];
 
 /// The commands outside the prototype, in the order SPEC 13.2 lists them. EN1301.
 pub const DEFERRED: &[&str] = &[
-    "install", "add", "publish", "doc", "lsp", "repl", "bench", "debug", "upgrade", "fmt",
+    "install", "add", "publish", "doc", "lsp", "repl", "bench", "debug", "upgrade",
 ];
 
 /// A name from another toolchain, pointed at its counterpart. EN1302.

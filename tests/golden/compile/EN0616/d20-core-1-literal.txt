@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0616/d20-core-1-literal.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change a string literal
+ --> tests/compile/EN0616/d20-core-1-literal.fail.en:3:8
+  |
+3 | a.setS("hi"); //~ EN0616
+  |        ^^^^ `setS` writes through it
+  |
+help: copy it first: `.toString()`
+  = explain: run `enrang explain EN0616`
+
+error[EN0608]: `setS` can change `s`, but `t` is `const`
+ --> tests/compile/EN0616/d20-core-1-literal.fail.en:5:8
+  |
+5 | a.setS(&t); //~ EN0608
+  |        ^^ `setS` writes through it
+  |
+help: declare it `let t`
+  |
+4 | let t: string = "ok".toString();
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 2 previous errors

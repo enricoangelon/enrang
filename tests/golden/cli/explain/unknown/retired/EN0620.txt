@@ -1,0 +1,5 @@
+$ enrang explain EN0620
+[exit 2]
+[stdout]
+[stderr]
+error: `EN0620` is retired: a method with type parameters of its own is never overridden; an override of one is EN0460

@@ -124,6 +124,23 @@ pub fn register(h: &mut Harness) {
             assert_eq!(dcx.take().len(), 2);
         },
     );
+    h.case("ctx/reported knows each code and span emitted", || {
+        let src = Src::new("a.en", "abc\n");
+        let mut dcx = DiagCtx::new();
+        assert!(!dcx.reported(Code::EN0301, src.find("a")));
+        dcx.emit(named(Code::EN0301, "a", src.find("a")));
+        assert!(dcx.reported(Code::EN0301, src.find("a")));
+        assert!(!dcx.reported(Code::EN0302, src.find("a")), "another code");
+        assert!(!dcx.reported(Code::EN0301, src.find("b")), "another span");
+        assert!(!dcx.reported(Code::EN0301, src.find("ab")), "a wider span");
+        dcx.take();
+        assert!(dcx.reported(Code::EN0301, src.find("a")), "taken or not");
+    });
+    h.case("ctx/reported is false for a dummy span", || {
+        let mut dcx = DiagCtx::new();
+        dcx.emit(Diagnostic::spanless(Code::EN1301, "spanless"));
+        assert!(!dcx.reported(Code::EN1301, Span::DUMMY));
+    });
     h.case("ctx/a dedupe outlasts take", || {
         let src = Src::new("a.en", "abc\n");
         let mut dcx = DiagCtx::new();

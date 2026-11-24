@@ -1,0 +1,22 @@
+$ enrang check tests/compile/EN0706/write_while_shared.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `x` cannot change while `y` still points into it
+ --> tests/compile/EN0706/write_while_shared.fail.en:3:1
+  |
+2 | const y = &x;
+  |           -- shared borrow of `x` starts here, held by `y`
+3 | x = 13; //~ EN0706 "`x` cannot change while `y` still points into it"
+  | ^^^^^^ `x` changes here
+4 | console.log(y);
+  |             - `y` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: keep a copy instead of a reference
+  |
+2 | const y = x.clone();
+  |           ~~~~~~~~~
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

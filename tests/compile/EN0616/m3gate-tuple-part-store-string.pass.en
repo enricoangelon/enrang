@@ -1,0 +1,6 @@
+let s = "hello world".toString();
+let o = "x".toString();
+let t: [&string, i32] = [&o, 0];
+t[0] = &s;
+*t[0] = "a much longer replacement".toString();
+console.log(s);

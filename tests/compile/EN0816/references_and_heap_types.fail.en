@@ -1,0 +1,12 @@
+//! target: x86_64-windows
+@dll("kernel32.dll") public declare function GetName(s: string): void; //~ EN0816 "`string` can't cross into foreign code"
+
+@dll("kernel32.dll") public declare function Fill(xs: i32[], ys: u8[4], r: &i32, v: &Slice<u8>): void; //~ EN0816 "`int[]` can't cross into foreign code" //~ EN0816 "`&int` can't cross into foreign code"
+
+@dll("kernel32.dll") public declare function Run(f: (x: i32) => void, n: i32 | null): void; //~ EN0816 "`(int) => void` can't cross into foreign code"
+
+@dll("kernel32.dll") public declare function Gen<T>(x: T): void; //~ EN0816 "`T` can't cross into foreign code"
+
+@dll("kernel32.dll") public declare function Ret(): string; //~ EN0816 "`string` can't cross into foreign code"
+
+public type Cb = @abi("win64") unsafe fn(s: &string) => void; //~ EN0816 "`&string` can't cross into foreign code"

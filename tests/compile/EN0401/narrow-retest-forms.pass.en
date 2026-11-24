@@ -1,0 +1,32 @@
+private function a(h: &Holder): void {
+  if (h.item != null) {
+    h.drop();
+    if (h.item == null) {
+      return;
+    }
+    console.log(h.item.n);
+  }
+}
+
+private function b(h: &Holder): void {
+  if (h.item == null) {
+    return;
+  }
+  h.drop();
+  if (h.item == null) {
+    return;
+  }
+  console.log(h.item.n);
+}
+
+private class Item {
+  public n: i64 = 1;
+}
+
+private class Holder {
+  public item: Item | null = new Item();
+
+  public drop(): void {
+    this.item = null;
+  }
+}

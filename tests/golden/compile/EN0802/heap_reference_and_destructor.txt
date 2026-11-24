@@ -1,0 +1,61 @@
+$ enrang check tests/compile/EN0802/heap_reference_and_destructor.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0802]: an `unsafe let` can't hold a `string`
+ --> tests/compile/EN0802/heap_reference_and_destructor.fail.en:1:26
+  |
+1 | private unsafe let name: string = "x"; //~ EN0802 "an `unsafe let` can't hold a `string`"
+  |                          ^^^^^^ `string` owns heap memory
+  |
+  = explain: run `enrang explain EN0802`
+
+error[EN0802]: an `unsafe let` can't hold an `i64[]`
+ --> tests/compile/EN0802/heap_reference_and_destructor.fail.en:2:27
+  |
+2 | private unsafe let items: i64[]; //~ EN0802 "an `unsafe let` can't hold an `i64[]`"
+  |                           ^^^^^ `i64[]` owns heap memory
+  |
+  = explain: run `enrang explain EN0802`
+
+error[EN0802]: an `unsafe let` can't hold a `Box<i64> | null`
+ --> tests/compile/EN0802/heap_reference_and_destructor.fail.en:3:27
+  |
+3 | private unsafe let boxed: Box<i64> | null = null; //~ EN0802 "an `unsafe let` can't hold a `Box<i64> | null`"
+  |                           ^^^^^^^^^^^^^^^ `Box<i64>` owns heap memory
+  |
+  = explain: run `enrang explain EN0802`
+
+error[EN0802]: an `unsafe let` can't hold `void`
+ --> tests/compile/EN0802/heap_reference_and_destructor.fail.en:4:29
+  |
+4 | private unsafe let nothing: void; //~ EN0802 "an `unsafe let` can't hold `void`"
+  |                             ^^^^ `void` holds nothing
+  |
+  = explain: run `enrang explain EN0802`
+
+error[EN0802]: an `unsafe let` can't hold a `&i64 | null`
+ --> tests/compile/EN0802/heap_reference_and_destructor.fail.en:5:23
+  |
+5 | private unsafe let r: &i64 | null = null; //~ EN0802 "an `unsafe let` can't hold a `&i64 | null`"
+  |                       ^^^^^^^^^^^ `&i64` is a reference
+  |
+  = explain: run `enrang explain EN0802`
+
+error[EN0802]: an `unsafe let` can't hold a `Guard | null`
+ --> tests/compile/EN0802/heap_reference_and_destructor.fail.en:6:27
+  |
+6 | private unsafe let guard: Guard | null = null; //~ EN0802 "an `unsafe let` can't hold a `Guard | null`"
+  |                           ^^^^^^^^^^^^ `Guard` has a destructor
+  |
+  = explain: run `enrang explain EN0802`
+
+error[EN0802]: an `unsafe let` can't hold a `[i64, string]`
+ --> tests/compile/EN0802/heap_reference_and_destructor.fail.en:7:26
+  |
+7 | private unsafe let pair: [i64, string] = [1, "a"]; //~ EN0802 "an `unsafe let` can't hold a `[i64, string]`"
+  |                          ^^^^^^^^^^^^^ `string` owns heap memory
+  |
+  = explain: run `enrang explain EN0802`
+
+error: aborting due to 7 previous errors

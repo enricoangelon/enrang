@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0706/forof-narrowed-method-source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `o` cannot change while a borrow of it is still used
+  --> tests/compile/EN0706/forof-narrowed-method-source.fail.en:11:7
+   |
+10 |     for (const x of o.kids()) {
+   |                     - shared borrow of `o` starts here
+   |                     -------- the borrow is used again here
+11 |       o = null; //~ EN0706
+   |       ^^^^^^^^ `o` changes here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

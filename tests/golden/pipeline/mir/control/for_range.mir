@@ -1,0 +1,32 @@
+@private fn f(_1: i64) -> void {
+  let _1: i64; // n
+  let _2: i64 #cur;
+  let _3: i64 #end;
+  let _4: bool temp;
+  let _5: i64; // i
+  bb0: {
+    _2 = const 0: i64;
+    _3 = copy _1;
+    goto bb1;
+  }
+  bb1: {
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    _5 = copy _2;
+    _2 = add(copy _2, const 1: i64);
+    goto bb5;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    return;
+  }
+  bb5: {
+    storage_dead(_5);
+    goto bb3;
+  }
+}

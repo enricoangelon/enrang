@@ -1,0 +1,23 @@
+$ enrang explain EN0001
+[exit 0]
+[stdout]
+EN0001: source is not valid UTF-8
+
+Enrang source is UTF-8. Each run of bytes that is not valid UTF-8 is one EN0001, reported where the bytes are, and the file is not compiled. It usually means the file was saved in a legacy encoding such as Latin-1 or Windows-1252, where `ü` is the single byte FC, while UTF-8 spells it as the two bytes C3 BC. Save the file as UTF-8 and nothing else changes. A byte order mark at the very start of a file is allowed and skipped. The failing example below is shown as the text it was meant to be; its file holds the Latin-1 byte.
+
+Failing:
+
+    // Saved as Latin-1, so the name of the city holds the single byte FC.
+    const city = "Zürich";
+    console.log(city);
+
+Fixed:
+
+    // Saved as UTF-8, so the name of the city holds the two bytes C3 BC.
+    const city = "Zürich";
+    console.log(city);
+
+From TypeScript:
+
+The TypeScript compiler decodes such bytes as the replacement character, `�`, without a word, and the mistake shows up later as `Z�rich` in the output. Enrang stops at the bytes instead, so what you compile is what you wrote.
+[stderr]

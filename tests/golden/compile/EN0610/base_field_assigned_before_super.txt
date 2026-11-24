@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0610/base_field_assigned_before_super.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0610]: `name` is not set until `super(name)` runs
+ --> tests/compile/EN0610/base_field_assigned_before_super.fail.en:9:5
+  |
+9 |     this.name = name.clone(); //~ EN0610
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^ `name` is inherited from `Animal`, so it can be assigned only after `super(name)`
+  |
+help: assign this.name after super(name)
+  = explain: run `enrang explain EN0610`
+
+error: aborting due to 1 previous error

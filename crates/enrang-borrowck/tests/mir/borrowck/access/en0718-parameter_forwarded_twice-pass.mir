@@ -1,0 +1,34 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0718/parameter_forwarded_twice.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0718/parameter_forwarded_twice.pass";
+
+@private fn run1(_1: () => void) -> void {
+  let _1: () => void; // a
+  let _2: void temp;
+  bb0: {
+    _2 = closure _1() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn twiceOf(_1: () => void) -> void {
+  let _1: () => void; // f
+  let _2: void temp;
+  let _3: () => void temp;
+  let _4: void temp;
+  let _5: () => void temp;
+  bb0: {
+    _3 = closure_reborrow(_1);
+    _2 = run1(move _3) -> bb1;
+  }
+  bb1: {
+    _5 = closure_reborrow(_1);
+    _4 = run1(move _5) -> bb2;
+  }
+  bb2: {
+    return;
+  }
+}

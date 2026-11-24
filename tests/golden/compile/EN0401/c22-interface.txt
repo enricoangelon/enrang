@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0401/c22-interface.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: a `&string` can't become a `&Measured`, because it may be a part of a string
+ --> tests/compile/EN0401/c22-interface.fail.en:3:22
+  |
+3 | const m: &Measured = s.slice(1, 3); //~ EN0401 "a `&string` can't become a `&Measured`, because it may be a part of a string"
+  |                      ^^^^^^^^^^^^^ this is a `&string`
+  |
+help: take <T extends Measured>(m: &T)
+help: or keep a copy: s.slice(1, 3).toString()
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,10 @@
+public interface Counter {
+  count(): i64;
+}
+
+public class Ticks implements Counter { //~ EN0416 "`Ticks` does not satisfy `Counter`: `count` has `@requires`"
+  @requires("cmov")
+  public count(): i64 {
+    return 1;
+  }
+}

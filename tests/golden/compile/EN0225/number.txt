@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0225/number.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0225]: `number` does not exist in Enrang
+ --> tests/compile/EN0225/number.fail.en:1:12
+  |
+1 | let count: number = 0; //~ EN0225
+  |            ^^^^^^ every number type states its kind and size
+  |
+  = note: use `f64`, or `int` for whole numbers
+help: replace `number` with `f64`
+  |
+1 | let count: f64 = 0; //~ EN0225
+  |            ~~~
+  = explain: run `enrang explain EN0225`
+
+error: aborting due to 1 previous error

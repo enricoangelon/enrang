@@ -1,0 +1,22 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/override-move-mismatch.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/override-move-mismatch.pass";
+class Conn {
+  private fd: i64 = default;
+}
+class Tls extends Conn { }
+
+fn Conn::close(_1: &Conn) -> void {
+  let _1: &Conn; // this
+  bb0: {
+    return;
+  }
+}
+
+@override fn Tls::close(_1: &Tls) -> void {
+  let _1: &Tls; // this
+  bb0: {
+    return;
+  }
+}

@@ -1,0 +1,57 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0601/whole_used_after_field_moved.fail.en. Its row's codes: EN0601.
+module "tests/compile/EN0601/whole_used_after_field_moved.fail";
+class Pair {
+  first: string;
+  second: string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Pair; // p
+  let _3: *Pair temp;
+  let _4: void temp;
+  let _5: string; // f
+  let _6: void temp;
+  let _7: &string temp;
+  let _8: void temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Pair leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _2.first = const "a": string;
+    _2.second = const "b": string;
+    storage_live(_5);
+    _5 = move _2.first;
+    _7 = &_5 [auto-borrow];
+    _6 = form log(move _7) -> bb2;
+  }
+  bb2: {
+    _8 = show(move _2) -> bb3; //~ EN0601
+  }
+  bb3: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn show(_1: Pair) -> void {
+  let _1: Pair; // p
+  let _2: void temp;
+  let _3: &string temp;
+  bb0: {
+    _3 = &_1.second [auto-borrow];
+    _2 = form log(move _3) -> bb1;
+  }
+  bb1: {
+    drop(_1);
+    return;
+  }
+}

@@ -1,0 +1,8 @@
+//! row: `run(() => { q.push(1); })` in a loop ov
+let q: i64[] = [1, 2];
+for (const x of &q) {
+  console.log(x);
+}
+run(() => { q.push(1); });
+
+private function run(f: () => void): void { f(); }

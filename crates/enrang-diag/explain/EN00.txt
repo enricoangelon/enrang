@@ -1,0 +1,91 @@
+=== EN0001
+--- rule
+Enrang source is UTF-8. Each run of bytes that is not valid UTF-8 is one EN0001, reported where the bytes are, and the file is not compiled. It usually means the file was saved in a legacy encoding such as Latin-1 or Windows-1252, where `ü` is the single byte FC, while UTF-8 spells it as the two bytes C3 BC. Save the file as UTF-8 and nothing else changes. A byte order mark at the very start of a file is allowed and skipped. The failing example below is shown as the text it was meant to be; its file holds the Latin-1 byte.
+--- failing
+// Saved as Latin-1, so the name of the city holds the single byte FC.
+const city = "Zürich";
+console.log(city);
+--- fixed
+// Saved as UTF-8, so the name of the city holds the two bytes C3 BC.
+const city = "Zürich";
+console.log(city);
+--- typescript
+The TypeScript compiler decodes such bytes as the replacement character, `�`, without a word, and the mistake shows up later as `Z�rich` in the output. Enrang stops at the bytes instead, so what you compile is what you wrote.
+=== EN0002
+--- rule
+A block comment runs from `/*` to the first `*/`. One that reaches the end of the file is EN0002, reported at its `/*`: everything after it would be comment, so the compiler stops there rather than guess where it should have ended. Block comments do not nest, so in `/* a /* b */ c */` the comment ends after `b` and `c */` is code. Close the comment with `*/`, or use `//` comments, which end at the line.
+--- failing
+/* Prints a greeting.
+console.log("hello");
+--- fixed
+/* Prints a greeting. */
+console.log("hello");
+--- typescript
+The same mistake in TypeScript gives `'*/' expected`. As in TypeScript, block comments do not nest.
+=== EN0003
+--- rule
+Inside a string or a template, `\` starts an escape, and only these exist: `\n`, `\r`, `\t`, `\0`, `\\`, `\"`, `\'`, `` \` ``, `\$`, `\x` with two hex digits, and `\u{...}` with one to six hex digits naming a Unicode scalar value. Anything else after `\` is EN0003, reported at the escape. A run of `\x` escapes above `7F` must form valid UTF-8, and a `\` at the end of a line is not a line continuation. To write a backslash, double it. A `raw` template has no escapes at all: ``raw`\d+` `` holds a backslash and three more characters.
+--- failing
+const pattern = "\d+";
+console.log(pattern);
+--- fixed
+const pattern = "\\d+";
+console.log(pattern);
+--- typescript
+In TypeScript an escape it does not know keeps only its character, so `"\d+"` is quietly `"d+"`. Enrang rejects it instead. TypeScript's `\b`, `\f` and `\v` do not exist here either; write `\u{8}`, `\u{C}` and `\u{B}`. Its four-digit form `\u00FC` is EN0003 too, with a fix-it that adds the braces: `\u{00FC}`. A surrogate pair such as `\uD83D\uDE00` becomes the one escape `\u{1F600}`.
+=== EN0004
+--- rule
+A string literal ends at its closing quote, on the line where it starts. A string that reaches the end of its line, or a string or template that reaches the end of the file, is EN0004, reported at the opening quote or backtick. A template literal may span lines; for a string, write `\n` where the line should break.
+--- failing
+const names = [
+  "Ada",
+  "Grace
+];
+console.log(names);
+--- fixed
+const names = ["Ada", "Grace"];
+console.log(names);
+--- typescript
+TypeScript reports the same mistake as `Unterminated string literal`. TypeScript also lets a `\` at the end of a line continue a string on the next line; Enrang does not, so use a template literal or `\n`.
+=== EN0005
+--- rule
+An integer literal may not start with `0` followed by another digit. Old JavaScript read `0755` as octal, 493, while most languages read it as decimal, 755, so Enrang accepts neither reading: write `0o755` for octal or `755` for decimal. `0`, `0.5`, `0x1F`, `0o17` and `0b101` are fine, and so is `_` between digits, as in `1_000`.
+--- failing
+const mode = 0755;
+console.log(mode);
+--- fixed
+const mode = 0o755;
+console.log(mode);
+--- typescript
+TypeScript rejects legacy octal literals too and asks for the `0o` prefix, which Enrang shares, along with `0x` for hex and `0b` for binary.
+=== EN0006
+--- rule
+A float literal has at least one digit on each side of its dot: `0.5`, not `.5`, and `5.0`, not `5.`. A dot after a number is then always a member access or the start of `..` or `...`, so `0..n` is a range, `[...a]` a spread and `5.0.toString()` a call.
+--- failing
+const ratio = .5;
+console.log(ratio);
+--- fixed
+const ratio = 0.5;
+console.log(ratio);
+--- typescript
+TypeScript accepts `.5` and `5.`. Enrang asks for the digit that the shorthand leaves out.
+=== EN0007
+--- rule
+A number literal takes no suffix: letters or digits right after it, as in `1u8`, `0xFFu8` or `1n`, are EN0007. A literal gets its type from where it is used, so give the type there: annotate the binding, `const mask: u8 = 0xFF;`, or cast, `0xFF as u8`. An upper-case prefix, `0X` or `0B`, is EN0007 too, with a fix-it to lower case.
+--- failing
+const mask = 0xFFu8;
+console.log(mask);
+--- fixed
+const mask: u8 = 0xFF;
+console.log(mask);
+--- typescript
+`1n` is a BigInt literal in TypeScript. Enrang has fixed-width integers, from `i8` to `i64` and from `u8` to `u64`, and no arbitrary-precision integer type, so the suffix has nothing to mean.
+=== EN0008
+--- rule
+Some characters start no token outside a string, a template or a comment: `#`, a lone `\`, a typographic quote such as `“`, a non-breaking space, a byte order mark after the start of the file, and any other character that is neither white space nor punctuation nor part of a name. Each one is EN0008, reported at the character, and the compiler skips it. Typographic quotes and non-breaking spaces usually come from text pasted out of a document or a chat; type the plain ASCII character instead. White space is a space, a tab or a line break.
+--- failing
+console.log(“hello”);
+--- fixed
+console.log("hello");
+--- typescript
+TypeScript's `#name` private fields are EN0008 here, because the `#` starts no token: declare the member `private` instead, which in Enrang is enforced by the compiler.

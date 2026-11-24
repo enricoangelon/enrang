@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0401/m3gate-super-call-narrowed-case.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `this.op` may no longer be that case here
+  --> tests/compile/EN0401/m3gate-super-call-narrowed-case.fail.en:12:21
+   |
+11 |         super.reset();
+   |         ----- this may write through it
+12 |         console.log(this.op.s); //~ EN0401 "`this.op` may no longer be"
+   |                     ^^^^^^^^^ the test before this may no longer hold
+   |
+   = note: a writing reference may have changed `this.op`
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

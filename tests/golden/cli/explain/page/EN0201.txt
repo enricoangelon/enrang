@@ -1,0 +1,21 @@
+$ enrang explain EN0201
+[exit 0]
+[stdout]
+EN0201: `===` or `!==`: use `==` and `!=`
+
+`===` and `!==` do not exist. Enrang's `==` and `!=` never convert their operands, so they already mean what the strict forms mean in TypeScript. The fix-it replaces `===` with `==` and `!==` with `!=`.
+
+Failing:
+
+    const n = 3;
+    if (n === 3) { console.log("three"); }
+
+Fixed:
+
+    const n = 3;
+    if (n == 3) { console.log("three"); }
+
+From TypeScript:
+
+In TypeScript `==` converts its operands, so `"1" == 1` is `true`, and style guides ask for `===` everywhere. Enrang's `==` never coerces, so the strict form is the only form.
+[stderr]

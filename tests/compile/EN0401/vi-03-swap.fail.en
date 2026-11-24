@@ -1,0 +1,30 @@
+swapIn(new Dog {}, new Robot {});
+
+private function swapIn(let s: Speaker, o: Speaker): void {
+  s = o; //~ EN0401 "`o` may hold another class than `s`"
+  console.log(s.speak());
+}
+
+private function rename(let a: { name: string }, b: { name: string }): void {
+  a = b; //~ EN0401 "`b` may hold another class than `a`"
+}
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Dog implements Speaker {
+  public name: string = "Rex";
+
+  public speak(): string {
+    return `${this.name} barks`;
+  }
+}
+
+public final class Robot implements Speaker {
+  public id: i64 = 7;
+
+  public speak(): string {
+    return "beep";
+  }
+}

@@ -1,0 +1,5 @@
+public function main(): Result<void, AgeError> { console.log("hello"); }
+
+public enum AgeError {
+  Negative = "negative age",
+}

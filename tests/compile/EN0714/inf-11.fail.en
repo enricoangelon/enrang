@@ -1,0 +1,29 @@
+public interface Picker {
+  pick(ready: &Task[]): &Task;
+}
+
+public class Task {
+  public id: i64 = 0;
+}
+
+public class Fixed implements Picker {
+  private def: Task = new Task {};
+
+  public pick(ready: &Task[]): &Task {
+    return &ready[0]; //~ EN0714 "`Fixed.pick` returns a reference into `ready`, but `Picker.pick` returns only into `this`"
+  }
+}
+
+public class Base {
+  private def: Task = new Task {};
+
+  public pick(ready: &Task[]): &Task {
+    return &this.def;
+  }
+}
+
+public class Fifo extends Base {
+  public override pick(ready: &Task[]): &Task {
+    return &ready[0]; //~ EN0714 "`Fifo.pick` returns a reference into `ready`, but `Base.pick` returns only into `this`"
+  }
+}

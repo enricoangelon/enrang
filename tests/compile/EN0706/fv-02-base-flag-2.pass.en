@@ -1,0 +1,40 @@
+//! covers: H38
+const tbl: u8[] = [0];
+let other: u8[] = [5];
+let buf2: u8[] = [1];
+let s2 = new Sub(&tbl, &buf2);
+let x = new Base(&tbl, &other);
+x.adopt(&s2);
+const a = x.peek();
+console.log(*a);
+s2.step();
+s2.step();
+s2.step();
+s2.step();
+
+public class Base {
+  private src: readonly &u8[];
+  private dst: &u8[];
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+  public step(): void {
+    this.dst.push(1);
+  }
+  public static firstOf(o: &Sub): readonly &u8 {
+    return &o.dst[0];
+  }
+  public adopt(o: &Sub): void {
+    this.src = o.dst;
+  }
+}
+
+public final class Sub extends Base {
+  public constructor(s: &u8[], d: &u8[]) {
+    super(s, d);
+  }
+}

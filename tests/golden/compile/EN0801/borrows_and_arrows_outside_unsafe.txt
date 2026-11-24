@@ -1,0 +1,38 @@
+$ enrang check tests/compile/EN0801/borrows_and_arrows_outside_unsafe.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0801]: borrowing through a raw pointer needs `unsafe`
+ --> tests/compile/EN0801/borrows_and_arrows_outside_unsafe.fail.en:4:14
+  |
+4 |   const r = &*p; //~ EN0801 "borrowing through a raw pointer needs `unsafe`"
+  |              ^^ this dereferences `p`, a `*i64`
+  |
+  = rule: `unsafe` grants exactly five powers; this one is "dereference a raw pointer". Nothing checks the address for you.
+help: state that you have checked the address, in an `unsafe { }` block
+  = explain: run `enrang explain EN0801`
+
+error[EN0801]: using `count`, an `unsafe let`, needs `unsafe`
+ --> tests/compile/EN0801/borrows_and_arrows_outside_unsafe.fail.en:5:14
+  |
+5 |   const c = &count; //~ EN0801 "using `count`, an `unsafe let`, needs `unsafe`"
+  |              ^^^^^ this borrows the static storage `count`
+  |
+  = rule: `unsafe` grants exactly five powers; this one is "read, write or borrow an `unsafe let`". Nothing keeps other accesses to it apart.
+help: state that no other access overlaps this one, in an `unsafe { }` block
+  = explain: run `enrang explain EN0801`
+
+error[EN0801]: using `count`, an `unsafe let`, needs `unsafe`
+ --> tests/compile/EN0801/borrows_and_arrows_outside_unsafe.fail.en:7:31
+  |
+7 |   xs.forEach(x => console.log(count)); //~ EN0801 "using `count`, an `unsafe let`, needs `unsafe`"
+  |                               ^^^^^ this reads the static storage `count`
+  |
+  = rule: `unsafe` grants exactly five powers; this one is "read, write or borrow an `unsafe let`". Nothing keeps other accesses to it apart.
+help: state that no other access overlaps this one
+  |
+7 |   unsafe { xs.forEach(x => console.log(count)); } //~ EN0801 "using `count`, an `unsafe let`, needs `unsafe`"
+  |   +++++++++                                    ++
+  = explain: run `enrang explain EN0801`
+
+error: aborting due to 3 previous errors

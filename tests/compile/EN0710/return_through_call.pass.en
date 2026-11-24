@@ -1,0 +1,5 @@
+public function head(s: &string): &string {
+  return first(s);
+}
+
+private function first(t: &string): &string { return t; }

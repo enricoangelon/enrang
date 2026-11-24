@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0401/interface_values_stand_for_their_own_class.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `b` may hold another class than `a`
+ --> tests/compile/EN0401/interface_values_stand_for_their_own_class.fail.en:2:19
+  |
+2 |   return a.equals(b); //~ EN0401 "`b` may hold another class than `a`"
+  |                   ^ each interface value stands for a class of its own
+  |
+help: use one type for both: same<T extends Eq>(a: &T, b: &T)
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: `o` may hold another class than `s`
+ --> tests/compile/EN0401/interface_values_stand_for_their_own_class.fail.en:6:7
+  |
+6 |   s = o; //~ EN0401 "`o` may hold another class than `s`"
+  |       ^ each interface value stands for a class of its own
+  |
+help: use one type for both: swapIn<T extends Speaker>(let s: T, o: T)
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

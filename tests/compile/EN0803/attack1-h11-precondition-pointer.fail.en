@@ -1,0 +1,12 @@
+//! covers: H11
+private unsafe function poke(p: *u8, v: u8): void {}
+
+@requires("cmov") private function pick(p: *u8, v: u8): void {}
+
+private function run(f: (p: *u8, v: u8) => void): void {}
+
+public function wire(): void {
+  const a: fn(p: *u8, v: u8) => void = poke; //~ EN0803
+  const b: fn(p: *u8, v: u8) => void = pick; //~ EN0803
+  run(poke); //~ EN0803
+}

@@ -1,0 +1,14 @@
+//! row: `function steal<T extends Base>(x: T): string { return x.name; }`
+//! covers: H41
+const s = steal(new Base("x".toString()));
+console.log(s, keepName(new Base("y".toString())));
+
+private class Base {
+  public constructor(public name: string) {}
+  public destructor() { console.log(`drop ${this.name}`); }
+}
+
+private function steal<T extends Base>(x: T): string { return x.name.clone(); }
+private function keepName(x: { name: string }): string { return x.name.clone(); }
+
+@devMigrate private function migrateBase(old: { name: string }): Base { return new Base(old.name.clone()); }

@@ -1,0 +1,21 @@
+//! row: A method marked `const` whose body contains
+let l = new Logger();
+l.log("a");
+
+private unsafe let count: i64 = 0;
+
+private function bump(g: &Logger): void {
+  unsafe {
+    count += 1;
+  }
+}
+
+public class Logger {
+  public const log(const m: &string): void {
+    unsafe {
+      count += 1;
+    }
+    bump(this); //~ EN0615
+    console.log(m);
+  }
+}

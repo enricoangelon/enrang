@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0205/any_parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0205]: `any` does not exist in Enrang
+ --> tests/compile/EN0205/any_parameter.fail.en:1:29
+  |
+1 | public function show(value: any): void { //~ EN0205 "`any` does not exist in Enrang"
+  |                             ^^^ every value has one known type
+  |
+help: accept every value type with a generic
+  |
+1 | public function show<T>(value: &T): void { //~ EN0205 "`any` does not exist in Enrang"
+  |                     +++        ~~
+  = explain: run `enrang explain EN0205`
+
+error: aborting due to 1 previous error

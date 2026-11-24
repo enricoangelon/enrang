@@ -1,0 +1,4 @@
+public class Node {
+  public value: i64 = 0;
+  public next: Node | null = null; //~ EN0408 "recursive type `Node` needs `Box`"
+}

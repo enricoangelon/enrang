@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0711/m3gate-self-reference-drop.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0711]: `c` is dropped while it is still borrowed
+  --> tests/compile/EN0711/m3gate-self-reference-drop.fail.en:14:39
+   |
+ 2 | let c = new Outer();
+   |     - `c` lives until the end of this block
+   |         ----------- exclusive borrow of `c` starts here
+...
+14 | } //~ EN0711 "`c` is dropped while it"
+   |                                       ^ `c` is dropped here
+   |
+   = explain: run `enrang explain EN0711`
+
+error: aborting due to 1 previous error

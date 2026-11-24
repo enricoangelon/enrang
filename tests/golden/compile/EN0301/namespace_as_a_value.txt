@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0301/namespace_as_a_value.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0301]: `parts` is a namespace, not a value
+ --> tests/compile/EN0301/namespace_as_a_value.fail.en:4:13
+  |
+4 | console.log(parts); //~ EN0301 "`parts` is a namespace, not a value"
+  |             ^^^^^ used as a value here
+  |
+  = explain: run `enrang explain EN0301`
+
+error[EN0301]: cannot find `nothing` in `parts`
+ --> tests/compile/EN0301/namespace_as_a_value.fail.en:5:39
+  |
+5 | console.log(parts.describe(&p), parts.nothing(&p)); //~ EN0301 "cannot find `nothing` in `parts`"
+  |                                       ^^^^^^^ not found
+  |
+  = explain: run `enrang explain EN0301`
+
+error: aborting due to 2 previous errors

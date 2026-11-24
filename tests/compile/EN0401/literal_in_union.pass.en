@@ -1,0 +1,10 @@
+turn("left");
+turn("right");
+const d: Direction = "left";
+turn(d);
+
+private function turn(d: Direction): void {
+  console.log(d);
+}
+
+private type Direction = "left" | "right";

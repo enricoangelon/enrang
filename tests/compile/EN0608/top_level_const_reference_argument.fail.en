@@ -1,0 +1,14 @@
+const l = new Logger();
+l.log(GREETING); //~ EN0608
+
+private const GREETING: &string = "hi";
+private unsafe let count: i64 = 0;
+
+public class Logger {
+  public const log(m: &string): void {
+    unsafe {
+      count += 1;
+    }
+    console.log(m);
+  }
+}

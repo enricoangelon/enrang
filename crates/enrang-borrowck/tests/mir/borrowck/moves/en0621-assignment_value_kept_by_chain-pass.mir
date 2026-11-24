@@ -1,0 +1,72 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0621/assignment_value_kept_by_chain.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0621/assignment_value_kept_by_chain.pass";
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // a
+  let _3: string temp;
+  let _4: &string temp;
+  let mut _5: string; // b
+  let _6: string temp;
+  let _7: &string temp;
+  let _8: string temp;
+  let _9: string temp;
+  let _10: &string temp;
+  let _11: string temp;
+  let _12: &string temp;
+  let _13: void temp;
+  let _14: &string temp;
+  let _15: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = const "": string;
+    _7 = &_6 [temp-arg];
+    _5 = form to_string(move _7) -> bb2;
+  }
+  bb2: {
+    drop(_6);
+    storage_dead(_6);
+    _9 = const "xx": string;
+    _10 = &_9 [temp-arg];
+    _8 = form to_string(move _10) -> bb3;
+  }
+  bb3: {
+    drop(_5) [assign];
+    _5 = move _8;
+    drop(_8);
+    storage_dead(_8);
+    drop(_9);
+    storage_dead(_9);
+    _12 = &_5 [auto-borrow];
+    _11 = "alloc/string"::#extend0::clone(move _12) -> bb4;
+  }
+  bb4: {
+    drop(_2) [assign];
+    _2 = move _11;
+    drop(_11);
+    storage_dead(_11);
+    _14 = &_2 [auto-borrow];
+    _15 = &_5 [auto-borrow];
+    _13 = form log(move _14, move _15) -> bb5;
+  }
+  bb5: {
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

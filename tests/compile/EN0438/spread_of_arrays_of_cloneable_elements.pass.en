@@ -1,0 +1,23 @@
+public function snapshot<T extends Clone>(xs: &T[]): T[] { return [...xs]; }
+
+public function copies<T extends Copy>(xs: &T[]): T[] { return [...xs]; }
+
+public function spread(f: i32[3], b: Box<i64[]>, o: i64[] | null, rs: &Resource[]): void {
+  const a = [...f];
+  const c = [...&f];
+  const d = [0, ...*b];
+  if (o != null) {
+    const e = [...o];
+    console.log(e);
+  }
+  const g = [...rs];
+  console.log(a, c, d, g.length());
+}
+
+public class Resource {
+  public id: i64 = 0;
+
+  public clone(): Resource { return new Resource { id: this.id }; }
+
+  public destructor() { console.log("closed"); }
+}

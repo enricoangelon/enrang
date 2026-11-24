@@ -1,0 +1,19 @@
+//! row: Inner source is the outer element: `for 
+private function plain(): void {
+  let grid: i64[][] = [[1], [2]];
+  for (const row of &grid) {
+    for (const c of row) {
+      grid.push([]); //~ EN0706
+    }
+  }
+}
+
+private function innerBreak(): void {
+  let grid: i64[][] = [[1], [2]];
+  for (const row of &grid) {
+    for (const c of row) {
+      grid.push([]); //~ EN0706
+      break;
+    }
+  }
+}

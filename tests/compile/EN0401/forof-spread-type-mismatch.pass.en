@@ -1,0 +1,5 @@
+//! row: `const a: i64[3] = [...b];`, `const n: (
+//! covers: H03
+const xs: i64[] = [1, 2];
+const n: (i64 | null)[] = xs.map((x: &i64): i64 | null => *x);
+console.log(n);

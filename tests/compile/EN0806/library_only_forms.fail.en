@@ -1,0 +1,15 @@
+@lang("string") public final class Text {} //~ EN0806 "`@lang` is a library-only form"
+
+@intrinsic("MemCopy") public declare function copy(d: *u8, s: *u8, n: usize): void; //~ EN0806 "`@intrinsic` is a library-only form"
+
+@hostCall("fs.open") public declare function open(p: *u8): i32; //~ EN0806 "`@hostCall` is a library-only form"
+
+@owner public final class Owned {} //~ EN0806 "`@owner` is a library-only form"
+
+public class Shape {
+  public perimeter(): f64; //~ EN0806 "a method without a body is a library-only form"
+}
+
+extend Shape { //~ EN0806 "`extend` is a library-only form"
+  public name(): void {}
+}

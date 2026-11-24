@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0460/vi-05-override.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0460]: `show` has its own type parameters, so it can't be overridden
+ --> tests/compile/EN0460/vi-05-override.fail.en:8:19
+  |
+2 |   public show<T>(x: &T): void {
+  |          ---- `Animal.show` is declared here
+...
+8 |   public override show<T>(x: &T): void { //~ EN0460 "`show` has its own type parameters, so it can't be overridden"
+  |                   ^^^^ `Animal.show` is compiled once per type, so it has no method-table slot
+  |
+help: give Dog's method another name
+  = explain: run `enrang explain EN0460`
+
+error[EN0460]: `show` has its own type parameters, so it can't be overridden
+  --> tests/compile/EN0460/vi-05-override.fail.en:14:19
+   |
+ 2 |   public show<T>(x: &T): void {
+   |          ---- `Animal.show` is declared here
+...
+14 |   public override show<T>(x: &T): void { //~ EN0460 "`show` has its own type parameters, so it can't be overridden"
+   |                   ^^^^ `Animal.show` is compiled once per type, so it has no method-table slot
+   |
+help: give Puppy's method another name
+   = explain: run `enrang explain EN0460`
+
+error: aborting due to 2 previous errors

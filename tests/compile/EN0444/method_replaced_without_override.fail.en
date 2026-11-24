@@ -1,0 +1,15 @@
+public class Animal {
+  protected sound: string = "...";
+
+  public speak(): string {
+    return "...";
+  }
+}
+
+public class Dog extends Animal {
+  protected sound: string = "woof"; //~ EN0444 "`sound` replaces `Animal.sound` without `override`"
+
+  public speak(): string { //~ EN0444 "`speak` replaces `Animal.speak` without `override`"
+    return "woof";
+  }
+}

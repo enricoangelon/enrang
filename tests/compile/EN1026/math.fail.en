@@ -1,0 +1,3 @@
+const root = Math.sqrt(2.0); //~ EN1026 "`Math` does not exist"
+const big = Math.max(3, 4); //~ EN1026 "`Math` does not exist"
+const pi = Math.PI; //~ EN1026 "`Math` does not exist"

@@ -1,0 +1,3 @@
+public function span(start: i64 = 0, end: i64): i64 { //~ EN0229
+  return end - start;
+}

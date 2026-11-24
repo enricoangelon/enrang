@@ -1,0 +1,107 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0401/text_after_coalesce_on_a_generic_result.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0401/text_after_coalesce_on_a_generic_result.pass";
+@lang("ord") interface "core/prelude"::Ord { }
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::first(_1: &Slice<T>) -> &T | null;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: string[]; // words
+  let _3: &string | null; // w
+  let _4: &string[] temp;
+  let _5: &string; // x
+  let _6: isize temp;
+  let _7: &string; // m
+  let _8: &string | null temp;
+  let _9: &string[] temp;
+  let _10: isize temp;
+  let _11: void temp;
+  let _12: &string temp;
+  let _13: &string temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<string>(const "a": string, const "b": string);
+    storage_live(_3);
+    _4 = &_2 [explicit];
+    _3 = first<string>(move _4) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _6 = discriminant(_3);
+    switch move _6 [0: bb2, otherwise: bb4];
+  }
+  bb2: {
+    _5 = const "none": &string;
+    goto bb3;
+  }
+  bb3: {
+    storage_live(_7);
+    _9 = &_2 [explicit];
+    _8 = maxOf<string>(move _9) -> bb5;
+  }
+  bb4: {
+    check_tag(_3, Present);
+    _5 = copy (_3 as Present).0;
+    goto bb3;
+  }
+  bb5: {
+    _10 = discriminant(_8);
+    switch move _10 [0: bb6, otherwise: bb8];
+  }
+  bb6: {
+    _7 = const "none": &string;
+    goto bb7;
+  }
+  bb7: {
+    _12 = &*_5 [reborrow];
+    _13 = &*_7 [reborrow];
+    _11 = form log(move _12, move _13) -> bb9;
+  }
+  bb8: {
+    check_tag(_8, Present);
+    _7 = copy (_8 as Present).0;
+    goto bb7;
+  }
+  bb9: {
+    storage_dead(_7);
+    storage_dead(_5);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn first<T>(_1: &T[]) -> &T | null {
+  let _1: &T[]; // xs
+  let _2: &T[] temp;
+  let _3: &Slice<T> temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _3 = convert(array_to_slice, move _2);
+    _0 = "core/slice"::Slice<T>::first(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn maxOf<T extends Ord>(_1: &T[]) -> &T | null {
+  let _1: &T[]; // xs
+  let _2: &T[] temp;
+  let _3: &Slice<T> temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _3 = convert(array_to_slice, move _2);
+    _0 = "core/slice"::Slice<T>::first(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

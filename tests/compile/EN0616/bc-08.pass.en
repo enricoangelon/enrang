@@ -1,0 +1,24 @@
+const text: string = "ab";
+let lx = new Lexer(&text);
+let sub = lx.rest();
+console.log(sub.next());
+console.log(lx.next());
+console.log(sub.next());
+
+private class Lexer {
+  private src: &string;
+  private pos: isize;
+
+  public constructor(src: &string) { this.src = src; }
+
+  public next(): &string | null {
+    if (this.pos >= this.src.length()) { return null; }
+    const start = this.pos;
+    this.pos = this.src.length();  // a sketch: the rest of the text is one token
+    return this.src.slice(start, this.pos);
+  }
+
+  public rest(): Lexer {
+    return new Lexer(this.src.slice(this.pos, this.src.length()));
+  }
+}

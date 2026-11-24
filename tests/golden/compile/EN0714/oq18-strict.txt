@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0714/oq18-strict.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0714]: `Strict.label` returns a reference into `fallback`, but `Labeler.label` returns only into `name` or `this`
+ --> tests/compile/EN0714/oq18-strict.fail.en:7:5
+  |
+2 |   public label(name: &string, fallback: &string): &string { return name; }
+  |          ----- declared here
+...
+7 |     return fallback; //~ EN0714 "`Strict.label` returns a reference into `fallback`, but `Labeler.label` returns only into `name` or `this`"
+  |     ^^^^^^^^^^^^^^^^ returned here
+  |
+help: through a `&Labeler`, callers only expect `name` or the object
+  = explain: run `enrang explain EN0714`
+
+error: aborting due to 1 previous error

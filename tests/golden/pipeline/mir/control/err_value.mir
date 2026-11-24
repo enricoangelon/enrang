@@ -1,0 +1,12 @@
+@lang("error") interface "core/prelude"::Error { }
+@lang("result") enum "core/result"::Result<T, E extends Error> { Ok { value: T }, Err { error: E } }
+@private enum E { A }
+
+@private fn f(_1: E) -> Result<i64, E> {
+  let _1: E; // e
+  let _2: Result<i64, E> temp;
+  bb0: {
+    _2 = Result<i64, E>::Err { error: copy _1 };
+    return;
+  }
+}

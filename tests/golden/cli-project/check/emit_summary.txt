@@ -1,0 +1,13 @@
+$ enrang check --emit=summary main.en
+[exit 0]
+[stdout]
+module "main"
+class Copier writes_through_fields
+//   flag: writes through a reference read from its fields
+fn Copier::#ctor(_1: &Copier, _2: &i64[]) -> void perms(write, write) sources() stores(1 -> 0) result none;
+//   #0: writes through it
+//   #1: writes through it
+fn Copier::step(_1: &Copier) -> void perms(write) sources() result none;
+//   #0: passes it to `Array.push` from `alloc/array`, which changes it
+fn longest(_1: &string, _2: &string) -> &string perms(read, read) sources(0, 1) result readonly(string_part);
+[stderr]

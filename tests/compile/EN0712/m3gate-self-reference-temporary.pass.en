@@ -1,0 +1,15 @@
+//! covers: H05
+const k = [0];
+new Selfie(&k);
+console.log("end");
+
+private class Guard {
+  private v: readonly &i64[];
+  public constructor(v: &i64[]) { this.v = v; }
+  public destructor() { console.log(this.v); }
+}
+private class Selfie {
+  private g: Guard;
+  private buf: i64[] = [1, 2, 3];
+  public constructor(k: &i64[]) { this.g = new Guard(k); }
+}

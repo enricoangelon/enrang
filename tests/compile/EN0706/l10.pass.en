@@ -1,0 +1,10 @@
+//! row: `l9`: a local function that writes `q`, called
+//! row: `l1`-`l10`, local functions, among them `let
+let q = [7];
+function peek(): void {
+  console.log(q[0]);
+}
+for (const x of &q) {
+  peek();
+  console.log(x);
+}

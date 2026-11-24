@@ -1,0 +1,8 @@
+const words = ["a", "bbb", "cc"];
+let longest = &words[0];
+for (const w of &words) {
+  if (w.length() > longest.length()) {
+    longest = w;
+  }
+}
+console.log(longest);

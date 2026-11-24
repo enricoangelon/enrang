@@ -1,0 +1,31 @@
+$ enrang check tests/compile/EN0201/strict_equality.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0201]: `===` does not exist in Enrang
+ --> tests/compile/EN0201/strict_equality.fail.en:2:7
+  |
+2 | if (n === 3) { //~ EN0201 "`===` does not exist in Enrang"
+  |       ^^^ use `==` here
+  |
+  = from TypeScript: `==` never coerces in Enrang, so the strict form is the only form.
+help: replace `===` with `==`
+  |
+2 | if (n == 3) { //~ EN0201 "`===` does not exist in Enrang"
+  |       ~~
+  = explain: run `enrang explain EN0201`
+
+error[EN0201]: `!==` does not exist in Enrang
+ --> tests/compile/EN0201/strict_equality.fail.en:5:7
+  |
+5 | if (n !== 4) { //~ EN0201 "`!==` does not exist in Enrang"
+  |       ^^^ use `!=` here
+  |
+  = from TypeScript: `!=` never coerces in Enrang, so the strict form is the only form.
+help: replace `!==` with `!=`
+  |
+5 | if (n != 4) { //~ EN0201 "`!==` does not exist in Enrang"
+  |       ~~
+  = explain: run `enrang explain EN0201`
+
+error: aborting due to 2 previous errors

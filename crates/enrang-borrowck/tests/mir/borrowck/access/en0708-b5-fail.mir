@@ -1,0 +1,65 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0708/b5.fail.en. Its row's codes: EN0708.
+module "tests/compile/EN0708/b5.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::last(_1: &Array<T>) -> &T | null;
+fn "alloc/array"::Array<T>::length(_1: &Array<T>) -> isize;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // players
+  let _3: void temp;
+  let _4: &i64 | null temp;
+  let _5: &i64[] temp;
+  let _6: isize temp;
+  let _7: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64);
+    _5 = &_2 [auto-borrow];
+    _4 = "alloc/array"::Array<i64>::last(move _5) -> bb1;
+  }
+  bb1: {
+    _7 = &_2 [auto-borrow]; //~ EN0708 "`players` can't be read while"
+    _6 = "alloc/array"::Array<i64>::length(move _7) -> bb2;
+  }
+  bb2: {
+    _3 = setTo(move _4, move _6) -> bb3;
+  }
+  bb3: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private @local fn setTo(_1: &i64 | null, _2: isize) -> void {
+  let _1: &i64 | null; // x
+  let _2: isize; // n
+  let _3: bool temp;
+  let _4: u32 temp;
+  let _5: i64 temp;
+  fact f0: _1 nonnull;
+  use f0 at bb1[1];
+  test f0 at bb1;
+  bb0: {
+    _4 = discriminant(_1);
+    _3 = ne(move _4, const 0: u32);
+    switch move _3 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _5 = cast(int_to_int, copy _2, i64);
+    check_tag(_1, Present);
+    *(_1 as Present).0 = move _5;
+    goto bb2;
+  }
+  bb2: {
+    return;
+  }
+}

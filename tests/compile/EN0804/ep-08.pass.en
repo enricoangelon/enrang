@@ -1,0 +1,21 @@
+const all: Box<Speaker>[] = [new Box(new Robot { id: 7 })];
+console.log(all);
+console.log(new GdtPointer { limit: 0x17, base: 0x1000 });
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Robot implements Speaker {
+  public id: i64;
+
+  public speak(): string {
+    return "beep";
+  }
+}
+
+@packed
+public final class GdtPointer {
+  public limit: u16;
+  public base: u32;
+}

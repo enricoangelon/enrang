@@ -1,0 +1,1 @@
+private function show<T extends i64>(x: &T): void {} //~ EN0419 "`i64` can't be a bound"

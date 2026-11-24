@@ -1,7 +1,0 @@
-$ enrang explain EN0301
-[exit 0]
-[stdout]
-EN0301: unresolved name
-
-No explain page yet: it arrives with milestone M2, and this is milestone M0.
-[stderr]

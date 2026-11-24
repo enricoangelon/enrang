@@ -1,0 +1,4 @@
+let dir: Direction = "left";
+console.log(dir);
+
+private type Direction = "left" | "right";

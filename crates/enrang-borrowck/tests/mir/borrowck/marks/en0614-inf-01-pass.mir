@@ -1,0 +1,180 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/inf-01.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/inf-01.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Bag {
+  items: i64[] = default;
+}
+class Pair {
+  a: i64[] = default;
+  b: i64[] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Pair; // pair
+  let _3: *Pair temp;
+  let _4: void temp;
+  let _5: [&i64[], &i64[]]; // f
+  let _6: &Pair temp;
+  let mut _7: i64; // i
+  let _8: bool temp;
+  let _9: void temp;
+  let _10: &i64[] temp;
+  let _11: void temp;
+  let _12: &i64[] temp;
+  let _13: i64 temp;
+  let _14: void temp;
+  let _15: &i64[] temp;
+  let _16: &i64[] temp;
+  let mut _17: Bag; // x
+  let _18: *Bag temp;
+  let _19: void temp;
+  let mut _20: Bag; // y
+  let _21: *Bag temp;
+  let _22: void temp;
+  let _23: [&Bag, &Bag]; // b
+  let _24: &Bag temp;
+  let _25: &Bag temp;
+  let mut _26: i64; // i
+  let _27: bool temp;
+  let _28: void temp;
+  let _29: &i64[] temp;
+  let _30: void temp;
+  let _31: &i64[] temp;
+  let _32: i64 temp;
+  let _33: void temp;
+  let _34: &i64[] temp;
+  let _35: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Pair leaving(a, b)(move _3) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _6 = &_2 [explicit];
+    _5 = fields(move _6) -> bb2;
+  }
+  bb2: {
+    storage_live(_7);
+    _7 = const 0: i64;
+    goto bb3;
+  }
+  bb3: {
+    _8 = lt(copy _7, const 3: i64);
+    switch move _8 [0: bb6, otherwise: bb4];
+  }
+  bb4: {
+    _10 = copy _5.0;
+    _9 = "alloc/array"::Array<i64>::push(move _10, copy _7) -> bb7;
+  }
+  bb5: {
+    _13 = copy _7;
+    _7 = checked_add(copy _13, const 1: i64);
+    goto bb3;
+  }
+  bb6: {
+    storage_dead(_7);
+    _15 = &_2.a [auto-borrow];
+    _16 = &_2.b [auto-borrow];
+    _14 = form log(move _15, move _16) -> bb9;
+  }
+  bb7: {
+    _12 = copy _5.1;
+    _11 = "alloc/array"::Array<i64>::push(move _12, copy _7) -> bb8;
+  }
+  bb8: {
+    goto bb5;
+  }
+  bb9: {
+    storage_live(_17);
+    _18 = addr_of _17;
+    _19 = named_fill Bag leaving(items)(move _18) -> bb10;
+  }
+  bb10: {
+    storage_live(_20);
+    _21 = addr_of _20;
+    _22 = named_fill Bag leaving(items)(move _21) -> bb11;
+  }
+  bb11: {
+    storage_live(_23);
+    _24 = &_17 [explicit];
+    _25 = &_20 [explicit];
+    _23 = both(move _24, move _25) -> bb12;
+  }
+  bb12: {
+    storage_live(_26);
+    _26 = const 0: i64;
+    goto bb13;
+  }
+  bb13: {
+    _27 = lt(copy _26, const 3: i64);
+    switch move _27 [0: bb16, otherwise: bb14];
+  }
+  bb14: {
+    _29 = &(*_23.0).items [auto-borrow];
+    _28 = "alloc/array"::Array<i64>::push(move _29, copy _26) -> bb17;
+  }
+  bb15: {
+    _32 = copy _26;
+    _26 = checked_add(copy _32, const 1: i64);
+    goto bb13;
+  }
+  bb16: {
+    storage_dead(_26);
+    _34 = &_17.items [auto-borrow];
+    _35 = &_20.items [auto-borrow];
+    _33 = form log(move _34, move _35) -> bb19;
+  }
+  bb17: {
+    _31 = &(*_23.1).items [auto-borrow];
+    _30 = "alloc/array"::Array<i64>::push(move _31, copy _26) -> bb18;
+  }
+  bb18: {
+    goto bb15;
+  }
+  bb19: {
+    storage_dead(_23);
+    drop(_20);
+    storage_dead(_20);
+    drop(_17);
+    storage_dead(_17);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn both(_1: &Bag, _2: &Bag) -> [&Bag, &Bag] {
+  let _1: &Bag; // a
+  let _2: &Bag; // b
+  let _3: &Bag temp;
+  let _4: &Bag temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _0 = tuple(move _3, move _4);
+    return;
+  }
+}
+
+@private fn fields(_1: &Pair) -> [&i64[], &i64[]] {
+  let _1: &Pair; // p
+  let _2: &i64[] temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _2 = &(*_1).a [explicit];
+    _3 = &(*_1).b [explicit];
+    _0 = tuple(move _2, move _3);
+    return;
+  }
+}

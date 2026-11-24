@@ -1,0 +1,5 @@
+//! row: The owner's form: `let queue = ["a", "b"
+let queue = ["a", "b"];
+for (const job of &queue) {
+  queue.push("retry"); //~ EN0706 "cannot mutate `queue` while iterating over it"
+}

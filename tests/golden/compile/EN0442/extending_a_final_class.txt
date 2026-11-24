@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0442/extending_a_final_class.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0442]: `Animal` is `final`, so no class can extend it
+ --> tests/compile/EN0442/extending_a_final_class.fail.en:5:26
+  |
+5 | public class Dog extends Animal { //~ EN0442 "`Animal` is `final`, so no class can extend it"
+  |                          ^^^^^^ `Animal` is declared `final`
+  |
+  = explain: run `enrang explain EN0442`
+
+error: aborting due to 1 previous error

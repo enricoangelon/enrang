@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0612/missing_ampersand.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0612]: missing `&`: `bump` takes a reference
+ --> tests/compile/EN0612/missing_ampersand.fail.en:6:6
+  |
+6 | bump(a); //~ EN0612 "missing `&`: `bump` takes a reference"
+  |      ^ expected `&i64[]`, found `i64[]`
+  |
+  = note: a reference is only ever made by writing `&`; with no `&`, a value is moved or copied.
+help: write `&a`
+  |
+6 | bump(&a); //~ EN0612 "missing `&`: `bump` takes a reference"
+  |      +
+  = explain: run `enrang explain EN0612`
+
+error: aborting due to 1 previous error

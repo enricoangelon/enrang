@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0401/forof-narrowed-source-cleared-2.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `string[]`, found `null`
+ --> tests/compile/EN0401/forof-narrowed-source-cleared-2.fail.en:6:23
+  |
+6 |       mem.replace(&p, null); //~ EN0401 "mismatched types: expected `string[]`, found `null`"
+  |                       ^^^^ `string[]` is never `null`
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

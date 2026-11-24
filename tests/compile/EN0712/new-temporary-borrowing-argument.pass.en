@@ -1,0 +1,16 @@
+show(&new View(&new Tracer("t")));
+show(&View.make(&new Tracer("u")));
+
+private final class Tracer {
+  public constructor(public name: string) {}
+  public destructor() { console.log(`drop ${this.name}`); }
+}
+
+private final class View {
+  public constructor(private t: &Tracer) {}
+  public static make(t: &Tracer): View { return new View(t); }
+  public label(): &string { return &this.t.name; }
+  public destructor() { console.log(`drop view of ${this.t.name}`); }
+}
+
+private function show(v: &View): void { console.log(v.label()); }

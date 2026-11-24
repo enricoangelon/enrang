@@ -1,0 +1,25 @@
+public class Base {
+  private a: &string;
+  private n: i64 = 0;
+
+  public constructor(a: &string) {
+    this.a = a;
+  }
+
+  public attach(s: &string): void {
+    this.a = s;
+  }
+}
+
+public class Keeper extends Base {
+  private b: &string;
+
+  public constructor(a: &string, b: &string) {
+    this.b = b;
+    super(a);
+  }
+
+  public override attach(s: &string): void {
+    this.b = s;
+  }
+}

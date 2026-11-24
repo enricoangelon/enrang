@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/const_root_repointed_on_branch.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot mutate immutable data
+  --> tests/compile/EN0608/const_root_repointed_on_branch.fail.en:10:3
+   |
+10 |   *w = 3; //~ EN0608 "cannot mutate immutable data"
+   |   ^^^^^^ `w` points at `k`, which is `const`
+   |
+help: declare it `let k`
+   |
+ 5 |   let k = 2;
+   |   ~~~
+   = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

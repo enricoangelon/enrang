@@ -1,0 +1,5 @@
+public function check(n: i64): void {
+  if (n < 0) {
+    throw new Error("negative"); //~ EN0207 "`throw` does not exist in Enrang"
+  }
+}

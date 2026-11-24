@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/m3gate-tuple-param-part-const.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `g` can change `t`, but `a` is `const`
+ --> tests/compile/EN0608/m3gate-tuple-param-part-const.fail.en:3:8
+  |
+3 | g(&b, [&a, 0]); //~ EN0608 "`g` can change `t`, but"
+  |        ^^ `g` writes through it
+  |
+help: declare it `let a`
+  |
+1 | let a = [1];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

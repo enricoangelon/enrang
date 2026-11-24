@@ -1,0 +1,6 @@
+//! covers: H05
+let other: i64[] = [1];
+let pair: [&i64[], i64[]] = [&other, [2]];
+pair[0] = &pair[1];
+const moved = pair; //~ EN0709 "cannot move `pair` while it is borrowed"
+console.log(moved[1]);

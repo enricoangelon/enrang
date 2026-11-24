@@ -1,0 +1,28 @@
+public class Point implements Eq {
+  private reads: i64 = 0;
+  public x: i64 = 0;
+
+  public equals(other: &Point): bool {
+    this.reads += 1; //~ EN0615 "`equals` changes the object, but `Eq` declares that it doesn't"
+    return this.x == other.x;
+  }
+}
+
+public class Tally implements Clone {
+  private copies: i64 = 0;
+
+  public clone(): Tally {
+    this.copies += 1; //~ EN0615 "`clone` changes the object, but `Clone` declares that it doesn't"
+    return new Tally();
+  }
+}
+
+public class Rank implements Ord {
+  private asked: i64 = 0;
+  public level: i32 = 0;
+
+  public compare(other: &Rank): i32 {
+    this.asked += 1; //~ EN0615 "`compare` changes the object, but `Ord` declares that it doesn't"
+    return this.level - other.level;
+  }
+}

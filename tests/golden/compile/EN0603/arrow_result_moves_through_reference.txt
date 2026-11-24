@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0603/arrow_result_moves_through_reference.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0603]: cannot move `u.name` out of a reference
+ --> tests/compile/EN0603/arrow_result_moves_through_reference.fail.en:3:30
+  |
+3 | const names = users.map(u => u.name); //~ EN0603 "cannot move `u.name` out of a reference"
+  |                              ^^^^^^ `u.name` is behind a reference
+  |
+help: to take a copy, write `u.name.clone()`
+  |
+3 | const names = users.map(u => u.name.clone()); //~ EN0603 "cannot move `u.name` out of a reference"
+  |                                    ++++++++
+  = explain: run `enrang explain EN0603`
+
+error: aborting due to 1 previous error

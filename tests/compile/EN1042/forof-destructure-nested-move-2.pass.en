@@ -1,0 +1,7 @@
+//! row: `const { name, pos: { x } } = ada;` then
+public class H { public list: [i64, i64] = [0, 0]; }
+
+public function f(h: H): void {
+  const { list: [a, b] } = h;
+  console.log(a, b);
+}

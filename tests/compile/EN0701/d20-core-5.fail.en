@@ -1,0 +1,26 @@
+const source = "let x";
+let lx = new Lexer(&source);
+const tmp = "xy" + "z";
+useIt(&lx, &tmp); //~ EN0701 "a `Retarget` can't hold a `Lexer`, because `Lexer` holds a reference"
+console.log(lx.next());
+
+public interface Retarget {
+  retarget(s: &string): void;
+}
+
+private class Lexer implements Retarget {
+  private src: &string;
+  public constructor(src: &string) {
+    this.src = src;
+  }
+  public retarget(s: &string): void {
+    this.src = s;
+  }
+  public next(): &string {
+    return this.src;
+  }
+}
+
+private function useIt(r: &Retarget, s: &string): void {
+  r.retarget(s);
+}

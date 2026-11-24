@@ -1,0 +1,90 @@
+class Animal {
+  name: i64;
+}
+fn Animal::greet(_1: &Animal) -> void;
+@lang("box") class Box<T> { }
+move fn Box<T>::unbox(_1: &Box<T>) -> T;
+@lang("clone") interface Clone { }
+fn Clone::clone(_1: &Self) -> Self;
+interface Greet { }
+fn Greet::greet(_1: &Self) -> void;
+@final class Leaf {
+  v: i64;
+}
+fn take(_1: Animal) -> void;
+
+move fn Leaf::into(_1: &Leaf) -> Leaf {
+  bb0: {
+    _0 = move *_1;
+    return;
+  }
+}
+move fn Animal::into(_1: &Animal) -> Animal {
+  bb0: {
+    check_class(*_1, move_this(into), ref);
+    _0 = move *_1;
+    return;
+  }
+}
+fn narrowed(_1: &Animal | null) -> void {
+  let _2: Animal temp;
+  let _3: &Animal temp;
+  bb0: {
+    check_tag(_1, Present);
+    _3 = &*(_1 as Present).0 [reborrow];
+    check_class(*_3, clone, ref);
+    _2 = Clone::clone(move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+fn events(_1: &Animal, _2: Box<Animal>, _3: &Greet, _4: &Leaf) -> void {
+  let _5: Animal temp;
+  let _6: &Animal temp;
+  let _7: &Box<Animal> temp;
+  let _8: void temp;
+  let _9: Leaf temp;
+  let _10: &Greet temp;
+  let _11: Box<Animal> temp;
+  let _12: Box<Greet> temp;
+  bb0: {
+    check_class(*_1, copy_out, ref);
+    _5 = copy *_1;
+    check_class(*_2, copy_out, box);
+    _5 = copy *_2;
+    check_class(*_1, assign, ref);
+    drop(*_1) [assign];
+    *_1 = move _5;
+    _9 = copy *_4;
+    _10 = convert(ref_to_interface, copy _1);
+    _6 = &*_1 [reborrow];
+    check_class(*_1, clone, ref);
+    _5 = Clone::clone(move _6) -> bb1;
+  }
+  bb1: {
+    _7 = &_2 [auto-borrow];
+    check_class(*_2, unbox, box);
+    _5 = Box<Animal>::unbox(move _7) -> bb2;
+  }
+  bb2: {
+    _8 = virtual Greet::greet [copy _3](copy _3) -> bb6;
+  }
+  bb6: {
+    _8 = virtual Greet::greet [copy _12](copy _12) -> bb3;
+  }
+  bb3: {
+    check_class(*_1, copy_out, ref);
+    _8 = take(copy *_1) -> bb4;
+  }
+  bb4: {
+    _7 = &_2 [auto-borrow];
+    check_class(*_2, clone, box);
+    _11 = Clone::clone(move _7) -> bb5;
+  }
+  bb5: {
+    check_class(*_2, unbox, box);
+    _5 = move *_2;
+    return;
+  }
+}

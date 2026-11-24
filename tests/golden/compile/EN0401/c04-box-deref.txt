@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/c04-box-deref.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `i64`, found `Box<i64>`
+ --> tests/compile/EN0401/c04-box-deref.fail.en:3:16
+  |
+3 | const x: i64 = b; //~ EN0401 "mismatched types: expected `i64`, found `Box<i64>`"
+  |                ^ this is `Box<i64>`
+  |          --- `i64` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

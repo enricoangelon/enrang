@@ -1,0 +1,15 @@
+//! covers: H06
+let s: string = "abc";
+const lx = new Lexer(&s);
+console.log(new Box(lx)); //~ EN0701
+wrap(&s); //~ EN0703
+
+private function wrap<T>(x: T): T[] {
+  return [x];
+}
+
+private class Lexer {
+  private src: &string;
+
+  public constructor(src: &string) { this.src = src; }
+}

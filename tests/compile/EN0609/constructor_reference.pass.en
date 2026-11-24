@@ -1,0 +1,7 @@
+public class Board {
+  private readonly cells: i64[];
+  public constructor() {
+    this.cells = [1, 2, 3];
+    this.cells[0] = 9;
+  }
+}

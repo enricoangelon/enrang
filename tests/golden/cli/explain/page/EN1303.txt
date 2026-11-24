@@ -1,0 +1,21 @@
+$ enrang explain EN1303
+[exit 0]
+[stdout]
+EN1303: unknown target
+
+`--target` names one of the targets Enrang builds for: `x86_64-linux`, `x86_64-windows`, `i386-linux`, `i386-none` and `x86_64-none`. Any other name is EN1303, with a did-you-mean when one is close. A target names an architecture and an operating system, or `none` for a kernel; the CPU level is the separate flag `--cpu`, so a 32-bit build for a P6 is `--target=i386-linux --cpu=i686`. `enrang targets` lists the targets, their levels and the chip names.
+
+Failing:
+
+    $ enrang check --target=i686-linux
+    error[EN1303]: unknown target `i686-linux`
+      = note: targets are `x86_64-linux`, `x86_64-windows`, `i386-linux`, `i386-none` and `x86_64-none`
+    help: did you mean `i386-linux`?
+      = explain: run `enrang explain EN1303`
+
+    error: aborting due to 1 previous error
+
+Fixed:
+
+    $ enrang check --target=i386-linux --cpu=i686
+[stderr]

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0419/sealed_interface_implemented.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `AtomicValue` is sealed, so `Counter` can't implement it
+ --> tests/compile/EN0419/sealed_interface_implemented.fail.en:3:33
+  |
+3 | public class Counter implements AtomicValue {} //~ EN0419
+  |                                 ^^^^^^^^^^^ a sealed interface
+  |
+  = note: only the compiler's own list of types implements a sealed interface
+  = explain: run `enrang explain EN0419`
+
+error: aborting due to 1 previous error

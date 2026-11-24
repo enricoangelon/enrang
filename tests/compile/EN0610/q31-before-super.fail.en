@@ -1,0 +1,38 @@
+public class Animal {
+  public constructor(public name: string) {}
+
+  public describe(): string {
+    return `${this.name} makes a sound`;
+  }
+}
+
+public class Dog extends Animal {
+  private label: string;
+
+  public constructor(name: string) {
+    this.label = `${this.name} the dog`; //~ EN0610
+    super(name);
+  }
+}
+
+public class Puppy extends Animal {
+  private label: string;
+
+  public constructor(name: string) {
+    this.label = this.describe(); //~ EN0610
+    super(name);
+  }
+}
+
+public class Hound extends Animal {
+  private label: string;
+
+  public constructor(name: string) {
+    greet(this); //~ EN0610
+    super(name);
+  }
+}
+
+private function greet(a: &Animal): void {
+  console.log(a.name);
+}

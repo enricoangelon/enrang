@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0100/three_dots_in_a_range.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0100]: expected `..` or `)`, found `...`
+ --> tests/compile/EN0100/three_dots_in_a_range.fail.en:3:18
+  |
+3 | for (const i of a...b) { //~ EN0100
+  |                  ^^^ a range is written with `..`
+  |
+help: write the range with `..`
+  |
+3 | for (const i of a..b) { //~ EN0100
+  |                  ~~
+  = explain: run `enrang explain EN0100`
+
+error: aborting due to 1 previous error

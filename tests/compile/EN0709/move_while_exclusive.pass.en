@@ -1,0 +1,8 @@
+let q: i64[] = [1];
+const r = &q;
+r.push(2);
+take(q);
+
+private function take(v: i64[]): void {
+  console.log(v);
+}

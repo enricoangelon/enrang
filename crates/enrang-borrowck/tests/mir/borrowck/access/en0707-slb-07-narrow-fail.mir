@@ -1,0 +1,83 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0707/slb-07-narrow.fail.en. Its row's codes: EN0707.
+module "tests/compile/EN0707/slb-07-narrow.fail";
+class Obj {
+  s: string | null;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Obj; // o
+  let _3: string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: string | null temp;
+  let _7: *Obj temp;
+  let _8: void temp;
+  let _9: bool temp;
+  let _10: u32 temp;
+  let _11: &string temp;
+  let _12: &string temp;
+  let _13: &Obj temp;
+  let _14: void temp;
+  fact f0: _2.s nonnull;
+  record f0 at bb3[2] _13 call_arg;
+  use f0 at bb3[0];
+  test f0 at bb3;
+  bb0: {
+    storage_live(_2);
+    _4 = const "a": string;
+    _5 = &_4 [temp-arg];
+    _3 = form to_string(move _5) -> bb1;
+  }
+  bb1: {
+    _6 = present(move _3);
+    _7 = addr_of _2;
+    _8 = named_fill Obj leaving()(move _7) -> bb2;
+  }
+  bb2: {
+    _2.s = move _6;
+    drop(_6);
+    storage_dead(_6);
+    drop(_3);
+    storage_dead(_3);
+    drop(_4);
+    storage_dead(_4);
+    _10 = discriminant(_2.s);
+    _9 = ne(move _10, const 0: u32);
+    switch move _9 [0: bb4, otherwise: bb3];
+  }
+  bb3: {
+    check_tag(_2.s, Present);
+    _11 = &(_2.s as Present).0 [compound-target];
+    _13 = &_2 [explicit]; //~ EN0707
+    _12 = clear(move _13) -> bb5;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb5: {
+    _14 = form append(move _11, move _12) -> bb6;
+  }
+  bb6: {
+    goto bb4;
+  }
+}
+
+fn clear(_1: &Obj) -> &string {
+  let _1: &Obj; // o
+  let _2: string | null temp;
+  bb0: {
+    _2 = null;
+    drop((*_1).s) [assign];
+    (*_1).s = move _2;
+    drop(_2);
+    storage_dead(_2);
+    _0 = const "": &string;
+    return;
+  }
+}

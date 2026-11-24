@@ -1,0 +1,6 @@
+let sector: u8[8] = [0; 8];
+show(sector.slice(0, 2));
+
+private function show<T>(x: &T): void {
+  console.log(x);
+}

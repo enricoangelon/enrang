@@ -1,0 +1,6 @@
+let n = 0;
+const f = () => { n += 1; };
+const g = () => { f(); };
+g();
+const h = () => { f(); };
+h();

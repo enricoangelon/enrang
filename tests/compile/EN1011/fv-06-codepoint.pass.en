@@ -1,0 +1,2 @@
+console.log("città".codePointAt(4));
+console.log("città".codePointAt(5));

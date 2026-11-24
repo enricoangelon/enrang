@@ -1,0 +1,11 @@
+const count: i64 = 3;
+const name: string | null = null;
+if (count) { //~ EN0203 "a condition must be `bool`, found `i64`"
+  console.log("some");
+}
+while (name) { //~ EN0203 "a condition must be `bool`, found `string | null`"
+  break;
+}
+const word = count ? "some" : "none"; //~ EN0203 "a condition must be `bool`, found `i64`"
+const empty = !count; //~ EN0203 "a condition must be `bool`, found `i64`"
+console.log(word, empty);

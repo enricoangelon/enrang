@@ -1,0 +1,55 @@
+$ enrang check tests/compile/EN1004/shared_ownership.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1004]: shared ownership types are not supported yet
+ --> tests/compile/EN1004/shared_ownership.fail.en:1:8
+  |
+1 | let r: Rc<i64> | null = null; //~ EN1004 "shared ownership types are not supported yet"
+  |        ^^ not supported yet
+  |
+  = note: every value has one owner, and other code refers to it with `&`.
+help: Own the value in one place and pass `&T`, or use an arena with integer handles
+  = explain: run `enrang explain EN1004`
+
+error[EN1004]: shared ownership types are not supported yet
+ --> tests/compile/EN1004/shared_ownership.fail.en:2:8
+  |
+2 | let a: Arc<string> | null = null; //~ EN1004 "shared ownership types are not supported yet"
+  |        ^^^ not supported yet
+  |
+  = note: every value has one owner, and other code refers to it with `&`.
+help: Own the value in one place and pass `&T`, or use an arena with integer handles
+  = explain: run `enrang explain EN1004`
+
+error[EN1004]: shared ownership types are not supported yet
+ --> tests/compile/EN1004/shared_ownership.fail.en:3:8
+  |
+3 | let c: Cell<i64> | null = null; //~ EN1004 "shared ownership types are not supported yet"
+  |        ^^^^ not supported yet
+  |
+  = note: every value has one owner, and other code refers to it with `&`.
+help: Own the value in one place and pass `&T`, or use an arena with integer handles
+  = explain: run `enrang explain EN1004`
+
+error[EN1004]: shared ownership types are not supported yet
+ --> tests/compile/EN1004/shared_ownership.fail.en:4:9
+  |
+4 | let rc: RefCell<i64> | null = null; //~ EN1004 "shared ownership types are not supported yet"
+  |         ^^^^^^^ not supported yet
+  |
+  = note: every value has one owner, and other code refers to it with `&`.
+help: Own the value in one place and pass `&T`, or use an arena with integer handles
+  = explain: run `enrang explain EN1004`
+
+error[EN1004]: shared ownership types are not supported yet
+ --> tests/compile/EN1004/shared_ownership.fail.en:5:15
+  |
+5 | const n = new Rc(5); //~ EN1004 "shared ownership types are not supported yet"
+  |               ^^ not supported yet
+  |
+  = note: every value has one owner, and other code refers to it with `&`.
+help: Own the value in one place and pass `&T`, or use an arena with integer handles
+  = explain: run `enrang explain EN1004`
+
+error: aborting due to 5 previous errors

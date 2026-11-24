@@ -1,0 +1,22 @@
+//! row: `both(() => { const e = first(r); touch();
+public function go(r: &string[]): void {
+  both(() => { const e = first(r); touch(); console.log(e); }, r);
+}
+
+public function go2(r: &string[]): void {
+  both2(r, () => { const e = first(r); touch(); console.log(e); });
+}
+
+private function first(xs: &string[]): &string {
+  return &xs[0];
+}
+
+private function touch(): void {}
+
+private function both(f: () => void, xs: &string[]): void {
+  f();
+}
+
+private function both2(xs: &string[], f: () => void): void {
+  f();
+}

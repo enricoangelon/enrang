@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0419/class_bound_by_name.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0419]: `Cat` does not satisfy `Animal`
+ --> tests/compile/EN0419/class_bound_by_name.fail.en:2:20
+  |
+2 | console.log(oldest(&cat)); //~ EN0419 "`Cat` does not satisfy `Animal`"
+  |                    ^^^^ `T` must satisfy `Animal`
+3 |
+4 | private function oldest<T extends Animal>(a: &T): &string {
+  |                         - the bound on `T`
+  |
+  = explain: run `enrang explain EN0419`
+
+error: aborting due to 1 previous error

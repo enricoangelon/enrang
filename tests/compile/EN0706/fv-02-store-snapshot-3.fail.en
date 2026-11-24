@@ -1,0 +1,35 @@
+function link(h: &Holder, c: &Cell, s: &u8[]): void {
+  c.setSrc(s);
+  h.setCp(c);
+}
+const t0: u8[] = [0];
+let buf: u8[] = [1];
+let c = new Cell(&t0);
+let h = new Holder();
+link(&h, &c, &buf);
+buf.push(2); //~ EN0706
+console.log(h.first());
+
+public final class Cell {
+  private src: readonly &u8[];
+  public constructor(s: &u8[]) {
+    this.src = s;
+  }
+  public setSrc(s: &u8[]): void {
+    this.src = s;
+  }
+  public first(): u8 {
+    return this.src[0];
+  }
+}
+
+public final class Holder {
+  private cp: &Cell | null = null;
+  public constructor() {}
+  public setCp(c: &Cell): void {
+    this.cp = c;
+  }
+  public first(): u8 {
+    return this.cp!.first();
+  }
+}

@@ -1,0 +1,7 @@
+$ enrang check --color=sometimes
+[exit 2]
+[stdout]
+[stderr]
+error: `--color=sometimes` is not a value of `--color`
+note: the values of `--color` are `auto`, `always` and `never`
+usage: enrang check [file] [flags]

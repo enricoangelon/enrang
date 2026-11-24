@@ -1,0 +1,9 @@
+//! covers: H24
+let p: i64[] | null = [1, 2];
+if (p != null) {
+  for (const x of &p) {
+    console.log(x);
+    p = null;
+    break;
+  }
+}

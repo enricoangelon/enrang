@@ -1,0 +1,21 @@
+$ enrang check tests/compile/EN0614/m3gate-tuple-part-store-const.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `k` is `const`, so `push` cannot change it
+ --> tests/compile/EN0614/m3gate-tuple-part-store-const.fail.en:5:1
+  |
+1 | const k = [1];
+  |       - declared `const` here: immutable all the way down
+...
+5 | t[0].push(1); //~ EN0614 "`k` is `const`, so `push`"
+  | ^^^^^^^^^^^^ `push` changes `t[0]`
+  |
+  = from TypeScript: a TS `const` only freezes the binding. In Enrang values have no shared identity, so `const` freezes the value.
+help: make the binding mutable
+  |
+1 | let k = [1];
+  | ~~~
+  = explain: run `enrang explain EN0614`
+
+error: aborting due to 1 previous error

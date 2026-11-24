@@ -2,7 +2,8 @@
 
 use enrang_testkit::{
     FixtureStatus::{self, Failing, Missing, Passing},
-    GateFinding, GateRow, Harness, RunOptions, gate, gate_covers, golden, parse_covers, row_ids,
+    GateFinding, GateRow, Harness, RunOptions, gate, gate_building, gate_covers, golden,
+    parse_covers, row_ids,
 };
 
 use crate::support::{read_doc, run_harness};
@@ -196,7 +197,87 @@ pub fn register(h: &mut Harness) {
         report.orphans = gate_covers(&[("MIG-01", M6)], &covers, &M3).orphans;
         golden("testkit", "gate_report.txt", &report.to_string())
     });
+    register_building(h);
     register_covers(h);
+}
+
+fn register_building(h: &mut Harness) {
+    // since, current, building, status, and the verdict: gap, stale, early.
+    let verdicts: &[(
+        Milestone,
+        Milestone,
+        Milestone,
+        FixtureStatus,
+        bool,
+        bool,
+        bool,
+    )] = &[
+        (M1, M0, M1, Passing, false, false, true),
+        (M1, M0, M1, Failing, false, false, false),
+        (M1, M0, M1, Missing, false, false, false),
+        (M2, M0, M1, Passing, false, true, false),
+        (M0, M0, M1, Missing, true, false, false),
+        (M0, M0, M1, Passing, false, false, false),
+        (M1, M1, M2, Passing, false, false, false),
+        (M1, M1, M2, Missing, true, false, false),
+        (M10, M10, M10, Passing, false, false, false),
+        (M10, M9, M10, Passing, false, false, true),
+        (M1, M0, M0, Passing, false, true, false),
+    ];
+    for &(since, current, building, status, is_gap, is_stale, is_early) in verdicts {
+        h.case(
+            format!(
+                "gating::building::since_{since:?}_current_{current:?}_building_{building:?}_{status:?}"
+            ),
+            move || {
+                let report = gate_building(&[row("X", since, status)], &current, &building);
+                assert_eq!(report.gaps.len(), usize::from(is_gap), "{report}");
+                assert_eq!(report.stale.len(), usize::from(is_stale), "{report}");
+                assert_eq!(report.early.len(), usize::from(is_early), "{report}");
+                assert_eq!(report.is_clean(), !is_gap && !is_stale);
+            },
+        );
+    }
+    h.case("gating::building::the_registry_at_M0_building_M1", || {
+        let report = gate_building(&registry(), &M0, &M1);
+        assert_eq!(ids(&report.early), ["EN0101"]);
+        assert_eq!(ids(&report.stale), ["EN0430"]);
+        assert_eq!((report.enforced, report.deferred), (0, 6));
+    });
+    h.case("gating::building::early_rows_print_nothing", || {
+        let report = gate_building(&[row("a", M1, Passing)], &M0, &M1);
+        assert!(report.is_clean());
+        assert_eq!(report.to_string(), "");
+        assert_eq!(
+            report.early,
+            [GateFinding {
+                id: "a".to_owned(),
+                since: "M1".to_owned(),
+                fixture: Passing,
+            }]
+        );
+    });
+    h.case("gating::building::plain_gate_allows_nothing_early", || {
+        let report = gate(&[row("a", M1, Passing)], &M0);
+        assert!(report.early.is_empty());
+        assert_eq!(ids(&report.stale), ["a"]);
+    });
+    let combined: &[(FixtureStatus, FixtureStatus, FixtureStatus, FixtureStatus)] = &[
+        (Missing, Missing, Missing, Missing),
+        (Missing, Failing, Failing, Missing),
+        (Missing, Passing, Passing, Missing),
+        (Failing, Passing, Passing, Failing),
+        (Passing, Passing, Passing, Passing),
+        (Failing, Failing, Failing, Failing),
+    ];
+    for &(a, b, best, worst) in combined {
+        h.case(format!("gating::status::{a:?}_and_{b:?}"), move || {
+            assert_eq!(a.best(b), best);
+            assert_eq!(b.best(a), best);
+            assert_eq!(a.worst(b), worst);
+            assert_eq!(b.worst(a), worst);
+        });
+    }
 }
 
 fn register_covers(h: &mut Harness) {
@@ -243,10 +324,32 @@ fn register_covers(h: &mut Harness) {
         let found = row_ids(&spec, "C").expect("SPEC 4.5 parses");
         let rows: Vec<(&str, Milestone)> = found.iter().map(|row| (row.id.as_str(), M2)).collect();
         assert!(gate_covers(&rows, &[], &M1).is_clean());
-        assert_eq!(gate_covers(&rows, &[], &M2).gaps.len(), 17);
-        let fixture = "//! covers: C01\n//! covers: C02, C03\nfunction main(): void {}\n";
+        assert_eq!(gate_covers(&rows, &[], &M2).gaps.len(), 19);
+        let fixture = "//! covers: C04\n//! covers: C05, C06\nfunction main(): void {}\n";
         let report = gate_covers(&rows, &parse_covers(fixture), &M2);
-        assert_eq!(report.gaps.len(), 14);
-        assert!(!ids(&report.gaps).contains(&"C02"));
+        assert_eq!(report.gaps.len(), 16);
+        assert!(!ids(&report.gaps).contains(&"C05"));
+        assert!(report.orphans.is_empty(), "{report}");
+    });
+    h.case("gating::covers::a_retired_c_row_is_an_orphan", || {
+        // SPEC 4.5 retires C01-C03 and never reuses them, so a claim names no row
+        // whatever the milestone, and covers nothing.
+        let spec = read_doc("SPEC.md");
+        let found = row_ids(&spec, "C").expect("SPEC 4.5 parses");
+        let rows: Vec<(&str, Milestone)> = found.iter().map(|row| (row.id.as_str(), M2)).collect();
+        let fixture = "//! covers: C01\n//! covers: C02, C03\nfunction main(): void {}\n";
+        for current in [M1, M2] {
+            let report = gate_covers(&rows, &parse_covers(fixture), &current);
+            assert_eq!(report.orphans, ["C01", "C02", "C03"], "{report}");
+            assert!(!report.is_clean());
+        }
+        let report = gate_covers(&rows, &parse_covers(fixture), &M2);
+        assert_eq!(report.gaps.len(), 19);
+        assert!(
+            report
+                .to_string()
+                .contains("orphan: `covers: C02` names no row\n"),
+            "{report}"
+        );
     });
 }

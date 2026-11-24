@@ -1,0 +1,9 @@
+let c = new Counter();
+*c.count() = 5; //~ EN0616 "cannot change the object returned by `count`"
+
+public class Counter {
+  private n: isize = 0;
+  public count(): readonly &isize {
+    return &this.n;
+  }
+}

@@ -1,0 +1,41 @@
+$ enrang check tests/compile/EN0438/forof-spread-not-array.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0438]: `...` needs an array, found `Box<i64[]>`
+ --> tests/compile/EN0438/forof-spread-not-array.fail.en:4:13
+  |
+4 | const c1 = [...b]; //~ EN0438
+  |             ^^^^ this is `Box<i64[]>`
+  |
+help: spread the array in the box: `...*b`
+  |
+4 | const c1 = [...*b]; //~ EN0438
+  |                +
+  = explain: run `enrang explain EN0438`
+
+error[EN0438]: `...` needs an array, found `int`
+ --> tests/compile/EN0438/forof-spread-not-array.fail.en:5:13
+  |
+5 | const c2 = [...5]; //~ EN0438
+  |             ^^^^ this is `int`
+  |
+  = explain: run `enrang explain EN0438`
+
+error[EN0438]: `...` needs an array, found `string`
+ --> tests/compile/EN0438/forof-spread-not-array.fail.en:6:13
+  |
+6 | const c3 = [..."abc"]; //~ EN0438
+  |             ^^^^^^^^ this is `string`
+  |
+  = explain: run `enrang explain EN0438`
+
+error[EN0438]: `...` needs an array, found `i64[] | null`
+ --> tests/compile/EN0438/forof-spread-not-array.fail.en:7:13
+  |
+7 | const c4 = [...o]; //~ EN0438
+  |             ^^^^ this is `i64[] | null`
+  |
+  = explain: run `enrang explain EN0438`
+
+error: aborting due to 4 previous errors

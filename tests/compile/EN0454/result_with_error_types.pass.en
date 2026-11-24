@@ -1,0 +1,22 @@
+public function parseAge(s: &string): Result<i64> {
+  if (s.isEmpty()) { return Err("empty"); }
+  return 0;
+}
+
+public function check(n: i64): Result<i64, AgeError> {
+  if (n < 0) { return Err(AgeError.Negative); }
+  return n;
+}
+
+public function load(n: i64): Result<i64, DiskError> {
+  if (n < 0) { return Err(new DiskError { code: n }); }
+  return n;
+}
+
+public enum AgeError {
+  Negative = "negative age",
+}
+
+public class DiskError implements Error {
+  public code: i64;
+}

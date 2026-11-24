@@ -1,0 +1,9 @@
+const f: fn(x: i64) => i64 = double;
+console.log(f);
+const g = () => 1;
+console.log(g);
+console.log(0xB8000 as *u16);
+
+private function double(x: i64): i64 {
+  return x * 2;
+}

@@ -1,0 +1,17 @@
+let text: string = "abc";
+const t = new Tagged(&text, "first".toString());
+console.log(t.code());
+text = "def";
+console.log(text);
+
+private class Tagged {
+  private r: &string;
+  public label: string;
+
+  public constructor(r: &string, label: string) {
+    this.r = r;
+    this.label = label;
+  }
+
+  public code(): u8 { return this.r.byteAt(0); }
+}

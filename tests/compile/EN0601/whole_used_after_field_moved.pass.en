@@ -1,0 +1,14 @@
+let p = new Pair { first: "a", second: "b" };
+const f = p.first;
+console.log(f);
+p.first = "z";
+show(p);
+
+public class Pair {
+  public first: string;
+  public second: string;
+}
+
+public function show(p: Pair): void {
+  console.log(p.second);
+}

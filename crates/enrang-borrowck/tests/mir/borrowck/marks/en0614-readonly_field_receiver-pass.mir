@@ -1,0 +1,27 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/readonly_field_receiver.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/readonly_field_receiver.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Bag {
+  private items: i64[] = default;
+}
+
+fn Bag::add(_1: &Bag, _2: i64) -> void {
+  let _1: &Bag; // this
+  let _2: i64; // x
+  let _3: void temp;
+  let _4: &i64[] temp;
+  bb0: {
+    _4 = &(*_1).items [auto-borrow];
+    _3 = "alloc/array"::Array<i64>::push(move _4, copy _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

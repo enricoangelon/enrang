@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0603/for_of_takes_field_of_this.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0603]: cannot move `this.items` out of `this`
+ --> tests/compile/EN0603/for_of_takes_field_of_this.fail.en:4:21
+  |
+4 |     for (const x of this.items) { //~ EN0603 "cannot move `this.items` out of `this`"
+  |                     ^^^^^^^^^^ `this.items` moves here
+  |
+help: to loop over the elements in place, write `&this.items`
+  |
+4 |     for (const x of &this.items) { //~ EN0603 "cannot move `this.items` out of `this`"
+  |                     +
+  = explain: run `enrang explain EN0603`
+
+error: aborting due to 1 previous error

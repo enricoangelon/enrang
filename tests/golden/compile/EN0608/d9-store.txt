@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0608/d9-store.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `new C` can change `x`, but `k` is `const`
+ --> tests/compile/EN0608/d9-store.fail.en:4:3
+  |
+4 |   &k, //~ EN0608
+  |   ^^ `new C` writes through it
+  |
+help: declare it `let k`
+  |
+1 | let k: i64[] = [1];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error[EN0608]: `new C` can change `y`, but `j` is `const`
+ --> tests/compile/EN0608/d9-store.fail.en:5:3
+  |
+5 |   &j, //~ EN0608
+  |   ^^ `new C` writes through it
+  |
+help: declare it `let j`
+  |
+2 | let j: i64[] = [2];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 2 previous errors

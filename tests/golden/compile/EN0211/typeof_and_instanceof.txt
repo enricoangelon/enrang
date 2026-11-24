@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0211/typeof_and_instanceof.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0211]: `typeof` does not exist in Enrang
+ --> tests/compile/EN0211/typeof_and_instanceof.fail.en:2:13
+  |
+2 |   const t = typeof value; //~ EN0211
+  |             ^^^^^^ a value's type is known when the program compiles
+  |
+help: keep the kinds of value in an enum, and `match` on it
+  = explain: run `enrang explain EN0211`
+
+error[EN0211]: `instanceof` does not exist in Enrang
+ --> tests/compile/EN0211/typeof_and_instanceof.fail.en:3:13
+  |
+3 |   if (value instanceof Circle) { //~ EN0211
+  |             ^^^^^^^^^^ a value's class is known when the program compiles
+  |
+help: keep the kinds of value in an enum, and `match` on it
+  = explain: run `enrang explain EN0211`
+
+error: aborting due to 2 previous errors

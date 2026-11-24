@@ -1,0 +1,56 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0605/field_of_box_contents_moved_out.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0605/field_of_box_contents_moved_out.pass";
+@lang("box") @final class "alloc/box"::Box<T> {
+  private p: *T;
+}
+fn "alloc/box"::Box<T>::#ctor(_1: &Box<T>, _2: T) -> void;
+extend "alloc/string"::#extend0: string;
+fn "alloc/string"::#extend0::clone(_1: &string) -> string;
+class User {
+  name: string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Box<User>; // b
+  let _3: User temp;
+  let _4: *User temp;
+  let _5: void temp;
+  let _6: &Box<User> temp;
+  let _7: void temp;
+  let _8: string; // n
+  let _9: &string temp;
+  let _10: void temp;
+  let _11: &string temp;
+  bb0: {
+    storage_live(_2);
+    _4 = addr_of _3;
+    _5 = named_fill User leaving()(move _4) -> bb1;
+  }
+  bb1: {
+    _3.name = const "Ada": string;
+    _6 = &_2 [auto-borrow];
+    _7 = "alloc/box"::Box<User>::#ctor(move _6, move _3) -> bb2;
+  }
+  bb2: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_8);
+    _9 = &(*_2).name [auto-borrow];
+    _8 = "alloc/string"::#extend0::clone(move _9) -> bb3;
+  }
+  bb3: {
+    _11 = &_8 [auto-borrow];
+    _10 = form log(move _11) -> bb4;
+  }
+  bb4: {
+    drop(_8);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}

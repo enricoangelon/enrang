@@ -1,0 +1,3 @@
+//! target: i386-linux
+//! covers: H14
+private unsafe let wrapped: u64[536870912]; //~ EN0435

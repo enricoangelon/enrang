@@ -1,0 +1,59 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0619/super_in_a_loop.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0619/super_in_a_loop.pass";
+class Animal {
+  age: i64;
+}
+class Dog extends Animal { }
+
+fn Animal::#ctor(_1: &Animal, _2: i64) -> void {
+  let _1: &Animal; // this
+  let _2: i64; // age
+  bb0: {
+    switch const overridden(age): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    (*_1).age = copy _2;
+    return;
+  }
+  bb2: {
+    field_init((*_1).age, const 0: i64);
+    goto bb1;
+  }
+}
+
+fn Dog::#ctor(_1: &Dog, _2: i64, _3: i64) -> void {
+  let _1: &Dog; // this
+  let _2: i64; // age
+  let _3: i64; // n
+  let mut _4: i64; // i
+  let _5: void temp;
+  let _6: &Dog temp;
+  let _7: &Animal temp;
+  let _8: bool temp;
+  let _9: i64 temp;
+  bb0: {
+    storage_live(_4);
+    _4 = const 0: i64;
+    _6 = &*_1 [reborrow];
+    _7 = convert(upcast, move _6);
+    _5 = Animal::#ctor(move _7, copy _2) -> bb1;
+  }
+  bb1: {
+    goto bb2;
+  }
+  bb2: {
+    _8 = lt(copy _4, copy _3);
+    switch move _8 [0: bb4, otherwise: bb3];
+  }
+  bb3: {
+    _9 = copy _4;
+    _4 = checked_add(copy _9, const 1: i64);
+    goto bb2;
+  }
+  bb4: {
+    storage_dead(_4);
+    return;
+  }
+}

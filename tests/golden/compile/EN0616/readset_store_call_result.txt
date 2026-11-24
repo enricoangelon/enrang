@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/readset_store_call_result.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `src` is declared `readonly &`, so it can't hold a reference from `dst`
+  --> tests/compile/EN0616/readset_store_call_result.fail.en:25:5
+   |
+25 |     w.src = p; //~ EN0616 "`src` is declared `readonly &`, so it can't hold a reference from `dst`"
+   |     ^^^^^^^^^ stored here
+   |
+help: store a reference from a parameter, or from another `readonly &` field
+   = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

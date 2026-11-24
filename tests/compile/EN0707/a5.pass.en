@@ -1,0 +1,9 @@
+let players: i64[] = [1, 2];
+const q = players.last();
+if (q != null) {
+  *q = 5;
+}
+if (q != null) {
+  *q = 6;
+}
+players.push(3);

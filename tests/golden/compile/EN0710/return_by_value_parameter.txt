@@ -1,0 +1,20 @@
+$ enrang check tests/compile/EN0710/return_by_value_parameter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0710]: cannot return a reference to local `s`
+ --> tests/compile/EN0710/return_by_value_parameter.fail.en:2:10
+  |
+2 |   return &s; //~ EN0710 "cannot return a reference to local `s`"
+  |          ^^ this reference would point at freed memory
+  |
+  = rule: a returned reference must borrow from a parameter, and `first` has no reference parameters.
+help: return the owned value instead
+  |
+1 | public function first(s: string): string {
+  |                                   ~~~~~~
+2 |   return s; //~ EN0710 "cannot return a reference to local `s`"
+  |          ~
+  = explain: run `enrang explain EN0710`
+
+error: aborting due to 1 previous error

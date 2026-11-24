@@ -1,0 +1,5 @@
+public type Cd = @abi("cdecl") unsafe fn(n: i32) => void; //~ EN1030 "this foreign ABI is not supported yet"
+
+@abi("stdcall") public function sc(n: i32): i32 { //~ EN1030 "this foreign ABI is not supported yet"
+  return n;
+}

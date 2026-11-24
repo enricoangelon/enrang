@@ -1,0 +1,7 @@
+public class Square {
+  public side: f64;
+}
+
+public function area(s: &Square): f64 {
+  return s.side * s.side;
+}

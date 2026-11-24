@@ -1,0 +1,9 @@
+public final class Pad {
+  private t: [&i64[], i32];
+  public constructor(a: &i64[]) {
+    this.t = [a, 1];
+  }
+  public poke(): void {
+    this.t[0].push(4);
+  }
+}

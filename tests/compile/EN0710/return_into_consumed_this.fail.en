@@ -1,0 +1,4 @@
+public class Lexer {
+  public pos: isize = 0;
+  public move posRef(): &isize { return &this.pos; } //~ EN0710 "`posRef` returns a reference into the object it consumes"
+}

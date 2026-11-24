@@ -1,0 +1,93 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/tk-01-local-ref.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/tk-01-local-ref.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Inner {
+  a: i64[];
+  b: i64[];
+}
+class P {
+  inner: Inner;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: P; // p
+  let _3: Inner temp;
+  let _4: i64[] temp;
+  let _5: i64[] temp;
+  let _6: *Inner temp;
+  let _7: void temp;
+  let _8: *P temp;
+  let _9: void temp;
+  let _10: [&i64[], &i64[]] temp;
+  let _11: &P temp;
+  let _12: &i64[]; // x
+  let _13: &i64[]; // y
+  let _14: void temp;
+  let _15: &i64[] temp;
+  let _16: void temp;
+  let _17: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _4 = intrinsic AllocArray<i64>(const 1: i64);
+    _5 = intrinsic AllocArray<i64>(const 2: i64);
+    _6 = addr_of _3;
+    _7 = named_fill Inner leaving()(move _6) -> bb1;
+  }
+  bb1: {
+    _3.a = move _4;
+    _3.b = move _5;
+    _8 = addr_of _2;
+    _9 = named_fill P leaving()(move _8) -> bb2;
+  }
+  bb2: {
+    _2.inner = move _3;
+    drop(_5);
+    storage_dead(_5);
+    drop(_4);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    _11 = &_2 [explicit];
+    _10 = pair(move _11) -> bb3;
+  }
+  bb3: {
+    storage_live(_12);
+    _12 = copy _10.0;
+    storage_live(_13);
+    _13 = copy _10.1;
+    _15 = &*_12 [reborrow];
+    _14 = "alloc/array"::Array<i64>::push(move _15, const 3: i64) -> bb4;
+  }
+  bb4: {
+    _17 = &*_13 [reborrow];
+    _16 = "alloc/array"::Array<i64>::push(move _17, const 4: i64) -> bb5;
+  }
+  bb5: {
+    storage_dead(_13);
+    storage_dead(_12);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn pair(_1: &P) -> [&i64[], &i64[]] {
+  let _1: &P; // p
+  let _2: &i64[] temp;
+  let _3: &i64[] temp;
+  bb0: {
+    _2 = &(*_1).inner.a [explicit];
+    _3 = &(*_1).inner.b [explicit];
+    _0 = tuple(move _2, move _3);
+    return;
+  }
+}

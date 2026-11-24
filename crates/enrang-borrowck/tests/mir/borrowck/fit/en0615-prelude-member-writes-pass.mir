@@ -1,0 +1,46 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/prelude-member-writes.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/prelude-member-writes.pass";
+class Point {
+  private reads: i64 = default;
+  x: i64 = default;
+}
+class Rank {
+  private asked: i64 = default;
+  level: int = default;
+}
+class Tally {
+  private copies: i64 = default;
+}
+
+fn Point::equals(_1: &Point, _2: &Point) -> bool {
+  let _1: &Point; // this
+  let _2: &Point; // other
+  bb0: {
+    _0 = eq(copy (*_1).x, copy (*_2).x);
+    return;
+  }
+}
+
+fn Rank::compare(_1: &Rank, _2: &Rank) -> int {
+  let _1: &Rank; // this
+  let _2: &Rank; // other
+  bb0: {
+    _0 = checked_sub(copy (*_1).level, copy (*_2).level);
+    return;
+  }
+}
+
+fn Tally::clone(_1: &Tally) -> Tally {
+  let _1: &Tally; // this
+  let _2: *Tally temp;
+  let _3: void temp;
+  bb0: {
+    _2 = addr_of _0;
+    _3 = named_fill Tally leaving(copies)(move _2) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

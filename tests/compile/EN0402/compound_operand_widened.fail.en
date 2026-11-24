@@ -1,0 +1,8 @@
+// `as` binds tighter than `-` and `*`, so the fix-it converts the whole operand.
+public function avg(total: i64, xs: &i64[]): i64 {
+  return total / (xs.length() - 1); //~ EN0402 "cannot divide `i64` by `isize`"
+}
+
+public function twice(total: i64, n: isize): i64 {
+  return total + n * 2; //~ EN0402 "cannot add `isize` to `i64`"
+}

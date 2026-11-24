@@ -1,0 +1,69 @@
+// `for...of` (plan d.7 modes): the bind's borrow is exclusive iff the binding
+// is write-live after it, the hold iff the binding is write-live anywhere in
+// the loop body.
+// MIR shapes: the head and bind of plan c.13 (plan.md:1134-1140) over a path
+// source `*_1`.
+fn zero(_1: &i64[]) -> void {
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &i64; // x
+  loop l0: path *_1 preheader bb0 head bb1 bind bb2[2] binding _5; // hold exclusive
+  bb0: {
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb1: {
+    _3 = len(*_1);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &(*_1)[_2] [for-of-element]; // exclusive
+    _2 = add(copy _2, const 1: isize);
+    goto bb3;
+  }
+  bb3: {
+    *_5 = const 0: i64;
+    storage_dead(_5);
+    goto bb1;
+  }
+  bb4: {
+    return;
+  }
+}
+fn sum(_1: &i64[]) -> i64 {
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &i64; // x
+  loop l0: path *_1 preheader bb0 head bb1 bind bb2[2] binding _5; // hold shared
+  bb0: {
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb1: {
+    _3 = len(*_1);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &(*_1)[_2] [for-of-element]; // shared
+    _2 = add(copy _2, const 1: isize);
+    goto bb3;
+  }
+  bb3: {
+    _0 = add(copy _0, copy *_5);
+    storage_dead(_5);
+    goto bb1;
+  }
+  bb4: {
+    return;
+  }
+}

@@ -1,0 +1,7 @@
+let o = new O();
+o.s = "abc".toString();
+if (o.s != null) {
+  const x = mem.replace(&o, new O());
+  console.log(o.s.length()); //~ EN0401 "`o.s` may be `null` here"
+}
+public class O { public s: string | null = null; }

@@ -1,0 +1,8 @@
+//! row: `t.isNull()` with `t: &User \| null`
+public function check(t: &User | null): bool {
+  return t.isNull(); //~ EN0703
+}
+
+public class User {
+  public name: string = "Ada";
+}

@@ -1,0 +1,5 @@
+// The array's element type is inferred from its texts, so `find` gives a
+// `&string | null`, and the text after `??` is its static descriptor (C13).
+const names = ["ann", "bob"];
+const b = names.find(n => n.startsWith("b")) ?? "nobody";
+console.log(b);

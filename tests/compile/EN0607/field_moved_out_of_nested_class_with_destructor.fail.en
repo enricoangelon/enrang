@@ -1,0 +1,14 @@
+const d = new Dir { file: new File("a.txt", 3) };
+const n = d.file.name; //~ EN0607 "cannot move `d.file.name` out of `d.file`, because `File` has a destructor"
+console.log(n);
+
+public class Dir {
+  public file: File;
+}
+
+public class File {
+  public constructor(public name: string, private fd: i64) {}
+  public destructor() {
+    console.log("close", this.fd);
+  }
+}

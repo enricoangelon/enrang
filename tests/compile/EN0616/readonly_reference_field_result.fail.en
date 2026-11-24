@@ -1,0 +1,19 @@
+const bytes: u8[] = [1, 2, 3];
+let ly = new ByteLexer(&bytes);
+ly.next()![0] = 9; //~ EN0616 "cannot change the object returned by `next`"
+
+public final class ByteLexer {
+  private src: readonly &Slice<u8>;
+  private pos: isize = 0;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public next(): &Slice<u8> | null {
+    if (this.pos >= this.src.length()) {
+      return null;
+    }
+    const start = this.pos;
+    this.pos += 1;
+    return this.src.slice(start, this.pos);
+  }
+}

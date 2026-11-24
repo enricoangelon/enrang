@@ -1,0 +1,87 @@
+$ enrang check tests/compile/EN0616/fv-02-nested-ref.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `src` is declared `readonly &`, so it can't hold a reference from `dst`
+  --> tests/compile/EN0616/fv-02-nested-ref.fail.en:23:5
+   |
+23 |     r.src = p; //~ EN0616
+   |     ^^^^^^^^^ stored here
+   |
+help: store a reference from a parameter, or from another `readonly &` field
+   = explain: run `enrang explain EN0616`
+
+error[EN0708]: `o.inner` can't be read while a borrow of it may write into it
+  --> tests/compile/EN0616/fv-02-nested-ref.fail.en:24:15
+   |
+21 |     const r = &o.inner;
+   |               -------- borrowed for writing here, because it writes on line 23
+22 |     const p = r.dst;
+23 |     r.src = p; //~ EN0616
+   |     --------- the write
+24 |     const a = o.inner.peek(); //~ EN0708
+   |               ^^^^^^^^^^^^^^ read here
+25 |     o.inner.step(); //~ EN0707
+   |     - still used here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+help: read `o.inner` before line 21 or after line 25
+   = explain: run `enrang explain EN0708`
+
+error[EN0707]: cannot borrow `o.inner` as exclusive twice at the same time
+  --> tests/compile/EN0616/fv-02-nested-ref.fail.en:25:5
+   |
+21 |     const r = &o.inner;
+   |               -------- first exclusive borrow
+...
+25 |     o.inner.step(); //~ EN0707
+   |     ^^^^^^^^^^^^^^ second exclusive borrow
+26 |     o.inner.step(); //~ EN0707
+   |     - `the borrow` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error[EN0707]: cannot borrow `o.inner` as exclusive twice at the same time
+  --> tests/compile/EN0616/fv-02-nested-ref.fail.en:26:5
+   |
+21 |     const r = &o.inner;
+   |               -------- first exclusive borrow
+...
+26 |     o.inner.step(); //~ EN0707
+   |     ^^^^^^^^^^^^^^ second exclusive borrow
+27 |     o.inner.step(); //~ EN0707
+   |     - `the borrow` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error[EN0707]: cannot borrow `o.inner` as exclusive twice at the same time
+  --> tests/compile/EN0616/fv-02-nested-ref.fail.en:27:5
+   |
+21 |     const r = &o.inner;
+   |               -------- first exclusive borrow
+...
+27 |     o.inner.step(); //~ EN0707
+   |     ^^^^^^^^^^^^^^ second exclusive borrow
+28 |     o.inner.step(); //~ EN0707
+   |     - `the borrow` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error[EN0707]: cannot borrow `o.inner` as exclusive twice at the same time
+  --> tests/compile/EN0616/fv-02-nested-ref.fail.en:28:5
+   |
+21 |     const r = &o.inner;
+   |               -------- first exclusive borrow
+...
+28 |     o.inner.step(); //~ EN0707
+   |     ^^^^^^^^^^^^^^ second exclusive borrow
+29 |     console.log(*a);
+   |                  - `the borrow` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0707`
+
+error: aborting due to 6 previous errors

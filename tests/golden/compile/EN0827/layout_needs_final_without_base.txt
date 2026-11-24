@@ -1,0 +1,32 @@
+$ enrang check tests/compile/EN0827/layout_needs_final_without_base.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0827]: a `@packed` class must be `final`
+ --> tests/compile/EN0827/layout_needs_final_without_base.fail.en:1:1
+  |
+1 | @packed public class P1 { //~ EN0827 "a `@packed` class must be `final`"
+  | ^^^^^^^ promises an exact layout, but a class that can be extended carries a hidden pointer
+  |
+help: write `@packed public final class P1`
+  = explain: run `enrang explain EN0827`
+
+error[EN0827]: a `@packed` class can't extend another class
+ --> tests/compile/EN0827/layout_needs_final_without_base.fail.en:7:39
+  |
+7 | @packed public final class P2 extends Base { //~ EN0827 "a `@packed` class can't extend another class"
+  |                                       ^^^^ `Base` gives it a hidden method-table pointer
+  |
+help: remove `extends Base`
+  = explain: run `enrang explain EN0827`
+
+error[EN0827]: a `@align(16)` class must be `final`
+  --> tests/compile/EN0827/layout_needs_final_without_base.fail.en:11:1
+   |
+11 | @align(16) public class Al { //~ EN0827 "a `@align(16)` class must be `final`"
+   | ^^^^^^^^^^ promises an exact layout, but a class that can be extended carries a hidden pointer
+   |
+help: write `@align(16) public final class Al`
+   = explain: run `enrang explain EN0827`
+
+error: aborting due to 3 previous errors

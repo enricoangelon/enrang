@@ -1,0 +1,23 @@
+const p = new Point(1, 2);
+const q = new Pair { a: 1, b: 2 };
+const c = Color.Red;
+console.log(p, q, c);
+
+public class Point {
+  private x: i64;
+  private y: i64;
+  public constructor(x: i64, y: i64) {
+    this.x = x;
+    this.y = y;
+  }
+}
+
+public class Pair {
+  public a: i64;
+  public b: i64;
+}
+
+public enum Color {
+  Red,
+  Green,
+}

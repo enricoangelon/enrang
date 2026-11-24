@@ -1,0 +1,10 @@
+let queue: string[] = [];
+const task = "build";
+queue.push(task);
+const copy = queue;
+const robot = new Robot {};
+robot.move();
+
+public class Robot {
+  public move(): void {}
+}

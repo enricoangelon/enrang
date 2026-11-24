@@ -1,0 +1,4 @@
+$ enrang fmt --check empty
+[exit 0]
+[stdout]
+[stderr]

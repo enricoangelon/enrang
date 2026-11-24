@@ -1,0 +1,63 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/loop_source_readonly_reference_field.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/loop_source_readonly_reference_field.pass";
+@final class Copier {
+  private src: readonly &Slice<u8>;
+}
+
+fn Copier::#ctor(_1: &Copier, _2: &Slice<u8>) -> void {
+  let _1: &Copier; // this
+  let _2: &Slice<u8>; // src
+  let _3: &Slice<u8> temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+}
+
+fn Copier::zeroAll(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: isize #i;
+  let _3: isize #n;
+  let _4: bool temp;
+  let _5: &u8; // b
+  let _6: void temp;
+  let _7: &u8 temp;
+  loop l0: path *(*_1).src preheader bb5 head bb1 bind bb2[2] binding _5;
+  bb0: {
+    goto bb5;
+  }
+  bb1: {
+    _3 = len(*(*_1).src);
+    _4 = lt(copy _2, copy _3);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_5);
+    check_bounds(copy _2, copy _3);
+    _5 = &(*(*_1).src)[_2] [for-of-element];
+    _2 = add(copy _2, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    return;
+  }
+  bb5: {
+    storage_live(_2);
+    _2 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _7 = &*_5 [auto-borrow];
+    _6 = form log(move _7) -> bb7;
+  }
+  bb7: {
+    storage_dead(_5);
+    goto bb3;
+  }
+}

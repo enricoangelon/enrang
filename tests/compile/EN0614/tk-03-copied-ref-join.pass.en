@@ -1,0 +1,10 @@
+//! covers: H31
+let list: Pt[] = [new Pt()]; list[0].xs.push(1); const p = firstLanes(&list, false);
+if (p != null) {
+  const [u, v] = p; const e = &u[0];
+  console.log(*e, *v);
+}
+
+public class Pt { public xs: i64[] = []; public ys: i64[] = []; }
+
+public function firstLanes(ps: &Slice<Pt>, c: bool): [&i64[], &i64[]] | null { const r = ps; for (const x of r) { const second = c ? &ps[0].ys : &x.xs; return [&ps[0].xs, second]; } return null; }

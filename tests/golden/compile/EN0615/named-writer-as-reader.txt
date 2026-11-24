@@ -1,0 +1,23 @@
+$ enrang check tests/compile/EN0615/named-writer-as-reader.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `bump` changes `x`, which `(x: &i64) => void` can't declare
+ --> tests/compile/EN0615/named-writer-as-reader.fail.en:3:7
+  |
+3 | apply(bump); //~ EN0615
+  |       ^^^^ converted here
+  |
+  = note: a function value may write only what its type's `let` marks allow, and store nothing
+  = explain: run `enrang explain EN0615`
+
+error[EN0615]: `bump` changes `x`, which `fn(x: &i64) => void` can't declare
+ --> tests/compile/EN0615/named-writer-as-reader.fail.en:4:32
+  |
+4 | const f: fn(x: &i64) => void = bump; //~ EN0615
+  |                                ^^^^ converted here
+  |
+  = note: a function value may write only what its type's `let` marks allow, and store nothing
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 2 previous errors

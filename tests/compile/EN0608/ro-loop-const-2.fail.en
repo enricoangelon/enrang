@@ -1,0 +1,6 @@
+//! covers: H28
+for (const t of &TABLE) { //~ EN0608
+  *t = 0;
+}
+
+private const TABLE: i64[2] = [1, 2];

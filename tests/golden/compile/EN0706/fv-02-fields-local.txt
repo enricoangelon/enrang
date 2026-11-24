@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0706/fv-02-fields-local.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `base` cannot change while `keep` still points into it
+  --> tests/compile/EN0706/fv-02-fields-local.fail.en:18:5
+   |
+16 |     let lx = new Lexer(&base);
+   |                        ----- shared borrow of `base` starts here, held by `keep`
+17 |     const keep = lx.src;
+18 |     base = "zzz".toString(); //~ EN0706
+   |     ^^^^^^^^^^^^^^^^^^^^^^^ `base` changes here
+19 |     console.log(keep);
+   |                 ---- `keep` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

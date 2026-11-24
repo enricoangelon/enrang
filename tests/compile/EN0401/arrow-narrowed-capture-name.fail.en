@@ -1,0 +1,10 @@
+let p: string | null = "a".toString();
+function clr(): void { p = null; }
+run(() => {
+  if (p != null) {
+    clr();
+    console.log(p.length()); //~ EN0401 "`p` may be `null` here"
+  }
+});
+
+private function run(f: () => void): void { f(); }

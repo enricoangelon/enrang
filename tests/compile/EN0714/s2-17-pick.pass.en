@@ -1,0 +1,45 @@
+const rex = new Dog {};
+const robo = new Robot {};
+console.log(pick(&rex, &robo, true).speak(), pick(&rex, &robo, false).speak());
+new Greeter(&robo).hello();
+console.log(sizeOf<Greeter>());
+introduce(pick(&rex, &robo, false));
+const maybe: &Speaker | null = &rex;
+const tagged: [&Speaker, i64] = [&robo, 1];
+console.log(maybe != null, tagged[1]);
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Dog implements Speaker {
+  public speak(): string {
+    return "woof";
+  }
+}
+
+public final class Robot implements Speaker {
+  public speak(): string {
+    return "beep";
+  }
+}
+
+public final class Greeter {
+  private s: &Speaker;
+
+  public constructor(s: &Speaker) {
+    this.s = s;
+  }
+
+  public hello(): void {
+    console.log(`hello, ${this.s.speak()}`);
+  }
+}
+
+private function pick(a: &Speaker, b: &Speaker, first: bool): &Speaker {
+  return first ? a : b;
+}
+
+private function introduce(s: &Speaker): void {
+  console.log(s.speak());
+}

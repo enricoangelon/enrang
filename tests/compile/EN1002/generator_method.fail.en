@@ -1,0 +1,3 @@
+public class Counter {
+  public *values(): void {} //~ EN1002 "generators are not supported yet"
+}

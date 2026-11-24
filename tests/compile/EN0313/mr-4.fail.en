@@ -1,0 +1,17 @@
+let q: i64[] = [];
+function grow(): void {
+  for (let i: i64 = 0; i < 100; i++) {
+    q.push(i);
+  }
+}
+function relay(): void {
+  grow();
+}
+const f: fn() => void = relay; //~ EN0803 "`relay` uses top-level variables, so it can't become an `fn`"
+relay();
+
+public class Worker {
+  public run(): void {
+    grow(); //~ EN0313 "`grow` uses top-level variables, so only the top-level statements can call it"
+  }
+}

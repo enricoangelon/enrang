@@ -1,0 +1,8 @@
+let a: i64 = 1;
+let b: i64 = 2;
+function add(): void { a += b; }
+const rb = &b;
+run(add);
+console.log(*rb, a);
+
+private function run(f: () => void): void { f(); }

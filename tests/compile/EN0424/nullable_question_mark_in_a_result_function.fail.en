@@ -1,0 +1,6 @@
+console.log(first(null));
+
+private function first(xs: i64[] | null): Result<i64 | null> {
+  const all = xs?; //~ EN0424
+  return all[0];
+}

@@ -1,20 +1,35 @@
 //! `explain` over every row of the registry, and over everything that is not a row.
+//!
+//! A page's transcripts run as processes in a project that `enrang init` made, so a
+//! command that reads a project finds one, and one that writes, as `init` does,
+//! writes there and never into the crate. A `Compile` page holds source instead,
+//! whose examples the syntax suite checks (`crates/enrang-syntax/tests/syntax/explain.rs`).
 
-use enrang_cli::{EXIT_USAGE, Outcome};
-use enrang_diag::{CURRENT_MILESTONE, Code, did_you_mean, explain};
-use enrang_testkit::Harness;
+use std::path::Path;
 
-use crate::support::{inproc, strings};
+use enrang_cli::EXIT_USAGE;
+use enrang_diag::{CURRENT_MILESTONE, Code, FixtureKind, did_you_mean, explain};
+use enrang_testkit::{Harness, TempDir};
 
-/// Runs the command a transcript shows on its first line.
-fn run_transcript_command(transcript: &str) -> (Outcome, &str) {
+use crate::support::{RETIRED, Ran, enrang_in, inproc, strings};
+
+/// Runs the command a transcript shows on its first line, in `dir`.
+fn run_transcript_command<'a>(transcript: &'a str, dir: &Path) -> (Ran, &'a str) {
     let (command, output) = transcript.split_once('\n').unwrap_or((transcript, ""));
     let words: Vec<&str> = command
         .strip_prefix("$ enrang ")
         .expect("a transcript opens with a command")
         .split(' ')
         .collect();
-    (enrang_cli::run(&strings(&words), false), output)
+    (enrang_in(dir, &strings(&words)), output)
+}
+
+/// A fresh directory holding the project `enrang init` makes.
+fn project() -> TempDir {
+    let directory = TempDir::new("explain");
+    let ran = enrang_in(directory.path(), &strings(&["init"]));
+    assert_eq!(ran.code, 0, "{ran:?}");
+    directory
 }
 
 /// The name in the help line of a failed lookup, if it offers one.
@@ -79,20 +94,26 @@ pub fn register(h: &mut Harness) {
 
     for &code in Code::ALL {
         let Some(page) = explain(code) else { continue };
+        if code.fixture() == FixtureKind::Compile {
+            continue;
+        }
         h.case(
             format!("explain/{code}/its failing transcript is what the command does"),
             move || {
-                let (outcome, shown) = run_transcript_command(page.failing);
-                assert_eq!(outcome.code, EXIT_USAGE, "{outcome:?}");
-                assert_eq!(outcome.stderr.trim_end(), shown);
+                let directory = project();
+                let (ran, shown) = run_transcript_command(page.failing, directory.path());
+                assert_eq!(ran.code, i32::from(EXIT_USAGE), "{ran:?}");
+                assert_eq!(ran.stderr.trim_end(), shown);
+                assert_eq!(ran.stdout, "");
                 assert!(shown.contains(&format!("error[{code}]")), "{shown}");
             },
         );
         h.case(
             format!("explain/{code}/its fixed transcript succeeds today"),
             move || {
-                let (outcome, shown) = run_transcript_command(page.fixed);
-                assert_eq!(outcome.code, 0, "{}: {outcome:?}", page.fixed);
+                let directory = project();
+                let (ran, shown) = run_transcript_command(page.fixed, directory.path());
+                assert_eq!(ran.code, 0, "{}: {ran:?}", page.fixed);
                 assert_eq!(shown, "", "a fixed transcript shows only its command");
             },
         );
@@ -115,19 +136,23 @@ pub fn register(h: &mut Harness) {
         for heading in ["Failing:", "Fixed:", "From TypeScript:"] {
             assert!(page.contains(heading), "{heading}");
         }
-        let title = inproc(&["explain", "EN0601"]).stdout;
+        let title = inproc(&["explain", "EN0414"]).stdout;
         for heading in ["Failing:", "Fixed:", "From TypeScript:"] {
             assert!(!title.contains(heading), "{heading}");
         }
     });
     h.case("explain/the milestone named is the row's own", || {
         let rows: &[(&str, &str)] = &[
-            ("EN0001", "M1"),
-            ("EN0301", "M2"),
-            ("EN0601", "M3"),
+            ("EN0414", "M4"),
+            ("EN0821", "M4"),
+            ("EN1101", "M4"),
+            ("EN1108", "M4"),
+            ("T0005", "M4"),
+            ("EN1211", "M6"),
             ("EN0310", "M4"),
             ("EN0901", "M5"),
             ("EN1210", "M6"),
+            ("EN1212", "M6"),
             ("EN0809", "M9"),
             ("T0001", "M4"),
             ("T0008", "M5"),
@@ -138,14 +163,21 @@ pub fn register(h: &mut Harness) {
             assert!(text.contains(&expected), "{code}: {text}");
         }
     });
-    h.case("explain/the retired code names what covers it", || {
-        let outcome = inproc(&["explain", "EN0704"]);
-        assert_eq!(outcome.code, EXIT_USAGE);
-        assert_eq!(
-            outcome.stderr,
-            "error: `EN0704` is retired: R3's rule 4 with EN0710 and EN0712 covers what it named\n"
+    for (code, why) in RETIRED {
+        h.case(
+            format!("explain/the retired code {code} names why it went"),
+            move || {
+                assert_eq!(Code::from_name(code), None, "a retired code has no row");
+                let outcome = inproc(&["explain", code]);
+                assert_eq!(outcome.code, EXIT_USAGE);
+                assert_eq!(outcome.stdout, "");
+                assert_eq!(
+                    outcome.stderr,
+                    format!("error: `{code}` is retired: {why}\n")
+                );
+            },
         );
-    });
+    }
     h.case("explain/a suggestion is always the closest", || {
         let rows: &[(&str, &str)] = &[
             ("EN1031x", "EN1031"),

@@ -1,0 +1,5 @@
+console.log(pair(1));
+
+private function pair(n: i64): &Slice<i64> {
+  return &[1, 1];
+}

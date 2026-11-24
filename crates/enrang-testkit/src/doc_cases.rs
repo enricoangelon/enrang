@@ -127,6 +127,36 @@ pub fn extract_cases(doc: &str) -> Result<Vec<Case>, ExtractErrors> {
     }
 }
 
+/// A fenced code block of a document.
+#[derive(Clone, Eq, PartialEq, Debug)]
+pub struct FencedBlock {
+    /// The line of the opening fence.
+    pub line: usize,
+    /// The first word of the info string, such as `ts`, or empty.
+    pub lang: String,
+    /// The lines between the fences, each ending in a newline, with the opening
+    /// fence's indentation taken off.
+    pub contents: String,
+}
+
+/// Every fenced code block of a document, in order, read by the same rules as the
+/// case extractor: a suite that checks each `ts` block of SPEC sees the blocks the
+/// cases are made of.
+pub fn fenced_blocks(doc: &str) -> Result<Vec<FencedBlock>, ExtractErrors> {
+    let blocks = scan(doc)?
+        .into_iter()
+        .filter_map(|item| match item {
+            Item::Block(block) => Some(FencedBlock {
+                line: block.line,
+                lang: block.lang.to_owned(),
+                contents: block.contents,
+            }),
+            Item::Line { .. } => None,
+        })
+        .collect();
+    Ok(blocks)
+}
+
 /// The `G` and `S` headings with no marker of the same ID under them. SPEC 14
 /// requires a meta-test that this is empty.
 pub fn headings_without_cases(doc: &str) -> Result<Vec<String>, ExtractErrors> {

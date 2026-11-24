@@ -1,0 +1,13 @@
+$ enrang check tests/compile/EN0701/ep-07.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0701]: `T` can't stand for a `Lexer`, because `Lexer` holds a reference
+ --> tests/compile/EN0701/ep-07.fail.en:3:6
+  |
+3 | show(&lx); //~ EN0701 "because `Lexer` holds a reference"
+  |      ^^^ no generic argument can hold a reference
+  |
+  = explain: run `enrang explain EN0701`
+
+error: aborting due to 1 previous error

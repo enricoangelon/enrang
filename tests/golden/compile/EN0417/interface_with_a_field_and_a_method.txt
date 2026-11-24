@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0417/interface_with_a_field_and_a_method.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0417]: interface `Named` mixes fields and methods
+ --> tests/compile/EN0417/interface_with_a_field_and_a_method.fail.en:2:3
+  |
+2 |   name: string; //~ EN0417 "interface `Named` mixes fields and methods"
+  |   ^^^^^^^^^^^^ a field in an interface with methods
+  |
+help: make it a method: `name(): &string`
+  |
+2 |   name(): &string; //~ EN0417 "interface `Named` mixes fields and methods"
+  |   ~~~~~~~~~~~~~~~
+  = explain: run `enrang explain EN0417`
+
+error: aborting due to 1 previous error

@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0608/top_level_const_loop_source.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: cannot change `TABLE`, because it is a top-level `const`
+ --> tests/compile/EN0608/top_level_const_loop_source.fail.en:2:17
+  |
+2 | for (const t of &TABLE) { //~ EN0608
+  |                 ^^^^^^ written here
+...
+6 | private const TABLE: i64[3] = [1, 2, 3];
+  |               ----- declared `const` here
+  |
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

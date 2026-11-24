@@ -1,0 +1,29 @@
+$ enrang check tests/compile/EN0706/forof-inner-source-outer-element.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `grid` while iterating over it
+ --> tests/compile/EN0706/forof-inner-source-outer-element.fail.en:6:7
+  |
+4 |   for (const row of &grid) {
+  |                     ----- immutable borrow begins here
+5 |     for (const c of row) {
+6 |       grid.push([]); //~ EN0706
+  |       ^^^^^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+  = explain: run `enrang explain EN0706`
+
+error[EN0706]: cannot mutate `grid` while iterating over it
+  --> tests/compile/EN0706/forof-inner-source-outer-element.fail.en:15:7
+   |
+13 |   for (const row of &grid) {
+   |                     ----- immutable borrow begins here
+14 |     for (const c of row) {
+15 |       grid.push([]); //~ EN0706
+   |       ^^^^^^^^^^^^^ conflicting mutable access
+   |
+   = note: structural mutations may invalidate the iterator
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

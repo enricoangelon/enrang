@@ -1,0 +1,8 @@
+let s: string = "abc";
+let t: string = "de";
+const r = longest(&s, &t);
+*r += "!";
+
+public function longest(let a: &string, let b: &string): &string {
+  return a.length() >= b.length() ? a : b;
+}

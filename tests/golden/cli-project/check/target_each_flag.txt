@@ -1,0 +1,4 @@
+$ enrang check --target=i386-none --cpu=i486 --float=x87 main.en
+[exit 0]
+[stdout]
+[stderr]

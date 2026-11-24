@@ -1,0 +1,5 @@
+public function turn(): Result<string, Direction> {
+  return "left"; //~ EN0455 "could be a success or an error here"
+}
+
+private type Direction = "left" | "right";

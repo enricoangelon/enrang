@@ -3,5 +3,5 @@ $ enrang explain EN1106
 [stdout]
 EN1106: `test.only` under `--ci`
 
-No explain page yet: it arrives with milestone M4, and this is milestone M0.
+No explain page yet: it arrives with milestone M4, and this is milestone M3.
 [stderr]

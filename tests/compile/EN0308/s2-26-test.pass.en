@@ -1,0 +1,6 @@
+import { Lexer, firstWord } from "./lexer.pass";
+
+const s = "let x";
+console.log(firstWord(&s));
+let lx = new Lexer(&s);
+console.log(lx.next());

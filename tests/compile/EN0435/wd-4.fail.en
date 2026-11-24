@@ -1,0 +1,8 @@
+//! target: i386-linux
+private unsafe let over: u64[268435456]; //~ EN0435 "`u64[268435456]` is too large for `i386-linux`"
+
+public function f(): void {
+  const a: u8[2147483646] = [0; 2147483646];
+  const b: u8[2] = [0, 0]; //~ EN0435 "the stack frame of `f` is too large for `i386-linux`"
+  console.log(a[0], b[0]);
+}

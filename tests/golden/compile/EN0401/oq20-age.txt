@@ -1,0 +1,31 @@
+$ enrang check tests/compile/EN0401/oq20-age.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0455]: `Token.End` could be a success or an error here
+ --> tests/compile/EN0401/oq20-age.fail.en:4:10
+  |
+4 |   return Token.End; //~ EN0455
+  |          ^^^^^^^^^ `Err` would take this as it is
+  |
+help: write `Ok(Token.End)` or `Err(Token.End)`
+  = explain: run `enrang explain EN0455`
+
+error[EN0455]: `"file missing"` could be a success or an error here
+ --> tests/compile/EN0401/oq20-age.fail.en:8:10
+  |
+8 |   return "file missing"; //~ EN0455
+  |          ^^^^^^^^^^^^^^ `Err` would take this as it is
+  |
+help: write `Ok("file missing")` or `Err("file missing")`
+  = explain: run `enrang explain EN0455`
+
+error[EN0401]: mismatched types: expected `AgeError`, found `DiskError`
+  --> tests/compile/EN0401/oq20-age.fail.en:12:14
+   |
+12 |   return Err(DiskError.Timeout); //~ EN0401
+   |              ^^^^^^^^^^^^^^^^^ this is `DiskError`
+   |
+   = explain: run `enrang explain EN0401`
+
+error: aborting due to 3 previous errors

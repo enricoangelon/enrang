@@ -1,0 +1,39 @@
+const bytes: u8[] = [1, 2, 3];
+let ly = new ByteLexer(&bytes);
+console.log(ly.next());
+let sub = ly.rest();
+console.log(sub.next());
+console.log(ly.next());
+console.log(sub.next());
+
+public final class ByteLexer {
+  private src: readonly &Slice<u8>;
+  private pos: isize = 0;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public next(): readonly &Slice<u8> | null {
+    if (this.pos >= this.src.length()) {
+      return null;
+    }
+    const start = this.pos;
+    this.pos += 1;
+    return this.src.slice(start, this.pos);
+  }
+  public rest(): ByteLexer {
+    return new ByteLexer(this.src.slice(this.pos, this.src.length()));
+  }
+  public cursor(): Cursor {
+    return new Cursor(this.src.slice(this.pos, this.src.length())); //~ EN0616 "src"
+  }
+}
+
+public final class Cursor {
+  private src: &Slice<u8>;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public zero(): void {
+    this.src[0] = 0;
+  }
+}

@@ -1,0 +1,36 @@
+// Constant literal views (plan d.12; A:970, S:964): one only read becomes
+// `static_addr(literal#0)` and loses its temporary, its construction and its storage;
+// one passed to a Write parameter stays the temporary. Shapes: c.18 (plan lines
+// 1203-1206) the literal into a statement temporary `_t`, `_r = &_t [literal-view]`;
+// c.6 (line 985) `convert(fixed_to_slice, move _r)` after the borrow.
+fn total(_1: &Slice<i64>) -> i64;
+fn fill(let _1: &Slice<i64>, _2: i64) -> void;
+
+fn lit() -> i64 {
+  let _1: i64[3] temp;
+  let _2: &i64[3] temp;
+  let _3: &Slice<i64> temp;
+  let _4: i64[3] temp;
+  let _5: &i64[3] temp;
+  let _6: &Slice<i64> temp;
+  let _7: void temp;
+  bb0: {
+    storage_live(_1);
+    _1 = fixed<i64>[const 2: i64, const 3: i64, const 5: i64];
+    _2 = &_1 [literal-view];
+    _3 = convert(fixed_to_slice, move _2);
+    _0 = total(move _3) -> bb1;
+  }
+  bb1: {
+    storage_dead(_1);
+    storage_live(_4);
+    _4 = fixed<i64>[const 1: i64, const 2: i64, const 3: i64];
+    _5 = &_4 [literal-view];
+    _6 = convert(fixed_to_slice, move _5);
+    _7 = fill(move _6, const 7: i64) -> bb2;
+  }
+  bb2: {
+    storage_dead(_4);
+    return;
+  }
+}

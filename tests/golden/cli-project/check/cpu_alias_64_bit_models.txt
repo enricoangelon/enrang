@@ -1,0 +1,5 @@
+$ enrang check --target=x86_64-linux --cpu=p4 main.en
+[exit 0]
+[stdout]
+[stderr]
+note: `p4` resolves to level `x86-64`; this covers only its 64-bit models

@@ -1,0 +1,13 @@
+error[EN0608]: cannot change `xs[0]`, because `xs` is `const`
+ --> main.en:2:1
+  |
+2 | xs[0] = 3;
+  | ^^^^^^^^^ written here
+  |
+help: declare it `let xs`
+  |
+1 | let xs = [1, 2];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

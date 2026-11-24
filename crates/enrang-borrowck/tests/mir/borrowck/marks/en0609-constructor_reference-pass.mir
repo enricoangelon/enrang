@@ -1,0 +1,37 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0609/constructor_reference.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0609/constructor_reference.pass";
+class Board {
+  private readonly cells: i64[];
+}
+
+fn Board::#ctor(_1: &Board) -> void {
+  let _1: &Board; // this
+  let _2: i64[] temp;
+  let _3: i64[] temp;
+  let _4: isize temp;
+  let _5: isize temp;
+  bb0: {
+    switch const overridden(cells): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    drop((*_1).cells) [assign];
+    (*_1).cells = move _3;
+    drop(_3);
+    storage_dead(_3);
+    _4 = const 0: isize;
+    _5 = len((*_1).cells);
+    check_bounds(copy _4, copy _5);
+    (*_1).cells[_4] = const 9: i64;
+    return;
+  }
+  bb2: {
+    _2 = intrinsic AllocArray<i64>();
+    field_init((*_1).cells, move _2);
+    drop(_2);
+    storage_dead(_2);
+    goto bb1;
+  }
+}

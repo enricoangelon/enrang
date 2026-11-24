@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0209/switch.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0209]: `switch` does not exist in Enrang
+ --> tests/compile/EN0209/switch.fail.en:2:1
+  |
+2 | switch (n) { //~ EN0209
+  | ^^^^^^ use `match` here
+  |
+  = note: a `match` arm never falls through, and a `match` on an enum names every case
+help: write `match (value) { 1 => ..., default => ... }`
+  = explain: run `enrang explain EN0209`
+
+error: aborting due to 1 previous error

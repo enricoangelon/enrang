@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0706/forof-outer-element-after-inner-push.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `xs` while iterating over it
+ --> tests/compile/EN0706/forof-outer-element-after-inner-push.fail.en:5:5
+  |
+3 | for (const a of &xs) {
+  |                 --- immutable borrow begins here
+4 |   for (const b of &xs) {
+5 |     xs.push(1); //~ EN0706
+  |     ^^^^^^^^^^ conflicting mutable access
+  |
+  = note: structural mutations may invalidate the iterator
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

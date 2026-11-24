@@ -1,0 +1,17 @@
+public const A: i64 = 2 * 2;
+public const B: u32 = 5;
+private unsafe let S: i64 = 6;
+public const SIZE: usize = sizeOf<Point>();
+public const ORIGIN: Point = new Point { x: 0 };
+assert(A == 4, "four");
+
+public function twice(n: i64): i64 { return n * 2; }
+
+public function startup(): i64 {
+  const local = twice(A);
+  return local;
+}
+
+public final class Point {
+  public x: i64;
+}

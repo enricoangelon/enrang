@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0418/destructor_in_the_chain.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0418]: `Region`'s destructor runs for every `Snapshot`, so copying one would run it twice
+  --> tests/compile/EN0418/destructor_in_the_chain.fail.en:11:14
+   |
+11 | public class Snapshot extends Region implements Copy {} //~ EN0418 "`Region`'s destructor runs for every `Snapshot`, so copying one would run it twice"
+   |              ^^^^^^^^ a Copy class can have no destructor
+   |
+help: remove `implements Copy`; to copy a `Snapshot`, write `clone()`
+   = explain: run `enrang explain EN0418`
+
+error: aborting due to 1 previous error

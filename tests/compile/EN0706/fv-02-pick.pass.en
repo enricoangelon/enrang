@@ -1,0 +1,31 @@
+const t: u8[3] = [7, 8, 9];
+let o: u8[3] = [0, 0, 0];
+let cp = new Copier(&t, &o);
+let buf: u8[2] = [0, 0];
+const a = cp.pick(&buf, true);
+cp.step();
+console.log(a);
+
+public final class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize;
+  public constructor(src: &Slice<u8>, dst: &Slice<u8>) {
+    this.src = src;
+    this.dst = dst;
+  }
+  public step(): void {
+    this.dst[this.pos] = this.src[this.pos];
+    this.pos += 1;
+  }
+  public peek(): readonly &Slice<u8> {
+    return this.src.slice(this.pos, this.pos + 1);
+  }
+  public pick(x: &Slice<u8>, c: bool): readonly &Slice<u8> {
+    x[0] = 1;
+    if (c) {
+      return this.src.slice(0, 1);
+    }
+    return x;
+  }
+}

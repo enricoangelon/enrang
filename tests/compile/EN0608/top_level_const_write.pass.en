@@ -1,0 +1,5 @@
+let table = TABLE;
+const r = &table;
+r[0] = 5;
+
+private const TABLE: i64[3] = [1, 2, 3];

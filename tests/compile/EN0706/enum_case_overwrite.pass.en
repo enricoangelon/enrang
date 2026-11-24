@@ -1,0 +1,15 @@
+//! covers: H02
+let s: Shape = Shape.Circle { radius: 1 };
+match (s) {
+  Shape.Circle => {
+    const r = &s.radius;
+    console.log(*r);
+    s = Shape.Empty;
+  },
+  default => {},
+}
+
+public enum Shape {
+  Circle { radius: i64 },
+  Empty,
+}

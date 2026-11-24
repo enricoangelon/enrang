@@ -1,0 +1,7 @@
+//! covers: H31
+let qs: Q[] = [new Q()]; qs[0].a.push(1); let h = new Holder2(&qs); const [u, w] = h.pair(false); const e = &u[0];
+console.log(*e, *w);
+
+public class Q { public a: i64[] = []; public b: i64[] = []; }
+
+public class Holder2 { private view: &Slice<Q>; public constructor(v: &Slice<Q>) { this.view = v; } public pair(c: bool): [&i64[], &i64[]] { const v = this.view; const second = c ? &this.view[0].b : &v[0].a; return [&this.view[0].a, second]; } }

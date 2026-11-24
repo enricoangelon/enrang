@@ -5,7 +5,8 @@ use std::collections::BTreeSet;
 use std::sync::OnceLock;
 
 use enrang_testkit::{
-    Case, ExtractErrors, Harness, StreamSource, extract_cases, headings_without_cases,
+    Case, ExtractErrors, FencedBlock, Harness, StreamSource, extract_cases, fenced_blocks,
+    headings_without_cases,
 };
 
 use crate::support::read_doc;
@@ -45,7 +46,7 @@ type Row = (
     StreamSource,
 );
 
-const MARKERS: [Row; 37] = [
+const MARKERS: [Row; 38] = [
     (
         "tour",
         &["tour.en"],
@@ -257,7 +258,7 @@ const MARKERS: [Row; 37] = [
         "G21",
         &["g21.en"],
         "enrang check g21.en",
-        0,
+        1,
         Unnamed,
         Block,
         Unnamed,
@@ -275,6 +276,15 @@ const MARKERS: [Row; 37] = [
         "G23",
         &["g23.en"],
         "enrang check g23.en",
+        1,
+        Unnamed,
+        Block,
+        Unnamed,
+    ),
+    (
+        "G24",
+        &["g24.en"],
+        "enrang check g24.en",
         1,
         Unnamed,
         Block,
@@ -376,7 +386,7 @@ const MARKERS: [Row; 37] = [
         "enrang run s11.en",
         0,
         Block,
-        Block,
+        Unnamed,
         Unnamed,
     ),
 ];
@@ -519,8 +529,47 @@ fn register_markdown(h: &mut Harness) {
     }
 }
 
+fn register_fenced_blocks(h: &mut Harness) {
+    h.case("doc_cases::fenced::every_block_in_order", || {
+        let doc = "# T\n```ts\na\n```\ntext\n   ~~~text\n   b\n~~~\n```\nc\n```\n";
+        let blocks = fenced_blocks(doc).expect("well formed");
+        let block = |line, lang: &str, contents: &str| FencedBlock {
+            line,
+            lang: lang.to_owned(),
+            contents: contents.to_owned(),
+        };
+        assert_eq!(
+            blocks,
+            [
+                block(2, "ts", "a\n"),
+                block(6, "text", "b\n"),
+                block(9, "", "c\n")
+            ]
+        );
+    });
+    h.case("doc_cases::fenced::an_unclosed_fence_is_an_error", || {
+        let errors = fenced_blocks("x\n```ts\ny\n").expect_err("unclosed");
+        assert_eq!(errors.0[0].line, 2);
+    });
+    h.case(
+        "doc_cases::fenced::spec_holds_every_case_file_as_a_block",
+        || {
+            let blocks = fenced_blocks(spec()).expect("SPEC is well formed");
+            for case in spec_cases() {
+                for file in &case.files {
+                    let found = blocks
+                        .iter()
+                        .any(|block| block.lang == "ts" && block.contents == file.contents);
+                    assert!(found, "{} {}", case.id, file.name);
+                }
+            }
+        },
+    );
+}
+
 pub fn register(h: &mut Harness) {
     register_markdown(h);
+    register_fenced_blocks(h);
     register_real_document(h);
     register_valid_documents(h);
     register_malformed_documents(h);
@@ -529,8 +578,8 @@ pub fn register(h: &mut Harness) {
 }
 
 fn register_real_document(h: &mut Harness) {
-    h.case("doc_cases::real::finds_exactly_the_37_markers", || {
-        assert_eq!(spec_cases().len(), 37);
+    h.case("doc_cases::real::finds_exactly_the_38_markers", || {
+        assert_eq!(spec_cases().len(), 38);
         assert_eq!(spec_cases().len(), MARKERS.len());
     });
     h.case(
@@ -540,7 +589,7 @@ fn register_real_document(h: &mut Harness) {
                 .lines()
                 .filter(|line| line.starts_with("<!-- case:"))
                 .count();
-            assert_eq!(raw, 37);
+            assert_eq!(raw, 38);
         },
     );
     h.case(
@@ -559,9 +608,9 @@ fn register_real_document(h: &mut Harness) {
         let expected: Vec<&str> = MARKERS.iter().map(|row| row.0).collect();
         assert_eq!(found, expected);
     });
-    h.case("doc_cases::real::g01_to_g23_are_all_there", || {
+    h.case("doc_cases::real::g01_to_g24_are_all_there", || {
         let found: BTreeSet<&str> = spec_cases().iter().map(|case| case.id.as_str()).collect();
-        for number in 1..=23 {
+        for number in 1..=24 {
             assert!(
                 found.contains(format!("G{number:02}").as_str()),
                 "G{number:02}"
@@ -643,8 +692,8 @@ fn register_real_document(h: &mut Harness) {
             },
         );
     }
-    // G21 and S11 have warnings alone, and G23 opens with its warning.
-    for number in (1..=23).filter(|number| *number != 21) {
+    // G23 opens with its warning.
+    for number in 1..=24 {
         h.case(
             format!("doc_cases::real::G{number:02}::is_a_full_diagnostic"),
             move || {
@@ -664,22 +713,54 @@ fn register_real_document(h: &mut Harness) {
             },
         );
     }
-    for id in ["G21", "S11"] {
-        h.case(
-            format!("doc_cases::real::{id}::is_a_warning_alone"),
-            move || {
-                let case = spec_case(id);
-                let stderr = &case.stderr.text;
-                assert!(stderr.starts_with("warning[EN"), "{stderr}");
-                assert!(!stderr.contains("error"), "{stderr}");
-                assert!(!stderr.contains("aborting"), "{stderr}");
-                assert!(!stderr.contains("= explain:"), "{stderr}");
-                let name = &case.files[0].name;
-                assert!(stderr.contains(&format!(" --> {name}:")), "{stderr}");
-                assert_eq!(case.exit, 0);
-            },
-        );
-    }
+    // No case has warnings alone any more. SPEC 14's rule for one, exit 0 and no
+    // `= explain:` line, still holds for every diagnostic case and for the
+    // warning that opens G23.
+    h.case("doc_cases::real::exit_follows_the_diagnostics", || {
+        let mut checked = 0;
+        for case in spec_cases() {
+            let stderr = &case.stderr.text;
+            let header =
+                |line: &str| line.starts_with("error[EN") || line.starts_with("warning[EN");
+            if !stderr.lines().any(header) {
+                continue;
+            }
+            checked += 1;
+            let id = &case.id;
+            if stderr.lines().any(|line| line.starts_with("error[EN")) {
+                assert_eq!(case.exit, 1, "{id}");
+                let last = stderr.lines().last().unwrap();
+                assert!(
+                    last.starts_with("error: aborting due to "),
+                    "{id}: {stderr}"
+                );
+            } else {
+                assert_eq!(case.exit, 0, "{id}");
+                assert!(stderr.starts_with("warning[EN"), "{id}: {stderr}");
+                assert!(!stderr.contains("error"), "{id}: {stderr}");
+                assert!(!stderr.contains("aborting"), "{id}: {stderr}");
+                assert!(!stderr.contains("= explain:"), "{id}: {stderr}");
+            }
+        }
+        assert_eq!(checked, 24, "G01 to G24 have diagnostics");
+    });
+    h.case(
+        "doc_cases::real::G23::its_warning_is_a_warning_alone",
+        || {
+            let case = spec_case("G23");
+            let (warning, error) = case
+                .stderr
+                .text
+                .split_once("\nerror[EN")
+                .expect("an error follows the warning");
+            assert!(warning.starts_with("warning[EN"), "{warning}");
+            assert!(!warning.contains("error"), "{warning}");
+            assert!(!warning.contains("aborting"), "{warning}");
+            assert!(!warning.contains("= explain:"), "{warning}");
+            assert!(warning.contains(" --> g23.en:"), "{warning}");
+            assert!(error.contains("= explain:"), "{error}");
+        },
+    );
     h.case("doc_cases::real::G23::counts_its_warning", || {
         let last = spec_case("G23").stderr.text.lines().last().unwrap();
         assert_eq!(
@@ -728,12 +809,12 @@ fn register_real_document(h: &mut Harness) {
         (
             "g01_source",
             |c| &c.files[0].contents,
-            "function main(): void {\n  const x = 1\n  console.log(x);\n}\n",
+            "const x = 1\nconsole.log(x);\n",
         ),
         (
             "g01_stderr",
             |c| &c.stderr.text,
-            "error[EN0101]: missing `;` after this statement\n --> g01.en:2:14\n  |\n2 |   const x = 1\n  |              ^ expected `;` here\n  |\n  = from TypeScript: Enrang has no automatic semicolon insertion.\nhelp: add the semicolon\n  |\n2 |   const x = 1;\n  |              +\n  = explain: run `enrang explain EN0101`\n\nerror: aborting due to 1 previous error\n",
+            "error[EN0101]: missing `;` after this statement\n --> g01.en:1:12\n  |\n1 | const x = 1\n  |            ^ expected `;` here\n  |\n  = from TypeScript: Enrang has no automatic semicolon insertion.\nhelp: add the semicolon\n  |\n1 | const x = 1;\n  |            +\n  = explain: run `enrang explain EN0101`\n\nerror: aborting due to 1 previous error\n",
         ),
         (
             "s11_stdout",
@@ -743,7 +824,7 @@ fn register_real_document(h: &mut Harness) {
         (
             "s10_second_file",
             |c| &c.files[1].contents,
-            "describe(\"gcd\", () => {\n  test(\"common factor\", () => {\n    expect(gcd(84, 36)).toBe(12);\n  });\n\n  test(\"zero\", () => {\n    expect(gcd(7, 0)).toBe(7);\n  });\n\n  compileFails(\"rejects mixed widths\", raw`\n    function f(a: i32, b: i64): i64 { return a + b; } //~ EN0402\n    function main(): void {}\n  `);\n});\n",
+            "describe(\"gcd\", () => {\n  test(\"common factor\", () => { expect(gcd(84, 36)).toBe(12); });\n\n  test(\"zero\", () => { expect(gcd(7, 0)).toBe(7); });\n\n  compileFails(\n    \"rejects mixed widths\",\n    raw`\n    private function f(a: i32, b: i64): i64 { return a + b; } //~ EN0402\n  `,\n  );\n});\n",
         ),
     ];
     for &(name, field, expected) in exact {
@@ -757,18 +838,14 @@ fn register_real_document(h: &mut Harness) {
     }
     let first_lines: &[(&str, &str, usize)] = &[
         ("tour", "// tour.en: run with `enrang run tour.en`", 0),
-        (
-            "ownership",
-            "function total(xs: &i64[]): i64 { let t = 0; for (const x of xs) { t += x; } return t; }",
-            0,
-        ),
+        ("ownership", "function total(xs: &Slice<i64>): i64 {", 0),
         (
             "tour-kernel",
             "// hello.en: enrang build --target=i386-none --image=hdd hello.en",
             0,
         ),
-        ("S9", "import { vga, serial } from \"os\";", 0),
-        ("S10", "export function gcd(a: i64, b: i64): i64 {", 0),
+        ("S9", "import { serial, vga } from \"os\";", 0),
+        ("S10", "console.log(gcd(84, 36));", 0),
         ("S10", "describe(\"gcd\", () => {", 1),
     ];
     for &(id, line, index) in first_lines {
@@ -1700,7 +1777,7 @@ fn register_mutations(h: &mut Harness) {
             "Quoted: `<!-- case: FAKE files=f.en cmd=\"x\" exit=0 -->`.\n\n## 15. Sample programs",
         );
         assert_ne!(changed, spec());
-        assert_eq!(extract_cases(&changed).unwrap().len(), 37);
+        assert_eq!(extract_cases(&changed).unwrap().len(), 38);
     });
     h.case(
         "doc_cases::mutation::an_inline_sentence_is_the_source",
@@ -1728,8 +1805,8 @@ fn register_mutations(h: &mut Harness) {
             "<!-- case: NEW files=n.en cmd=\"enrang check n.en\" exit=0 -->\n```ts\nx\n```\n\n## 16. Deferred features",
         );
         let cases = extract_cases(&changed).unwrap();
-        assert_eq!(cases.len(), 38);
-        assert_eq!(cases[37].id, "NEW");
+        assert_eq!(cases.len(), 39);
+        assert_eq!(cases[38].id, "NEW");
     });
     // A mutation of the real document, and what the refusal must say.
     let refused: &[(&str, &str, &str, &str, &str)] = &[
@@ -1813,7 +1890,7 @@ fn register_mutations(h: &mut Harness) {
                 .unwrap();
             let changed = spec().replace(&format!("{line}\n"), "");
             let cases = extract_cases(&changed).unwrap();
-            assert_eq!(cases.len(), 36);
+            assert_eq!(cases.len(), 37);
             assert!(cases.iter().all(|case| case.id != "G07"));
         },
     );

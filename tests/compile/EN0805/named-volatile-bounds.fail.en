@@ -1,0 +1,5 @@
+//! target: x86_64-linux
+//! row: `public unsafe function w<T extends Copy>(p:
+public unsafe function w<T extends Copy>(p: *T, v: T): void {
+  p.writeVolatile(v); //~ EN0805 "`T` can't be accessed volatile on `x86_64-linux`"
+}

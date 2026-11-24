@@ -1,0 +1,10 @@
+const ada = new User { name: "Ada" };
+done(ada);
+
+public function done(x: { name: string }): void { dispose(x); }
+
+public class User {
+  public name: string;
+
+  public destructor() { console.log(`bye ${this.name}`); }
+}

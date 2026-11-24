@@ -1,0 +1,51 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/rr-05.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/rr-05.pass";
+@final class Cell {
+  private n: i64 = default;
+}
+@final class Two {
+  private a: &i64;
+  private b: &i64;
+}
+
+fn Cell::#ctor(_1: &Cell) -> void {
+  let _1: &Cell; // this
+  bb0: {
+    (*_1).n = const 0: i64;
+    return;
+  }
+}
+
+fn Cell::make(_1: &Cell) -> readonly Two {
+  let _1: &Cell; // this
+  let _2: &i64 temp;
+  let _3: &i64 temp;
+  let _4: &Two temp;
+  let _5: void temp;
+  bb0: {
+    _2 = &(*_1).n [explicit];
+    _3 = &(*_1).n [explicit];
+    _4 = &_0 [auto-borrow];
+    _5 = Two::#ctor(move _4, move _2, move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Two::#ctor(_1: &Two, _2: &i64, _3: &i64) -> void {
+  let _1: &Two; // this
+  let _2: &i64; // a
+  let _3: &i64; // b
+  let _4: &i64 temp;
+  let _5: &i64 temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).a = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).b = move _5;
+    return;
+  }
+}

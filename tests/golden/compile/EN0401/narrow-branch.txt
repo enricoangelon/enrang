@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0401/narrow-branch.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `h.item` may be `null` here
+ --> tests/compile/EN0401/narrow-branch.fail.en:7:17
+  |
+5 |       wipe(h);
+  |            - this may write through it
+6 |     }
+7 |     console.log(h.item.n); //~ EN0401
+  |                 ^^^^^^^^ the test before this may no longer hold
+  |
+  = note: a writing reference may have changed `h.item`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

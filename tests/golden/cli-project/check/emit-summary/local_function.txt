@@ -1,0 +1,7 @@
+$ enrang check --emit=summary main.en
+[exit 0]
+[stdout]
+module "main"
+@private @local fn note(_1: &string) -> void perms(read, write, read) sources() result none;
+//   #1: passes it to `Array.push` from `alloc/array`, which changes it
+[stderr]

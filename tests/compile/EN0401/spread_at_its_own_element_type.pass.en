@@ -1,0 +1,8 @@
+const b: i64[] = [1, 2, 3];
+const xs: i64[] = [4, 5];
+const f: i32[3] = [1, 2, 3];
+const a: i64[] = [...b];
+const c = [...f];
+const both = [...b, ...xs];
+const n: (i64 | null)[] = [...xs.map((x): i64 | null => x)];
+console.log(a, c, both, n);

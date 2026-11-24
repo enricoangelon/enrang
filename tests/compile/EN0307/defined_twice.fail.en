@@ -1,0 +1,20 @@
+const n = 1;
+console.log(n);
+
+private function area(): f64 {
+  return 1.0;
+}
+
+private class area {} //~ EN0307 "`area` is defined twice"
+
+public class File {
+  private fd: i64 = 0;
+  public fd: i64 = 1; //~ EN0307 "`fd` is defined twice"
+  public destructor() {}
+  public destructor() {} //~ EN0307 "`destructor` is defined twice"
+}
+
+private function scale(x: i64): i64 {
+  let x = 2; //~ EN0307 "`x` is defined twice"
+  return x;
+}

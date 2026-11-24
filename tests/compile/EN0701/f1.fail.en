@@ -1,0 +1,28 @@
+const text = "hello";
+const k = keep(new Echo(&text)); //~ EN0701 "a `Speaker` can't hold an `Echo`, because `Echo` holds a reference"
+const b: Box<Speaker> = new Box(new Echo(&text)); //~ EN0701 "a `Speaker` can't hold an `Echo`, because `Echo` holds a reference"
+const echo = new Echo(&text);
+introduce(&echo); //~ EN0701 "a `Speaker` can't hold an `Echo`, because `Echo` holds a reference"
+console.log(k, b);
+
+public interface Speaker {
+  speak(): string;
+}
+
+private class Echo implements Speaker {
+  private text: &string;
+  public constructor(text: &string) {
+    this.text = text;
+  }
+  public speak(): string {
+    return `${this.text}`;
+  }
+}
+
+private function keep(s: Speaker): Box<Speaker> {
+  return new Box(s);
+}
+
+private function introduce(s: &Speaker): void {
+  console.log(s.speak());
+}

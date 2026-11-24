@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/c22-loan.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `b` cannot change while `m` still points into it
+ --> tests/compile/EN0706/c22-loan.fail.en:3:1
+  |
+2 | const m: &Measured = &b;
+  |                      -- shared borrow of `b` starts here, held by `m`
+3 | b.add(1); //~ EN0706
+  | ^^^^^^^^ `add` changes `b`, so it needs exclusive access to it
+4 | console.log(m.length());
+  |             - `m` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

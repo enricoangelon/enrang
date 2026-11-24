@@ -1,0 +1,13 @@
+@packed public final class P {
+  public s: string; //~ EN0826 "`@packed` field must be Copy and non-generic"
+}
+
+@packed public final class G<T> {
+  public v: T; //~ EN0826 "`@packed` field must be Copy and non-generic"
+}
+
+@packed public final class Q {
+  public xs: u8[]; //~ EN0826 "`@packed` field must be Copy and non-generic"
+  public b: Box<u8>; //~ EN0826 "`@packed` field must be Copy and non-generic"
+  public n: u32;
+}

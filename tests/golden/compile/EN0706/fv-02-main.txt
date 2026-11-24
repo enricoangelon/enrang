@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0706/fv-02-main.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `t[0]` cannot change while `d` still points into it
+ --> tests/compile/EN0706/fv-02-main.fail.en:5:1
+  |
+3 | let v = new View(&t, &o);
+  |                  -- shared borrow of `t` starts here, held by `d`
+4 | const d = v.last();
+5 | t[0] = 9; //~ EN0706
+  | ^^^^^^^^ `t[0]` changes here
+6 | console.log(d);
+  |             - `d` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

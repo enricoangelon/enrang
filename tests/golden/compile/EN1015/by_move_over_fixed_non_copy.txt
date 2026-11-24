@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN1015/by_move_over_fixed_non_copy.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1015]: this `for...of` source is not supported yet
+ --> tests/compile/EN1015/by_move_over_fixed_non_copy.fail.en:2:17
+  |
+2 | for (const x of a) { //~ EN1015 "this `for...of` source is not supported yet"
+  |                 ^ this is `D[3]`
+  |
+  = note: a loop takes a fixed array by copying each element, and `D` is not Copy
+help: use a `D[]` for owned non-Copy elements, or borrow it: `&a`
+  = explain: run `enrang explain EN1015`
+
+error: aborting due to 1 previous error

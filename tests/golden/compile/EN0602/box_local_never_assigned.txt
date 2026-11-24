@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0602/box_local_never_assigned.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0602]: `p` is used before it has a value
+ --> tests/compile/EN0602/box_local_never_assigned.fail.en:2:14
+  |
+1 | let p: Box<i64>;
+  |     - `p` is declared here with no value
+2 | console.log(*p); //~ EN0602 "`p` is used before it has a value"
+  |              ^ a `Box<i64>` has no default value
+  |
+help: give `p` a value where it is declared, or on every path before this use
+  = explain: run `enrang explain EN0602`
+
+error: aborting due to 1 previous error

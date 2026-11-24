@@ -1,0 +1,101 @@
+// Marks through calls (plan d.3; A:1009, S 4.11): a source argument's mark reaches the
+// result and a write through it is one report at the call; a read-only result's
+// receiver; a store into a class that writes through its fields (rule (e)), at a statement,
+// and at a call through the callee's own parameter, which rule (e) makes Write there
+// (A:1359; a call's stores add no caller-side check, `D20-core-4`). Shapes: c.6
+// (plan lines 974-975) receivers `&place [auto-borrow]` and `&*r [reborrow]`; c.7 (line
+// 1010) the receiver's borrow last; c.8 (line 1028) `drop(x.f) [assign]` then the
+// store.
+// Heads (plan e): `book` hands out a writable reference, but `lib` is `const` (at the
+// call, never also EN0614); `view` returns a read-only reference, so `push` cannot
+// change it (EN0614, help: remove `readonly` from the return type of `view`).
+@final class Book {
+  title: string;
+}
+@final class Library {
+  books: Book[];
+}
+fn Library::book(_1: &Library, _2: i64) -> &Book sources(0) result writable;
+fn make() -> Library;
+class Stack {
+  items: i64[];
+}
+fn Stack::push(let _1: &Stack, _2: i64) -> void;
+fn Stack::view(_1: &Stack) -> readonly &Stack;
+@final class Cursor writes_through_fields {
+  buf: &i64;
+}
+fn Cursor::hold(_1: &Cursor, _2: &i64) -> void perms(read, write) stores(1 -> 0);
+
+// `lib.book(1).title = "Dune";` on a `const lib`.
+fn accessor() -> void {
+  let _1: Library; // lib
+  let _2: &Library temp;
+  let _3: &Book temp;
+  bb0: {
+    storage_live(_1);
+    _1 = make() -> bb1;
+  }
+  bb1: {
+    _2 = &_1 [auto-borrow];
+    _3 = Library::book(move _2, const 1: i64) -> bb2; //~ EN0608
+  }
+  bb2: {
+    drop((*_3).title) [assign];
+    (*_3).title = const "Dune": string;
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}
+
+// `s.view().push(99);`
+fn view(_1: &Stack) -> void {
+  let _2: &Stack temp;
+  let _3: &Stack temp;
+  let _4: &Stack temp;
+  let _5: void temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _3 = Stack::view(move _2) -> bb1;
+  }
+  bb1: {
+    _4 = &*_3 [reborrow];
+    _5 = Stack::push(move _4, const 99: i64) -> bb2; //~ EN0614
+  }
+  bb2: {
+    return;
+  }
+}
+
+// `c.buf = &k;` with a `const k`, into a class whose flag is set.
+fn store(_1: &Cursor) -> void {
+  let _2: i64; // k
+  let _3: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 1: i64;
+    _3 = &_2 [explicit];
+    (*_1).buf = move _3; //~ EN0608
+    return;
+  }
+}
+
+// `c.hold(&k)` with a `const k`, whose contract stores it into `c`, so rule (e) made the
+// parameter Write: the report is at the argument, `&k`.
+fn stored(_1: &Cursor) -> void {
+  let _2: i64; // k
+  let _3: &i64 temp;
+  let _4: &Cursor temp;
+  let _5: void temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const 1: i64;
+    _3 = &_2 [explicit]; //~ EN0608
+    _4 = &*_1 [reborrow];
+    _5 = Cursor::hold(move _4, move _3) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

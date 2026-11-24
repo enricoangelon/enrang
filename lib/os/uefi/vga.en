@@ -1,0 +1,11 @@
+// SPEC 8.4, `vga`: `os/uefi/vga`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+public final class Screen {
+  private base: usize;
+  public static fromBoot(const b: &BootInfo): Screen;
+  public let write(const s: &string): void;
+  public let writeByte(b: u8): void;
+  public let clear(): void;
+  public let setColor(fg: u8, bg: u8): void;
+}
+
+public function emergency(const s: &string): void { unreachable(); }

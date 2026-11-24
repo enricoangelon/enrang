@@ -1,0 +1,159 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/inf-06.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/inf-06.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+fn "alloc/array"::Array<T>::last(_1: &Array<T>) -> &T | null;
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@mustUse fn "alloc/array"::Array<T>::slice(const _1: &Array<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+fn "core/slice"::Slice<T>::length(_1: &Slice<T>) -> isize;
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: u8[8]; // sector
+  let _3: void temp;
+  let _4: &Slice<u8> temp;
+  let _5: isize | null temp;
+  let _6: &u8[8] temp;
+  let _7: &Slice<u8> temp;
+  let _8: void temp;
+  let _9: &u8[8] temp;
+  let _10: i64[]; // data
+  let _11: void temp;
+  let _12: isize temp;
+  let _13: &Slice<i64> temp;
+  let _14: isize | null temp;
+  let _15: &i64[] temp;
+  let _16: &isize temp;
+  let _17: void temp;
+  let _18: &i64 | null temp;
+  let _19: &i64[] temp;
+  let _20: &(&i64 | null) temp;
+  let mut _21: i64[]; // list
+  let _22: &Slice<i64>; // head
+  let _23: isize | null temp;
+  let _24: &i64[] temp;
+  let _25: void temp;
+  let _26: &Slice<i64> temp;
+  let _27: void temp;
+  let _28: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = repeat(const 0: u8; 8);
+    _5 = present(const 8: isize);
+    _6 = &_2 [auto-borrow];
+    _7 = convert(fixed_to_slice, move _6);
+    _4 = "core/slice"::Slice<u8>::slice(move _7, const 4: isize, move _5, const 2: isize) -> bb1;
+  }
+  bb1: {
+    _3 = fill(move _4, const 7: u8) -> bb2;
+  }
+  bb2: {
+    _9 = &_2 [auto-borrow];
+    _8 = form log(move _9) -> bb3;
+  }
+  bb3: {
+    storage_live(_10);
+    _10 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    _14 = present(const 2: isize);
+    _15 = &_10 [auto-borrow];
+    _13 = "alloc/array"::Array<i64>::slice(move _15, const 0: isize, move _14, const 2: isize) -> bb4;
+  }
+  bb4: {
+    _12 = "core/slice"::Slice<i64>::length(move _13) -> bb5;
+  }
+  bb5: {
+    _16 = &_12 [temp-arg];
+    _11 = form log(move _16) -> bb6;
+  }
+  bb6: {
+    storage_dead(_12);
+    _19 = &_10 [auto-borrow];
+    _18 = "alloc/array"::Array<i64>::last(move _19) -> bb7;
+  }
+  bb7: {
+    _20 = &_18 [temp-arg];
+    _17 = form log(move _20) -> bb8;
+  }
+  bb8: {
+    storage_dead(_18);
+    storage_live(_21);
+    _21 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    storage_live(_22);
+    _23 = present(const 2: isize);
+    _24 = &_21 [auto-borrow];
+    _22 = "alloc/array"::Array<i64>::slice(move _24, const 0: isize, move _23, const 2: isize) -> bb9;
+  }
+  bb9: {
+    _26 = &*_22 [reborrow];
+    _25 = form log(move _26) -> bb10;
+  }
+  bb10: {
+    _28 = &_21 [auto-borrow];
+    _27 = "alloc/array"::Array<i64>::push(move _28, const 4: i64) -> bb11;
+  }
+  bb11: {
+    storage_dead(_22);
+    drop(_21);
+    storage_dead(_21);
+    drop(_10);
+    storage_dead(_10);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private fn fill(_1: &Slice<u8>, _2: u8) -> void {
+  let _1: &Slice<u8>; // part
+  let _2: u8; // v
+  let mut _3: isize; // i
+  let _4: bool temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: &Slice<u8> temp;
+  let _8: isize temp;
+  let _9: u8 temp;
+  let _10: isize temp;
+  let _11: isize temp;
+  bb0: {
+    storage_live(_3);
+    _3 = const 0: isize;
+    goto bb1;
+  }
+  bb1: {
+    _5 = copy _3;
+    _7 = &*_1 [reborrow];
+    _6 = "core/slice"::Slice<u8>::length(move _7) -> bb5;
+  }
+  bb2: {
+    _8 = copy _3;
+    _9 = copy _2;
+    _10 = len(*_1);
+    check_bounds(copy _8, copy _10);
+    (*_1)[_8] = move _9;
+    goto bb3;
+  }
+  bb3: {
+    _11 = copy _3;
+    _3 = checked_add(copy _11, const 1: isize);
+    goto bb1;
+  }
+  bb4: {
+    storage_dead(_3);
+    return;
+  }
+  bb5: {
+    _4 = lt(move _5, move _6);
+    switch move _4 [0: bb4, otherwise: bb2];
+  }
+}

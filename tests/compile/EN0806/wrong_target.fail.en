@@ -1,0 +1,13 @@
+@packed public function d(): void {} //~ EN0806 "`@packed` can't be used on a function"
+
+@at(0x1000) public const E: i64 = 1; //~ EN0806 "`@at` can't be used on a constant"
+
+@naked public function f(): void {} //~ EN0806 "`@naked` can be used only on an `unsafe function`"
+
+@devMigrate public function migrate(n: i64): Shape { //~ EN0806 "`@devMigrate` needs a function with an object-typed parameter"
+  return new Shape {};
+}
+
+public class Shape {
+  @entry public area(): void {} //~ EN0806 "`@entry` can't be used on a method"
+}

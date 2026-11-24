@@ -3,5 +3,5 @@ $ enrang explain T0008
 [stdout]
 T0008: native watchdog timeout
 
-No explain page yet: it arrives with milestone M5, and this is milestone M0.
+No explain page yet: it arrives with milestone M5, and this is milestone M3.
 [stderr]

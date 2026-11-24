@@ -1,0 +1,62 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0607/move_method_hands_out_field_of_class_with_destructor.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0607/move_method_hands_out_field_of_class_with_destructor.pass";
+class Envelope {
+  inside: Letter;
+}
+class Letter {
+  text: string;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: Envelope; // e
+  let _3: Letter temp;
+  let _4: *Letter temp;
+  let _5: void temp;
+  let _6: *Envelope temp;
+  let _7: void temp;
+  let _8: Letter; // l
+  let _9: void temp;
+  let _10: &string temp;
+  bb0: {
+    storage_live(_2);
+    _4 = addr_of _3;
+    _5 = named_fill Letter leaving()(move _4) -> bb1;
+  }
+  bb1: {
+    _3.text = const "hi": string;
+    _6 = addr_of _2;
+    _7 = named_fill Envelope leaving()(move _6) -> bb2;
+  }
+  bb2: {
+    _2.inside = move _3;
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_8);
+    _8 = Envelope::open(move _2) -> bb3;
+  }
+  bb3: {
+    _10 = &_8.text [auto-borrow];
+    _9 = form log(move _10) -> bb4;
+  }
+  bb4: {
+    drop(_8);
+    storage_dead(_8);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+move fn Envelope::open(_1: &Envelope) -> Letter {
+  let _1: &Envelope; // this
+  bb0: {
+    check_class(*_1, move_this(open), ref);
+    _0 = move (*_1).inside;
+    drop(*_1);
+    return;
+  }
+}

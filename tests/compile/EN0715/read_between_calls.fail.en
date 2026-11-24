@@ -1,0 +1,5 @@
+let count = 0;
+const inc = () => { count += 1; };
+inc();
+console.log(count); //~ EN0715 "`count` is locked while `inc` will still be used"
+inc();

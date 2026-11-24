@@ -1,0 +1,15 @@
+const d = new Dog();
+console.log(`live: ${d.sound}`);
+console.log(d);
+
+public class Animal {
+  public sound: string = "...";
+
+  public constructor() {
+    console.log(`ctor: ${this.sound}`);
+  }
+}
+
+public class Dog extends Animal {
+  public override sound: string = "woof";
+}

@@ -111,6 +111,12 @@ impl Harness {
         self.cases.is_empty()
     }
 
+    /// The names of the registered cases, in the order they were registered, so a
+    /// suite can count the cases of one kind, as TESTING 23's counts ask.
+    pub fn names(&self) -> impl Iterator<Item = &str> {
+        self.cases.iter().map(|case| case.name.as_str())
+    }
+
     /// Fails the run on any orphan in `tests/golden/<suite>`. One test binary must
     /// own the suite directory, since only its own calls count as uses.
     pub fn goldens(&mut self, suite: &str) {

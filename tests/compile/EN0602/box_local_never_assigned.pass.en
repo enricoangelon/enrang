@@ -1,0 +1,3 @@
+let p: Box<i64>;
+p = new Box(7);
+console.log(*p);

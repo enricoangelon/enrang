@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0616/m3gate-tuple-param-part-string.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot change the object returned by `slice`
+ --> tests/compile/EN0616/m3gate-tuple-param-part-string.fail.en:3:3
+  |
+3 | g([s.slice(0, 2), 0], &b); //~ EN0616 "cannot change the object returned"
+  |   ^^^^^^^^^^^^^^^^^^ `g` writes through it
+  |
+  = note: `slice` returns a read-only reference
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

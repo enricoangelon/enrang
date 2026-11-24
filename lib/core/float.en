@@ -1,0 +1,42 @@
+// SPEC 8.2, the floats (9.3): `core/float`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `f64.PI`, `E`, `INFINITY` and `NAN` are constants the compiler reads through the type's name (SPEC 3.1).
+// A sealed interface (SPEC 4.4): its implementers are the compiler's table.
+@lang("float") public interface __Float {}
+
+// On the sealed bound, so that the variable of a float literal finds them (SPEC 4.7).
+extend<F extends __Float> F {
+  public sqrt(): F;
+  public floor(): F;
+  public ceil(): F;
+  public trunc(): F;
+  public round(): F;
+  public abs(): F;
+  public sign(): F;
+  public sin(): F;
+  public cos(): F;
+  public tan(): F;
+  public atan(): F;
+  public exp(): F;
+  public log(): F;
+  public log2(): F;
+  public min(o: F): F;
+  public max(o: F): F;
+  public atan2(o: F): F;
+  public pow(e: F): F;
+  public isNaN(): bool;
+  public isFinite(): bool;
+  public isInfinite(): bool;
+  public equals(other: &F): bool;
+  public compare(other: &F): i32;
+  public fmt(let f: &Formatter): void;
+}
+
+extend f64 {
+  public toBits(): u64;
+  public static fromBits(b: u64): f64;
+}
+
+extend f32 {
+  public toBits(): u32;
+  public static fromBits(b: u32): f32;
+}

@@ -1,0 +1,2 @@
+// SPEC 8.1, the hosted prelude: `os/vm/prelude`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `console` is a compiler form on every hosted target (SPEC 6), so nothing is declared here.

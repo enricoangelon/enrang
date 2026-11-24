@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0710/move_method_returns_field_with_drop.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0710]: `open` returns a reference into the object it consumes
+  --> tests/compile/EN0710/move_method_returns_field_with_drop.fail.en:12:5
+   |
+12 |     return &this.inside; //~ EN0710 "`open` returns a reference into the object it consumes"
+   |     ^^^^^^^^^^^^^^^^^^^^ this reference would point at the consumed object
+   |
+   = note: a `move` method gives up its object, which is disposed of when the method ends
+help: return the value itself, or take `this` by reference
+   = explain: run `enrang explain EN0710`
+
+error: aborting due to 1 previous error

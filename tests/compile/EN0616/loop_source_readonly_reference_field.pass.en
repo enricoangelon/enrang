@@ -1,0 +1,12 @@
+//! covers: H28
+public final class Copier {
+  private src: readonly &Slice<u8>;
+  public constructor(src: &Slice<u8>) {
+    this.src = src;
+  }
+  public zeroAll(): void {
+    for (const b of this.src) {
+      console.log(*b);
+    }
+  }
+}

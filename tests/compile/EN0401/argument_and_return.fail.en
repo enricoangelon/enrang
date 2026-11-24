@@ -1,0 +1,10 @@
+greet(42); //~ EN0401 "mismatched types: expected `&string`, found `int`"
+console.log(half(8));
+
+private function greet(name: &string): void {
+  console.log(name);
+}
+
+private function half(n: i64): i64 {
+  return n > 1; //~ EN0401 "mismatched types: expected `i64`, found `bool`"
+}

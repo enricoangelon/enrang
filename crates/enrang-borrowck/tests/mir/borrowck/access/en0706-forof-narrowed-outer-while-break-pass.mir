@@ -1,0 +1,99 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/forof-narrowed-outer-while-break.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/forof-narrowed-outer-while-break.pass";
+
+fn f(_1: bool, _2: bool) -> void {
+  let _1: bool; // c
+  let _2: bool; // d
+  let mut _3: string[] | null; // p
+  let _4: bool temp;
+  let _5: string[] temp;
+  let _6: bool temp;
+  let _7: u32 temp;
+  let _8: isize #i;
+  let _9: isize #n;
+  let _10: bool temp;
+  let _11: &string; // a
+  let _12: bool temp;
+  let _13: string[] | null temp;
+  loop l0: path (_3 as Present).0 preheader bb10 head bb6 bind bb7[3] binding _11;
+  fact f0: _3 nonnull;
+  use f0 at bb6[0];
+  use f0 at bb7[2];
+  test f0 at bb4;
+  bb0: {
+    storage_live(_3);
+    _4 = copy _1;
+    switch move _4 [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _5 = intrinsic AllocArray<string>(const "a": string);
+    _3 = present(move _5);
+    goto bb3;
+  }
+  bb2: {
+    _3 = null;
+    goto bb3;
+  }
+  bb3: {
+    drop(_5);
+    storage_dead(_5);
+    _7 = discriminant(_3);
+    _6 = ne(move _7, const 0: u32);
+    switch move _6 [0: bb5, otherwise: bb4];
+  }
+  bb4: {
+    goto bb10;
+  }
+  bb5: {
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+  bb6: {
+    check_tag(_3, Present);
+    _9 = len((_3 as Present).0);
+    _10 = lt(copy _8, copy _9);
+    switch move _10 [0: bb9, otherwise: bb7];
+  }
+  bb7: {
+    storage_live(_11);
+    check_bounds(copy _8, copy _9);
+    check_tag(_3, Present);
+    _11 = &(_3 as Present).0[_8] [for-of-element];
+    _8 = add(copy _8, const 1: isize);
+    goto bb11;
+  }
+  bb8: {
+    goto bb6;
+  }
+  bb9: {
+    goto bb5;
+  }
+  bb10: {
+    storage_live(_8);
+    _8 = const 0: isize;
+    goto bb6;
+  }
+  bb11: {
+    goto bb12;
+  }
+  bb12: {
+    _12 = copy _2;
+    switch move _12 [0: bb14, otherwise: bb13];
+  }
+  bb13: {
+    _13 = null;
+    drop(_3) [assign];
+    _3 = move _13;
+    drop(_13);
+    storage_dead(_13);
+    storage_dead(_11);
+    goto bb9;
+  }
+  bb14: {
+    storage_dead(_11);
+    goto bb8;
+  }
+}

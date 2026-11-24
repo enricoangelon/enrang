@@ -7,8 +7,8 @@ use enrang_target::{
 use enrang_testkit::Harness;
 
 use crate::support::{
-    I386_TARGETS, SpecAlias, SpecOn64, TARGETS, VM_TARGETS, X86_64_TARGETS, cpu, err, level, ok,
-    render, says, spec_aliases,
+    I386_TARGETS, SpecAlias, SpecOn64, TARGETS, VM_TARGETS, X86_64_TARGETS, cpu, default_float,
+    err, level, ok, render, says, spec_aliases,
 };
 
 /// Asserts that the one note of a resolve names `alias` and `level`, and the exact
@@ -111,12 +111,13 @@ fn on_32_bit(h: &mut Harness, alias: &SpecAlias) {
             let rung = level(&want);
             assert_eq!(built.cpu, rung);
             assert_eq!(built.allowed, rung.features(Arch::I386));
-            let float = if rung == CpuLevel::Sse2 {
-                FloatStrategy::Sse2
-            } else {
-                FloatStrategy::Soft
+            let float = match rung {
+                CpuLevel::Sse2 => FloatStrategy::Sse2,
+                CpuLevel::I586 | CpuLevel::I686 => FloatStrategy::X87,
+                _ => FloatStrategy::Soft,
             };
             assert_eq!(built.float, float, "the default float follows the rung");
+            assert_eq!(built.float, default_float(Arch::I386, rung));
             check_note(target, &name, &want, false);
         });
     }

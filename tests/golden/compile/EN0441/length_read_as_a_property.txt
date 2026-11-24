@@ -1,0 +1,41 @@
+$ enrang check tests/compile/EN0441/length_read_as_a_property.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0441]: `length` is a method on `string`
+ --> tests/compile/EN0441/length_read_as_a_property.fail.en:4:18
+  |
+4 | console.log(name.length); //~ EN0441 "`length` is a method on `string`"
+  |                  ^^^^^^ a method, called as `length()`
+  |
+help: `name.length()` counts bytes; `name.charCount()` counts characters
+  = explain: run `enrang explain EN0441`
+
+error[EN0441]: `length` is a method on `i64[]`
+ --> tests/compile/EN0441/length_read_as_a_property.fail.en:5:16
+  |
+5 | console.log(xs.length); //~ EN0441 "`length` is a method on `i64[]`"
+  |                ^^^^^^ a method, called as `length()`
+  |
+help: `xs.length()`
+  = explain: run `enrang explain EN0441`
+
+error[EN0441]: `length` is a method on `string`
+ --> tests/compile/EN0441/length_read_as_a_property.fail.en:6:21
+  |
+6 | console.log("città".length); //~ EN0441 "`length` is a method on `string`"
+  |                     ^^^^^^ a method, called as `length()`
+  |
+help: `"città".length()` counts bytes (6 here); `"città".charCount()` counts characters (5 here)
+  = explain: run `enrang explain EN0441`
+
+error[EN0441]: `length` is a method on `string`
+ --> tests/compile/EN0441/length_read_as_a_property.fail.en:7:20
+  |
+7 | console.log(maybe?.length); //~ EN0441 "`length` is a method on `string`"
+  |                    ^^^^^^ a method, called as `length()`
+  |
+help: `maybe?.length()` counts bytes; `maybe?.charCount()` counts characters
+  = explain: run `enrang explain EN0441`
+
+error: aborting due to 4 previous errors

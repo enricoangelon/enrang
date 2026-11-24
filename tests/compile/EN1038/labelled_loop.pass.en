@@ -1,0 +1,5 @@
+let running = true;
+setup: while (running) {
+  running = false;
+  break setup;
+}

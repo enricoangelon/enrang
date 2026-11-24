@@ -1,0 +1,35 @@
+$ enrang check tests/compile/EN1001/async_await_promise.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN1001]: async functions are not supported yet
+ --> tests/compile/EN1001/async_await_promise.fail.en:1:8
+  |
+1 | public async function load(): void {} //~ EN1001 "async functions are not supported yet"
+  |        ^^^^^ an async function
+  |
+  = note: Enrang has no event loop yet, so nothing can wait without blocking.
+help: Run blocking; threads and an event loop come later
+  = explain: run `enrang explain EN1001`
+
+error[EN1001]: async functions are not supported yet
+ --> tests/compile/EN1001/async_await_promise.fail.en:4:13
+  |
+4 |   const x = await fetchIt(); //~ EN1001 "async functions are not supported yet"
+  |             ^^^^^ waits for a promise
+  |
+  = note: Enrang has no event loop yet, so nothing can wait without blocking.
+help: Run blocking; threads and an event loop come later
+  = explain: run `enrang explain EN1001`
+
+error[EN1001]: async functions are not supported yet
+ --> tests/compile/EN1001/async_await_promise.fail.en:5:10
+  |
+5 |   let p: Promise<i64> | null = null; //~ EN1001 "async functions are not supported yet"
+  |          ^^^^^^^ a promise type
+  |
+  = note: Enrang has no event loop yet, so nothing can wait without blocking.
+help: Run blocking; threads and an event loop come later
+  = explain: run `enrang explain EN1001`
+
+error: aborting due to 3 previous errors

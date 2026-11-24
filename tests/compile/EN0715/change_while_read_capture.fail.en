@@ -1,0 +1,4 @@
+let q: i64[] = [1];
+const show = () => { console.log(q); };
+q.push(2); //~ EN0715 "`q` is locked while `show` will still be used"
+show();

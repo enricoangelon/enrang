@@ -1,0 +1,3 @@
+public function firstOf(xs: &Slice<string>): string {
+  return xs[0]; //~ EN0604 "cannot move out of `xs[0]`"
+}

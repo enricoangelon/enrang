@@ -1,0 +1,19 @@
+public function maybe(c: bool): void {
+  let s: string = "abc";
+  const g = new Guard(&s);
+  if (c) {
+    dispose(g);
+  } else {
+    mem.forget(g);
+  }
+  s = "def";
+  console.log(s);
+}
+
+private class Guard {
+  private r: &string;
+
+  public constructor(r: &string) { this.r = r; }
+
+  public destructor() { console.log(`drop ${this.r}`); }
+}

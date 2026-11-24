@@ -1,0 +1,4 @@
+const size: { width: i64 | null, height: i64 } = { width: 2, height: 3 };
+const { width, height } = size;
+const w = width ?? 1;
+console.log(w, height);

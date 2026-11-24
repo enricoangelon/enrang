@@ -1,0 +1,5 @@
+let a: i64[] = [1];
+const n = mk((): i64 => a[0]);
+a.push(2);
+console.log(n);
+function mk(f: () => i64): i64 { return f(); }

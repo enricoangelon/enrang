@@ -1,0 +1,18 @@
+let xs: i64[] = [1, 2];
+const v = val(&xs);
+*slot(&xs) = v;
+console.log(xs);
+
+let ys: i64[] = [1];
+ys[0] += (ys[0] = 5);
+console.log(ys);
+
+private function slot(v: &i64[]): &i64 {
+  console.log("slot");
+  return &v[0];
+}
+
+private function val(v: &i64[]): i64 {
+  console.log("val");
+  return v[1];
+}

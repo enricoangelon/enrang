@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN0401/narrow-same-statement.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `o` may be `null` here
+ --> tests/compile/EN0401/narrow-same-statement.fail.en:4:3
+  |
+4 |   o.add(clear(&o)); //~ EN0401
+  |   ^ the test before this may no longer hold
+  |               -- this may write through it
+  |
+  = note: a writing reference may have changed `o`
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: `p` may be `null` here
+ --> tests/compile/EN0401/narrow-same-statement.fail.en:8:3
+  |
+8 |   p.n = clear(&p); //~ EN0401
+  |   ^^^^^^^^^^^^^^^ the test before this may no longer hold
+  |               -- this may write through it
+  |
+  = note: a writing reference may have changed `p`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

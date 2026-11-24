@@ -1,0 +1,9 @@
+let a: i64 = 1;
+let b: i64 = 2;
+let r: &i64 = &a;
+function show(): void {
+  console.log(*r);
+}
+show();
+r = &b;
+show();

@@ -1,0 +1,15 @@
+$ enrang check --emit=summary src/main.en
+[exit 0]
+[stdout]
+module "src/util/bag"
+fn fill(_1: &i64[], _2: i64) -> void perms(write) sources() moves(0) result none;
+//   #0: passes it to `grow`, which passes it to `Array.push` from `alloc/array`, which changes it
+@private fn grow(_1: &i64[], _2: i64) -> void perms(write) sources() moves(0) result none;
+//   #0: passes it to `Array.push` from `alloc/array`, which changes it
+
+module "src/words"
+fn extend(_1: &i64[]) -> void perms(write) sources() result none;
+//   #0: passes it to `fill` from `src/util/bag`, which changes it (`fill` #0: passes it to `grow`, which passes it to `Array.push` from `alloc/array`, which changes it)
+
+module "src/main"
+[stderr]

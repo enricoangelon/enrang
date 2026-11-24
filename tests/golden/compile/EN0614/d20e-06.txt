@@ -1,0 +1,26 @@
+$ enrang check tests/compile/EN0614/d20e-06.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0614]: `aim` also keeps a reference from `xs` in `c`, so `push` cannot change it
+ --> tests/compile/EN0614/d20e-06.fail.en:5:1
+  |
+5 | r.push(4); //~ EN0614
+  | ^^^^^^^^^ `push` changes it
+  |
+  = explain: run `enrang explain EN0614`
+
+error[EN0706]: `data2` cannot change while `cur2` still points into it
+  --> tests/compile/EN0614/d20e-06.fail.en:11:1
+   |
+10 | const r2 = aim(&cur2, &data2);
+   |                       ------ shared borrow of `data2` starts here, held by `cur2`
+11 | data2.push(4); //~ EN0706
+   | ^^^^^^^^^^^^^ `push` changes `data2`, so it needs exclusive access to it
+12 | console.log(cur2.get());
+   |             ---- `cur2` is used again here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0706`
+
+error: aborting due to 2 previous errors

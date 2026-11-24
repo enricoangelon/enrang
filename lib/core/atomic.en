@@ -1,0 +1,36 @@
+// SPEC 10.5, atomics: `core/atomic`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// Sealed interfaces (SPEC 4.4): their implementers are the compiler's table.
+@lang("atomic_value") public interface AtomicValue {}
+
+@lang("atomic_bits") public interface AtomicBits {}
+
+// `@intrinsic` members take their contracts from the compiler's table, so they read `this` (SPEC 4.4).
+public final class Atomic<T extends AtomicValue> {
+  public constructor(private v: T) {}
+  @intrinsic("AtomicLoad") public load(): T;
+  @intrinsic("AtomicStore") public store(v: T): void;
+  @intrinsic("AtomicExchange") public exchange(v: T): T;
+  public add(v: T): void;
+  public sub(v: T): void;
+  public and(v: T): void;
+  public or(v: T): void;
+  public xor(v: T): void;
+  public incAndTestZero(): bool;
+  public decAndTestZero(): bool;
+  public testAndSet(bit: u32): bool where T extends AtomicBits;
+  public testAndClear(bit: u32): bool where T extends AtomicBits;
+  @intrinsic("AtomicFence") public fence(): void;
+  @intrinsic("AtomicCompareExchange") public compareExchange(old: T, value: T): T;
+  @intrinsic("AtomicFetchAdd") public fetchAdd(v: T): T;
+  public fmt(let f: &Formatter): void;
+}
+
+@align(8) public final class Atomic64 {
+  public constructor(private v: u64) {}
+  public load(): u64;
+  public store(v: u64): void;
+  public exchange(v: u64): u64;
+  public compareExchange(old: u64, value: u64): u64;
+  public fetchAdd(v: u64): u64;
+  public fmt(let f: &Formatter): void;
+}

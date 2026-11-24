@@ -1,0 +1,14 @@
+//! target: i386-none
+//! covers: C17
+import { idt } from "os";
+
+@interrupt private function onTimer(frame: &InterruptFrame): void {}
+
+@entry private function kmain(boot: &BootInfo): never {
+  idt.set(32, onTimer);
+  const h: InterruptHandler = onTimer;
+  idt.set(33, h);
+  halt();
+}
+
+@panicHandler private function onPanic(info: &PanicInfo): never { halt(); }

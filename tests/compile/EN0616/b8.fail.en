@@ -1,0 +1,10 @@
+let t = new Thermo();
+*t.peek() = 5; //~ EN0616 "cannot change the object returned by `peek`"
+
+public class Thermo {
+  private kelvin: i64 = 300;
+
+  public peek(): readonly &i64 {
+    return &this.kelvin;
+  }
+}

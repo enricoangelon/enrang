@@ -1,0 +1,19 @@
+$ enrang check tests/compile/EN0706/hold_writing_call.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: cannot mutate `q` while iterating over it
+ --> tests/compile/EN0706/hold_writing_call.fail.en:3:9
+  |
+2 | for (const x of &q) {
+  |                 -- immutable borrow begins here
+3 |   reset(&q); //~ EN0706 "cannot mutate `q` while iterating over it"
+  |         ^^ conflicting mutable access
+  |
+help: loop over a copy
+  |
+2 | for (const x of [...q]) {
+  |                 ~~~~ +
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

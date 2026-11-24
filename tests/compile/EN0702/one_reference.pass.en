@@ -1,0 +1,36 @@
+const source = "let x";
+const n: i64 = 1;
+let lx = new Lexer(&source);
+f(&n);
+g(null);
+h(&lx);
+const v: Box<i32> = new Box(7);
+let x: Box<i32>= v;
+const deep: Box<Box<Box<i64>>> = new Box(new Box(new Box(1)));
+console.log(x, deep);
+
+public function f(x: &i64): void {
+  console.log(*x);
+}
+
+public function g(x: &i64 | null): void {
+  console.log(x);
+}
+
+private function h(lx: &Lexer): void {
+  console.log(lx.text());
+}
+
+public unsafe function raw(pp: **u8): *u8 {
+  return *pp;
+}
+
+private class Lexer {
+  private src: &string;
+  public constructor(src: &string) {
+    this.src = src;
+  }
+  public text(): readonly &string {
+    return this.src;
+  }
+}

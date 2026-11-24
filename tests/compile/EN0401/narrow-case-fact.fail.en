@@ -1,0 +1,23 @@
+//! covers: H18
+let h = new Holder();
+match (h.shape) {
+  Shape.Circle => {
+    flatten(&h);
+    console.log(h.shape.radius); //~ EN0401
+  },
+  Shape.Empty => {},
+}
+
+private function flatten(h: &Holder): void {
+  h.shape = Shape.Empty;
+}
+
+public enum Shape {
+  Circle { radius: f64 },
+  Empty,
+}
+
+private class Holder {
+  public shape: Shape = Shape.Circle { radius: 1.0 };
+  public label: string = "shape";
+}

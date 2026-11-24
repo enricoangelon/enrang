@@ -1,0 +1,12 @@
+const c: i64[] = [1];
+f(&c);
+let w: i64[] = [1];
+const e = &w[0];
+f(&w);
+console.log(*e);
+
+private function f(xs: &i64[], n: isize = grow(xs)): void {}
+
+private function grow(xs: &i64[]): isize {
+  return xs.length();
+}

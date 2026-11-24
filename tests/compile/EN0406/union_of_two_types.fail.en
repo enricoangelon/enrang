@@ -1,0 +1,5 @@
+show(1);
+
+private function show(x: i64 | string): void { //~ EN0406 "union other than `T | null`"
+  console.log(x);
+}

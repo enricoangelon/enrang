@@ -1,0 +1,20 @@
+const b: Box<Speaker> = new Box(new Dog { name: "Rex" });
+b.unbox(); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+const v = b.unbox(); //~ EN1006 "an interface type by value outside a parameter is not supported yet"
+
+public interface Speaker {
+  speak(): string;
+}
+
+public class Animal implements Speaker {
+  public name: string = "";
+  public speak(): string {
+    return `${this.name} makes a sound`;
+  }
+}
+
+public class Dog extends Animal {
+  public override speak(): string {
+    return `${this.name} barks`;
+  }
+}

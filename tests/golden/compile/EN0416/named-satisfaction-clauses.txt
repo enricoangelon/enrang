@@ -1,0 +1,57 @@
+$ enrang check tests/compile/EN0416/named-satisfaction-clauses.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0416]: `Device` does not satisfy `Port`: `poke` is `unsafe`
+  --> tests/compile/EN0416/named-satisfaction-clauses.fail.en:14:32
+   |
+14 | public class Device implements Port { //~ EN0416 "`Device` does not satisfy `Port`: `poke` is `unsafe`"
+   |                                ^^^^ required by this `implements`
+15 |   public unsafe poke(): void {}
+   |                 ---- `Device.poke` is `unsafe`
+   |
+   = explain: run `enrang explain EN0416`
+
+error[EN0416]: `Dog` does not satisfy `Speaker`: `speak` is private
+  --> tests/compile/EN0416/named-satisfaction-clauses.fail.en:18:29
+   |
+18 | public class Dog implements Speaker { //~ EN0416 "`Dog` does not satisfy `Speaker`: `speak` is private"
+   |                             ^^^^^^^ required by this `implements`
+19 |   private speak(): string {
+   |           ----- `Dog.speak` is `private`
+   |
+   = explain: run `enrang explain EN0416`
+
+error[EN0416]: `Cat` does not satisfy `Speaker`: `speak` is protected
+  --> tests/compile/EN0416/named-satisfaction-clauses.fail.en:24:29
+   |
+24 | public class Cat implements Speaker { //~ EN0416 "`Cat` does not satisfy `Speaker`: `speak` is protected"
+   |                             ^^^^^^^ required by this `implements`
+25 |   protected speak(): string {
+   |             ----- `Cat.speak` is `protected`
+   |
+   = explain: run `enrang explain EN0416`
+
+error[EN0416]: `Ticks` does not satisfy `Counter`: `count` has `@requires`
+  --> tests/compile/EN0416/named-satisfaction-clauses.fail.en:30:31
+   |
+30 | public class Ticks implements Counter { //~ EN0416 "`Ticks` does not satisfy `Counter`: `count` has `@requires`"
+   |                               ^^^^^^^ required by this `implements`
+31 |   @requires("cmov")
+32 |   public count(): i64 {
+   |          ----- `Ticks.count` has `@requires`
+   |
+   = explain: run `enrang explain EN0416`
+
+error[EN0416]: `Cage` does not satisfy `Speaker`: `speak` is missing
+  --> tests/compile/EN0416/named-satisfaction-clauses.fail.en:43:30
+   |
+ 7 |   speak(): string;
+   |   ----- `Speaker.speak` is declared here
+...
+43 | public class Cage implements Speaker { //~ EN0416 "`Cage` does not satisfy `Speaker`: `speak` is missing"
+   |                              ^^^^^^^ required by this `implements`
+   |
+   = explain: run `enrang explain EN0416`
+
+error: aborting due to 5 previous errors

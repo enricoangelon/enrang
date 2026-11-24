@@ -1,0 +1,39 @@
+class Inner {
+  v: i64;
+}
+class Outer {
+  a: Inner;
+  b: [i64, Inner];
+  c: Box<Inner>;
+  d: i64[];
+  e: i64[4];
+  f: { x: i64, y: bool };
+  g: Inner | null;
+}
+enum Shape { Circle { r: i64 }, Square { side: i64, tag: u8 } }
+
+fn places(_1: &Outer, _2: isize, _3: *Inner, _4: Shape) -> i64 {
+  let _5: i64 temp;
+  let _6: isize temp;
+  let _7: u8 temp;
+  let _8: &&Outer temp;
+  bb0: {
+    _5 = copy (*_1).a.v;
+    _5 = copy (*_1).b.0;
+    _5 = copy (*_1).b.1.v;
+    _5 = copy (*(*_1).c).v;
+    _6 = len((*_1).d);
+    check_bounds(copy _2, copy _6);
+    _5 = copy (*_1).d[_2];
+    _5 = copy (*_1).e[3];
+    _5 = copy (*_1).f.x;
+    check_tag((*_1).g, Present);
+    _5 = copy ((*_1).g as Present).0.v;
+    _5 = copy (*_3).v;
+    check_tag(_4, Square);
+    _7 = copy (_4 as Square).tag;
+    _5 = copy (**_8).a.v;
+    _0 = copy _5;
+    return;
+  }
+}

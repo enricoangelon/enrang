@@ -1,0 +1,7 @@
+let a: i64[] = [1, 2];
+const n = a.length();
+fill(&a, n);
+
+private function fill(xs: &i64[], n: isize): void {
+  xs.push(n as i64);
+}

@@ -1,0 +1,10 @@
+//! row: `h1`-`h8`, hold slots: loans on the sour
+public class Tally {
+  public items: i64[] = [1, 2];
+  public total: i64 = 0;
+  public sum(): void {
+    for (const x of &this.items) {
+      this.total += *x;
+    }
+  }
+}

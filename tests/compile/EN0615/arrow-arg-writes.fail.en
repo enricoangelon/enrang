@@ -1,0 +1,9 @@
+let v: i64[] = [1, 2];
+each(&v, (x: &i64) => { *x *= 2; }); //~ EN0615
+console.log(v);
+
+private function each(xs: &i64[], f: (x: &i64) => void): void {
+  for (const x of xs) {
+    f(x);
+  }
+}

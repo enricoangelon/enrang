@@ -1,0 +1,9 @@
+//! row: `h1`-`h8`, hold slots: loans on the sour
+let q: i64[] = [1, 2];
+outer: for (const a of &q) {
+  for (const b of &q) {
+    q = [];
+    break outer;
+  }
+}
+console.log(q);

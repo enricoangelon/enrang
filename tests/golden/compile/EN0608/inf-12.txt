@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0608/inf-12.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0608]: `book` hands out a writable reference, but `lib` is `const`
+ --> tests/compile/EN0608/inf-12.fail.en:2:1
+  |
+2 | lib.book(1).title = "Dune"; //~ EN0608 "`book` hands out a writable reference, but `lib` is `const`"
+  | ^^^^^^^^^^^ `book` hands out a writable reference to it
+  |
+help: declare it `let lib`
+  |
+1 | let lib = new Library();
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

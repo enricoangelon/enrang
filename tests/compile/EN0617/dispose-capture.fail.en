@@ -1,0 +1,5 @@
+const s = "a".toString();
+run(() => { dispose(s); }); //~ EN0617
+console.log(s);
+
+private function run(f: () => void): void { f(); }

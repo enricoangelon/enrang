@@ -1,0 +1,80 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/fit-structural.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/fit-structural.pass";
+interface Measured { }
+interface Sizer { }
+fn Sizer::size<T extends Measured>(_1: &Self, _2: &T) -> isize;
+class Tally {
+  private n: isize;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: string; // s
+  let _3: string temp;
+  let _4: &string temp;
+  let mut _5: Tally; // t
+  let _6: *Tally temp;
+  let _7: void temp;
+  let _8: void temp;
+  let _9: &Tally temp;
+  let _10: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "hello": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = addr_of _5;
+    _7 = named_fill Tally leaving(n)(move _6) -> bb2;
+  }
+  bb2: {
+    _9 = &_5 [explicit];
+    _10 = &_2 [explicit];
+    _8 = f<Tally>(move _9, move _10) -> bb3;
+  }
+  bb3: {
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Tally::size<T extends Measured>(_1: &Tally, _2: &T) -> isize {
+  let _1: &Tally; // this
+  let _2: &T; // x
+  bb0: {
+    _0 = checked_add(copy (*_1).n, const 1: isize);
+    return;
+  }
+}
+
+@private fn f<implicit Sizer>(_1: &Sizer, _2: &string) -> void {
+  let _1: &Sizer; // z
+  let _2: &string; // v
+  let _3: void temp;
+  let _4: isize temp;
+  let _5: &string temp;
+  let _6: &Sizer temp;
+  let _7: &isize temp;
+  bb0: {
+    _5 = &*_2 [reborrow];
+    _6 = &*_1 [reborrow];
+    _4 = Sizer::size(move _6, move _5) -> bb1;
+  }
+  bb1: {
+    _7 = &_4 [temp-arg];
+    _3 = form log(move _7) -> bb2;
+  }
+  bb2: {
+    storage_dead(_4);
+    return;
+  }
+}

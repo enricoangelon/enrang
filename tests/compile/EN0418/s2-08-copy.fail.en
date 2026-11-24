@@ -1,0 +1,56 @@
+//! covers: H38
+let data: i64[] = [1, 2, 3];
+let c = new Cursor(&data);
+const c2 = c;
+const e = c2.cur();
+c.all().push(4);
+console.log(*e);
+
+private class Cursor implements Copy { //~ EN0418 "`Cursor` writes through its reference fields, so copying it would make two writers"
+  private xs: &i64[];
+  private i: isize = 0;
+
+  public constructor(xs: &i64[]) {
+    this.xs = xs;
+  }
+
+  public cur(): &i64 {
+    return &this.xs[this.i];
+  }
+
+  public all(): &i64[] {
+    return this.xs;
+  }
+}
+
+public class Base {
+  private src: readonly &u8[];
+  private dst: &u8[];
+
+  public constructor(s: &u8[], d: &u8[]) {
+    this.src = s;
+    this.dst = d;
+  }
+
+  public peek(): readonly &u8 {
+    return &this.src[0];
+  }
+
+  public step(): void {
+    this.dst.push(1);
+  }
+
+  public static firstOf(o: &Sub): readonly &u8 {
+    return &o.dst[0];
+  }
+
+  public adopt(o: &Sub): void {
+    this.src = o.dst;
+  }
+}
+
+public final class Sub extends Base implements Copy { //~ EN0418 "`Sub` writes through its reference fields, so copying it would make two writers"
+  public constructor(s: &u8[], d: &u8[]) {
+    super(s, d);
+  }
+}

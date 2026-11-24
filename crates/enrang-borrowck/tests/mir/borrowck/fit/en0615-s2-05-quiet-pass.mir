@@ -1,0 +1,96 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/s2-05-quiet.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/s2-05-quiet.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+class Quiet extends Sink { }
+class Sink { }
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Quiet; // k
+  let _3: *Quiet temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &Quiet temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Quiet leaving()(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2 [explicit];
+    _5 = speak(move _6) -> bb2;
+  }
+  bb2: {
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@override fn Quiet::put(_1: &Quiet, _2: &string) -> void {
+  let _1: &Quiet; // this
+  let _2: &string; // s
+  let _3: void temp;
+  let _4: isize temp;
+  let _5: &string temp;
+  let _6: &isize temp;
+  bb0: {
+    _5 = &*_2 [reborrow];
+    _4 = "core/string"::string::length(move _5) -> bb1;
+  }
+  bb1: {
+    _6 = &_4 [temp-arg];
+    _3 = form log(move _6) -> bb2;
+  }
+  bb2: {
+    storage_dead(_4);
+    return;
+  }
+}
+
+fn Sink::put(_1: &Sink, let _2: &string) -> void {
+  let _1: &Sink; // this
+  let _2: &string; // s
+  let _3: &string temp;
+  let _4: string temp;
+  let _5: &string temp;
+  let _6: void temp;
+  bb0: {
+    _3 = &*_2 [compound-target];
+    _4 = const "!": string;
+    _5 = &_4 [temp-arg];
+    _6 = form append(move _3, move _5) -> bb1;
+  }
+  bb1: {
+    drop(_4);
+    storage_dead(_4);
+    return;
+  }
+}
+
+@private fn speak(_1: &Quiet) -> void {
+  let _1: &Quiet; // q
+  let mut _2: string; // msg
+  let _3: void temp;
+  let _4: &string temp;
+  let _5: &Quiet temp;
+  bb0: {
+    storage_live(_2);
+    _2 = const "hi": string;
+    _4 = &_2 [explicit];
+    _5 = &*_1 [reborrow];
+    _3 = virtual Quiet::put [copy _5](move _5, move _4) -> bb1;
+  }
+  bb1: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+}

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0615/arrow-local-writes.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: this arrow changes `x`, which `fn(x: &i64) => void` can't declare
+ --> tests/compile/EN0615/arrow-local-writes.fail.en:2:13
+  |
+2 | const inc = (x: &i64) => { *x += 1; }; //~ EN0615
+  |             ^^^^^^^^^^^^^^^^^^^^^^^^^ converted here
+  |
+  = note: a function value may write only what its type's `let` marks allow, and store nothing
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

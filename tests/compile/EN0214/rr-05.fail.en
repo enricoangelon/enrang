@@ -1,0 +1,6 @@
+public final class Plain { public n: i64 = 0; }
+public function f(): readonly Plain { return new Plain {}; } //~ EN0214
+public enum Color { Red, Green }
+public function c(): readonly Color { return Color.Red; } //~ EN0214
+public function g<T>(x: T): readonly T { return x; } //~ EN0214
+public function h(): readonly Plain | null { return null; } //~ EN0214

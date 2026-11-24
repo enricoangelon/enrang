@@ -1,0 +1,15 @@
+$ enrang check tests/compile/EN0616/captured_reference_rebound_in_local_function.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: cannot repoint captured `r` inside `repoint`
+ --> tests/compile/EN0616/captured_reference_rebound_in_local_function.fail.en:5:3
+  |
+5 |   r = &b; //~ EN0616 "cannot repoint captured `r` inside `repoint`"
+  |   ^^^^^^ repointed here
+  |
+  = note: `repoint` holds its own copy of the reference `r`, so the change would not reach the variable outside
+help: return the new reference and assign it to `r` outside, or write through it with `*r`
+  = explain: run `enrang explain EN0616`
+
+error: aborting due to 1 previous error

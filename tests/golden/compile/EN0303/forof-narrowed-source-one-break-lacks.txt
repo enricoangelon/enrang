@@ -1,0 +1,31 @@
+$ enrang check tests/compile/EN0303/forof-narrowed-source-one-break-lacks.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0303]: `string[] | null` has no member `length`
+ --> tests/compile/EN0303/forof-narrowed-source-one-break-lacks.fail.en:6:19
+  |
+6 |     console.log(p.length()); //~ EN0303
+  |                   ^^^^^^ this value may be `null`
+  |
+help: use `?.length`, which reads it only when the value is not `null`
+  |
+6 |     console.log(p?.length()); //~ EN0303
+  |                  +
+help: or narrow it first: `if (p != null) { ... }`
+  = explain: run `enrang explain EN0303`
+
+error[EN0303]: `string[] | null` has no member `length`
+  --> tests/compile/EN0303/forof-narrowed-source-one-break-lacks.fail.en:14:19
+   |
+14 |     console.log(p.length()); //~ EN0303
+   |                   ^^^^^^ this value may be `null`
+   |
+help: use `?.length`, which reads it only when the value is not `null`
+   |
+14 |     console.log(p?.length()); //~ EN0303
+   |                  +
+help: or narrow it first: `if (p != null) { ... }`
+   = explain: run `enrang explain EN0303`
+
+error: aborting due to 2 previous errors

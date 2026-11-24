@@ -1,0 +1,150 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0615/closure-arg-stores.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0615/closure-arg-stores.pass";
+@lang("string") @final class "core/string"::string {
+  private ptr: *u8;
+  private len: usize;
+  private cap: usize;
+}
+fn "core/string"::string::length(_1: &string) -> isize;
+class Lexer {
+  private src: &string;
+  private pos: isize = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let _2: string; // a
+  let _3: string temp;
+  let _4: &string temp;
+  let _5: string; // b
+  let _6: string temp;
+  let _7: &string temp;
+  let mut _8: Lexer; // lx
+  let _9: &string temp;
+  let _10: &Lexer temp;
+  let _11: void temp;
+  let _12: void temp;
+  let _13: [] temp;
+  let _14: (let &Lexer, &string) => void temp;
+  let _15: &Lexer temp;
+  let _16: &string temp;
+  bb0: {
+    storage_live(_2);
+    _3 = const "ab": string;
+    _4 = &_3 [temp-arg];
+    _2 = form to_string(move _4) -> bb1;
+  }
+  bb1: {
+    drop(_3);
+    storage_dead(_3);
+    storage_live(_5);
+    _6 = const "cd": string;
+    _7 = &_6 [temp-arg];
+    _5 = form to_string(move _7) -> bb2;
+  }
+  bb2: {
+    drop(_6);
+    storage_dead(_6);
+    storage_live(_8);
+    set_table(_8, Lexer);
+    _9 = &_2 [explicit];
+    _10 = &_8 [auto-borrow];
+    _11 = Lexer::#ctor(move _10, move _9) -> bb3;
+  }
+  bb3: {
+    _13 = tuple();
+    _14 = closure(fn reset, _13);
+    _15 = &_8 [explicit];
+    _16 = &_5 [explicit];
+    _12 = apply(move _14, move _15, move _16) -> bb4;
+  }
+  bb4: {
+    storage_dead(_8);
+    drop(_5);
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Lexer::#ctor(_1: &Lexer, _2: &string) -> void {
+  let _1: &Lexer; // this
+  let _2: &string; // src
+  let _3: &string temp;
+  bb0: {
+    switch const overridden(pos): bool [0: bb2, otherwise: bb1];
+  }
+  bb1: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    return;
+  }
+  bb2: {
+    field_init((*_1).pos, const 0: isize);
+    goto bb1;
+  }
+}
+
+fn Lexer::advance(_1: &Lexer, _2: isize) -> void {
+  let _1: &Lexer; // this
+  let _2: isize; // n
+  let _3: isize temp;
+  bb0: {
+    _3 = copy (*_1).pos;
+    (*_1).pos = checked_add(copy _3, copy _2);
+    return;
+  }
+}
+
+fn Lexer::setSrc(_1: &Lexer, _2: &string) -> void {
+  let _1: &Lexer; // this
+  let _2: &string; // s
+  let _3: &string temp;
+  bb0: {
+    _3 = &*_2 [reborrow];
+    (*_1).src = move _3;
+    (*_1).pos = const 0: isize;
+    return;
+  }
+}
+
+@private fn apply(_1: (let &Lexer, &string) => void, _2: &Lexer, _3: &string) -> void {
+  let _1: (let &Lexer, &string) => void; // f
+  let _2: &Lexer; // l
+  let _3: &string; // s
+  let _4: void temp;
+  let _5: &Lexer temp;
+  let _6: &string temp;
+  bb0: {
+    _5 = &*_2 [reborrow];
+    _6 = &*_3 [reborrow];
+    _4 = closure _1(move _5, move _6) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+@private fn reset(_1: &Lexer, _2: &string) -> void {
+  let _1: &Lexer; // lx
+  let _2: &string; // s
+  let _3: void temp;
+  let _4: isize temp;
+  let _5: &string temp;
+  let _6: &Lexer temp;
+  bb0: {
+    _5 = &*_2 [reborrow];
+    _4 = "core/string"::string::length(move _5) -> bb1;
+  }
+  bb1: {
+    _6 = &*_1 [reborrow];
+    _3 = virtual Lexer::advance [copy _6](move _6, move _4) -> bb2;
+  }
+  bb2: {
+    return;
+  }
+}

@@ -1,0 +1,74 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/loop_source_readonly_result.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/loop_source_readonly_result.pass";
+class Stack {
+  private items: i64[] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Stack; // st
+  let _3: *Stack temp;
+  let _4: void temp;
+  let _5: &i64[]; // r
+  let _6: &Stack temp;
+  let _7: isize #i;
+  let _8: isize #n;
+  let _9: bool temp;
+  let _10: &i64; // x
+  loop l0: path *_5 preheader bb7 head bb3 bind bb4[2] binding _10;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Stack leaving(items)(move _3) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _6 = &_2 [auto-borrow];
+    _5 = Stack::view(move _6) -> bb2;
+  }
+  bb2: {
+    goto bb7;
+  }
+  bb3: {
+    _8 = len(*_5);
+    _9 = lt(copy _7, copy _8);
+    switch move _9 [0: bb6, otherwise: bb4];
+  }
+  bb4: {
+    storage_live(_10);
+    check_bounds(copy _7, copy _8);
+    _10 = &(*_5)[_7] [for-of-element];
+    _7 = add(copy _7, const 1: isize);
+    goto bb8;
+  }
+  bb5: {
+    goto bb3;
+  }
+  bb6: {
+    storage_dead(_5);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+  bb7: {
+    storage_live(_7);
+    _7 = const 0: isize;
+    goto bb3;
+  }
+  bb8: {
+    *_10 = const 0: i64;
+    storage_dead(_10);
+    goto bb5;
+  }
+}
+
+fn Stack::view(_1: &Stack) -> &i64[] {
+  let _1: &Stack; // this
+  bb0: {
+    _0 = &(*_1).items [explicit];
+    return;
+  }
+}

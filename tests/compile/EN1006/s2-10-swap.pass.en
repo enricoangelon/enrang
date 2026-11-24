@@ -1,0 +1,22 @@
+let a: Box<Speaker> = new Box(new Dog { name: "Rex", tricks: [] });
+let b: Box<Speaker> = new Box(new Robot { id: 7 });
+mem.swap(&a, &b);
+console.log(a.speak());
+show(&a);
+
+private function show<T>(x: &T): void { console.log(x); }
+
+public interface Speaker {
+  speak(): string;
+}
+
+public final class Dog implements Speaker {
+  public name: string;
+  public tricks: string[];
+  public speak(): string { return `${this.name} woof`; }
+}
+
+public final class Robot implements Speaker {
+  public id: i64;
+  public speak(): string { return `beep ${this.id}`; }
+}

@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0427/end_reachable_without_return.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0427]: `sign` may end without returning an `i64`
+ --> tests/compile/EN0427/end_reachable_without_return.fail.en:9:1
+  |
+3 | private function sign(n: i64): i64 {
+  |                                --- `i64` is required by the return type
+...
+9 | } //~ EN0427 "`sign` may end without returning an `i64`"
+  | ^ the end of the body is reached without a `return`
+  |
+  = explain: run `enrang explain EN0427`
+
+error: aborting due to 1 previous error

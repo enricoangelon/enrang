@@ -1,0 +1,142 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/fv-02-nested.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/fv-02-nested.pass";
+@lang("slice") @final class "core/slice"::Slice<T> {
+  private ptr: *T;
+  private len: usize;
+}
+@mustUse fn "core/slice"::Slice<T>::slice(const _1: &Slice<T>, _2: isize, _3: isize | null = default) -> &Slice<T>;
+@final class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize;
+}
+@final class Outer {
+  private inner: Copier;
+}
+
+fn Copier::#ctor(_1: &Copier, _2: &Slice<u8>, _3: &Slice<u8>) -> void {
+  let _1: &Copier; // this
+  let _2: &Slice<u8>; // src
+  let _3: &Slice<u8>; // dst
+  let _4: &Slice<u8> temp;
+  let _5: &Slice<u8> temp;
+  bb0: {
+    (*_1).pos = const 0: isize;
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+fn Copier::peek(_1: &Copier) -> readonly &Slice<u8> {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  let _4: isize | null temp;
+  let _5: &Slice<u8> temp;
+  bb0: {
+    _2 = copy (*_1).pos;
+    _3 = checked_add(copy (*_1).pos, const 1: isize);
+    _4 = present(move _3);
+    _5 = copy (*_1).src;
+    _0 = "core/slice"::Slice<u8>::slice(move _5, move _2, move _4, const 2: isize) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Copier::step(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  let _4: u8 temp;
+  let _5: isize temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  bb0: {
+    _2 = copy (*_1).pos;
+    _3 = copy (*_1).pos;
+    _5 = len(*(*_1).src);
+    check_bounds(copy _3, copy _5);
+    _4 = copy (*(*_1).src)[_3];
+    _6 = len(*(*_1).dst);
+    check_bounds(copy _2, copy _6);
+    (*(*_1).dst)[_2] = move _4;
+    _7 = copy (*_1).pos;
+    (*_1).pos = checked_add(copy _7, const 1: isize);
+    return;
+  }
+}
+
+fn Outer::#ctor(_1: &Outer, _2: Copier) -> void {
+  let _1: &Outer; // this
+  let _2: Copier; // c
+  bb0: {
+    (*_1).inner = move _2;
+    return;
+  }
+}
+
+static fn Outer::demo() -> void {
+  let mut _1: u8[]; // table
+  let mut _2: u8[3]; // out
+  let _3: Outer; // o
+  let _4: Copier temp;
+  let _5: &u8[] temp;
+  let _6: &Slice<u8> temp;
+  let _7: &u8[3] temp;
+  let _8: &Slice<u8> temp;
+  let _9: &Copier temp;
+  let _10: void temp;
+  let _11: &Outer temp;
+  let _12: void temp;
+  let _13: &Slice<u8>; // a
+  let _14: &Copier temp;
+  let _15: void temp;
+  let _16: &Slice<u8> temp;
+  let _17: u8[] temp;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<u8>(const 7: u8, const 8: u8, const 9: u8);
+    storage_live(_2);
+    _2 = fixed<u8>[const 0: u8, const 0: u8, const 0: u8];
+    storage_live(_3);
+    _5 = &_1 [explicit];
+    _6 = convert(array_to_slice, move _5);
+    _7 = &_2 [explicit];
+    _8 = convert(fixed_to_slice, move _7);
+    _9 = &_4 [auto-borrow];
+    _10 = Copier::#ctor(move _9, move _6, move _8) -> bb1;
+  }
+  bb1: {
+    _11 = &_3 [auto-borrow];
+    _12 = Outer::#ctor(move _11, move _4) -> bb2;
+  }
+  bb2: {
+    storage_live(_13);
+    _14 = &_3.inner [auto-borrow];
+    _13 = Copier::peek(move _14) -> bb3;
+  }
+  bb3: {
+    _16 = &*_13 [reborrow];
+    _15 = form log(move _16) -> bb4;
+  }
+  bb4: {
+    _17 = intrinsic AllocArray<u8>(const 1: u8);
+    drop(_1) [assign];
+    _1 = move _17;
+    drop(_17);
+    storage_dead(_17);
+    storage_dead(_13);
+    storage_dead(_3);
+    storage_dead(_2);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+}

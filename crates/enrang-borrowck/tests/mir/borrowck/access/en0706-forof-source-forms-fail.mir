@@ -1,0 +1,496 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/forof-source-forms.fail.en. Its row's codes: EN0706, EN0706, EN0706, EN0706, EN0706, EN0707, EN0707.
+module "tests/compile/EN0706/forof-source-forms.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class V {
+  items: i64[] = default;
+}
+
+fn V::fill(_1: &V) -> void {
+  let _1: &V; // this
+  let _2: &i64[] temp;
+  let _3: &V temp;
+  let _4: &i64[] #src;
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64; // x
+  let _9: void temp;
+  let _10: &i64[] temp;
+  loop l0: once _4 preheader bb6 head bb1 bind bb2[2] binding _8;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = virtual V::view [copy _3](move _3) -> bb5;
+  }
+  bb1: {
+    _6 = len(*_4);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_4)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb7;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    return;
+  }
+  bb5: {
+    _4 = move _2;
+    goto bb6;
+  }
+  bb6: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb7: {
+    _10 = &(*_1).items [auto-borrow]; //~ EN0706
+    _9 = "alloc/array"::Array<i64>::push(move _10, const 1: i64) -> bb8;
+  }
+  bb8: {
+    storage_dead(_8);
+    goto bb3;
+  }
+}
+
+fn V::view(_1: &V) -> &i64[] {
+  let _1: &V; // this
+  bb0: {
+    _0 = &(*_1).items [explicit];
+    return;
+  }
+}
+
+fn bang() -> void {
+  let mut _1: i64[]; // q
+  let _2: &i64[] | null; // r
+  let _3: &i64[] temp;
+  let _4: &i64[] temp;
+  let _5: &i64[] #src;
+  let _6: isize #i;
+  let _7: isize #n;
+  let _8: bool temp;
+  let _9: &i64; // x
+  let _10: void temp;
+  let _11: &i64[] temp;
+  loop l0: once _5 preheader bb5 head bb1 bind bb2[2] binding _9;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<i64>(const 1: i64);
+    storage_live(_2);
+    _3 = &_1 [explicit];
+    _2 = present(move _3);
+    check_tag(_2, Present);
+    _4 = &*(_2 as Present).0 [reborrow];
+    _5 = move _4;
+    goto bb5;
+  }
+  bb1: {
+    _7 = len(*_5);
+    _8 = lt(copy _6, copy _7);
+    switch move _8 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_9);
+    check_bounds(copy _6, copy _7);
+    _9 = &(*_5)[_6] [for-of-element];
+    _6 = add(copy _6, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    storage_dead(_2);
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+  bb5: {
+    storage_live(_6);
+    _6 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _11 = &_1 [auto-borrow]; //~ EN0706
+    _10 = "alloc/array"::Array<i64>::push(move _11, const 1: i64) -> bb7;
+  }
+  bb7: {
+    storage_dead(_9);
+    goto bb3;
+  }
+}
+
+fn first(_1: &i64[]) -> &i64[] {
+  let _1: &i64[]; // q
+  let _2: &i64[] temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = move _2;
+    return;
+  }
+}
+
+fn indexed(_1: isize) -> void {
+  let _1: isize; // r
+  let mut _2: i64[][]; // grid
+  let _3: i64[] temp;
+  let _4: isize temp;
+  let _5: isize temp;
+  let _6: &i64[] #src;
+  let _7: isize #i;
+  let _8: isize #n;
+  let _9: bool temp;
+  let _10: &i64; // x
+  let _11: void temp;
+  let _12: i64[] temp;
+  let _13: &i64[][] temp;
+  loop l0: once _6 preheader bb5 head bb1 bind bb2[2] binding _10;
+  bb0: {
+    storage_live(_2);
+    _3 = intrinsic AllocArray<i64>(const 1: i64);
+    _2 = intrinsic AllocArray<i64[]>(move _3);
+    drop(_3);
+    storage_dead(_3);
+    _4 = copy _1;
+    _5 = len(_2);
+    check_bounds(copy _4, copy _5);
+    _6 = &_2[_4] [for-of-hidden];
+    goto bb5;
+  }
+  bb1: {
+    _8 = len(*_6);
+    _9 = lt(copy _7, copy _8);
+    switch move _9 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_10);
+    check_bounds(copy _7, copy _8);
+    _10 = &(*_6)[_7] [for-of-element];
+    _7 = add(copy _7, const 1: isize);
+    goto bb6;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+  bb5: {
+    storage_live(_7);
+    _7 = const 0: isize;
+    goto bb1;
+  }
+  bb6: {
+    _12 = intrinsic AllocArray<i64>();
+    _13 = &_2 [auto-borrow]; //~ EN0706
+    _11 = "alloc/array"::Array<i64[]>::push(move _13, move _12) -> bb7;
+  }
+  bb7: {
+    drop(_12);
+    storage_dead(_12);
+    storage_dead(_10);
+    goto bb3;
+  }
+}
+
+fn ternary(_1: bool) -> void {
+  let _1: bool; // c
+  let mut _2: i64[]; // a
+  let mut _3: i64[]; // b
+  let _4: &i64[] temp;
+  let _5: bool temp;
+  let _6: &i64[] #src;
+  let _7: isize #i;
+  let _8: isize #n;
+  let _9: bool temp;
+  let _10: &i64; // x
+  let _11: void temp;
+  let _12: &i64[] temp;
+  loop l0: once _6 preheader bb8 head bb1 bind bb2[2] binding _10;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<i64>(const 2: i64);
+    _5 = copy _1;
+    switch move _5 [0: bb6, otherwise: bb5];
+  }
+  bb1: {
+    _8 = len(*_6);
+    _9 = lt(copy _7, copy _8);
+    switch move _9 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_10);
+    check_bounds(copy _7, copy _8);
+    _10 = &(*_6)[_7] [for-of-element];
+    _7 = add(copy _7, const 1: isize);
+    goto bb9;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    return;
+  }
+  bb5: {
+    _4 = &_2 [explicit];
+    goto bb7;
+  }
+  bb6: {
+    _4 = &_3 [explicit];
+    goto bb7;
+  }
+  bb7: {
+    _6 = move _4;
+    goto bb8;
+  }
+  bb8: {
+    storage_live(_7);
+    _7 = const 0: isize;
+    goto bb1;
+  }
+  bb9: {
+    _12 = &_2 [auto-borrow]; //~ EN0706
+    _11 = "alloc/array"::Array<i64>::push(move _12, const 1: i64) -> bb10;
+  }
+  bb10: {
+    storage_dead(_10);
+    goto bb3;
+  }
+}
+
+fn viaCall() -> void {
+  let mut _1: i64[]; // q
+  let _2: &i64[] temp;
+  let _3: &i64[] temp;
+  let _4: &i64[] #src;
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64; // x
+  let _9: void temp;
+  let _10: &i64[] temp;
+  loop l0: once _4 preheader bb6 head bb1 bind bb2[2] binding _8;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<i64>(const 1: i64);
+    _3 = &_1 [explicit];
+    _2 = first(move _3) -> bb5;
+  }
+  bb1: {
+    _6 = len(*_4);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_4)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb7;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+  bb5: {
+    _4 = move _2;
+    goto bb6;
+  }
+  bb6: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb7: {
+    _10 = &_1 [auto-borrow]; //~ EN0706
+    _9 = "alloc/array"::Array<i64>::push(move _10, const 1: i64) -> bb8;
+  }
+  bb8: {
+    storage_dead(_8);
+    goto bb3;
+  }
+}
+
+fn viaCallKept() -> void {
+  let mut _1: i64[]; // q
+  let _2: &i64[] temp;
+  let _3: &i64[] temp;
+  let _4: &i64[] #src;
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64; // x
+  let _9: &i64[]; // s
+  let _10: &i64[] temp;
+  let _11: isize temp;
+  let _12: isize temp;
+  loop l0: once _4 preheader bb6 head bb1 bind bb2[2] binding _8;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<i64>(const 1: i64);
+    _3 = &_1 [explicit];
+    _2 = first(move _3) -> bb5;
+  }
+  bb1: {
+    _6 = len(*_4);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_4)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb7;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+  bb5: {
+    _4 = move _2;
+    goto bb6;
+  }
+  bb6: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb7: {
+    *_8 = const 1: i64;
+    storage_live(_9);
+    _10 = &_1 [explicit]; //~ EN0707
+    _9 = first(move _10) -> bb8;
+  }
+  bb8: {
+    _11 = const 0: isize;
+    _12 = len(*_9);
+    check_bounds(copy _11, copy _12);
+    (*_9)[_11] = const 2: i64;
+    storage_dead(_9);
+    storage_dead(_8);
+    goto bb3;
+  }
+}
+
+fn viaCallNested() -> void {
+  let mut _1: i64[]; // q
+  let _2: &i64[] temp;
+  let _3: &i64[] temp;
+  let _4: &i64[] #src;
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64; // x
+  let _9: &i64[] temp;
+  let _10: &i64[] temp;
+  let _11: &i64[] #src;
+  let _12: isize #i;
+  let _13: isize #n;
+  let _14: bool temp;
+  let _15: &i64; // y
+  loop l0: once _4 preheader bb6 head bb1 bind bb2[2] binding _8;
+  loop l1: once _11 preheader bb13 head bb8 bind bb9[2] binding _15;
+  bb0: {
+    storage_live(_1);
+    _1 = intrinsic AllocArray<i64>(const 1: i64);
+    _3 = &_1 [explicit];
+    _2 = first(move _3) -> bb5;
+  }
+  bb1: {
+    _6 = len(*_4);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_4)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb7;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    drop(_1);
+    storage_dead(_1);
+    return;
+  }
+  bb5: {
+    _4 = move _2;
+    goto bb6;
+  }
+  bb6: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb7: {
+    *_8 = const 1: i64;
+    _10 = &_1 [explicit]; //~ EN0707
+    _9 = first(move _10) -> bb12;
+  }
+  bb8: {
+    _13 = len(*_11);
+    _14 = lt(copy _12, copy _13);
+    switch move _14 [0: bb11, otherwise: bb9];
+  }
+  bb9: {
+    storage_live(_15);
+    check_bounds(copy _12, copy _13);
+    _15 = &(*_11)[_12] [for-of-element];
+    _12 = add(copy _12, const 1: isize);
+    goto bb14;
+  }
+  bb10: {
+    goto bb8;
+  }
+  bb11: {
+    storage_dead(_8);
+    goto bb3;
+  }
+  bb12: {
+    _11 = move _9;
+    goto bb13;
+  }
+  bb13: {
+    storage_live(_12);
+    _12 = const 0: isize;
+    goto bb8;
+  }
+  bb14: {
+    *_15 = const 2: i64;
+    storage_dead(_15);
+    goto bb10;
+  }
+}

@@ -1,0 +1,13 @@
+let s: string = "abc";
+*grown(&s) += "!";
+console.log(s);
+
+let s2: string = "abc";
+let r = s2.slice(0, 2).toString();
+r += "!";
+console.log(r);
+
+private function grown(s: &string): &string {
+  *s += "?";
+  return s;
+}

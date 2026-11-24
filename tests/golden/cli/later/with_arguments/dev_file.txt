@@ -4,4 +4,4 @@ $ enrang dev main.en
 [stderr]
 error: `enrang dev` arrives with milestone M6
 note: M6 delivers the dev session with hot reload
-note: this is milestone M0, which has no compiler, so nothing was done
+note: this is milestone M3, so nothing was done

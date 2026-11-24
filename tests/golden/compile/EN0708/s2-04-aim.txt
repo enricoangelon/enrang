@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0708/s2-04-aim.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0708]: `xs` can't be read while a borrow of it may write into it
+  --> tests/compile/EN0708/s2-04-aim.fail.en:10:10
+   |
+ 9 |   c.set(xs);
+   |         -- borrowed for writing here, because it writes on line 9
+10 |   return xs.slice(0, 1); //~ EN0708
+   |          ^^^^^^^^^^^^^^ read here
+   |
+   = rule: a value has many shared borrows or one exclusive borrow, never both.
+   = explain: run `enrang explain EN0708`
+
+error: aborting due to 1 previous error

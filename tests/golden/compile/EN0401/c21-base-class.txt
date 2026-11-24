@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0401/c21-base-class.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `Animal`, found `Dog`
+ --> tests/compile/EN0401/c21-base-class.fail.en:3:19
+  |
+3 | const a: Animal = rex; //~ EN0401 "mismatched types: expected `Animal`, found `Dog`"
+  |                   ^^^ this is `Dog`
+  |          ------ `Animal` is required by this annotation
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

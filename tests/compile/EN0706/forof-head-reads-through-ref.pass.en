@@ -1,0 +1,7 @@
+//! row: `const r = &queue; for (const job of r) 
+let queue = ["a", "b"];
+const r = &queue;
+for (const job of r) {
+  console.log(job);
+}
+queue.push("x");

@@ -3,7 +3,10 @@
 use std::collections::{BTreeMap, BTreeSet, VecDeque};
 
 use enrang_base::{BytePos, Span};
-use enrang_diag::{Code, DiagCtx, Diagnostic, Edit, FixConflict, Help, apply_fixes, did_you_mean};
+use enrang_diag::{
+    Code, DiagCtx, Diagnostic, Edit, FixConflict, Help, apply_fixes, did_you_mean,
+    did_you_mean_ordered,
+};
 use enrang_testkit::{Harness, Rng, Xoshiro256, rng_for, scaled};
 
 use crate::json_value::parse;
@@ -392,6 +395,50 @@ fn random_suggestions(h: &mut Harness) {
                 candidates.rotate_left(2);
                 assert_eq!(as_refs(&candidates), first);
             }
+        },
+    );
+    h.case(
+        "properties/did_you_mean_ordered finds as near a candidate, a tie going to the first",
+        || {
+            let mut rng = rng_for("diag-ordered");
+            let alphabet = ['a', 'b', 'c'];
+            for _ in 0..scaled(150) {
+                let word = |rng: &mut Xoshiro256| -> String {
+                    (0..=rng.below(5)).map(|_| *pick(rng, &alphabet)).collect()
+                };
+                let name = word(&mut rng);
+                let candidates: Vec<String> = (0..4).map(|_| word(&mut rng)).collect();
+                let refs: Vec<&str> = candidates.iter().map(String::as_str).collect();
+                let ordered = did_you_mean_ordered(&name, &refs);
+                let by_name = did_you_mean(&name, &refs);
+                assert_eq!(ordered.is_some(), by_name.is_some(), "{name} {refs:?}");
+                let (Some(ordered), Some(by_name)) = (ordered, by_name) else {
+                    continue;
+                };
+                let far = |c: &str| distance_by_search(&name, c, &alphabet);
+                assert_eq!(far(ordered), far(by_name), "{name} {refs:?}");
+                let first = refs
+                    .iter()
+                    .find(|c| far(c) == far(by_name))
+                    .expect("the nearest is a candidate");
+                assert_eq!(ordered, *first, "{name} {refs:?}");
+            }
+        },
+    );
+    h.case(
+        "properties/did_you_mean_ordered: a local listed first beats an item of one distance",
+        || {
+            assert_eq!(did_you_mean("todo", &["Todo", "todos"]), Some("Todo"));
+            assert_eq!(
+                did_you_mean_ordered("todo", &["todos", "Todo"]),
+                Some("todos")
+            );
+            assert_eq!(
+                did_you_mean_ordered("todo", &["Todo", "todos"]),
+                Some("Todo")
+            );
+            assert_eq!(did_you_mean_ordered("todo", &["tod", "todos"]), Some("tod"));
+            assert_eq!(did_you_mean_ordered("todo", &["xxxx"]), None);
         },
     );
 }

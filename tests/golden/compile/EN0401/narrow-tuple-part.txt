@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0401/narrow-tuple-part.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `r.item` may be `null` here
+ --> tests/compile/EN0401/narrow-tuple-part.fail.en:6:17
+  |
+4 |     const [a, b] = [r, 1];
+  |                     - this may write through it
+5 |     a.item = null;
+6 |     console.log(r.item.n, b); //~ EN0401
+  |                 ^^^^^^^^ the test before this may no longer hold
+  |
+  = note: a writing reference may have changed `r.item`
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 1 previous error

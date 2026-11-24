@@ -1,0 +1,14 @@
+let v: i64[] = [5, 3, 9, 1];
+v.sortBy((a, b) => 1);
+console.log(v);
+let ps: P[] = [new P { n: 2 }, new P { n: 1 }, new P { n: 3 }];
+ps.sort();
+console.log(ps);
+
+public final class P implements Ord {
+  public n: i64;
+
+  public compare(other: &P): i32 {
+    return -1;
+  }
+}

@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0615/override-store-read-bit.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `Sub.retarget` keeps `v` in the `readonly &` field `extra`, but `Base.retarget` keeps it in another field
+  --> tests/compile/EN0615/override-store-read-bit.fail.en:22:19
+   |
+ 9 |   public retarget(v: &Slice<u8>): void {
+   |          -------- declared here
+...
+22 |   public override retarget(v: &Slice<u8>): void { //~ EN0615
+   |                   ^^^^^^^^ stored here
+   |
+   = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

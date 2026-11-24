@@ -1,0 +1,10 @@
+//! covers: H07
+public function show(h: &Holder): void {
+  for (const x of &h.items) {
+    console.log(x);
+  }
+}
+
+public class Holder {
+  public items: string[] = [];
+}

@@ -1,0 +1,14 @@
+$ enrang check tests/compile/EN0004/unterminated_string.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0004]: unterminated string
+ --> tests/compile/EN0004/unterminated_string.fail.en:3:3
+  |
+3 |   "beta, //~ EN0004
+  |   ^ this string has no closing `"`
+  |
+  = note: a string ends on the line it starts; a template may span lines
+  = explain: run `enrang explain EN0004`
+
+error: aborting due to 1 previous error

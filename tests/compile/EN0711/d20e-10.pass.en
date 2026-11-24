@@ -1,0 +1,19 @@
+let s: string = "abc";
+const g = new Guard(&s);
+dispose(g);
+s = "def";
+console.log(s);
+
+let s2: string = "abc";
+const g2 = new Guard(&s2);
+mem.forget(g2);
+s2 = "def";
+console.log(s2);
+
+private class Guard {
+  private r: &string;
+
+  public constructor(r: &string) { this.r = r; }
+
+  public destructor() { console.log(`drop ${this.r}`); }
+}

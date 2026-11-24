@@ -1,0 +1,14 @@
+// SPEC 7.3, port I/O: `core/port`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+public unsafe function inb(p: u16): u8 { unreachable(); }
+
+public unsafe function inw(p: u16): u16 { unreachable(); }
+
+public unsafe function inl(p: u16): u32 { unreachable(); }
+
+public unsafe function outb(p: u16, v: u8): void { unreachable(); }
+
+public unsafe function outw(p: u16, v: u16): void { unreachable(); }
+
+public unsafe function outl(p: u16, v: u32): void { unreachable(); }
+
+public unsafe function ioDelay(): void { unreachable(); }

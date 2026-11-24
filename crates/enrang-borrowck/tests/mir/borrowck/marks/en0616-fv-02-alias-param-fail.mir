@@ -1,0 +1,161 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0616/fv-02-alias-param.fail.en. Its row's codes: EN0616, EN0709.
+module "tests/compile/EN0616/fv-02-alias-param.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@final class Copier {
+  private src: readonly &u8[];
+  private dst: &u8[];
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: u8[]; // buf
+  let _3: u8[]; // tbl
+  let mut _4: Copier; // c
+  let _5: Copier temp;
+  let _6: &u8[] temp;
+  let _7: &u8[] temp;
+  let _8: &Copier temp;
+  let _9: void temp;
+  let _10: &u8; // a
+  let _11: &Copier temp;
+  let _12: void temp;
+  let _13: &Copier temp;
+  let _14: void temp;
+  let _15: &Copier temp;
+  let _16: void temp;
+  let _17: &Copier temp;
+  let _18: void temp;
+  let _19: &Copier temp;
+  let _20: void temp;
+  let _21: &u8 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<u8>(const 1: u8);
+    storage_live(_3);
+    _3 = intrinsic AllocArray<u8>(const 0: u8);
+    storage_live(_4);
+    _6 = &_3 [explicit];
+    _7 = &_2 [explicit];
+    _8 = &_5 [auto-borrow];
+    _9 = Copier::#ctor(move _8, move _6, move _7) -> bb1;
+  }
+  bb1: {
+    _4 = Copier::aliasIn(move _5) -> bb2;
+  }
+  bb2: {
+    storage_live(_10);
+    _11 = &_4 [auto-borrow];
+    _10 = Copier::peek(move _11) -> bb3;
+  }
+  bb3: {
+    _13 = &_4 [auto-borrow];
+    _12 = Copier::step(move _13) -> bb4;
+  }
+  bb4: {
+    _15 = &_4 [auto-borrow];
+    _14 = Copier::step(move _15) -> bb5;
+  }
+  bb5: {
+    _17 = &_4 [auto-borrow];
+    _16 = Copier::step(move _17) -> bb6;
+  }
+  bb6: {
+    _19 = &_4 [auto-borrow];
+    _18 = Copier::step(move _19) -> bb7;
+  }
+  bb7: {
+    _21 = &*_10 [auto-borrow];
+    _20 = form log(move _21) -> bb8;
+  }
+  bb8: {
+    storage_dead(_10);
+    storage_dead(_4);
+    drop(_3);
+    storage_dead(_3);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Copier::#ctor(_1: &Copier, _2: &u8[], _3: &u8[]) -> void {
+  let _1: &Copier; // this
+  let _2: &u8[]; // s
+  let _3: &u8[]; // d
+  let _4: &u8[] temp;
+  let _5: &u8[] temp;
+  bb0: {
+    _4 = &*_2 [reborrow];
+    (*_1).src = move _4;
+    _5 = &*_3 [reborrow];
+    (*_1).dst = move _5;
+    return;
+  }
+}
+
+static fn Copier::aliasIn(let _1: Copier) -> Copier {
+  let _1: Copier; // w
+  let _2: &u8[]; // p
+  let _3: &u8[] temp;
+  bb0: {
+    storage_live(_2);
+    _2 = copy _1.dst;
+    _3 = &*_2 [reborrow];
+    _1.src = move _3; //~ EN0616 "`src` is declared `readonly &`, so it can't hold a reference from `dst`"
+    _0 = move _1; //~ EN0709
+    storage_dead(_2);
+    return;
+  }
+}
+
+static fn Copier::make(_1: &u8[], _2: &u8[]) -> Copier {
+  let _1: &u8[]; // s
+  let _2: &u8[]; // d
+  let _3: &u8[] temp;
+  let _4: &u8[] temp;
+  let _5: &Copier temp;
+  let _6: void temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _5 = &_0 [auto-borrow];
+    _6 = Copier::#ctor(move _5, move _3, move _4) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+fn Copier::peek(_1: &Copier) -> readonly &u8 {
+  let _1: &Copier; // this
+  let _2: isize temp;
+  let _3: isize temp;
+  bb0: {
+    _2 = const 0: isize;
+    _3 = len(*(*_1).src);
+    check_bounds(copy _2, copy _3);
+    _0 = &(*(*_1).src)[_2] [explicit];
+    return;
+  }
+}
+
+fn Copier::step(_1: &Copier) -> void {
+  let _1: &Copier; // this
+  let _2: void temp;
+  let _3: &u8[] temp;
+  bb0: {
+    _3 = copy (*_1).dst;
+    _2 = "alloc/array"::Array<u8>::push(move _3, const 1: u8) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

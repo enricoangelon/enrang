@@ -1,0 +1,20 @@
+$ enrang check tests/compile/EN0615/mr-8.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0615]: `update` changes the object, but `Entity` declares that it doesn't
+ --> tests/compile/EN0615/mr-8.fail.en:9:5
+  |
+4 |   public update(): void {}
+  |          ------ declared here without `let`
+...
+9 |     this.x += 1; //~ EN0615 "`update` changes the object, but `Entity` declares that it doesn't"
+  |     ^^^^^^^^^^^ this write needs exclusive access to `this`
+  |
+help: if implementations may change the object, write `let` before `update` in `Entity`
+  |
+4 |   public let update(): void {}
+  |          ++++
+  = explain: run `enrang explain EN0615`
+
+error: aborting due to 1 previous error

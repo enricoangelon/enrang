@@ -1,0 +1,61 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the firing fixture
+// tests/compile/EN0706/c18-loan.fail.en. Its row's codes: EN0706.
+module "tests/compile/EN0706/c18-loan.fail";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: i64[]; // xs
+  let _3: void temp;
+  let _4: i64 temp;
+  let _5: &i64[] temp;
+  let _6: &i64 temp;
+  bb0: {
+    storage_live(_2);
+    _2 = intrinsic AllocArray<i64>(const 1: i64, const 2: i64, const 3: i64);
+    _5 = &_2 [explicit];
+    _4 = view(move _5) -> bb1;
+  }
+  bb1: {
+    _6 = &_4 [temp-arg];
+    _3 = form log(move _6) -> bb2;
+  }
+  bb2: {
+    storage_dead(_4);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+@private @local fn view(_1: &i64[]) -> i64 {
+  let _1: &i64[]; // r
+  let _2: &Slice<i64>; // s
+  let _3: &i64[] temp;
+  let _4: void temp;
+  let _5: &i64[] temp;
+  let _6: isize temp;
+  let _7: isize temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &*_1 [reborrow];
+    _2 = convert(array_to_slice, move _3);
+    _5 = &*_1 [reborrow]; //~ EN0706
+    _4 = "alloc/array"::Array<i64>::push(move _5, const 4: i64) -> bb1;
+  }
+  bb1: {
+    _6 = const 0: isize;
+    _7 = len(*_2);
+    check_bounds(copy _6, copy _7);
+    _0 = copy (*_2)[_6];
+    storage_dead(_2);
+    return;
+  }
+}

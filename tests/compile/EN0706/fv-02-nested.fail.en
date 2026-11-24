@@ -1,0 +1,32 @@
+public final class Outer {
+  private inner: Copier;
+  public constructor(c: Copier) {
+    this.inner = c;
+  }
+
+  public static demo(): void {
+    let table: u8[] = [7, 8, 9];
+    let out: u8[3] = [0, 0, 0];
+    const o = new Outer(new Copier(&table, &out));
+    const a = o.inner.peek();
+    table = [1]; //~ EN0706 "`table` cannot change while `a` still points into it"
+    console.log(a);
+  }
+}
+
+public final class Copier {
+  private src: readonly &Slice<u8>;
+  private dst: &Slice<u8>;
+  private pos: isize;
+  public constructor(src: &Slice<u8>, dst: &Slice<u8>) {
+    this.src = src;
+    this.dst = dst;
+  }
+  public step(): void {
+    this.dst[this.pos] = this.src[this.pos];
+    this.pos += 1;
+  }
+  public peek(): readonly &Slice<u8> {
+    return this.src.slice(this.pos, this.pos + 1);
+  }
+}

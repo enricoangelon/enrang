@@ -1,0 +1,11 @@
+let q = [];
+const c = [...q];
+q.push(1);
+const u = new User { name: "Ada" };
+let xs = [];
+xs.push(u);
+console.log(c, xs[0].name);
+
+public class User {
+  public name: string;
+}

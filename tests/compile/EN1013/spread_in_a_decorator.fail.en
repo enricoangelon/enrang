@@ -1,0 +1,2 @@
+@d([...a]) //~ EN1013 "rest, and spread outside an array literal, are not supported yet"
+public class A {}

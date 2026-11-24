@@ -1,0 +1,4 @@
+// SPEC 8.1, `alloc`'s prelude: `alloc/prelude`. Signatures with explicit marks; bodies arrive at M4 (ARCHITECTURE 10).
+// `T[]` and `string` reach their members through `alloc/array` and `alloc/string`.
+public import { Box } from "./box";
+public import { FreeListHeap, GlobalAllocator } from "./heap";

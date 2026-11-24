@@ -1,0 +1,11 @@
+error[EN0601]: `e` was used up by `open`
+ --> main.en:3:16
+  |
+2 | const l = e.open();
+  |           - `e` moves here
+3 | console.log(l, e.inside);
+  |                ^^^^^^^^ used here, after the move
+  |
+  = explain: run `enrang explain EN0601`
+
+error: aborting due to 1 previous error

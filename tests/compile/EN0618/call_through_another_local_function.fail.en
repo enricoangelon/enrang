@@ -1,0 +1,8 @@
+relay(); //~ EN0618 "`relay()` reads `count` before it is declared"
+let count = 0;
+function relay(): void {
+  report();
+}
+function report(): void {
+  console.log(count);
+}

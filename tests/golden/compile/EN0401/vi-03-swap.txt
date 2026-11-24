@@ -1,0 +1,22 @@
+$ enrang check tests/compile/EN0401/vi-03-swap.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: `o` may hold another class than `s`
+ --> tests/compile/EN0401/vi-03-swap.fail.en:4:7
+  |
+4 |   s = o; //~ EN0401 "`o` may hold another class than `s`"
+  |       ^ each interface value stands for a class of its own
+  |
+help: use one type for both: swapIn<T extends Speaker>(let s: T, o: T)
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: `b` may hold another class than `a`
+ --> tests/compile/EN0401/vi-03-swap.fail.en:9:7
+  |
+9 |   a = b; //~ EN0401 "`b` may hold another class than `a`"
+  |       ^ each by-value object parameter stands for a type of its own
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

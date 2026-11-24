@@ -1,0 +1,18 @@
+$ enrang check tests/compile/EN0706/c21-inherited.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0706]: `rex` cannot change while `tag` still points into it
+ --> tests/compile/EN0706/c21-inherited.fail.en:3:1
+  |
+2 | const tag = rex.label();
+  |             --- shared borrow of `rex` starts here, held by `tag`
+3 | rex.rename("Max"); //~ EN0706
+  | ^^^ `rex` changes here
+4 | console.log(tag);
+  |             --- `tag` is used again here
+  |
+  = rule: a value has many shared borrows or one exclusive borrow, never both.
+  = explain: run `enrang explain EN0706`
+
+error: aborting due to 1 previous error

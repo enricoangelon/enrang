@@ -1,0 +1,9 @@
+let c = new Counter();
+*c.count() = 5;
+
+public class Counter {
+  private n: isize = 0;
+  public count(): &isize {
+    return &this.n;
+  }
+}

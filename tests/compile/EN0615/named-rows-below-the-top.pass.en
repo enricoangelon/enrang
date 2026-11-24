@@ -1,0 +1,33 @@
+//! row: A reading function where `(let x: &i64) =>
+public class Holder<T> {
+  public v: T;
+}
+
+public function underRef(r: &fn(let x: &i64) => void): void {
+  const w: &fn(let x: &i64) => void = r;
+}
+
+public function underArray(readers: (fn(let x: &i64) => void)[]): void {
+  const writers: (fn(let x: &i64) => void)[] = readers;
+}
+
+public function underNull(o: (fn(let x: &i64) => void) | null): void {
+  const w: (fn(let x: &i64) => void) | null = o;
+}
+
+public function underField(r: fn(x: &i64) => void): void {
+  const o: { f: fn(let x: &i64) => void } = { f: r };
+  const w: { f: fn(let x: &i64) => void } = o;
+}
+
+public function underGeneric(b: Holder<fn(let x: &i64) => void>): void {
+  const w: Holder<fn(let x: &i64) => void> = b;
+}
+
+public function underParameter(h: fn(g: fn(let x: &i64) => void) => void): void {
+  const w: fn(g: fn(let x: &i64) => void) => void = h;
+}
+
+public function underResult(h: fn() => fn(let x: &i64) => void): void {
+  const w: fn() => fn(let x: &i64) => void = h;
+}

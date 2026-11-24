@@ -1,0 +1,13 @@
+error[EN0608]: `both` can change `y`, but `b` is `const`
+ --> main.en:3:10
+  |
+3 | both(&a, &b);
+  |          ^^ `both` writes through it
+  |
+help: declare it `let b`
+  |
+2 | let b: i64[] = [2];
+  | ~~~
+  = explain: run `enrang explain EN0608`
+
+error: aborting due to 1 previous error

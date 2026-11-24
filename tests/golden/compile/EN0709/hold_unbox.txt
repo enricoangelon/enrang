@@ -1,0 +1,16 @@
+$ enrang check tests/compile/EN0709/hold_unbox.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0709]: cannot move `b` while iterating over it
+ --> tests/compile/EN0709/hold_unbox.fail.en:3:13
+  |
+2 | for (const x of &*b) {
+  |                 --- `b` is borrowed here
+3 |   const v = b.unbox(); //~ EN0709 "cannot move `b` while iterating over it"
+  |             ^^^^^^^^^ `b` moves here
+  |
+help: move `b` after the loop, or move a copy: `b.clone()`
+  = explain: run `enrang explain EN0709`
+
+error: aborting due to 1 previous error

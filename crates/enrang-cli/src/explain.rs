@@ -8,12 +8,64 @@ use crate::report::complaint;
 
 const USAGE: &str = "enrang explain <code>";
 
-/// Codes the catalog retired, and what took their place (SPEC 13.2). Codes are never
-/// reused, so a retired code stays an answerable question.
-const RETIRED: &[(&str, &str)] = &[(
-    "EN0704",
-    "R3's rule 4 with EN0710 and EN0712 covers what it named",
-)];
+/// Codes the catalog retired, in code order, and why each went (SPEC 13.2). Codes are
+/// never reused, so a retired code stays an answerable question.
+const RETIRED: &[(&str, &str)] = &[
+    ("EN0204", "classes may extend a class now; see EN0442"),
+    (
+        "EN0212",
+        "`protected`, `abstract` and `super` are valid now",
+    ),
+    (
+        "EN0217",
+        "an object literal without a class is an anonymous object now",
+    ),
+    ("EN0223", "`x?: T` is valid now, on fields and parameters"),
+    (
+        "EN0306",
+        "user folders have namespaces now; a private item is EN0311",
+    ),
+    ("EN0407", "object types are valid everywhere now"),
+    (
+        "EN0431",
+        "`length()` is a method now; a bare `.length` is EN0441",
+    ),
+    ("EN0505", "`match` arms bind no variables now"),
+    (
+        "EN0620",
+        "a method with type parameters of its own is never overridden; an override of one is EN0460",
+    ),
+    (
+        "EN0704",
+        "R3's rule 3 with EN0710 and EN0712 covers what it named",
+    ),
+    (
+        "EN0716",
+        "`from` is removed; returned-reference sources are inferred",
+    ),
+    (
+        "EN0719",
+        "a `for...of` source is locked for the loop; changing it is EN0706",
+    ),
+    (
+        "EN0720",
+        "a part of an array is a `&Slice<T>`, and one passed where a growable `&T[]` is expected is EN0401",
+    ),
+    ("EN0810", "there is one raw pointer kind, `*T`"),
+    ("EN1008", "`match` guards and ranges are supported now"),
+    (
+        "EN1016",
+        "default parameters and overloads are supported now",
+    ),
+    (
+        "EN1020",
+        "`--float=x87` is accepted; it is the default at `i586` and `i686`",
+    ),
+    (
+        "EN1040",
+        "enum cases may carry texts now: `Negative = \"negative age\"`",
+    ),
+];
 
 pub(crate) fn command(args: &[String]) -> Outcome {
     match args {

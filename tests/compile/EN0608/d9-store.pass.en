@@ -1,0 +1,11 @@
+const k: i64[] = [1];
+const j: i64[] = [2];
+let c = new C(&k, &j);
+
+public class C {
+  private a: readonly &i64[];
+  private b: &i64[];
+  public constructor(x: &i64[], y: &i64[]) {
+    [this.a, this.b] = [x, y];
+  }
+}

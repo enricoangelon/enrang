@@ -1,0 +1,485 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0706/forof-source-forms.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0706/forof-source-forms.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+@private const TABLE: i64[3] = [1, 2, 3];
+class V {
+  items: i64[] = default;
+}
+
+fn V::show(_1: &V) -> void {
+  let _1: &V; // this
+  let _2: &i64[] temp;
+  let _3: &V temp;
+  let _4: &i64[] #src;
+  let _5: isize #i;
+  let _6: isize #n;
+  let _7: bool temp;
+  let _8: &i64; // x
+  let _9: void temp;
+  let _10: &i64 temp;
+  let _11: void temp;
+  let _12: &i64[] temp;
+  loop l0: once _4 preheader bb6 head bb1 bind bb2[2] binding _8;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _2 = virtual V::view [copy _3](move _3) -> bb5;
+  }
+  bb1: {
+    _6 = len(*_4);
+    _7 = lt(copy _5, copy _6);
+    switch move _7 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_8);
+    check_bounds(copy _5, copy _6);
+    _8 = &(*_4)[_5] [for-of-element];
+    _5 = add(copy _5, const 1: isize);
+    goto bb7;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _12 = &(*_1).items [auto-borrow];
+    _11 = "alloc/array"::Array<i64>::push(move _12, const 1: i64) -> bb9;
+  }
+  bb5: {
+    _4 = move _2;
+    goto bb6;
+  }
+  bb6: {
+    storage_live(_5);
+    _5 = const 0: isize;
+    goto bb1;
+  }
+  bb7: {
+    _10 = &*_8 [reborrow];
+    _9 = form log(move _10) -> bb8;
+  }
+  bb8: {
+    storage_dead(_8);
+    goto bb3;
+  }
+  bb9: {
+    return;
+  }
+}
+
+fn V::view(_1: &V) -> &i64[] {
+  let _1: &V; // this
+  bb0: {
+    _0 = &(*_1).items [explicit];
+    return;
+  }
+}
+
+fn first(_1: &i64[]) -> &i64[] {
+  let _1: &i64[]; // q
+  let _2: &i64[] temp;
+  bb0: {
+    _2 = &*_1 [reborrow];
+    _0 = move _2;
+    return;
+  }
+}
+
+fn forms(_1: bool, _2: isize) -> void {
+  let _1: bool; // c
+  let _2: isize; // r
+  let mut _3: i64[]; // q
+  let _4: &i64[] temp;
+  let _5: &i64[] temp;
+  let _6: &i64[] #src;
+  let _7: isize #i;
+  let _8: isize #n;
+  let _9: bool temp;
+  let _10: &i64; // x
+  let _11: void temp;
+  let _12: &i64[] temp;
+  let mut _13: i64[]; // a
+  let mut _14: i64[]; // b
+  let _15: &i64[] temp;
+  let _16: bool temp;
+  let _17: &i64[] #src;
+  let _18: isize #i;
+  let _19: isize #n;
+  let _20: bool temp;
+  let _21: &i64; // x
+  let _22: void temp;
+  let _23: &i64 temp;
+  let _24: void temp;
+  let _25: &i64[] temp;
+  let _26: &i64[] | null; // n
+  let _27: &i64[] temp;
+  let _28: &i64[] temp;
+  let _29: &i64[] #src;
+  let _30: isize #i;
+  let _31: isize #n;
+  let _32: bool temp;
+  let _33: &i64; // x
+  let _34: void temp;
+  let _35: &i64 temp;
+  let _36: void temp;
+  let _37: &i64[] temp;
+  let _38: i64[] #iter;
+  let _39: V temp;
+  let _40: isize #i;
+  let _41: isize #n;
+  let _42: bool temp;
+  let _43: i64; // x
+  let _44: void temp;
+  let _45: &i64 temp;
+  let _46: V temp;
+  let _47: &i64[] #src;
+  let _48: isize #i;
+  let _49: isize #n;
+  let _50: bool temp;
+  let _51: &i64; // x
+  let _52: void temp;
+  let _53: &i64 temp;
+  let mut _54: i64[][]; // grid
+  let _55: i64[] temp;
+  let _56: isize temp;
+  let _57: isize temp;
+  let _58: &i64[] #src;
+  let _59: isize #i;
+  let _60: isize #n;
+  let _61: bool temp;
+  let _62: &i64; // x
+  let _63: void temp;
+  let _64: &i64 temp;
+  let _65: void temp;
+  let _66: i64[] temp;
+  let _67: &i64[][] temp;
+  let _68: &i64[3] #src;
+  let _69: isize #i;
+  let _70: isize #n;
+  let _71: bool temp;
+  let _72: &i64; // t
+  let _73: void temp;
+  let _74: &i64 temp;
+  loop l0: once _6 preheader bb6 head bb1 bind bb2[2] binding _10;
+  loop l1: once _17 preheader bb16 head bb9 bind bb10[2] binding _21;
+  loop l2: once _29 preheader bb24 head bb20 bind bb21[2] binding _33;
+  loop l4: once _47 preheader bb41 head bb36 bind bb37[2] binding _51;
+  loop l5: once _58 preheader bb48 head bb44 bind bb45[2] binding _62;
+  loop l6: once _68 preheader bb56 head bb52 bind bb53[2] binding _72;
+  bb0: {
+    storage_live(_3);
+    _3 = intrinsic AllocArray<i64>(const 1: i64);
+    _5 = &_3 [explicit];
+    _4 = first(move _5) -> bb5;
+  }
+  bb1: {
+    _8 = len(*_6);
+    _9 = lt(copy _7, copy _8);
+    switch move _9 [0: bb4, otherwise: bb2];
+  }
+  bb2: {
+    storage_live(_10);
+    check_bounds(copy _7, copy _8);
+    _10 = &(*_6)[_7] [for-of-element];
+    _7 = add(copy _7, const 1: isize);
+    goto bb7;
+  }
+  bb3: {
+    goto bb1;
+  }
+  bb4: {
+    _12 = &_3 [auto-borrow];
+    _11 = "alloc/array"::Array<i64>::push(move _12, const 1: i64) -> bb8;
+  }
+  bb5: {
+    _6 = move _4;
+    goto bb6;
+  }
+  bb6: {
+    storage_live(_7);
+    _7 = const 0: isize;
+    goto bb1;
+  }
+  bb7: {
+    *_10 = const 1: i64;
+    storage_dead(_10);
+    goto bb3;
+  }
+  bb8: {
+    storage_live(_13);
+    _13 = intrinsic AllocArray<i64>(const 1: i64);
+    storage_live(_14);
+    _14 = intrinsic AllocArray<i64>(const 2: i64);
+    _16 = copy _1;
+    switch move _16 [0: bb14, otherwise: bb13];
+  }
+  bb9: {
+    _19 = len(*_17);
+    _20 = lt(copy _18, copy _19);
+    switch move _20 [0: bb12, otherwise: bb10];
+  }
+  bb10: {
+    storage_live(_21);
+    check_bounds(copy _18, copy _19);
+    _21 = &(*_17)[_18] [for-of-element];
+    _18 = add(copy _18, const 1: isize);
+    goto bb17;
+  }
+  bb11: {
+    goto bb9;
+  }
+  bb12: {
+    _25 = &_13 [auto-borrow];
+    _24 = "alloc/array"::Array<i64>::push(move _25, const 1: i64) -> bb19;
+  }
+  bb13: {
+    _15 = &_13 [explicit];
+    goto bb15;
+  }
+  bb14: {
+    _15 = &_14 [explicit];
+    goto bb15;
+  }
+  bb15: {
+    _17 = move _15;
+    goto bb16;
+  }
+  bb16: {
+    storage_live(_18);
+    _18 = const 0: isize;
+    goto bb9;
+  }
+  bb17: {
+    _23 = &*_21 [reborrow];
+    _22 = form log(move _23) -> bb18;
+  }
+  bb18: {
+    storage_dead(_21);
+    goto bb11;
+  }
+  bb19: {
+    storage_live(_26);
+    _27 = &_3 [explicit];
+    _26 = present(move _27);
+    check_tag(_26, Present);
+    _28 = &*(_26 as Present).0 [reborrow];
+    _29 = move _28;
+    goto bb24;
+  }
+  bb20: {
+    _31 = len(*_29);
+    _32 = lt(copy _30, copy _31);
+    switch move _32 [0: bb23, otherwise: bb21];
+  }
+  bb21: {
+    storage_live(_33);
+    check_bounds(copy _30, copy _31);
+    _33 = &(*_29)[_30] [for-of-element];
+    _30 = add(copy _30, const 1: isize);
+    goto bb25;
+  }
+  bb22: {
+    goto bb20;
+  }
+  bb23: {
+    _37 = &_3 [auto-borrow];
+    _36 = "alloc/array"::Array<i64>::push(move _37, const 2: i64) -> bb27;
+  }
+  bb24: {
+    storage_live(_30);
+    _30 = const 0: isize;
+    goto bb20;
+  }
+  bb25: {
+    _35 = &*_33 [reborrow];
+    _34 = form log(move _35) -> bb26;
+  }
+  bb26: {
+    storage_dead(_33);
+    goto bb22;
+  }
+  bb27: {
+    _39 = make() -> bb32;
+  }
+  bb28: {
+    _41 = len(_38);
+    _42 = lt(copy _40, copy _41);
+    switch move _42 [0: bb31, otherwise: bb29];
+  }
+  bb29: {
+    storage_live(_43);
+    check_bounds(copy _40, copy _41);
+    _43 = copy _38[_40];
+    _40 = add(copy _40, const 1: isize);
+    goto bb34;
+  }
+  bb30: {
+    goto bb28;
+  }
+  bb31: {
+    drop(_39);
+    storage_dead(_39);
+    drop(_38);
+    storage_dead(_38);
+    _46 = make() -> bb40;
+  }
+  bb32: {
+    _38 = move _39.items;
+    goto bb33;
+  }
+  bb33: {
+    storage_live(_40);
+    _40 = const 0: isize;
+    goto bb28;
+  }
+  bb34: {
+    _45 = &_43 [auto-borrow];
+    _44 = form log(move _45) -> bb35;
+  }
+  bb35: {
+    storage_dead(_43);
+    goto bb30;
+  }
+  bb36: {
+    _49 = len(*_47);
+    _50 = lt(copy _48, copy _49);
+    switch move _50 [0: bb39, otherwise: bb37];
+  }
+  bb37: {
+    storage_live(_51);
+    check_bounds(copy _48, copy _49);
+    _51 = &(*_47)[_48] [for-of-element];
+    _48 = add(copy _48, const 1: isize);
+    goto bb42;
+  }
+  bb38: {
+    goto bb36;
+  }
+  bb39: {
+    drop(_46);
+    storage_dead(_46);
+    storage_live(_54);
+    _55 = intrinsic AllocArray<i64>(const 1: i64);
+    _54 = intrinsic AllocArray<i64[]>(move _55);
+    drop(_55);
+    storage_dead(_55);
+    _56 = copy _2;
+    _57 = len(_54);
+    check_bounds(copy _56, copy _57);
+    _58 = &_54[_56] [for-of-hidden];
+    goto bb48;
+  }
+  bb40: {
+    _47 = &_46.items [for-of-hidden];
+    goto bb41;
+  }
+  bb41: {
+    storage_live(_48);
+    _48 = const 0: isize;
+    goto bb36;
+  }
+  bb42: {
+    _53 = &*_51 [reborrow];
+    _52 = form log(move _53) -> bb43;
+  }
+  bb43: {
+    storage_dead(_51);
+    goto bb38;
+  }
+  bb44: {
+    _60 = len(*_58);
+    _61 = lt(copy _59, copy _60);
+    switch move _61 [0: bb47, otherwise: bb45];
+  }
+  bb45: {
+    storage_live(_62);
+    check_bounds(copy _59, copy _60);
+    _62 = &(*_58)[_59] [for-of-element];
+    _59 = add(copy _59, const 1: isize);
+    goto bb49;
+  }
+  bb46: {
+    goto bb44;
+  }
+  bb47: {
+    _66 = intrinsic AllocArray<i64>();
+    _67 = &_54 [auto-borrow];
+    _65 = "alloc/array"::Array<i64[]>::push(move _67, move _66) -> bb51;
+  }
+  bb48: {
+    storage_live(_59);
+    _59 = const 0: isize;
+    goto bb44;
+  }
+  bb49: {
+    _64 = &*_62 [reborrow];
+    _63 = form log(move _64) -> bb50;
+  }
+  bb50: {
+    storage_dead(_62);
+    goto bb46;
+  }
+  bb51: {
+    drop(_66);
+    storage_dead(_66);
+    _68 = const static_addr(TABLE): &i64[3];
+    goto bb56;
+  }
+  bb52: {
+    _70 = len(*_68);
+    _71 = lt(copy _69, copy _70);
+    switch move _71 [0: bb55, otherwise: bb53];
+  }
+  bb53: {
+    storage_live(_72);
+    check_bounds(copy _69, copy _70);
+    _72 = &(*_68)[_69] [for-of-element];
+    _69 = add(copy _69, const 1: isize);
+    goto bb57;
+  }
+  bb54: {
+    goto bb52;
+  }
+  bb55: {
+    drop(_54);
+    storage_dead(_54);
+    storage_dead(_26);
+    drop(_14);
+    storage_dead(_14);
+    drop(_13);
+    storage_dead(_13);
+    drop(_3);
+    storage_dead(_3);
+    return;
+  }
+  bb56: {
+    storage_live(_69);
+    _69 = const 0: isize;
+    goto bb52;
+  }
+  bb57: {
+    _74 = &*_72 [reborrow];
+    _73 = form log(move _74) -> bb58;
+  }
+  bb58: {
+    storage_dead(_72);
+    goto bb54;
+  }
+}
+
+fn make() -> V {
+  let _1: *V temp;
+  let _2: void temp;
+  bb0: {
+    _1 = addr_of _0;
+    _2 = named_fill V leaving(items)(move _1) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}

@@ -1,0 +1,103 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0614/tk-01-split-written.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0614/tk-01-split-written.pass";
+@lang("array") @final class "alloc/array"::Array<T> {
+  private ptr: *T;
+  private len: usize;
+  private cap: usize;
+}
+@lang("array_push") fn "alloc/array"::Array<T>::push(let _1: &Array<T>, _2: T) -> void;
+class Pt {
+  xs: i64[] = default;
+  ys: i64[] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Pt; // pt
+  let _3: *Pt temp;
+  let _4: void temp;
+  let _5: void temp;
+  let _6: &i64[] temp;
+  let _7: [&i64[], &i64[]] temp;
+  let _8: &Pt temp;
+  let _9: &i64[]; // u
+  let _10: &i64[]; // v
+  let _11: &i64; // e
+  let _12: isize temp;
+  let _13: isize temp;
+  let _14: void temp;
+  let _15: &i64 temp;
+  let _16: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Pt leaving(xs, ys)(move _3) -> bb1;
+  }
+  bb1: {
+    _6 = &_2.ys [auto-borrow];
+    _5 = "alloc/array"::Array<i64>::push(move _6, const 1: i64) -> bb2;
+  }
+  bb2: {
+    _8 = &_2 [explicit];
+    _7 = same(move _8) -> bb3;
+  }
+  bb3: {
+    storage_live(_9);
+    _9 = copy _7.0;
+    storage_live(_10);
+    _10 = copy _7.1;
+    storage_live(_11);
+    _12 = const 0: isize;
+    _13 = len(*_9);
+    check_bounds(copy _12, copy _13);
+    _11 = &(*_9)[_12] [explicit];
+    _15 = &*_11 [auto-borrow];
+    _16 = &*_10 [auto-borrow];
+    _14 = form log(move _15, move _16) -> bb4;
+  }
+  bb4: {
+    storage_dead(_11);
+    storage_dead(_10);
+    storage_dead(_9);
+    drop(_2);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn same(_1: &Pt) -> [&i64[], &i64[]] {
+  let _1: &Pt; // q
+  let mut _2: [&i64[], &i64[]]; // p
+  let _3: &i64[] temp;
+  let _4: &i64[] temp;
+  let _5: &i64[] temp;
+  bb0: {
+    storage_live(_2);
+    _3 = &(*_1).xs [explicit];
+    _4 = &(*_1).ys [explicit];
+    _2 = two(move _3, move _4) -> bb1;
+  }
+  bb1: {
+    _5 = copy _2.1;
+    _2.0 = move _5;
+    _0 = copy _2;
+    storage_dead(_2);
+    return;
+  }
+}
+
+fn two(_1: &i64[], _2: &i64[]) -> [&i64[], &i64[]] {
+  let _1: &i64[]; // a
+  let _2: &i64[]; // b
+  let _3: &i64[] temp;
+  let _4: &i64[] temp;
+  bb0: {
+    _3 = &*_1 [reborrow];
+    _4 = &*_2 [reborrow];
+    _0 = tuple(move _3, move _4);
+    return;
+  }
+}

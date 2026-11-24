@@ -1,0 +1,17 @@
+$ enrang check tests/compile/EN0100/getter.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0100]: getters do not exist in Enrang
+ --> tests/compile/EN0100/getter.fail.en:4:10
+  |
+4 |   public get balance(): i64 { //~ EN0100 "getters do not exist in Enrang"
+  |          ^^^^^^^^^^^ write a method named `balance`
+  |
+help: make it a method
+  |
+4 |   public balance(): i64 { //~ EN0100 "getters do not exist in Enrang"
+  |          ~
+  = explain: run `enrang explain EN0100`
+
+error: aborting due to 1 previous error

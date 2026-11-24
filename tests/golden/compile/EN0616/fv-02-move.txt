@@ -1,0 +1,25 @@
+$ enrang check tests/compile/EN0616/fv-02-move.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0616]: `src` is declared `readonly &`, so it can't hold a reference from `dst`
+  --> tests/compile/EN0616/fv-02-move.fail.en:17:5
+   |
+17 |     this.src = this.dst.slice(0, 1); //~ EN0616 "`src` is declared `readonly &`, so it can't hold a reference from `dst`"
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ stored here
+   |
+help: store a reference from a parameter, or from another `readonly &` field
+   = explain: run `enrang explain EN0616`
+
+error[EN0709]: cannot move `this` while it is borrowed
+  --> tests/compile/EN0616/fv-02-move.fail.en:18:12
+   |
+17 |     this.src = this.dst.slice(0, 1); //~ EN0616 "`src` is declared `readonly &`, so it can't hold a reference from `dst`"
+   |                -------- shared borrow of `this` starts here
+18 |     return this; //~ EN0709
+   |            ^^^^ `this` moves here
+   |
+help: move `this` after its last borrow
+   = explain: run `enrang explain EN0709`
+
+error: aborting due to 2 previous errors

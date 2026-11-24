@@ -1,0 +1,36 @@
+$ enrang check tests/compile/EN0711/d20e-04.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0711]: `tmp` is dropped while `lx` still borrows it
+ --> tests/compile/EN0711/d20e-04.fail.en:6:1
+  |
+4 |   const tmp = "x" + "y";
+  |         --- `tmp` lives until the end of this block
+5 |   lx.restart(&tmp);
+  |              ---- shared borrow of `tmp` starts here, held by `lx`
+6 | } //~ EN0711
+  | ^ `tmp` is dropped here
+7 | console.log(lx.next());
+  |             -- the borrow is still in use here
+  |
+help: declare `tmp` outside the block so it lives as long as `lx`
+  = explain: run `enrang explain EN0711`
+
+error[EN0711]: `tmp` is dropped while `lx2` still borrows it
+  --> tests/compile/EN0711/d20e-04.fail.en:14:1
+   |
+11 |   const tmp = "x" + "y";
+   |         --- `tmp` lives until the end of this block
+12 |   const r = &lx2;
+13 |   *r = new Lexer(&tmp);
+   |                  ---- shared borrow of `tmp` starts here, held by `lx2`
+14 | } //~ EN0711
+   | ^ `tmp` is dropped here
+15 | console.log(lx2.next());
+   |             --- the borrow is still in use here
+   |
+help: declare `tmp` outside the block so it lives as long as `lx2`
+   = explain: run `enrang explain EN0711`
+
+error: aborting due to 2 previous errors

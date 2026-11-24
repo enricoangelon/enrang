@@ -1,0 +1,29 @@
+const k: u8[] = [0];
+let x: u8[] = [1, 2, 3];
+let s = new Sub(&k, &k);
+const r: &Base = &s;
+r.retarget(&x);
+const tok = s.peek();
+x.push(4);
+console.log(tok);
+
+public class Base {
+  private dst: &Slice<u8>;
+
+  public constructor(d: &Slice<u8>) { this.dst = d; }
+
+  public retarget(v: &Slice<u8>): void { this.dst = v; }
+}
+
+public class Sub extends Base {
+  private extra: readonly &Slice<u8>;
+
+  public constructor(d: &Slice<u8>, e: &Slice<u8>) {
+    this.extra = e;
+    super(d);
+  }
+
+  public override retarget(v: &Slice<u8>): void { this.extra = v; } //~ EN0615
+
+  public peek(): readonly &Slice<u8> { return this.extra.slice(0, 1); }
+}

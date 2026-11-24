@@ -1,0 +1,59 @@
+// As MIR, built by mirbuild before elaboration in plan c's shapes (M3 plan f.1,
+// f.9), and checked through phase 3 with no front end: the near-miss
+// tests/compile/EN0616/raw_derived_method_result.pass.en. Its row's codes: none, since a near-miss passes `check`.
+module "tests/compile/EN0616/raw_derived_method_result.pass";
+extend "core/ptr"::#extend0<T>: *T;
+fn "core/ptr"::#extend0<T>::add(_1: &*T, _2: isize) -> *T;
+class Grid {
+  private cells: u16[4] = default;
+}
+
+statements (_1: string[]) -> int {
+  let _1: string[]; // args
+  let mut _2: Grid; // g
+  let _3: *Grid temp;
+  let _4: void temp;
+  let _5: &u16; // c
+  let _6: &Grid temp;
+  bb0: {
+    storage_live(_2);
+    _3 = addr_of _2;
+    _4 = named_fill Grid leaving(cells)(move _3) -> bb1;
+  }
+  bb1: {
+    storage_live(_5);
+    _6 = &_2 [auto-borrow];
+    _5 = Grid::cell(move _6, const 0: isize) -> bb2;
+  }
+  bb2: {
+    *_5 = const 7: u16;
+    storage_dead(_5);
+    storage_dead(_2);
+    drop(_1);
+    return;
+  }
+}
+
+fn Grid::cell(_1: &Grid, _2: isize) -> &u16 {
+  let _1: &Grid; // this
+  let _2: isize; // i
+  let _3: *u16; // p
+  let _4: &u16 temp;
+  let _5: *u16 temp;
+  let _6: &*u16 temp;
+  let _7: *u16 temp;
+  region r0: block;
+  bb0: {
+    storage_live(_3) @ r0;
+    _4 = &(*_1).cells[0] [explicit] @ r0;
+    _3 = cast(ref_to_raw, move _4, *u16) @ r0;
+    _6 = &_3 [auto-borrow] @ r0;
+    _5 = "core/ptr"::#extend0<u16>::add(move _6, copy _2) -> bb1 @ r0;
+  }
+  bb1: {
+    _7 = move _5 @ r0;
+    _0 = &*_7 [explicit] @ r0;
+    storage_dead(_3) @ r0;
+    return @ r0;
+  }
+}

@@ -1,0 +1,818 @@
+==== int-alias
+fn f(_1: int) -> int;
+---- outcome
+
+==== user-kind
+fn f() -> void {
+  let _1: i64 user;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+fn f() -> void {
+  let _1: i64;
+  bb0: {
+    return;
+  }
+}
+
+==== phase-built
+fn f() -> void {
+  phase built;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+fn f() -> void {
+  bb0: {
+    return;
+  }
+}
+
+==== numeric-field
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = copy (*_1).0;
+    return;
+  }
+}
+---- outcome
+class C {
+  x: i64;
+}
+
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = copy (*_1).x;
+    return;
+  }
+}
+
+==== numeric-case
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: E) -> i64 {
+  bb0: {
+    check_tag(_1, 1);
+    _0 = copy (_1 as 1).0;
+    return;
+  }
+}
+---- outcome
+enum E { A, B { v: i64 } }
+
+fn f(_1: E) -> i64 {
+  bb0: {
+    check_tag(_1, B);
+    _0 = copy (_1 as B).v;
+    return;
+  }
+}
+
+==== hex-int
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = const 0x1f: i64;
+    return;
+  }
+}
+---- outcome
+class C {
+  x: i64;
+}
+
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = const 31: i64;
+    return;
+  }
+}
+
+==== result-one-arg
+@lang("failure") class Failure { }
+@lang("result") enum Result<T, E> { Ok { 0: T }, Err { 0: E } }
+fn f() -> Result<i64>;
+fn g() -> void {
+  let _1: Result<i64> temp;
+  bb0: {
+    _1 = f() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+---- outcome
+@lang("failure") class Failure { }
+@lang("result") enum Result<T, E> { Ok { 0: T }, Err { 0: E } }
+fn f() -> Result<i64>;
+
+fn g() -> void {
+  let _1: Result<i64> temp;
+  bb0: {
+    _1 = f() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+==== anchor-comment
+fn f() -> void {
+  let _1: i64 temp; //~ EN0601 "x"
+  bb0: {
+    return;
+  }
+}
+---- outcome
+fn f() -> void {
+  let _1: i64 temp;
+  bb0: {
+    return;
+  }
+}
+
+==== instantiate
+instantiate Foo<i64>;
+fn f() -> void {
+  bb0: {
+    return;
+  }
+}
+---- outcome
+fn f() -> void {
+  bb0: {
+    return;
+  }
+}
+
+==== arg-after-head
+fn f() -> void {
+  let _1: i64 arg;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+fn f() -> void {
+  let _1: i64 arg;
+  bb0: {
+    return;
+  }
+}
+
+==== error-type
+fn f(_1: _) -> void;
+fn g() -> void {
+  let _1: _ temp;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+fn g() -> void {
+  let _1: _ temp;
+  bb0: {
+    return;
+  }
+}
+
+==== fn-types
+fn g() -> void {
+  let _1: @abi("sysv") unsafe fn(i64) => void temp;
+  let _2: unsafe fn(let &i64) => readonly &i64 temp;
+  let _3: (i64) => (i64) temp;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+fn g() -> void {
+  let _1: @abi("sysv") unsafe fn(i64) => void temp;
+  let _2: unsafe fn(let &i64) => readonly &i64 temp;
+  let _3: (i64) => i64 temp;
+  bb0: {
+    return;
+  }
+}
+
+==== overridden-number
+class B {
+  a: i64 = default;
+}
+class C extends B {
+  a: i64 = default override;
+}
+fn C::#ctor(_1: &C) -> void {
+  bb0: {
+    switch const overridden(0): bool [0: bb1, otherwise: bb1];
+  }
+  bb1: {
+    return;
+  }
+}
+---- outcome
+class B {
+  a: i64 = default;
+}
+class C extends B {
+  a: i64 = default override;
+}
+
+fn C::#ctor(_1: &C) -> void {
+  bb0: {
+    switch const overridden(a): bool [0: bb1, otherwise: bb1];
+  }
+  bb1: {
+    return;
+  }
+}
+
+==== err-phase
+fn f() -> void {
+  phase foo;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:3 no phase `foo`
+==== err-region
+fn f() -> void {
+  region r0: foo;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:3 no region kind `foo`
+==== err-region-order
+fn f() -> void {
+  region r1: block;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:3 r1 is declared out of order
+==== err-capture
+fn f() -> void {
+  capture x: i64 foo;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:3 no capture kind `foo`
+==== err-record
+fn f() -> void {
+  let _1: i64 temp;
+  record f0 at bb0[0] _1 foo;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 3:3 no record kind `foo`
+==== err-role
+fn f() -> void {
+  let _1: i64 #q;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:7 no loop role `#q`
+==== err-kind
+fn f() -> void {
+  let _1: i64 foo;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:15 no local kind `foo`
+==== err-perm
+fn f(_1: &i64) -> void perms(foo);
+---- outcome
+ERR 1:30 no permission `foo`
+==== err-reason
+fn f() -> &i64 result readonly(foo);
+---- outcome
+ERR 1:32 no reason `foo`
+==== err-cast
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = cast(foo, copy _2, i64);
+    return;
+  }
+}
+---- outcome
+ERR 8:15 no cast `foo`
+==== err-conv
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = convert(foo, copy _2);
+    return;
+  }
+}
+---- outcome
+ERR 8:18 no conversion `foo`
+==== err-origin
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = &_2 [foo-bar];
+    return;
+  }
+}
+---- outcome
+ERR 8:10 no borrow origin `foo-bar`
+==== err-class-event
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    check_class(*_1, foo, ref);
+    return;
+  }
+}
+---- outcome
+ERR 8:22 no class event `foo`
+==== err-holder
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    check_class(*_1, unbox, via);
+    return;
+  }
+}
+---- outcome
+ERR 8:29 expected `ref`, found `via`
+==== err-alu
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    intrinsic AtomicAlu<foo>();
+    return;
+  }
+}
+---- outcome
+ERR 8:15 no atomic operation `foo`
+==== err-intrinsic
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    intrinsic Foo();
+    return;
+  }
+}
+---- outcome
+ERR 8:15 no intrinsic `Foo`
+==== err-feature
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = intrinsic CpuHas<"zzz">();
+    return;
+  }
+}
+---- outcome
+ERR 8:20 no feature `zzz`
+==== err-bool
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = intrinsic AtomicBitTest<maybe>();
+    return;
+  }
+}
+---- outcome
+ERR 8:20 expected `true` or `false`
+==== err-plain-payload
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = intrinsic VolatileRead<i64>();
+    return;
+  }
+}
+---- outcome
+ERR 8:32 expected `(`, found `<`
+==== err-form
+fn f() -> void {
+  let _1: void temp;
+  bb0: {
+    _1 = form foo() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+---- outcome
+ERR 4:15 no form `foo`
+==== err-shim
+shim foo(i64) () -> void {
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 1:10 no shim `foo`
+==== err-escape
+const S: string = "a\qb";
+---- outcome
+ERR 1:19 an unknown escape `\q`
+==== err-u-escape
+const S: string = "a\u{zz}b";
+---- outcome
+ERR 1:19 a malformed \u escape
+==== err-hex
+const N: i64 = 0x;
+---- outcome
+ERR 1:16 a hex number out of range
+==== err-char
+fn f() -> void $;
+---- outcome
+ERR 1:16 an unexpected character `$`
+==== err-number
+const N: i64 = 999999999999999999999999999999999999999999;
+---- outcome
+ERR 1:16 a number out of range
+==== err-attr-abi
+@abi("nope") fn f() -> void;
+---- outcome
+ERR 1:1 no such ABI
+==== err-lang
+@lang("nope") class C { }
+---- outcome
+ERR 1:1 no lang item `nope`
+==== err-move-path
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: C) -> void {
+  let _2: bool flag;
+  drop_flag _2: *_1;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 7:17 a move path has only fields and case fields
+==== err-literal-order
+fn f() -> void {
+  literal#1: i64 = 1;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:3 literal#1 is declared out of order
+==== err-fact-order
+fn f(_1: i64 | null) -> void {
+  fact f1: _1 nonnull;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:3 f1 is declared out of order
+==== err-fields-missing
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: i64 temp;
+  bb0: {
+    _3 = C { };
+    return;
+  }
+}
+---- outcome
+ERR 8:10 1 fields are needed, 0 given
+==== err-field-twice
+class C {
+  x: i64;
+}
+enum E { A, B { v: i64 } }
+fn f(_1: &C, _2: i64) -> void {
+  let _3: C temp;
+  bb0: {
+    _3 = C { x: copy _2, x: copy _2 };
+    return;
+  }
+}
+---- outcome
+ERR 8:26 field `x` is given twice
+==== err-head-type
+fn f(_1: i64) -> void {
+  let _1: bool;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:7 _1 is declared with another type in the head
+==== err-local-order
+fn f() -> void {
+  let _2: i64;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:7 _2 is declared out of order
+==== err-arg-after-local
+fn f() -> void {
+  let _1: i64;
+  let _2: i64 arg;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 3:7 an argument after a local that is not one
+==== err-head-kind
+fn f(_1: i64) -> void {
+  let _1: i64 temp;
+  bb0: {
+    return;
+  }
+}
+---- outcome
+ERR 2:7 _1 of the head keeps its kind
+==== err-param-name
+fn f(_2: i64) -> void;
+---- outcome
+ERR 1:4 parameter 1 is not _1
+==== err-target
+target "nope";
+---- outcome
+ERR 1:1 no target `nope`
+==== err-override
+class B {
+  a: i64;
+}
+class C extends B {
+  z: i64 = default override;
+}
+---- outcome
+ERR 5:3 no inherited field `z`
+==== err-nan
+const F: f64 = nan(0x7ff8000000000001);
+const G: f64 = -inf;
+const H: f32 = 1e3;
+---- outcome
+
+==== where-unknown
+class H<T> { }
+fn H<T>::m(_1: &H<T>) -> void where U extends H<T>;
+---- outcome
+ERR 2:37 no parameter `U` to bound
+==== implicit-bad
+fn f<implicit i64>(_1: i64) -> void;
+---- outcome
+ERR 1:4 an implicit parameter is an interface or an object type
+==== extend-ok
+extend #extend0<T>: T[];
+fn #extend0<T>::len(_1: &T[]) -> isize;
+fn g(_1: &i64[]) -> void {
+  let _2: isize temp;
+  bb0: {
+    _2 = #extend0<i64>::len(copy _1) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+---- outcome
+extend #extend0<T>: T[];
+fn #extend0<T>::len(_1: &T[]) -> isize;
+
+fn g(_1: &i64[]) -> void {
+  let _2: isize temp;
+  bb0: {
+    _2 = #extend0<i64>::len(copy _1) -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+==== comment-line-names-nothing
+fn f() -> void {
+  let _1: i64 temp;
+  // a note on its own line
+  let _2: i64 temp; // n
+  bb0: {
+    return;
+  }
+}
+---- outcome
+fn f() -> void {
+  let _1: i64 temp;
+  let _2: i64 temp; // n
+  bb0: {
+    return;
+  }
+}
+
+==== exponents
+const A: f64 = 1e+3;
+const B: f64 = 2.5e-3;
+const C: f64 = 1e3;
+const D: f32 = -0.5;
+fn f() -> void {
+  let _1: *f64 temp;
+  bb0: {
+    _1 = const static_addr(A): *f64;
+    _1 = const static_addr(B): *f64;
+    _1 = const static_addr(C): *f64;
+    _1 = const static_addr(D): *f64;
+    return;
+  }
+}
+---- outcome
+const A: f64 = 1000.0;
+const B: f64 = 0.0025;
+const C: f64 = 1000.0;
+const D: f32 = -0.5;
+
+fn f() -> void {
+  let _1: *f64 temp;
+  bb0: {
+    _1 = const static_addr(A): *f64;
+    _1 = const static_addr(B): *f64;
+    _1 = const static_addr(C): *f64;
+    _1 = const static_addr(D): *f64;
+    return;
+  }
+}
+
+==== shims
+class C {
+  x: i64;
+}
+shim clone_glue(C) (_1: &C) -> C {
+  bb0: {
+    return;
+  }
+}
+shim eq_glue(C) (_1: &C, _2: &C) -> bool {
+  bb0: {
+    return;
+  }
+}
+shim show_glue(C) () -> void {
+  bb0: {
+    return;
+  }
+}
+shim display_glue(C) () -> void {
+  bb0: {
+    return;
+  }
+}
+shim named_fill(C) () -> void {
+  bb0: {
+    return;
+  }
+}
+shim string_form_env(C, i64) () -> void {
+  bb0: {
+    return;
+  }
+}
+---- outcome
+class C {
+  x: i64;
+}
+
+shim clone_glue(C) (_1: &C) -> C {
+  bb0: {
+    return;
+  }
+}
+
+shim display_glue(C) () -> void {
+  bb0: {
+    return;
+  }
+}
+
+shim eq_glue(C) (_1: &C, _2: &C) -> bool {
+  bb0: {
+    return;
+  }
+}
+
+shim named_fill(C) () -> void {
+  bb0: {
+    return;
+  }
+}
+
+shim show_glue(C) () -> void {
+  bb0: {
+    return;
+  }
+}
+
+shim string_form_env(C, i64) () -> void {
+  bb0: {
+    return;
+  }
+}
+
+==== err-implicit-bound
+interface Greet { }
+fn f<implicit Greet extends Greet>(_1: Greet) -> void;
+---- outcome
+ERR 2:4 a declaration's own parameters are names
+==== requires
+@requires("cmov", "sse2") fn g() -> void;
+fn f() -> void {
+  let _1: void temp;
+  bb0: {
+    _1 = g() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+---- outcome
+@requires("cmov", "sse2") fn g() -> void;
+
+fn f() -> void {
+  let _1: void temp;
+  bb0: {
+    _1 = g() -> bb1;
+  }
+  bb1: {
+    return;
+  }
+}
+
+==== err-requires-unknown
+@requires("cmov", "nope") fn g() -> void;
+---- outcome
+ERR 1:1 no feature `nope`

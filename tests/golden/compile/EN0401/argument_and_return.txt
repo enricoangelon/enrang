@@ -1,0 +1,28 @@
+$ enrang check tests/compile/EN0401/argument_and_return.fail.en
+[exit 1]
+[stdout]
+[stderr]
+error[EN0401]: mismatched types: expected `&string`, found `int`
+ --> tests/compile/EN0401/argument_and_return.fail.en:1:7
+  |
+1 | greet(42); //~ EN0401 "mismatched types: expected `&string`, found `int`"
+  |       ^^ this is `int`
+2 | console.log(half(8));
+3 |
+4 | private function greet(name: &string): void {
+  |                        ------------- `&string` is required by this parameter
+  |
+  = note: Enrang never converts between numbers and strings implicitly.
+  = explain: run `enrang explain EN0401`
+
+error[EN0401]: mismatched types: expected `i64`, found `bool`
+ --> tests/compile/EN0401/argument_and_return.fail.en:9:10
+  |
+8 | private function half(n: i64): i64 {
+  |                                --- `i64` is required by the return type
+9 |   return n > 1; //~ EN0401 "mismatched types: expected `i64`, found `bool`"
+  |          ^^^^^ this is `bool`
+  |
+  = explain: run `enrang explain EN0401`
+
+error: aborting due to 2 previous errors

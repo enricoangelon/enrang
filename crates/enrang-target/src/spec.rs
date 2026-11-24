@@ -57,7 +57,8 @@ impl DataLayout {
 pub enum FloatStrategy {
     Soft,
     Sse2,
-    /// Never produced by [`resolve`](crate::resolve): `--float=x87` is EN1020.
+    /// The FPU: the default at `i586` and `i686` on `i386-*`, and `--float=x87` at
+    /// any level there (SPEC 9.3). Code generation for it arrives in M8.
     X87,
     /// Rust's floats, in the VM only.
     Host,
