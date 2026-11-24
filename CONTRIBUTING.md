@@ -1,6 +1,6 @@
 # Contributing to Enrang
 
-This repository holds Enrang's documentation: the design, the logo and the examples. The compiler's code isn't in it, so the most useful contribution right now is a close read. If something in the design looks wrong, unsound or unclear, open an issue.
+Enrang is at an early stage, so the most useful contribution right now is a close read of the design. If something in it looks wrong, unsound or unclear, open an issue.
 
 ## The rules the project holds itself to
 
